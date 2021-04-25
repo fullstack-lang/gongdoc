@@ -1,0 +1,49 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"label": "03 - ng serve",
+			"type": "shell",
+			"options": {
+				"cwd": "ng"
+			},
+			"command": "ng serve",
+			"group": "build"
+		},
+		{
+			"label": "02 - go run",
+			"type": "shell",
+			"options": {
+				"cwd": "."
+			},
+			"command": "go",
+			"args": [
+				"run",
+				"main.go"
+			],
+			"group": "build"
+		},
+		{
+			"label": "01 - gongc",
+			"type": "shell",
+			"options": {
+				"cwd": "go/models"
+			},
+			"command": "gongc",
+			"args": [],
+			"group": "build"
+		},
+		{
+			"label": "01 - gongc & run",
+			"type": "shell",
+			"options": {
+				"cwd": "go/models"
+			},
+			"command": "gongc",
+			"args": [
+				"-run"
+			],
+			"group": "build"
+		},
+	]
+}
