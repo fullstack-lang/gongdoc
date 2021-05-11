@@ -140,7 +140,7 @@ export class GongdocCommandsTableComponent implements OnInit {
           this.selection = new SelectionModel<GongdocCommandDB>(allowMultiSelect, this.initialSelection);
         }
 
-		// update the mat table data source
+        // update the mat table data source
         this.matTableDataSource.data = this.gongdoccommands
       }
     )

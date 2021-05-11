@@ -6,15 +6,18 @@ import (
 	"errors"
 	"fmt"
 	"log"
+	"sort"
 	"time"
 
 	"github.com/jinzhu/gorm"
+
 	"github.com/fullstack-lang/gongdoc/go/models"
 )
 
-// dummy variable to have the import database/sql wihthout compile failure id no sql is used
+// dummy variable to have the import declaration wihthout compile failure (even if no code needing this import is generated)
 var dummy_State sql.NullBool
 var __State_time__dummyDeclaration time.Duration
+var dummy_State_sort sort.Float64Slice
 
 // StateAPI is the input in POST API
 //
@@ -38,6 +41,7 @@ type StateAPI struct {
 
 	// Implementation of a reverse ID for field Umlsc{}.States []*State
 	Umlsc_StatesDBID sql.NullInt64
+	Umlsc_StatesDBID_Index sql.NullInt64
 
 	// end of insertion
 }

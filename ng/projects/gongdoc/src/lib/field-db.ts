@@ -18,6 +18,7 @@ export class FieldDB {
 
 	// insertion point for other declarations
 	Classshape_FieldsDBID?: NullInt64
+	Classshape_FieldsDBID_Index?: NullInt64 // store the index of the field instance in Classshape.Fields
 	Classshape_Fields_reverse?: ClassshapeDB
 
 }

@@ -16,6 +16,7 @@ export class ClassdiagramDB {
 	// insertion point for other declarations
 	Classshapes?: Array<ClassshapeDB>
 	Pkgelt_ClassdiagramsDBID?: NullInt64
+	Pkgelt_ClassdiagramsDBID_Index?: NullInt64 // store the index of the classdiagram instance in Pkgelt.Classdiagrams
 	Pkgelt_Classdiagrams_reverse?: PkgeltDB
 
 }

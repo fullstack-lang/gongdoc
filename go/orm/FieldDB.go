@@ -6,15 +6,18 @@ import (
 	"errors"
 	"fmt"
 	"log"
+	"sort"
 	"time"
 
 	"github.com/jinzhu/gorm"
+
 	"github.com/fullstack-lang/gongdoc/go/models"
 )
 
-// dummy variable to have the import database/sql wihthout compile failure id no sql is used
+// dummy variable to have the import declaration wihthout compile failure (even if no code needing this import is generated)
 var dummy_Field sql.NullBool
 var __Field_time__dummyDeclaration time.Duration
+var dummy_Field_sort sort.Float64Slice
 
 // FieldAPI is the input in POST API
 //
@@ -44,6 +47,7 @@ type FieldAPI struct {
 
 	// Implementation of a reverse ID for field Classshape{}.Fields []*Field
 	Classshape_FieldsDBID sql.NullInt64
+	Classshape_FieldsDBID_Index sql.NullInt64
 
 	// end of insertion
 }

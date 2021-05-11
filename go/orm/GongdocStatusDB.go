@@ -6,15 +6,18 @@ import (
 	"errors"
 	"fmt"
 	"log"
+	"sort"
 	"time"
 
 	"github.com/jinzhu/gorm"
+
 	"github.com/fullstack-lang/gongdoc/go/models"
 )
 
-// dummy variable to have the import database/sql wihthout compile failure id no sql is used
+// dummy variable to have the import declaration wihthout compile failure (even if no code needing this import is generated)
 var dummy_GongdocStatus sql.NullBool
 var __GongdocStatus_time__dummyDeclaration time.Duration
+var dummy_GongdocStatus_sort sort.Float64Slice
 
 // GongdocStatusAPI is the input in POST API
 //

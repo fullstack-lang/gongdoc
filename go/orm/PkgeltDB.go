@@ -6,15 +6,18 @@ import (
 	"errors"
 	"fmt"
 	"log"
+	"sort"
 	"time"
 
 	"github.com/jinzhu/gorm"
+
 	"github.com/fullstack-lang/gongdoc/go/models"
 )
 
-// dummy variable to have the import database/sql wihthout compile failure id no sql is used
+// dummy variable to have the import declaration wihthout compile failure (even if no code needing this import is generated)
 var dummy_Pkgelt sql.NullBool
 var __Pkgelt_time__dummyDeclaration time.Duration
+var dummy_Pkgelt_sort sort.Float64Slice
 
 // PkgeltAPI is the input in POST API
 //
@@ -195,10 +198,14 @@ func (backRepoPkgelt *BackRepoPkgeltStruct) CommitPhaseTwoInstance(backRepo *Bac
 
 				// commit a slice of pointer translates to update reverse pointer to Classdiagram, i.e.
 				for _, classdiagram := range pkgelt.Classdiagrams {
+					index := 0
 					if classdiagramDBID, ok := (*backRepo.BackRepoClassdiagram.Map_ClassdiagramPtr_ClassdiagramDBID)[classdiagram]; ok {
 						if classdiagramDB, ok := (*backRepo.BackRepoClassdiagram.Map_ClassdiagramDBID_ClassdiagramDB)[classdiagramDBID]; ok {
 							classdiagramDB.Pkgelt_ClassdiagramsDBID.Int64 = int64(pkgeltDB.ID)
 							classdiagramDB.Pkgelt_ClassdiagramsDBID.Valid = true
+							classdiagramDB.Pkgelt_ClassdiagramsDBID_Index.Int64 = int64(index)
+							index = index + 1
+							classdiagramDB.Pkgelt_ClassdiagramsDBID_Index.Valid = true
 							if q := backRepoPkgelt.db.Save(&classdiagramDB); q.Error != nil {
 								return q.Error
 							}
@@ -208,10 +215,14 @@ func (backRepoPkgelt *BackRepoPkgeltStruct) CommitPhaseTwoInstance(backRepo *Bac
 
 				// commit a slice of pointer translates to update reverse pointer to Umlsc, i.e.
 				for _, umlsc := range pkgelt.Umlscs {
+					index := 0
 					if umlscDBID, ok := (*backRepo.BackRepoUmlsc.Map_UmlscPtr_UmlscDBID)[umlsc]; ok {
 						if umlscDB, ok := (*backRepo.BackRepoUmlsc.Map_UmlscDBID_UmlscDB)[umlscDBID]; ok {
 							umlscDB.Pkgelt_UmlscsDBID.Int64 = int64(pkgeltDB.ID)
 							umlscDB.Pkgelt_UmlscsDBID.Valid = true
+							umlscDB.Pkgelt_UmlscsDBID_Index.Int64 = int64(index)
+							index = index + 1
+							umlscDB.Pkgelt_UmlscsDBID_Index.Valid = true
 							if q := backRepoPkgelt.db.Save(&umlscDB); q.Error != nil {
 								return q.Error
 							}
@@ -311,6 +322,17 @@ func (backRepoPkgelt *BackRepoPkgeltStruct) CheckoutPhaseTwoInstance(backRepo *B
 					pkgelt.Classdiagrams = append(pkgelt.Classdiagrams, Classdiagram)
 				}
 			}
+			
+			// sort the array according to the order
+			sort.Slice(pkgelt.Classdiagrams, func(i, j int) bool {
+				classdiagramDB_i_ID := (*backRepo.BackRepoClassdiagram.Map_ClassdiagramPtr_ClassdiagramDBID)[pkgelt.Classdiagrams[i]]
+				classdiagramDB_j_ID := (*backRepo.BackRepoClassdiagram.Map_ClassdiagramPtr_ClassdiagramDBID)[pkgelt.Classdiagrams[j]]
+
+				classdiagramDB_i := (*backRepo.BackRepoClassdiagram.Map_ClassdiagramDBID_ClassdiagramDB)[classdiagramDB_i_ID]
+				classdiagramDB_j := (*backRepo.BackRepoClassdiagram.Map_ClassdiagramDBID_ClassdiagramDB)[classdiagramDB_j_ID]
+
+				return classdiagramDB_i.Pkgelt_ClassdiagramsDBID_Index.Int64 < classdiagramDB_j.Pkgelt_ClassdiagramsDBID_Index.Int64
+			})
 
 			// parse all UmlscDB and redeem the array of poiners to Pkgelt
 			// first reset the slice
@@ -321,6 +343,17 @@ func (backRepoPkgelt *BackRepoPkgeltStruct) CheckoutPhaseTwoInstance(backRepo *B
 					pkgelt.Umlscs = append(pkgelt.Umlscs, Umlsc)
 				}
 			}
+			
+			// sort the array according to the order
+			sort.Slice(pkgelt.Umlscs, func(i, j int) bool {
+				umlscDB_i_ID := (*backRepo.BackRepoUmlsc.Map_UmlscPtr_UmlscDBID)[pkgelt.Umlscs[i]]
+				umlscDB_j_ID := (*backRepo.BackRepoUmlsc.Map_UmlscPtr_UmlscDBID)[pkgelt.Umlscs[j]]
+
+				umlscDB_i := (*backRepo.BackRepoUmlsc.Map_UmlscDBID_UmlscDB)[umlscDB_i_ID]
+				umlscDB_j := (*backRepo.BackRepoUmlsc.Map_UmlscDBID_UmlscDB)[umlscDB_j_ID]
+
+				return umlscDB_i.Pkgelt_UmlscsDBID_Index.Int64 < umlscDB_j.Pkgelt_UmlscsDBID_Index.Int64
+			})
 
 		}
 	}

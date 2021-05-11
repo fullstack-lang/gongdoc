@@ -126,7 +126,7 @@ export class VerticesTableComponent implements OnInit {
           this.selection = new SelectionModel<VerticeDB>(allowMultiSelect, this.initialSelection);
         }
 
-		// update the mat table data source
+        // update the mat table data source
         this.matTableDataSource.data = this.vertices
       }
     )

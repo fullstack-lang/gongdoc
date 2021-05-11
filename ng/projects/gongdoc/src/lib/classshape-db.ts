@@ -27,6 +27,7 @@ export class ClassshapeDB {
 	Fields?: Array<FieldDB>
 	Links?: Array<LinkDB>
 	Classdiagram_ClassshapesDBID?: NullInt64
+	Classdiagram_ClassshapesDBID_Index?: NullInt64 // store the index of the classshape instance in Classdiagram.Classshapes
 	Classdiagram_Classshapes_reverse?: ClassdiagramDB
 
 }

@@ -124,7 +124,7 @@ export class ClassdiagramsTableComponent implements OnInit {
           this.selection = new SelectionModel<ClassdiagramDB>(allowMultiSelect, this.initialSelection);
         }
 
-		// update the mat table data source
+        // update the mat table data source
         this.matTableDataSource.data = this.classdiagrams
       }
     )

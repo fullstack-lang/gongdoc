@@ -17,6 +17,7 @@ export class UmlscDB {
 	// insertion point for other declarations
 	States?: Array<StateDB>
 	Pkgelt_UmlscsDBID?: NullInt64
+	Pkgelt_UmlscsDBID_Index?: NullInt64 // store the index of the umlsc instance in Pkgelt.Umlscs
 	Pkgelt_Umlscs_reverse?: PkgeltDB
 
 }

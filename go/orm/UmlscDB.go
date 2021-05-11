@@ -6,15 +6,18 @@ import (
 	"errors"
 	"fmt"
 	"log"
+	"sort"
 	"time"
 
 	"github.com/jinzhu/gorm"
+
 	"github.com/fullstack-lang/gongdoc/go/models"
 )
 
-// dummy variable to have the import database/sql wihthout compile failure id no sql is used
+// dummy variable to have the import declaration wihthout compile failure (even if no code needing this import is generated)
 var dummy_Umlsc sql.NullBool
 var __Umlsc_time__dummyDeclaration time.Duration
+var dummy_Umlsc_sort sort.Float64Slice
 
 // UmlscAPI is the input in POST API
 //
@@ -35,6 +38,7 @@ type UmlscAPI struct {
 
 	// Implementation of a reverse ID for field Pkgelt{}.Umlscs []*Umlsc
 	Pkgelt_UmlscsDBID sql.NullInt64
+	Pkgelt_UmlscsDBID_Index sql.NullInt64
 
 	// end of insertion
 }
@@ -195,10 +199,14 @@ func (backRepoUmlsc *BackRepoUmlscStruct) CommitPhaseTwoInstance(backRepo *BackR
 
 				// commit a slice of pointer translates to update reverse pointer to State, i.e.
 				for _, state := range umlsc.States {
+					index := 0
 					if stateDBID, ok := (*backRepo.BackRepoState.Map_StatePtr_StateDBID)[state]; ok {
 						if stateDB, ok := (*backRepo.BackRepoState.Map_StateDBID_StateDB)[stateDBID]; ok {
 							stateDB.Umlsc_StatesDBID.Int64 = int64(umlscDB.ID)
 							stateDB.Umlsc_StatesDBID.Valid = true
+							stateDB.Umlsc_StatesDBID_Index.Int64 = int64(index)
+							index = index + 1
+							stateDB.Umlsc_StatesDBID_Index.Valid = true
 							if q := backRepoUmlsc.db.Save(&stateDB); q.Error != nil {
 								return q.Error
 							}
@@ -299,6 +307,17 @@ func (backRepoUmlsc *BackRepoUmlscStruct) CheckoutPhaseTwoInstance(backRepo *Bac
 					umlsc.States = append(umlsc.States, State)
 				}
 			}
+			
+			// sort the array according to the order
+			sort.Slice(umlsc.States, func(i, j int) bool {
+				stateDB_i_ID := (*backRepo.BackRepoState.Map_StatePtr_StateDBID)[umlsc.States[i]]
+				stateDB_j_ID := (*backRepo.BackRepoState.Map_StatePtr_StateDBID)[umlsc.States[j]]
+
+				stateDB_i := (*backRepo.BackRepoState.Map_StateDBID_StateDB)[stateDB_i_ID]
+				stateDB_j := (*backRepo.BackRepoState.Map_StateDBID_StateDB)[stateDB_j_ID]
+
+				return stateDB_i.Umlsc_StatesDBID_Index.Int64 < stateDB_j.Umlsc_StatesDBID_Index.Int64
+			})
 
 			umlsc.Activestate = umlscDB.Activestate_Data.String
 

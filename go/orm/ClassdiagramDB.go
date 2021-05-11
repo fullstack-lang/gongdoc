@@ -6,15 +6,18 @@ import (
 	"errors"
 	"fmt"
 	"log"
+	"sort"
 	"time"
 
 	"github.com/jinzhu/gorm"
+
 	"github.com/fullstack-lang/gongdoc/go/models"
 )
 
-// dummy variable to have the import database/sql wihthout compile failure id no sql is used
+// dummy variable to have the import declaration wihthout compile failure (even if no code needing this import is generated)
 var dummy_Classdiagram sql.NullBool
 var __Classdiagram_time__dummyDeclaration time.Duration
+var dummy_Classdiagram_sort sort.Float64Slice
 
 // ClassdiagramAPI is the input in POST API
 //
@@ -32,6 +35,7 @@ type ClassdiagramAPI struct {
 
 	// Implementation of a reverse ID for field Pkgelt{}.Classdiagrams []*Classdiagram
 	Pkgelt_ClassdiagramsDBID sql.NullInt64
+	Pkgelt_ClassdiagramsDBID_Index sql.NullInt64
 
 	// end of insertion
 }
@@ -192,10 +196,14 @@ func (backRepoClassdiagram *BackRepoClassdiagramStruct) CommitPhaseTwoInstance(b
 
 				// commit a slice of pointer translates to update reverse pointer to Classshape, i.e.
 				for _, classshape := range classdiagram.Classshapes {
+					index := 0
 					if classshapeDBID, ok := (*backRepo.BackRepoClassshape.Map_ClassshapePtr_ClassshapeDBID)[classshape]; ok {
 						if classshapeDB, ok := (*backRepo.BackRepoClassshape.Map_ClassshapeDBID_ClassshapeDB)[classshapeDBID]; ok {
 							classshapeDB.Classdiagram_ClassshapesDBID.Int64 = int64(classdiagramDB.ID)
 							classshapeDB.Classdiagram_ClassshapesDBID.Valid = true
+							classshapeDB.Classdiagram_ClassshapesDBID_Index.Int64 = int64(index)
+							index = index + 1
+							classshapeDB.Classdiagram_ClassshapesDBID_Index.Valid = true
 							if q := backRepoClassdiagram.db.Save(&classshapeDB); q.Error != nil {
 								return q.Error
 							}
@@ -293,6 +301,17 @@ func (backRepoClassdiagram *BackRepoClassdiagramStruct) CheckoutPhaseTwoInstance
 					classdiagram.Classshapes = append(classdiagram.Classshapes, Classshape)
 				}
 			}
+			
+			// sort the array according to the order
+			sort.Slice(classdiagram.Classshapes, func(i, j int) bool {
+				classshapeDB_i_ID := (*backRepo.BackRepoClassshape.Map_ClassshapePtr_ClassshapeDBID)[classdiagram.Classshapes[i]]
+				classshapeDB_j_ID := (*backRepo.BackRepoClassshape.Map_ClassshapePtr_ClassshapeDBID)[classdiagram.Classshapes[j]]
+
+				classshapeDB_i := (*backRepo.BackRepoClassshape.Map_ClassshapeDBID_ClassshapeDB)[classshapeDB_i_ID]
+				classshapeDB_j := (*backRepo.BackRepoClassshape.Map_ClassshapeDBID_ClassshapeDB)[classshapeDB_j_ID]
+
+				return classshapeDB_i.Classdiagram_ClassshapesDBID_Index.Int64 < classshapeDB_j.Classdiagram_ClassshapesDBID_Index.Int64
+			})
 
 		}
 	}

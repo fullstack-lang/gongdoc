@@ -186,6 +186,8 @@ definitions:
         $ref: '#/definitions/NullString'
       Pkgelt_ClassdiagramsDBID:
         $ref: '#/definitions/NullInt64'
+      Pkgelt_ClassdiagramsDBID_Index:
+        $ref: '#/definitions/NullInt64'
     title: ClassdiagramAPI is the input in POST API
     type: object
     x-go-name: ClassdiagramAPI
@@ -215,6 +217,8 @@ definitions:
         $ref: '#/definitions/NullString'
       Pkgelt_ClassdiagramsDBID:
         $ref: '#/definitions/NullInt64'
+      Pkgelt_ClassdiagramsDBID_Index:
+        $ref: '#/definitions/NullInt64'
       UpdatedAt:
         format: date-time
         type: string
@@ -229,6 +233,8 @@ definitions:
       fullfill the ORM requirements for associations
     properties:
       Classdiagram_ClassshapesDBID:
+        $ref: '#/definitions/NullInt64'
+      Classdiagram_ClassshapesDBID_Index:
         $ref: '#/definitions/NullInt64'
       ClassshapeTargetType:
         $ref: '#/definitions/ClassshapeTargetType'
@@ -277,6 +283,8 @@ definitions:
     description: 'It incorporates all fields : from the model, from the generated field for the API and the GORM ID'
     properties:
       Classdiagram_ClassshapesDBID:
+        $ref: '#/definitions/NullInt64'
+      Classdiagram_ClassshapesDBID_Index:
         $ref: '#/definitions/NullInt64'
       ClassshapeTargetType:
         $ref: '#/definitions/ClassshapeTargetType'
@@ -341,6 +349,8 @@ definitions:
     properties:
       Classshape_FieldsDBID:
         $ref: '#/definitions/NullInt64'
+      Classshape_FieldsDBID_Index:
+        $ref: '#/definitions/NullInt64'
       FieldTypeAsString:
         type: string
       FieldTypeAsString_Data:
@@ -369,6 +379,8 @@ definitions:
     description: 'It incorporates all fields : from the model, from the generated field for the API and the GORM ID'
     properties:
       Classshape_FieldsDBID:
+        $ref: '#/definitions/NullInt64'
+      Classshape_FieldsDBID_Index:
         $ref: '#/definitions/NullInt64'
       CreatedAt:
         format: date-time
@@ -618,6 +630,8 @@ definitions:
     properties:
       Classshape_LinksDBID:
         $ref: '#/definitions/NullInt64'
+      Classshape_LinksDBID_Index:
+        $ref: '#/definitions/NullInt64'
       Fieldname:
         type: string
       Fieldname_Data:
@@ -651,6 +665,8 @@ definitions:
     description: 'It incorporates all fields : from the model, from the generated field for the API and the GORM ID'
     properties:
       Classshape_LinksDBID:
+        $ref: '#/definitions/NullInt64'
+      Classshape_LinksDBID_Index:
         $ref: '#/definitions/NullInt64'
       CreatedAt:
         format: date-time
@@ -823,6 +839,8 @@ definitions:
         $ref: '#/definitions/NullString'
       Umlsc_StatesDBID:
         $ref: '#/definitions/NullInt64'
+      Umlsc_StatesDBID_Index:
+        $ref: '#/definitions/NullInt64'
       X:
         format: double
         type: number
@@ -854,6 +872,8 @@ definitions:
       Name_Data:
         $ref: '#/definitions/NullString'
       Umlsc_StatesDBID:
+        $ref: '#/definitions/NullInt64'
+      Umlsc_StatesDBID_Index:
         $ref: '#/definitions/NullInt64'
       UpdatedAt:
         format: date-time
@@ -891,6 +911,8 @@ definitions:
         $ref: '#/definitions/NullString'
       Pkgelt_UmlscsDBID:
         $ref: '#/definitions/NullInt64'
+      Pkgelt_UmlscsDBID_Index:
+        $ref: '#/definitions/NullInt64'
       States:
         description: |-
           this is the memory model (and not the "memory motel" of the Rolling Stones)
@@ -926,6 +948,8 @@ definitions:
       Name_Data:
         $ref: '#/definitions/NullString'
       Pkgelt_UmlscsDBID:
+        $ref: '#/definitions/NullInt64'
+      Pkgelt_UmlscsDBID_Index:
         $ref: '#/definitions/NullInt64'
       States:
         description: |-
@@ -1963,6 +1987,7 @@ responses:
           Declation for basic field classdiagramDB.Name {{BasicKind}} (to be completed)
       Pkgelt_ClassdiagramsDBID:
         description: Implementation of a reverse ID for field Pkgelt{}.Classdiagrams []*Classdiagram
+      Pkgelt_ClassdiagramsDBID_Index: {}
       UpdatedAt:
         format: date-time
         type: string
@@ -1979,6 +2004,7 @@ responses:
     headers:
       Classdiagram_ClassshapesDBID:
         description: Implementation of a reverse ID for field Classdiagram{}.Classshapes []*Classshape
+      Classdiagram_ClassshapesDBID_Index: {}
       ClassshapeTargetType: {}
       ClassshapeTargetType_Data:
         description: Declation for basic field classshapeDB.ClassshapeTargetType {{BasicKind}} (to be completed)
@@ -2045,6 +2071,7 @@ responses:
     headers:
       Classshape_FieldsDBID:
         description: Implementation of a reverse ID for field Classshape{}.Fields []*Field
+      Classshape_FieldsDBID_Index: {}
       CreatedAt:
         format: date-time
         type: string
@@ -2229,6 +2256,7 @@ responses:
     headers:
       Classshape_LinksDBID:
         description: Implementation of a reverse ID for field Classshape{}.Links []*Link
+      Classshape_LinksDBID_Index: {}
       CreatedAt:
         format: date-time
         type: string
@@ -2377,6 +2405,7 @@ responses:
           Declation for basic field stateDB.Name {{BasicKind}} (to be completed)
       Umlsc_StatesDBID:
         description: Implementation of a reverse ID for field Umlsc{}.States []*State
+      Umlsc_StatesDBID_Index: {}
       UpdatedAt:
         format: date-time
         type: string
@@ -2425,6 +2454,7 @@ responses:
           Declation for basic field umlscDB.Name {{BasicKind}} (to be completed)
       Pkgelt_UmlscsDBID:
         description: Implementation of a reverse ID for field Pkgelt{}.Umlscs []*Umlsc
+      Pkgelt_UmlscsDBID_Index: {}
       States:
         description: |-
           this is the memory model (and not the "memory motel" of the Rolling Stones)

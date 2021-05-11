@@ -23,6 +23,7 @@ export class LinkDB {
 	MiddleverticeName?: string
 
 	Classshape_LinksDBID?: NullInt64
+	Classshape_LinksDBID_Index?: NullInt64 // store the index of the link instance in Classshape.Links
 	Classshape_Links_reverse?: ClassshapeDB
 
 }

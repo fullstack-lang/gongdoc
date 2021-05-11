@@ -22,6 +22,7 @@ import { MatExpansionModule } from '@angular/material/expansion';
 import { MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { MatGridListModule } from '@angular/material/grid-list';
 import { MatTreeModule } from '@angular/material/tree';
+import { DragDropModule } from '@angular/cdk/drag-drop';
 
 import { AngularSplitModule, SplitComponent } from 'angular-split';
 
@@ -32,46 +33,57 @@ import { SidebarComponent } from './sidebar/sidebar.component';
 
 // insertion point for imports 
 import { ClassdiagramsTableComponent } from './classdiagrams-table/classdiagrams-table.component'
+import { ClassdiagramSortingComponent } from './classdiagram-sorting/classdiagram-sorting.component'
 import { ClassdiagramDetailComponent } from './classdiagram-detail/classdiagram-detail.component'
 import { ClassdiagramPresentationComponent } from './classdiagram-presentation/classdiagram-presentation.component'
 
 import { ClassshapesTableComponent } from './classshapes-table/classshapes-table.component'
+import { ClassshapeSortingComponent } from './classshape-sorting/classshape-sorting.component'
 import { ClassshapeDetailComponent } from './classshape-detail/classshape-detail.component'
 import { ClassshapePresentationComponent } from './classshape-presentation/classshape-presentation.component'
 
 import { FieldsTableComponent } from './fields-table/fields-table.component'
+import { FieldSortingComponent } from './field-sorting/field-sorting.component'
 import { FieldDetailComponent } from './field-detail/field-detail.component'
 import { FieldPresentationComponent } from './field-presentation/field-presentation.component'
 
 import { GongdocCommandsTableComponent } from './gongdoccommands-table/gongdoccommands-table.component'
+import { GongdocCommandSortingComponent } from './gongdoccommand-sorting/gongdoccommand-sorting.component'
 import { GongdocCommandDetailComponent } from './gongdoccommand-detail/gongdoccommand-detail.component'
 import { GongdocCommandPresentationComponent } from './gongdoccommand-presentation/gongdoccommand-presentation.component'
 
 import { GongdocStatussTableComponent } from './gongdocstatuss-table/gongdocstatuss-table.component'
+import { GongdocStatusSortingComponent } from './gongdocstatus-sorting/gongdocstatus-sorting.component'
 import { GongdocStatusDetailComponent } from './gongdocstatus-detail/gongdocstatus-detail.component'
 import { GongdocStatusPresentationComponent } from './gongdocstatus-presentation/gongdocstatus-presentation.component'
 
 import { LinksTableComponent } from './links-table/links-table.component'
+import { LinkSortingComponent } from './link-sorting/link-sorting.component'
 import { LinkDetailComponent } from './link-detail/link-detail.component'
 import { LinkPresentationComponent } from './link-presentation/link-presentation.component'
 
 import { PkgeltsTableComponent } from './pkgelts-table/pkgelts-table.component'
+import { PkgeltSortingComponent } from './pkgelt-sorting/pkgelt-sorting.component'
 import { PkgeltDetailComponent } from './pkgelt-detail/pkgelt-detail.component'
 import { PkgeltPresentationComponent } from './pkgelt-presentation/pkgelt-presentation.component'
 
 import { PositionsTableComponent } from './positions-table/positions-table.component'
+import { PositionSortingComponent } from './position-sorting/position-sorting.component'
 import { PositionDetailComponent } from './position-detail/position-detail.component'
 import { PositionPresentationComponent } from './position-presentation/position-presentation.component'
 
 import { StatesTableComponent } from './states-table/states-table.component'
+import { StateSortingComponent } from './state-sorting/state-sorting.component'
 import { StateDetailComponent } from './state-detail/state-detail.component'
 import { StatePresentationComponent } from './state-presentation/state-presentation.component'
 
 import { UmlscsTableComponent } from './umlscs-table/umlscs-table.component'
+import { UmlscSortingComponent } from './umlsc-sorting/umlsc-sorting.component'
 import { UmlscDetailComponent } from './umlsc-detail/umlsc-detail.component'
 import { UmlscPresentationComponent } from './umlsc-presentation/umlsc-presentation.component'
 
 import { VerticesTableComponent } from './vertices-table/vertices-table.component'
+import { VerticeSortingComponent } from './vertice-sorting/vertice-sorting.component'
 import { VerticeDetailComponent } from './vertice-detail/vertice-detail.component'
 import { VerticePresentationComponent } from './vertice-presentation/vertice-presentation.component'
 
@@ -80,46 +92,57 @@ import { VerticePresentationComponent } from './vertice-presentation/vertice-pre
 	declarations: [
 		// insertion point for declarations 
 		ClassdiagramsTableComponent,
+		ClassdiagramSortingComponent,
 		ClassdiagramDetailComponent,
 		ClassdiagramPresentationComponent,
 
 		ClassshapesTableComponent,
+		ClassshapeSortingComponent,
 		ClassshapeDetailComponent,
 		ClassshapePresentationComponent,
 
 		FieldsTableComponent,
+		FieldSortingComponent,
 		FieldDetailComponent,
 		FieldPresentationComponent,
 
 		GongdocCommandsTableComponent,
+		GongdocCommandSortingComponent,
 		GongdocCommandDetailComponent,
 		GongdocCommandPresentationComponent,
 
 		GongdocStatussTableComponent,
+		GongdocStatusSortingComponent,
 		GongdocStatusDetailComponent,
 		GongdocStatusPresentationComponent,
 
 		LinksTableComponent,
+		LinkSortingComponent,
 		LinkDetailComponent,
 		LinkPresentationComponent,
 
 		PkgeltsTableComponent,
+		PkgeltSortingComponent,
 		PkgeltDetailComponent,
 		PkgeltPresentationComponent,
 
 		PositionsTableComponent,
+		PositionSortingComponent,
 		PositionDetailComponent,
 		PositionPresentationComponent,
 
 		StatesTableComponent,
+		StateSortingComponent,
 		StateDetailComponent,
 		StatePresentationComponent,
 
 		UmlscsTableComponent,
+		UmlscSortingComponent,
 		UmlscDetailComponent,
 		UmlscPresentationComponent,
 
 		VerticesTableComponent,
+		VerticeSortingComponent,
 		VerticeDetailComponent,
 		VerticePresentationComponent,
 
@@ -152,52 +175,64 @@ import { VerticePresentationComponent } from './vertice-presentation/vertice-pre
 		MatDialogModule,
 		MatGridListModule,
 		MatTreeModule,
+		DragDropModule,
 
 		AngularSplitModule,
 	],
 	exports: [
 		// insertion point for declarations 
 		ClassdiagramsTableComponent,
+		ClassdiagramSortingComponent,
 		ClassdiagramDetailComponent,
 		ClassdiagramPresentationComponent,
 
 		ClassshapesTableComponent,
+		ClassshapeSortingComponent,
 		ClassshapeDetailComponent,
 		ClassshapePresentationComponent,
 
 		FieldsTableComponent,
+		FieldSortingComponent,
 		FieldDetailComponent,
 		FieldPresentationComponent,
 
 		GongdocCommandsTableComponent,
+		GongdocCommandSortingComponent,
 		GongdocCommandDetailComponent,
 		GongdocCommandPresentationComponent,
 
 		GongdocStatussTableComponent,
+		GongdocStatusSortingComponent,
 		GongdocStatusDetailComponent,
 		GongdocStatusPresentationComponent,
 
 		LinksTableComponent,
+		LinkSortingComponent,
 		LinkDetailComponent,
 		LinkPresentationComponent,
 
 		PkgeltsTableComponent,
+		PkgeltSortingComponent,
 		PkgeltDetailComponent,
 		PkgeltPresentationComponent,
 
 		PositionsTableComponent,
+		PositionSortingComponent,
 		PositionDetailComponent,
 		PositionPresentationComponent,
 
 		StatesTableComponent,
+		StateSortingComponent,
 		StateDetailComponent,
 		StatePresentationComponent,
 
 		UmlscsTableComponent,
+		UmlscSortingComponent,
 		UmlscDetailComponent,
 		UmlscPresentationComponent,
 
 		VerticesTableComponent,
+		VerticeSortingComponent,
 		VerticeDetailComponent,
 		VerticePresentationComponent,
 

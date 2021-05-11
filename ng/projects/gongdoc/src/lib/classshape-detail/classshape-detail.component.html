@@ -30,12 +30,40 @@
             </mat-form-field>
         </form>
     </div>
-    <div class="details__item">
-        <button mat-raised-button (click)="openReverseSelection('Field', 'Classshape_FieldsDBID')">Fields</button>
-    </div>
-    <div class="details__item">
-        <button mat-raised-button (click)="openReverseSelection('Link', 'Classshape_LinksDBID')">Links</button>
-    </div>
+    <mat-grid-list cols="2" rowHeight="6:1">
+        <mat-grid-tile>
+            <div style="width: 100vw; text-align: right;">
+                <button mat-raised-button
+                    (click)="openReverseSelection('Field', 'Classshape_FieldsDBID')">Fields</button>
+            </div>
+        </mat-grid-tile>
+        <mat-grid-tile>
+            <div style="width: 100vw; text-align: left;">
+                <button mat-raised-button (click)="openDragAndDropOrdering('Field', 'Classshape_FieldsDBID')">
+                    <mat-icon>
+                        shuffle
+                    </mat-icon>
+                </button>
+            </div>
+        </mat-grid-tile>
+    </mat-grid-list>
+    <mat-grid-list cols="2" rowHeight="6:1">
+        <mat-grid-tile>
+            <div style="width: 100vw; text-align: right;">
+                <button mat-raised-button
+                    (click)="openReverseSelection('Link', 'Classshape_LinksDBID')">Links</button>
+            </div>
+        </mat-grid-tile>
+        <mat-grid-tile>
+            <div style="width: 100vw; text-align: left;">
+                <button mat-raised-button (click)="openDragAndDropOrdering('Link', 'Classshape_LinksDBID')">
+                    <mat-icon>
+                        shuffle
+                    </mat-icon>
+                </button>
+            </div>
+        </mat-grid-tile>
+    </mat-grid-list>
     <!-- -->
     <div class="details__item">
         <form>

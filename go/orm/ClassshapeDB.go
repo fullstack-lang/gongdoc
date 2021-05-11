@@ -6,15 +6,18 @@ import (
 	"errors"
 	"fmt"
 	"log"
+	"sort"
 	"time"
 
 	"github.com/jinzhu/gorm"
+
 	"github.com/fullstack-lang/gongdoc/go/models"
 )
 
-// dummy variable to have the import database/sql wihthout compile failure id no sql is used
+// dummy variable to have the import declaration wihthout compile failure (even if no code needing this import is generated)
 var dummy_Classshape sql.NullBool
 var __Classshape_time__dummyDeclaration time.Duration
+var dummy_Classshape_sort sort.Float64Slice
 
 // ClassshapeAPI is the input in POST API
 //
@@ -51,6 +54,7 @@ type ClassshapeAPI struct {
 
 	// Implementation of a reverse ID for field Classdiagram{}.Classshapes []*Classshape
 	Classdiagram_ClassshapesDBID sql.NullInt64
+	Classdiagram_ClassshapesDBID_Index sql.NullInt64
 
 	// end of insertion
 }
@@ -222,10 +226,14 @@ func (backRepoClassshape *BackRepoClassshapeStruct) CommitPhaseTwoInstance(backR
 
 				// commit a slice of pointer translates to update reverse pointer to Field, i.e.
 				for _, field := range classshape.Fields {
+					index := 0
 					if fieldDBID, ok := (*backRepo.BackRepoField.Map_FieldPtr_FieldDBID)[field]; ok {
 						if fieldDB, ok := (*backRepo.BackRepoField.Map_FieldDBID_FieldDB)[fieldDBID]; ok {
 							fieldDB.Classshape_FieldsDBID.Int64 = int64(classshapeDB.ID)
 							fieldDB.Classshape_FieldsDBID.Valid = true
+							fieldDB.Classshape_FieldsDBID_Index.Int64 = int64(index)
+							index = index + 1
+							fieldDB.Classshape_FieldsDBID_Index.Valid = true
 							if q := backRepoClassshape.db.Save(&fieldDB); q.Error != nil {
 								return q.Error
 							}
@@ -235,10 +243,14 @@ func (backRepoClassshape *BackRepoClassshapeStruct) CommitPhaseTwoInstance(backR
 
 				// commit a slice of pointer translates to update reverse pointer to Link, i.e.
 				for _, link := range classshape.Links {
+					index := 0
 					if linkDBID, ok := (*backRepo.BackRepoLink.Map_LinkPtr_LinkDBID)[link]; ok {
 						if linkDB, ok := (*backRepo.BackRepoLink.Map_LinkDBID_LinkDB)[linkDBID]; ok {
 							linkDB.Classshape_LinksDBID.Int64 = int64(classshapeDB.ID)
 							linkDB.Classshape_LinksDBID.Valid = true
+							linkDB.Classshape_LinksDBID_Index.Int64 = int64(index)
+							index = index + 1
+							linkDB.Classshape_LinksDBID_Index.Valid = true
 							if q := backRepoClassshape.db.Save(&linkDB); q.Error != nil {
 								return q.Error
 							}
@@ -352,6 +364,17 @@ func (backRepoClassshape *BackRepoClassshapeStruct) CheckoutPhaseTwoInstance(bac
 					classshape.Fields = append(classshape.Fields, Field)
 				}
 			}
+			
+			// sort the array according to the order
+			sort.Slice(classshape.Fields, func(i, j int) bool {
+				fieldDB_i_ID := (*backRepo.BackRepoField.Map_FieldPtr_FieldDBID)[classshape.Fields[i]]
+				fieldDB_j_ID := (*backRepo.BackRepoField.Map_FieldPtr_FieldDBID)[classshape.Fields[j]]
+
+				fieldDB_i := (*backRepo.BackRepoField.Map_FieldDBID_FieldDB)[fieldDB_i_ID]
+				fieldDB_j := (*backRepo.BackRepoField.Map_FieldDBID_FieldDB)[fieldDB_j_ID]
+
+				return fieldDB_i.Classshape_FieldsDBID_Index.Int64 < fieldDB_j.Classshape_FieldsDBID_Index.Int64
+			})
 
 			// parse all LinkDB and redeem the array of poiners to Classshape
 			// first reset the slice
@@ -362,6 +385,17 @@ func (backRepoClassshape *BackRepoClassshapeStruct) CheckoutPhaseTwoInstance(bac
 					classshape.Links = append(classshape.Links, Link)
 				}
 			}
+			
+			// sort the array according to the order
+			sort.Slice(classshape.Links, func(i, j int) bool {
+				linkDB_i_ID := (*backRepo.BackRepoLink.Map_LinkPtr_LinkDBID)[classshape.Links[i]]
+				linkDB_j_ID := (*backRepo.BackRepoLink.Map_LinkPtr_LinkDBID)[classshape.Links[j]]
+
+				linkDB_i := (*backRepo.BackRepoLink.Map_LinkDBID_LinkDB)[linkDB_i_ID]
+				linkDB_j := (*backRepo.BackRepoLink.Map_LinkDBID_LinkDB)[linkDB_j_ID]
+
+				return linkDB_i.Classshape_LinksDBID_Index.Int64 < linkDB_j.Classshape_LinksDBID_Index.Int64
+			})
 
 			classshape.Width = classshapeDB.Width_Data.Float64
 

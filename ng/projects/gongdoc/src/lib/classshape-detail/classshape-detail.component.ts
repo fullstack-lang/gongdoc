@@ -7,6 +7,7 @@ import { ClassshapeService } from '../classshape.service'
 
 import { FrontRepoService, FrontRepo } from '../front-repo.service'
 import { MapOfComponents } from '../map-components'
+import { MapOfSortingComponents } from '../map-components'
 
 // insertion point for imports
 import { ClassshapeTargetTypeSelect, ClassshapeTargetTypeList } from '../ClassshapeTargetType'
@@ -113,6 +114,7 @@ export class ClassshapeDetailComponent implements OnInit {
 				this.classshape.Classdiagram_ClassshapesDBID = new NullInt64
 				this.classshape.Classdiagram_ClassshapesDBID.Int64 = this.classshape.Classdiagram_Classshapes_reverse.ID
 				this.classshape.Classdiagram_ClassshapesDBID.Valid = true
+				this.classshape.Classdiagram_ClassshapesDBID_Index.Valid = true
 				this.classshape.Classdiagram_Classshapes_reverse = undefined // very important, otherwise, circular JSON
 			}
 		}
@@ -132,6 +134,7 @@ export class ClassshapeDetailComponent implements OnInit {
 					this.classshape.Classdiagram_ClassshapesDBID = new NullInt64
 					this.classshape.Classdiagram_ClassshapesDBID.Int64 = id
 					this.classshape.Classdiagram_ClassshapesDBID.Valid = true
+					this.classshape.Classdiagram_ClassshapesDBID_Index.Valid = true
 					break
 			}
 			this.classshapeService.postClassshape(this.classshape).subscribe(classshape => {
@@ -153,13 +156,39 @@ export class ClassshapeDetailComponent implements OnInit {
 
 		// dialogConfig.disableClose = true;
 		dialogConfig.autoFocus = true;
+		dialogConfig.width = "50%"
+		dialogConfig.height = "50%"
 		dialogConfig.data = {
 			ID: this.classshape.ID,
 			ReversePointer: reverseField,
+			OrderingMode: false,
 		};
 		const dialogRef: MatDialogRef<string, any> = this.dialog.open(
 			MapOfComponents.get(AssociatedStruct).get(
 				AssociatedStruct + 'sTableComponent'
+			),
+			dialogConfig
+		);
+
+		dialogRef.afterClosed().subscribe(result => {
+			console.log('The dialog was closed');
+		});
+	}
+
+	openDragAndDropOrdering(AssociatedStruct: string, reverseField: string) {
+
+		const dialogConfig = new MatDialogConfig();
+
+		// dialogConfig.disableClose = true;
+		dialogConfig.autoFocus = true;
+		dialogConfig.data = {
+			ID: this.classshape.ID,
+			ReversePointer: reverseField,
+			OrderingMode: true,
+		};
+		const dialogRef: MatDialogRef<string, any> = this.dialog.open(
+			MapOfSortingComponents.get(AssociatedStruct).get(
+				AssociatedStruct + 'SortingComponent'
 			),
 			dialogConfig
 		);

@@ -6,15 +6,18 @@ import (
 	"errors"
 	"fmt"
 	"log"
+	"sort"
 	"time"
 
 	"github.com/jinzhu/gorm"
+
 	"github.com/fullstack-lang/gongdoc/go/models"
 )
 
-// dummy variable to have the import database/sql wihthout compile failure id no sql is used
+// dummy variable to have the import declaration wihthout compile failure (even if no code needing this import is generated)
 var dummy_Link sql.NullBool
 var __Link_time__dummyDeclaration time.Duration
+var dummy_Link_sort sort.Float64Slice
 
 // LinkAPI is the input in POST API
 //
@@ -51,6 +54,7 @@ type LinkAPI struct {
 
 	// Implementation of a reverse ID for field Classshape{}.Links []*Link
 	Classshape_LinksDBID sql.NullInt64
+	Classshape_LinksDBID_Index sql.NullInt64
 
 	// end of insertion
 }

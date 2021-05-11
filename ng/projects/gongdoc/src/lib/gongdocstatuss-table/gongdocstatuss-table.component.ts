@@ -126,7 +126,7 @@ export class GongdocStatussTableComponent implements OnInit {
           this.selection = new SelectionModel<GongdocStatusDB>(allowMultiSelect, this.initialSelection);
         }
 
-		// update the mat table data source
+        // update the mat table data source
         this.matTableDataSource.data = this.gongdocstatuss
       }
     )

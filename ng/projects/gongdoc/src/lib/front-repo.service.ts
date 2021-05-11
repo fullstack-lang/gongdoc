@@ -91,6 +91,7 @@ export class NullInt64 {
 export interface DialogData {
   ID: number; // ID of the calling instance
   ReversePointer: string; // field of {{Structname}} that serve as reverse pointer
+  OrderingMode: boolean; // if true, this is for ordering items
 }
 
 //
@@ -221,6 +222,18 @@ export class FrontRepoService {
                 }
               }
             )
+            
+            // sort Classdiagrams_array array
+            FrontRepoSingloton.Classdiagrams_array.sort((t1, t2) => {
+              if (t1.Name > t2.Name) {
+                return 1;
+              }
+              if (t1.Name < t2.Name) {
+                return -1;
+              }
+              return 0;
+            });
+            
             // init the array
             FrontRepoSingloton.Classshapes_array = classshapes
 
@@ -242,6 +255,18 @@ export class FrontRepoService {
                 }
               }
             )
+            
+            // sort Classshapes_array array
+            FrontRepoSingloton.Classshapes_array.sort((t1, t2) => {
+              if (t1.Name > t2.Name) {
+                return 1;
+              }
+              if (t1.Name < t2.Name) {
+                return -1;
+              }
+              return 0;
+            });
+            
             // init the array
             FrontRepoSingloton.Fields_array = fields
 
@@ -263,6 +288,18 @@ export class FrontRepoService {
                 }
               }
             )
+            
+            // sort Fields_array array
+            FrontRepoSingloton.Fields_array.sort((t1, t2) => {
+              if (t1.Name > t2.Name) {
+                return 1;
+              }
+              if (t1.Name < t2.Name) {
+                return -1;
+              }
+              return 0;
+            });
+            
             // init the array
             FrontRepoSingloton.GongdocCommands_array = gongdoccommands
 
@@ -284,6 +321,18 @@ export class FrontRepoService {
                 }
               }
             )
+            
+            // sort GongdocCommands_array array
+            FrontRepoSingloton.GongdocCommands_array.sort((t1, t2) => {
+              if (t1.Name > t2.Name) {
+                return 1;
+              }
+              if (t1.Name < t2.Name) {
+                return -1;
+              }
+              return 0;
+            });
+            
             // init the array
             FrontRepoSingloton.GongdocStatuss_array = gongdocstatuss
 
@@ -305,6 +354,18 @@ export class FrontRepoService {
                 }
               }
             )
+            
+            // sort GongdocStatuss_array array
+            FrontRepoSingloton.GongdocStatuss_array.sort((t1, t2) => {
+              if (t1.Name > t2.Name) {
+                return 1;
+              }
+              if (t1.Name < t2.Name) {
+                return -1;
+              }
+              return 0;
+            });
+            
             // init the array
             FrontRepoSingloton.Links_array = links
 
@@ -326,6 +387,18 @@ export class FrontRepoService {
                 }
               }
             )
+            
+            // sort Links_array array
+            FrontRepoSingloton.Links_array.sort((t1, t2) => {
+              if (t1.Name > t2.Name) {
+                return 1;
+              }
+              if (t1.Name < t2.Name) {
+                return -1;
+              }
+              return 0;
+            });
+            
             // init the array
             FrontRepoSingloton.Pkgelts_array = pkgelts
 
@@ -347,6 +420,18 @@ export class FrontRepoService {
                 }
               }
             )
+            
+            // sort Pkgelts_array array
+            FrontRepoSingloton.Pkgelts_array.sort((t1, t2) => {
+              if (t1.Name > t2.Name) {
+                return 1;
+              }
+              if (t1.Name < t2.Name) {
+                return -1;
+              }
+              return 0;
+            });
+            
             // init the array
             FrontRepoSingloton.Positions_array = positions
 
@@ -368,6 +453,18 @@ export class FrontRepoService {
                 }
               }
             )
+            
+            // sort Positions_array array
+            FrontRepoSingloton.Positions_array.sort((t1, t2) => {
+              if (t1.Name > t2.Name) {
+                return 1;
+              }
+              if (t1.Name < t2.Name) {
+                return -1;
+              }
+              return 0;
+            });
+            
             // init the array
             FrontRepoSingloton.States_array = states
 
@@ -389,6 +486,18 @@ export class FrontRepoService {
                 }
               }
             )
+            
+            // sort States_array array
+            FrontRepoSingloton.States_array.sort((t1, t2) => {
+              if (t1.Name > t2.Name) {
+                return 1;
+              }
+              if (t1.Name < t2.Name) {
+                return -1;
+              }
+              return 0;
+            });
+            
             // init the array
             FrontRepoSingloton.Umlscs_array = umlscs
 
@@ -410,6 +519,18 @@ export class FrontRepoService {
                 }
               }
             )
+            
+            // sort Umlscs_array array
+            FrontRepoSingloton.Umlscs_array.sort((t1, t2) => {
+              if (t1.Name > t2.Name) {
+                return 1;
+              }
+              if (t1.Name < t2.Name) {
+                return -1;
+              }
+              return 0;
+            });
+            
             // init the array
             FrontRepoSingloton.Vertices_array = vertices
 
@@ -431,6 +552,18 @@ export class FrontRepoService {
                 }
               }
             )
+            
+            // sort Vertices_array array
+            FrontRepoSingloton.Vertices_array.sort((t1, t2) => {
+              if (t1.Name > t2.Name) {
+                return 1;
+              }
+              if (t1.Name < t2.Name) {
+                return -1;
+              }
+              return 0;
+            });
+            
 
             // 
             // Second Step: redeem pointers between instances (thanks to maps in the First Step)
@@ -445,7 +578,7 @@ export class FrontRepoService {
                   let _pkgelt = FrontRepoSingloton.Pkgelts.get(classdiagram.Pkgelt_ClassdiagramsDBID.Int64)
                   if (_pkgelt) {
                     if (_pkgelt.Classdiagrams == undefined) {
-                      _pkgelt.Classdiagrams = new Array<PkgeltDB>()
+                      _pkgelt.Classdiagrams = new Array<ClassdiagramDB>()
                     }
                     _pkgelt.Classdiagrams.push(classdiagram)
                     if (classdiagram.Pkgelt_Classdiagrams_reverse == undefined) {
@@ -472,7 +605,7 @@ export class FrontRepoService {
                   let _classdiagram = FrontRepoSingloton.Classdiagrams.get(classshape.Classdiagram_ClassshapesDBID.Int64)
                   if (_classdiagram) {
                     if (_classdiagram.Classshapes == undefined) {
-                      _classdiagram.Classshapes = new Array<ClassdiagramDB>()
+                      _classdiagram.Classshapes = new Array<ClassshapeDB>()
                     }
                     _classdiagram.Classshapes.push(classshape)
                     if (classshape.Classdiagram_Classshapes_reverse == undefined) {
@@ -492,7 +625,7 @@ export class FrontRepoService {
                   let _classshape = FrontRepoSingloton.Classshapes.get(field.Classshape_FieldsDBID.Int64)
                   if (_classshape) {
                     if (_classshape.Fields == undefined) {
-                      _classshape.Fields = new Array<ClassshapeDB>()
+                      _classshape.Fields = new Array<FieldDB>()
                     }
                     _classshape.Fields.push(field)
                     if (field.Classshape_Fields_reverse == undefined) {
@@ -533,7 +666,7 @@ export class FrontRepoService {
                   let _classshape = FrontRepoSingloton.Classshapes.get(link.Classshape_LinksDBID.Int64)
                   if (_classshape) {
                     if (_classshape.Links == undefined) {
-                      _classshape.Links = new Array<ClassshapeDB>()
+                      _classshape.Links = new Array<LinkDB>()
                     }
                     _classshape.Links.push(link)
                     if (link.Classshape_Links_reverse == undefined) {
@@ -567,7 +700,7 @@ export class FrontRepoService {
                   let _umlsc = FrontRepoSingloton.Umlscs.get(state.Umlsc_StatesDBID.Int64)
                   if (_umlsc) {
                     if (_umlsc.States == undefined) {
-                      _umlsc.States = new Array<UmlscDB>()
+                      _umlsc.States = new Array<StateDB>()
                     }
                     _umlsc.States.push(state)
                     if (state.Umlsc_States_reverse == undefined) {
@@ -587,7 +720,7 @@ export class FrontRepoService {
                   let _pkgelt = FrontRepoSingloton.Pkgelts.get(umlsc.Pkgelt_UmlscsDBID.Int64)
                   if (_pkgelt) {
                     if (_pkgelt.Umlscs == undefined) {
-                      _pkgelt.Umlscs = new Array<PkgeltDB>()
+                      _pkgelt.Umlscs = new Array<UmlscDB>()
                     }
                     _pkgelt.Umlscs.push(umlsc)
                     if (umlsc.Pkgelt_Umlscs_reverse == undefined) {
@@ -647,7 +780,7 @@ export class FrontRepoService {
                   let _pkgelt = FrontRepoSingloton.Pkgelts.get(classdiagram.Pkgelt_ClassdiagramsDBID.Int64)
                   if (_pkgelt) {
                     if (_pkgelt.Classdiagrams == undefined) {
-                      _pkgelt.Classdiagrams = new Array<PkgeltDB>()
+                      _pkgelt.Classdiagrams = new Array<ClassdiagramDB>()
                     }
                     _pkgelt.Classdiagrams.push(classdiagram)
                     if (classdiagram.Pkgelt_Classdiagrams_reverse == undefined) {
@@ -718,7 +851,7 @@ export class FrontRepoService {
                   let _classdiagram = FrontRepoSingloton.Classdiagrams.get(classshape.Classdiagram_ClassshapesDBID.Int64)
                   if (_classdiagram) {
                     if (_classdiagram.Classshapes == undefined) {
-                      _classdiagram.Classshapes = new Array<ClassdiagramDB>()
+                      _classdiagram.Classshapes = new Array<ClassshapeDB>()
                     }
                     _classdiagram.Classshapes.push(classshape)
                     if (classshape.Classdiagram_Classshapes_reverse == undefined) {
@@ -782,7 +915,7 @@ export class FrontRepoService {
                   let _classshape = FrontRepoSingloton.Classshapes.get(field.Classshape_FieldsDBID.Int64)
                   if (_classshape) {
                     if (_classshape.Fields == undefined) {
-                      _classshape.Fields = new Array<ClassshapeDB>()
+                      _classshape.Fields = new Array<FieldDB>()
                     }
                     _classshape.Fields.push(field)
                     if (field.Classshape_Fields_reverse == undefined) {
@@ -955,7 +1088,7 @@ export class FrontRepoService {
                   let _classshape = FrontRepoSingloton.Classshapes.get(link.Classshape_LinksDBID.Int64)
                   if (_classshape) {
                     if (_classshape.Links == undefined) {
-                      _classshape.Links = new Array<ClassshapeDB>()
+                      _classshape.Links = new Array<LinkDB>()
                     }
                     _classshape.Links.push(link)
                     if (link.Classshape_Links_reverse == undefined) {
@@ -1121,7 +1254,7 @@ export class FrontRepoService {
                   let _umlsc = FrontRepoSingloton.Umlscs.get(state.Umlsc_StatesDBID.Int64)
                   if (_umlsc) {
                     if (_umlsc.States == undefined) {
-                      _umlsc.States = new Array<UmlscDB>()
+                      _umlsc.States = new Array<StateDB>()
                     }
                     _umlsc.States.push(state)
                     if (state.Umlsc_States_reverse == undefined) {
@@ -1185,7 +1318,7 @@ export class FrontRepoService {
                   let _pkgelt = FrontRepoSingloton.Pkgelts.get(umlsc.Pkgelt_UmlscsDBID.Int64)
                   if (_pkgelt) {
                     if (_pkgelt.Umlscs == undefined) {
-                      _pkgelt.Umlscs = new Array<PkgeltDB>()
+                      _pkgelt.Umlscs = new Array<UmlscDB>()
                     }
                     _pkgelt.Umlscs.push(umlsc)
                     if (umlsc.Pkgelt_Umlscs_reverse == undefined) {
