@@ -24,6 +24,32 @@
 			"group": "build"
 		},
 		{
+			"label": "02 - go run on test/geometry",
+			"type": "shell",
+			"options": {
+				"cwd": "."
+			},
+			"command": "go",
+			"args": [
+				"run",
+				"main.go",
+				"go/tests/geometry/diagrams"
+			],
+			"group": "build"
+		},
+		{
+			"label": "02 - go install gongdoc",
+			"type": "shell",
+			"options": {
+				"cwd": "."
+			},
+			"command": "go",
+			"args": [
+				"install",
+			],
+			"group": "build"
+		},
+		{
 			"label": "01 - gongc",
 			"type": "shell",
 			"options": {
