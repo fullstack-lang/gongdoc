@@ -446,6 +446,52 @@ export class SidebarGongDiagramsComponent implements OnInit {
   }
 
   /**
+ * removeBasicFieldFromDiagram is called from the html template
+ * 
+ * @param gongFlatNode 
+ */
+  removeBasicFieldFromDiagram(gongFlatNode: GongFlatNode) {
+
+    // get the GongdocCommandSingloton
+    let gongdocCommandSingloton = this.gongdocFrontRepo.GongdocCommands.get(1)
+    if (gongdocCommandSingloton != undefined) {
+      gongdocCommandSingloton.Command = gongdoc.GongdocCommandType.DIAGRAM_ELEMENT_DELETE
+      gongdocCommandSingloton.DiagramName = this.currentClassdiagram.Name
+      gongdocCommandSingloton.StructName = gongFlatNode.structName
+      gongdocCommandSingloton.Date = Date.now().toString()
+      gongdocCommandSingloton.GongdocNodeType = gongFlatNode.type
+      gongdocCommandSingloton.FieldName = gongFlatNode.name
+
+      this.gongdocCommandService.updateGongdocCommand(gongdocCommandSingloton).subscribe(
+        GongdocCommand => {
+          console.log("GongdocCommand updated")
+        }
+      )
+    }
+  }
+
+  addBasicFieldToDiagram(gongFlatNode: GongFlatNode) {
+
+    // get the GongdocCommandSingloton
+    let gongdocCommandSingloton = this.gongdocFrontRepo.GongdocCommands.get(1)
+    if (gongdocCommandSingloton != undefined) {
+      gongdocCommandSingloton.Command = gongdoc.GongdocCommandType.DIAGRAM_ELEMENT_CREATE
+      gongdocCommandSingloton.DiagramName = this.currentClassdiagram.Name
+      gongdocCommandSingloton.StructName = gongFlatNode.structName
+      gongdocCommandSingloton.Date = Date.now().toString()
+      gongdocCommandSingloton.GongdocNodeType = gongFlatNode.type
+      gongdocCommandSingloton.FieldName = gongFlatNode.name
+      gongdocCommandSingloton.FieldTypeName = gongFlatNode.gongBasicField?.BasicKindName
+
+      this.gongdocCommandService.updateGongdocCommand(gongdocCommandSingloton).subscribe(
+        GongdocCommand => {
+          console.log("GongdocCommand updated")
+        }
+      )
+    }
+  }
+
+  /**
    * dropped is called from the html template
    * 
    * @param event 

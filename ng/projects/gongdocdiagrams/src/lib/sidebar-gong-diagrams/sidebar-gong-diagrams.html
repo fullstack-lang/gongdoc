@@ -46,26 +46,17 @@
                     <!-- if the element is present, display an icon to allow for the removal of the element -->
                     <ng-template #leafPresentBlock>
                         <span>{{node.name}} &nbsp;</span>
-                        <mat-icon class="node-link-icon" (click)="removeNodeFromDiagram(node)">
-                            visibility_off_outline
+                        <mat-icon class="node-link-icon" (click)="removeBasicFieldFromDiagram(node)">
+                            visibility_off
                         </mat-icon>
                     </ng-template>
 
                     <!-- -->
                     <ng-template #leafNotPresentBlock>
-                        <div *ngIf="node.draggable; then leafDraggableBlock else leafNotDraggableBlock"></div>
-                        <ng-template #leafDraggableBlock>
-                            <span cdkDrag>{{node.name}} &nbsp;</span>
-                            <mat-icon cdkDrag class="node-link-icon">
-                                person_add
-                            </mat-icon>
-                        </ng-template>
-                        <ng-template #leafNotDraggableBlock>
-                            <span>{{node.name}} &nbsp;</span>
-                            <mat-icon class="node-link-icon">
-                                person_add_alt
-                            </mat-icon>
-                        </ng-template>
+                        <span>{{node.name}} &nbsp;</span>
+                        <mat-icon class="node-link-icon" (click)="addBasicFieldToDiagram(node)">
+                            visibility
+                        </mat-icon>
                     </ng-template>
                 </div>
             </div>
@@ -93,7 +84,7 @@
                     <span>{{node.name}} &nbsp;</span>
                 </div>
                 <mat-icon class="node-link-icon" (click)="removeNodeFromDiagram(node)">
-                    visibility_off_outline
+                    visibility_off
                 </mat-icon>
             </ng-template>
 
