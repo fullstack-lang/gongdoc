@@ -33,7 +33,10 @@
 			"args": [
 				"run",
 				"main.go",
-				"go/tests/geometry/diagrams"
+				"-diagramPkgPath",
+				"go/tests/geometry/diagrams",
+				"-pkgPath",
+				"go/tests/geometry/models",
 			],
 			"group": "build"
 		},

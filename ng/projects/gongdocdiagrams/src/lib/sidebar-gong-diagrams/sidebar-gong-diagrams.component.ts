@@ -1,7 +1,6 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { Router, ActivatedRoute, RouterState, ParamMap } from '@angular/router';
 import { CdkDragDrop } from '@angular/cdk/drag-drop';
-import { ElementRef, Injectable } from '@angular/core';
+import { ElementRef } from '@angular/core';
 
 import { FlatTreeControl } from '@angular/cdk/tree';
 import { MatTreeFlatDataSource, MatTreeFlattener } from '@angular/material/tree';
@@ -18,6 +17,7 @@ import { NoDataRowOutlet } from '@angular/cdk/table';
 
 /**
  * GongNode is the "data" node that is construed from the gongFrontRepo
+ * 
  */
 interface GongNode {
   name: string // if STRUCT, the name of the struct, if INSTANCE the name of the instance
@@ -26,7 +26,9 @@ interface GongNode {
   structName: string
   id: number
   uniqueIdPerStack: number
-  instancePresentInDiagram?: boolean // for "instance" type node, in order to guide the display
+
+  // specific field for gongdoc
+  present?: boolean // for "instance" type node, in order to guide the display
   gongBasicField?: GongBasicFieldDB
   draggable: boolean
 }
@@ -42,6 +44,8 @@ export interface GongFlatNode {
   structName: string
   id: number
   uniqueIdPerStack: number
+
+  // specific field for gongdoc
   present?: boolean
   gongBasicField?: GongBasicFieldDB
   draggable: boolean
@@ -52,6 +56,19 @@ export interface DragDropPosition {
   y: number;
 }
 
+/**
+ * SidebarGongDiagramsComponent is the component that displays all gongstructs of the gong model
+ * that is modeled
+ * 
+ * each gong struct have:
+ * - basic fields
+ * - pointer to gong struct
+ * - slice of pointer to gong struct
+ * 
+ * the component deals with actions on those elements
+ * 
+ * the sidebar component is bespoke rework of the default gong generated sidebar
+ */
 @Component({
   styleUrls: ['./sidebar-gong-diagrams.css'],
   selector: 'lib-sidebar-gong-diagams',
@@ -59,9 +76,13 @@ export interface DragDropPosition {
 })
 export class SidebarGongDiagramsComponent implements OnInit {
 
+  /**
+   * innerHTMLelement is the html elemnt of the diagram
+   * it allows the Sidebar component to devise the drop position of the gongstruct
+   */
   @ViewChild('innerHTMLelement') innerHTMLelement: ElementRef;
 
-  // the current classdiagram
+  // the classdiagram that is currently displayed
   currentClassdiagram: gongdoc.ClassdiagramDB
 
   /**
@@ -94,7 +115,9 @@ export class SidebarGongDiagramsComponent implements OnInit {
       structName: node.structName,
       id: node.id,
       uniqueIdPerStack: node.uniqueIdPerStack,
-      present: node.instancePresentInDiagram,
+
+      // specific to gongdoc
+      present: node.present,
       gongBasicField: node.gongBasicField,
       draggable: node.draggable
     }
@@ -158,8 +181,6 @@ export class SidebarGongDiagramsComponent implements OnInit {
   classdiagramContext: ClassdiagramContext
 
   constructor(
-    private route: ActivatedRoute,
-    private router: Router,
     private gongFrontRepoService: gong.FrontRepoService,
     private gongdocFrontRepoService: gongdoc.FrontRepoService,
     private gongdocCommandService: gongdoc.GongdocCommandService,
@@ -186,8 +207,8 @@ export class SidebarGongDiagramsComponent implements OnInit {
       gongdocFrontRepo => {
         this.gongdocFrontRepo = gongdocFrontRepo
 
-        // // listen to any new diagram draw in order to update the 
-        // // gong tree appaeance
+        // listen to any new diagram draw in order to update the 
+        // gong tree appaeance
         ClassdiagramContextSubject.subscribe(
           classdiagramContext => {
             this.classdiagramContext = classdiagramContext
@@ -233,7 +254,9 @@ export class SidebarGongDiagramsComponent implements OnInit {
         uniqueIdPerStack: 13 * nonInstanceNodeId,
         structName: "GongStruct",
         children: new Array<GongNode>(),
-        instancePresentInDiagram: false,
+
+        // the root node is neither present not draggable
+        present: false,
         draggable: false,
       }
       nonInstanceNodeId = nonInstanceNodeId + 1
@@ -259,7 +282,10 @@ export class SidebarGongDiagramsComponent implements OnInit {
             uniqueIdPerStack: gong.getGongStructUniqueID(gongstructDB.ID),
             structName: gongstructDB.Name,
             children: new Array<GongNode>(),
-            instancePresentInDiagram: arrayOfDispaledGongStruct.has(gongstructDB.Name),
+
+            // specific to gongdoc
+            //
+            present: arrayOfDispaledGongStruct.has(gongstructDB.Name),
             draggable: false,
           }
           gongstructGongNodeStruct.children.push(gongstructGongNodeInstance)
@@ -303,7 +329,7 @@ export class SidebarGongDiagramsComponent implements OnInit {
               structName: gongstructDB.Name,
               gongBasicField: gongbasicfieldDB,
               children: new Array<GongNode>(),
-              instancePresentInDiagram: arrayOfDispaledGongField.has(gongbasicfieldDB.Name),
+              present: arrayOfDispaledGongField.has(gongbasicfieldDB.Name),
               draggable: draggable,
             }
             GongBasicFieldsGongNodeAssociation.children.push(gongbasicfieldNode)
