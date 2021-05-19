@@ -195,14 +195,14 @@ func (backRepoClassdiagram *BackRepoClassdiagramStruct) CommitPhaseTwoInstance(b
 				classdiagramDB.Name_Data.Valid = true
 
 				// commit a slice of pointer translates to update reverse pointer to Classshape, i.e.
+				index_Classshapes := 0
 				for _, classshape := range classdiagram.Classshapes {
-					index := 0
 					if classshapeDBID, ok := (*backRepo.BackRepoClassshape.Map_ClassshapePtr_ClassshapeDBID)[classshape]; ok {
 						if classshapeDB, ok := (*backRepo.BackRepoClassshape.Map_ClassshapeDBID_ClassshapeDB)[classshapeDBID]; ok {
 							classshapeDB.Classdiagram_ClassshapesDBID.Int64 = int64(classdiagramDB.ID)
 							classshapeDB.Classdiagram_ClassshapesDBID.Valid = true
-							classshapeDB.Classdiagram_ClassshapesDBID_Index.Int64 = int64(index)
-							index = index + 1
+							classshapeDB.Classdiagram_ClassshapesDBID_Index.Int64 = int64(index_Classshapes)
+							index_Classshapes = index_Classshapes + 1
 							classshapeDB.Classdiagram_ClassshapesDBID_Index.Valid = true
 							if q := backRepoClassdiagram.db.Save(&classshapeDB); q.Error != nil {
 								return q.Error

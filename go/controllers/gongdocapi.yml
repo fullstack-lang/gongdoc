@@ -193,7 +193,8 @@ definitions:
     x-go-name: ClassdiagramAPI
     x-go-package: github.com/fullstack-lang/gongdoc/go/orm
   classdiagramDB:
-    description: 'It incorporates all fields : from the model, from the generated field for the API and the GORM ID'
+    description: 'It incorporates all fields : from the model, from the generated
+      field for the API and the GORM ID'
     properties:
       Classshapes:
         description: |-
@@ -260,7 +261,8 @@ definitions:
       PositionID:
         $ref: '#/definitions/NullInt64'
       PositionName:
-        description: all gong Struct has a Name field, this enables this data to object field
+        description: all gong Struct has a Name field, this enables this data to object
+          field
         type: string
       Structname:
         type: string
@@ -280,7 +282,8 @@ definitions:
     x-go-name: ClassshapeAPI
     x-go-package: github.com/fullstack-lang/gongdoc/go/orm
   classshapeDB:
-    description: 'It incorporates all fields : from the model, from the generated field for the API and the GORM ID'
+    description: 'It incorporates all fields : from the model, from the generated
+      field for the API and the GORM ID'
     properties:
       Classdiagram_ClassshapesDBID:
         $ref: '#/definitions/NullInt64'
@@ -319,7 +322,8 @@ definitions:
       PositionID:
         $ref: '#/definitions/NullInt64'
       PositionName:
-        description: all gong Struct has a Name field, this enables this data to object field
+        description: all gong Struct has a Name field, this enables this data to object
+          field
         type: string
       Structname:
         type: string
@@ -376,7 +380,8 @@ definitions:
     x-go-name: FieldAPI
     x-go-package: github.com/fullstack-lang/gongdoc/go/orm
   fieldDB:
-    description: 'It incorporates all fields : from the model, from the generated field for the API and the GORM ID'
+    description: 'It incorporates all fields : from the model, from the generated
+      field for the API and the GORM ID'
     properties:
       Classshape_FieldsDBID:
         $ref: '#/definitions/NullInt64'
@@ -430,6 +435,14 @@ definitions:
         - PRINT_ALL_DOCUMENTS
         - DIAGRAM_ELEMENT_DELETE
         - DIAGRAM_ELEMENT_CREATE
+        - DIAGRAM_GONGSTRUCT_DELETE
+        - DIAGRAM_GONGSTRUCT_CREATE
+        - DIAGRAM_BASICFIELD_DELETE
+        - DIAGRAM_BASICFIELD_CREATE
+        - DIAGRAM_POINTER_TO_GONGSTRUCT_DELETE
+        - DIAGRAM_POINTER_TO_GONGSTRUCT_CREATE
+        - DIAGRAM_SLICE_OF_POINTERS_TO_GONGSTRUCT_DELETE
+        - DIAGRAM_SLICE_OF_POINTERS_TO_GONGSTRUCT_CREATE
         type: string
       Command_Data:
         $ref: '#/definitions/NullString'
@@ -485,7 +498,8 @@ definitions:
     x-go-name: GongdocCommandAPI
     x-go-package: github.com/fullstack-lang/gongdoc/go/orm
   gongdoccommandDB:
-    description: 'It incorporates all fields : from the model, from the generated field for the API and the GORM ID'
+    description: 'It incorporates all fields : from the model, from the generated
+      field for the API and the GORM ID'
     properties:
       Command:
         enum:
@@ -493,6 +507,14 @@ definitions:
         - PRINT_ALL_DOCUMENTS
         - DIAGRAM_ELEMENT_DELETE
         - DIAGRAM_ELEMENT_CREATE
+        - DIAGRAM_GONGSTRUCT_DELETE
+        - DIAGRAM_GONGSTRUCT_CREATE
+        - DIAGRAM_BASICFIELD_DELETE
+        - DIAGRAM_BASICFIELD_CREATE
+        - DIAGRAM_POINTER_TO_GONGSTRUCT_DELETE
+        - DIAGRAM_POINTER_TO_GONGSTRUCT_CREATE
+        - DIAGRAM_SLICE_OF_POINTERS_TO_GONGSTRUCT_DELETE
+        - DIAGRAM_SLICE_OF_POINTERS_TO_GONGSTRUCT_CREATE
         type: string
       Command_Data:
         $ref: '#/definitions/NullString'
@@ -579,6 +601,14 @@ definitions:
         - PRINT_ALL_DOCUMENTS
         - DIAGRAM_ELEMENT_DELETE
         - DIAGRAM_ELEMENT_CREATE
+        - DIAGRAM_GONGSTRUCT_DELETE
+        - DIAGRAM_GONGSTRUCT_CREATE
+        - DIAGRAM_BASICFIELD_DELETE
+        - DIAGRAM_BASICFIELD_CREATE
+        - DIAGRAM_POINTER_TO_GONGSTRUCT_DELETE
+        - DIAGRAM_POINTER_TO_GONGSTRUCT_CREATE
+        - DIAGRAM_SLICE_OF_POINTERS_TO_GONGSTRUCT_DELETE
+        - DIAGRAM_SLICE_OF_POINTERS_TO_GONGSTRUCT_CREATE
         type: string
       Status_Data:
         $ref: '#/definitions/NullString'
@@ -587,7 +617,8 @@ definitions:
     x-go-name: GongdocStatusAPI
     x-go-package: github.com/fullstack-lang/gongdoc/go/orm
   gongdocstatusDB:
-    description: 'It incorporates all fields : from the model, from the generated field for the API and the GORM ID'
+    description: 'It incorporates all fields : from the model, from the generated
+      field for the API and the GORM ID'
     properties:
       CommandCompletionDate:
         type: string
@@ -612,6 +643,14 @@ definitions:
         - PRINT_ALL_DOCUMENTS
         - DIAGRAM_ELEMENT_DELETE
         - DIAGRAM_ELEMENT_CREATE
+        - DIAGRAM_GONGSTRUCT_DELETE
+        - DIAGRAM_GONGSTRUCT_CREATE
+        - DIAGRAM_BASICFIELD_DELETE
+        - DIAGRAM_BASICFIELD_CREATE
+        - DIAGRAM_POINTER_TO_GONGSTRUCT_DELETE
+        - DIAGRAM_POINTER_TO_GONGSTRUCT_CREATE
+        - DIAGRAM_SLICE_OF_POINTERS_TO_GONGSTRUCT_DELETE
+        - DIAGRAM_SLICE_OF_POINTERS_TO_GONGSTRUCT_CREATE
         type: string
       Status_Data:
         $ref: '#/definitions/NullString'
@@ -643,7 +682,8 @@ definitions:
       MiddleverticeID:
         $ref: '#/definitions/NullInt64'
       MiddleverticeName:
-        description: all gong Struct has a Name field, this enables this data to object field
+        description: all gong Struct has a Name field, this enables this data to object
+          field
         type: string
       Multiplicity:
         $ref: '#/definitions/MultiplicityType'
@@ -662,7 +702,8 @@ definitions:
     x-go-name: LinkAPI
     x-go-package: github.com/fullstack-lang/gongdoc/go/orm
   linkDB:
-    description: 'It incorporates all fields : from the model, from the generated field for the API and the GORM ID'
+    description: 'It incorporates all fields : from the model, from the generated
+      field for the API and the GORM ID'
     properties:
       Classshape_LinksDBID:
         $ref: '#/definitions/NullInt64'
@@ -688,7 +729,8 @@ definitions:
       MiddleverticeID:
         $ref: '#/definitions/NullInt64'
       MiddleverticeName:
-        description: all gong Struct has a Name field, this enables this data to object field
+        description: all gong Struct has a Name field, this enables this data to object
+          field
         type: string
       Multiplicity:
         $ref: '#/definitions/MultiplicityType'
@@ -736,7 +778,8 @@ definitions:
     x-go-name: PkgeltAPI
     x-go-package: github.com/fullstack-lang/gongdoc/go/orm
   pkgeltDB:
-    description: 'It incorporates all fields : from the model, from the generated field for the API and the GORM ID'
+    description: 'It incorporates all fields : from the model, from the generated
+      field for the API and the GORM ID'
     properties:
       Classdiagrams:
         items:
@@ -795,7 +838,8 @@ definitions:
     x-go-name: PositionAPI
     x-go-package: github.com/fullstack-lang/gongdoc/go/orm
   positionDB:
-    description: 'It incorporates all fields : from the model, from the generated field for the API and the GORM ID'
+    description: 'It incorporates all fields : from the model, from the generated
+      field for the API and the GORM ID'
     properties:
       CreatedAt:
         format: date-time
@@ -856,7 +900,8 @@ definitions:
     x-go-name: StateAPI
     x-go-package: github.com/fullstack-lang/gongdoc/go/orm
   stateDB:
-    description: 'It incorporates all fields : from the model, from the generated field for the API and the GORM ID'
+    description: 'It incorporates all fields : from the model, from the generated
+      field for the API and the GORM ID'
     properties:
       CreatedAt:
         format: date-time
@@ -925,7 +970,8 @@ definitions:
     x-go-name: UmlscAPI
     x-go-package: github.com/fullstack-lang/gongdoc/go/orm
   umlscDB:
-    description: 'It incorporates all fields : from the model, from the generated field for the API and the GORM ID'
+    description: 'It incorporates all fields : from the model, from the generated
+      field for the API and the GORM ID'
     properties:
       Activestate:
         description: |-
@@ -990,7 +1036,8 @@ definitions:
     x-go-name: VerticeAPI
     x-go-package: github.com/fullstack-lang/gongdoc/go/orm
   verticeDB:
-    description: 'It incorporates all fields : from the model, from the generated field for the API and the GORM ID'
+    description: 'It incorporates all fields : from the model, from the generated
+      field for the API and the GORM ID'
     properties:
       CreatedAt:
         format: date-time
@@ -1986,7 +2033,8 @@ responses:
           insertion for fields declaration
           Declation for basic field classdiagramDB.Name {{BasicKind}} (to be completed)
       Pkgelt_ClassdiagramsDBID:
-        description: Implementation of a reverse ID for field Pkgelt{}.Classdiagrams []*Classdiagram
+        description: Implementation of a reverse ID for field Pkgelt{}.Classdiagrams
+          []*Classdiagram
       Pkgelt_ClassdiagramsDBID_Index: {}
       UpdatedAt:
         format: date-time
@@ -2003,11 +2051,13 @@ responses:
     description: ClassshapeDBResponse provides response
     headers:
       Classdiagram_ClassshapesDBID:
-        description: Implementation of a reverse ID for field Classdiagram{}.Classshapes []*Classshape
+        description: Implementation of a reverse ID for field Classdiagram{}.Classshapes
+          []*Classshape
       Classdiagram_ClassshapesDBID_Index: {}
       ClassshapeTargetType: {}
       ClassshapeTargetType_Data:
-        description: Declation for basic field classshapeDB.ClassshapeTargetType {{BasicKind}} (to be completed)
+        description: Declation for basic field classshapeDB.ClassshapeTargetType {{BasicKind}}
+          (to be completed)
       CreatedAt:
         format: date-time
         type: string
@@ -2020,7 +2070,8 @@ responses:
           $ref: '#/definitions/Field'
         type: array
       Heigth_Data:
-        description: Declation for basic field classshapeDB.Heigth {{BasicKind}} (to be completed)
+        description: Declation for basic field classshapeDB.Heigth {{BasicKind}} (to
+          be completed)
       ID:
         format: uint64
         type: integer
@@ -2041,12 +2092,14 @@ responses:
           field Position is a pointer to another Struct (optional or 0..1)
           This field is generated into another field to enable AS ONE association
       PositionName:
-        description: all gong Struct has a Name field, this enables this data to object field
+        description: all gong Struct has a Name field, this enables this data to object
+          field
         type: string
       Structname:
         type: string
       Structname_Data:
-        description: Declation for basic field classshapeDB.Structname {{BasicKind}} (to be completed)
+        description: Declation for basic field classshapeDB.Structname {{BasicKind}}
+          (to be completed)
       UpdatedAt:
         format: date-time
         type: string
@@ -2057,7 +2110,8 @@ responses:
         format: double
         type: number
       Width_Data:
-        description: Declation for basic field classshapeDB.Width {{BasicKind}} (to be completed)
+        description: Declation for basic field classshapeDB.Width {{BasicKind}} (to
+          be completed)
     schema:
       $ref: '#/definitions/NullInt64'
   classshapeDBsResponse:
@@ -2070,7 +2124,8 @@ responses:
     description: FieldDBResponse provides response
     headers:
       Classshape_FieldsDBID:
-        description: Implementation of a reverse ID for field Classshape{}.Fields []*Field
+        description: Implementation of a reverse ID for field Classshape{}.Fields
+          []*Field
       Classshape_FieldsDBID_Index: {}
       CreatedAt:
         format: date-time
@@ -2081,15 +2136,18 @@ responses:
       FieldTypeAsString:
         type: string
       FieldTypeAsString_Data:
-        description: Declation for basic field fieldDB.FieldTypeAsString {{BasicKind}} (to be completed)
+        description: Declation for basic field fieldDB.FieldTypeAsString {{BasicKind}}
+          (to be completed)
       Fieldname:
         type: string
       Fieldname_Data:
-        description: Declation for basic field fieldDB.Fieldname {{BasicKind}} (to be completed)
+        description: Declation for basic field fieldDB.Fieldname {{BasicKind}} (to
+          be completed)
       Fieldtypename:
         type: string
       Fieldtypename_Data:
-        description: Declation for basic field fieldDB.Fieldtypename {{BasicKind}} (to be completed)
+        description: Declation for basic field fieldDB.Fieldtypename {{BasicKind}}
+          (to be completed)
       ID:
         format: uint64
         type: integer
@@ -2102,7 +2160,8 @@ responses:
       Structname:
         type: string
       Structname_Data:
-        description: Declation for basic field fieldDB.Structname {{BasicKind}} (to be completed)
+        description: Declation for basic field fieldDB.Structname {{BasicKind}} (to
+          be completed)
       UpdatedAt:
         format: date-time
         type: string
@@ -2137,31 +2196,44 @@ responses:
           - PRINT_ALL_DOCUMENTS
           - DIAGRAM_ELEMENT_DELETE
           - DIAGRAM_ELEMENT_CREATE
+          - DIAGRAM_GONGSTRUCT_DELETE
+          - DIAGRAM_GONGSTRUCT_CREATE
+          - DIAGRAM_BASICFIELD_DELETE
+          - DIAGRAM_BASICFIELD_CREATE
+          - DIAGRAM_POINTER_TO_GONGSTRUCT_DELETE
+          - DIAGRAM_POINTER_TO_GONGSTRUCT_CREATE
+          - DIAGRAM_SLICE_OF_POINTERS_TO_GONGSTRUCT_DELETE
+          - DIAGRAM_SLICE_OF_POINTERS_TO_GONGSTRUCT_CREATE
         type: string
       Command_Data:
-        description: Declation for basic field gongdoccommandDB.Command {{BasicKind}} (to be completed)
+        description: Declation for basic field gongdoccommandDB.Command {{BasicKind}}
+          (to be completed)
       CreatedAt:
         format: date-time
         type: string
       Date:
         type: string
       Date_Data:
-        description: Declation for basic field gongdoccommandDB.Date {{BasicKind}} (to be completed)
+        description: Declation for basic field gongdoccommandDB.Date {{BasicKind}}
+          (to be completed)
       DeletedAt:
         format: date-time
         type: string
       DiagramName:
         type: string
       DiagramName_Data:
-        description: Declation for basic field gongdoccommandDB.DiagramName {{BasicKind}} (to be completed)
+        description: Declation for basic field gongdoccommandDB.DiagramName {{BasicKind}}
+          (to be completed)
       FieldName:
         type: string
       FieldName_Data:
-        description: Declation for basic field gongdoccommandDB.FieldName {{BasicKind}} (to be completed)
+        description: Declation for basic field gongdoccommandDB.FieldName {{BasicKind}}
+          (to be completed)
       FieldTypeName:
         type: string
       FieldTypeName_Data:
-        description: Declation for basic field gongdoccommandDB.FieldTypeName {{BasicKind}} (to be completed)
+        description: Declation for basic field gongdoccommandDB.FieldTypeName {{BasicKind}}
+          (to be completed)
       GongdocNodeType:
         enum:
         - - ROOT_OF_GONG_STRUCTS
@@ -2174,7 +2246,8 @@ responses:
           - SLICE_OF_POINTER_TO_STRUCT
         type: string
       GongdocNodeType_Data:
-        description: Declation for basic field gongdoccommandDB.GongdocNodeType {{BasicKind}} (to be completed)
+        description: Declation for basic field gongdoccommandDB.GongdocNodeType {{BasicKind}}
+          (to be completed)
       ID:
         format: uint64
         type: integer
@@ -2188,16 +2261,19 @@ responses:
         format: int64
         type: integer
       PositionX_Data:
-        description: Declation for basic field gongdoccommandDB.PositionX {{BasicKind}} (to be completed)
+        description: Declation for basic field gongdoccommandDB.PositionX {{BasicKind}}
+          (to be completed)
       PositionY:
         format: int64
         type: integer
       PositionY_Data:
-        description: Declation for basic field gongdoccommandDB.PositionY {{BasicKind}} (to be completed)
+        description: Declation for basic field gongdoccommandDB.PositionY {{BasicKind}}
+          (to be completed)
       StructName:
         type: string
       StructName_Data:
-        description: Declation for basic field gongdoccommandDB.StructName {{BasicKind}} (to be completed)
+        description: Declation for basic field gongdoccommandDB.StructName {{BasicKind}}
+          (to be completed)
       UpdatedAt:
         format: date-time
         type: string
@@ -2215,7 +2291,8 @@ responses:
       CommandCompletionDate:
         type: string
       CommandCompletionDate_Data:
-        description: Declation for basic field gongdocstatusDB.CommandCompletionDate {{BasicKind}} (to be completed)
+        description: Declation for basic field gongdocstatusDB.CommandCompletionDate
+          {{BasicKind}} (to be completed)
       CreatedAt:
         format: date-time
         type: string
@@ -2237,9 +2314,18 @@ responses:
           - PRINT_ALL_DOCUMENTS
           - DIAGRAM_ELEMENT_DELETE
           - DIAGRAM_ELEMENT_CREATE
+          - DIAGRAM_GONGSTRUCT_DELETE
+          - DIAGRAM_GONGSTRUCT_CREATE
+          - DIAGRAM_BASICFIELD_DELETE
+          - DIAGRAM_BASICFIELD_CREATE
+          - DIAGRAM_POINTER_TO_GONGSTRUCT_DELETE
+          - DIAGRAM_POINTER_TO_GONGSTRUCT_CREATE
+          - DIAGRAM_SLICE_OF_POINTERS_TO_GONGSTRUCT_DELETE
+          - DIAGRAM_SLICE_OF_POINTERS_TO_GONGSTRUCT_CREATE
         type: string
       Status_Data:
-        description: Declation for basic field gongdocstatusDB.Status {{BasicKind}} (to be completed)
+        description: Declation for basic field gongdocstatusDB.Status {{BasicKind}}
+          (to be completed)
       UpdatedAt:
         format: date-time
         type: string
@@ -2266,11 +2352,13 @@ responses:
       Fieldname:
         type: string
       Fieldname_Data:
-        description: Declation for basic field linkDB.Fieldname {{BasicKind}} (to be completed)
+        description: Declation for basic field linkDB.Fieldname {{BasicKind}} (to
+          be completed)
       Fieldtypename:
         type: string
       Fieldtypename_Data:
-        description: Declation for basic field linkDB.Fieldtypename {{BasicKind}} (to be completed)
+        description: Declation for basic field linkDB.Fieldtypename {{BasicKind}}
+          (to be completed)
       ID:
         format: uint64
         type: integer
@@ -2279,11 +2367,13 @@ responses:
           field Middlevertice is a pointer to another Struct (optional or 0..1)
           This field is generated into another field to enable AS ONE association
       MiddleverticeName:
-        description: all gong Struct has a Name field, this enables this data to object field
+        description: all gong Struct has a Name field, this enables this data to object
+          field
         type: string
       Multiplicity: {}
       Multiplicity_Data:
-        description: Declation for basic field linkDB.Multiplicity {{BasicKind}} (to be completed)
+        description: Declation for basic field linkDB.Multiplicity {{BasicKind}} (to
+          be completed)
       Name:
         type: string
       Name_Data:
@@ -2293,7 +2383,8 @@ responses:
       Structname:
         type: string
       Structname_Data:
-        description: Declation for basic field linkDB.Structname {{BasicKind}} (to be completed)
+        description: Declation for basic field linkDB.Structname {{BasicKind}} (to
+          be completed)
       UpdatedAt:
         format: date-time
         type: string
@@ -2330,7 +2421,8 @@ responses:
       Path:
         type: string
       Path_Data:
-        description: Declation for basic field pkgeltDB.Path {{BasicKind}} (to be completed)
+        description: Declation for basic field pkgeltDB.Path {{BasicKind}} (to be
+          completed)
       Umlscs:
         items:
           $ref: '#/definitions/Umlsc'
@@ -2361,7 +2453,8 @@ responses:
       Name:
         type: string
       Name_Data:
-        description: Declation for basic field positionDB.Name {{BasicKind}} (to be completed)
+        description: Declation for basic field positionDB.Name {{BasicKind}} (to be
+          completed)
       UpdatedAt:
         format: date-time
         type: string
@@ -2436,7 +2529,8 @@ responses:
           (with the embedded states version, that might change)
         type: string
       Activestate_Data:
-        description: Declation for basic field umlscDB.Activestate {{BasicKind}} (to be completed)
+        description: Declation for basic field umlscDB.Activestate {{BasicKind}} (to
+          be completed)
       CreatedAt:
         format: date-time
         type: string
@@ -2505,7 +2599,8 @@ responses:
       Name:
         type: string
       Name_Data:
-        description: Declation for basic field verticeDB.Name {{BasicKind}} (to be completed)
+        description: Declation for basic field verticeDB.Name {{BasicKind}} (to be
+          completed)
       UpdatedAt:
         format: date-time
         type: string

@@ -8,31 +8,66 @@
 
         <!-- This is the tree node template for leaf nodes -->
         <mat-tree-node class="node-link" *matTreeNodeDef="let node" matTreeNodePadding>
-            <div [cdkDropListDisabled]="false" (cdkDropListDropped)="dropped($event, node)" cdkDropList>
+
+            <div *ngIf="node.type == 'ROOT_OF_BASIC_FIELDS'">
                 <!-- use a disabled button to provide padding for tree leaf -->
                 <button mat-icon-button disabled></button>
-                <div *ngIf="node.present; then leafPresentBlock else leafNotPresentBlock"></div>
-                <ng-template #leafPresentBlock>
-                    <span>{{node.name}} &nbsp;</span>
-                    <mat-icon class="node-link-icon" (click)="removeNodeFromDiagram(node)">
-                        visibility_off_outline
-                    </mat-icon>
-                </ng-template>
-                <ng-template #leafNotPresentBlock>
-                    <div *ngIf="node.draggable; then leafDraggableBlock else leafNotDraggableBlock"></div>
-                    <ng-template #leafDraggableBlock>
-                        <span cdkDrag>{{node.name}} &nbsp;</span>
-                        <mat-icon cdkDrag class="node-link-icon">
-                            person_add
-                        </mat-icon>
-                    </ng-template>
-                    <ng-template #leafNotDraggableBlock>
+                <span>{{node.name}} &nbsp;</span>
+            </div>
+            <div *ngIf="node.type == 'ROOT_OF_POINTER_TO_STRUCT_FIELDS'">
+                <!-- use a disabled button to provide padding for tree leaf -->
+                <button mat-icon-button disabled></button>
+                <span>{{node.name}} &nbsp;</span>
+            </div>
+            <div *ngIf="node.type == 'ROOT_OF_SLICE_OF_POINTER_TO_GONG_STRUCT_FIELDS'">
+                <!-- use a disabled button to provide padding for tree leaf -->
+                <button mat-icon-button disabled></button>
+                <span>{{node.name}} &nbsp;</span>
+            </div>
+            <div *ngIf="node.type == 'POINTER_TO_STRUCT'">
+                <!-- use a disabled button to provide padding for tree leaf -->
+                <button mat-icon-button disabled></button>
+                <span>{{node.name}} &nbsp;</span>
+            </div>
+            <div *ngIf="node.type == 'SLICE_OF_POINTER_TO_STRUCT'">
+                <!-- use a disabled button to provide padding for tree leaf -->
+                <button mat-icon-button disabled></button>
+                <span>{{node.name}} &nbsp;</span>
+            </div>
+
+            <div *ngIf="node.type == 'BASIC_FIELD'">
+                <div [cdkDropListDisabled]="false" (cdkDropListDropped)="dropped($event, node)" cdkDropList>
+                    <!-- use a disabled button to provide padding for tree leaf -->
+                    <button mat-icon-button disabled></button>
+
+                    <!-- if then else block to deal wether the object is present or not -->
+                    <div *ngIf="node.present; then leafPresentBlock else leafNotPresentBlock"></div>
+
+                    <!-- if the element is present, display an icon to allow for the removal of the element -->
+                    <ng-template #leafPresentBlock>
                         <span>{{node.name}} &nbsp;</span>
-                        <mat-icon class="node-link-icon">
-                            person_add_alt
+                        <mat-icon class="node-link-icon" (click)="removeNodeFromDiagram(node)">
+                            visibility_off_outline
                         </mat-icon>
                     </ng-template>
-                </ng-template>
+
+                    <!-- -->
+                    <ng-template #leafNotPresentBlock>
+                        <div *ngIf="node.draggable; then leafDraggableBlock else leafNotDraggableBlock"></div>
+                        <ng-template #leafDraggableBlock>
+                            <span cdkDrag>{{node.name}} &nbsp;</span>
+                            <mat-icon cdkDrag class="node-link-icon">
+                                person_add
+                            </mat-icon>
+                        </ng-template>
+                        <ng-template #leafNotDraggableBlock>
+                            <span>{{node.name}} &nbsp;</span>
+                            <mat-icon class="node-link-icon">
+                                person_add_alt
+                            </mat-icon>
+                        </ng-template>
+                    </ng-template>
+                </div>
             </div>
         </mat-tree-node>
 

@@ -197,14 +197,14 @@ func (backRepoPkgelt *BackRepoPkgeltStruct) CommitPhaseTwoInstance(backRepo *Bac
 				pkgeltDB.Path_Data.Valid = true
 
 				// commit a slice of pointer translates to update reverse pointer to Classdiagram, i.e.
+				index_Classdiagrams := 0
 				for _, classdiagram := range pkgelt.Classdiagrams {
-					index := 0
 					if classdiagramDBID, ok := (*backRepo.BackRepoClassdiagram.Map_ClassdiagramPtr_ClassdiagramDBID)[classdiagram]; ok {
 						if classdiagramDB, ok := (*backRepo.BackRepoClassdiagram.Map_ClassdiagramDBID_ClassdiagramDB)[classdiagramDBID]; ok {
 							classdiagramDB.Pkgelt_ClassdiagramsDBID.Int64 = int64(pkgeltDB.ID)
 							classdiagramDB.Pkgelt_ClassdiagramsDBID.Valid = true
-							classdiagramDB.Pkgelt_ClassdiagramsDBID_Index.Int64 = int64(index)
-							index = index + 1
+							classdiagramDB.Pkgelt_ClassdiagramsDBID_Index.Int64 = int64(index_Classdiagrams)
+							index_Classdiagrams = index_Classdiagrams + 1
 							classdiagramDB.Pkgelt_ClassdiagramsDBID_Index.Valid = true
 							if q := backRepoPkgelt.db.Save(&classdiagramDB); q.Error != nil {
 								return q.Error
@@ -214,14 +214,14 @@ func (backRepoPkgelt *BackRepoPkgeltStruct) CommitPhaseTwoInstance(backRepo *Bac
 				}
 
 				// commit a slice of pointer translates to update reverse pointer to Umlsc, i.e.
+				index_Umlscs := 0
 				for _, umlsc := range pkgelt.Umlscs {
-					index := 0
 					if umlscDBID, ok := (*backRepo.BackRepoUmlsc.Map_UmlscPtr_UmlscDBID)[umlsc]; ok {
 						if umlscDB, ok := (*backRepo.BackRepoUmlsc.Map_UmlscDBID_UmlscDB)[umlscDBID]; ok {
 							umlscDB.Pkgelt_UmlscsDBID.Int64 = int64(pkgeltDB.ID)
 							umlscDB.Pkgelt_UmlscsDBID.Valid = true
-							umlscDB.Pkgelt_UmlscsDBID_Index.Int64 = int64(index)
-							index = index + 1
+							umlscDB.Pkgelt_UmlscsDBID_Index.Int64 = int64(index_Umlscs)
+							index_Umlscs = index_Umlscs + 1
 							umlscDB.Pkgelt_UmlscsDBID_Index.Valid = true
 							if q := backRepoPkgelt.db.Save(&umlscDB); q.Error != nil {
 								return q.Error

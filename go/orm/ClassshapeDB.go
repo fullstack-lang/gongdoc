@@ -225,14 +225,14 @@ func (backRepoClassshape *BackRepoClassshapeStruct) CommitPhaseTwoInstance(backR
 				classshapeDB.Structname_Data.Valid = true
 
 				// commit a slice of pointer translates to update reverse pointer to Field, i.e.
+				index_Fields := 0
 				for _, field := range classshape.Fields {
-					index := 0
 					if fieldDBID, ok := (*backRepo.BackRepoField.Map_FieldPtr_FieldDBID)[field]; ok {
 						if fieldDB, ok := (*backRepo.BackRepoField.Map_FieldDBID_FieldDB)[fieldDBID]; ok {
 							fieldDB.Classshape_FieldsDBID.Int64 = int64(classshapeDB.ID)
 							fieldDB.Classshape_FieldsDBID.Valid = true
-							fieldDB.Classshape_FieldsDBID_Index.Int64 = int64(index)
-							index = index + 1
+							fieldDB.Classshape_FieldsDBID_Index.Int64 = int64(index_Fields)
+							index_Fields = index_Fields + 1
 							fieldDB.Classshape_FieldsDBID_Index.Valid = true
 							if q := backRepoClassshape.db.Save(&fieldDB); q.Error != nil {
 								return q.Error
@@ -242,14 +242,14 @@ func (backRepoClassshape *BackRepoClassshapeStruct) CommitPhaseTwoInstance(backR
 				}
 
 				// commit a slice of pointer translates to update reverse pointer to Link, i.e.
+				index_Links := 0
 				for _, link := range classshape.Links {
-					index := 0
 					if linkDBID, ok := (*backRepo.BackRepoLink.Map_LinkPtr_LinkDBID)[link]; ok {
 						if linkDB, ok := (*backRepo.BackRepoLink.Map_LinkDBID_LinkDB)[linkDBID]; ok {
 							linkDB.Classshape_LinksDBID.Int64 = int64(classshapeDB.ID)
 							linkDB.Classshape_LinksDBID.Valid = true
-							linkDB.Classshape_LinksDBID_Index.Int64 = int64(index)
-							index = index + 1
+							linkDB.Classshape_LinksDBID_Index.Int64 = int64(index_Links)
+							index_Links = index_Links + 1
 							linkDB.Classshape_LinksDBID_Index.Valid = true
 							if q := backRepoClassshape.db.Save(&linkDB); q.Error != nil {
 								return q.Error
