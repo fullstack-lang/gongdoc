@@ -30,7 +30,6 @@ interface GongNode {
   // specific field for gongdoc
   present?: boolean // for "instance" type node, in order to guide the display
   gongBasicField?: GongBasicFieldDB
-  draggable: boolean
 }
 
 /** 
@@ -48,7 +47,6 @@ export interface GongFlatNode {
   // specific field for gongdoc
   present?: boolean
   gongBasicField?: GongBasicFieldDB
-  draggable: boolean
 }
 
 export interface DragDropPosition {
@@ -119,7 +117,6 @@ export class SidebarGongDiagramsComponent implements OnInit {
       // specific to gongdoc
       present: node.present,
       gongBasicField: node.gongBasicField,
-      draggable: node.draggable
     }
   }
 
@@ -257,7 +254,6 @@ export class SidebarGongDiagramsComponent implements OnInit {
 
         // the root node is neither present not draggable
         present: false,
-        draggable: false,
       }
       nonInstanceNodeId = nonInstanceNodeId + 1
       this.gongNodeTree.push(gongstructGongNodeStruct)
@@ -286,7 +282,7 @@ export class SidebarGongDiagramsComponent implements OnInit {
             // specific to gongdoc
             //
             present: arrayOfDispaledGongStruct.has(gongstructDB.Name),
-            draggable: false,
+
           }
           gongstructGongNodeStruct.children.push(gongstructGongNodeInstance)
 
@@ -301,7 +297,7 @@ export class SidebarGongDiagramsComponent implements OnInit {
             uniqueIdPerStack: 19 * nonInstanceNodeId,
             structName: "GongStruct",
             children: new Array<GongNode>(),
-            draggable: false,
+
           }
           nonInstanceNodeId = nonInstanceNodeId + 1
           gongstructGongNodeInstance.children.push(GongBasicFieldsGongNodeAssociation)
@@ -314,10 +310,6 @@ export class SidebarGongDiagramsComponent implements OnInit {
           )
 
           gongstructDB.GongBasicFields?.forEach(gongbasicfieldDB => {
-            let draggable = false
-            if (classshape && !arrayOfDispaledGongField.has(gongbasicfieldDB.Name)) {
-              draggable = true
-            }
 
             let gongbasicfieldNode: GongNode = {
               name: gongbasicfieldDB.Name,
@@ -330,7 +322,6 @@ export class SidebarGongDiagramsComponent implements OnInit {
               gongBasicField: gongbasicfieldDB,
               children: new Array<GongNode>(),
               present: arrayOfDispaledGongField.has(gongbasicfieldDB.Name),
-              draggable: draggable,
             }
             GongBasicFieldsGongNodeAssociation.children.push(gongbasicfieldNode)
           })
@@ -345,7 +336,7 @@ export class SidebarGongDiagramsComponent implements OnInit {
             uniqueIdPerStack: 19 * nonInstanceNodeId,
             structName: gongstructDB.Name,
             children: new Array<GongNode>(),
-            draggable: false,
+
           }
           nonInstanceNodeId = nonInstanceNodeId + 1
           gongstructGongNodeInstance.children.push(PointerToGongStructFieldsGongNodeAssociation)
@@ -360,7 +351,7 @@ export class SidebarGongDiagramsComponent implements OnInit {
                 + 11 * gong.getPointerToGongStructFieldUniqueID(pointertogongstructfieldDB.ID),
               structName: gongstructDB.Name,
               children: new Array<GongNode>(),
-              draggable: false,
+
             }
             PointerToGongStructFieldsGongNodeAssociation.children.push(pointertogongstructfieldNode)
           })
@@ -375,7 +366,7 @@ export class SidebarGongDiagramsComponent implements OnInit {
             uniqueIdPerStack: 19 * nonInstanceNodeId,
             structName: gongstructDB.Name,
             children: new Array<GongNode>(),
-            draggable: false,
+
           }
           nonInstanceNodeId = nonInstanceNodeId + 1
           gongstructGongNodeInstance.children.push(SliceOfPointerToGongStructFieldsGongNodeAssociation)
@@ -390,7 +381,7 @@ export class SidebarGongDiagramsComponent implements OnInit {
                 + 11 * gong.getSliceOfPointerToGongStructFieldUniqueID(sliceofpointertogongstructfieldDB.ID),
               structName: gongstructDB.Name,
               children: new Array<GongNode>(),
-              draggable: false,
+
             }
             SliceOfPointerToGongStructFieldsGongNodeAssociation.children.push(sliceofpointertogongstructfieldNode)
           })
