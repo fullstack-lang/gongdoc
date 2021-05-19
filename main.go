@@ -65,7 +65,7 @@ func main() {
 	log.SetFlags(0)
 	flag.Parse()
 	if len(flag.Args()) > 1 {
-		log.Fatal("surplus arguments")
+		log.Fatal("too many non-flag arguments to the gongdoc command")
 	}
 	if len(flag.Args()) == 1 {
 		*diagramPkgPath = flag.Arg(0)
@@ -136,6 +136,7 @@ func main() {
 	pkgelt.SerializeToStage()
 	gongdoc_models.Stage.Commit()
 	log.Printf("Parse found %d diagrams\n", len(pkgelt.Classdiagrams))
+	log.Printf("Server ready to serve on http://localhost:8080/")
 
 	r.Run(":8080")
 }

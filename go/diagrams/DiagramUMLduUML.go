@@ -40,7 +40,7 @@ var DiagramUMLduUML uml.Classdiagram = uml.Classdiagram{
 				Y: 490.000000,
 			},
 			Width:  240.000000,
-			Heigth: 63.000000,
+			Heigth: 108.000000,
 			Links: []*uml.Link{
 				{
 					Field: models.Classshape{}.Fields,
@@ -61,7 +61,16 @@ var DiagramUMLduUML uml.Classdiagram = uml.Classdiagram{
 			},
 			Fields: []*uml.Field{
 				{
+					Field: models.Classshape{}.ClassshapeTargetType,
+				},
+				{
+					Field: models.Classshape{}.Heigth,
+				},
+				{
 					Field: models.Classshape{}.Structname,
+				},
+				{
+					Field: models.Classshape{}.Width,
 				},
 			},
 		},
@@ -72,10 +81,19 @@ var DiagramUMLduUML uml.Classdiagram = uml.Classdiagram{
 				Y: 680.000000,
 			},
 			Width:  240.000000,
-			Heigth: 63.000000,
+			Heigth: 108.000000,
 			Fields: []*uml.Field{
 				{
+					Field: models.Field{}.FieldTypeAsString,
+				},
+				{
 					Field: models.Field{}.Fieldname,
+				},
+				{
+					Field: models.Field{}.Fieldtypename,
+				},
+				{
+					Field: models.Field{}.Structname,
 				},
 			},
 		},
@@ -86,7 +104,7 @@ var DiagramUMLduUML uml.Classdiagram = uml.Classdiagram{
 				Y: 680.000000,
 			},
 			Width:  240.000000,
-			Heigth: 63.000000,
+			Heigth: 108.000000,
 			Links: []*uml.Link{
 				{
 					Field: models.Link{}.Middlevertice,
@@ -101,6 +119,15 @@ var DiagramUMLduUML uml.Classdiagram = uml.Classdiagram{
 				{
 					Field: models.Link{}.Fieldname,
 				},
+				{
+					Field: models.Link{}.Fieldtypename,
+				},
+				{
+					Field: models.Link{}.Multiplicity,
+				},
+				{
+					Field: models.Link{}.Structname,
+				},
 			},
 		},
 		{
@@ -110,7 +137,7 @@ var DiagramUMLduUML uml.Classdiagram = uml.Classdiagram{
 				Y: 90.000000,
 			},
 			Width:  240.000000,
-			Heigth: 48.000000,
+			Heigth: 78.000000,
 			Links: []*uml.Link{
 				{
 					Field: models.Pkgelt{}.Classdiagrams,
@@ -127,6 +154,31 @@ var DiagramUMLduUML uml.Classdiagram = uml.Classdiagram{
 						Y: 180.000000,
 					},
 					Multiplicity: "*",
+				},
+			},
+			Fields: []*uml.Field{
+				{
+					Field: models.Pkgelt{}.Name,
+				},
+				{
+					Field: models.Pkgelt{}.Path,
+				},
+			},
+		},
+		{
+			Struct: &(models.Position{}),
+			Position: &uml.Position{
+				X: 430.000000,
+				Y: 860.000000,
+			},
+			Width:  240.000000,
+			Heigth: 93.000000,
+			Fields: []*uml.Field{
+				{
+					Field: models.Position{}.X,
+				},
+				{
+					Field: models.Position{}.Y,
 				},
 			},
 		},
