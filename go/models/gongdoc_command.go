@@ -115,6 +115,25 @@ func init() {
 						classDiagram.Classshapes = removeClassshapeFromSlice(classDiagram.Classshapes, idx)
 						classshape.Position.Unstage()
 						classshape.Unstage()
+
+						// remove links that go from this classshape
+						for idx, link := range classshape.Links {
+							classshape.Links = removeLinkFromSlice(classshape.Links, idx)
+							link.Middlevertice.Unstage()
+							link.Unstage()
+						}
+
+						// remove links that go to this classshape
+						for _, fromClassshape := range classDiagram.Classshapes {
+							for idx, link := range fromClassshape.Links {
+								if link.Fieldtypename == classshape.Structname {
+									fromClassshape.Links = removeLinkFromSlice(fromClassshape.Links, idx)
+									link.Middlevertice.Unstage()
+									link.Unstage()
+								}
+							}
+						}
+
 						Stage.Commit()
 					case BASIC_FIELD:
 						var basicField *Field
@@ -129,6 +148,32 @@ func init() {
 						classshape.Heigth = classshape.Heigth - 15
 
 						basicField.Unstage()
+						Stage.Commit()
+					case POINTER_TO_STRUCT:
+						// check wether the classshape of the basic field is present
+						foundSourceClassshape := false
+						var fromClassshape *Classshape
+						for _, _classshape := range classDiagram.Classshapes {
+
+							// strange behavior when the classshape is remove within the loop
+							if _classshape.Structname == GongdocCommandSingloton.StructName && !foundSourceClassshape {
+								foundSourceClassshape = true
+								fromClassshape = _classshape
+							}
+						}
+						if !foundSourceClassshape {
+							log.Panicf("Classshape %s of field not present ", GongdocCommandSingloton.StructName)
+						}
+						_ = fromClassshape
+
+						for idx, link := range fromClassshape.Links {
+							if link.Fieldtypename == GongdocCommandSingloton.FieldTypeName {
+								fromClassshape.Links = removeLinkFromSlice(fromClassshape.Links, idx)
+								link.Middlevertice.Unstage()
+								link.Unstage()
+							}
+						}
+
 						Stage.Commit()
 					}
 
@@ -183,20 +228,52 @@ func init() {
 
 					case POINTER_TO_STRUCT:
 						// check wether the classshape of the basic field is present
-						foundClassshape := false
-						var classshape *Classshape
+						foundSourceClassshape := false
+						var sourceClassshape *Classshape
 						for _, _classshape := range classDiagram.Classshapes {
 
 							// strange behavior when the classshape is remove within the loop
-							if _classshape.Structname == GongdocCommandSingloton.StructName && !foundClassshape {
-								foundClassshape = true
-								classshape = _classshape
+							if _classshape.Structname == GongdocCommandSingloton.StructName && !foundSourceClassshape {
+								foundSourceClassshape = true
+								sourceClassshape = _classshape
 							}
 						}
-						if !foundClassshape {
+						if !foundSourceClassshape {
 							log.Panicf("Classshape %s of field not present ", GongdocCommandSingloton.StructName)
 						}
-						_ = classshape
+						_ = sourceClassshape
+
+						targetSourceClassshape := false
+						var targetClassshape *Classshape
+						for _, _classshape := range classDiagram.Classshapes {
+
+							// strange behavior when the classshape is remove within the loop
+							if _classshape.Structname == GongdocCommandSingloton.FieldTypeName && !targetSourceClassshape {
+								targetSourceClassshape = true
+								targetClassshape = _classshape
+							}
+						}
+						if !targetSourceClassshape {
+							log.Panicf("Classshape %s of field not present ", GongdocCommandSingloton.StructName)
+						}
+						_ = targetClassshape
+
+						link := new(Link).Stage()
+						link.Name = GongdocCommandSingloton.FieldName
+						link.Fieldname = GongdocCommandSingloton.FieldName
+						link.Structname = GongdocCommandSingloton.StructName
+						link.Fieldtypename = GongdocCommandSingloton.FieldTypeName
+						link.Multiplicity = ZERO_ONE
+						sourceClassshape.Links = append(sourceClassshape.Links, link)
+						link.Middlevertice = new(Vertice).Stage()
+						link.Middlevertice.Name = "Verticle in class diagram " + classDiagram.Name +
+							" in middle between " + sourceClassshape.Name + " and " + targetClassshape.Name
+						link.Middlevertice.X = (sourceClassshape.Position.X+targetClassshape.Position.X)/2.0 +
+							sourceClassshape.Width/2.0
+						link.Middlevertice.Y = (sourceClassshape.Position.Y+targetClassshape.Position.Y)/2.0 +
+							sourceClassshape.Heigth/2.0
+						Stage.Commit()
+
 					case SLICE_OF_POINTER_TO_STRUCT:
 					}
 				}
@@ -206,11 +283,13 @@ func init() {
 }
 
 func removeClassshapeFromSlice(s []*Classshape, i int) []*Classshape {
-	s[len(s)-1], s[i] = s[i], s[len(s)-1]
-	return s[:len(s)-1]
+	return append(s[:i], s[i+1:]...)
+}
+
+func removeLinkFromSlice(s []*Link, i int) []*Link {
+	return append(s[:i], s[i+1:]...)
 }
 
 func removeFieldFromSlice(s []*Field, i int) []*Field {
-	s[len(s)-1], s[i] = s[i], s[len(s)-1]
-	return s[:len(s)-1]
+	return append(s[:i], s[i+1:]...)
 }
