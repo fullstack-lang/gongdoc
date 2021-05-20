@@ -65,8 +65,8 @@ var Diagram1 uml.Classdiagram = uml.Classdiagram{
 				{
 					Field: models.PointWithName{}.Point,
 					Middlevertice: &uml.Vertice{
-						X: 700.000000,
-						Y: 200.000000,
+						X: 770.000000,
+						Y: 260.000000,
 					},
 					Multiplicity: "1",
 				},
@@ -74,6 +74,25 @@ var Diagram1 uml.Classdiagram = uml.Classdiagram{
 			Fields: []*uml.Field{
 				{
 					Field: models.PointWithName{}.Name,
+				},
+			},
+		},
+		{
+			Struct: &(models.Polyline{}),
+			Position: &uml.Position{
+				X: 500.000000,
+				Y: 380.000000,
+			},
+			Width:  240.000000,
+			Heigth: 63.000000,
+			Links: []*uml.Link{
+				{
+					Field: models.Polyline{}.Points,
+					Middlevertice: &uml.Vertice{
+						X: 621.000000,
+						Y: 288.500000,
+					},
+					Multiplicity: "*",
 				},
 			},
 		},

@@ -29,7 +29,7 @@
             "webRoot": "${workspaceFolder}/ng"
         },
         {
-            "name": "Launch firefox localhost:4200",
+            "name": "Launch appv firefox localhost:4200",
             "type": "firefox",
             "request": "launch",
             "reAttach": true,

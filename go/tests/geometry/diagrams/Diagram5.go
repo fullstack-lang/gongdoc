@@ -45,11 +45,21 @@ var Diagram5 uml.Classdiagram = uml.Classdiagram{
 		{
 			Struct: &(models.Polyline{}),
 			Position: &uml.Position{
-				X: 568.000000,
-				Y: 457.000000,
+				X: 420.000000,
+				Y: 460.000000,
 			},
 			Width:  240.000000,
-			Heigth: 63.000000,
+			Heigth: 48.000000,
+			Links: []*uml.Link{
+				{
+					Field: models.Polyline{}.Points,
+					Middlevertice: &uml.Vertice{
+						X: 319.000000,
+						Y: 477.500000,
+					},
+					Multiplicity: "*",
+				},
+			},
 		},
 	},
 }

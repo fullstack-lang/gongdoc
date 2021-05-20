@@ -127,6 +127,7 @@ export class SidebarGongDiagramsComponent implements OnInit {
       present: node.presentInDiagram,
       gongBasicField: node.gongBasicField,
       gongPointerToGongStructField: node.gongPointerToGongStructField,
+      gongSliceOfPointerToGongStructField: node.gongSliceOfPointerToGongStructField,
       canBeIncluded: node.canBeIncluded,
     }
   }
