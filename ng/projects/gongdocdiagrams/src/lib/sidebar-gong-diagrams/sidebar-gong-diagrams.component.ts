@@ -537,7 +537,7 @@ export class SidebarGongDiagramsComponent implements OnInit {
       gongdocCommandSingloton.StructName = gongFlatNode.structName
       gongdocCommandSingloton.Date = Date.now().toString()
       gongdocCommandSingloton.GongdocNodeType = gongFlatNode.type
-      gongdocCommandSingloton.FieldName = gongFlatNode.name
+      gongdocCommandSingloton.FieldName = gongFlatNode.gongPointerToGongStructField.Name
       gongdocCommandSingloton.FieldTypeName = gongFlatNode.gongPointerToGongStructField.GongStruct?.Name
 
       this.gongdocCommandService.updateGongdocCommand(gongdocCommandSingloton).subscribe(
@@ -579,7 +579,7 @@ export class SidebarGongDiagramsComponent implements OnInit {
       gongdocCommandSingloton.StructName = gongFlatNode.structName
       gongdocCommandSingloton.Date = Date.now().toString()
       gongdocCommandSingloton.GongdocNodeType = gongFlatNode.type
-      gongdocCommandSingloton.FieldName = gongFlatNode.name
+      gongdocCommandSingloton.FieldName = gongFlatNode.gongSliceOfPointerToGongStructField.Name
       gongdocCommandSingloton.FieldTypeName = gongFlatNode.gongSliceOfPointerToGongStructField.GongStruct?.Name
 
       this.gongdocCommandService.updateGongdocCommand(gongdocCommandSingloton).subscribe(

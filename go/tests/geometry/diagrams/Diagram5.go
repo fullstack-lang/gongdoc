@@ -21,8 +21,16 @@ var Diagram5 uml.Classdiagram = uml.Classdiagram{
 				{
 					Field: models.Line{}.End,
 					Middlevertice: &uml.Vertice{
-						X: 115.000000,
-						Y: 271.500000,
+						X: 535.000000,
+						Y: 184.000000,
+					},
+					Multiplicity: "0..1",
+				},
+				{
+					Field: models.Line{}.Start,
+					Middlevertice: &uml.Vertice{
+						X: 85.000000,
+						Y: 274.000000,
 					},
 					Multiplicity: "0..1",
 				},
@@ -43,21 +51,43 @@ var Diagram5 uml.Classdiagram = uml.Classdiagram{
 			},
 		},
 		{
-			Struct: &(models.Polyline{}),
+			Struct: &(models.PointWithName{}),
 			Position: &uml.Position{
-				X: 420.000000,
-				Y: 460.000000,
+				X: 150.000000,
+				Y: 572.000000,
 			},
 			Width:  240.000000,
 			Heigth: 48.000000,
+		},
+		{
+			Struct: &(models.Polyline{}),
+			Position: &uml.Position{
+				X: 500.000000,
+				Y: 650.000000,
+			},
+			Width:  240.000000,
+			Heigth: 63.000000,
 			Links: []*uml.Link{
 				{
-					Field: models.Polyline{}.Points,
+					Field: models.Polyline{}.Follower,
 					Middlevertice: &uml.Vertice{
-						X: 319.000000,
-						Y: 477.500000,
+						X: 860.000000,
+						Y: 681.500000,
 					},
-					Multiplicity: "*",
+					Multiplicity: "0..1",
+				},
+				{
+					Field: models.Polyline{}.Start_Point,
+					Middlevertice: &uml.Vertice{
+						X: 765.000000,
+						Y: 491.500000,
+					},
+					Multiplicity: "0..1",
+				},
+			},
+			Fields: []*uml.Field{
+				{
+					Field: models.Polyline{}.Name,
 				},
 			},
 		},
