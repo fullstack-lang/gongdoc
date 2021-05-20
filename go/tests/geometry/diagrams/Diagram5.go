@@ -16,7 +16,7 @@ var Diagram5 uml.Classdiagram = uml.Classdiagram{
 				Y: 50.000000,
 			},
 			Width:  240.000000,
-			Heigth: 63.000000,
+			Heigth: 48.000000,
 			Links: []*uml.Link{
 				{
 					Field: models.Line{}.End,
@@ -41,6 +41,15 @@ var Diagram5 uml.Classdiagram = uml.Classdiagram{
 					Field: models.Point{}.X,
 				},
 			},
+		},
+		{
+			Struct: &(models.Polyline{}),
+			Position: &uml.Position{
+				X: 568.000000,
+				Y: 457.000000,
+			},
+			Width:  240.000000,
+			Heigth: 63.000000,
 		},
 	},
 }

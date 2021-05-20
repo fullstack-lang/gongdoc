@@ -275,6 +275,52 @@ func init() {
 						Stage.Commit()
 
 					case SLICE_OF_POINTER_TO_STRUCT:
+						// check wether the classshape of the basic field is present
+						foundSourceClassshape := false
+						var sourceClassshape *Classshape
+						for _, _classshape := range classDiagram.Classshapes {
+
+							// strange behavior when the classshape is remove within the loop
+							if _classshape.Structname == GongdocCommandSingloton.StructName && !foundSourceClassshape {
+								foundSourceClassshape = true
+								sourceClassshape = _classshape
+							}
+						}
+						if !foundSourceClassshape {
+							log.Panicf("Classshape %s of field not present ", GongdocCommandSingloton.StructName)
+						}
+						_ = sourceClassshape
+
+						targetSourceClassshape := false
+						var targetClassshape *Classshape
+						for _, _classshape := range classDiagram.Classshapes {
+
+							// strange behavior when the classshape is remove within the loop
+							if _classshape.Structname == GongdocCommandSingloton.FieldTypeName && !targetSourceClassshape {
+								targetSourceClassshape = true
+								targetClassshape = _classshape
+							}
+						}
+						if !targetSourceClassshape {
+							log.Panicf("Classshape %s of field not present ", GongdocCommandSingloton.StructName)
+						}
+						_ = targetClassshape
+
+						link := new(Link).Stage()
+						link.Name = GongdocCommandSingloton.FieldName
+						link.Fieldname = GongdocCommandSingloton.FieldName
+						link.Structname = GongdocCommandSingloton.StructName
+						link.Fieldtypename = GongdocCommandSingloton.FieldTypeName
+						link.Multiplicity = MANY
+						sourceClassshape.Links = append(sourceClassshape.Links, link)
+						link.Middlevertice = new(Vertice).Stage()
+						link.Middlevertice.Name = "Verticle in class diagram " + classDiagram.Name +
+							" in middle between " + sourceClassshape.Name + " and " + targetClassshape.Name
+						link.Middlevertice.X = (sourceClassshape.Position.X+targetClassshape.Position.X)/2.0 +
+							sourceClassshape.Width/2.0
+						link.Middlevertice.Y = (sourceClassshape.Position.Y+targetClassshape.Position.Y)/2.0 +
+							sourceClassshape.Heigth/2.0
+						Stage.Commit()
 					}
 				}
 			} // end of polling function
