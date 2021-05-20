@@ -28,6 +28,40 @@
             "url": "http://localhost:4200/",
             "webRoot": "${workspaceFolder}/ng"
         },
-
+        {
+            "name": "Launch appv firefox localhost:4200",
+            "type": "firefox",
+            "request": "launch",
+            "reAttach": true,
+            "url": "http://localhost:4200/",
+            "webRoot": "${workspaceFolder}/ng",
+            "firefoxExecutable": "C:/Users/peugeot/AppData/Local/Microsoft/AppV/Client/Integration/F8B22858-413B-4241-955C-7CDA2C0B6696/Root/VFS/ProgramFilesX64/Mozilla Firefox/firefox.exe",
+            "pathMappings": [
+                {
+                    "url": "webpack:///projects",
+                    "path": "${workspaceFolder}/ng/projects"
+                }
+            ],
+        },
+        {
+            "name": "go server on geometry",
+            "type": "go",
+            "request": "launch",
+            "mode": "debug",
+            "program": "${workspaceFolder}",
+            "dlvLoadConfig": {
+                "followPointers": true,
+                "maxVariableRecurse": 1,
+                "maxStringLen": 300,
+                "maxArrayValues": 64,
+                "maxStructFields": -1
+            },
+            "args": [
+                "-diagramPkgPath",
+                "go/tests/geometry/diagrams",
+                "-pkgPath",
+                "go/tests/geometry/models",
+            ]
+        },
     ]
 }

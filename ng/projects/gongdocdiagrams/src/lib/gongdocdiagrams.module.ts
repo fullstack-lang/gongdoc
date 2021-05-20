@@ -30,9 +30,7 @@ import { GongdocdiagramsComponent } from './gongdocdiagrams.component';
 import { UmlscDiagramComponent } from './umlsc-diagram/umlsc-diagram.component';
 import { ClassDiagramComponent } from './class-diagram/class-diagram.component';
 import { PkgeltDocsComponent } from './pkgelt-docs/pkgelt-docs.component';
-import { ClassdiagramsSimpleTableComponent } from './classdiagrams-simple-table/classdiagrams-simple-table.component'
 import { UmlscSimpleTableComponent } from './umlsc-simple/umlsc-simple.component';
-import { ActionButtonsComponent } from './action-buttons/action-buttons.component';
 
 import { SidebarGongDiagramsComponent } from './sidebar-gong-diagrams/sidebar-gong-diagrams.component'
 import { SidebarGongdocDiagramsComponent } from './sidebar-gongdoc-diagrams/sidebar-gongdoc-diagrams.component'
@@ -44,9 +42,7 @@ import { ClassdiagramDetailComponent } from './classdiagram-detail/classdiagram-
     UmlscDiagramComponent,
     ClassDiagramComponent,
     PkgeltDocsComponent,
-    ClassdiagramsSimpleTableComponent,
     UmlscSimpleTableComponent,
-    ActionButtonsComponent,
     SidebarGongDiagramsComponent,
     SidebarGongdocDiagramsComponent,
     ClassdiagramDetailComponent

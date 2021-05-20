@@ -198,14 +198,14 @@ func (backRepoUmlsc *BackRepoUmlscStruct) CommitPhaseTwoInstance(backRepo *BackR
 				umlscDB.Name_Data.Valid = true
 
 				// commit a slice of pointer translates to update reverse pointer to State, i.e.
+				index_States := 0
 				for _, state := range umlsc.States {
-					index := 0
 					if stateDBID, ok := (*backRepo.BackRepoState.Map_StatePtr_StateDBID)[state]; ok {
 						if stateDB, ok := (*backRepo.BackRepoState.Map_StateDBID_StateDB)[stateDBID]; ok {
 							stateDB.Umlsc_StatesDBID.Int64 = int64(umlscDB.ID)
 							stateDB.Umlsc_StatesDBID.Valid = true
-							stateDB.Umlsc_StatesDBID_Index.Int64 = int64(index)
-							index = index + 1
+							stateDB.Umlsc_StatesDBID_Index.Int64 = int64(index_States)
+							index_States = index_States + 1
 							stateDB.Umlsc_StatesDBID_Index.Valid = true
 							if q := backRepoUmlsc.db.Save(&stateDB); q.Error != nil {
 								return q.Error

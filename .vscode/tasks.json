@@ -11,6 +11,15 @@
 			"group": "build"
 		},
 		{
+			"label": "03 - ng build",
+			"type": "shell",
+			"options": {
+				"cwd": "ng"
+			},
+			"command": "ng build",
+			"group": "build"
+		},
+		{
 			"label": "02 - go run",
 			"type": "shell",
 			"options": {
@@ -20,6 +29,35 @@
 			"args": [
 				"run",
 				"main.go"
+			],
+			"group": "build"
+		},
+		{
+			"label": "02 - go run on test/geometry",
+			"type": "shell",
+			"options": {
+				"cwd": "."
+			},
+			"command": "go",
+			"args": [
+				"run",
+				"main.go",
+				"-diagramPkgPath",
+				"go/tests/geometry/diagrams",
+				"-pkgPath",
+				"go/tests/geometry/models",
+			],
+			"group": "build"
+		},
+		{
+			"label": "02 - go install gongdoc",
+			"type": "shell",
+			"options": {
+				"cwd": "."
+			},
+			"command": "go",
+			"args": [
+				"install",
 			],
 			"group": "build"
 		},
