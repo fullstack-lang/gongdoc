@@ -273,20 +273,21 @@ export class SidebarGongDiagramsComponent implements OnInit {
       // create the set of classshapes presents in the class diagram
       // important for knowing which shapes are already displayed are 
       let arrayOfDisplayedClassshape = new Map<string, ClassshapeDB>()
-      let arrayOfDisplayedGongdocField = new Map<string, FieldDB>()
-      let arrayOfDisplayedGongdocLink = new Map<string, FieldDB>()
+      let arrayOfDisplayedBasicField = new Map<string, FieldDB>()
+      let arrayOfDisplayedLink = new Map<string, FieldDB>()
 
       this.currentClassdiagram.Classshapes?.forEach(
         classshape => {
           arrayOfDisplayedClassshape.set(classshape.Structname, classshape)
           classshape?.Fields?.forEach(
             field => {
-              arrayOfDisplayedGongdocField.set(field.Fieldname, field)
+              arrayOfDisplayedBasicField.set( classshape.Structname + "." + field.Fieldname, field)
+              console.log("Adding " + classshape.Structname + "." + field.Fieldname)
             }
           )
           classshape?.Links?.forEach(
             link => {
-              arrayOfDisplayedGongdocLink.set(link.Fieldname, link)
+              arrayOfDisplayedLink.set( classshape.Structname + "." + link.Fieldname, link)
             }
           )
         }
@@ -331,6 +332,8 @@ export class SidebarGongDiagramsComponent implements OnInit {
 
             let structIsPresent = arrayOfDisplayedClassshape.has(gongbasicfieldDB.GongStruct_GongBasicFields_reverse.Name)
 
+            let presentInDiagram = arrayOfDisplayedBasicField.has(gongstructDB.Name + "." + gongbasicfieldDB.Name)
+
             let gongbasicfieldNode: GongNode = {
               name: gongbasicfieldDB.Name,
               type: gongdoc.GongdocNodeType.BASIC_FIELD,
@@ -341,7 +344,7 @@ export class SidebarGongDiagramsComponent implements OnInit {
               structName: gongstructDB.Name,
               gongBasicField: gongbasicfieldDB,
               children: new Array<GongNode>(),
-              presentInDiagram: arrayOfDisplayedGongdocField.has(gongbasicfieldDB.Name),
+              presentInDiagram: presentInDiagram,
               canBeIncluded: structIsPresent,
             }
             GongBasicFieldsGongNodeAssociation.children.push(gongbasicfieldNode)
@@ -384,12 +387,12 @@ export class SidebarGongDiagramsComponent implements OnInit {
               structName: gongstructDB.Name,
               children: new Array<GongNode>(),
               gongPointerToGongStructField: pointerToGongstructFieldDB,
-              presentInDiagram: arrayOfDisplayedGongdocLink.has(pointerToGongstructFieldDB.Name),
+              presentInDiagram: arrayOfDisplayedLink.has(gongstructDB.Name + "." + pointerToGongstructFieldDB.Name),
               canBeIncluded: canBeIncluded,
             }
-            console.log("can be included ? " + pointertogongstructfieldNode.name + " " +
-              pointertogongstructfieldNode.canBeIncluded + " " +
-              canBeIncluded)
+            // console.log("can be included ? " + pointertogongstructfieldNode.name + " " +
+            //   pointertogongstructfieldNode.canBeIncluded + " " +
+            //   canBeIncluded)
             PointerToGongStructFieldsGongNodeAssociation.children.push(pointertogongstructfieldNode)
           })
 
@@ -413,7 +416,7 @@ export class SidebarGongDiagramsComponent implements OnInit {
             let sourceIsPresent = arrayOfDisplayedClassshape.has(sliceofpointertogongstructfieldDB.GongStruct_SliceOfPointerToGongStructFields_reverse.Name)
             let destinationIsPresent = arrayOfDisplayedClassshape.has(sliceofpointertogongstructfieldDB.GongStruct.Name)
             let canBeIncluded = sourceIsPresent && destinationIsPresent
-            let presentInDiagram = arrayOfDisplayedGongdocLink.has(sliceofpointertogongstructfieldDB.Name)
+            let presentInDiagram = arrayOfDisplayedLink.has(gongstructDB.Name + "." + sliceofpointertogongstructfieldDB.Name)
 
             let sliceofpointertogongstructfieldNode: GongNode = {
               name: sliceofpointertogongstructfieldDB.Name + " (" + sliceofpointertogongstructfieldDB.GongStruct.Name + ")",
