@@ -11,7 +11,6 @@ import * as gongdoc from 'gongdoc'
 
 import { ClassdiagramContextSubject, ClassdiagramContext } from '../diagram-displayed-gongstruct'
 import { combineLatest, Observable, timer } from 'rxjs';
-import { GongBasicFieldDB } from 'gong';
 import { ClassshapeDB, FieldDB } from 'gongdoc';
 import { NoDataRowOutlet } from '@angular/cdk/table';
 
@@ -28,8 +27,14 @@ interface GongNode {
   uniqueIdPerStack: number
 
   // specific field for gongdoc
-  present?: boolean // for "instance" type node, in order to guide the display
-  gongBasicField?: GongBasicFieldDB
+  presentInDiagram?: boolean // if the corresponding graphic element is present in the diagram, this value is true
+  gongBasicField?: gong.GongBasicFieldDB
+  gongPointerToGongStructField?: gong.PointerToGongStructFieldDB
+
+  // if the node is for a link between two gong struct, both have to be present in the diagram
+  // for canBeIncluded to be true
+  canBeIncluded?: boolean
+
 }
 
 /** 
@@ -45,8 +50,10 @@ export interface GongFlatNode {
   uniqueIdPerStack: number
 
   // specific field for gongdoc
-  present?: boolean
-  gongBasicField?: GongBasicFieldDB
+  presentInDiagram?: boolean
+  gongBasicField?: gong.GongBasicFieldDB
+  gongPointerToGongStructField?: gong.PointerToGongStructFieldDB
+  canBeIncluded?: boolean
 }
 
 export interface DragDropPosition {
@@ -115,8 +122,10 @@ export class SidebarGongDiagramsComponent implements OnInit {
       uniqueIdPerStack: node.uniqueIdPerStack,
 
       // specific to gongdoc
-      present: node.present,
+      present: node.presentInDiagram,
       gongBasicField: node.gongBasicField,
+      gongPointerToGongStructField: node.gongPointerToGongStructField,
+      canBeIncluded: node.canBeIncluded,
     }
   }
 
@@ -253,23 +262,24 @@ export class SidebarGongDiagramsComponent implements OnInit {
         children: new Array<GongNode>(),
 
         // the root node is neither present not draggable
-        present: false,
+        presentInDiagram: false,
       }
       nonInstanceNodeId = nonInstanceNodeId + 1
       this.gongNodeTree.push(gongstructGongNodeStruct)
 
       // create the set of classshapes presents in the class diagram
-      let arrayOfDispaledGongStruct = new Map<string, ClassshapeDB>()
+      // important for knowing which shapes are already displayed are 
+      let arrayOfDisplayedClassshape = new Map<string, ClassshapeDB>()
       this.currentClassdiagram.Classshapes?.forEach(
         classshape => {
-          arrayOfDispaledGongStruct.set(classshape.Structname, classshape)
+          arrayOfDisplayedClassshape.set(classshape.Structname, classshape)
         }
       )
 
       this.gongFrontRepo.GongStructs_array.forEach(
         gongstructDB => {
 
-          let classshape = arrayOfDispaledGongStruct.get(gongstructDB.Name)
+          let classshape = arrayOfDisplayedClassshape.get(gongstructDB.Name)
 
           let gongstructGongNodeInstance: GongNode = {
             name: gongstructDB.Name,
@@ -280,8 +290,7 @@ export class SidebarGongDiagramsComponent implements OnInit {
             children: new Array<GongNode>(),
 
             // specific to gongdoc
-            //
-            present: arrayOfDispaledGongStruct.has(gongstructDB.Name),
+            presentInDiagram: arrayOfDisplayedClassshape.has(gongstructDB.Name),
 
           }
           gongstructGongNodeStruct.children.push(gongstructGongNodeInstance)
@@ -302,10 +311,17 @@ export class SidebarGongDiagramsComponent implements OnInit {
           nonInstanceNodeId = nonInstanceNodeId + 1
           gongstructGongNodeInstance.children.push(GongBasicFieldsGongNodeAssociation)
 
-          let arrayOfDispaledGongField = new Map<string, FieldDB>()
+          let arrayOfDisplayedGongdocField = new Map<string, FieldDB>()
           classshape?.Fields?.forEach(
             field => {
-              arrayOfDispaledGongField.set(field.Fieldname, field)
+              arrayOfDisplayedGongdocField.set(field.Fieldname, field)
+            }
+          )
+
+          let arrayOfDisplayedGongdocLink = new Map<string, FieldDB>()
+          classshape?.Links?.forEach(
+            link => {
+              arrayOfDisplayedGongdocLink.set(link.Fieldname, link)
             }
           )
 
@@ -321,7 +337,7 @@ export class SidebarGongDiagramsComponent implements OnInit {
               structName: gongstructDB.Name,
               gongBasicField: gongbasicfieldDB,
               children: new Array<GongNode>(),
-              present: arrayOfDispaledGongField.has(gongbasicfieldDB.Name),
+              presentInDiagram: arrayOfDisplayedGongdocField.has(gongbasicfieldDB.Name),
             }
             GongBasicFieldsGongNodeAssociation.children.push(gongbasicfieldNode)
           })
@@ -342,8 +358,19 @@ export class SidebarGongDiagramsComponent implements OnInit {
           gongstructGongNodeInstance.children.push(PointerToGongStructFieldsGongNodeAssociation)
 
           gongstructDB.PointerToGongStructFields?.forEach(pointertogongstructfieldDB => {
+
+            // console.log("field " + pointertogongstructfieldDB.Name)
+            let sourceIsPresent = arrayOfDisplayedClassshape.has(pointertogongstructfieldDB.GongStruct_PointerToGongStructFields_reverse.Name)
+            // console.log("source " + pointertogongstructfieldDB.GongStruct_PointerToGongStructFields_reverse.Name + " is present " + sourceIsPresent)
+
+            // compute wether the link can be included in the diagram
+            let destinationIsPresent = arrayOfDisplayedClassshape.has(pointertogongstructfieldDB.GongStruct.Name)
+            // console.log("destination " + pointertogongstructfieldDB.GongStruct.Name + " is present " + destinationIsPresent)
+
+            let canBeIncluded = sourceIsPresent && destinationIsPresent
+
             let pointertogongstructfieldNode: GongNode = {
-              name: pointertogongstructfieldDB.Name,
+              name: pointertogongstructfieldDB.Name + " (" + pointertogongstructfieldDB.GongStruct.Name + ")",
               type: gongdoc.GongdocNodeType.POINTER_TO_STRUCT,
               id: pointertogongstructfieldDB.ID,
               uniqueIdPerStack: // godel numbering (thank you kurt)
@@ -351,8 +378,13 @@ export class SidebarGongDiagramsComponent implements OnInit {
                 + 11 * gong.getPointerToGongStructFieldUniqueID(pointertogongstructfieldDB.ID),
               structName: gongstructDB.Name,
               children: new Array<GongNode>(),
-
+              gongPointerToGongStructField: gongstructDB,
+              presentInDiagram: arrayOfDisplayedGongdocLink.has(pointertogongstructfieldDB.Name),
+              canBeIncluded: canBeIncluded,
             }
+            console.log("can be included ? " + pointertogongstructfieldNode.name + " " +
+              pointertogongstructfieldNode.canBeIncluded + " " +
+              canBeIncluded)
             PointerToGongStructFieldsGongNodeAssociation.children.push(pointertogongstructfieldNode)
           })
 
@@ -437,10 +469,10 @@ export class SidebarGongDiagramsComponent implements OnInit {
   }
 
   /**
- * removeBasicFieldFromDiagram is called from the html template
- * 
- * @param gongFlatNode 
- */
+   * removeBasicFieldFromDiagram is called from the html template
+   * 
+   * @param gongFlatNode 
+   */
   removeBasicFieldFromDiagram(gongFlatNode: GongFlatNode) {
 
     // get the GongdocCommandSingloton
@@ -462,6 +494,52 @@ export class SidebarGongDiagramsComponent implements OnInit {
   }
 
   addBasicFieldToDiagram(gongFlatNode: GongFlatNode) {
+
+    // get the GongdocCommandSingloton
+    let gongdocCommandSingloton = this.gongdocFrontRepo.GongdocCommands.get(1)
+    if (gongdocCommandSingloton != undefined) {
+      gongdocCommandSingloton.Command = gongdoc.GongdocCommandType.DIAGRAM_ELEMENT_CREATE
+      gongdocCommandSingloton.DiagramName = this.currentClassdiagram.Name
+      gongdocCommandSingloton.StructName = gongFlatNode.structName
+      gongdocCommandSingloton.Date = Date.now().toString()
+      gongdocCommandSingloton.GongdocNodeType = gongFlatNode.type
+      gongdocCommandSingloton.FieldName = gongFlatNode.name
+      gongdocCommandSingloton.FieldTypeName = gongFlatNode.gongBasicField?.BasicKindName
+
+      this.gongdocCommandService.updateGongdocCommand(gongdocCommandSingloton).subscribe(
+        GongdocCommand => {
+          console.log("GongdocCommand updated")
+        }
+      )
+    }
+  }
+
+  /**
+ * removeBasicFieldFromDiagram is called from the html template
+ * 
+ * @param gongFlatNode 
+ */
+  removePointerToStructFromDiagram(gongFlatNode: GongFlatNode) {
+
+    // get the GongdocCommandSingloton
+    let gongdocCommandSingloton = this.gongdocFrontRepo.GongdocCommands.get(1)
+    if (gongdocCommandSingloton != undefined) {
+      gongdocCommandSingloton.Command = gongdoc.GongdocCommandType.DIAGRAM_ELEMENT_DELETE
+      gongdocCommandSingloton.DiagramName = this.currentClassdiagram.Name
+      gongdocCommandSingloton.StructName = gongFlatNode.structName
+      gongdocCommandSingloton.Date = Date.now().toString()
+      gongdocCommandSingloton.GongdocNodeType = gongFlatNode.type
+      gongdocCommandSingloton.FieldName = gongFlatNode.name
+
+      this.gongdocCommandService.updateGongdocCommand(gongdocCommandSingloton).subscribe(
+        GongdocCommand => {
+          console.log("GongdocCommand updated")
+        }
+      )
+    }
+  }
+
+  addPointerToStructToDiagram(gongFlatNode: GongFlatNode) {
 
     // get the GongdocCommandSingloton
     let gongdocCommandSingloton = this.gongdocFrontRepo.GongdocCommands.get(1)
@@ -533,7 +611,7 @@ export class SidebarGongDiagramsComponent implements OnInit {
      * dropOnPaperOffset is the computed position the jointjs paper
      */
     const dropOnPaperOffset = {
-      x: droppedPosition.x - originPaper.x - sourceElement.x,
+      x: droppedPosition.x - originPaper.x,
       y: droppedPosition.y - originPaper.y,
     };
 

@@ -182,6 +182,21 @@ func init() {
 						Stage.Commit()
 
 					case POINTER_TO_STRUCT:
+						// check wether the classshape of the basic field is present
+						foundClassshape := false
+						var classshape *Classshape
+						for _, _classshape := range classDiagram.Classshapes {
+
+							// strange behavior when the classshape is remove within the loop
+							if _classshape.Structname == GongdocCommandSingloton.StructName && !foundClassshape {
+								foundClassshape = true
+								classshape = _classshape
+							}
+						}
+						if !foundClassshape {
+							log.Panicf("Classshape %s of field not present ", GongdocCommandSingloton.StructName)
+						}
+						_ = classshape
 					case SLICE_OF_POINTER_TO_STRUCT:
 					}
 				}
