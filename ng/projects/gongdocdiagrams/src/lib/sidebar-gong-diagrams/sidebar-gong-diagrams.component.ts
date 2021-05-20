@@ -327,6 +327,8 @@ export class SidebarGongDiagramsComponent implements OnInit {
 
           gongstructDB.GongBasicFields?.forEach(gongbasicfieldDB => {
 
+            let structIsPresent = arrayOfDisplayedClassshape.has(gongbasicfieldDB.GongStruct_GongBasicFields_reverse.Name)
+
             let gongbasicfieldNode: GongNode = {
               name: gongbasicfieldDB.Name,
               type: gongdoc.GongdocNodeType.BASIC_FIELD,
@@ -338,6 +340,7 @@ export class SidebarGongDiagramsComponent implements OnInit {
               gongBasicField: gongbasicfieldDB,
               children: new Array<GongNode>(),
               presentInDiagram: arrayOfDisplayedGongdocField.has(gongbasicfieldDB.Name),
+              canBeIncluded: structIsPresent,
             }
             GongBasicFieldsGongNodeAssociation.children.push(gongbasicfieldNode)
           })

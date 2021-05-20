@@ -11,6 +11,15 @@
 			"group": "build"
 		},
 		{
+			"label": "03 - ng build",
+			"type": "shell",
+			"options": {
+				"cwd": "ng"
+			},
+			"command": "ng build",
+			"group": "build"
+		},
+		{
 			"label": "02 - go run",
 			"type": "shell",
 			"options": {
