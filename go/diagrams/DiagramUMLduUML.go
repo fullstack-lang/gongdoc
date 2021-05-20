@@ -36,7 +36,7 @@ var DiagramUMLduUML uml.Classdiagram = uml.Classdiagram{
 		{
 			Struct: &(models.Classshape{}),
 			Position: &uml.Position{
-				X: 80.000000,
+				X: 70.000000,
 				Y: 490.000000,
 			},
 			Width:  240.000000,
@@ -45,8 +45,8 @@ var DiagramUMLduUML uml.Classdiagram = uml.Classdiagram{
 				{
 					Field: models.Classshape{}.Fields,
 					Middlevertice: &uml.Vertice{
-						X: 550.000000,
-						Y: 630.000000,
+						X: 470.000000,
+						Y: 610.000000,
 					},
 					Multiplicity: "*",
 				},
@@ -57,6 +57,14 @@ var DiagramUMLduUML uml.Classdiagram = uml.Classdiagram{
 						Y: 620.000000,
 					},
 					Multiplicity: "*",
+				},
+				{
+					Field: models.Classshape{}.Position,
+					Middlevertice: &uml.Vertice{
+						X: 725.000000,
+						Y: 609.000000,
+					},
+					Multiplicity: "0..1",
 				},
 			},
 			Fields: []*uml.Field{
@@ -77,7 +85,7 @@ var DiagramUMLduUML uml.Classdiagram = uml.Classdiagram{
 		{
 			Struct: &(models.Field{}),
 			Position: &uml.Position{
-				X: 430.000000,
+				X: 350.000000,
 				Y: 680.000000,
 			},
 			Width:  240.000000,
@@ -168,11 +176,11 @@ var DiagramUMLduUML uml.Classdiagram = uml.Classdiagram{
 		{
 			Struct: &(models.Position{}),
 			Position: &uml.Position{
-				X: 430.000000,
-				Y: 860.000000,
+				X: 600.000000,
+				Y: 680.000000,
 			},
 			Width:  240.000000,
-			Heigth: 93.000000,
+			Heigth: 78.000000,
 			Fields: []*uml.Field{
 				{
 					Field: models.Position{}.X,
@@ -189,10 +197,16 @@ var DiagramUMLduUML uml.Classdiagram = uml.Classdiagram{
 				Y: 480.000000,
 			},
 			Width:  240.000000,
-			Heigth: 63.000000,
+			Heigth: 93.000000,
 			Fields: []*uml.Field{
 				{
 					Field: models.State{}.Name,
+				},
+				{
+					Field: models.State{}.X,
+				},
+				{
+					Field: models.State{}.Y,
 				},
 			},
 		},
