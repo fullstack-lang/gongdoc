@@ -11,7 +11,7 @@ import * as gongdoc from 'gongdoc'
 
 import { ClassdiagramContextSubject, ClassdiagramContext } from '../diagram-displayed-gongstruct'
 import { combineLatest, Observable, timer } from 'rxjs';
-import { ClassshapeDB, FieldDB } from 'gongdoc';
+import { ClassshapeDB, FieldDB, GongdocCommandDB } from 'gongdoc';
 import { NoDataRowOutlet } from '@angular/cdk/table';
 
 /**
@@ -281,13 +281,13 @@ export class SidebarGongDiagramsComponent implements OnInit {
           arrayOfDisplayedClassshape.set(classshape.Structname, classshape)
           classshape?.Fields?.forEach(
             field => {
-              arrayOfDisplayedBasicField.set( classshape.Structname + "." + field.Fieldname, field)
+              arrayOfDisplayedBasicField.set(classshape.Structname + "." + field.Fieldname, field)
               console.log("Adding " + classshape.Structname + "." + field.Fieldname)
             }
           )
           classshape?.Links?.forEach(
             link => {
-              arrayOfDisplayedLink.set( classshape.Structname + "." + link.Fieldname, link)
+              arrayOfDisplayedLink.set(classshape.Structname + "." + link.Fieldname, link)
             }
           )
         }
@@ -463,7 +463,12 @@ export class SidebarGongDiagramsComponent implements OnInit {
   removeNodeFromDiagram(gongFlatNode: GongFlatNode) {
 
     // get the GongdocCommandSingloton
-    let gongdocCommandSingloton = this.gongdocFrontRepo.GongdocCommands.get(1)
+    let gongdocCommandSingloton: GongdocCommandDB
+    this.gongdocFrontRepo.GongdocCommands.forEach(
+      gongdocCommand => {
+        gongdocCommandSingloton = gongdocCommand
+      }
+    )
     if (gongdocCommandSingloton != undefined) {
       gongdocCommandSingloton.Command = gongdoc.GongdocCommandType.DIAGRAM_ELEMENT_DELETE
       gongdocCommandSingloton.DiagramName = this.currentClassdiagram.Name
@@ -492,7 +497,12 @@ export class SidebarGongDiagramsComponent implements OnInit {
   removeBasicFieldFromDiagram(gongFlatNode: GongFlatNode) {
 
     // get the GongdocCommandSingloton
-    let gongdocCommandSingloton = this.gongdocFrontRepo.GongdocCommands.get(1)
+    let gongdocCommandSingloton: GongdocCommandDB
+    this.gongdocFrontRepo.GongdocCommands.forEach(
+      gongdocCommand => {
+        gongdocCommandSingloton = gongdocCommand
+      }
+    )
     if (gongdocCommandSingloton != undefined) {
       gongdocCommandSingloton.Command = gongdoc.GongdocCommandType.DIAGRAM_ELEMENT_DELETE
       gongdocCommandSingloton.DiagramName = this.currentClassdiagram.Name
@@ -512,7 +522,12 @@ export class SidebarGongDiagramsComponent implements OnInit {
   addBasicFieldToDiagram(gongFlatNode: GongFlatNode) {
 
     // get the GongdocCommandSingloton
-    let gongdocCommandSingloton = this.gongdocFrontRepo.GongdocCommands.get(1)
+    let gongdocCommandSingloton: GongdocCommandDB
+    this.gongdocFrontRepo.GongdocCommands.forEach(
+      gongdocCommand => {
+        gongdocCommandSingloton = gongdocCommand
+      }
+    )
     if (gongdocCommandSingloton != undefined) {
       gongdocCommandSingloton.Command = gongdoc.GongdocCommandType.DIAGRAM_ELEMENT_CREATE
       gongdocCommandSingloton.DiagramName = this.currentClassdiagram.Name
@@ -533,7 +548,12 @@ export class SidebarGongDiagramsComponent implements OnInit {
   removePointerToStructFromDiagram(gongFlatNode: GongFlatNode) {
 
     // get the GongdocCommandSingloton
-    let gongdocCommandSingloton = this.gongdocFrontRepo.GongdocCommands.get(1)
+    let gongdocCommandSingloton: GongdocCommandDB
+    this.gongdocFrontRepo.GongdocCommands.forEach(
+      gongdocCommand => {
+        gongdocCommandSingloton = gongdocCommand
+      }
+    )
     if (gongdocCommandSingloton != undefined) {
       gongdocCommandSingloton.Command = gongdoc.GongdocCommandType.DIAGRAM_ELEMENT_DELETE
       gongdocCommandSingloton.DiagramName = this.currentClassdiagram.Name
@@ -554,7 +574,12 @@ export class SidebarGongDiagramsComponent implements OnInit {
   addPointerToStructToDiagram(gongFlatNode: GongFlatNode) {
 
     // get the GongdocCommandSingloton
-    let gongdocCommandSingloton = this.gongdocFrontRepo.GongdocCommands.get(1)
+    let gongdocCommandSingloton: GongdocCommandDB
+    this.gongdocFrontRepo.GongdocCommands.forEach(
+      gongdocCommand => {
+        gongdocCommandSingloton = gongdocCommand
+      }
+    )
     if (gongdocCommandSingloton != undefined) {
       gongdocCommandSingloton.Command = gongdoc.GongdocCommandType.DIAGRAM_ELEMENT_CREATE
       gongdocCommandSingloton.DiagramName = this.currentClassdiagram.Name
@@ -575,7 +600,12 @@ export class SidebarGongDiagramsComponent implements OnInit {
   removeSliceOfPointerToStructFromDiagram(gongFlatNode: GongFlatNode) {
 
     // get the GongdocCommandSingloton
-    let gongdocCommandSingloton = this.gongdocFrontRepo.GongdocCommands.get(1)
+    let gongdocCommandSingloton: GongdocCommandDB
+    this.gongdocFrontRepo.GongdocCommands.forEach(
+      gongdocCommand => {
+        gongdocCommandSingloton = gongdocCommand
+      }
+    )
     if (gongdocCommandSingloton != undefined) {
       gongdocCommandSingloton.Command = gongdoc.GongdocCommandType.DIAGRAM_ELEMENT_DELETE
       gongdocCommandSingloton.DiagramName = this.currentClassdiagram.Name
@@ -596,7 +626,12 @@ export class SidebarGongDiagramsComponent implements OnInit {
   addSliceOfPointerToStructToDiagram(gongFlatNode: GongFlatNode) {
 
     // get the GongdocCommandSingloton
-    let gongdocCommandSingloton = this.gongdocFrontRepo.GongdocCommands.get(1)
+    let gongdocCommandSingloton: GongdocCommandDB
+    this.gongdocFrontRepo.GongdocCommands.forEach(
+      gongdocCommand => {
+        gongdocCommandSingloton = gongdocCommand
+      }
+    )
     if (gongdocCommandSingloton != undefined) {
       gongdocCommandSingloton.Command = gongdoc.GongdocCommandType.DIAGRAM_ELEMENT_CREATE
       gongdocCommandSingloton.DiagramName = this.currentClassdiagram.Name
@@ -670,7 +705,13 @@ export class SidebarGongDiagramsComponent implements OnInit {
     };
 
     // get the GongdocCommandSingloton
-    let gongdocCommandSingloton = this.gongdocFrontRepo.GongdocCommands.get(1)
+    let gongdocCommandSingloton: GongdocCommandDB
+    this.gongdocFrontRepo.GongdocCommands.forEach(
+      gongdocCommand => {
+        gongdocCommandSingloton = gongdocCommand
+      }
+    )
+
     if (gongdocCommandSingloton != undefined) {
 
       gongdocCommandSingloton.Command = gongdoc.GongdocCommandType.DIAGRAM_ELEMENT_CREATE
