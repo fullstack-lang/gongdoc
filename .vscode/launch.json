@@ -102,5 +102,25 @@
                 "go/models",
             ]
         },
+        {
+            "name": "go server on gongsvg -svg",
+            "type": "go",
+            "request": "launch",
+            "mode": "debug",
+            "program": "${workspaceFolder}",
+            "cwd": "${workspaceFolder}/../gongsvg",
+            "dlvLoadConfig": {
+                "followPointers": true,
+                "maxVariableRecurse": 1,
+                "maxStringLen": 300,
+                "maxArrayValues": 64,
+                "maxStructFields": -1
+            },
+            "args": [
+                "-svg",
+                "-pkgPath",
+                "go/models",
+            ]
+        },
     ]
 }
