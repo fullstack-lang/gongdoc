@@ -365,7 +365,12 @@ export class ClassDiagramComponent implements OnInit, OnDestroy {
     )
 
     // send a marshalling command to the backend via GongdocCommandSingloton
-    let gongdocCommandSingloton = this.gongdocFrontRepo.GongdocCommands.get(1)
+    let gongdocCommandSingloton: gongdoc.GongdocCommandDB
+    this.gongdocFrontRepo.GongdocCommands.forEach(
+      gongdocCommand => {
+        gongdocCommandSingloton = gongdocCommand
+      }
+    )
     gongdocCommandSingloton.Command = gongdoc.GongdocCommandType.MARSHALL_DIAGRAM
     gongdocCommandSingloton.DiagramName = this.classdiagram.Name
     gongdocCommandSingloton.Date = Date.now().toString()
