@@ -1,12 +1,10 @@
-package main
+package models
 
 import (
 	"log"
 	"os"
 	"path/filepath"
 	"strings"
-
-	gongdoc_models "github.com/fullstack-lang/gongdoc/go/models"
 
 	gong_models "github.com/fullstack-lang/gong/go/models"
 )
@@ -15,7 +13,7 @@ import (
 func GenGoDefaultDiagram(modelPkg *gong_models.ModelPkg, pkgPath string) {
 
 	// generate diagrams for documentation
-	var pkgelt gongdoc_models.Pkgelt
+	var pkgelt Pkgelt
 	// parse the diagram package
 	diagramPkgPath := filepath.Join(pkgPath, "../diagrams")
 
@@ -34,20 +32,20 @@ func GenGoDefaultDiagram(modelPkg *gong_models.ModelPkg, pkgPath string) {
 
 	// generates default diagram
 	{
-		var pkgelt_default gongdoc_models.Pkgelt
+		var pkgelt_default Pkgelt
 		pkgelt_default.Name = gong_models.PkgGoPath
 
-		defaultClassDiagramm := new(gongdoc_models.Classdiagram)
+		defaultClassDiagramm := new(Classdiagram)
 		defaultClassDiagramm.Name = "defaultDiagram"
 		pkgelt_default.Classdiagrams = append(pkgelt_default.Classdiagrams, defaultClassDiagramm)
 
 		idx := 0.0
 		for _, _enum := range modelPkg.GongEnums {
-			classshape := new(gongdoc_models.Classshape)
-			classshape.ClassshapeTargetType = gongdoc_models.ENUM
+			classshape := new(Classshape)
+			classshape.ClassshapeTargetType = ENUM
 			classshape.Name = _enum.Name
 
-			classshape.Position = new(gongdoc_models.Position)
+			classshape.Position = new(Position)
 			classshape.Structname = _enum.Name
 
 			classshape.Position.X = 40.0 + 300.0*idx
@@ -57,7 +55,7 @@ func GenGoDefaultDiagram(modelPkg *gong_models.ModelPkg, pkgPath string) {
 			defaultClassDiagramm.Classshapes = append(defaultClassDiagramm.Classshapes, classshape)
 
 			for _, value := range _enum.GongEnumValues {
-				field := new(gongdoc_models.Field)
+				field := new(Field)
 				field.Fieldname = value.Name
 				field.Structname = _enum.Name
 				field.Field = value
@@ -67,12 +65,12 @@ func GenGoDefaultDiagram(modelPkg *gong_models.ModelPkg, pkgPath string) {
 
 		idx = 0.0
 		for _, _struct := range modelPkg.GongStructs {
-			classshape := new(gongdoc_models.Classshape)
-			classshape.ClassshapeTargetType = gongdoc_models.STRUCT
+			classshape := new(Classshape)
+			classshape.ClassshapeTargetType = STRUCT
 
 			classshape.Name = _struct.Name
 
-			classshape.Position = new(gongdoc_models.Position)
+			classshape.Position = new(Position)
 			classshape.Structname = _struct.Name
 
 			classshape.Position.X = 40.0 + 300.0*idx
@@ -93,13 +91,13 @@ func GenGoDefaultDiagram(modelPkg *gong_models.ModelPkg, pkgPath string) {
 					case *gong_models.PointerToGongStructField:
 						pointerToGongStructField := _field.(*gong_models.PointerToGongStructField)
 
-						link := new(gongdoc_models.Link)
+						link := new(Link)
 						link.Fieldname = pointerToGongStructField.Name
 						link.Structname = _struct.Name
 						link.Field = _field
-						link.Multiplicity = gongdoc_models.ZERO_ONE
+						link.Multiplicity = ZERO_ONE
 
-						link.Middlevertice = new(gongdoc_models.Vertice)
+						link.Middlevertice = new(Vertice)
 						link.Middlevertice.X = 40 + 300.0*float64(idx) + 250
 						link.Middlevertice.Y = 200.0 + float64(linkIndex)*50
 						classshape.Links = append(classshape.Links, link)
@@ -108,13 +106,13 @@ func GenGoDefaultDiagram(modelPkg *gong_models.ModelPkg, pkgPath string) {
 					case *gong_models.SliceOfPointerToGongStructField:
 						sliceOfPointerToGongStructField := _field.(*gong_models.SliceOfPointerToGongStructField)
 
-						link := new(gongdoc_models.Link)
+						link := new(Link)
 						link.Fieldname = sliceOfPointerToGongStructField.Name
 						link.Structname = _struct.Name
 						link.Field = _field
-						link.Multiplicity = gongdoc_models.MANY
+						link.Multiplicity = MANY
 
-						link.Middlevertice = new(gongdoc_models.Vertice)
+						link.Middlevertice = new(Vertice)
 						link.Middlevertice.X = 40 + 300.0*float64(idx) + 250
 						link.Middlevertice.Y = 200.0 + float64(linkIndex)*50
 						classshape.Links = append(classshape.Links, link)
@@ -123,7 +121,7 @@ func GenGoDefaultDiagram(modelPkg *gong_models.ModelPkg, pkgPath string) {
 					case *gong_models.GongBasicField:
 						basicField := _field.(*gong_models.GongBasicField)
 
-						field := new(gongdoc_models.Field)
+						field := new(Field)
 						field.Fieldname = basicField.Name
 						field.Structname = _struct.Name
 						field.Field = _field

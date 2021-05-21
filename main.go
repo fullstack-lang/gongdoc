@@ -111,7 +111,7 @@ func main() {
 		log.Printf("Generating default diagram")
 
 		// generates default UML diagrams
-		GenGoDefaultDiagram(modelPkg, *pkgPath)
+		gongdoc_models.GenGoDefaultDiagram(modelPkg, *pkgPath)
 		return
 	}
 
