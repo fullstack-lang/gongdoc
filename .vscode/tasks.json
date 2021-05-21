@@ -42,8 +42,6 @@
 			"args": [
 				"run",
 				"main.go",
-				"-diagramPkgPath",
-				"go/tests/geometry/diagrams",
 				"-pkgPath",
 				"go/tests/geometry/models",
 			],
