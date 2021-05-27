@@ -46,7 +46,7 @@ type FieldAPI struct {
 	Fieldtypename_Data sql.NullString
 
 	// Implementation of a reverse ID for field Classshape{}.Fields []*Field
-	Classshape_FieldsDBID       sql.NullInt64
+	Classshape_FieldsDBID sql.NullInt64
 	Classshape_FieldsDBID_Index sql.NullInt64
 
 	// end of insertion
