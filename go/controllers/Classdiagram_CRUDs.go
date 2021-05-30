@@ -61,7 +61,7 @@ func GetClassdiagrams(c *gin.Context) {
 	}
 
 	// slice that will be transmitted to the front
-	var classdiagramAPIs []orm.ClassdiagramAPI
+	classdiagramAPIs := make([]orm.ClassdiagramAPI, 0)
 
 	// for each classdiagram, update fields from the database nullable fields
 	for idx := range classdiagramDBs {

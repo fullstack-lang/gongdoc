@@ -61,7 +61,7 @@ func GetClassshapes(c *gin.Context) {
 	}
 
 	// slice that will be transmitted to the front
-	var classshapeAPIs []orm.ClassshapeAPI
+	classshapeAPIs := make([]orm.ClassshapeAPI, 0)
 
 	// for each classshape, update fields from the database nullable fields
 	for idx := range classshapeDBs {

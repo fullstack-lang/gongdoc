@@ -61,7 +61,7 @@ func GetPkgelts(c *gin.Context) {
 	}
 
 	// slice that will be transmitted to the front
-	var pkgeltAPIs []orm.PkgeltAPI
+	pkgeltAPIs := make([]orm.PkgeltAPI, 0)
 
 	// for each pkgelt, update fields from the database nullable fields
 	for idx := range pkgeltDBs {

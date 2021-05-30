@@ -61,7 +61,7 @@ func GetStates(c *gin.Context) {
 	}
 
 	// slice that will be transmitted to the front
-	var stateAPIs []orm.StateAPI
+	stateAPIs := make([]orm.StateAPI, 0)
 
 	// for each state, update fields from the database nullable fields
 	for idx := range stateDBs {

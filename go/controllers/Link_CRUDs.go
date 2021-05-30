@@ -61,7 +61,7 @@ func GetLinks(c *gin.Context) {
 	}
 
 	// slice that will be transmitted to the front
-	var linkAPIs []orm.LinkAPI
+	linkAPIs := make([]orm.LinkAPI, 0)
 
 	// for each link, update fields from the database nullable fields
 	for idx := range linkDBs {

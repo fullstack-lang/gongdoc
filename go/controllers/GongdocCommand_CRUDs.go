@@ -61,7 +61,7 @@ func GetGongdocCommands(c *gin.Context) {
 	}
 
 	// slice that will be transmitted to the front
-	var gongdoccommandAPIs []orm.GongdocCommandAPI
+	gongdoccommandAPIs := make([]orm.GongdocCommandAPI, 0)
 
 	// for each gongdoccommand, update fields from the database nullable fields
 	for idx := range gongdoccommandDBs {

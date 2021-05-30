@@ -61,7 +61,7 @@ func GetVertices(c *gin.Context) {
 	}
 
 	// slice that will be transmitted to the front
-	var verticeAPIs []orm.VerticeAPI
+	verticeAPIs := make([]orm.VerticeAPI, 0)
 
 	// for each vertice, update fields from the database nullable fields
 	for idx := range verticeDBs {

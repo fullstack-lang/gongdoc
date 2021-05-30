@@ -61,7 +61,7 @@ func GetUmlscs(c *gin.Context) {
 	}
 
 	// slice that will be transmitted to the front
-	var umlscAPIs []orm.UmlscAPI
+	umlscAPIs := make([]orm.UmlscAPI, 0)
 
 	// for each umlsc, update fields from the database nullable fields
 	for idx := range umlscDBs {

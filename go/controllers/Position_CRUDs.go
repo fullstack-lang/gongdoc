@@ -61,7 +61,7 @@ func GetPositions(c *gin.Context) {
 	}
 
 	// slice that will be transmitted to the front
-	var positionAPIs []orm.PositionAPI
+	positionAPIs := make([]orm.PositionAPI, 0)
 
 	// for each position, update fields from the database nullable fields
 	for idx := range positionDBs {

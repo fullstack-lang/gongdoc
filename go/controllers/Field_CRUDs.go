@@ -61,7 +61,7 @@ func GetFields(c *gin.Context) {
 	}
 
 	// slice that will be transmitted to the front
-	var fieldAPIs []orm.FieldAPI
+	fieldAPIs := make([]orm.FieldAPI, 0)
 
 	// for each field, update fields from the database nullable fields
 	for idx := range fieldDBs {
