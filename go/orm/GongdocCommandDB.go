@@ -3,9 +3,13 @@ package orm
 
 import (
 	"database/sql"
+	"encoding/json"
 	"errors"
 	"fmt"
+	"io/ioutil"
 	"log"
+	"os"
+	"path/filepath"
 	"sort"
 	"time"
 
@@ -27,9 +31,30 @@ var dummy_GongdocCommand_sort sort.Float64Slice
 //
 // swagger:model gongdoccommandAPI
 type GongdocCommandAPI struct {
+	gorm.Model
+
 	models.GongdocCommand
 
-	// insertion for fields declaration
+	// encoding of pointers
+	GongdocCommandPointersEnconding
+}
+
+// GongdocCommandPointersEnconding encodes pointers to Struct and
+// reverse pointers of slice of poitners to Struct
+type GongdocCommandPointersEnconding struct {
+	// insertion for pointer fields encoding declaration
+}
+
+// GongdocCommandDB describes a gongdoccommand in the database
+//
+// It incorporates the GORM ID, basic fields from the model (because they can be serialized),
+// the encoded version of pointers
+//
+// swagger:model gongdoccommandDB
+type GongdocCommandDB struct {
+	gorm.Model
+
+	// insertion for basic fields declaration
 	// Declation for basic field gongdoccommandDB.Name {{BasicKind}} (to be completed)
 	Name_Data sql.NullString
 
@@ -60,18 +85,8 @@ type GongdocCommandAPI struct {
 	// Declation for basic field gongdoccommandDB.PositionY {{BasicKind}} (to be completed)
 	PositionY_Data sql.NullInt64
 
-	// end of insertion
-}
-
-// GongdocCommandDB describes a gongdoccommand in the database
-//
-// It incorporates all fields : from the model, from the generated field for the API and the GORM ID
-//
-// swagger:model gongdoccommandDB
-type GongdocCommandDB struct {
-	gorm.Model
-
-	GongdocCommandAPI
+	// encoding of pointers
+	GongdocCommandPointersEnconding
 }
 
 // GongdocCommandDBs arrays gongdoccommandDBs
@@ -95,6 +110,13 @@ type BackRepoGongdocCommandStruct struct {
 	Map_GongdocCommandDBID_GongdocCommandPtr *map[uint]*models.GongdocCommand
 
 	db *gorm.DB
+}
+
+// GetGongdocCommandDBFromGongdocCommandPtr is a handy function to access the back repo instance from the stage instance
+func (backRepoGongdocCommand *BackRepoGongdocCommandStruct) GetGongdocCommandDBFromGongdocCommandPtr(gongdoccommand *models.GongdocCommand) (gongdoccommandDB *GongdocCommandDB) {
+	id := (*backRepoGongdocCommand.Map_GongdocCommandPtr_GongdocCommandDBID)[gongdoccommand]
+	gongdoccommandDB = (*backRepoGongdocCommand.Map_GongdocCommandDBID_GongdocCommandDB)[id]
+	return
 }
 
 // BackRepoGongdocCommand.Init set up the BackRepo of the GongdocCommand
@@ -178,7 +200,7 @@ func (backRepoGongdocCommand *BackRepoGongdocCommandStruct) CommitPhaseOneInstan
 
 	// initiate gongdoccommand
 	var gongdoccommandDB GongdocCommandDB
-	gongdoccommandDB.GongdocCommand = *gongdoccommand
+	gongdoccommandDB.CopyBasicFieldsFromGongdocCommand(gongdoccommand)
 
 	query := backRepoGongdocCommand.db.Create(&gongdoccommandDB)
 	if query.Error != nil {
@@ -211,41 +233,9 @@ func (backRepoGongdocCommand *BackRepoGongdocCommandStruct) CommitPhaseTwoInstan
 	// fetch matching gongdoccommandDB
 	if gongdoccommandDB, ok := (*backRepoGongdocCommand.Map_GongdocCommandDBID_GongdocCommandDB)[idx]; ok {
 
-		{
-			{
-				// insertion point for fields commit
-				gongdoccommandDB.Name_Data.String = gongdoccommand.Name
-				gongdoccommandDB.Name_Data.Valid = true
+		gongdoccommandDB.CopyBasicFieldsFromGongdocCommand(gongdoccommand)
 
-				gongdoccommandDB.Command_Data.String = string(gongdoccommand.Command)
-				gongdoccommandDB.Command_Data.Valid = true
-
-				gongdoccommandDB.DiagramName_Data.String = gongdoccommand.DiagramName
-				gongdoccommandDB.DiagramName_Data.Valid = true
-
-				gongdoccommandDB.Date_Data.String = gongdoccommand.Date
-				gongdoccommandDB.Date_Data.Valid = true
-
-				gongdoccommandDB.GongdocNodeType_Data.String = string(gongdoccommand.GongdocNodeType)
-				gongdoccommandDB.GongdocNodeType_Data.Valid = true
-
-				gongdoccommandDB.StructName_Data.String = gongdoccommand.StructName
-				gongdoccommandDB.StructName_Data.Valid = true
-
-				gongdoccommandDB.FieldName_Data.String = gongdoccommand.FieldName
-				gongdoccommandDB.FieldName_Data.Valid = true
-
-				gongdoccommandDB.FieldTypeName_Data.String = gongdoccommand.FieldTypeName
-				gongdoccommandDB.FieldTypeName_Data.Valid = true
-
-				gongdoccommandDB.PositionX_Data.Int64 = int64(gongdoccommand.PositionX)
-				gongdoccommandDB.PositionX_Data.Valid = true
-
-				gongdoccommandDB.PositionY_Data.Int64 = int64(gongdoccommand.PositionY)
-				gongdoccommandDB.PositionY_Data.Valid = true
-
-			}
-		}
+		// insertion point for fields commit
 		query := backRepoGongdocCommand.db.Save(&gongdoccommandDB)
 		if query.Error != nil {
 			return query.Error
@@ -287,17 +277,20 @@ func (backRepoGongdocCommand *BackRepoGongdocCommandStruct) CheckoutPhaseOne() (
 func (backRepoGongdocCommand *BackRepoGongdocCommandStruct) CheckoutPhaseOneInstance(gongdoccommandDB *GongdocCommandDB) (Error error) {
 
 	// if absent, create entries in the backRepoGongdocCommand maps.
-	gongdoccommandWithNewFieldValues := gongdoccommandDB.GongdocCommand
-	if _, ok := (*backRepoGongdocCommand.Map_GongdocCommandDBID_GongdocCommandPtr)[gongdoccommandDB.ID]; !ok {
+	// var gongdoccommand models.GongdocCommand
+	// gongdoccommandDB.CopyBasicFieldsToGongdocCommand(&gongdoccommandWithNewFieldValues)
 
-		(*backRepoGongdocCommand.Map_GongdocCommandDBID_GongdocCommandPtr)[gongdoccommandDB.ID] = &gongdoccommandWithNewFieldValues
-		(*backRepoGongdocCommand.Map_GongdocCommandPtr_GongdocCommandDBID)[&gongdoccommandWithNewFieldValues] = gongdoccommandDB.ID
+	gongdoccommand, ok := (*backRepoGongdocCommand.Map_GongdocCommandDBID_GongdocCommandPtr)[gongdoccommandDB.ID]
+	if !ok {
+		gongdoccommand = new(models.GongdocCommand)
+		(*backRepoGongdocCommand.Map_GongdocCommandDBID_GongdocCommandPtr)[gongdoccommandDB.ID] = gongdoccommand
+		(*backRepoGongdocCommand.Map_GongdocCommandPtr_GongdocCommandDBID)[gongdoccommand] = gongdoccommandDB.ID
 
 		// append model store with the new element
-		gongdoccommandWithNewFieldValues.Stage()
+		gongdoccommand.Stage()
 	}
-	gongdoccommandDBWithNewFieldValues := *gongdoccommandDB
-	(*backRepoGongdocCommand.Map_GongdocCommandDBID_GongdocCommandDB)[gongdoccommandDB.ID] = &gongdoccommandDBWithNewFieldValues
+	gongdoccommandDB.CopyBasicFieldsToGongdocCommand(gongdoccommand)
+	(*backRepoGongdocCommand.Map_GongdocCommandDBID_GongdocCommandDB)[gongdoccommandDB.ID] = gongdoccommandDB
 
 	return
 }
@@ -319,32 +312,8 @@ func (backRepoGongdocCommand *BackRepoGongdocCommandStruct) CheckoutPhaseTwoInst
 
 	gongdoccommand := (*backRepoGongdocCommand.Map_GongdocCommandDBID_GongdocCommandPtr)[gongdoccommandDB.ID]
 	_ = gongdoccommand // sometimes, there is no code generated. This lines voids the "unused variable" compilation error
-	{
-		{
-			// insertion point for checkout, i.e. update of fields of stage instance from fields of back repo instances
-			//
-			gongdoccommand.Name = gongdoccommandDB.Name_Data.String
 
-			gongdoccommand.Command = models.GongdocCommandType(gongdoccommandDB.Command_Data.String)
-
-			gongdoccommand.DiagramName = gongdoccommandDB.DiagramName_Data.String
-
-			gongdoccommand.Date = gongdoccommandDB.Date_Data.String
-
-			gongdoccommand.GongdocNodeType = models.GongdocNodeType(gongdoccommandDB.GongdocNodeType_Data.String)
-
-			gongdoccommand.StructName = gongdoccommandDB.StructName_Data.String
-
-			gongdoccommand.FieldName = gongdoccommandDB.FieldName_Data.String
-
-			gongdoccommand.FieldTypeName = gongdoccommandDB.FieldTypeName_Data.String
-
-			gongdoccommand.PositionX = int(gongdoccommandDB.PositionX_Data.Int64)
-
-			gongdoccommand.PositionY = int(gongdoccommandDB.PositionY_Data.Int64)
-
-		}
-	}
+	// insertion point for checkout of pointer encoding
 	return
 }
 
@@ -371,5 +340,119 @@ func (backRepo *BackRepoStruct) CheckoutGongdocCommand(gongdoccommand *models.Go
 			backRepo.BackRepoGongdocCommand.CheckoutPhaseOneInstance(&gongdoccommandDB)
 			backRepo.BackRepoGongdocCommand.CheckoutPhaseTwoInstance(backRepo, &gongdoccommandDB)
 		}
+	}
+}
+
+// CopyBasicFieldsToGongdocCommandDB is used to copy basic fields between the Stage or the CRUD to the back repo
+func (gongdoccommandDB *GongdocCommandDB) CopyBasicFieldsFromGongdocCommand(gongdoccommand *models.GongdocCommand) {
+	// insertion point for fields commit
+	gongdoccommandDB.Name_Data.String = gongdoccommand.Name
+	gongdoccommandDB.Name_Data.Valid = true
+
+	gongdoccommandDB.Command_Data.String = string(gongdoccommand.Command)
+	gongdoccommandDB.Command_Data.Valid = true
+
+	gongdoccommandDB.DiagramName_Data.String = gongdoccommand.DiagramName
+	gongdoccommandDB.DiagramName_Data.Valid = true
+
+	gongdoccommandDB.Date_Data.String = gongdoccommand.Date
+	gongdoccommandDB.Date_Data.Valid = true
+
+	gongdoccommandDB.GongdocNodeType_Data.String = string(gongdoccommand.GongdocNodeType)
+	gongdoccommandDB.GongdocNodeType_Data.Valid = true
+
+	gongdoccommandDB.StructName_Data.String = gongdoccommand.StructName
+	gongdoccommandDB.StructName_Data.Valid = true
+
+	gongdoccommandDB.FieldName_Data.String = gongdoccommand.FieldName
+	gongdoccommandDB.FieldName_Data.Valid = true
+
+	gongdoccommandDB.FieldTypeName_Data.String = gongdoccommand.FieldTypeName
+	gongdoccommandDB.FieldTypeName_Data.Valid = true
+
+	gongdoccommandDB.PositionX_Data.Int64 = int64(gongdoccommand.PositionX)
+	gongdoccommandDB.PositionX_Data.Valid = true
+
+	gongdoccommandDB.PositionY_Data.Int64 = int64(gongdoccommand.PositionY)
+	gongdoccommandDB.PositionY_Data.Valid = true
+
+}
+
+// CopyBasicFieldsToGongdocCommandDB is used to copy basic fields between the Stage or the CRUD to the back repo
+func (gongdoccommandDB *GongdocCommandDB) CopyBasicFieldsToGongdocCommand(gongdoccommand *models.GongdocCommand) {
+
+	// insertion point for checkout of basic fields (back repo to stage)
+	gongdoccommand.Name = gongdoccommandDB.Name_Data.String
+	gongdoccommand.Command = models.GongdocCommandType(gongdoccommandDB.Command_Data.String)
+	gongdoccommand.DiagramName = gongdoccommandDB.DiagramName_Data.String
+	gongdoccommand.Date = gongdoccommandDB.Date_Data.String
+	gongdoccommand.GongdocNodeType = models.GongdocNodeType(gongdoccommandDB.GongdocNodeType_Data.String)
+	gongdoccommand.StructName = gongdoccommandDB.StructName_Data.String
+	gongdoccommand.FieldName = gongdoccommandDB.FieldName_Data.String
+	gongdoccommand.FieldTypeName = gongdoccommandDB.FieldTypeName_Data.String
+	gongdoccommand.PositionX = int(gongdoccommandDB.PositionX_Data.Int64)
+	gongdoccommand.PositionY = int(gongdoccommandDB.PositionY_Data.Int64)
+}
+
+// Backup generates a json file from a slice of all GongdocCommandDB instances in the backrepo
+func (backRepoGongdocCommand *BackRepoGongdocCommandStruct) Backup(dirPath string) {
+
+	filename := filepath.Join(dirPath, "GongdocCommandDB.json")
+
+	// organize the map into an array with increasing IDs, in order to have repoductible
+	// backup file
+	var forBackup []*GongdocCommandDB
+	for _, gongdoccommandDB := range *backRepoGongdocCommand.Map_GongdocCommandDBID_GongdocCommandDB {
+		forBackup = append(forBackup, gongdoccommandDB)
+	}
+
+	sort.Slice(forBackup[:], func(i, j int) bool {
+		return forBackup[i].ID < forBackup[j].ID
+	})
+
+	file, err := json.MarshalIndent(forBackup, "", " ")
+
+	if err != nil {
+		log.Panic("Cannot json GongdocCommand ", filename, " ", err.Error())
+	}
+
+	err = ioutil.WriteFile(filename, file, 0644)
+	if err != nil {
+		log.Panic("Cannot write the json GongdocCommand file", err.Error())
+	}
+}
+
+func (backRepoGongdocCommand *BackRepoGongdocCommandStruct) Restore(dirPath string) {
+
+	filename := filepath.Join(dirPath, "GongdocCommandDB.json")
+	jsonFile, err := os.Open(filename)
+	// if we os.Open returns an error then handle it
+	if err != nil {
+		log.Panic("Cannot restore/open the json GongdocCommand file", filename, " ", err.Error())
+	}
+
+	// read our opened jsonFile as a byte array.
+	byteValue, _ := ioutil.ReadAll(jsonFile)
+
+	var forRestore []*GongdocCommandDB
+
+	err = json.Unmarshal(byteValue, &forRestore)
+
+	// fill up Map_GongdocCommandDBID_GongdocCommandDB
+	for _, gongdoccommandDB := range forRestore {
+
+		gongdoccommandDB_ID := gongdoccommandDB.ID
+		query := backRepoGongdocCommand.db.Create(gongdoccommandDB)
+		if query.Error != nil {
+			log.Panic(query.Error)
+		}
+		if gongdoccommandDB_ID != gongdoccommandDB.ID {
+			log.Panicf("ID of GongdocCommand restore ID %d, name %s, has wrong ID %d in DB after create",
+				gongdoccommandDB_ID, gongdoccommandDB.Name_Data.String, gongdoccommandDB.ID)
+		}
+	}
+
+	if err != nil {
+		log.Panic("Cannot restore/unmarshall json GongdocCommand file", err.Error())
 	}
 }
