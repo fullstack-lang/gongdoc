@@ -63,8 +63,6 @@ export class PositionDetailComponent implements OnInit {
 		this.frontRepoService.pull().subscribe(
 			frontRepo => {
 				this.frontRepo = frontRepo
-				console.log("front repo PositionPull returned")
-
 				if (id != 0 && association == undefined) {
 					this.position = frontRepo.Positions.get(id)
 				} else {
@@ -97,8 +95,6 @@ export class PositionDetailComponent implements OnInit {
 			this.positionService.updatePosition(this.position)
 				.subscribe(position => {
 					this.positionService.PositionServiceChanged.next("update")
-
-					console.log("position saved")
 				});
 		} else {
 			switch (association) {
@@ -109,7 +105,6 @@ export class PositionDetailComponent implements OnInit {
 				this.positionService.PositionServiceChanged.next("post")
 
 				this.position = {} // reset fields
-				console.log("position added")
 			});
 		}
 	}
@@ -138,7 +133,6 @@ export class PositionDetailComponent implements OnInit {
 		);
 
 		dialogRef.afterClosed().subscribe(result => {
-			console.log('The dialog was closed');
 		});
 	}
 
@@ -161,7 +155,6 @@ export class PositionDetailComponent implements OnInit {
 		);
 
 		dialogRef.afterClosed().subscribe(result => {
-			console.log('The dialog was closed');
 		});
 	}
 }

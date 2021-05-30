@@ -63,8 +63,6 @@ export class FieldDetailComponent implements OnInit {
 		this.frontRepoService.pull().subscribe(
 			frontRepo => {
 				this.frontRepo = frontRepo
-				console.log("front repo FieldPull returned")
-
 				if (id != 0 && association == undefined) {
 					this.field = frontRepo.Fields.get(id)
 				} else {
@@ -94,6 +92,7 @@ export class FieldDetailComponent implements OnInit {
 				this.field.Classshape_FieldsDBID = new NullInt64
 				this.field.Classshape_FieldsDBID.Int64 = this.field.Classshape_Fields_reverse.ID
 				this.field.Classshape_FieldsDBID.Valid = true
+				this.field.Classshape_FieldsDBID_Index = new NullInt64
 				this.field.Classshape_FieldsDBID_Index.Valid = true
 				this.field.Classshape_Fields_reverse = undefined // very important, otherwise, circular JSON
 			}
@@ -104,8 +103,6 @@ export class FieldDetailComponent implements OnInit {
 			this.fieldService.updateField(this.field)
 				.subscribe(field => {
 					this.fieldService.FieldServiceChanged.next("update")
-
-					console.log("field saved")
 				});
 		} else {
 			switch (association) {
@@ -114,6 +111,7 @@ export class FieldDetailComponent implements OnInit {
 					this.field.Classshape_FieldsDBID = new NullInt64
 					this.field.Classshape_FieldsDBID.Int64 = id
 					this.field.Classshape_FieldsDBID.Valid = true
+					this.field.Classshape_FieldsDBID_Index = new NullInt64
 					this.field.Classshape_FieldsDBID_Index.Valid = true
 					break
 			}
@@ -122,7 +120,6 @@ export class FieldDetailComponent implements OnInit {
 				this.fieldService.FieldServiceChanged.next("post")
 
 				this.field = {} // reset fields
-				console.log("field added")
 			});
 		}
 	}
@@ -151,7 +148,6 @@ export class FieldDetailComponent implements OnInit {
 		);
 
 		dialogRef.afterClosed().subscribe(result => {
-			console.log('The dialog was closed');
 		});
 	}
 
@@ -174,7 +170,6 @@ export class FieldDetailComponent implements OnInit {
 		);
 
 		dialogRef.afterClosed().subscribe(result => {
-			console.log('The dialog was closed');
 		});
 	}
 }

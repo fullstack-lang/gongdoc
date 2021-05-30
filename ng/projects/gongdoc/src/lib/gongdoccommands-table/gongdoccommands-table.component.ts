@@ -114,7 +114,6 @@ export class GongdocCommandsTableComponent implements OnInit {
     this.frontRepoService.pull().subscribe(
       frontRepo => {
         this.frontRepo = frontRepo
-        console.log("front repo pull returned")
 
         this.gongdoccommands = this.frontRepo.GongdocCommands_array;
 
@@ -152,8 +151,6 @@ export class GongdocCommandsTableComponent implements OnInit {
     this.gongdoccommandService.deleteGongdocCommand(gongdoccommandID).subscribe(
       gongdoccommand => {
         this.gongdoccommandService.GongdocCommandServiceChanged.next("delete")
-
-        console.log("gongdoccommand deleted")
       }
     );
   }
@@ -215,7 +212,6 @@ export class GongdocCommandsTableComponent implements OnInit {
     // from selection, set gongdoccommand that belong to gongdoccommand through Anarrayofb
     this.selection.selected.forEach(
       gongdoccommand => {
-        console.log("selection ID " + gongdoccommand.ID)
         let ID = +this.dialogData.ID
         gongdoccommand[this.dialogData.ReversePointer].Int64 = ID
         gongdoccommand[this.dialogData.ReversePointer].Valid = true
@@ -229,7 +225,6 @@ export class GongdocCommandsTableComponent implements OnInit {
         this.gongdoccommandService.updateGongdocCommand(gongdoccommand)
           .subscribe(gongdoccommand => {
             this.gongdoccommandService.GongdocCommandServiceChanged.next("update")
-            console.log("gongdoccommand saved")
           });
       }
     )

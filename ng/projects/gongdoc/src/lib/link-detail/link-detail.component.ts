@@ -66,8 +66,6 @@ export class LinkDetailComponent implements OnInit {
 		this.frontRepoService.pull().subscribe(
 			frontRepo => {
 				this.frontRepo = frontRepo
-				console.log("front repo LinkPull returned")
-
 				if (id != 0 && association == undefined) {
 					this.link = frontRepo.Links.get(id)
 				} else {
@@ -109,6 +107,7 @@ export class LinkDetailComponent implements OnInit {
 				this.link.Classshape_LinksDBID = new NullInt64
 				this.link.Classshape_LinksDBID.Int64 = this.link.Classshape_Links_reverse.ID
 				this.link.Classshape_LinksDBID.Valid = true
+				this.link.Classshape_LinksDBID_Index = new NullInt64
 				this.link.Classshape_LinksDBID_Index.Valid = true
 				this.link.Classshape_Links_reverse = undefined // very important, otherwise, circular JSON
 			}
@@ -119,8 +118,6 @@ export class LinkDetailComponent implements OnInit {
 			this.linkService.updateLink(this.link)
 				.subscribe(link => {
 					this.linkService.LinkServiceChanged.next("update")
-
-					console.log("link saved")
 				});
 		} else {
 			switch (association) {
@@ -129,6 +126,7 @@ export class LinkDetailComponent implements OnInit {
 					this.link.Classshape_LinksDBID = new NullInt64
 					this.link.Classshape_LinksDBID.Int64 = id
 					this.link.Classshape_LinksDBID.Valid = true
+					this.link.Classshape_LinksDBID_Index = new NullInt64
 					this.link.Classshape_LinksDBID_Index.Valid = true
 					break
 			}
@@ -137,7 +135,6 @@ export class LinkDetailComponent implements OnInit {
 				this.linkService.LinkServiceChanged.next("post")
 
 				this.link = {} // reset fields
-				console.log("link added")
 			});
 		}
 	}
@@ -166,7 +163,6 @@ export class LinkDetailComponent implements OnInit {
 		);
 
 		dialogRef.afterClosed().subscribe(result => {
-			console.log('The dialog was closed');
 		});
 	}
 
@@ -189,7 +185,6 @@ export class LinkDetailComponent implements OnInit {
 		);
 
 		dialogRef.afterClosed().subscribe(result => {
-			console.log('The dialog was closed');
 		});
 	}
 }

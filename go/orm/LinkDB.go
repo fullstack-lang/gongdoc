@@ -3,9 +3,13 @@ package orm
 
 import (
 	"database/sql"
+	"encoding/json"
 	"errors"
 	"fmt"
+	"io/ioutil"
 	"log"
+	"os"
+	"path/filepath"
 	"sort"
 	"time"
 
@@ -27,9 +31,42 @@ var dummy_Link_sort sort.Float64Slice
 //
 // swagger:model linkAPI
 type LinkAPI struct {
+	gorm.Model
+
 	models.Link
 
-	// insertion for fields declaration
+	// encoding of pointers
+	LinkPointersEnconding
+}
+
+// LinkPointersEnconding encodes pointers to Struct and
+// reverse pointers of slice of poitners to Struct
+type LinkPointersEnconding struct {
+	// insertion for pointer fields encoding declaration
+	// field Middlevertice is a pointer to another Struct (optional or 0..1)
+	// This field is generated into another field to enable AS ONE association
+	MiddleverticeID sql.NullInt64
+
+	// all gong Struct has a Name field, this enables this data to object field
+	MiddleverticeName string
+
+	// Implementation of a reverse ID for field Classshape{}.Links []*Link
+	Classshape_LinksDBID sql.NullInt64
+
+	// implementation of the index of the withing the slice
+	Classshape_LinksDBID_Index sql.NullInt64
+}
+
+// LinkDB describes a link in the database
+//
+// It incorporates the GORM ID, basic fields from the model (because they can be serialized),
+// the encoded version of pointers
+//
+// swagger:model linkDB
+type LinkDB struct {
+	gorm.Model
+
+	// insertion for basic fields declaration
 	// Declation for basic field linkDB.Name {{BasicKind}} (to be completed)
 	Name_Data sql.NullString
 
@@ -45,29 +82,8 @@ type LinkAPI struct {
 	// Declation for basic field linkDB.Multiplicity {{BasicKind}} (to be completed)
 	Multiplicity_Data sql.NullString
 
-	// field Middlevertice is a pointer to another Struct (optional or 0..1)
-	// This field is generated into another field to enable AS ONE association
-	MiddleverticeID sql.NullInt64
-
-	// all gong Struct has a Name field, this enables this data to object field
-	MiddleverticeName string
-
-	// Implementation of a reverse ID for field Classshape{}.Links []*Link
-	Classshape_LinksDBID sql.NullInt64
-	Classshape_LinksDBID_Index sql.NullInt64
-
-	// end of insertion
-}
-
-// LinkDB describes a link in the database
-//
-// It incorporates all fields : from the model, from the generated field for the API and the GORM ID
-//
-// swagger:model linkDB
-type LinkDB struct {
-	gorm.Model
-
-	LinkAPI
+	// encoding of pointers
+	LinkPointersEnconding
 }
 
 // LinkDBs arrays linkDBs
@@ -91,6 +107,13 @@ type BackRepoLinkStruct struct {
 	Map_LinkDBID_LinkPtr *map[uint]*models.Link
 
 	db *gorm.DB
+}
+
+// GetLinkDBFromLinkPtr is a handy function to access the back repo instance from the stage instance
+func (backRepoLink *BackRepoLinkStruct) GetLinkDBFromLinkPtr(link *models.Link) (linkDB *LinkDB) {
+	id := (*backRepoLink.Map_LinkPtr_LinkDBID)[link]
+	linkDB = (*backRepoLink.Map_LinkDBID_LinkDB)[id]
+	return
 }
 
 // BackRepoLink.Init set up the BackRepo of the Link
@@ -174,7 +197,7 @@ func (backRepoLink *BackRepoLinkStruct) CommitPhaseOneInstance(link *models.Link
 
 	// initiate link
 	var linkDB LinkDB
-	linkDB.Link = *link
+	linkDB.CopyBasicFieldsFromLink(link)
 
 	query := backRepoLink.db.Create(&linkDB)
 	if query.Error != nil {
@@ -207,34 +230,17 @@ func (backRepoLink *BackRepoLinkStruct) CommitPhaseTwoInstance(backRepo *BackRep
 	// fetch matching linkDB
 	if linkDB, ok := (*backRepoLink.Map_LinkDBID_LinkDB)[idx]; ok {
 
-		{
-			{
-				// insertion point for fields commit
-				linkDB.Name_Data.String = link.Name
-				linkDB.Name_Data.Valid = true
+		linkDB.CopyBasicFieldsFromLink(link)
 
-				linkDB.Fieldname_Data.String = link.Fieldname
-				linkDB.Fieldname_Data.Valid = true
-
-				linkDB.Structname_Data.String = link.Structname
-				linkDB.Structname_Data.Valid = true
-
-				linkDB.Fieldtypename_Data.String = link.Fieldtypename
-				linkDB.Fieldtypename_Data.Valid = true
-
-				linkDB.Multiplicity_Data.String = string(link.Multiplicity)
-				linkDB.Multiplicity_Data.Valid = true
-
-				// commit pointer value link.Middlevertice translates to updating the link.MiddleverticeID
-				linkDB.MiddleverticeID.Valid = true // allow for a 0 value (nil association)
-				if link.Middlevertice != nil {
-					if MiddleverticeId, ok := (*backRepo.BackRepoVertice.Map_VerticePtr_VerticeDBID)[link.Middlevertice]; ok {
-						linkDB.MiddleverticeID.Int64 = int64(MiddleverticeId)
-					}
-				}
-
+		// insertion point for translating pointers encodings into actual pointers
+		// commit pointer value link.Middlevertice translates to updating the link.MiddleverticeID
+		linkDB.MiddleverticeID.Valid = true // allow for a 0 value (nil association)
+		if link.Middlevertice != nil {
+			if MiddleverticeId, ok := (*backRepo.BackRepoVertice.Map_VerticePtr_VerticeDBID)[link.Middlevertice]; ok {
+				linkDB.MiddleverticeID.Int64 = int64(MiddleverticeId)
 			}
 		}
+
 		query := backRepoLink.db.Save(&linkDB)
 		if query.Error != nil {
 			return query.Error
@@ -275,18 +281,23 @@ func (backRepoLink *BackRepoLinkStruct) CheckoutPhaseOne() (Error error) {
 // models version of the linkDB
 func (backRepoLink *BackRepoLinkStruct) CheckoutPhaseOneInstance(linkDB *LinkDB) (Error error) {
 
-	// if absent, create entries in the backRepoLink maps.
-	linkWithNewFieldValues := linkDB.Link
-	if _, ok := (*backRepoLink.Map_LinkDBID_LinkPtr)[linkDB.ID]; !ok {
+	link, ok := (*backRepoLink.Map_LinkDBID_LinkPtr)[linkDB.ID]
+	if !ok {
+		link = new(models.Link)
 
-		(*backRepoLink.Map_LinkDBID_LinkPtr)[linkDB.ID] = &linkWithNewFieldValues
-		(*backRepoLink.Map_LinkPtr_LinkDBID)[&linkWithNewFieldValues] = linkDB.ID
+		(*backRepoLink.Map_LinkDBID_LinkPtr)[linkDB.ID] = link
+		(*backRepoLink.Map_LinkPtr_LinkDBID)[link] = linkDB.ID
 
 		// append model store with the new element
-		linkWithNewFieldValues.Stage()
+		link.Stage()
 	}
-	linkDBWithNewFieldValues := *linkDB
-	(*backRepoLink.Map_LinkDBID_LinkDB)[linkDB.ID] = &linkDBWithNewFieldValues
+	linkDB.CopyBasicFieldsToLink(link)
+
+	// preserve pointer to aclassDB. Otherwise, pointer will is recycled and the map of pointers
+	// Map_LinkDBID_LinkDB)[linkDB hold variable pointers
+	linkDB_Data := *linkDB
+	preservedPtrToLink := &linkDB_Data
+	(*backRepoLink.Map_LinkDBID_LinkDB)[linkDB.ID] = preservedPtrToLink
 
 	return
 }
@@ -308,26 +319,11 @@ func (backRepoLink *BackRepoLinkStruct) CheckoutPhaseTwoInstance(backRepo *BackR
 
 	link := (*backRepoLink.Map_LinkDBID_LinkPtr)[linkDB.ID]
 	_ = link // sometimes, there is no code generated. This lines voids the "unused variable" compilation error
-	{
-		{
-			// insertion point for checkout, i.e. update of fields of stage instance from fields of back repo instances
-			//
-			link.Name = linkDB.Name_Data.String
 
-			link.Fieldname = linkDB.Fieldname_Data.String
-
-			link.Structname = linkDB.Structname_Data.String
-
-			link.Fieldtypename = linkDB.Fieldtypename_Data.String
-
-			link.Multiplicity = models.MultiplicityType(linkDB.Multiplicity_Data.String)
-
-			// Middlevertice field
-			if linkDB.MiddleverticeID.Int64 != 0 {
-				link.Middlevertice = (*backRepo.BackRepoVertice.Map_VerticeDBID_VerticePtr)[uint(linkDB.MiddleverticeID.Int64)]
-			}
-
-		}
+	// insertion point for checkout of pointer encoding
+	// Middlevertice field
+	if linkDB.MiddleverticeID.Int64 != 0 {
+		link.Middlevertice = (*backRepo.BackRepoVertice.Map_VerticeDBID_VerticePtr)[uint(linkDB.MiddleverticeID.Int64)]
 	}
 	return
 }
@@ -355,5 +351,100 @@ func (backRepo *BackRepoStruct) CheckoutLink(link *models.Link) {
 			backRepo.BackRepoLink.CheckoutPhaseOneInstance(&linkDB)
 			backRepo.BackRepoLink.CheckoutPhaseTwoInstance(backRepo, &linkDB)
 		}
+	}
+}
+
+// CopyBasicFieldsToLinkDB is used to copy basic fields between the Stage or the CRUD to the back repo
+func (linkDB *LinkDB) CopyBasicFieldsFromLink(link *models.Link) {
+	// insertion point for fields commit
+	linkDB.Name_Data.String = link.Name
+	linkDB.Name_Data.Valid = true
+
+	linkDB.Fieldname_Data.String = link.Fieldname
+	linkDB.Fieldname_Data.Valid = true
+
+	linkDB.Structname_Data.String = link.Structname
+	linkDB.Structname_Data.Valid = true
+
+	linkDB.Fieldtypename_Data.String = link.Fieldtypename
+	linkDB.Fieldtypename_Data.Valid = true
+
+	linkDB.Multiplicity_Data.String = string(link.Multiplicity)
+	linkDB.Multiplicity_Data.Valid = true
+
+}
+
+// CopyBasicFieldsToLinkDB is used to copy basic fields between the Stage or the CRUD to the back repo
+func (linkDB *LinkDB) CopyBasicFieldsToLink(link *models.Link) {
+
+	// insertion point for checkout of basic fields (back repo to stage)
+	link.Name = linkDB.Name_Data.String
+	link.Fieldname = linkDB.Fieldname_Data.String
+	link.Structname = linkDB.Structname_Data.String
+	link.Fieldtypename = linkDB.Fieldtypename_Data.String
+	link.Multiplicity = models.MultiplicityType(linkDB.Multiplicity_Data.String)
+}
+
+// Backup generates a json file from a slice of all LinkDB instances in the backrepo
+func (backRepoLink *BackRepoLinkStruct) Backup(dirPath string) {
+
+	filename := filepath.Join(dirPath, "LinkDB.json")
+
+	// organize the map into an array with increasing IDs, in order to have repoductible
+	// backup file
+	var forBackup []*LinkDB
+	for _, linkDB := range *backRepoLink.Map_LinkDBID_LinkDB {
+		forBackup = append(forBackup, linkDB)
+	}
+
+	sort.Slice(forBackup[:], func(i, j int) bool {
+		return forBackup[i].ID < forBackup[j].ID
+	})
+
+	file, err := json.MarshalIndent(forBackup, "", " ")
+
+	if err != nil {
+		log.Panic("Cannot json Link ", filename, " ", err.Error())
+	}
+
+	err = ioutil.WriteFile(filename, file, 0644)
+	if err != nil {
+		log.Panic("Cannot write the json Link file", err.Error())
+	}
+}
+
+func (backRepoLink *BackRepoLinkStruct) Restore(dirPath string) {
+
+	filename := filepath.Join(dirPath, "LinkDB.json")
+	jsonFile, err := os.Open(filename)
+	// if we os.Open returns an error then handle it
+	if err != nil {
+		log.Panic("Cannot restore/open the json Link file", filename, " ", err.Error())
+	}
+
+	// read our opened jsonFile as a byte array.
+	byteValue, _ := ioutil.ReadAll(jsonFile)
+
+	var forRestore []*LinkDB
+
+	err = json.Unmarshal(byteValue, &forRestore)
+
+	// fill up Map_LinkDBID_LinkDB
+	for _, linkDB := range forRestore {
+
+		linkDB_ID := linkDB.ID
+		linkDB.ID = 0
+		query := backRepoLink.db.Create(linkDB)
+		if query.Error != nil {
+			log.Panic(query.Error)
+		}
+		if linkDB_ID != linkDB.ID {
+			log.Panicf("ID of Link restore ID %d, name %s, has wrong ID %d in DB after create",
+				linkDB_ID, linkDB.Name_Data.String, linkDB.ID)
+		}
+	}
+
+	if err != nil {
+		log.Panic("Cannot restore/unmarshall json Link file", err.Error())
 	}
 }

@@ -3,9 +3,13 @@ package orm
 
 import (
 	"database/sql"
+	"encoding/json"
 	"errors"
 	"fmt"
+	"io/ioutil"
 	"log"
+	"os"
+	"path/filepath"
 	"sort"
 	"time"
 
@@ -27,9 +31,35 @@ var dummy_State_sort sort.Float64Slice
 //
 // swagger:model stateAPI
 type StateAPI struct {
+	gorm.Model
+
 	models.State
 
-	// insertion for fields declaration
+	// encoding of pointers
+	StatePointersEnconding
+}
+
+// StatePointersEnconding encodes pointers to Struct and
+// reverse pointers of slice of poitners to Struct
+type StatePointersEnconding struct {
+	// insertion for pointer fields encoding declaration
+	// Implementation of a reverse ID for field Umlsc{}.States []*State
+	Umlsc_StatesDBID sql.NullInt64
+
+	// implementation of the index of the withing the slice
+	Umlsc_StatesDBID_Index sql.NullInt64
+}
+
+// StateDB describes a state in the database
+//
+// It incorporates the GORM ID, basic fields from the model (because they can be serialized),
+// the encoded version of pointers
+//
+// swagger:model stateDB
+type StateDB struct {
+	gorm.Model
+
+	// insertion for basic fields declaration
 	// Declation for basic field stateDB.Name {{BasicKind}} (to be completed)
 	Name_Data sql.NullString
 
@@ -39,22 +69,8 @@ type StateAPI struct {
 	// Declation for basic field stateDB.Y {{BasicKind}} (to be completed)
 	Y_Data sql.NullFloat64
 
-	// Implementation of a reverse ID for field Umlsc{}.States []*State
-	Umlsc_StatesDBID sql.NullInt64
-	Umlsc_StatesDBID_Index sql.NullInt64
-
-	// end of insertion
-}
-
-// StateDB describes a state in the database
-//
-// It incorporates all fields : from the model, from the generated field for the API and the GORM ID
-//
-// swagger:model stateDB
-type StateDB struct {
-	gorm.Model
-
-	StateAPI
+	// encoding of pointers
+	StatePointersEnconding
 }
 
 // StateDBs arrays stateDBs
@@ -78,6 +94,13 @@ type BackRepoStateStruct struct {
 	Map_StateDBID_StatePtr *map[uint]*models.State
 
 	db *gorm.DB
+}
+
+// GetStateDBFromStatePtr is a handy function to access the back repo instance from the stage instance
+func (backRepoState *BackRepoStateStruct) GetStateDBFromStatePtr(state *models.State) (stateDB *StateDB) {
+	id := (*backRepoState.Map_StatePtr_StateDBID)[state]
+	stateDB = (*backRepoState.Map_StateDBID_StateDB)[id]
+	return
 }
 
 // BackRepoState.Init set up the BackRepo of the State
@@ -161,7 +184,7 @@ func (backRepoState *BackRepoStateStruct) CommitPhaseOneInstance(state *models.S
 
 	// initiate state
 	var stateDB StateDB
-	stateDB.State = *state
+	stateDB.CopyBasicFieldsFromState(state)
 
 	query := backRepoState.db.Create(&stateDB)
 	if query.Error != nil {
@@ -194,20 +217,9 @@ func (backRepoState *BackRepoStateStruct) CommitPhaseTwoInstance(backRepo *BackR
 	// fetch matching stateDB
 	if stateDB, ok := (*backRepoState.Map_StateDBID_StateDB)[idx]; ok {
 
-		{
-			{
-				// insertion point for fields commit
-				stateDB.Name_Data.String = state.Name
-				stateDB.Name_Data.Valid = true
+		stateDB.CopyBasicFieldsFromState(state)
 
-				stateDB.X_Data.Float64 = state.X
-				stateDB.X_Data.Valid = true
-
-				stateDB.Y_Data.Float64 = state.Y
-				stateDB.Y_Data.Valid = true
-
-			}
-		}
+		// insertion point for translating pointers encodings into actual pointers
 		query := backRepoState.db.Save(&stateDB)
 		if query.Error != nil {
 			return query.Error
@@ -248,18 +260,23 @@ func (backRepoState *BackRepoStateStruct) CheckoutPhaseOne() (Error error) {
 // models version of the stateDB
 func (backRepoState *BackRepoStateStruct) CheckoutPhaseOneInstance(stateDB *StateDB) (Error error) {
 
-	// if absent, create entries in the backRepoState maps.
-	stateWithNewFieldValues := stateDB.State
-	if _, ok := (*backRepoState.Map_StateDBID_StatePtr)[stateDB.ID]; !ok {
+	state, ok := (*backRepoState.Map_StateDBID_StatePtr)[stateDB.ID]
+	if !ok {
+		state = new(models.State)
 
-		(*backRepoState.Map_StateDBID_StatePtr)[stateDB.ID] = &stateWithNewFieldValues
-		(*backRepoState.Map_StatePtr_StateDBID)[&stateWithNewFieldValues] = stateDB.ID
+		(*backRepoState.Map_StateDBID_StatePtr)[stateDB.ID] = state
+		(*backRepoState.Map_StatePtr_StateDBID)[state] = stateDB.ID
 
 		// append model store with the new element
-		stateWithNewFieldValues.Stage()
+		state.Stage()
 	}
-	stateDBWithNewFieldValues := *stateDB
-	(*backRepoState.Map_StateDBID_StateDB)[stateDB.ID] = &stateDBWithNewFieldValues
+	stateDB.CopyBasicFieldsToState(state)
+
+	// preserve pointer to aclassDB. Otherwise, pointer will is recycled and the map of pointers
+	// Map_StateDBID_StateDB)[stateDB hold variable pointers
+	stateDB_Data := *stateDB
+	preservedPtrToState := &stateDB_Data
+	(*backRepoState.Map_StateDBID_StateDB)[stateDB.ID] = preservedPtrToState
 
 	return
 }
@@ -281,18 +298,8 @@ func (backRepoState *BackRepoStateStruct) CheckoutPhaseTwoInstance(backRepo *Bac
 
 	state := (*backRepoState.Map_StateDBID_StatePtr)[stateDB.ID]
 	_ = state // sometimes, there is no code generated. This lines voids the "unused variable" compilation error
-	{
-		{
-			// insertion point for checkout, i.e. update of fields of stage instance from fields of back repo instances
-			//
-			state.Name = stateDB.Name_Data.String
 
-			state.X = stateDB.X_Data.Float64
-
-			state.Y = stateDB.Y_Data.Float64
-
-		}
-	}
+	// insertion point for checkout of pointer encoding
 	return
 }
 
@@ -319,5 +326,92 @@ func (backRepo *BackRepoStruct) CheckoutState(state *models.State) {
 			backRepo.BackRepoState.CheckoutPhaseOneInstance(&stateDB)
 			backRepo.BackRepoState.CheckoutPhaseTwoInstance(backRepo, &stateDB)
 		}
+	}
+}
+
+// CopyBasicFieldsToStateDB is used to copy basic fields between the Stage or the CRUD to the back repo
+func (stateDB *StateDB) CopyBasicFieldsFromState(state *models.State) {
+	// insertion point for fields commit
+	stateDB.Name_Data.String = state.Name
+	stateDB.Name_Data.Valid = true
+
+	stateDB.X_Data.Float64 = state.X
+	stateDB.X_Data.Valid = true
+
+	stateDB.Y_Data.Float64 = state.Y
+	stateDB.Y_Data.Valid = true
+
+}
+
+// CopyBasicFieldsToStateDB is used to copy basic fields between the Stage or the CRUD to the back repo
+func (stateDB *StateDB) CopyBasicFieldsToState(state *models.State) {
+
+	// insertion point for checkout of basic fields (back repo to stage)
+	state.Name = stateDB.Name_Data.String
+	state.X = stateDB.X_Data.Float64
+	state.Y = stateDB.Y_Data.Float64
+}
+
+// Backup generates a json file from a slice of all StateDB instances in the backrepo
+func (backRepoState *BackRepoStateStruct) Backup(dirPath string) {
+
+	filename := filepath.Join(dirPath, "StateDB.json")
+
+	// organize the map into an array with increasing IDs, in order to have repoductible
+	// backup file
+	var forBackup []*StateDB
+	for _, stateDB := range *backRepoState.Map_StateDBID_StateDB {
+		forBackup = append(forBackup, stateDB)
+	}
+
+	sort.Slice(forBackup[:], func(i, j int) bool {
+		return forBackup[i].ID < forBackup[j].ID
+	})
+
+	file, err := json.MarshalIndent(forBackup, "", " ")
+
+	if err != nil {
+		log.Panic("Cannot json State ", filename, " ", err.Error())
+	}
+
+	err = ioutil.WriteFile(filename, file, 0644)
+	if err != nil {
+		log.Panic("Cannot write the json State file", err.Error())
+	}
+}
+
+func (backRepoState *BackRepoStateStruct) Restore(dirPath string) {
+
+	filename := filepath.Join(dirPath, "StateDB.json")
+	jsonFile, err := os.Open(filename)
+	// if we os.Open returns an error then handle it
+	if err != nil {
+		log.Panic("Cannot restore/open the json State file", filename, " ", err.Error())
+	}
+
+	// read our opened jsonFile as a byte array.
+	byteValue, _ := ioutil.ReadAll(jsonFile)
+
+	var forRestore []*StateDB
+
+	err = json.Unmarshal(byteValue, &forRestore)
+
+	// fill up Map_StateDBID_StateDB
+	for _, stateDB := range forRestore {
+
+		stateDB_ID := stateDB.ID
+		stateDB.ID = 0
+		query := backRepoState.db.Create(stateDB)
+		if query.Error != nil {
+			log.Panic(query.Error)
+		}
+		if stateDB_ID != stateDB.ID {
+			log.Panicf("ID of State restore ID %d, name %s, has wrong ID %d in DB after create",
+				stateDB_ID, stateDB.Name_Data.String, stateDB.ID)
+		}
+	}
+
+	if err != nil {
+		log.Panic("Cannot restore/unmarshall json State file", err.Error())
 	}
 }

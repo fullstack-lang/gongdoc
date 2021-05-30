@@ -3,9 +3,13 @@ package orm
 
 import (
 	"database/sql"
+	"encoding/json"
 	"errors"
 	"fmt"
+	"io/ioutil"
 	"log"
+	"os"
+	"path/filepath"
 	"sort"
 	"time"
 
@@ -27,31 +31,43 @@ var dummy_Umlsc_sort sort.Float64Slice
 //
 // swagger:model umlscAPI
 type UmlscAPI struct {
+	gorm.Model
+
 	models.Umlsc
 
-	// insertion for fields declaration
+	// encoding of pointers
+	UmlscPointersEnconding
+}
+
+// UmlscPointersEnconding encodes pointers to Struct and
+// reverse pointers of slice of poitners to Struct
+type UmlscPointersEnconding struct {
+	// insertion for pointer fields encoding declaration
+	// Implementation of a reverse ID for field Pkgelt{}.Umlscs []*Umlsc
+	Pkgelt_UmlscsDBID sql.NullInt64
+
+	// implementation of the index of the withing the slice
+	Pkgelt_UmlscsDBID_Index sql.NullInt64
+}
+
+// UmlscDB describes a umlsc in the database
+//
+// It incorporates the GORM ID, basic fields from the model (because they can be serialized),
+// the encoded version of pointers
+//
+// swagger:model umlscDB
+type UmlscDB struct {
+	gorm.Model
+
+	// insertion for basic fields declaration
 	// Declation for basic field umlscDB.Name {{BasicKind}} (to be completed)
 	Name_Data sql.NullString
 
 	// Declation for basic field umlscDB.Activestate {{BasicKind}} (to be completed)
 	Activestate_Data sql.NullString
 
-	// Implementation of a reverse ID for field Pkgelt{}.Umlscs []*Umlsc
-	Pkgelt_UmlscsDBID sql.NullInt64
-	Pkgelt_UmlscsDBID_Index sql.NullInt64
-
-	// end of insertion
-}
-
-// UmlscDB describes a umlsc in the database
-//
-// It incorporates all fields : from the model, from the generated field for the API and the GORM ID
-//
-// swagger:model umlscDB
-type UmlscDB struct {
-	gorm.Model
-
-	UmlscAPI
+	// encoding of pointers
+	UmlscPointersEnconding
 }
 
 // UmlscDBs arrays umlscDBs
@@ -75,6 +91,13 @@ type BackRepoUmlscStruct struct {
 	Map_UmlscDBID_UmlscPtr *map[uint]*models.Umlsc
 
 	db *gorm.DB
+}
+
+// GetUmlscDBFromUmlscPtr is a handy function to access the back repo instance from the stage instance
+func (backRepoUmlsc *BackRepoUmlscStruct) GetUmlscDBFromUmlscPtr(umlsc *models.Umlsc) (umlscDB *UmlscDB) {
+	id := (*backRepoUmlsc.Map_UmlscPtr_UmlscDBID)[umlsc]
+	umlscDB = (*backRepoUmlsc.Map_UmlscDBID_UmlscDB)[id]
+	return
 }
 
 // BackRepoUmlsc.Init set up the BackRepo of the Umlsc
@@ -158,7 +181,7 @@ func (backRepoUmlsc *BackRepoUmlscStruct) CommitPhaseOneInstance(umlsc *models.U
 
 	// initiate umlsc
 	var umlscDB UmlscDB
-	umlscDB.Umlsc = *umlsc
+	umlscDB.CopyBasicFieldsFromUmlsc(umlsc)
 
 	query := backRepoUmlsc.db.Create(&umlscDB)
 	if query.Error != nil {
@@ -191,34 +214,28 @@ func (backRepoUmlsc *BackRepoUmlscStruct) CommitPhaseTwoInstance(backRepo *BackR
 	// fetch matching umlscDB
 	if umlscDB, ok := (*backRepoUmlsc.Map_UmlscDBID_UmlscDB)[idx]; ok {
 
-		{
-			{
-				// insertion point for fields commit
-				umlscDB.Name_Data.String = umlsc.Name
-				umlscDB.Name_Data.Valid = true
+		umlscDB.CopyBasicFieldsFromUmlsc(umlsc)
 
-				// commit a slice of pointer translates to update reverse pointer to State, i.e.
-				index_States := 0
-				for _, state := range umlsc.States {
-					if stateDBID, ok := (*backRepo.BackRepoState.Map_StatePtr_StateDBID)[state]; ok {
-						if stateDB, ok := (*backRepo.BackRepoState.Map_StateDBID_StateDB)[stateDBID]; ok {
-							stateDB.Umlsc_StatesDBID.Int64 = int64(umlscDB.ID)
-							stateDB.Umlsc_StatesDBID.Valid = true
-							stateDB.Umlsc_StatesDBID_Index.Int64 = int64(index_States)
-							index_States = index_States + 1
-							stateDB.Umlsc_StatesDBID_Index.Valid = true
-							if q := backRepoUmlsc.db.Save(&stateDB); q.Error != nil {
-								return q.Error
-							}
-						}
-					}
-				}
+		// insertion point for translating pointers encodings into actual pointers
+		// This loop encodes the slice of pointers umlsc.States into the back repo.
+		// Each back repo instance at the end of the association encode the ID of the association start
+		// into a dedicated field for coding the association. The back repo instance is then saved to the db
+		for idx, stateAssocEnd := range umlsc.States {
 
-				umlscDB.Activestate_Data.String = umlsc.Activestate
-				umlscDB.Activestate_Data.Valid = true
+			// get the back repo instance at the association end
+			stateAssocEnd_DB :=
+				backRepo.BackRepoState.GetStateDBFromStatePtr( stateAssocEnd)
 
+			// encode reverse pointer in the association end back repo instance
+			stateAssocEnd_DB.Umlsc_StatesDBID.Int64 = int64(umlscDB.ID)
+			stateAssocEnd_DB.Umlsc_StatesDBID.Valid = true
+			stateAssocEnd_DB.Umlsc_StatesDBID_Index.Int64 = int64(idx)
+			stateAssocEnd_DB.Umlsc_StatesDBID_Index.Valid = true
+			if q := backRepoUmlsc.db.Save(stateAssocEnd_DB); q.Error != nil {
+				return q.Error
 			}
 		}
+
 		query := backRepoUmlsc.db.Save(&umlscDB)
 		if query.Error != nil {
 			return query.Error
@@ -259,18 +276,23 @@ func (backRepoUmlsc *BackRepoUmlscStruct) CheckoutPhaseOne() (Error error) {
 // models version of the umlscDB
 func (backRepoUmlsc *BackRepoUmlscStruct) CheckoutPhaseOneInstance(umlscDB *UmlscDB) (Error error) {
 
-	// if absent, create entries in the backRepoUmlsc maps.
-	umlscWithNewFieldValues := umlscDB.Umlsc
-	if _, ok := (*backRepoUmlsc.Map_UmlscDBID_UmlscPtr)[umlscDB.ID]; !ok {
+	umlsc, ok := (*backRepoUmlsc.Map_UmlscDBID_UmlscPtr)[umlscDB.ID]
+	if !ok {
+		umlsc = new(models.Umlsc)
 
-		(*backRepoUmlsc.Map_UmlscDBID_UmlscPtr)[umlscDB.ID] = &umlscWithNewFieldValues
-		(*backRepoUmlsc.Map_UmlscPtr_UmlscDBID)[&umlscWithNewFieldValues] = umlscDB.ID
+		(*backRepoUmlsc.Map_UmlscDBID_UmlscPtr)[umlscDB.ID] = umlsc
+		(*backRepoUmlsc.Map_UmlscPtr_UmlscDBID)[umlsc] = umlscDB.ID
 
 		// append model store with the new element
-		umlscWithNewFieldValues.Stage()
+		umlsc.Stage()
 	}
-	umlscDBWithNewFieldValues := *umlscDB
-	(*backRepoUmlsc.Map_UmlscDBID_UmlscDB)[umlscDB.ID] = &umlscDBWithNewFieldValues
+	umlscDB.CopyBasicFieldsToUmlsc(umlsc)
+
+	// preserve pointer to aclassDB. Otherwise, pointer will is recycled and the map of pointers
+	// Map_UmlscDBID_UmlscDB)[umlscDB hold variable pointers
+	umlscDB_Data := *umlscDB
+	preservedPtrToUmlsc := &umlscDB_Data
+	(*backRepoUmlsc.Map_UmlscDBID_UmlscDB)[umlscDB.ID] = preservedPtrToUmlsc
 
 	return
 }
@@ -292,37 +314,35 @@ func (backRepoUmlsc *BackRepoUmlscStruct) CheckoutPhaseTwoInstance(backRepo *Bac
 
 	umlsc := (*backRepoUmlsc.Map_UmlscDBID_UmlscPtr)[umlscDB.ID]
 	_ = umlsc // sometimes, there is no code generated. This lines voids the "unused variable" compilation error
-	{
-		{
-			// insertion point for checkout, i.e. update of fields of stage instance from fields of back repo instances
-			//
-			umlsc.Name = umlscDB.Name_Data.String
 
-			// parse all StateDB and redeem the array of poiners to Umlsc
-			// first reset the slice
-			umlsc.States = umlsc.States[:0]
-			for _, StateDB := range *backRepo.BackRepoState.Map_StateDBID_StateDB {
-				if StateDB.Umlsc_StatesDBID.Int64 == int64(umlscDB.ID) {
-					State := (*backRepo.BackRepoState.Map_StateDBID_StatePtr)[StateDB.ID]
-					umlsc.States = append(umlsc.States, State)
-				}
-			}
-			
-			// sort the array according to the order
-			sort.Slice(umlsc.States, func(i, j int) bool {
-				stateDB_i_ID := (*backRepo.BackRepoState.Map_StatePtr_StateDBID)[umlsc.States[i]]
-				stateDB_j_ID := (*backRepo.BackRepoState.Map_StatePtr_StateDBID)[umlsc.States[j]]
-
-				stateDB_i := (*backRepo.BackRepoState.Map_StateDBID_StateDB)[stateDB_i_ID]
-				stateDB_j := (*backRepo.BackRepoState.Map_StateDBID_StateDB)[stateDB_j_ID]
-
-				return stateDB_i.Umlsc_StatesDBID_Index.Int64 < stateDB_j.Umlsc_StatesDBID_Index.Int64
-			})
-
-			umlsc.Activestate = umlscDB.Activestate_Data.String
-
+	// insertion point for checkout of pointer encoding
+	// This loop redeem umlsc.States in the stage from the encode in the back repo
+	// It parses all StateDB in the back repo and if the reverse pointer encoding matches the back repo ID
+	// it appends the stage instance
+	// 1. reset the slice
+	umlsc.States = umlsc.States[:0]
+	// 2. loop all instances in the type in the association end
+	for _, stateDB_AssocEnd := range *backRepo.BackRepoState.Map_StateDBID_StateDB {
+		// 3. Does the ID encoding at the end and the ID at the start matches ?
+		if stateDB_AssocEnd.Umlsc_StatesDBID.Int64 == int64(umlscDB.ID) {
+			// 4. fetch the associated instance in the stage
+			state_AssocEnd := (*backRepo.BackRepoState.Map_StateDBID_StatePtr)[stateDB_AssocEnd.ID]
+			// 5. append it the association slice
+			umlsc.States = append(umlsc.States, state_AssocEnd)
 		}
 	}
+
+	// sort the array according to the order
+	sort.Slice(umlsc.States, func(i, j int) bool {
+		stateDB_i_ID := (*backRepo.BackRepoState.Map_StatePtr_StateDBID)[umlsc.States[i]]
+		stateDB_j_ID := (*backRepo.BackRepoState.Map_StatePtr_StateDBID)[umlsc.States[j]]
+
+		stateDB_i := (*backRepo.BackRepoState.Map_StateDBID_StateDB)[stateDB_i_ID]
+		stateDB_j := (*backRepo.BackRepoState.Map_StateDBID_StateDB)[stateDB_j_ID]
+
+		return stateDB_i.Umlsc_StatesDBID_Index.Int64 < stateDB_j.Umlsc_StatesDBID_Index.Int64
+	})
+
 	return
 }
 
@@ -349,5 +369,88 @@ func (backRepo *BackRepoStruct) CheckoutUmlsc(umlsc *models.Umlsc) {
 			backRepo.BackRepoUmlsc.CheckoutPhaseOneInstance(&umlscDB)
 			backRepo.BackRepoUmlsc.CheckoutPhaseTwoInstance(backRepo, &umlscDB)
 		}
+	}
+}
+
+// CopyBasicFieldsToUmlscDB is used to copy basic fields between the Stage or the CRUD to the back repo
+func (umlscDB *UmlscDB) CopyBasicFieldsFromUmlsc(umlsc *models.Umlsc) {
+	// insertion point for fields commit
+	umlscDB.Name_Data.String = umlsc.Name
+	umlscDB.Name_Data.Valid = true
+
+	umlscDB.Activestate_Data.String = umlsc.Activestate
+	umlscDB.Activestate_Data.Valid = true
+
+}
+
+// CopyBasicFieldsToUmlscDB is used to copy basic fields between the Stage or the CRUD to the back repo
+func (umlscDB *UmlscDB) CopyBasicFieldsToUmlsc(umlsc *models.Umlsc) {
+
+	// insertion point for checkout of basic fields (back repo to stage)
+	umlsc.Name = umlscDB.Name_Data.String
+	umlsc.Activestate = umlscDB.Activestate_Data.String
+}
+
+// Backup generates a json file from a slice of all UmlscDB instances in the backrepo
+func (backRepoUmlsc *BackRepoUmlscStruct) Backup(dirPath string) {
+
+	filename := filepath.Join(dirPath, "UmlscDB.json")
+
+	// organize the map into an array with increasing IDs, in order to have repoductible
+	// backup file
+	var forBackup []*UmlscDB
+	for _, umlscDB := range *backRepoUmlsc.Map_UmlscDBID_UmlscDB {
+		forBackup = append(forBackup, umlscDB)
+	}
+
+	sort.Slice(forBackup[:], func(i, j int) bool {
+		return forBackup[i].ID < forBackup[j].ID
+	})
+
+	file, err := json.MarshalIndent(forBackup, "", " ")
+
+	if err != nil {
+		log.Panic("Cannot json Umlsc ", filename, " ", err.Error())
+	}
+
+	err = ioutil.WriteFile(filename, file, 0644)
+	if err != nil {
+		log.Panic("Cannot write the json Umlsc file", err.Error())
+	}
+}
+
+func (backRepoUmlsc *BackRepoUmlscStruct) Restore(dirPath string) {
+
+	filename := filepath.Join(dirPath, "UmlscDB.json")
+	jsonFile, err := os.Open(filename)
+	// if we os.Open returns an error then handle it
+	if err != nil {
+		log.Panic("Cannot restore/open the json Umlsc file", filename, " ", err.Error())
+	}
+
+	// read our opened jsonFile as a byte array.
+	byteValue, _ := ioutil.ReadAll(jsonFile)
+
+	var forRestore []*UmlscDB
+
+	err = json.Unmarshal(byteValue, &forRestore)
+
+	// fill up Map_UmlscDBID_UmlscDB
+	for _, umlscDB := range forRestore {
+
+		umlscDB_ID := umlscDB.ID
+		umlscDB.ID = 0
+		query := backRepoUmlsc.db.Create(umlscDB)
+		if query.Error != nil {
+			log.Panic(query.Error)
+		}
+		if umlscDB_ID != umlscDB.ID {
+			log.Panicf("ID of Umlsc restore ID %d, name %s, has wrong ID %d in DB after create",
+				umlscDB_ID, umlscDB.Name_Data.String, umlscDB.ID)
+		}
+	}
+
+	if err != nil {
+		log.Panic("Cannot restore/unmarshall json Umlsc file", err.Error())
 	}
 }

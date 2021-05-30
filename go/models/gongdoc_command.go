@@ -57,7 +57,7 @@ func init() {
 				GongdocCommandSingloton.Checkout()
 
 				nbCheckCommand = nbCheckCommand + 1
-				// log.Println("nbCheckCommand ", nbCheckCommand)
+				// log.Println("nbCheckCommand ", nbCheckCommand, " date ", GongdocCommandSingloton.Date)
 				if GongdocCommandSingloton.Date == GongdocStatusSingloton.CommandCompletionDate {
 					continue
 				}

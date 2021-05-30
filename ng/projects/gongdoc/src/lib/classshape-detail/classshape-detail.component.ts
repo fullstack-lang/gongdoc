@@ -66,8 +66,6 @@ export class ClassshapeDetailComponent implements OnInit {
 		this.frontRepoService.pull().subscribe(
 			frontRepo => {
 				this.frontRepo = frontRepo
-				console.log("front repo ClassshapePull returned")
-
 				if (id != 0 && association == undefined) {
 					this.classshape = frontRepo.Classshapes.get(id)
 				} else {
@@ -109,6 +107,7 @@ export class ClassshapeDetailComponent implements OnInit {
 				this.classshape.Classdiagram_ClassshapesDBID = new NullInt64
 				this.classshape.Classdiagram_ClassshapesDBID.Int64 = this.classshape.Classdiagram_Classshapes_reverse.ID
 				this.classshape.Classdiagram_ClassshapesDBID.Valid = true
+				this.classshape.Classdiagram_ClassshapesDBID_Index = new NullInt64
 				this.classshape.Classdiagram_ClassshapesDBID_Index.Valid = true
 				this.classshape.Classdiagram_Classshapes_reverse = undefined // very important, otherwise, circular JSON
 			}
@@ -119,8 +118,6 @@ export class ClassshapeDetailComponent implements OnInit {
 			this.classshapeService.updateClassshape(this.classshape)
 				.subscribe(classshape => {
 					this.classshapeService.ClassshapeServiceChanged.next("update")
-
-					console.log("classshape saved")
 				});
 		} else {
 			switch (association) {
@@ -129,6 +126,7 @@ export class ClassshapeDetailComponent implements OnInit {
 					this.classshape.Classdiagram_ClassshapesDBID = new NullInt64
 					this.classshape.Classdiagram_ClassshapesDBID.Int64 = id
 					this.classshape.Classdiagram_ClassshapesDBID.Valid = true
+					this.classshape.Classdiagram_ClassshapesDBID_Index = new NullInt64
 					this.classshape.Classdiagram_ClassshapesDBID_Index.Valid = true
 					break
 			}
@@ -137,7 +135,6 @@ export class ClassshapeDetailComponent implements OnInit {
 				this.classshapeService.ClassshapeServiceChanged.next("post")
 
 				this.classshape = {} // reset fields
-				console.log("classshape added")
 			});
 		}
 	}
@@ -166,7 +163,6 @@ export class ClassshapeDetailComponent implements OnInit {
 		);
 
 		dialogRef.afterClosed().subscribe(result => {
-			console.log('The dialog was closed');
 		});
 	}
 
@@ -189,7 +185,6 @@ export class ClassshapeDetailComponent implements OnInit {
 		);
 
 		dialogRef.afterClosed().subscribe(result => {
-			console.log('The dialog was closed');
 		});
 	}
 }

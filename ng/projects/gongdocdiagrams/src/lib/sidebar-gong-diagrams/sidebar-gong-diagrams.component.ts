@@ -282,7 +282,7 @@ export class SidebarGongDiagramsComponent implements OnInit {
           classshape?.Fields?.forEach(
             field => {
               arrayOfDisplayedBasicField.set(classshape.Structname + "." + field.Fieldname, field)
-              console.log("Adding " + classshape.Structname + "." + field.Fieldname)
+              // console.log("Adding " + classshape.Structname + "." + field.Fieldname)
             }
           )
           classshape?.Links?.forEach(

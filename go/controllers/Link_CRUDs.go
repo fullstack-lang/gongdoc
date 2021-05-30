@@ -49,8 +49,9 @@ type LinkInput struct {
 func GetLinks(c *gin.Context) {
 	db := c.MustGet("db").(*gorm.DB)
 
-	var links []orm.LinkDB
-	query := db.Find(&links)
+	// source slice
+	var linkDBs []orm.LinkDB
+	query := db.Find(&linkDBs)
 	if query.Error != nil {
 		var returnError GenericError
 		returnError.Body.Code = http.StatusBadRequest
@@ -59,34 +60,23 @@ func GetLinks(c *gin.Context) {
 		return
 	}
 
+	// slice that will be transmitted to the front
+	var linkAPIs []orm.LinkAPI
+
 	// for each link, update fields from the database nullable fields
-	for idx := range links {
-		link := &links[idx]
-		_ = link
+	for idx := range linkDBs {
+		linkDB := &linkDBs[idx]
+		_ = linkDB
+		var linkAPI orm.LinkAPI
+
 		// insertion point for updating fields
-		if link.Name_Data.Valid {
-			link.Name = link.Name_Data.String
-		}
-
-		if link.Fieldname_Data.Valid {
-			link.Fieldname = link.Fieldname_Data.String
-		}
-
-		if link.Structname_Data.Valid {
-			link.Structname = link.Structname_Data.String
-		}
-
-		if link.Fieldtypename_Data.Valid {
-			link.Fieldtypename = link.Fieldtypename_Data.String
-		}
-
-		if link.Multiplicity_Data.Valid {
-			link.Multiplicity = models.MultiplicityType(link.Multiplicity_Data.String)
-		}
-
+		linkAPI.ID = linkDB.ID
+		linkDB.CopyBasicFieldsToLink(&linkAPI.Link)
+		linkAPI.LinkPointersEnconding = linkDB.LinkPointersEnconding
+		linkAPIs = append(linkAPIs, linkAPI)
 	}
 
-	c.JSON(http.StatusOK, links)
+	c.JSON(http.StatusOK, linkAPIs)
 }
 
 // PostLink
@@ -119,22 +109,8 @@ func PostLink(c *gin.Context) {
 
 	// Create link
 	linkDB := orm.LinkDB{}
-	linkDB.LinkAPI = input
-	// insertion point for nullable field set
-	linkDB.Name_Data.String = input.Name
-	linkDB.Name_Data.Valid = true
-
-	linkDB.Fieldname_Data.String = input.Fieldname
-	linkDB.Fieldname_Data.Valid = true
-
-	linkDB.Structname_Data.String = input.Structname
-	linkDB.Structname_Data.Valid = true
-
-	linkDB.Fieldtypename_Data.String = input.Fieldtypename
-	linkDB.Fieldtypename_Data.Valid = true
-
-	linkDB.Multiplicity_Data.String = string(input.Multiplicity)
-	linkDB.Multiplicity_Data.Valid = true
+	linkDB.LinkPointersEnconding = input.LinkPointersEnconding
+	linkDB.CopyBasicFieldsFromLink(&input.Link)
 
 	query := db.Create(&linkDB)
 	if query.Error != nil {
@@ -164,9 +140,9 @@ func PostLink(c *gin.Context) {
 func GetLink(c *gin.Context) {
 	db := c.MustGet("db").(*gorm.DB)
 
-	// Get link in DB
-	var link orm.LinkDB
-	if err := db.First(&link, c.Param("id")).Error; err != nil {
+	// Get linkDB in DB
+	var linkDB orm.LinkDB
+	if err := db.First(&linkDB, c.Param("id")).Error; err != nil {
 		var returnError GenericError
 		returnError.Body.Code = http.StatusBadRequest
 		returnError.Body.Message = err.Error()
@@ -174,28 +150,12 @@ func GetLink(c *gin.Context) {
 		return
 	}
 
-	// insertion point for fields value set from nullable fields
-	if link.Name_Data.Valid {
-		link.Name = link.Name_Data.String
-	}
+	var linkAPI orm.LinkAPI
+	linkAPI.ID = linkDB.ID
+	linkAPI.LinkPointersEnconding = linkDB.LinkPointersEnconding
+	linkDB.CopyBasicFieldsToLink(&linkAPI.Link)
 
-	if link.Fieldname_Data.Valid {
-		link.Fieldname = link.Fieldname_Data.String
-	}
-
-	if link.Structname_Data.Valid {
-		link.Structname = link.Structname_Data.String
-	}
-
-	if link.Fieldtypename_Data.Valid {
-		link.Fieldtypename = link.Fieldtypename_Data.String
-	}
-
-	if link.Multiplicity_Data.Valid {
-		link.Multiplicity = models.MultiplicityType(link.Multiplicity_Data.String)
-	}
-
-	c.JSON(http.StatusOK, link)
+	c.JSON(http.StatusOK, linkAPI)
 }
 
 // UpdateLink
@@ -232,23 +192,10 @@ func UpdateLink(c *gin.Context) {
 	}
 
 	// update
-	// insertion point for nullable field set
-	input.Name_Data.String = input.Name
-	input.Name_Data.Valid = true
+	linkDB.CopyBasicFieldsFromLink(&input.Link)
+	linkDB.LinkPointersEnconding = input.LinkPointersEnconding
 
-	input.Fieldname_Data.String = input.Fieldname
-	input.Fieldname_Data.Valid = true
-
-	input.Structname_Data.String = input.Structname
-	input.Structname_Data.Valid = true
-
-	input.Fieldtypename_Data.String = input.Fieldtypename
-	input.Fieldtypename_Data.Valid = true
-
-	input.Multiplicity_Data.String = string(input.Multiplicity)
-	input.Multiplicity_Data.Valid = true
-
-	query = db.Model(&linkDB).Updates(input)
+	query = db.Model(&linkDB).Updates(linkDB)
 	if query.Error != nil {
 		var returnError GenericError
 		returnError.Body.Code = http.StatusBadRequest

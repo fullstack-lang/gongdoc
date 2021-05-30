@@ -63,8 +63,6 @@ export class StateDetailComponent implements OnInit {
 		this.frontRepoService.pull().subscribe(
 			frontRepo => {
 				this.frontRepo = frontRepo
-				console.log("front repo StatePull returned")
-
 				if (id != 0 && association == undefined) {
 					this.state = frontRepo.States.get(id)
 				} else {
@@ -94,6 +92,7 @@ export class StateDetailComponent implements OnInit {
 				this.state.Umlsc_StatesDBID = new NullInt64
 				this.state.Umlsc_StatesDBID.Int64 = this.state.Umlsc_States_reverse.ID
 				this.state.Umlsc_StatesDBID.Valid = true
+				this.state.Umlsc_StatesDBID_Index = new NullInt64
 				this.state.Umlsc_StatesDBID_Index.Valid = true
 				this.state.Umlsc_States_reverse = undefined // very important, otherwise, circular JSON
 			}
@@ -104,8 +103,6 @@ export class StateDetailComponent implements OnInit {
 			this.stateService.updateState(this.state)
 				.subscribe(state => {
 					this.stateService.StateServiceChanged.next("update")
-
-					console.log("state saved")
 				});
 		} else {
 			switch (association) {
@@ -114,6 +111,7 @@ export class StateDetailComponent implements OnInit {
 					this.state.Umlsc_StatesDBID = new NullInt64
 					this.state.Umlsc_StatesDBID.Int64 = id
 					this.state.Umlsc_StatesDBID.Valid = true
+					this.state.Umlsc_StatesDBID_Index = new NullInt64
 					this.state.Umlsc_StatesDBID_Index.Valid = true
 					break
 			}
@@ -122,7 +120,6 @@ export class StateDetailComponent implements OnInit {
 				this.stateService.StateServiceChanged.next("post")
 
 				this.state = {} // reset fields
-				console.log("state added")
 			});
 		}
 	}
@@ -151,7 +148,6 @@ export class StateDetailComponent implements OnInit {
 		);
 
 		dialogRef.afterClosed().subscribe(result => {
-			console.log('The dialog was closed');
 		});
 	}
 
@@ -174,7 +170,6 @@ export class StateDetailComponent implements OnInit {
 		);
 
 		dialogRef.afterClosed().subscribe(result => {
-			console.log('The dialog was closed');
 		});
 	}
 }

@@ -63,8 +63,6 @@ export class PkgeltDetailComponent implements OnInit {
 		this.frontRepoService.pull().subscribe(
 			frontRepo => {
 				this.frontRepo = frontRepo
-				console.log("front repo PkgeltPull returned")
-
 				if (id != 0 && association == undefined) {
 					this.pkgelt = frontRepo.Pkgelts.get(id)
 				} else {
@@ -97,8 +95,6 @@ export class PkgeltDetailComponent implements OnInit {
 			this.pkgeltService.updatePkgelt(this.pkgelt)
 				.subscribe(pkgelt => {
 					this.pkgeltService.PkgeltServiceChanged.next("update")
-
-					console.log("pkgelt saved")
 				});
 		} else {
 			switch (association) {
@@ -109,7 +105,6 @@ export class PkgeltDetailComponent implements OnInit {
 				this.pkgeltService.PkgeltServiceChanged.next("post")
 
 				this.pkgelt = {} // reset fields
-				console.log("pkgelt added")
 			});
 		}
 	}
@@ -138,7 +133,6 @@ export class PkgeltDetailComponent implements OnInit {
 		);
 
 		dialogRef.afterClosed().subscribe(result => {
-			console.log('The dialog was closed');
 		});
 	}
 
@@ -161,7 +155,6 @@ export class PkgeltDetailComponent implements OnInit {
 		);
 
 		dialogRef.afterClosed().subscribe(result => {
-			console.log('The dialog was closed');
 		});
 	}
 }

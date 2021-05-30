@@ -3,9 +3,13 @@ package orm
 
 import (
 	"database/sql"
+	"encoding/json"
 	"errors"
 	"fmt"
+	"io/ioutil"
 	"log"
+	"os"
+	"path/filepath"
 	"sort"
 	"time"
 
@@ -27,18 +31,44 @@ var dummy_Classshape_sort sort.Float64Slice
 //
 // swagger:model classshapeAPI
 type ClassshapeAPI struct {
+	gorm.Model
+
 	models.Classshape
 
-	// insertion for fields declaration
-	// Declation for basic field classshapeDB.Name {{BasicKind}} (to be completed)
-	Name_Data sql.NullString
+	// encoding of pointers
+	ClassshapePointersEnconding
+}
 
+// ClassshapePointersEnconding encodes pointers to Struct and
+// reverse pointers of slice of poitners to Struct
+type ClassshapePointersEnconding struct {
+	// insertion for pointer fields encoding declaration
 	// field Position is a pointer to another Struct (optional or 0..1)
 	// This field is generated into another field to enable AS ONE association
 	PositionID sql.NullInt64
 
 	// all gong Struct has a Name field, this enables this data to object field
 	PositionName string
+
+	// Implementation of a reverse ID for field Classdiagram{}.Classshapes []*Classshape
+	Classdiagram_ClassshapesDBID sql.NullInt64
+
+	// implementation of the index of the withing the slice
+	Classdiagram_ClassshapesDBID_Index sql.NullInt64
+}
+
+// ClassshapeDB describes a classshape in the database
+//
+// It incorporates the GORM ID, basic fields from the model (because they can be serialized),
+// the encoded version of pointers
+//
+// swagger:model classshapeDB
+type ClassshapeDB struct {
+	gorm.Model
+
+	// insertion for basic fields declaration
+	// Declation for basic field classshapeDB.Name {{BasicKind}} (to be completed)
+	Name_Data sql.NullString
 
 	// Declation for basic field classshapeDB.Structname {{BasicKind}} (to be completed)
 	Structname_Data sql.NullString
@@ -52,22 +82,8 @@ type ClassshapeAPI struct {
 	// Declation for basic field classshapeDB.ClassshapeTargetType {{BasicKind}} (to be completed)
 	ClassshapeTargetType_Data sql.NullString
 
-	// Implementation of a reverse ID for field Classdiagram{}.Classshapes []*Classshape
-	Classdiagram_ClassshapesDBID sql.NullInt64
-	Classdiagram_ClassshapesDBID_Index sql.NullInt64
-
-	// end of insertion
-}
-
-// ClassshapeDB describes a classshape in the database
-//
-// It incorporates all fields : from the model, from the generated field for the API and the GORM ID
-//
-// swagger:model classshapeDB
-type ClassshapeDB struct {
-	gorm.Model
-
-	ClassshapeAPI
+	// encoding of pointers
+	ClassshapePointersEnconding
 }
 
 // ClassshapeDBs arrays classshapeDBs
@@ -91,6 +107,13 @@ type BackRepoClassshapeStruct struct {
 	Map_ClassshapeDBID_ClassshapePtr *map[uint]*models.Classshape
 
 	db *gorm.DB
+}
+
+// GetClassshapeDBFromClassshapePtr is a handy function to access the back repo instance from the stage instance
+func (backRepoClassshape *BackRepoClassshapeStruct) GetClassshapeDBFromClassshapePtr(classshape *models.Classshape) (classshapeDB *ClassshapeDB) {
+	id := (*backRepoClassshape.Map_ClassshapePtr_ClassshapeDBID)[classshape]
+	classshapeDB = (*backRepoClassshape.Map_ClassshapeDBID_ClassshapeDB)[id]
+	return
 }
 
 // BackRepoClassshape.Init set up the BackRepo of the Classshape
@@ -174,7 +197,7 @@ func (backRepoClassshape *BackRepoClassshapeStruct) CommitPhaseOneInstance(class
 
 	// initiate classshape
 	var classshapeDB ClassshapeDB
-	classshapeDB.Classshape = *classshape
+	classshapeDB.CopyBasicFieldsFromClassshape(classshape)
 
 	query := backRepoClassshape.db.Create(&classshapeDB)
 	if query.Error != nil {
@@ -207,68 +230,55 @@ func (backRepoClassshape *BackRepoClassshapeStruct) CommitPhaseTwoInstance(backR
 	// fetch matching classshapeDB
 	if classshapeDB, ok := (*backRepoClassshape.Map_ClassshapeDBID_ClassshapeDB)[idx]; ok {
 
-		{
-			{
-				// insertion point for fields commit
-				classshapeDB.Name_Data.String = classshape.Name
-				classshapeDB.Name_Data.Valid = true
+		classshapeDB.CopyBasicFieldsFromClassshape(classshape)
 
-				// commit pointer value classshape.Position translates to updating the classshape.PositionID
-				classshapeDB.PositionID.Valid = true // allow for a 0 value (nil association)
-				if classshape.Position != nil {
-					if PositionId, ok := (*backRepo.BackRepoPosition.Map_PositionPtr_PositionDBID)[classshape.Position]; ok {
-						classshapeDB.PositionID.Int64 = int64(PositionId)
-					}
-				}
-
-				classshapeDB.Structname_Data.String = classshape.Structname
-				classshapeDB.Structname_Data.Valid = true
-
-				// commit a slice of pointer translates to update reverse pointer to Field, i.e.
-				index_Fields := 0
-				for _, field := range classshape.Fields {
-					if fieldDBID, ok := (*backRepo.BackRepoField.Map_FieldPtr_FieldDBID)[field]; ok {
-						if fieldDB, ok := (*backRepo.BackRepoField.Map_FieldDBID_FieldDB)[fieldDBID]; ok {
-							fieldDB.Classshape_FieldsDBID.Int64 = int64(classshapeDB.ID)
-							fieldDB.Classshape_FieldsDBID.Valid = true
-							fieldDB.Classshape_FieldsDBID_Index.Int64 = int64(index_Fields)
-							index_Fields = index_Fields + 1
-							fieldDB.Classshape_FieldsDBID_Index.Valid = true
-							if q := backRepoClassshape.db.Save(&fieldDB); q.Error != nil {
-								return q.Error
-							}
-						}
-					}
-				}
-
-				// commit a slice of pointer translates to update reverse pointer to Link, i.e.
-				index_Links := 0
-				for _, link := range classshape.Links {
-					if linkDBID, ok := (*backRepo.BackRepoLink.Map_LinkPtr_LinkDBID)[link]; ok {
-						if linkDB, ok := (*backRepo.BackRepoLink.Map_LinkDBID_LinkDB)[linkDBID]; ok {
-							linkDB.Classshape_LinksDBID.Int64 = int64(classshapeDB.ID)
-							linkDB.Classshape_LinksDBID.Valid = true
-							linkDB.Classshape_LinksDBID_Index.Int64 = int64(index_Links)
-							index_Links = index_Links + 1
-							linkDB.Classshape_LinksDBID_Index.Valid = true
-							if q := backRepoClassshape.db.Save(&linkDB); q.Error != nil {
-								return q.Error
-							}
-						}
-					}
-				}
-
-				classshapeDB.Width_Data.Float64 = classshape.Width
-				classshapeDB.Width_Data.Valid = true
-
-				classshapeDB.Heigth_Data.Float64 = classshape.Heigth
-				classshapeDB.Heigth_Data.Valid = true
-
-				classshapeDB.ClassshapeTargetType_Data.String = string(classshape.ClassshapeTargetType)
-				classshapeDB.ClassshapeTargetType_Data.Valid = true
-
+		// insertion point for translating pointers encodings into actual pointers
+		// commit pointer value classshape.Position translates to updating the classshape.PositionID
+		classshapeDB.PositionID.Valid = true // allow for a 0 value (nil association)
+		if classshape.Position != nil {
+			if PositionId, ok := (*backRepo.BackRepoPosition.Map_PositionPtr_PositionDBID)[classshape.Position]; ok {
+				classshapeDB.PositionID.Int64 = int64(PositionId)
 			}
 		}
+
+		// This loop encodes the slice of pointers classshape.Fields into the back repo.
+		// Each back repo instance at the end of the association encode the ID of the association start
+		// into a dedicated field for coding the association. The back repo instance is then saved to the db
+		for idx, fieldAssocEnd := range classshape.Fields {
+
+			// get the back repo instance at the association end
+			fieldAssocEnd_DB :=
+				backRepo.BackRepoField.GetFieldDBFromFieldPtr( fieldAssocEnd)
+
+			// encode reverse pointer in the association end back repo instance
+			fieldAssocEnd_DB.Classshape_FieldsDBID.Int64 = int64(classshapeDB.ID)
+			fieldAssocEnd_DB.Classshape_FieldsDBID.Valid = true
+			fieldAssocEnd_DB.Classshape_FieldsDBID_Index.Int64 = int64(idx)
+			fieldAssocEnd_DB.Classshape_FieldsDBID_Index.Valid = true
+			if q := backRepoClassshape.db.Save(fieldAssocEnd_DB); q.Error != nil {
+				return q.Error
+			}
+		}
+
+		// This loop encodes the slice of pointers classshape.Links into the back repo.
+		// Each back repo instance at the end of the association encode the ID of the association start
+		// into a dedicated field for coding the association. The back repo instance is then saved to the db
+		for idx, linkAssocEnd := range classshape.Links {
+
+			// get the back repo instance at the association end
+			linkAssocEnd_DB :=
+				backRepo.BackRepoLink.GetLinkDBFromLinkPtr( linkAssocEnd)
+
+			// encode reverse pointer in the association end back repo instance
+			linkAssocEnd_DB.Classshape_LinksDBID.Int64 = int64(classshapeDB.ID)
+			linkAssocEnd_DB.Classshape_LinksDBID.Valid = true
+			linkAssocEnd_DB.Classshape_LinksDBID_Index.Int64 = int64(idx)
+			linkAssocEnd_DB.Classshape_LinksDBID_Index.Valid = true
+			if q := backRepoClassshape.db.Save(linkAssocEnd_DB); q.Error != nil {
+				return q.Error
+			}
+		}
+
 		query := backRepoClassshape.db.Save(&classshapeDB)
 		if query.Error != nil {
 			return query.Error
@@ -309,18 +319,23 @@ func (backRepoClassshape *BackRepoClassshapeStruct) CheckoutPhaseOne() (Error er
 // models version of the classshapeDB
 func (backRepoClassshape *BackRepoClassshapeStruct) CheckoutPhaseOneInstance(classshapeDB *ClassshapeDB) (Error error) {
 
-	// if absent, create entries in the backRepoClassshape maps.
-	classshapeWithNewFieldValues := classshapeDB.Classshape
-	if _, ok := (*backRepoClassshape.Map_ClassshapeDBID_ClassshapePtr)[classshapeDB.ID]; !ok {
+	classshape, ok := (*backRepoClassshape.Map_ClassshapeDBID_ClassshapePtr)[classshapeDB.ID]
+	if !ok {
+		classshape = new(models.Classshape)
 
-		(*backRepoClassshape.Map_ClassshapeDBID_ClassshapePtr)[classshapeDB.ID] = &classshapeWithNewFieldValues
-		(*backRepoClassshape.Map_ClassshapePtr_ClassshapeDBID)[&classshapeWithNewFieldValues] = classshapeDB.ID
+		(*backRepoClassshape.Map_ClassshapeDBID_ClassshapePtr)[classshapeDB.ID] = classshape
+		(*backRepoClassshape.Map_ClassshapePtr_ClassshapeDBID)[classshape] = classshapeDB.ID
 
 		// append model store with the new element
-		classshapeWithNewFieldValues.Stage()
+		classshape.Stage()
 	}
-	classshapeDBWithNewFieldValues := *classshapeDB
-	(*backRepoClassshape.Map_ClassshapeDBID_ClassshapeDB)[classshapeDB.ID] = &classshapeDBWithNewFieldValues
+	classshapeDB.CopyBasicFieldsToClassshape(classshape)
+
+	// preserve pointer to aclassDB. Otherwise, pointer will is recycled and the map of pointers
+	// Map_ClassshapeDBID_ClassshapeDB)[classshapeDB hold variable pointers
+	classshapeDB_Data := *classshapeDB
+	preservedPtrToClassshape := &classshapeDB_Data
+	(*backRepoClassshape.Map_ClassshapeDBID_ClassshapeDB)[classshapeDB.ID] = preservedPtrToClassshape
 
 	return
 }
@@ -342,69 +357,66 @@ func (backRepoClassshape *BackRepoClassshapeStruct) CheckoutPhaseTwoInstance(bac
 
 	classshape := (*backRepoClassshape.Map_ClassshapeDBID_ClassshapePtr)[classshapeDB.ID]
 	_ = classshape // sometimes, there is no code generated. This lines voids the "unused variable" compilation error
-	{
-		{
-			// insertion point for checkout, i.e. update of fields of stage instance from fields of back repo instances
-			//
-			classshape.Name = classshapeDB.Name_Data.String
 
-			// Position field
-			if classshapeDB.PositionID.Int64 != 0 {
-				classshape.Position = (*backRepo.BackRepoPosition.Map_PositionDBID_PositionPtr)[uint(classshapeDB.PositionID.Int64)]
-			}
-
-			classshape.Structname = classshapeDB.Structname_Data.String
-
-			// parse all FieldDB and redeem the array of poiners to Classshape
-			// first reset the slice
-			classshape.Fields = classshape.Fields[:0]
-			for _, FieldDB := range *backRepo.BackRepoField.Map_FieldDBID_FieldDB {
-				if FieldDB.Classshape_FieldsDBID.Int64 == int64(classshapeDB.ID) {
-					Field := (*backRepo.BackRepoField.Map_FieldDBID_FieldPtr)[FieldDB.ID]
-					classshape.Fields = append(classshape.Fields, Field)
-				}
-			}
-			
-			// sort the array according to the order
-			sort.Slice(classshape.Fields, func(i, j int) bool {
-				fieldDB_i_ID := (*backRepo.BackRepoField.Map_FieldPtr_FieldDBID)[classshape.Fields[i]]
-				fieldDB_j_ID := (*backRepo.BackRepoField.Map_FieldPtr_FieldDBID)[classshape.Fields[j]]
-
-				fieldDB_i := (*backRepo.BackRepoField.Map_FieldDBID_FieldDB)[fieldDB_i_ID]
-				fieldDB_j := (*backRepo.BackRepoField.Map_FieldDBID_FieldDB)[fieldDB_j_ID]
-
-				return fieldDB_i.Classshape_FieldsDBID_Index.Int64 < fieldDB_j.Classshape_FieldsDBID_Index.Int64
-			})
-
-			// parse all LinkDB and redeem the array of poiners to Classshape
-			// first reset the slice
-			classshape.Links = classshape.Links[:0]
-			for _, LinkDB := range *backRepo.BackRepoLink.Map_LinkDBID_LinkDB {
-				if LinkDB.Classshape_LinksDBID.Int64 == int64(classshapeDB.ID) {
-					Link := (*backRepo.BackRepoLink.Map_LinkDBID_LinkPtr)[LinkDB.ID]
-					classshape.Links = append(classshape.Links, Link)
-				}
-			}
-			
-			// sort the array according to the order
-			sort.Slice(classshape.Links, func(i, j int) bool {
-				linkDB_i_ID := (*backRepo.BackRepoLink.Map_LinkPtr_LinkDBID)[classshape.Links[i]]
-				linkDB_j_ID := (*backRepo.BackRepoLink.Map_LinkPtr_LinkDBID)[classshape.Links[j]]
-
-				linkDB_i := (*backRepo.BackRepoLink.Map_LinkDBID_LinkDB)[linkDB_i_ID]
-				linkDB_j := (*backRepo.BackRepoLink.Map_LinkDBID_LinkDB)[linkDB_j_ID]
-
-				return linkDB_i.Classshape_LinksDBID_Index.Int64 < linkDB_j.Classshape_LinksDBID_Index.Int64
-			})
-
-			classshape.Width = classshapeDB.Width_Data.Float64
-
-			classshape.Heigth = classshapeDB.Heigth_Data.Float64
-
-			classshape.ClassshapeTargetType = models.ClassshapeTargetType(classshapeDB.ClassshapeTargetType_Data.String)
-
+	// insertion point for checkout of pointer encoding
+	// Position field
+	if classshapeDB.PositionID.Int64 != 0 {
+		classshape.Position = (*backRepo.BackRepoPosition.Map_PositionDBID_PositionPtr)[uint(classshapeDB.PositionID.Int64)]
+	}
+	// This loop redeem classshape.Fields in the stage from the encode in the back repo
+	// It parses all FieldDB in the back repo and if the reverse pointer encoding matches the back repo ID
+	// it appends the stage instance
+	// 1. reset the slice
+	classshape.Fields = classshape.Fields[:0]
+	// 2. loop all instances in the type in the association end
+	for _, fieldDB_AssocEnd := range *backRepo.BackRepoField.Map_FieldDBID_FieldDB {
+		// 3. Does the ID encoding at the end and the ID at the start matches ?
+		if fieldDB_AssocEnd.Classshape_FieldsDBID.Int64 == int64(classshapeDB.ID) {
+			// 4. fetch the associated instance in the stage
+			field_AssocEnd := (*backRepo.BackRepoField.Map_FieldDBID_FieldPtr)[fieldDB_AssocEnd.ID]
+			// 5. append it the association slice
+			classshape.Fields = append(classshape.Fields, field_AssocEnd)
 		}
 	}
+
+	// sort the array according to the order
+	sort.Slice(classshape.Fields, func(i, j int) bool {
+		fieldDB_i_ID := (*backRepo.BackRepoField.Map_FieldPtr_FieldDBID)[classshape.Fields[i]]
+		fieldDB_j_ID := (*backRepo.BackRepoField.Map_FieldPtr_FieldDBID)[classshape.Fields[j]]
+
+		fieldDB_i := (*backRepo.BackRepoField.Map_FieldDBID_FieldDB)[fieldDB_i_ID]
+		fieldDB_j := (*backRepo.BackRepoField.Map_FieldDBID_FieldDB)[fieldDB_j_ID]
+
+		return fieldDB_i.Classshape_FieldsDBID_Index.Int64 < fieldDB_j.Classshape_FieldsDBID_Index.Int64
+	})
+
+	// This loop redeem classshape.Links in the stage from the encode in the back repo
+	// It parses all LinkDB in the back repo and if the reverse pointer encoding matches the back repo ID
+	// it appends the stage instance
+	// 1. reset the slice
+	classshape.Links = classshape.Links[:0]
+	// 2. loop all instances in the type in the association end
+	for _, linkDB_AssocEnd := range *backRepo.BackRepoLink.Map_LinkDBID_LinkDB {
+		// 3. Does the ID encoding at the end and the ID at the start matches ?
+		if linkDB_AssocEnd.Classshape_LinksDBID.Int64 == int64(classshapeDB.ID) {
+			// 4. fetch the associated instance in the stage
+			link_AssocEnd := (*backRepo.BackRepoLink.Map_LinkDBID_LinkPtr)[linkDB_AssocEnd.ID]
+			// 5. append it the association slice
+			classshape.Links = append(classshape.Links, link_AssocEnd)
+		}
+	}
+
+	// sort the array according to the order
+	sort.Slice(classshape.Links, func(i, j int) bool {
+		linkDB_i_ID := (*backRepo.BackRepoLink.Map_LinkPtr_LinkDBID)[classshape.Links[i]]
+		linkDB_j_ID := (*backRepo.BackRepoLink.Map_LinkPtr_LinkDBID)[classshape.Links[j]]
+
+		linkDB_i := (*backRepo.BackRepoLink.Map_LinkDBID_LinkDB)[linkDB_i_ID]
+		linkDB_j := (*backRepo.BackRepoLink.Map_LinkDBID_LinkDB)[linkDB_j_ID]
+
+		return linkDB_i.Classshape_LinksDBID_Index.Int64 < linkDB_j.Classshape_LinksDBID_Index.Int64
+	})
+
 	return
 }
 
@@ -431,5 +443,100 @@ func (backRepo *BackRepoStruct) CheckoutClassshape(classshape *models.Classshape
 			backRepo.BackRepoClassshape.CheckoutPhaseOneInstance(&classshapeDB)
 			backRepo.BackRepoClassshape.CheckoutPhaseTwoInstance(backRepo, &classshapeDB)
 		}
+	}
+}
+
+// CopyBasicFieldsToClassshapeDB is used to copy basic fields between the Stage or the CRUD to the back repo
+func (classshapeDB *ClassshapeDB) CopyBasicFieldsFromClassshape(classshape *models.Classshape) {
+	// insertion point for fields commit
+	classshapeDB.Name_Data.String = classshape.Name
+	classshapeDB.Name_Data.Valid = true
+
+	classshapeDB.Structname_Data.String = classshape.Structname
+	classshapeDB.Structname_Data.Valid = true
+
+	classshapeDB.Width_Data.Float64 = classshape.Width
+	classshapeDB.Width_Data.Valid = true
+
+	classshapeDB.Heigth_Data.Float64 = classshape.Heigth
+	classshapeDB.Heigth_Data.Valid = true
+
+	classshapeDB.ClassshapeTargetType_Data.String = string(classshape.ClassshapeTargetType)
+	classshapeDB.ClassshapeTargetType_Data.Valid = true
+
+}
+
+// CopyBasicFieldsToClassshapeDB is used to copy basic fields between the Stage or the CRUD to the back repo
+func (classshapeDB *ClassshapeDB) CopyBasicFieldsToClassshape(classshape *models.Classshape) {
+
+	// insertion point for checkout of basic fields (back repo to stage)
+	classshape.Name = classshapeDB.Name_Data.String
+	classshape.Structname = classshapeDB.Structname_Data.String
+	classshape.Width = classshapeDB.Width_Data.Float64
+	classshape.Heigth = classshapeDB.Heigth_Data.Float64
+	classshape.ClassshapeTargetType = models.ClassshapeTargetType(classshapeDB.ClassshapeTargetType_Data.String)
+}
+
+// Backup generates a json file from a slice of all ClassshapeDB instances in the backrepo
+func (backRepoClassshape *BackRepoClassshapeStruct) Backup(dirPath string) {
+
+	filename := filepath.Join(dirPath, "ClassshapeDB.json")
+
+	// organize the map into an array with increasing IDs, in order to have repoductible
+	// backup file
+	var forBackup []*ClassshapeDB
+	for _, classshapeDB := range *backRepoClassshape.Map_ClassshapeDBID_ClassshapeDB {
+		forBackup = append(forBackup, classshapeDB)
+	}
+
+	sort.Slice(forBackup[:], func(i, j int) bool {
+		return forBackup[i].ID < forBackup[j].ID
+	})
+
+	file, err := json.MarshalIndent(forBackup, "", " ")
+
+	if err != nil {
+		log.Panic("Cannot json Classshape ", filename, " ", err.Error())
+	}
+
+	err = ioutil.WriteFile(filename, file, 0644)
+	if err != nil {
+		log.Panic("Cannot write the json Classshape file", err.Error())
+	}
+}
+
+func (backRepoClassshape *BackRepoClassshapeStruct) Restore(dirPath string) {
+
+	filename := filepath.Join(dirPath, "ClassshapeDB.json")
+	jsonFile, err := os.Open(filename)
+	// if we os.Open returns an error then handle it
+	if err != nil {
+		log.Panic("Cannot restore/open the json Classshape file", filename, " ", err.Error())
+	}
+
+	// read our opened jsonFile as a byte array.
+	byteValue, _ := ioutil.ReadAll(jsonFile)
+
+	var forRestore []*ClassshapeDB
+
+	err = json.Unmarshal(byteValue, &forRestore)
+
+	// fill up Map_ClassshapeDBID_ClassshapeDB
+	for _, classshapeDB := range forRestore {
+
+		classshapeDB_ID := classshapeDB.ID
+		classshapeDB.ID = 0
+		query := backRepoClassshape.db.Create(classshapeDB)
+		if query.Error != nil {
+			log.Panic(query.Error)
+		}
+		if classshapeDB_ID != classshapeDB.ID {
+			log.Panicf("ID of Classshape restore ID %d, name %s, has wrong ID %d in DB after create",
+				classshapeDB_ID, classshapeDB.Name_Data.String, classshapeDB.ID)
+		}
+	}
+
+	if err != nil {
+		log.Panic("Cannot restore/unmarshall json Classshape file", err.Error())
 	}
 }

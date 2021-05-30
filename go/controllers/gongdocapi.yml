@@ -180,29 +180,6 @@ definitions:
         items:
           $ref: '#/definitions/Classshape'
         type: array
-      Name:
-        type: string
-      Name_Data:
-        $ref: '#/definitions/NullString'
-      Pkgelt_ClassdiagramsDBID:
-        $ref: '#/definitions/NullInt64'
-      Pkgelt_ClassdiagramsDBID_Index:
-        $ref: '#/definitions/NullInt64'
-    title: ClassdiagramAPI is the input in POST API
-    type: object
-    x-go-name: ClassdiagramAPI
-    x-go-package: github.com/fullstack-lang/gongdoc/go/orm
-  classdiagramDB:
-    description: 'It incorporates all fields : from the model, from the generated
-      field for the API and the GORM ID'
-    properties:
-      Classshapes:
-        description: |-
-          this is the memory model (and not the "memory motel" of the Rolling Stones)
-          it is not ignored by swagger because it is used by the angular model
-        items:
-          $ref: '#/definitions/Classshape'
-        type: array
       CreatedAt:
         format: date-time
         type: string
@@ -214,6 +191,31 @@ definitions:
         type: integer
       Name:
         type: string
+      Pkgelt_ClassdiagramsDBID:
+        $ref: '#/definitions/NullInt64'
+      Pkgelt_ClassdiagramsDBID_Index:
+        $ref: '#/definitions/NullInt64'
+      UpdatedAt:
+        format: date-time
+        type: string
+    title: ClassdiagramAPI is the input in POST API
+    type: object
+    x-go-name: ClassdiagramAPI
+    x-go-package: github.com/fullstack-lang/gongdoc/go/orm
+  classdiagramDB:
+    description: |-
+      It incorporates the GORM ID, basic fields from the model (because they can be serialized),
+      the encoded version of pointers
+    properties:
+      CreatedAt:
+        format: date-time
+        type: string
+      DeletedAt:
+        format: date-time
+        type: string
+      ID:
+        format: uint64
+        type: integer
       Name_Data:
         $ref: '#/definitions/NullString'
       Pkgelt_ClassdiagramsDBID:
@@ -239,60 +241,6 @@ definitions:
         $ref: '#/definitions/NullInt64'
       ClassshapeTargetType:
         $ref: '#/definitions/ClassshapeTargetType'
-      ClassshapeTargetType_Data:
-        $ref: '#/definitions/NullString'
-      Fields:
-        description: models of the composition of Field
-        items:
-          $ref: '#/definitions/Field'
-        type: array
-      Heigth_Data:
-        $ref: '#/definitions/NullFloat64'
-      Links:
-        description: models of the composition of Link
-        items:
-          $ref: '#/definitions/Link'
-        type: array
-      Name:
-        description: for technical reasons
-        type: string
-      Name_Data:
-        $ref: '#/definitions/NullString'
-      PositionID:
-        $ref: '#/definitions/NullInt64'
-      PositionName:
-        description: all gong Struct has a Name field, this enables this data to object
-          field
-        type: string
-      Structname:
-        type: string
-      Structname_Data:
-        $ref: '#/definitions/NullString'
-      Width:
-        description: |-
-          with and height of the shape when they are rendered on SVG or with jointjs
-          They are optional fields. they can be computed when empty
-        format: double
-        type: number
-        x-go-name: Heigth
-      Width_Data:
-        $ref: '#/definitions/NullFloat64'
-    title: ClassshapeAPI is the input in POST API
-    type: object
-    x-go-name: ClassshapeAPI
-    x-go-package: github.com/fullstack-lang/gongdoc/go/orm
-  classshapeDB:
-    description: 'It incorporates all fields : from the model, from the generated
-      field for the API and the GORM ID'
-    properties:
-      Classdiagram_ClassshapesDBID:
-        $ref: '#/definitions/NullInt64'
-      Classdiagram_ClassshapesDBID_Index:
-        $ref: '#/definitions/NullInt64'
-      ClassshapeTargetType:
-        $ref: '#/definitions/ClassshapeTargetType'
-      ClassshapeTargetType_Data:
-        $ref: '#/definitions/NullString'
       CreatedAt:
         format: date-time
         type: string
@@ -304,8 +252,6 @@ definitions:
         items:
           $ref: '#/definitions/Field'
         type: array
-      Heigth_Data:
-        $ref: '#/definitions/NullFloat64'
       ID:
         format: uint64
         type: integer
@@ -317,8 +263,6 @@ definitions:
       Name:
         description: for technical reasons
         type: string
-      Name_Data:
-        $ref: '#/definitions/NullString'
       PositionID:
         $ref: '#/definitions/NullInt64'
       PositionName:
@@ -327,8 +271,6 @@ definitions:
         type: string
       Structname:
         type: string
-      Structname_Data:
-        $ref: '#/definitions/NullString'
       UpdatedAt:
         format: date-time
         type: string
@@ -339,6 +281,45 @@ definitions:
         format: double
         type: number
         x-go-name: Heigth
+    title: ClassshapeAPI is the input in POST API
+    type: object
+    x-go-name: ClassshapeAPI
+    x-go-package: github.com/fullstack-lang/gongdoc/go/orm
+  classshapeDB:
+    description: |-
+      It incorporates the GORM ID, basic fields from the model (because they can be serialized),
+      the encoded version of pointers
+    properties:
+      Classdiagram_ClassshapesDBID:
+        $ref: '#/definitions/NullInt64'
+      Classdiagram_ClassshapesDBID_Index:
+        $ref: '#/definitions/NullInt64'
+      ClassshapeTargetType_Data:
+        $ref: '#/definitions/NullString'
+      CreatedAt:
+        format: date-time
+        type: string
+      DeletedAt:
+        format: date-time
+        type: string
+      Heigth_Data:
+        $ref: '#/definitions/NullFloat64'
+      ID:
+        format: uint64
+        type: integer
+      Name_Data:
+        $ref: '#/definitions/NullString'
+      PositionID:
+        $ref: '#/definitions/NullInt64'
+      PositionName:
+        description: all gong Struct has a Name field, this enables this data to object
+          field
+        type: string
+      Structname_Data:
+        $ref: '#/definitions/NullString'
+      UpdatedAt:
+        format: date-time
+        type: string
       Width_Data:
         $ref: '#/definitions/NullFloat64'
     title: ClassshapeDB describes a classshape in the database
@@ -355,33 +336,36 @@ definitions:
         $ref: '#/definitions/NullInt64'
       Classshape_FieldsDBID_Index:
         $ref: '#/definitions/NullInt64'
+      CreatedAt:
+        format: date-time
+        type: string
+      DeletedAt:
+        format: date-time
+        type: string
       FieldTypeAsString:
         type: string
-      FieldTypeAsString_Data:
-        $ref: '#/definitions/NullString'
       Fieldname:
         type: string
-      Fieldname_Data:
-        $ref: '#/definitions/NullString'
       Fieldtypename:
         type: string
-      Fieldtypename_Data:
-        $ref: '#/definitions/NullString'
+      ID:
+        format: uint64
+        type: integer
       Name:
         type: string
-      Name_Data:
-        $ref: '#/definitions/NullString'
       Structname:
         type: string
-      Structname_Data:
-        $ref: '#/definitions/NullString'
+      UpdatedAt:
+        format: date-time
+        type: string
     title: FieldAPI is the input in POST API
     type: object
     x-go-name: FieldAPI
     x-go-package: github.com/fullstack-lang/gongdoc/go/orm
   fieldDB:
-    description: 'It incorporates all fields : from the model, from the generated
-      field for the API and the GORM ID'
+    description: |-
+      It incorporates the GORM ID, basic fields from the model (because they can be serialized),
+      the encoded version of pointers
     properties:
       Classshape_FieldsDBID:
         $ref: '#/definitions/NullInt64'
@@ -393,27 +377,17 @@ definitions:
       DeletedAt:
         format: date-time
         type: string
-      FieldTypeAsString:
-        type: string
       FieldTypeAsString_Data:
         $ref: '#/definitions/NullString'
-      Fieldname:
-        type: string
       Fieldname_Data:
         $ref: '#/definitions/NullString'
-      Fieldtypename:
-        type: string
       Fieldtypename_Data:
         $ref: '#/definitions/NullString'
       ID:
         format: uint64
         type: integer
-      Name:
-        type: string
       Name_Data:
         $ref: '#/definitions/NullString'
-      Structname:
-        type: string
       Structname_Data:
         $ref: '#/definitions/NullString'
       UpdatedAt:
@@ -444,24 +418,20 @@ definitions:
         - DIAGRAM_SLICE_OF_POINTERS_TO_GONGSTRUCT_DELETE
         - DIAGRAM_SLICE_OF_POINTERS_TO_GONGSTRUCT_CREATE
         type: string
-      Command_Data:
-        $ref: '#/definitions/NullString'
+      CreatedAt:
+        format: date-time
+        type: string
       Date:
         type: string
-      Date_Data:
-        $ref: '#/definitions/NullString'
+      DeletedAt:
+        format: date-time
+        type: string
       DiagramName:
         type: string
-      DiagramName_Data:
-        $ref: '#/definitions/NullString'
       FieldName:
         type: string
-      FieldName_Data:
-        $ref: '#/definitions/NullString'
       FieldTypeName:
         type: string
-      FieldTypeName_Data:
-        $ref: '#/definitions/NullString'
       GongdocNodeType:
         enum:
         - ROOT_OF_GONG_STRUCTS
@@ -473,105 +443,58 @@ definitions:
         - ROOT_OF_SLICE_OF_POINTER_TO_GONG_STRUCT_FIELDS
         - SLICE_OF_POINTER_TO_STRUCT
         type: string
-      GongdocNodeType_Data:
-        $ref: '#/definitions/NullString'
+      ID:
+        format: uint64
+        type: integer
       Name:
         type: string
-      Name_Data:
-        $ref: '#/definitions/NullString'
       PositionX:
         format: int64
         type: integer
-      PositionX_Data:
-        $ref: '#/definitions/NullInt64'
       PositionY:
         format: int64
         type: integer
-      PositionY_Data:
-        $ref: '#/definitions/NullInt64'
       StructName:
         type: string
-      StructName_Data:
-        $ref: '#/definitions/NullString'
+      UpdatedAt:
+        format: date-time
+        type: string
     title: GongdocCommandAPI is the input in POST API
     type: object
     x-go-name: GongdocCommandAPI
     x-go-package: github.com/fullstack-lang/gongdoc/go/orm
   gongdoccommandDB:
-    description: 'It incorporates all fields : from the model, from the generated
-      field for the API and the GORM ID'
+    description: |-
+      It incorporates the GORM ID, basic fields from the model (because they can be serialized),
+      the encoded version of pointers
     properties:
-      Command:
-        enum:
-        - MARSHALL_ALL_DIAGRAMS
-        - PRINT_ALL_DOCUMENTS
-        - DIAGRAM_ELEMENT_DELETE
-        - DIAGRAM_ELEMENT_CREATE
-        - DIAGRAM_GONGSTRUCT_DELETE
-        - DIAGRAM_GONGSTRUCT_CREATE
-        - DIAGRAM_BASICFIELD_DELETE
-        - DIAGRAM_BASICFIELD_CREATE
-        - DIAGRAM_POINTER_TO_GONGSTRUCT_DELETE
-        - DIAGRAM_POINTER_TO_GONGSTRUCT_CREATE
-        - DIAGRAM_SLICE_OF_POINTERS_TO_GONGSTRUCT_DELETE
-        - DIAGRAM_SLICE_OF_POINTERS_TO_GONGSTRUCT_CREATE
-        type: string
       Command_Data:
         $ref: '#/definitions/NullString'
       CreatedAt:
         format: date-time
-        type: string
-      Date:
         type: string
       Date_Data:
         $ref: '#/definitions/NullString'
       DeletedAt:
         format: date-time
         type: string
-      DiagramName:
-        type: string
       DiagramName_Data:
         $ref: '#/definitions/NullString'
-      FieldName:
-        type: string
       FieldName_Data:
         $ref: '#/definitions/NullString'
-      FieldTypeName:
-        type: string
       FieldTypeName_Data:
         $ref: '#/definitions/NullString'
-      GongdocNodeType:
-        enum:
-        - ROOT_OF_GONG_STRUCTS
-        - GONG_STRUCT
-        - ROOT_OF_BASIC_FIELDS
-        - BASIC_FIELD
-        - ROOT_OF_POINTER_TO_STRUCT_FIELDS
-        - POINTER_TO_STRUCT
-        - ROOT_OF_SLICE_OF_POINTER_TO_GONG_STRUCT_FIELDS
-        - SLICE_OF_POINTER_TO_STRUCT
-        type: string
       GongdocNodeType_Data:
         $ref: '#/definitions/NullString'
       ID:
         format: uint64
         type: integer
-      Name:
-        type: string
       Name_Data:
         $ref: '#/definitions/NullString'
-      PositionX:
-        format: int64
-        type: integer
       PositionX_Data:
         $ref: '#/definitions/NullInt64'
-      PositionY:
-        format: int64
-        type: integer
       PositionY_Data:
         $ref: '#/definitions/NullInt64'
-      StructName:
-        type: string
       StructName_Data:
         $ref: '#/definitions/NullString'
       UpdatedAt:
@@ -589,41 +512,6 @@ definitions:
     properties:
       CommandCompletionDate:
         type: string
-      CommandCompletionDate_Data:
-        $ref: '#/definitions/NullString'
-      Name:
-        type: string
-      Name_Data:
-        $ref: '#/definitions/NullString'
-      Status:
-        enum:
-        - MARSHALL_ALL_DIAGRAMS
-        - PRINT_ALL_DOCUMENTS
-        - DIAGRAM_ELEMENT_DELETE
-        - DIAGRAM_ELEMENT_CREATE
-        - DIAGRAM_GONGSTRUCT_DELETE
-        - DIAGRAM_GONGSTRUCT_CREATE
-        - DIAGRAM_BASICFIELD_DELETE
-        - DIAGRAM_BASICFIELD_CREATE
-        - DIAGRAM_POINTER_TO_GONGSTRUCT_DELETE
-        - DIAGRAM_POINTER_TO_GONGSTRUCT_CREATE
-        - DIAGRAM_SLICE_OF_POINTERS_TO_GONGSTRUCT_DELETE
-        - DIAGRAM_SLICE_OF_POINTERS_TO_GONGSTRUCT_CREATE
-        type: string
-      Status_Data:
-        $ref: '#/definitions/NullString'
-    title: GongdocStatusAPI is the input in POST API
-    type: object
-    x-go-name: GongdocStatusAPI
-    x-go-package: github.com/fullstack-lang/gongdoc/go/orm
-  gongdocstatusDB:
-    description: 'It incorporates all fields : from the model, from the generated
-      field for the API and the GORM ID'
-    properties:
-      CommandCompletionDate:
-        type: string
-      CommandCompletionDate_Data:
-        $ref: '#/definitions/NullString'
       CreatedAt:
         format: date-time
         type: string
@@ -635,8 +523,6 @@ definitions:
         type: integer
       Name:
         type: string
-      Name_Data:
-        $ref: '#/definitions/NullString'
       Status:
         enum:
         - MARSHALL_ALL_DIAGRAMS
@@ -652,6 +538,31 @@ definitions:
         - DIAGRAM_SLICE_OF_POINTERS_TO_GONGSTRUCT_DELETE
         - DIAGRAM_SLICE_OF_POINTERS_TO_GONGSTRUCT_CREATE
         type: string
+      UpdatedAt:
+        format: date-time
+        type: string
+    title: GongdocStatusAPI is the input in POST API
+    type: object
+    x-go-name: GongdocStatusAPI
+    x-go-package: github.com/fullstack-lang/gongdoc/go/orm
+  gongdocstatusDB:
+    description: |-
+      It incorporates the GORM ID, basic fields from the model (because they can be serialized),
+      the encoded version of pointers
+    properties:
+      CommandCompletionDate_Data:
+        $ref: '#/definitions/NullString'
+      CreatedAt:
+        format: date-time
+        type: string
+      DeletedAt:
+        format: date-time
+        type: string
+      ID:
+        format: uint64
+        type: integer
+      Name_Data:
+        $ref: '#/definitions/NullString'
       Status_Data:
         $ref: '#/definitions/NullString'
       UpdatedAt:
@@ -671,44 +582,6 @@ definitions:
         $ref: '#/definitions/NullInt64'
       Classshape_LinksDBID_Index:
         $ref: '#/definitions/NullInt64'
-      Fieldname:
-        type: string
-      Fieldname_Data:
-        $ref: '#/definitions/NullString'
-      Fieldtypename:
-        type: string
-      Fieldtypename_Data:
-        $ref: '#/definitions/NullString'
-      MiddleverticeID:
-        $ref: '#/definitions/NullInt64'
-      MiddleverticeName:
-        description: all gong Struct has a Name field, this enables this data to object
-          field
-        type: string
-      Multiplicity:
-        $ref: '#/definitions/MultiplicityType'
-      Multiplicity_Data:
-        $ref: '#/definitions/NullString'
-      Name:
-        type: string
-      Name_Data:
-        $ref: '#/definitions/NullString'
-      Structname:
-        type: string
-      Structname_Data:
-        $ref: '#/definitions/NullString'
-    title: LinkAPI is the input in POST API
-    type: object
-    x-go-name: LinkAPI
-    x-go-package: github.com/fullstack-lang/gongdoc/go/orm
-  linkDB:
-    description: 'It incorporates all fields : from the model, from the generated
-      field for the API and the GORM ID'
-    properties:
-      Classshape_LinksDBID:
-        $ref: '#/definitions/NullInt64'
-      Classshape_LinksDBID_Index:
-        $ref: '#/definitions/NullInt64'
       CreatedAt:
         format: date-time
         type: string
@@ -717,12 +590,8 @@ definitions:
         type: string
       Fieldname:
         type: string
-      Fieldname_Data:
-        $ref: '#/definitions/NullString'
       Fieldtypename:
         type: string
-      Fieldtypename_Data:
-        $ref: '#/definitions/NullString'
       ID:
         format: uint64
         type: integer
@@ -734,14 +603,49 @@ definitions:
         type: string
       Multiplicity:
         $ref: '#/definitions/MultiplicityType'
-      Multiplicity_Data:
-        $ref: '#/definitions/NullString'
       Name:
         type: string
-      Name_Data:
-        $ref: '#/definitions/NullString'
       Structname:
         type: string
+      UpdatedAt:
+        format: date-time
+        type: string
+    title: LinkAPI is the input in POST API
+    type: object
+    x-go-name: LinkAPI
+    x-go-package: github.com/fullstack-lang/gongdoc/go/orm
+  linkDB:
+    description: |-
+      It incorporates the GORM ID, basic fields from the model (because they can be serialized),
+      the encoded version of pointers
+    properties:
+      Classshape_LinksDBID:
+        $ref: '#/definitions/NullInt64'
+      Classshape_LinksDBID_Index:
+        $ref: '#/definitions/NullInt64'
+      CreatedAt:
+        format: date-time
+        type: string
+      DeletedAt:
+        format: date-time
+        type: string
+      Fieldname_Data:
+        $ref: '#/definitions/NullString'
+      Fieldtypename_Data:
+        $ref: '#/definitions/NullString'
+      ID:
+        format: uint64
+        type: integer
+      MiddleverticeID:
+        $ref: '#/definitions/NullInt64'
+      MiddleverticeName:
+        description: all gong Struct has a Name field, this enables this data to object
+          field
+        type: string
+      Multiplicity_Data:
+        $ref: '#/definitions/NullString'
+      Name_Data:
+        $ref: '#/definitions/NullString'
       Structname_Data:
         $ref: '#/definitions/NullString'
       UpdatedAt:
@@ -761,30 +665,6 @@ definitions:
         items:
           $ref: '#/definitions/Classdiagram'
         type: array
-      Name:
-        type: string
-      Name_Data:
-        $ref: '#/definitions/NullString'
-      Path:
-        type: string
-      Path_Data:
-        $ref: '#/definitions/NullString'
-      Umlscs:
-        items:
-          $ref: '#/definitions/Umlsc'
-        type: array
-    title: PkgeltAPI is the input in POST API
-    type: object
-    x-go-name: PkgeltAPI
-    x-go-package: github.com/fullstack-lang/gongdoc/go/orm
-  pkgeltDB:
-    description: 'It incorporates all fields : from the model, from the generated
-      field for the API and the GORM ID'
-    properties:
-      Classdiagrams:
-        items:
-          $ref: '#/definitions/Classdiagram'
-        type: array
       CreatedAt:
         format: date-time
         type: string
@@ -796,16 +676,37 @@ definitions:
         type: integer
       Name:
         type: string
-      Name_Data:
-        $ref: '#/definitions/NullString'
       Path:
         type: string
-      Path_Data:
-        $ref: '#/definitions/NullString'
       Umlscs:
         items:
           $ref: '#/definitions/Umlsc'
         type: array
+      UpdatedAt:
+        format: date-time
+        type: string
+    title: PkgeltAPI is the input in POST API
+    type: object
+    x-go-name: PkgeltAPI
+    x-go-package: github.com/fullstack-lang/gongdoc/go/orm
+  pkgeltDB:
+    description: |-
+      It incorporates the GORM ID, basic fields from the model (because they can be serialized),
+      the encoded version of pointers
+    properties:
+      CreatedAt:
+        format: date-time
+        type: string
+      DeletedAt:
+        format: date-time
+        type: string
+      ID:
+        format: uint64
+        type: integer
+      Name_Data:
+        $ref: '#/definitions/NullString'
+      Path_Data:
+        $ref: '#/definitions/NullString'
       UpdatedAt:
         format: date-time
         type: string
@@ -819,28 +720,6 @@ definitions:
       from associations ("Has One" and "Has Many") that are generated to
       fullfill the ORM requirements for associations
     properties:
-      Name:
-        type: string
-      Name_Data:
-        $ref: '#/definitions/NullString'
-      X:
-        format: double
-        type: number
-      X_Data:
-        $ref: '#/definitions/NullFloat64'
-      "Y":
-        format: double
-        type: number
-      Y_Data:
-        $ref: '#/definitions/NullFloat64'
-    title: PositionAPI is the input in POST API
-    type: object
-    x-go-name: PositionAPI
-    x-go-package: github.com/fullstack-lang/gongdoc/go/orm
-  positionDB:
-    description: 'It incorporates all fields : from the model, from the generated
-      field for the API and the GORM ID'
-    properties:
       CreatedAt:
         format: date-time
         type: string
@@ -852,19 +731,40 @@ definitions:
         type: integer
       Name:
         type: string
-      Name_Data:
-        $ref: '#/definitions/NullString'
       UpdatedAt:
         format: date-time
         type: string
       X:
         format: double
         type: number
-      X_Data:
-        $ref: '#/definitions/NullFloat64'
       "Y":
         format: double
         type: number
+    title: PositionAPI is the input in POST API
+    type: object
+    x-go-name: PositionAPI
+    x-go-package: github.com/fullstack-lang/gongdoc/go/orm
+  positionDB:
+    description: |-
+      It incorporates the GORM ID, basic fields from the model (because they can be serialized),
+      the encoded version of pointers
+    properties:
+      CreatedAt:
+        format: date-time
+        type: string
+      DeletedAt:
+        format: date-time
+        type: string
+      ID:
+        format: uint64
+        type: integer
+      Name_Data:
+        $ref: '#/definitions/NullString'
+      UpdatedAt:
+        format: date-time
+        type: string
+      X_Data:
+        $ref: '#/definitions/NullFloat64'
       Y_Data:
         $ref: '#/definitions/NullFloat64'
     title: PositionDB describes a position in the database
@@ -877,32 +777,6 @@ definitions:
       from associations ("Has One" and "Has Many") that are generated to
       fullfill the ORM requirements for associations
     properties:
-      Name:
-        type: string
-      Name_Data:
-        $ref: '#/definitions/NullString'
-      Umlsc_StatesDBID:
-        $ref: '#/definitions/NullInt64'
-      Umlsc_StatesDBID_Index:
-        $ref: '#/definitions/NullInt64'
-      X:
-        format: double
-        type: number
-      X_Data:
-        $ref: '#/definitions/NullFloat64'
-      "Y":
-        format: double
-        type: number
-      Y_Data:
-        $ref: '#/definitions/NullFloat64'
-    title: StateAPI is the input in POST API
-    type: object
-    x-go-name: StateAPI
-    x-go-package: github.com/fullstack-lang/gongdoc/go/orm
-  stateDB:
-    description: 'It incorporates all fields : from the model, from the generated
-      field for the API and the GORM ID'
-    properties:
       CreatedAt:
         format: date-time
         type: string
@@ -914,8 +788,6 @@ definitions:
         type: integer
       Name:
         type: string
-      Name_Data:
-        $ref: '#/definitions/NullString'
       Umlsc_StatesDBID:
         $ref: '#/definitions/NullInt64'
       Umlsc_StatesDBID_Index:
@@ -926,11 +798,38 @@ definitions:
       X:
         format: double
         type: number
-      X_Data:
-        $ref: '#/definitions/NullFloat64'
       "Y":
         format: double
         type: number
+    title: StateAPI is the input in POST API
+    type: object
+    x-go-name: StateAPI
+    x-go-package: github.com/fullstack-lang/gongdoc/go/orm
+  stateDB:
+    description: |-
+      It incorporates the GORM ID, basic fields from the model (because they can be serialized),
+      the encoded version of pointers
+    properties:
+      CreatedAt:
+        format: date-time
+        type: string
+      DeletedAt:
+        format: date-time
+        type: string
+      ID:
+        format: uint64
+        type: integer
+      Name_Data:
+        $ref: '#/definitions/NullString'
+      Umlsc_StatesDBID:
+        $ref: '#/definitions/NullInt64'
+      Umlsc_StatesDBID_Index:
+        $ref: '#/definitions/NullInt64'
+      UpdatedAt:
+        format: date-time
+        type: string
+      X_Data:
+        $ref: '#/definitions/NullFloat64'
       Y_Data:
         $ref: '#/definitions/NullFloat64'
     title: StateDB describes a state in the database
@@ -948,38 +847,6 @@ definitions:
           in this version, only one state is active mong the states
           (with the embedded states version, that might change)
         type: string
-      Activestate_Data:
-        $ref: '#/definitions/NullString'
-      Name:
-        type: string
-      Name_Data:
-        $ref: '#/definitions/NullString'
-      Pkgelt_UmlscsDBID:
-        $ref: '#/definitions/NullInt64'
-      Pkgelt_UmlscsDBID_Index:
-        $ref: '#/definitions/NullInt64'
-      States:
-        description: |-
-          this is the memory model (and not the "memory motel" of the Rolling Stones)
-          it is not ignored by swagger because it is used by the angular model
-        items:
-          $ref: '#/definitions/State'
-        type: array
-    title: UmlscAPI is the input in POST API
-    type: object
-    x-go-name: UmlscAPI
-    x-go-package: github.com/fullstack-lang/gongdoc/go/orm
-  umlscDB:
-    description: 'It incorporates all fields : from the model, from the generated
-      field for the API and the GORM ID'
-    properties:
-      Activestate:
-        description: |-
-          in this version, only one state is active mong the states
-          (with the embedded states version, that might change)
-        type: string
-      Activestate_Data:
-        $ref: '#/definitions/NullString'
       CreatedAt:
         format: date-time
         type: string
@@ -991,8 +858,6 @@ definitions:
         type: integer
       Name:
         type: string
-      Name_Data:
-        $ref: '#/definitions/NullString'
       Pkgelt_UmlscsDBID:
         $ref: '#/definitions/NullInt64'
       Pkgelt_UmlscsDBID_Index:
@@ -1004,6 +869,35 @@ definitions:
         items:
           $ref: '#/definitions/State'
         type: array
+      UpdatedAt:
+        format: date-time
+        type: string
+    title: UmlscAPI is the input in POST API
+    type: object
+    x-go-name: UmlscAPI
+    x-go-package: github.com/fullstack-lang/gongdoc/go/orm
+  umlscDB:
+    description: |-
+      It incorporates the GORM ID, basic fields from the model (because they can be serialized),
+      the encoded version of pointers
+    properties:
+      Activestate_Data:
+        $ref: '#/definitions/NullString'
+      CreatedAt:
+        format: date-time
+        type: string
+      DeletedAt:
+        format: date-time
+        type: string
+      ID:
+        format: uint64
+        type: integer
+      Name_Data:
+        $ref: '#/definitions/NullString'
+      Pkgelt_UmlscsDBID:
+        $ref: '#/definitions/NullInt64'
+      Pkgelt_UmlscsDBID_Index:
+        $ref: '#/definitions/NullInt64'
       UpdatedAt:
         format: date-time
         type: string
@@ -1017,28 +911,6 @@ definitions:
       from associations ("Has One" and "Has Many") that are generated to
       fullfill the ORM requirements for associations
     properties:
-      Name:
-        type: string
-      Name_Data:
-        $ref: '#/definitions/NullString'
-      X:
-        format: double
-        type: number
-      X_Data:
-        $ref: '#/definitions/NullFloat64'
-      "Y":
-        format: double
-        type: number
-      Y_Data:
-        $ref: '#/definitions/NullFloat64'
-    title: VerticeAPI is the input in POST API
-    type: object
-    x-go-name: VerticeAPI
-    x-go-package: github.com/fullstack-lang/gongdoc/go/orm
-  verticeDB:
-    description: 'It incorporates all fields : from the model, from the generated
-      field for the API and the GORM ID'
-    properties:
       CreatedAt:
         format: date-time
         type: string
@@ -1050,19 +922,40 @@ definitions:
         type: integer
       Name:
         type: string
-      Name_Data:
-        $ref: '#/definitions/NullString'
       UpdatedAt:
         format: date-time
         type: string
       X:
         format: double
         type: number
-      X_Data:
-        $ref: '#/definitions/NullFloat64'
       "Y":
         format: double
         type: number
+    title: VerticeAPI is the input in POST API
+    type: object
+    x-go-name: VerticeAPI
+    x-go-package: github.com/fullstack-lang/gongdoc/go/orm
+  verticeDB:
+    description: |-
+      It incorporates the GORM ID, basic fields from the model (because they can be serialized),
+      the encoded version of pointers
+    properties:
+      CreatedAt:
+        format: date-time
+        type: string
+      DeletedAt:
+        format: date-time
+        type: string
+      ID:
+        format: uint64
+        type: integer
+      Name_Data:
+        $ref: '#/definitions/NullString'
+      UpdatedAt:
+        format: date-time
+        type: string
+      X_Data:
+        $ref: '#/definitions/NullFloat64'
       Y_Data:
         $ref: '#/definitions/NullFloat64'
     title: VerticeDB describes a vertice in the database
@@ -2010,13 +1903,6 @@ responses:
   classdiagramDBResponse:
     description: ClassdiagramDBResponse provides response
     headers:
-      Classshapes:
-        description: |-
-          this is the memory model (and not the "memory motel" of the Rolling Stones)
-          it is not ignored by swagger because it is used by the angular model
-        items:
-          $ref: '#/definitions/Classshape'
-        type: array
       CreatedAt:
         format: date-time
         type: string
@@ -2026,16 +1912,16 @@ responses:
       ID:
         format: uint64
         type: integer
-      Name:
-        type: string
       Name_Data:
         description: |-
-          insertion for fields declaration
+          insertion for basic fields declaration
           Declation for basic field classdiagramDB.Name {{BasicKind}} (to be completed)
       Pkgelt_ClassdiagramsDBID:
-        description: Implementation of a reverse ID for field Pkgelt{}.Classdiagrams
-          []*Classdiagram
-      Pkgelt_ClassdiagramsDBID_Index: {}
+        description: |-
+          insertion for pointer fields encoding declaration
+          Implementation of a reverse ID for field Pkgelt{}.Classdiagrams []*Classdiagram
+      Pkgelt_ClassdiagramsDBID_Index:
+        description: implementation of the index of the withing the slice
       UpdatedAt:
         format: date-time
         type: string
@@ -2053,8 +1939,8 @@ responses:
       Classdiagram_ClassshapesDBID:
         description: Implementation of a reverse ID for field Classdiagram{}.Classshapes
           []*Classshape
-      Classdiagram_ClassshapesDBID_Index: {}
-      ClassshapeTargetType: {}
+      Classdiagram_ClassshapesDBID_Index:
+        description: implementation of the index of the withing the slice
       ClassshapeTargetType_Data:
         description: Declation for basic field classshapeDB.ClassshapeTargetType {{BasicKind}}
           (to be completed)
@@ -2064,38 +1950,24 @@ responses:
       DeletedAt:
         format: date-time
         type: string
-      Fields:
-        description: models of the composition of Field
-        items:
-          $ref: '#/definitions/Field'
-        type: array
       Heigth_Data:
         description: Declation for basic field classshapeDB.Heigth {{BasicKind}} (to
           be completed)
       ID:
         format: uint64
         type: integer
-      Links:
-        description: models of the composition of Link
-        items:
-          $ref: '#/definitions/Link'
-        type: array
-      Name:
-        description: for technical reasons
-        type: string
       Name_Data:
         description: |-
-          insertion for fields declaration
+          insertion for basic fields declaration
           Declation for basic field classshapeDB.Name {{BasicKind}} (to be completed)
       PositionID:
         description: |-
+          insertion for pointer fields encoding declaration
           field Position is a pointer to another Struct (optional or 0..1)
           This field is generated into another field to enable AS ONE association
       PositionName:
         description: all gong Struct has a Name field, this enables this data to object
           field
-        type: string
-      Structname:
         type: string
       Structname_Data:
         description: Declation for basic field classshapeDB.Structname {{BasicKind}}
@@ -2103,12 +1975,6 @@ responses:
       UpdatedAt:
         format: date-time
         type: string
-      Width:
-        description: |-
-          with and height of the shape when they are rendered on SVG or with jointjs
-          They are optional fields. they can be computed when empty
-        format: double
-        type: number
       Width_Data:
         description: Declation for basic field classshapeDB.Width {{BasicKind}} (to
           be completed)
@@ -2124,41 +1990,33 @@ responses:
     description: FieldDBResponse provides response
     headers:
       Classshape_FieldsDBID:
-        description: Implementation of a reverse ID for field Classshape{}.Fields
-          []*Field
-      Classshape_FieldsDBID_Index: {}
+        description: |-
+          insertion for pointer fields encoding declaration
+          Implementation of a reverse ID for field Classshape{}.Fields []*Field
+      Classshape_FieldsDBID_Index:
+        description: implementation of the index of the withing the slice
       CreatedAt:
         format: date-time
         type: string
       DeletedAt:
         format: date-time
         type: string
-      FieldTypeAsString:
-        type: string
       FieldTypeAsString_Data:
         description: Declation for basic field fieldDB.FieldTypeAsString {{BasicKind}}
           (to be completed)
-      Fieldname:
-        type: string
       Fieldname_Data:
         description: Declation for basic field fieldDB.Fieldname {{BasicKind}} (to
           be completed)
-      Fieldtypename:
-        type: string
       Fieldtypename_Data:
         description: Declation for basic field fieldDB.Fieldtypename {{BasicKind}}
           (to be completed)
       ID:
         format: uint64
         type: integer
-      Name:
-        type: string
       Name_Data:
         description: |-
-          insertion for fields declaration
+          insertion for basic fields declaration
           Declation for basic field fieldDB.Name {{BasicKind}} (to be completed)
-      Structname:
-        type: string
       Structname_Data:
         description: Declation for basic field fieldDB.Structname {{BasicKind}} (to
           be completed)
@@ -2190,28 +2048,11 @@ responses:
   gongdoccommandDBResponse:
     description: GongdocCommandDBResponse provides response
     headers:
-      Command:
-        enum:
-        - - MARSHALL_ALL_DIAGRAMS
-          - PRINT_ALL_DOCUMENTS
-          - DIAGRAM_ELEMENT_DELETE
-          - DIAGRAM_ELEMENT_CREATE
-          - DIAGRAM_GONGSTRUCT_DELETE
-          - DIAGRAM_GONGSTRUCT_CREATE
-          - DIAGRAM_BASICFIELD_DELETE
-          - DIAGRAM_BASICFIELD_CREATE
-          - DIAGRAM_POINTER_TO_GONGSTRUCT_DELETE
-          - DIAGRAM_POINTER_TO_GONGSTRUCT_CREATE
-          - DIAGRAM_SLICE_OF_POINTERS_TO_GONGSTRUCT_DELETE
-          - DIAGRAM_SLICE_OF_POINTERS_TO_GONGSTRUCT_CREATE
-        type: string
       Command_Data:
         description: Declation for basic field gongdoccommandDB.Command {{BasicKind}}
           (to be completed)
       CreatedAt:
         format: date-time
-        type: string
-      Date:
         type: string
       Date_Data:
         description: Declation for basic field gongdoccommandDB.Date {{BasicKind}}
@@ -2219,58 +2060,31 @@ responses:
       DeletedAt:
         format: date-time
         type: string
-      DiagramName:
-        type: string
       DiagramName_Data:
         description: Declation for basic field gongdoccommandDB.DiagramName {{BasicKind}}
           (to be completed)
-      FieldName:
-        type: string
       FieldName_Data:
         description: Declation for basic field gongdoccommandDB.FieldName {{BasicKind}}
           (to be completed)
-      FieldTypeName:
-        type: string
       FieldTypeName_Data:
         description: Declation for basic field gongdoccommandDB.FieldTypeName {{BasicKind}}
           (to be completed)
-      GongdocNodeType:
-        enum:
-        - - ROOT_OF_GONG_STRUCTS
-          - GONG_STRUCT
-          - ROOT_OF_BASIC_FIELDS
-          - BASIC_FIELD
-          - ROOT_OF_POINTER_TO_STRUCT_FIELDS
-          - POINTER_TO_STRUCT
-          - ROOT_OF_SLICE_OF_POINTER_TO_GONG_STRUCT_FIELDS
-          - SLICE_OF_POINTER_TO_STRUCT
-        type: string
       GongdocNodeType_Data:
         description: Declation for basic field gongdoccommandDB.GongdocNodeType {{BasicKind}}
           (to be completed)
       ID:
         format: uint64
         type: integer
-      Name:
-        type: string
       Name_Data:
         description: |-
-          insertion for fields declaration
+          insertion for basic fields declaration
           Declation for basic field gongdoccommandDB.Name {{BasicKind}} (to be completed)
-      PositionX:
-        format: int64
-        type: integer
       PositionX_Data:
         description: Declation for basic field gongdoccommandDB.PositionX {{BasicKind}}
           (to be completed)
-      PositionY:
-        format: int64
-        type: integer
       PositionY_Data:
         description: Declation for basic field gongdoccommandDB.PositionY {{BasicKind}}
           (to be completed)
-      StructName:
-        type: string
       StructName_Data:
         description: Declation for basic field gongdoccommandDB.StructName {{BasicKind}}
           (to be completed)
@@ -2288,8 +2102,6 @@ responses:
   gongdocstatusDBResponse:
     description: GongdocStatusDBResponse provides response
     headers:
-      CommandCompletionDate:
-        type: string
       CommandCompletionDate_Data:
         description: Declation for basic field gongdocstatusDB.CommandCompletionDate
           {{BasicKind}} (to be completed)
@@ -2302,27 +2114,10 @@ responses:
       ID:
         format: uint64
         type: integer
-      Name:
-        type: string
       Name_Data:
         description: |-
-          insertion for fields declaration
+          insertion for basic fields declaration
           Declation for basic field gongdocstatusDB.Name {{BasicKind}} (to be completed)
-      Status:
-        enum:
-        - - MARSHALL_ALL_DIAGRAMS
-          - PRINT_ALL_DOCUMENTS
-          - DIAGRAM_ELEMENT_DELETE
-          - DIAGRAM_ELEMENT_CREATE
-          - DIAGRAM_GONGSTRUCT_DELETE
-          - DIAGRAM_GONGSTRUCT_CREATE
-          - DIAGRAM_BASICFIELD_DELETE
-          - DIAGRAM_BASICFIELD_CREATE
-          - DIAGRAM_POINTER_TO_GONGSTRUCT_DELETE
-          - DIAGRAM_POINTER_TO_GONGSTRUCT_CREATE
-          - DIAGRAM_SLICE_OF_POINTERS_TO_GONGSTRUCT_DELETE
-          - DIAGRAM_SLICE_OF_POINTERS_TO_GONGSTRUCT_CREATE
-        type: string
       Status_Data:
         description: Declation for basic field gongdocstatusDB.Status {{BasicKind}}
           (to be completed)
@@ -2342,20 +2137,17 @@ responses:
     headers:
       Classshape_LinksDBID:
         description: Implementation of a reverse ID for field Classshape{}.Links []*Link
-      Classshape_LinksDBID_Index: {}
+      Classshape_LinksDBID_Index:
+        description: implementation of the index of the withing the slice
       CreatedAt:
         format: date-time
         type: string
       DeletedAt:
         format: date-time
         type: string
-      Fieldname:
-        type: string
       Fieldname_Data:
         description: Declation for basic field linkDB.Fieldname {{BasicKind}} (to
           be completed)
-      Fieldtypename:
-        type: string
       Fieldtypename_Data:
         description: Declation for basic field linkDB.Fieldtypename {{BasicKind}}
           (to be completed)
@@ -2364,24 +2156,20 @@ responses:
         type: integer
       MiddleverticeID:
         description: |-
+          insertion for pointer fields encoding declaration
           field Middlevertice is a pointer to another Struct (optional or 0..1)
           This field is generated into another field to enable AS ONE association
       MiddleverticeName:
         description: all gong Struct has a Name field, this enables this data to object
           field
         type: string
-      Multiplicity: {}
       Multiplicity_Data:
         description: Declation for basic field linkDB.Multiplicity {{BasicKind}} (to
           be completed)
-      Name:
-        type: string
       Name_Data:
         description: |-
-          insertion for fields declaration
+          insertion for basic fields declaration
           Declation for basic field linkDB.Name {{BasicKind}} (to be completed)
-      Structname:
-        type: string
       Structname_Data:
         description: Declation for basic field linkDB.Structname {{BasicKind}} (to
           be completed)
@@ -2399,10 +2187,6 @@ responses:
   pkgeltDBResponse:
     description: PkgeltDBResponse provides response
     headers:
-      Classdiagrams:
-        items:
-          $ref: '#/definitions/Classdiagram'
-        type: array
       CreatedAt:
         format: date-time
         type: string
@@ -2412,21 +2196,13 @@ responses:
       ID:
         format: uint64
         type: integer
-      Name:
-        type: string
       Name_Data:
         description: |-
-          insertion for fields declaration
+          insertion for basic fields declaration
           Declation for basic field pkgeltDB.Name {{BasicKind}} (to be completed)
-      Path:
-        type: string
       Path_Data:
         description: Declation for basic field pkgeltDB.Path {{BasicKind}} (to be
           completed)
-      Umlscs:
-        items:
-          $ref: '#/definitions/Umlsc'
-        type: array
       UpdatedAt:
         format: date-time
         type: string
@@ -2450,24 +2226,16 @@ responses:
       ID:
         format: uint64
         type: integer
-      Name:
-        type: string
       Name_Data:
         description: Declation for basic field positionDB.Name {{BasicKind}} (to be
           completed)
       UpdatedAt:
         format: date-time
         type: string
-      X:
-        format: double
-        type: number
       X_Data:
         description: |-
-          insertion for fields declaration
+          insertion for basic fields declaration
           Declation for basic field positionDB.X {{BasicKind}} (to be completed)
-      "Y":
-        format: double
-        type: number
       Y_Data:
         description: Declation for basic field positionDB.Y {{BasicKind}} (to be completed)
     schema:
@@ -2490,26 +2258,21 @@ responses:
       ID:
         format: uint64
         type: integer
-      Name:
-        type: string
       Name_Data:
         description: |-
-          insertion for fields declaration
+          insertion for basic fields declaration
           Declation for basic field stateDB.Name {{BasicKind}} (to be completed)
       Umlsc_StatesDBID:
-        description: Implementation of a reverse ID for field Umlsc{}.States []*State
-      Umlsc_StatesDBID_Index: {}
+        description: |-
+          insertion for pointer fields encoding declaration
+          Implementation of a reverse ID for field Umlsc{}.States []*State
+      Umlsc_StatesDBID_Index:
+        description: implementation of the index of the withing the slice
       UpdatedAt:
         format: date-time
         type: string
-      X:
-        format: double
-        type: number
       X_Data:
         description: Declation for basic field stateDB.X {{BasicKind}} (to be completed)
-      "Y":
-        format: double
-        type: number
       Y_Data:
         description: Declation for basic field stateDB.Y {{BasicKind}} (to be completed)
     schema:
@@ -2523,11 +2286,6 @@ responses:
   umlscDBResponse:
     description: UmlscDBResponse provides response
     headers:
-      Activestate:
-        description: |-
-          in this version, only one state is active mong the states
-          (with the embedded states version, that might change)
-        type: string
       Activestate_Data:
         description: Declation for basic field umlscDB.Activestate {{BasicKind}} (to
           be completed)
@@ -2540,22 +2298,16 @@ responses:
       ID:
         format: uint64
         type: integer
-      Name:
-        type: string
       Name_Data:
         description: |-
-          insertion for fields declaration
+          insertion for basic fields declaration
           Declation for basic field umlscDB.Name {{BasicKind}} (to be completed)
       Pkgelt_UmlscsDBID:
-        description: Implementation of a reverse ID for field Pkgelt{}.Umlscs []*Umlsc
-      Pkgelt_UmlscsDBID_Index: {}
-      States:
         description: |-
-          this is the memory model (and not the "memory motel" of the Rolling Stones)
-          it is not ignored by swagger because it is used by the angular model
-        items:
-          $ref: '#/definitions/State'
-        type: array
+          insertion for pointer fields encoding declaration
+          Implementation of a reverse ID for field Pkgelt{}.Umlscs []*Umlsc
+      Pkgelt_UmlscsDBID_Index:
+        description: implementation of the index of the withing the slice
       UpdatedAt:
         format: date-time
         type: string
@@ -2596,24 +2348,16 @@ responses:
       ID:
         format: uint64
         type: integer
-      Name:
-        type: string
       Name_Data:
         description: Declation for basic field verticeDB.Name {{BasicKind}} (to be
           completed)
       UpdatedAt:
         format: date-time
         type: string
-      X:
-        format: double
-        type: number
       X_Data:
         description: |-
-          insertion for fields declaration
+          insertion for basic fields declaration
           Declation for basic field verticeDB.X {{BasicKind}} (to be completed)
-      "Y":
-        format: double
-        type: number
       Y_Data:
         description: Declation for basic field verticeDB.Y {{BasicKind}} (to be completed)
     schema:

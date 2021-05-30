@@ -100,7 +100,6 @@ export class PositionsTableComponent implements OnInit {
     this.frontRepoService.pull().subscribe(
       frontRepo => {
         this.frontRepo = frontRepo
-        console.log("front repo pull returned")
 
         this.positions = this.frontRepo.Positions_array;
 
@@ -138,8 +137,6 @@ export class PositionsTableComponent implements OnInit {
     this.positionService.deletePosition(positionID).subscribe(
       position => {
         this.positionService.PositionServiceChanged.next("delete")
-
-        console.log("position deleted")
       }
     );
   }
@@ -201,7 +198,6 @@ export class PositionsTableComponent implements OnInit {
     // from selection, set position that belong to position through Anarrayofb
     this.selection.selected.forEach(
       position => {
-        console.log("selection ID " + position.ID)
         let ID = +this.dialogData.ID
         position[this.dialogData.ReversePointer].Int64 = ID
         position[this.dialogData.ReversePointer].Valid = true
@@ -215,7 +211,6 @@ export class PositionsTableComponent implements OnInit {
         this.positionService.updatePosition(position)
           .subscribe(position => {
             this.positionService.PositionServiceChanged.next("update")
-            console.log("position saved")
           });
       }
     )

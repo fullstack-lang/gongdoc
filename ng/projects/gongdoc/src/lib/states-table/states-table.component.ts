@@ -102,7 +102,6 @@ export class StatesTableComponent implements OnInit {
     this.frontRepoService.pull().subscribe(
       frontRepo => {
         this.frontRepo = frontRepo
-        console.log("front repo pull returned")
 
         this.states = this.frontRepo.States_array;
 
@@ -140,8 +139,6 @@ export class StatesTableComponent implements OnInit {
     this.stateService.deleteState(stateID).subscribe(
       state => {
         this.stateService.StateServiceChanged.next("delete")
-
-        console.log("state deleted")
       }
     );
   }
@@ -203,7 +200,6 @@ export class StatesTableComponent implements OnInit {
     // from selection, set state that belong to state through Anarrayofb
     this.selection.selected.forEach(
       state => {
-        console.log("selection ID " + state.ID)
         let ID = +this.dialogData.ID
         state[this.dialogData.ReversePointer].Int64 = ID
         state[this.dialogData.ReversePointer].Valid = true
@@ -217,7 +213,6 @@ export class StatesTableComponent implements OnInit {
         this.stateService.updateState(state)
           .subscribe(state => {
             this.stateService.StateServiceChanged.next("update")
-            console.log("state saved")
           });
       }
     )

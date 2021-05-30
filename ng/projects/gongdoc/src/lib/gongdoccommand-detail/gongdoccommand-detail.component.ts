@@ -69,8 +69,6 @@ export class GongdocCommandDetailComponent implements OnInit {
 		this.frontRepoService.pull().subscribe(
 			frontRepo => {
 				this.frontRepo = frontRepo
-				console.log("front repo GongdocCommandPull returned")
-
 				if (id != 0 && association == undefined) {
 					this.gongdoccommand = frontRepo.GongdocCommands.get(id)
 				} else {
@@ -103,8 +101,6 @@ export class GongdocCommandDetailComponent implements OnInit {
 			this.gongdoccommandService.updateGongdocCommand(this.gongdoccommand)
 				.subscribe(gongdoccommand => {
 					this.gongdoccommandService.GongdocCommandServiceChanged.next("update")
-
-					console.log("gongdoccommand saved")
 				});
 		} else {
 			switch (association) {
@@ -115,7 +111,6 @@ export class GongdocCommandDetailComponent implements OnInit {
 				this.gongdoccommandService.GongdocCommandServiceChanged.next("post")
 
 				this.gongdoccommand = {} // reset fields
-				console.log("gongdoccommand added")
 			});
 		}
 	}
@@ -144,7 +139,6 @@ export class GongdocCommandDetailComponent implements OnInit {
 		);
 
 		dialogRef.afterClosed().subscribe(result => {
-			console.log('The dialog was closed');
 		});
 	}
 
@@ -167,7 +161,6 @@ export class GongdocCommandDetailComponent implements OnInit {
 		);
 
 		dialogRef.afterClosed().subscribe(result => {
-			console.log('The dialog was closed');
 		});
 	}
 }

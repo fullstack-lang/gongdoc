@@ -76,8 +76,6 @@ export class GongdocStatusSortingComponent implements OnInit {
           }
           return 0;
         });
-
-        console.log("front repo pull returned")
       }
     )
   }
@@ -93,7 +91,6 @@ export class GongdocStatusSortingComponent implements OnInit {
       revPointerID_Index.Valid = true
       revPointerID_Index.Int64 = index++
     }
-    console.log("after drop")
   }
 
   save() {
@@ -103,7 +100,6 @@ export class GongdocStatusSortingComponent implements OnInit {
         this.gongdocstatusService.updateGongdocStatus(gongdocstatus)
           .subscribe(gongdocstatus => {
             this.gongdocstatusService.GongdocStatusServiceChanged.next("update")
-            console.log("gongdocstatus saved")
           });
       }
     )

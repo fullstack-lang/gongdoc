@@ -98,7 +98,6 @@ export class ClassdiagramsTableComponent implements OnInit {
     this.frontRepoService.pull().subscribe(
       frontRepo => {
         this.frontRepo = frontRepo
-        console.log("front repo pull returned")
 
         this.classdiagrams = this.frontRepo.Classdiagrams_array;
 
@@ -136,8 +135,6 @@ export class ClassdiagramsTableComponent implements OnInit {
     this.classdiagramService.deleteClassdiagram(classdiagramID).subscribe(
       classdiagram => {
         this.classdiagramService.ClassdiagramServiceChanged.next("delete")
-
-        console.log("classdiagram deleted")
       }
     );
   }
@@ -199,7 +196,6 @@ export class ClassdiagramsTableComponent implements OnInit {
     // from selection, set classdiagram that belong to classdiagram through Anarrayofb
     this.selection.selected.forEach(
       classdiagram => {
-        console.log("selection ID " + classdiagram.ID)
         let ID = +this.dialogData.ID
         classdiagram[this.dialogData.ReversePointer].Int64 = ID
         classdiagram[this.dialogData.ReversePointer].Valid = true
@@ -213,7 +209,6 @@ export class ClassdiagramsTableComponent implements OnInit {
         this.classdiagramService.updateClassdiagram(classdiagram)
           .subscribe(classdiagram => {
             this.classdiagramService.ClassdiagramServiceChanged.next("update")
-            console.log("classdiagram saved")
           });
       }
     )

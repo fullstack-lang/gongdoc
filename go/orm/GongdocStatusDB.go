@@ -3,9 +3,13 @@ package orm
 
 import (
 	"database/sql"
+	"encoding/json"
 	"errors"
 	"fmt"
+	"io/ioutil"
 	"log"
+	"os"
+	"path/filepath"
 	"sort"
 	"time"
 
@@ -27,9 +31,30 @@ var dummy_GongdocStatus_sort sort.Float64Slice
 //
 // swagger:model gongdocstatusAPI
 type GongdocStatusAPI struct {
+	gorm.Model
+
 	models.GongdocStatus
 
-	// insertion for fields declaration
+	// encoding of pointers
+	GongdocStatusPointersEnconding
+}
+
+// GongdocStatusPointersEnconding encodes pointers to Struct and
+// reverse pointers of slice of poitners to Struct
+type GongdocStatusPointersEnconding struct {
+	// insertion for pointer fields encoding declaration
+}
+
+// GongdocStatusDB describes a gongdocstatus in the database
+//
+// It incorporates the GORM ID, basic fields from the model (because they can be serialized),
+// the encoded version of pointers
+//
+// swagger:model gongdocstatusDB
+type GongdocStatusDB struct {
+	gorm.Model
+
+	// insertion for basic fields declaration
 	// Declation for basic field gongdocstatusDB.Name {{BasicKind}} (to be completed)
 	Name_Data sql.NullString
 
@@ -39,18 +64,8 @@ type GongdocStatusAPI struct {
 	// Declation for basic field gongdocstatusDB.CommandCompletionDate {{BasicKind}} (to be completed)
 	CommandCompletionDate_Data sql.NullString
 
-	// end of insertion
-}
-
-// GongdocStatusDB describes a gongdocstatus in the database
-//
-// It incorporates all fields : from the model, from the generated field for the API and the GORM ID
-//
-// swagger:model gongdocstatusDB
-type GongdocStatusDB struct {
-	gorm.Model
-
-	GongdocStatusAPI
+	// encoding of pointers
+	GongdocStatusPointersEnconding
 }
 
 // GongdocStatusDBs arrays gongdocstatusDBs
@@ -74,6 +89,13 @@ type BackRepoGongdocStatusStruct struct {
 	Map_GongdocStatusDBID_GongdocStatusPtr *map[uint]*models.GongdocStatus
 
 	db *gorm.DB
+}
+
+// GetGongdocStatusDBFromGongdocStatusPtr is a handy function to access the back repo instance from the stage instance
+func (backRepoGongdocStatus *BackRepoGongdocStatusStruct) GetGongdocStatusDBFromGongdocStatusPtr(gongdocstatus *models.GongdocStatus) (gongdocstatusDB *GongdocStatusDB) {
+	id := (*backRepoGongdocStatus.Map_GongdocStatusPtr_GongdocStatusDBID)[gongdocstatus]
+	gongdocstatusDB = (*backRepoGongdocStatus.Map_GongdocStatusDBID_GongdocStatusDB)[id]
+	return
 }
 
 // BackRepoGongdocStatus.Init set up the BackRepo of the GongdocStatus
@@ -157,7 +179,7 @@ func (backRepoGongdocStatus *BackRepoGongdocStatusStruct) CommitPhaseOneInstance
 
 	// initiate gongdocstatus
 	var gongdocstatusDB GongdocStatusDB
-	gongdocstatusDB.GongdocStatus = *gongdocstatus
+	gongdocstatusDB.CopyBasicFieldsFromGongdocStatus(gongdocstatus)
 
 	query := backRepoGongdocStatus.db.Create(&gongdocstatusDB)
 	if query.Error != nil {
@@ -190,20 +212,9 @@ func (backRepoGongdocStatus *BackRepoGongdocStatusStruct) CommitPhaseTwoInstance
 	// fetch matching gongdocstatusDB
 	if gongdocstatusDB, ok := (*backRepoGongdocStatus.Map_GongdocStatusDBID_GongdocStatusDB)[idx]; ok {
 
-		{
-			{
-				// insertion point for fields commit
-				gongdocstatusDB.Name_Data.String = gongdocstatus.Name
-				gongdocstatusDB.Name_Data.Valid = true
+		gongdocstatusDB.CopyBasicFieldsFromGongdocStatus(gongdocstatus)
 
-				gongdocstatusDB.Status_Data.String = string(gongdocstatus.Status)
-				gongdocstatusDB.Status_Data.Valid = true
-
-				gongdocstatusDB.CommandCompletionDate_Data.String = gongdocstatus.CommandCompletionDate
-				gongdocstatusDB.CommandCompletionDate_Data.Valid = true
-
-			}
-		}
+		// insertion point for translating pointers encodings into actual pointers
 		query := backRepoGongdocStatus.db.Save(&gongdocstatusDB)
 		if query.Error != nil {
 			return query.Error
@@ -244,18 +255,23 @@ func (backRepoGongdocStatus *BackRepoGongdocStatusStruct) CheckoutPhaseOne() (Er
 // models version of the gongdocstatusDB
 func (backRepoGongdocStatus *BackRepoGongdocStatusStruct) CheckoutPhaseOneInstance(gongdocstatusDB *GongdocStatusDB) (Error error) {
 
-	// if absent, create entries in the backRepoGongdocStatus maps.
-	gongdocstatusWithNewFieldValues := gongdocstatusDB.GongdocStatus
-	if _, ok := (*backRepoGongdocStatus.Map_GongdocStatusDBID_GongdocStatusPtr)[gongdocstatusDB.ID]; !ok {
+	gongdocstatus, ok := (*backRepoGongdocStatus.Map_GongdocStatusDBID_GongdocStatusPtr)[gongdocstatusDB.ID]
+	if !ok {
+		gongdocstatus = new(models.GongdocStatus)
 
-		(*backRepoGongdocStatus.Map_GongdocStatusDBID_GongdocStatusPtr)[gongdocstatusDB.ID] = &gongdocstatusWithNewFieldValues
-		(*backRepoGongdocStatus.Map_GongdocStatusPtr_GongdocStatusDBID)[&gongdocstatusWithNewFieldValues] = gongdocstatusDB.ID
+		(*backRepoGongdocStatus.Map_GongdocStatusDBID_GongdocStatusPtr)[gongdocstatusDB.ID] = gongdocstatus
+		(*backRepoGongdocStatus.Map_GongdocStatusPtr_GongdocStatusDBID)[gongdocstatus] = gongdocstatusDB.ID
 
 		// append model store with the new element
-		gongdocstatusWithNewFieldValues.Stage()
+		gongdocstatus.Stage()
 	}
-	gongdocstatusDBWithNewFieldValues := *gongdocstatusDB
-	(*backRepoGongdocStatus.Map_GongdocStatusDBID_GongdocStatusDB)[gongdocstatusDB.ID] = &gongdocstatusDBWithNewFieldValues
+	gongdocstatusDB.CopyBasicFieldsToGongdocStatus(gongdocstatus)
+
+	// preserve pointer to aclassDB. Otherwise, pointer will is recycled and the map of pointers
+	// Map_GongdocStatusDBID_GongdocStatusDB)[gongdocstatusDB hold variable pointers
+	gongdocstatusDB_Data := *gongdocstatusDB
+	preservedPtrToGongdocStatus := &gongdocstatusDB_Data
+	(*backRepoGongdocStatus.Map_GongdocStatusDBID_GongdocStatusDB)[gongdocstatusDB.ID] = preservedPtrToGongdocStatus
 
 	return
 }
@@ -277,18 +293,8 @@ func (backRepoGongdocStatus *BackRepoGongdocStatusStruct) CheckoutPhaseTwoInstan
 
 	gongdocstatus := (*backRepoGongdocStatus.Map_GongdocStatusDBID_GongdocStatusPtr)[gongdocstatusDB.ID]
 	_ = gongdocstatus // sometimes, there is no code generated. This lines voids the "unused variable" compilation error
-	{
-		{
-			// insertion point for checkout, i.e. update of fields of stage instance from fields of back repo instances
-			//
-			gongdocstatus.Name = gongdocstatusDB.Name_Data.String
 
-			gongdocstatus.Status = models.GongdocCommandType(gongdocstatusDB.Status_Data.String)
-
-			gongdocstatus.CommandCompletionDate = gongdocstatusDB.CommandCompletionDate_Data.String
-
-		}
-	}
+	// insertion point for checkout of pointer encoding
 	return
 }
 
@@ -315,5 +321,92 @@ func (backRepo *BackRepoStruct) CheckoutGongdocStatus(gongdocstatus *models.Gong
 			backRepo.BackRepoGongdocStatus.CheckoutPhaseOneInstance(&gongdocstatusDB)
 			backRepo.BackRepoGongdocStatus.CheckoutPhaseTwoInstance(backRepo, &gongdocstatusDB)
 		}
+	}
+}
+
+// CopyBasicFieldsToGongdocStatusDB is used to copy basic fields between the Stage or the CRUD to the back repo
+func (gongdocstatusDB *GongdocStatusDB) CopyBasicFieldsFromGongdocStatus(gongdocstatus *models.GongdocStatus) {
+	// insertion point for fields commit
+	gongdocstatusDB.Name_Data.String = gongdocstatus.Name
+	gongdocstatusDB.Name_Data.Valid = true
+
+	gongdocstatusDB.Status_Data.String = string(gongdocstatus.Status)
+	gongdocstatusDB.Status_Data.Valid = true
+
+	gongdocstatusDB.CommandCompletionDate_Data.String = gongdocstatus.CommandCompletionDate
+	gongdocstatusDB.CommandCompletionDate_Data.Valid = true
+
+}
+
+// CopyBasicFieldsToGongdocStatusDB is used to copy basic fields between the Stage or the CRUD to the back repo
+func (gongdocstatusDB *GongdocStatusDB) CopyBasicFieldsToGongdocStatus(gongdocstatus *models.GongdocStatus) {
+
+	// insertion point for checkout of basic fields (back repo to stage)
+	gongdocstatus.Name = gongdocstatusDB.Name_Data.String
+	gongdocstatus.Status = models.GongdocCommandType(gongdocstatusDB.Status_Data.String)
+	gongdocstatus.CommandCompletionDate = gongdocstatusDB.CommandCompletionDate_Data.String
+}
+
+// Backup generates a json file from a slice of all GongdocStatusDB instances in the backrepo
+func (backRepoGongdocStatus *BackRepoGongdocStatusStruct) Backup(dirPath string) {
+
+	filename := filepath.Join(dirPath, "GongdocStatusDB.json")
+
+	// organize the map into an array with increasing IDs, in order to have repoductible
+	// backup file
+	var forBackup []*GongdocStatusDB
+	for _, gongdocstatusDB := range *backRepoGongdocStatus.Map_GongdocStatusDBID_GongdocStatusDB {
+		forBackup = append(forBackup, gongdocstatusDB)
+	}
+
+	sort.Slice(forBackup[:], func(i, j int) bool {
+		return forBackup[i].ID < forBackup[j].ID
+	})
+
+	file, err := json.MarshalIndent(forBackup, "", " ")
+
+	if err != nil {
+		log.Panic("Cannot json GongdocStatus ", filename, " ", err.Error())
+	}
+
+	err = ioutil.WriteFile(filename, file, 0644)
+	if err != nil {
+		log.Panic("Cannot write the json GongdocStatus file", err.Error())
+	}
+}
+
+func (backRepoGongdocStatus *BackRepoGongdocStatusStruct) Restore(dirPath string) {
+
+	filename := filepath.Join(dirPath, "GongdocStatusDB.json")
+	jsonFile, err := os.Open(filename)
+	// if we os.Open returns an error then handle it
+	if err != nil {
+		log.Panic("Cannot restore/open the json GongdocStatus file", filename, " ", err.Error())
+	}
+
+	// read our opened jsonFile as a byte array.
+	byteValue, _ := ioutil.ReadAll(jsonFile)
+
+	var forRestore []*GongdocStatusDB
+
+	err = json.Unmarshal(byteValue, &forRestore)
+
+	// fill up Map_GongdocStatusDBID_GongdocStatusDB
+	for _, gongdocstatusDB := range forRestore {
+
+		gongdocstatusDB_ID := gongdocstatusDB.ID
+		gongdocstatusDB.ID = 0
+		query := backRepoGongdocStatus.db.Create(gongdocstatusDB)
+		if query.Error != nil {
+			log.Panic(query.Error)
+		}
+		if gongdocstatusDB_ID != gongdocstatusDB.ID {
+			log.Panicf("ID of GongdocStatus restore ID %d, name %s, has wrong ID %d in DB after create",
+				gongdocstatusDB_ID, gongdocstatusDB.Name_Data.String, gongdocstatusDB.ID)
+		}
+	}
+
+	if err != nil {
+		log.Panic("Cannot restore/unmarshall json GongdocStatus file", err.Error())
 	}
 }

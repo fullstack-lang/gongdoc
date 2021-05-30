@@ -100,7 +100,6 @@ export class UmlscsTableComponent implements OnInit {
     this.frontRepoService.pull().subscribe(
       frontRepo => {
         this.frontRepo = frontRepo
-        console.log("front repo pull returned")
 
         this.umlscs = this.frontRepo.Umlscs_array;
 
@@ -138,8 +137,6 @@ export class UmlscsTableComponent implements OnInit {
     this.umlscService.deleteUmlsc(umlscID).subscribe(
       umlsc => {
         this.umlscService.UmlscServiceChanged.next("delete")
-
-        console.log("umlsc deleted")
       }
     );
   }
@@ -201,7 +198,6 @@ export class UmlscsTableComponent implements OnInit {
     // from selection, set umlsc that belong to umlsc through Anarrayofb
     this.selection.selected.forEach(
       umlsc => {
-        console.log("selection ID " + umlsc.ID)
         let ID = +this.dialogData.ID
         umlsc[this.dialogData.ReversePointer].Int64 = ID
         umlsc[this.dialogData.ReversePointer].Valid = true
@@ -215,7 +211,6 @@ export class UmlscsTableComponent implements OnInit {
         this.umlscService.updateUmlsc(umlsc)
           .subscribe(umlsc => {
             this.umlscService.UmlscServiceChanged.next("update")
-            console.log("umlsc saved")
           });
       }
     )

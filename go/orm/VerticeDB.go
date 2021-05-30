@@ -3,9 +3,13 @@ package orm
 
 import (
 	"database/sql"
+	"encoding/json"
 	"errors"
 	"fmt"
+	"io/ioutil"
 	"log"
+	"os"
+	"path/filepath"
 	"sort"
 	"time"
 
@@ -27,9 +31,30 @@ var dummy_Vertice_sort sort.Float64Slice
 //
 // swagger:model verticeAPI
 type VerticeAPI struct {
+	gorm.Model
+
 	models.Vertice
 
-	// insertion for fields declaration
+	// encoding of pointers
+	VerticePointersEnconding
+}
+
+// VerticePointersEnconding encodes pointers to Struct and
+// reverse pointers of slice of poitners to Struct
+type VerticePointersEnconding struct {
+	// insertion for pointer fields encoding declaration
+}
+
+// VerticeDB describes a vertice in the database
+//
+// It incorporates the GORM ID, basic fields from the model (because they can be serialized),
+// the encoded version of pointers
+//
+// swagger:model verticeDB
+type VerticeDB struct {
+	gorm.Model
+
+	// insertion for basic fields declaration
 	// Declation for basic field verticeDB.X {{BasicKind}} (to be completed)
 	X_Data sql.NullFloat64
 
@@ -39,18 +64,8 @@ type VerticeAPI struct {
 	// Declation for basic field verticeDB.Name {{BasicKind}} (to be completed)
 	Name_Data sql.NullString
 
-	// end of insertion
-}
-
-// VerticeDB describes a vertice in the database
-//
-// It incorporates all fields : from the model, from the generated field for the API and the GORM ID
-//
-// swagger:model verticeDB
-type VerticeDB struct {
-	gorm.Model
-
-	VerticeAPI
+	// encoding of pointers
+	VerticePointersEnconding
 }
 
 // VerticeDBs arrays verticeDBs
@@ -74,6 +89,13 @@ type BackRepoVerticeStruct struct {
 	Map_VerticeDBID_VerticePtr *map[uint]*models.Vertice
 
 	db *gorm.DB
+}
+
+// GetVerticeDBFromVerticePtr is a handy function to access the back repo instance from the stage instance
+func (backRepoVertice *BackRepoVerticeStruct) GetVerticeDBFromVerticePtr(vertice *models.Vertice) (verticeDB *VerticeDB) {
+	id := (*backRepoVertice.Map_VerticePtr_VerticeDBID)[vertice]
+	verticeDB = (*backRepoVertice.Map_VerticeDBID_VerticeDB)[id]
+	return
 }
 
 // BackRepoVertice.Init set up the BackRepo of the Vertice
@@ -157,7 +179,7 @@ func (backRepoVertice *BackRepoVerticeStruct) CommitPhaseOneInstance(vertice *mo
 
 	// initiate vertice
 	var verticeDB VerticeDB
-	verticeDB.Vertice = *vertice
+	verticeDB.CopyBasicFieldsFromVertice(vertice)
 
 	query := backRepoVertice.db.Create(&verticeDB)
 	if query.Error != nil {
@@ -190,20 +212,9 @@ func (backRepoVertice *BackRepoVerticeStruct) CommitPhaseTwoInstance(backRepo *B
 	// fetch matching verticeDB
 	if verticeDB, ok := (*backRepoVertice.Map_VerticeDBID_VerticeDB)[idx]; ok {
 
-		{
-			{
-				// insertion point for fields commit
-				verticeDB.X_Data.Float64 = vertice.X
-				verticeDB.X_Data.Valid = true
+		verticeDB.CopyBasicFieldsFromVertice(vertice)
 
-				verticeDB.Y_Data.Float64 = vertice.Y
-				verticeDB.Y_Data.Valid = true
-
-				verticeDB.Name_Data.String = vertice.Name
-				verticeDB.Name_Data.Valid = true
-
-			}
-		}
+		// insertion point for translating pointers encodings into actual pointers
 		query := backRepoVertice.db.Save(&verticeDB)
 		if query.Error != nil {
 			return query.Error
@@ -244,18 +255,23 @@ func (backRepoVertice *BackRepoVerticeStruct) CheckoutPhaseOne() (Error error) {
 // models version of the verticeDB
 func (backRepoVertice *BackRepoVerticeStruct) CheckoutPhaseOneInstance(verticeDB *VerticeDB) (Error error) {
 
-	// if absent, create entries in the backRepoVertice maps.
-	verticeWithNewFieldValues := verticeDB.Vertice
-	if _, ok := (*backRepoVertice.Map_VerticeDBID_VerticePtr)[verticeDB.ID]; !ok {
+	vertice, ok := (*backRepoVertice.Map_VerticeDBID_VerticePtr)[verticeDB.ID]
+	if !ok {
+		vertice = new(models.Vertice)
 
-		(*backRepoVertice.Map_VerticeDBID_VerticePtr)[verticeDB.ID] = &verticeWithNewFieldValues
-		(*backRepoVertice.Map_VerticePtr_VerticeDBID)[&verticeWithNewFieldValues] = verticeDB.ID
+		(*backRepoVertice.Map_VerticeDBID_VerticePtr)[verticeDB.ID] = vertice
+		(*backRepoVertice.Map_VerticePtr_VerticeDBID)[vertice] = verticeDB.ID
 
 		// append model store with the new element
-		verticeWithNewFieldValues.Stage()
+		vertice.Stage()
 	}
-	verticeDBWithNewFieldValues := *verticeDB
-	(*backRepoVertice.Map_VerticeDBID_VerticeDB)[verticeDB.ID] = &verticeDBWithNewFieldValues
+	verticeDB.CopyBasicFieldsToVertice(vertice)
+
+	// preserve pointer to aclassDB. Otherwise, pointer will is recycled and the map of pointers
+	// Map_VerticeDBID_VerticeDB)[verticeDB hold variable pointers
+	verticeDB_Data := *verticeDB
+	preservedPtrToVertice := &verticeDB_Data
+	(*backRepoVertice.Map_VerticeDBID_VerticeDB)[verticeDB.ID] = preservedPtrToVertice
 
 	return
 }
@@ -277,18 +293,8 @@ func (backRepoVertice *BackRepoVerticeStruct) CheckoutPhaseTwoInstance(backRepo 
 
 	vertice := (*backRepoVertice.Map_VerticeDBID_VerticePtr)[verticeDB.ID]
 	_ = vertice // sometimes, there is no code generated. This lines voids the "unused variable" compilation error
-	{
-		{
-			// insertion point for checkout, i.e. update of fields of stage instance from fields of back repo instances
-			//
-			vertice.X = verticeDB.X_Data.Float64
 
-			vertice.Y = verticeDB.Y_Data.Float64
-
-			vertice.Name = verticeDB.Name_Data.String
-
-		}
-	}
+	// insertion point for checkout of pointer encoding
 	return
 }
 
@@ -315,5 +321,92 @@ func (backRepo *BackRepoStruct) CheckoutVertice(vertice *models.Vertice) {
 			backRepo.BackRepoVertice.CheckoutPhaseOneInstance(&verticeDB)
 			backRepo.BackRepoVertice.CheckoutPhaseTwoInstance(backRepo, &verticeDB)
 		}
+	}
+}
+
+// CopyBasicFieldsToVerticeDB is used to copy basic fields between the Stage or the CRUD to the back repo
+func (verticeDB *VerticeDB) CopyBasicFieldsFromVertice(vertice *models.Vertice) {
+	// insertion point for fields commit
+	verticeDB.X_Data.Float64 = vertice.X
+	verticeDB.X_Data.Valid = true
+
+	verticeDB.Y_Data.Float64 = vertice.Y
+	verticeDB.Y_Data.Valid = true
+
+	verticeDB.Name_Data.String = vertice.Name
+	verticeDB.Name_Data.Valid = true
+
+}
+
+// CopyBasicFieldsToVerticeDB is used to copy basic fields between the Stage or the CRUD to the back repo
+func (verticeDB *VerticeDB) CopyBasicFieldsToVertice(vertice *models.Vertice) {
+
+	// insertion point for checkout of basic fields (back repo to stage)
+	vertice.X = verticeDB.X_Data.Float64
+	vertice.Y = verticeDB.Y_Data.Float64
+	vertice.Name = verticeDB.Name_Data.String
+}
+
+// Backup generates a json file from a slice of all VerticeDB instances in the backrepo
+func (backRepoVertice *BackRepoVerticeStruct) Backup(dirPath string) {
+
+	filename := filepath.Join(dirPath, "VerticeDB.json")
+
+	// organize the map into an array with increasing IDs, in order to have repoductible
+	// backup file
+	var forBackup []*VerticeDB
+	for _, verticeDB := range *backRepoVertice.Map_VerticeDBID_VerticeDB {
+		forBackup = append(forBackup, verticeDB)
+	}
+
+	sort.Slice(forBackup[:], func(i, j int) bool {
+		return forBackup[i].ID < forBackup[j].ID
+	})
+
+	file, err := json.MarshalIndent(forBackup, "", " ")
+
+	if err != nil {
+		log.Panic("Cannot json Vertice ", filename, " ", err.Error())
+	}
+
+	err = ioutil.WriteFile(filename, file, 0644)
+	if err != nil {
+		log.Panic("Cannot write the json Vertice file", err.Error())
+	}
+}
+
+func (backRepoVertice *BackRepoVerticeStruct) Restore(dirPath string) {
+
+	filename := filepath.Join(dirPath, "VerticeDB.json")
+	jsonFile, err := os.Open(filename)
+	// if we os.Open returns an error then handle it
+	if err != nil {
+		log.Panic("Cannot restore/open the json Vertice file", filename, " ", err.Error())
+	}
+
+	// read our opened jsonFile as a byte array.
+	byteValue, _ := ioutil.ReadAll(jsonFile)
+
+	var forRestore []*VerticeDB
+
+	err = json.Unmarshal(byteValue, &forRestore)
+
+	// fill up Map_VerticeDBID_VerticeDB
+	for _, verticeDB := range forRestore {
+
+		verticeDB_ID := verticeDB.ID
+		verticeDB.ID = 0
+		query := backRepoVertice.db.Create(verticeDB)
+		if query.Error != nil {
+			log.Panic(query.Error)
+		}
+		if verticeDB_ID != verticeDB.ID {
+			log.Panicf("ID of Vertice restore ID %d, name %s, has wrong ID %d in DB after create",
+				verticeDB_ID, verticeDB.Name_Data.String, verticeDB.ID)
+		}
+	}
+
+	if err != nil {
+		log.Panic("Cannot restore/unmarshall json Vertice file", err.Error())
 	}
 }

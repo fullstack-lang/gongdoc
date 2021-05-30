@@ -108,7 +108,6 @@ export class LinksTableComponent implements OnInit {
     this.frontRepoService.pull().subscribe(
       frontRepo => {
         this.frontRepo = frontRepo
-        console.log("front repo pull returned")
 
         this.links = this.frontRepo.Links_array;
 
@@ -146,8 +145,6 @@ export class LinksTableComponent implements OnInit {
     this.linkService.deleteLink(linkID).subscribe(
       link => {
         this.linkService.LinkServiceChanged.next("delete")
-
-        console.log("link deleted")
       }
     );
   }
@@ -209,7 +206,6 @@ export class LinksTableComponent implements OnInit {
     // from selection, set link that belong to link through Anarrayofb
     this.selection.selected.forEach(
       link => {
-        console.log("selection ID " + link.ID)
         let ID = +this.dialogData.ID
         link[this.dialogData.ReversePointer].Int64 = ID
         link[this.dialogData.ReversePointer].Valid = true
@@ -223,7 +219,6 @@ export class LinksTableComponent implements OnInit {
         this.linkService.updateLink(link)
           .subscribe(link => {
             this.linkService.LinkServiceChanged.next("update")
-            console.log("link saved")
           });
       }
     )

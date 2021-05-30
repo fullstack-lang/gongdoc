@@ -49,8 +49,9 @@ type StateInput struct {
 func GetStates(c *gin.Context) {
 	db := c.MustGet("db").(*gorm.DB)
 
-	var states []orm.StateDB
-	query := db.Find(&states)
+	// source slice
+	var stateDBs []orm.StateDB
+	query := db.Find(&stateDBs)
 	if query.Error != nil {
 		var returnError GenericError
 		returnError.Body.Code = http.StatusBadRequest
@@ -59,26 +60,23 @@ func GetStates(c *gin.Context) {
 		return
 	}
 
+	// slice that will be transmitted to the front
+	var stateAPIs []orm.StateAPI
+
 	// for each state, update fields from the database nullable fields
-	for idx := range states {
-		state := &states[idx]
-		_ = state
+	for idx := range stateDBs {
+		stateDB := &stateDBs[idx]
+		_ = stateDB
+		var stateAPI orm.StateAPI
+
 		// insertion point for updating fields
-		if state.Name_Data.Valid {
-			state.Name = state.Name_Data.String
-		}
-
-		if state.X_Data.Valid {
-			state.X = state.X_Data.Float64
-		}
-
-		if state.Y_Data.Valid {
-			state.Y = state.Y_Data.Float64
-		}
-
+		stateAPI.ID = stateDB.ID
+		stateDB.CopyBasicFieldsToState(&stateAPI.State)
+		stateAPI.StatePointersEnconding = stateDB.StatePointersEnconding
+		stateAPIs = append(stateAPIs, stateAPI)
 	}
 
-	c.JSON(http.StatusOK, states)
+	c.JSON(http.StatusOK, stateAPIs)
 }
 
 // PostState
@@ -111,16 +109,8 @@ func PostState(c *gin.Context) {
 
 	// Create state
 	stateDB := orm.StateDB{}
-	stateDB.StateAPI = input
-	// insertion point for nullable field set
-	stateDB.Name_Data.String = input.Name
-	stateDB.Name_Data.Valid = true
-
-	stateDB.X_Data.Float64 = input.X
-	stateDB.X_Data.Valid = true
-
-	stateDB.Y_Data.Float64 = input.Y
-	stateDB.Y_Data.Valid = true
+	stateDB.StatePointersEnconding = input.StatePointersEnconding
+	stateDB.CopyBasicFieldsFromState(&input.State)
 
 	query := db.Create(&stateDB)
 	if query.Error != nil {
@@ -150,9 +140,9 @@ func PostState(c *gin.Context) {
 func GetState(c *gin.Context) {
 	db := c.MustGet("db").(*gorm.DB)
 
-	// Get state in DB
-	var state orm.StateDB
-	if err := db.First(&state, c.Param("id")).Error; err != nil {
+	// Get stateDB in DB
+	var stateDB orm.StateDB
+	if err := db.First(&stateDB, c.Param("id")).Error; err != nil {
 		var returnError GenericError
 		returnError.Body.Code = http.StatusBadRequest
 		returnError.Body.Message = err.Error()
@@ -160,20 +150,12 @@ func GetState(c *gin.Context) {
 		return
 	}
 
-	// insertion point for fields value set from nullable fields
-	if state.Name_Data.Valid {
-		state.Name = state.Name_Data.String
-	}
+	var stateAPI orm.StateAPI
+	stateAPI.ID = stateDB.ID
+	stateAPI.StatePointersEnconding = stateDB.StatePointersEnconding
+	stateDB.CopyBasicFieldsToState(&stateAPI.State)
 
-	if state.X_Data.Valid {
-		state.X = state.X_Data.Float64
-	}
-
-	if state.Y_Data.Valid {
-		state.Y = state.Y_Data.Float64
-	}
-
-	c.JSON(http.StatusOK, state)
+	c.JSON(http.StatusOK, stateAPI)
 }
 
 // UpdateState
@@ -210,17 +192,10 @@ func UpdateState(c *gin.Context) {
 	}
 
 	// update
-	// insertion point for nullable field set
-	input.Name_Data.String = input.Name
-	input.Name_Data.Valid = true
+	stateDB.CopyBasicFieldsFromState(&input.State)
+	stateDB.StatePointersEnconding = input.StatePointersEnconding
 
-	input.X_Data.Float64 = input.X
-	input.X_Data.Valid = true
-
-	input.Y_Data.Float64 = input.Y
-	input.Y_Data.Valid = true
-
-	query = db.Model(&stateDB).Updates(input)
+	query = db.Model(&stateDB).Updates(stateDB)
 	if query.Error != nil {
 		var returnError GenericError
 		returnError.Body.Code = http.StatusBadRequest

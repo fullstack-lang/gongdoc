@@ -3,9 +3,13 @@ package orm
 
 import (
 	"database/sql"
+	"encoding/json"
 	"errors"
 	"fmt"
+	"io/ioutil"
 	"log"
+	"os"
+	"path/filepath"
 	"sort"
 	"time"
 
@@ -27,9 +31,30 @@ var dummy_Position_sort sort.Float64Slice
 //
 // swagger:model positionAPI
 type PositionAPI struct {
+	gorm.Model
+
 	models.Position
 
-	// insertion for fields declaration
+	// encoding of pointers
+	PositionPointersEnconding
+}
+
+// PositionPointersEnconding encodes pointers to Struct and
+// reverse pointers of slice of poitners to Struct
+type PositionPointersEnconding struct {
+	// insertion for pointer fields encoding declaration
+}
+
+// PositionDB describes a position in the database
+//
+// It incorporates the GORM ID, basic fields from the model (because they can be serialized),
+// the encoded version of pointers
+//
+// swagger:model positionDB
+type PositionDB struct {
+	gorm.Model
+
+	// insertion for basic fields declaration
 	// Declation for basic field positionDB.X {{BasicKind}} (to be completed)
 	X_Data sql.NullFloat64
 
@@ -39,18 +64,8 @@ type PositionAPI struct {
 	// Declation for basic field positionDB.Name {{BasicKind}} (to be completed)
 	Name_Data sql.NullString
 
-	// end of insertion
-}
-
-// PositionDB describes a position in the database
-//
-// It incorporates all fields : from the model, from the generated field for the API and the GORM ID
-//
-// swagger:model positionDB
-type PositionDB struct {
-	gorm.Model
-
-	PositionAPI
+	// encoding of pointers
+	PositionPointersEnconding
 }
 
 // PositionDBs arrays positionDBs
@@ -74,6 +89,13 @@ type BackRepoPositionStruct struct {
 	Map_PositionDBID_PositionPtr *map[uint]*models.Position
 
 	db *gorm.DB
+}
+
+// GetPositionDBFromPositionPtr is a handy function to access the back repo instance from the stage instance
+func (backRepoPosition *BackRepoPositionStruct) GetPositionDBFromPositionPtr(position *models.Position) (positionDB *PositionDB) {
+	id := (*backRepoPosition.Map_PositionPtr_PositionDBID)[position]
+	positionDB = (*backRepoPosition.Map_PositionDBID_PositionDB)[id]
+	return
 }
 
 // BackRepoPosition.Init set up the BackRepo of the Position
@@ -157,7 +179,7 @@ func (backRepoPosition *BackRepoPositionStruct) CommitPhaseOneInstance(position 
 
 	// initiate position
 	var positionDB PositionDB
-	positionDB.Position = *position
+	positionDB.CopyBasicFieldsFromPosition(position)
 
 	query := backRepoPosition.db.Create(&positionDB)
 	if query.Error != nil {
@@ -190,20 +212,9 @@ func (backRepoPosition *BackRepoPositionStruct) CommitPhaseTwoInstance(backRepo 
 	// fetch matching positionDB
 	if positionDB, ok := (*backRepoPosition.Map_PositionDBID_PositionDB)[idx]; ok {
 
-		{
-			{
-				// insertion point for fields commit
-				positionDB.X_Data.Float64 = position.X
-				positionDB.X_Data.Valid = true
+		positionDB.CopyBasicFieldsFromPosition(position)
 
-				positionDB.Y_Data.Float64 = position.Y
-				positionDB.Y_Data.Valid = true
-
-				positionDB.Name_Data.String = position.Name
-				positionDB.Name_Data.Valid = true
-
-			}
-		}
+		// insertion point for translating pointers encodings into actual pointers
 		query := backRepoPosition.db.Save(&positionDB)
 		if query.Error != nil {
 			return query.Error
@@ -244,18 +255,23 @@ func (backRepoPosition *BackRepoPositionStruct) CheckoutPhaseOne() (Error error)
 // models version of the positionDB
 func (backRepoPosition *BackRepoPositionStruct) CheckoutPhaseOneInstance(positionDB *PositionDB) (Error error) {
 
-	// if absent, create entries in the backRepoPosition maps.
-	positionWithNewFieldValues := positionDB.Position
-	if _, ok := (*backRepoPosition.Map_PositionDBID_PositionPtr)[positionDB.ID]; !ok {
+	position, ok := (*backRepoPosition.Map_PositionDBID_PositionPtr)[positionDB.ID]
+	if !ok {
+		position = new(models.Position)
 
-		(*backRepoPosition.Map_PositionDBID_PositionPtr)[positionDB.ID] = &positionWithNewFieldValues
-		(*backRepoPosition.Map_PositionPtr_PositionDBID)[&positionWithNewFieldValues] = positionDB.ID
+		(*backRepoPosition.Map_PositionDBID_PositionPtr)[positionDB.ID] = position
+		(*backRepoPosition.Map_PositionPtr_PositionDBID)[position] = positionDB.ID
 
 		// append model store with the new element
-		positionWithNewFieldValues.Stage()
+		position.Stage()
 	}
-	positionDBWithNewFieldValues := *positionDB
-	(*backRepoPosition.Map_PositionDBID_PositionDB)[positionDB.ID] = &positionDBWithNewFieldValues
+	positionDB.CopyBasicFieldsToPosition(position)
+
+	// preserve pointer to aclassDB. Otherwise, pointer will is recycled and the map of pointers
+	// Map_PositionDBID_PositionDB)[positionDB hold variable pointers
+	positionDB_Data := *positionDB
+	preservedPtrToPosition := &positionDB_Data
+	(*backRepoPosition.Map_PositionDBID_PositionDB)[positionDB.ID] = preservedPtrToPosition
 
 	return
 }
@@ -277,18 +293,8 @@ func (backRepoPosition *BackRepoPositionStruct) CheckoutPhaseTwoInstance(backRep
 
 	position := (*backRepoPosition.Map_PositionDBID_PositionPtr)[positionDB.ID]
 	_ = position // sometimes, there is no code generated. This lines voids the "unused variable" compilation error
-	{
-		{
-			// insertion point for checkout, i.e. update of fields of stage instance from fields of back repo instances
-			//
-			position.X = positionDB.X_Data.Float64
 
-			position.Y = positionDB.Y_Data.Float64
-
-			position.Name = positionDB.Name_Data.String
-
-		}
-	}
+	// insertion point for checkout of pointer encoding
 	return
 }
 
@@ -315,5 +321,92 @@ func (backRepo *BackRepoStruct) CheckoutPosition(position *models.Position) {
 			backRepo.BackRepoPosition.CheckoutPhaseOneInstance(&positionDB)
 			backRepo.BackRepoPosition.CheckoutPhaseTwoInstance(backRepo, &positionDB)
 		}
+	}
+}
+
+// CopyBasicFieldsToPositionDB is used to copy basic fields between the Stage or the CRUD to the back repo
+func (positionDB *PositionDB) CopyBasicFieldsFromPosition(position *models.Position) {
+	// insertion point for fields commit
+	positionDB.X_Data.Float64 = position.X
+	positionDB.X_Data.Valid = true
+
+	positionDB.Y_Data.Float64 = position.Y
+	positionDB.Y_Data.Valid = true
+
+	positionDB.Name_Data.String = position.Name
+	positionDB.Name_Data.Valid = true
+
+}
+
+// CopyBasicFieldsToPositionDB is used to copy basic fields between the Stage or the CRUD to the back repo
+func (positionDB *PositionDB) CopyBasicFieldsToPosition(position *models.Position) {
+
+	// insertion point for checkout of basic fields (back repo to stage)
+	position.X = positionDB.X_Data.Float64
+	position.Y = positionDB.Y_Data.Float64
+	position.Name = positionDB.Name_Data.String
+}
+
+// Backup generates a json file from a slice of all PositionDB instances in the backrepo
+func (backRepoPosition *BackRepoPositionStruct) Backup(dirPath string) {
+
+	filename := filepath.Join(dirPath, "PositionDB.json")
+
+	// organize the map into an array with increasing IDs, in order to have repoductible
+	// backup file
+	var forBackup []*PositionDB
+	for _, positionDB := range *backRepoPosition.Map_PositionDBID_PositionDB {
+		forBackup = append(forBackup, positionDB)
+	}
+
+	sort.Slice(forBackup[:], func(i, j int) bool {
+		return forBackup[i].ID < forBackup[j].ID
+	})
+
+	file, err := json.MarshalIndent(forBackup, "", " ")
+
+	if err != nil {
+		log.Panic("Cannot json Position ", filename, " ", err.Error())
+	}
+
+	err = ioutil.WriteFile(filename, file, 0644)
+	if err != nil {
+		log.Panic("Cannot write the json Position file", err.Error())
+	}
+}
+
+func (backRepoPosition *BackRepoPositionStruct) Restore(dirPath string) {
+
+	filename := filepath.Join(dirPath, "PositionDB.json")
+	jsonFile, err := os.Open(filename)
+	// if we os.Open returns an error then handle it
+	if err != nil {
+		log.Panic("Cannot restore/open the json Position file", filename, " ", err.Error())
+	}
+
+	// read our opened jsonFile as a byte array.
+	byteValue, _ := ioutil.ReadAll(jsonFile)
+
+	var forRestore []*PositionDB
+
+	err = json.Unmarshal(byteValue, &forRestore)
+
+	// fill up Map_PositionDBID_PositionDB
+	for _, positionDB := range forRestore {
+
+		positionDB_ID := positionDB.ID
+		positionDB.ID = 0
+		query := backRepoPosition.db.Create(positionDB)
+		if query.Error != nil {
+			log.Panic(query.Error)
+		}
+		if positionDB_ID != positionDB.ID {
+			log.Panicf("ID of Position restore ID %d, name %s, has wrong ID %d in DB after create",
+				positionDB_ID, positionDB.Name_Data.String, positionDB.ID)
+		}
+	}
+
+	if err != nil {
+		log.Panic("Cannot restore/unmarshall json Position file", err.Error())
 	}
 }

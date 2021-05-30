@@ -49,8 +49,9 @@ type GongdocStatusInput struct {
 func GetGongdocStatuss(c *gin.Context) {
 	db := c.MustGet("db").(*gorm.DB)
 
-	var gongdocstatuss []orm.GongdocStatusDB
-	query := db.Find(&gongdocstatuss)
+	// source slice
+	var gongdocstatusDBs []orm.GongdocStatusDB
+	query := db.Find(&gongdocstatusDBs)
 	if query.Error != nil {
 		var returnError GenericError
 		returnError.Body.Code = http.StatusBadRequest
@@ -59,26 +60,23 @@ func GetGongdocStatuss(c *gin.Context) {
 		return
 	}
 
+	// slice that will be transmitted to the front
+	var gongdocstatusAPIs []orm.GongdocStatusAPI
+
 	// for each gongdocstatus, update fields from the database nullable fields
-	for idx := range gongdocstatuss {
-		gongdocstatus := &gongdocstatuss[idx]
-		_ = gongdocstatus
+	for idx := range gongdocstatusDBs {
+		gongdocstatusDB := &gongdocstatusDBs[idx]
+		_ = gongdocstatusDB
+		var gongdocstatusAPI orm.GongdocStatusAPI
+
 		// insertion point for updating fields
-		if gongdocstatus.Name_Data.Valid {
-			gongdocstatus.Name = gongdocstatus.Name_Data.String
-		}
-
-		if gongdocstatus.Status_Data.Valid {
-			gongdocstatus.Status = models.GongdocCommandType(gongdocstatus.Status_Data.String)
-		}
-
-		if gongdocstatus.CommandCompletionDate_Data.Valid {
-			gongdocstatus.CommandCompletionDate = gongdocstatus.CommandCompletionDate_Data.String
-		}
-
+		gongdocstatusAPI.ID = gongdocstatusDB.ID
+		gongdocstatusDB.CopyBasicFieldsToGongdocStatus(&gongdocstatusAPI.GongdocStatus)
+		gongdocstatusAPI.GongdocStatusPointersEnconding = gongdocstatusDB.GongdocStatusPointersEnconding
+		gongdocstatusAPIs = append(gongdocstatusAPIs, gongdocstatusAPI)
 	}
 
-	c.JSON(http.StatusOK, gongdocstatuss)
+	c.JSON(http.StatusOK, gongdocstatusAPIs)
 }
 
 // PostGongdocStatus
@@ -111,16 +109,8 @@ func PostGongdocStatus(c *gin.Context) {
 
 	// Create gongdocstatus
 	gongdocstatusDB := orm.GongdocStatusDB{}
-	gongdocstatusDB.GongdocStatusAPI = input
-	// insertion point for nullable field set
-	gongdocstatusDB.Name_Data.String = input.Name
-	gongdocstatusDB.Name_Data.Valid = true
-
-	gongdocstatusDB.Status_Data.String = string(input.Status)
-	gongdocstatusDB.Status_Data.Valid = true
-
-	gongdocstatusDB.CommandCompletionDate_Data.String = input.CommandCompletionDate
-	gongdocstatusDB.CommandCompletionDate_Data.Valid = true
+	gongdocstatusDB.GongdocStatusPointersEnconding = input.GongdocStatusPointersEnconding
+	gongdocstatusDB.CopyBasicFieldsFromGongdocStatus(&input.GongdocStatus)
 
 	query := db.Create(&gongdocstatusDB)
 	if query.Error != nil {
@@ -150,9 +140,9 @@ func PostGongdocStatus(c *gin.Context) {
 func GetGongdocStatus(c *gin.Context) {
 	db := c.MustGet("db").(*gorm.DB)
 
-	// Get gongdocstatus in DB
-	var gongdocstatus orm.GongdocStatusDB
-	if err := db.First(&gongdocstatus, c.Param("id")).Error; err != nil {
+	// Get gongdocstatusDB in DB
+	var gongdocstatusDB orm.GongdocStatusDB
+	if err := db.First(&gongdocstatusDB, c.Param("id")).Error; err != nil {
 		var returnError GenericError
 		returnError.Body.Code = http.StatusBadRequest
 		returnError.Body.Message = err.Error()
@@ -160,20 +150,12 @@ func GetGongdocStatus(c *gin.Context) {
 		return
 	}
 
-	// insertion point for fields value set from nullable fields
-	if gongdocstatus.Name_Data.Valid {
-		gongdocstatus.Name = gongdocstatus.Name_Data.String
-	}
+	var gongdocstatusAPI orm.GongdocStatusAPI
+	gongdocstatusAPI.ID = gongdocstatusDB.ID
+	gongdocstatusAPI.GongdocStatusPointersEnconding = gongdocstatusDB.GongdocStatusPointersEnconding
+	gongdocstatusDB.CopyBasicFieldsToGongdocStatus(&gongdocstatusAPI.GongdocStatus)
 
-	if gongdocstatus.Status_Data.Valid {
-		gongdocstatus.Status = models.GongdocCommandType(gongdocstatus.Status_Data.String)
-	}
-
-	if gongdocstatus.CommandCompletionDate_Data.Valid {
-		gongdocstatus.CommandCompletionDate = gongdocstatus.CommandCompletionDate_Data.String
-	}
-
-	c.JSON(http.StatusOK, gongdocstatus)
+	c.JSON(http.StatusOK, gongdocstatusAPI)
 }
 
 // UpdateGongdocStatus
@@ -210,17 +192,10 @@ func UpdateGongdocStatus(c *gin.Context) {
 	}
 
 	// update
-	// insertion point for nullable field set
-	input.Name_Data.String = input.Name
-	input.Name_Data.Valid = true
+	gongdocstatusDB.CopyBasicFieldsFromGongdocStatus(&input.GongdocStatus)
+	gongdocstatusDB.GongdocStatusPointersEnconding = input.GongdocStatusPointersEnconding
 
-	input.Status_Data.String = string(input.Status)
-	input.Status_Data.Valid = true
-
-	input.CommandCompletionDate_Data.String = input.CommandCompletionDate
-	input.CommandCompletionDate_Data.Valid = true
-
-	query = db.Model(&gongdocstatusDB).Updates(input)
+	query = db.Model(&gongdocstatusDB).Updates(gongdocstatusDB)
 	if query.Error != nil {
 		var returnError GenericError
 		returnError.Body.Code = http.StatusBadRequest

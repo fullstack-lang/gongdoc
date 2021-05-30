@@ -49,8 +49,9 @@ type ClassdiagramInput struct {
 func GetClassdiagrams(c *gin.Context) {
 	db := c.MustGet("db").(*gorm.DB)
 
-	var classdiagrams []orm.ClassdiagramDB
-	query := db.Find(&classdiagrams)
+	// source slice
+	var classdiagramDBs []orm.ClassdiagramDB
+	query := db.Find(&classdiagramDBs)
 	if query.Error != nil {
 		var returnError GenericError
 		returnError.Body.Code = http.StatusBadRequest
@@ -59,18 +60,23 @@ func GetClassdiagrams(c *gin.Context) {
 		return
 	}
 
-	// for each classdiagram, update fields from the database nullable fields
-	for idx := range classdiagrams {
-		classdiagram := &classdiagrams[idx]
-		_ = classdiagram
-		// insertion point for updating fields
-		if classdiagram.Name_Data.Valid {
-			classdiagram.Name = classdiagram.Name_Data.String
-		}
+	// slice that will be transmitted to the front
+	var classdiagramAPIs []orm.ClassdiagramAPI
 
+	// for each classdiagram, update fields from the database nullable fields
+	for idx := range classdiagramDBs {
+		classdiagramDB := &classdiagramDBs[idx]
+		_ = classdiagramDB
+		var classdiagramAPI orm.ClassdiagramAPI
+
+		// insertion point for updating fields
+		classdiagramAPI.ID = classdiagramDB.ID
+		classdiagramDB.CopyBasicFieldsToClassdiagram(&classdiagramAPI.Classdiagram)
+		classdiagramAPI.ClassdiagramPointersEnconding = classdiagramDB.ClassdiagramPointersEnconding
+		classdiagramAPIs = append(classdiagramAPIs, classdiagramAPI)
 	}
 
-	c.JSON(http.StatusOK, classdiagrams)
+	c.JSON(http.StatusOK, classdiagramAPIs)
 }
 
 // PostClassdiagram
@@ -103,10 +109,8 @@ func PostClassdiagram(c *gin.Context) {
 
 	// Create classdiagram
 	classdiagramDB := orm.ClassdiagramDB{}
-	classdiagramDB.ClassdiagramAPI = input
-	// insertion point for nullable field set
-	classdiagramDB.Name_Data.String = input.Name
-	classdiagramDB.Name_Data.Valid = true
+	classdiagramDB.ClassdiagramPointersEnconding = input.ClassdiagramPointersEnconding
+	classdiagramDB.CopyBasicFieldsFromClassdiagram(&input.Classdiagram)
 
 	query := db.Create(&classdiagramDB)
 	if query.Error != nil {
@@ -136,9 +140,9 @@ func PostClassdiagram(c *gin.Context) {
 func GetClassdiagram(c *gin.Context) {
 	db := c.MustGet("db").(*gorm.DB)
 
-	// Get classdiagram in DB
-	var classdiagram orm.ClassdiagramDB
-	if err := db.First(&classdiagram, c.Param("id")).Error; err != nil {
+	// Get classdiagramDB in DB
+	var classdiagramDB orm.ClassdiagramDB
+	if err := db.First(&classdiagramDB, c.Param("id")).Error; err != nil {
 		var returnError GenericError
 		returnError.Body.Code = http.StatusBadRequest
 		returnError.Body.Message = err.Error()
@@ -146,12 +150,12 @@ func GetClassdiagram(c *gin.Context) {
 		return
 	}
 
-	// insertion point for fields value set from nullable fields
-	if classdiagram.Name_Data.Valid {
-		classdiagram.Name = classdiagram.Name_Data.String
-	}
+	var classdiagramAPI orm.ClassdiagramAPI
+	classdiagramAPI.ID = classdiagramDB.ID
+	classdiagramAPI.ClassdiagramPointersEnconding = classdiagramDB.ClassdiagramPointersEnconding
+	classdiagramDB.CopyBasicFieldsToClassdiagram(&classdiagramAPI.Classdiagram)
 
-	c.JSON(http.StatusOK, classdiagram)
+	c.JSON(http.StatusOK, classdiagramAPI)
 }
 
 // UpdateClassdiagram
@@ -188,11 +192,10 @@ func UpdateClassdiagram(c *gin.Context) {
 	}
 
 	// update
-	// insertion point for nullable field set
-	input.Name_Data.String = input.Name
-	input.Name_Data.Valid = true
+	classdiagramDB.CopyBasicFieldsFromClassdiagram(&input.Classdiagram)
+	classdiagramDB.ClassdiagramPointersEnconding = input.ClassdiagramPointersEnconding
 
-	query = db.Model(&classdiagramDB).Updates(input)
+	query = db.Model(&classdiagramDB).Updates(classdiagramDB)
 	if query.Error != nil {
 		var returnError GenericError
 		returnError.Body.Code = http.StatusBadRequest

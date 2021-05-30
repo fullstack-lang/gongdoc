@@ -49,8 +49,9 @@ type GongdocCommandInput struct {
 func GetGongdocCommands(c *gin.Context) {
 	db := c.MustGet("db").(*gorm.DB)
 
-	var gongdoccommands []orm.GongdocCommandDB
-	query := db.Find(&gongdoccommands)
+	// source slice
+	var gongdoccommandDBs []orm.GongdocCommandDB
+	query := db.Find(&gongdoccommandDBs)
 	if query.Error != nil {
 		var returnError GenericError
 		returnError.Body.Code = http.StatusBadRequest
@@ -59,54 +60,23 @@ func GetGongdocCommands(c *gin.Context) {
 		return
 	}
 
+	// slice that will be transmitted to the front
+	var gongdoccommandAPIs []orm.GongdocCommandAPI
+
 	// for each gongdoccommand, update fields from the database nullable fields
-	for idx := range gongdoccommands {
-		gongdoccommand := &gongdoccommands[idx]
-		_ = gongdoccommand
+	for idx := range gongdoccommandDBs {
+		gongdoccommandDB := &gongdoccommandDBs[idx]
+		_ = gongdoccommandDB
+		var gongdoccommandAPI orm.GongdocCommandAPI
+
 		// insertion point for updating fields
-		if gongdoccommand.Name_Data.Valid {
-			gongdoccommand.Name = gongdoccommand.Name_Data.String
-		}
-
-		if gongdoccommand.Command_Data.Valid {
-			gongdoccommand.Command = models.GongdocCommandType(gongdoccommand.Command_Data.String)
-		}
-
-		if gongdoccommand.DiagramName_Data.Valid {
-			gongdoccommand.DiagramName = gongdoccommand.DiagramName_Data.String
-		}
-
-		if gongdoccommand.Date_Data.Valid {
-			gongdoccommand.Date = gongdoccommand.Date_Data.String
-		}
-
-		if gongdoccommand.GongdocNodeType_Data.Valid {
-			gongdoccommand.GongdocNodeType = models.GongdocNodeType(gongdoccommand.GongdocNodeType_Data.String)
-		}
-
-		if gongdoccommand.StructName_Data.Valid {
-			gongdoccommand.StructName = gongdoccommand.StructName_Data.String
-		}
-
-		if gongdoccommand.FieldName_Data.Valid {
-			gongdoccommand.FieldName = gongdoccommand.FieldName_Data.String
-		}
-
-		if gongdoccommand.FieldTypeName_Data.Valid {
-			gongdoccommand.FieldTypeName = gongdoccommand.FieldTypeName_Data.String
-		}
-
-		if gongdoccommand.PositionX_Data.Valid {
-			gongdoccommand.PositionX = int(gongdoccommand.PositionX_Data.Int64)
-		}
-
-		if gongdoccommand.PositionY_Data.Valid {
-			gongdoccommand.PositionY = int(gongdoccommand.PositionY_Data.Int64)
-		}
-
+		gongdoccommandAPI.ID = gongdoccommandDB.ID
+		gongdoccommandDB.CopyBasicFieldsToGongdocCommand(&gongdoccommandAPI.GongdocCommand)
+		gongdoccommandAPI.GongdocCommandPointersEnconding = gongdoccommandDB.GongdocCommandPointersEnconding
+		gongdoccommandAPIs = append(gongdoccommandAPIs, gongdoccommandAPI)
 	}
 
-	c.JSON(http.StatusOK, gongdoccommands)
+	c.JSON(http.StatusOK, gongdoccommandAPIs)
 }
 
 // PostGongdocCommand
@@ -139,37 +109,8 @@ func PostGongdocCommand(c *gin.Context) {
 
 	// Create gongdoccommand
 	gongdoccommandDB := orm.GongdocCommandDB{}
-	gongdoccommandDB.GongdocCommandAPI = input
-	// insertion point for nullable field set
-	gongdoccommandDB.Name_Data.String = input.Name
-	gongdoccommandDB.Name_Data.Valid = true
-
-	gongdoccommandDB.Command_Data.String = string(input.Command)
-	gongdoccommandDB.Command_Data.Valid = true
-
-	gongdoccommandDB.DiagramName_Data.String = input.DiagramName
-	gongdoccommandDB.DiagramName_Data.Valid = true
-
-	gongdoccommandDB.Date_Data.String = input.Date
-	gongdoccommandDB.Date_Data.Valid = true
-
-	gongdoccommandDB.GongdocNodeType_Data.String = string(input.GongdocNodeType)
-	gongdoccommandDB.GongdocNodeType_Data.Valid = true
-
-	gongdoccommandDB.StructName_Data.String = input.StructName
-	gongdoccommandDB.StructName_Data.Valid = true
-
-	gongdoccommandDB.FieldName_Data.String = input.FieldName
-	gongdoccommandDB.FieldName_Data.Valid = true
-
-	gongdoccommandDB.FieldTypeName_Data.String = input.FieldTypeName
-	gongdoccommandDB.FieldTypeName_Data.Valid = true
-
-	gongdoccommandDB.PositionX_Data.Int64 = int64(input.PositionX)
-	gongdoccommandDB.PositionX_Data.Valid = true
-
-	gongdoccommandDB.PositionY_Data.Int64 = int64(input.PositionY)
-	gongdoccommandDB.PositionY_Data.Valid = true
+	gongdoccommandDB.GongdocCommandPointersEnconding = input.GongdocCommandPointersEnconding
+	gongdoccommandDB.CopyBasicFieldsFromGongdocCommand(&input.GongdocCommand)
 
 	query := db.Create(&gongdoccommandDB)
 	if query.Error != nil {
@@ -199,9 +140,9 @@ func PostGongdocCommand(c *gin.Context) {
 func GetGongdocCommand(c *gin.Context) {
 	db := c.MustGet("db").(*gorm.DB)
 
-	// Get gongdoccommand in DB
-	var gongdoccommand orm.GongdocCommandDB
-	if err := db.First(&gongdoccommand, c.Param("id")).Error; err != nil {
+	// Get gongdoccommandDB in DB
+	var gongdoccommandDB orm.GongdocCommandDB
+	if err := db.First(&gongdoccommandDB, c.Param("id")).Error; err != nil {
 		var returnError GenericError
 		returnError.Body.Code = http.StatusBadRequest
 		returnError.Body.Message = err.Error()
@@ -209,48 +150,12 @@ func GetGongdocCommand(c *gin.Context) {
 		return
 	}
 
-	// insertion point for fields value set from nullable fields
-	if gongdoccommand.Name_Data.Valid {
-		gongdoccommand.Name = gongdoccommand.Name_Data.String
-	}
+	var gongdoccommandAPI orm.GongdocCommandAPI
+	gongdoccommandAPI.ID = gongdoccommandDB.ID
+	gongdoccommandAPI.GongdocCommandPointersEnconding = gongdoccommandDB.GongdocCommandPointersEnconding
+	gongdoccommandDB.CopyBasicFieldsToGongdocCommand(&gongdoccommandAPI.GongdocCommand)
 
-	if gongdoccommand.Command_Data.Valid {
-		gongdoccommand.Command = models.GongdocCommandType(gongdoccommand.Command_Data.String)
-	}
-
-	if gongdoccommand.DiagramName_Data.Valid {
-		gongdoccommand.DiagramName = gongdoccommand.DiagramName_Data.String
-	}
-
-	if gongdoccommand.Date_Data.Valid {
-		gongdoccommand.Date = gongdoccommand.Date_Data.String
-	}
-
-	if gongdoccommand.GongdocNodeType_Data.Valid {
-		gongdoccommand.GongdocNodeType = models.GongdocNodeType(gongdoccommand.GongdocNodeType_Data.String)
-	}
-
-	if gongdoccommand.StructName_Data.Valid {
-		gongdoccommand.StructName = gongdoccommand.StructName_Data.String
-	}
-
-	if gongdoccommand.FieldName_Data.Valid {
-		gongdoccommand.FieldName = gongdoccommand.FieldName_Data.String
-	}
-
-	if gongdoccommand.FieldTypeName_Data.Valid {
-		gongdoccommand.FieldTypeName = gongdoccommand.FieldTypeName_Data.String
-	}
-
-	if gongdoccommand.PositionX_Data.Valid {
-		gongdoccommand.PositionX = int(gongdoccommand.PositionX_Data.Int64)
-	}
-
-	if gongdoccommand.PositionY_Data.Valid {
-		gongdoccommand.PositionY = int(gongdoccommand.PositionY_Data.Int64)
-	}
-
-	c.JSON(http.StatusOK, gongdoccommand)
+	c.JSON(http.StatusOK, gongdoccommandAPI)
 }
 
 // UpdateGongdocCommand
@@ -287,38 +192,10 @@ func UpdateGongdocCommand(c *gin.Context) {
 	}
 
 	// update
-	// insertion point for nullable field set
-	input.Name_Data.String = input.Name
-	input.Name_Data.Valid = true
+	gongdoccommandDB.CopyBasicFieldsFromGongdocCommand(&input.GongdocCommand)
+	gongdoccommandDB.GongdocCommandPointersEnconding = input.GongdocCommandPointersEnconding
 
-	input.Command_Data.String = string(input.Command)
-	input.Command_Data.Valid = true
-
-	input.DiagramName_Data.String = input.DiagramName
-	input.DiagramName_Data.Valid = true
-
-	input.Date_Data.String = input.Date
-	input.Date_Data.Valid = true
-
-	input.GongdocNodeType_Data.String = string(input.GongdocNodeType)
-	input.GongdocNodeType_Data.Valid = true
-
-	input.StructName_Data.String = input.StructName
-	input.StructName_Data.Valid = true
-
-	input.FieldName_Data.String = input.FieldName
-	input.FieldName_Data.Valid = true
-
-	input.FieldTypeName_Data.String = input.FieldTypeName
-	input.FieldTypeName_Data.Valid = true
-
-	input.PositionX_Data.Int64 = int64(input.PositionX)
-	input.PositionX_Data.Valid = true
-
-	input.PositionY_Data.Int64 = int64(input.PositionY)
-	input.PositionY_Data.Valid = true
-
-	query = db.Model(&gongdoccommandDB).Updates(input)
+	query = db.Model(&gongdoccommandDB).Updates(gongdoccommandDB)
 	if query.Error != nil {
 		var returnError GenericError
 		returnError.Body.Code = http.StatusBadRequest

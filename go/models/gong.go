@@ -13,33 +13,22 @@ var __member __void
 // swagger:ignore
 type StageStruct struct { // insertion point for definition of arrays registering instances
 	Classdiagrams map[*Classdiagram]struct{}
-
 	Classshapes map[*Classshape]struct{}
-
 	Fields map[*Field]struct{}
-
 	GongdocCommands map[*GongdocCommand]struct{}
-
 	GongdocStatuss map[*GongdocStatus]struct{}
-
 	Links map[*Link]struct{}
-
 	Pkgelts map[*Pkgelt]struct{}
-
 	Positions map[*Position]struct{}
-
 	States map[*State]struct{}
-
 	Umlscs map[*Umlsc]struct{}
-
 	Vertices map[*Vertice]struct{}
-
 	AllModelsStructCreateCallback AllModelsStructCreateInterface
 
 	AllModelsStructDeleteCallback AllModelsStructDeleteInterface
 
 	BackRepo BackRepoInterface
-	
+
 	// if set will be called before each commit to the back repo
 	OnInitCommitCallback OnInitCommitInterface
 }
@@ -51,6 +40,8 @@ type OnInitCommitInterface interface {
 type BackRepoInterface interface {
 	Commit(stage *StageStruct)
 	Checkout(stage *StageStruct)
+	Backup(stage *StageStruct, dirPath string)
+	Restore(stage *StageStruct, dirPath string)
 	// insertion point for Commit and Checkout signatures
 	CommitClassdiagram(classdiagram *Classdiagram)
 	CheckoutClassdiagram(classdiagram *Classdiagram)
@@ -80,27 +71,16 @@ type BackRepoInterface interface {
 // swagger:ignore instructs the gong compiler (gongc) to avoid this particular struct
 var Stage StageStruct = StageStruct{ // insertion point for array initiatialisation
 	Classdiagrams: make(map[*Classdiagram]struct{}, 0),
-
 	Classshapes: make(map[*Classshape]struct{}, 0),
-
 	Fields: make(map[*Field]struct{}, 0),
-
 	GongdocCommands: make(map[*GongdocCommand]struct{}, 0),
-
 	GongdocStatuss: make(map[*GongdocStatus]struct{}, 0),
-
 	Links: make(map[*Link]struct{}, 0),
-
 	Pkgelts: make(map[*Pkgelt]struct{}, 0),
-
 	Positions: make(map[*Position]struct{}, 0),
-
 	States: make(map[*State]struct{}, 0),
-
 	Umlscs: make(map[*Umlsc]struct{}, 0),
-
 	Vertices: make(map[*Vertice]struct{}, 0),
-
 }
 
 func (stage *StageStruct) Commit() {
@@ -112,6 +92,21 @@ func (stage *StageStruct) Commit() {
 func (stage *StageStruct) Checkout() {
 	if stage.BackRepo != nil {
 		stage.BackRepo.Checkout(stage)
+	}
+}
+
+// backup generates backup files in the dirPath
+func (stage *StageStruct) Backup(dirPath string) {
+	if stage.BackRepo != nil {
+		stage.BackRepo.Backup(stage, dirPath)
+	}
+}
+
+// Restore resets Stage & BackRepo and restores their content from the restore files in dirPath
+// Restore shall be performed only on a new database with rowids at 0 (otherwise, it will panic)
+func (stage *StageStruct) Restore(dirPath string) {
+	if stage.BackRepo != nil {
+		stage.BackRepo.Restore(stage, dirPath)
 	}
 }
 
@@ -160,61 +155,6 @@ func (classdiagram *Classdiagram) Checkout() *Classdiagram {
 	return classdiagram
 }
 
-//
-// Legacy, to be deleted
-//
-
-// StageCopy appends a copy of classdiagram to the model stage
-func (classdiagram *Classdiagram) StageCopy() *Classdiagram {
-	_classdiagram := new(Classdiagram)
-	*_classdiagram = *classdiagram
-	_classdiagram.Stage()
-	return _classdiagram
-}
-
-// StageAndCommit appends classdiagram to the model stage and commit to the orm repo
-func (classdiagram *Classdiagram) StageAndCommit() *Classdiagram {
-	classdiagram.Stage()
-	if Stage.AllModelsStructCreateCallback != nil {
-		Stage.AllModelsStructCreateCallback.CreateORMClassdiagram(classdiagram)
-	}
-	return classdiagram
-}
-
-// DeleteStageAndCommit appends classdiagram to the model stage and commit to the orm repo
-func (classdiagram *Classdiagram) DeleteStageAndCommit() *Classdiagram {
-	classdiagram.Unstage()
-	DeleteORMClassdiagram(classdiagram)
-	return classdiagram
-}
-
-// StageCopyAndCommit appends a copy of classdiagram to the model stage and commit to the orm repo
-func (classdiagram *Classdiagram) StageCopyAndCommit() *Classdiagram {
-	_classdiagram := new(Classdiagram)
-	*_classdiagram = *classdiagram
-	_classdiagram.Stage()
-	if Stage.AllModelsStructCreateCallback != nil {
-		Stage.AllModelsStructCreateCallback.CreateORMClassdiagram(classdiagram)
-	}
-	return _classdiagram
-}
-
-// CreateORMClassdiagram enables dynamic staging of a Classdiagram instance
-func CreateORMClassdiagram(classdiagram *Classdiagram) {
-	classdiagram.Stage()
-	if Stage.AllModelsStructCreateCallback != nil {
-		Stage.AllModelsStructCreateCallback.CreateORMClassdiagram(classdiagram)
-	}
-}
-
-// DeleteORMClassdiagram enables dynamic staging of a Classdiagram instance
-func DeleteORMClassdiagram(classdiagram *Classdiagram) {
-	classdiagram.Unstage()
-	if Stage.AllModelsStructDeleteCallback != nil {
-		Stage.AllModelsStructDeleteCallback.DeleteORMClassdiagram(classdiagram)
-	}
-}
-
 func (stage *StageStruct) getClassshapeOrderedStructWithNameField() []*Classshape {
 	// have alphabetical order generation
 	classshapeOrdered := []*Classshape{}
@@ -257,61 +197,6 @@ func (classshape *Classshape) Checkout() *Classshape {
 		}
 	}
 	return classshape
-}
-
-//
-// Legacy, to be deleted
-//
-
-// StageCopy appends a copy of classshape to the model stage
-func (classshape *Classshape) StageCopy() *Classshape {
-	_classshape := new(Classshape)
-	*_classshape = *classshape
-	_classshape.Stage()
-	return _classshape
-}
-
-// StageAndCommit appends classshape to the model stage and commit to the orm repo
-func (classshape *Classshape) StageAndCommit() *Classshape {
-	classshape.Stage()
-	if Stage.AllModelsStructCreateCallback != nil {
-		Stage.AllModelsStructCreateCallback.CreateORMClassshape(classshape)
-	}
-	return classshape
-}
-
-// DeleteStageAndCommit appends classshape to the model stage and commit to the orm repo
-func (classshape *Classshape) DeleteStageAndCommit() *Classshape {
-	classshape.Unstage()
-	DeleteORMClassshape(classshape)
-	return classshape
-}
-
-// StageCopyAndCommit appends a copy of classshape to the model stage and commit to the orm repo
-func (classshape *Classshape) StageCopyAndCommit() *Classshape {
-	_classshape := new(Classshape)
-	*_classshape = *classshape
-	_classshape.Stage()
-	if Stage.AllModelsStructCreateCallback != nil {
-		Stage.AllModelsStructCreateCallback.CreateORMClassshape(classshape)
-	}
-	return _classshape
-}
-
-// CreateORMClassshape enables dynamic staging of a Classshape instance
-func CreateORMClassshape(classshape *Classshape) {
-	classshape.Stage()
-	if Stage.AllModelsStructCreateCallback != nil {
-		Stage.AllModelsStructCreateCallback.CreateORMClassshape(classshape)
-	}
-}
-
-// DeleteORMClassshape enables dynamic staging of a Classshape instance
-func DeleteORMClassshape(classshape *Classshape) {
-	classshape.Unstage()
-	if Stage.AllModelsStructDeleteCallback != nil {
-		Stage.AllModelsStructDeleteCallback.DeleteORMClassshape(classshape)
-	}
 }
 
 func (stage *StageStruct) getFieldOrderedStructWithNameField() []*Field {
@@ -358,61 +243,6 @@ func (field *Field) Checkout() *Field {
 	return field
 }
 
-//
-// Legacy, to be deleted
-//
-
-// StageCopy appends a copy of field to the model stage
-func (field *Field) StageCopy() *Field {
-	_field := new(Field)
-	*_field = *field
-	_field.Stage()
-	return _field
-}
-
-// StageAndCommit appends field to the model stage and commit to the orm repo
-func (field *Field) StageAndCommit() *Field {
-	field.Stage()
-	if Stage.AllModelsStructCreateCallback != nil {
-		Stage.AllModelsStructCreateCallback.CreateORMField(field)
-	}
-	return field
-}
-
-// DeleteStageAndCommit appends field to the model stage and commit to the orm repo
-func (field *Field) DeleteStageAndCommit() *Field {
-	field.Unstage()
-	DeleteORMField(field)
-	return field
-}
-
-// StageCopyAndCommit appends a copy of field to the model stage and commit to the orm repo
-func (field *Field) StageCopyAndCommit() *Field {
-	_field := new(Field)
-	*_field = *field
-	_field.Stage()
-	if Stage.AllModelsStructCreateCallback != nil {
-		Stage.AllModelsStructCreateCallback.CreateORMField(field)
-	}
-	return _field
-}
-
-// CreateORMField enables dynamic staging of a Field instance
-func CreateORMField(field *Field) {
-	field.Stage()
-	if Stage.AllModelsStructCreateCallback != nil {
-		Stage.AllModelsStructCreateCallback.CreateORMField(field)
-	}
-}
-
-// DeleteORMField enables dynamic staging of a Field instance
-func DeleteORMField(field *Field) {
-	field.Unstage()
-	if Stage.AllModelsStructDeleteCallback != nil {
-		Stage.AllModelsStructDeleteCallback.DeleteORMField(field)
-	}
-}
-
 func (stage *StageStruct) getGongdocCommandOrderedStructWithNameField() []*GongdocCommand {
 	// have alphabetical order generation
 	gongdoccommandOrdered := []*GongdocCommand{}
@@ -455,61 +285,6 @@ func (gongdoccommand *GongdocCommand) Checkout() *GongdocCommand {
 		}
 	}
 	return gongdoccommand
-}
-
-//
-// Legacy, to be deleted
-//
-
-// StageCopy appends a copy of gongdoccommand to the model stage
-func (gongdoccommand *GongdocCommand) StageCopy() *GongdocCommand {
-	_gongdoccommand := new(GongdocCommand)
-	*_gongdoccommand = *gongdoccommand
-	_gongdoccommand.Stage()
-	return _gongdoccommand
-}
-
-// StageAndCommit appends gongdoccommand to the model stage and commit to the orm repo
-func (gongdoccommand *GongdocCommand) StageAndCommit() *GongdocCommand {
-	gongdoccommand.Stage()
-	if Stage.AllModelsStructCreateCallback != nil {
-		Stage.AllModelsStructCreateCallback.CreateORMGongdocCommand(gongdoccommand)
-	}
-	return gongdoccommand
-}
-
-// DeleteStageAndCommit appends gongdoccommand to the model stage and commit to the orm repo
-func (gongdoccommand *GongdocCommand) DeleteStageAndCommit() *GongdocCommand {
-	gongdoccommand.Unstage()
-	DeleteORMGongdocCommand(gongdoccommand)
-	return gongdoccommand
-}
-
-// StageCopyAndCommit appends a copy of gongdoccommand to the model stage and commit to the orm repo
-func (gongdoccommand *GongdocCommand) StageCopyAndCommit() *GongdocCommand {
-	_gongdoccommand := new(GongdocCommand)
-	*_gongdoccommand = *gongdoccommand
-	_gongdoccommand.Stage()
-	if Stage.AllModelsStructCreateCallback != nil {
-		Stage.AllModelsStructCreateCallback.CreateORMGongdocCommand(gongdoccommand)
-	}
-	return _gongdoccommand
-}
-
-// CreateORMGongdocCommand enables dynamic staging of a GongdocCommand instance
-func CreateORMGongdocCommand(gongdoccommand *GongdocCommand) {
-	gongdoccommand.Stage()
-	if Stage.AllModelsStructCreateCallback != nil {
-		Stage.AllModelsStructCreateCallback.CreateORMGongdocCommand(gongdoccommand)
-	}
-}
-
-// DeleteORMGongdocCommand enables dynamic staging of a GongdocCommand instance
-func DeleteORMGongdocCommand(gongdoccommand *GongdocCommand) {
-	gongdoccommand.Unstage()
-	if Stage.AllModelsStructDeleteCallback != nil {
-		Stage.AllModelsStructDeleteCallback.DeleteORMGongdocCommand(gongdoccommand)
-	}
 }
 
 func (stage *StageStruct) getGongdocStatusOrderedStructWithNameField() []*GongdocStatus {
@@ -556,61 +331,6 @@ func (gongdocstatus *GongdocStatus) Checkout() *GongdocStatus {
 	return gongdocstatus
 }
 
-//
-// Legacy, to be deleted
-//
-
-// StageCopy appends a copy of gongdocstatus to the model stage
-func (gongdocstatus *GongdocStatus) StageCopy() *GongdocStatus {
-	_gongdocstatus := new(GongdocStatus)
-	*_gongdocstatus = *gongdocstatus
-	_gongdocstatus.Stage()
-	return _gongdocstatus
-}
-
-// StageAndCommit appends gongdocstatus to the model stage and commit to the orm repo
-func (gongdocstatus *GongdocStatus) StageAndCommit() *GongdocStatus {
-	gongdocstatus.Stage()
-	if Stage.AllModelsStructCreateCallback != nil {
-		Stage.AllModelsStructCreateCallback.CreateORMGongdocStatus(gongdocstatus)
-	}
-	return gongdocstatus
-}
-
-// DeleteStageAndCommit appends gongdocstatus to the model stage and commit to the orm repo
-func (gongdocstatus *GongdocStatus) DeleteStageAndCommit() *GongdocStatus {
-	gongdocstatus.Unstage()
-	DeleteORMGongdocStatus(gongdocstatus)
-	return gongdocstatus
-}
-
-// StageCopyAndCommit appends a copy of gongdocstatus to the model stage and commit to the orm repo
-func (gongdocstatus *GongdocStatus) StageCopyAndCommit() *GongdocStatus {
-	_gongdocstatus := new(GongdocStatus)
-	*_gongdocstatus = *gongdocstatus
-	_gongdocstatus.Stage()
-	if Stage.AllModelsStructCreateCallback != nil {
-		Stage.AllModelsStructCreateCallback.CreateORMGongdocStatus(gongdocstatus)
-	}
-	return _gongdocstatus
-}
-
-// CreateORMGongdocStatus enables dynamic staging of a GongdocStatus instance
-func CreateORMGongdocStatus(gongdocstatus *GongdocStatus) {
-	gongdocstatus.Stage()
-	if Stage.AllModelsStructCreateCallback != nil {
-		Stage.AllModelsStructCreateCallback.CreateORMGongdocStatus(gongdocstatus)
-	}
-}
-
-// DeleteORMGongdocStatus enables dynamic staging of a GongdocStatus instance
-func DeleteORMGongdocStatus(gongdocstatus *GongdocStatus) {
-	gongdocstatus.Unstage()
-	if Stage.AllModelsStructDeleteCallback != nil {
-		Stage.AllModelsStructDeleteCallback.DeleteORMGongdocStatus(gongdocstatus)
-	}
-}
-
 func (stage *StageStruct) getLinkOrderedStructWithNameField() []*Link {
 	// have alphabetical order generation
 	linkOrdered := []*Link{}
@@ -653,61 +373,6 @@ func (link *Link) Checkout() *Link {
 		}
 	}
 	return link
-}
-
-//
-// Legacy, to be deleted
-//
-
-// StageCopy appends a copy of link to the model stage
-func (link *Link) StageCopy() *Link {
-	_link := new(Link)
-	*_link = *link
-	_link.Stage()
-	return _link
-}
-
-// StageAndCommit appends link to the model stage and commit to the orm repo
-func (link *Link) StageAndCommit() *Link {
-	link.Stage()
-	if Stage.AllModelsStructCreateCallback != nil {
-		Stage.AllModelsStructCreateCallback.CreateORMLink(link)
-	}
-	return link
-}
-
-// DeleteStageAndCommit appends link to the model stage and commit to the orm repo
-func (link *Link) DeleteStageAndCommit() *Link {
-	link.Unstage()
-	DeleteORMLink(link)
-	return link
-}
-
-// StageCopyAndCommit appends a copy of link to the model stage and commit to the orm repo
-func (link *Link) StageCopyAndCommit() *Link {
-	_link := new(Link)
-	*_link = *link
-	_link.Stage()
-	if Stage.AllModelsStructCreateCallback != nil {
-		Stage.AllModelsStructCreateCallback.CreateORMLink(link)
-	}
-	return _link
-}
-
-// CreateORMLink enables dynamic staging of a Link instance
-func CreateORMLink(link *Link) {
-	link.Stage()
-	if Stage.AllModelsStructCreateCallback != nil {
-		Stage.AllModelsStructCreateCallback.CreateORMLink(link)
-	}
-}
-
-// DeleteORMLink enables dynamic staging of a Link instance
-func DeleteORMLink(link *Link) {
-	link.Unstage()
-	if Stage.AllModelsStructDeleteCallback != nil {
-		Stage.AllModelsStructDeleteCallback.DeleteORMLink(link)
-	}
 }
 
 func (stage *StageStruct) getPkgeltOrderedStructWithNameField() []*Pkgelt {
@@ -754,61 +419,6 @@ func (pkgelt *Pkgelt) Checkout() *Pkgelt {
 	return pkgelt
 }
 
-//
-// Legacy, to be deleted
-//
-
-// StageCopy appends a copy of pkgelt to the model stage
-func (pkgelt *Pkgelt) StageCopy() *Pkgelt {
-	_pkgelt := new(Pkgelt)
-	*_pkgelt = *pkgelt
-	_pkgelt.Stage()
-	return _pkgelt
-}
-
-// StageAndCommit appends pkgelt to the model stage and commit to the orm repo
-func (pkgelt *Pkgelt) StageAndCommit() *Pkgelt {
-	pkgelt.Stage()
-	if Stage.AllModelsStructCreateCallback != nil {
-		Stage.AllModelsStructCreateCallback.CreateORMPkgelt(pkgelt)
-	}
-	return pkgelt
-}
-
-// DeleteStageAndCommit appends pkgelt to the model stage and commit to the orm repo
-func (pkgelt *Pkgelt) DeleteStageAndCommit() *Pkgelt {
-	pkgelt.Unstage()
-	DeleteORMPkgelt(pkgelt)
-	return pkgelt
-}
-
-// StageCopyAndCommit appends a copy of pkgelt to the model stage and commit to the orm repo
-func (pkgelt *Pkgelt) StageCopyAndCommit() *Pkgelt {
-	_pkgelt := new(Pkgelt)
-	*_pkgelt = *pkgelt
-	_pkgelt.Stage()
-	if Stage.AllModelsStructCreateCallback != nil {
-		Stage.AllModelsStructCreateCallback.CreateORMPkgelt(pkgelt)
-	}
-	return _pkgelt
-}
-
-// CreateORMPkgelt enables dynamic staging of a Pkgelt instance
-func CreateORMPkgelt(pkgelt *Pkgelt) {
-	pkgelt.Stage()
-	if Stage.AllModelsStructCreateCallback != nil {
-		Stage.AllModelsStructCreateCallback.CreateORMPkgelt(pkgelt)
-	}
-}
-
-// DeleteORMPkgelt enables dynamic staging of a Pkgelt instance
-func DeleteORMPkgelt(pkgelt *Pkgelt) {
-	pkgelt.Unstage()
-	if Stage.AllModelsStructDeleteCallback != nil {
-		Stage.AllModelsStructDeleteCallback.DeleteORMPkgelt(pkgelt)
-	}
-}
-
 func (stage *StageStruct) getPositionOrderedStructWithNameField() []*Position {
 	// have alphabetical order generation
 	positionOrdered := []*Position{}
@@ -851,61 +461,6 @@ func (position *Position) Checkout() *Position {
 		}
 	}
 	return position
-}
-
-//
-// Legacy, to be deleted
-//
-
-// StageCopy appends a copy of position to the model stage
-func (position *Position) StageCopy() *Position {
-	_position := new(Position)
-	*_position = *position
-	_position.Stage()
-	return _position
-}
-
-// StageAndCommit appends position to the model stage and commit to the orm repo
-func (position *Position) StageAndCommit() *Position {
-	position.Stage()
-	if Stage.AllModelsStructCreateCallback != nil {
-		Stage.AllModelsStructCreateCallback.CreateORMPosition(position)
-	}
-	return position
-}
-
-// DeleteStageAndCommit appends position to the model stage and commit to the orm repo
-func (position *Position) DeleteStageAndCommit() *Position {
-	position.Unstage()
-	DeleteORMPosition(position)
-	return position
-}
-
-// StageCopyAndCommit appends a copy of position to the model stage and commit to the orm repo
-func (position *Position) StageCopyAndCommit() *Position {
-	_position := new(Position)
-	*_position = *position
-	_position.Stage()
-	if Stage.AllModelsStructCreateCallback != nil {
-		Stage.AllModelsStructCreateCallback.CreateORMPosition(position)
-	}
-	return _position
-}
-
-// CreateORMPosition enables dynamic staging of a Position instance
-func CreateORMPosition(position *Position) {
-	position.Stage()
-	if Stage.AllModelsStructCreateCallback != nil {
-		Stage.AllModelsStructCreateCallback.CreateORMPosition(position)
-	}
-}
-
-// DeleteORMPosition enables dynamic staging of a Position instance
-func DeleteORMPosition(position *Position) {
-	position.Unstage()
-	if Stage.AllModelsStructDeleteCallback != nil {
-		Stage.AllModelsStructDeleteCallback.DeleteORMPosition(position)
-	}
 }
 
 func (stage *StageStruct) getStateOrderedStructWithNameField() []*State {
@@ -952,61 +507,6 @@ func (state *State) Checkout() *State {
 	return state
 }
 
-//
-// Legacy, to be deleted
-//
-
-// StageCopy appends a copy of state to the model stage
-func (state *State) StageCopy() *State {
-	_state := new(State)
-	*_state = *state
-	_state.Stage()
-	return _state
-}
-
-// StageAndCommit appends state to the model stage and commit to the orm repo
-func (state *State) StageAndCommit() *State {
-	state.Stage()
-	if Stage.AllModelsStructCreateCallback != nil {
-		Stage.AllModelsStructCreateCallback.CreateORMState(state)
-	}
-	return state
-}
-
-// DeleteStageAndCommit appends state to the model stage and commit to the orm repo
-func (state *State) DeleteStageAndCommit() *State {
-	state.Unstage()
-	DeleteORMState(state)
-	return state
-}
-
-// StageCopyAndCommit appends a copy of state to the model stage and commit to the orm repo
-func (state *State) StageCopyAndCommit() *State {
-	_state := new(State)
-	*_state = *state
-	_state.Stage()
-	if Stage.AllModelsStructCreateCallback != nil {
-		Stage.AllModelsStructCreateCallback.CreateORMState(state)
-	}
-	return _state
-}
-
-// CreateORMState enables dynamic staging of a State instance
-func CreateORMState(state *State) {
-	state.Stage()
-	if Stage.AllModelsStructCreateCallback != nil {
-		Stage.AllModelsStructCreateCallback.CreateORMState(state)
-	}
-}
-
-// DeleteORMState enables dynamic staging of a State instance
-func DeleteORMState(state *State) {
-	state.Unstage()
-	if Stage.AllModelsStructDeleteCallback != nil {
-		Stage.AllModelsStructDeleteCallback.DeleteORMState(state)
-	}
-}
-
 func (stage *StageStruct) getUmlscOrderedStructWithNameField() []*Umlsc {
 	// have alphabetical order generation
 	umlscOrdered := []*Umlsc{}
@@ -1051,61 +551,6 @@ func (umlsc *Umlsc) Checkout() *Umlsc {
 	return umlsc
 }
 
-//
-// Legacy, to be deleted
-//
-
-// StageCopy appends a copy of umlsc to the model stage
-func (umlsc *Umlsc) StageCopy() *Umlsc {
-	_umlsc := new(Umlsc)
-	*_umlsc = *umlsc
-	_umlsc.Stage()
-	return _umlsc
-}
-
-// StageAndCommit appends umlsc to the model stage and commit to the orm repo
-func (umlsc *Umlsc) StageAndCommit() *Umlsc {
-	umlsc.Stage()
-	if Stage.AllModelsStructCreateCallback != nil {
-		Stage.AllModelsStructCreateCallback.CreateORMUmlsc(umlsc)
-	}
-	return umlsc
-}
-
-// DeleteStageAndCommit appends umlsc to the model stage and commit to the orm repo
-func (umlsc *Umlsc) DeleteStageAndCommit() *Umlsc {
-	umlsc.Unstage()
-	DeleteORMUmlsc(umlsc)
-	return umlsc
-}
-
-// StageCopyAndCommit appends a copy of umlsc to the model stage and commit to the orm repo
-func (umlsc *Umlsc) StageCopyAndCommit() *Umlsc {
-	_umlsc := new(Umlsc)
-	*_umlsc = *umlsc
-	_umlsc.Stage()
-	if Stage.AllModelsStructCreateCallback != nil {
-		Stage.AllModelsStructCreateCallback.CreateORMUmlsc(umlsc)
-	}
-	return _umlsc
-}
-
-// CreateORMUmlsc enables dynamic staging of a Umlsc instance
-func CreateORMUmlsc(umlsc *Umlsc) {
-	umlsc.Stage()
-	if Stage.AllModelsStructCreateCallback != nil {
-		Stage.AllModelsStructCreateCallback.CreateORMUmlsc(umlsc)
-	}
-}
-
-// DeleteORMUmlsc enables dynamic staging of a Umlsc instance
-func DeleteORMUmlsc(umlsc *Umlsc) {
-	umlsc.Unstage()
-	if Stage.AllModelsStructDeleteCallback != nil {
-		Stage.AllModelsStructDeleteCallback.DeleteORMUmlsc(umlsc)
-	}
-}
-
 func (stage *StageStruct) getVerticeOrderedStructWithNameField() []*Vertice {
 	// have alphabetical order generation
 	verticeOrdered := []*Vertice{}
@@ -1148,61 +593,6 @@ func (vertice *Vertice) Checkout() *Vertice {
 		}
 	}
 	return vertice
-}
-
-//
-// Legacy, to be deleted
-//
-
-// StageCopy appends a copy of vertice to the model stage
-func (vertice *Vertice) StageCopy() *Vertice {
-	_vertice := new(Vertice)
-	*_vertice = *vertice
-	_vertice.Stage()
-	return _vertice
-}
-
-// StageAndCommit appends vertice to the model stage and commit to the orm repo
-func (vertice *Vertice) StageAndCommit() *Vertice {
-	vertice.Stage()
-	if Stage.AllModelsStructCreateCallback != nil {
-		Stage.AllModelsStructCreateCallback.CreateORMVertice(vertice)
-	}
-	return vertice
-}
-
-// DeleteStageAndCommit appends vertice to the model stage and commit to the orm repo
-func (vertice *Vertice) DeleteStageAndCommit() *Vertice {
-	vertice.Unstage()
-	DeleteORMVertice(vertice)
-	return vertice
-}
-
-// StageCopyAndCommit appends a copy of vertice to the model stage and commit to the orm repo
-func (vertice *Vertice) StageCopyAndCommit() *Vertice {
-	_vertice := new(Vertice)
-	*_vertice = *vertice
-	_vertice.Stage()
-	if Stage.AllModelsStructCreateCallback != nil {
-		Stage.AllModelsStructCreateCallback.CreateORMVertice(vertice)
-	}
-	return _vertice
-}
-
-// CreateORMVertice enables dynamic staging of a Vertice instance
-func CreateORMVertice(vertice *Vertice) {
-	vertice.Stage()
-	if Stage.AllModelsStructCreateCallback != nil {
-		Stage.AllModelsStructCreateCallback.CreateORMVertice(vertice)
-	}
-}
-
-// DeleteORMVertice enables dynamic staging of a Vertice instance
-func DeleteORMVertice(vertice *Vertice) {
-	vertice.Unstage()
-	if Stage.AllModelsStructDeleteCallback != nil {
-		Stage.AllModelsStructDeleteCallback.DeleteORMVertice(vertice)
-	}
 }
 
 // swagger:ignore

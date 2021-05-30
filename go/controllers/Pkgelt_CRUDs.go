@@ -49,8 +49,9 @@ type PkgeltInput struct {
 func GetPkgelts(c *gin.Context) {
 	db := c.MustGet("db").(*gorm.DB)
 
-	var pkgelts []orm.PkgeltDB
-	query := db.Find(&pkgelts)
+	// source slice
+	var pkgeltDBs []orm.PkgeltDB
+	query := db.Find(&pkgeltDBs)
 	if query.Error != nil {
 		var returnError GenericError
 		returnError.Body.Code = http.StatusBadRequest
@@ -59,22 +60,23 @@ func GetPkgelts(c *gin.Context) {
 		return
 	}
 
+	// slice that will be transmitted to the front
+	var pkgeltAPIs []orm.PkgeltAPI
+
 	// for each pkgelt, update fields from the database nullable fields
-	for idx := range pkgelts {
-		pkgelt := &pkgelts[idx]
-		_ = pkgelt
+	for idx := range pkgeltDBs {
+		pkgeltDB := &pkgeltDBs[idx]
+		_ = pkgeltDB
+		var pkgeltAPI orm.PkgeltAPI
+
 		// insertion point for updating fields
-		if pkgelt.Name_Data.Valid {
-			pkgelt.Name = pkgelt.Name_Data.String
-		}
-
-		if pkgelt.Path_Data.Valid {
-			pkgelt.Path = pkgelt.Path_Data.String
-		}
-
+		pkgeltAPI.ID = pkgeltDB.ID
+		pkgeltDB.CopyBasicFieldsToPkgelt(&pkgeltAPI.Pkgelt)
+		pkgeltAPI.PkgeltPointersEnconding = pkgeltDB.PkgeltPointersEnconding
+		pkgeltAPIs = append(pkgeltAPIs, pkgeltAPI)
 	}
 
-	c.JSON(http.StatusOK, pkgelts)
+	c.JSON(http.StatusOK, pkgeltAPIs)
 }
 
 // PostPkgelt
@@ -107,13 +109,8 @@ func PostPkgelt(c *gin.Context) {
 
 	// Create pkgelt
 	pkgeltDB := orm.PkgeltDB{}
-	pkgeltDB.PkgeltAPI = input
-	// insertion point for nullable field set
-	pkgeltDB.Name_Data.String = input.Name
-	pkgeltDB.Name_Data.Valid = true
-
-	pkgeltDB.Path_Data.String = input.Path
-	pkgeltDB.Path_Data.Valid = true
+	pkgeltDB.PkgeltPointersEnconding = input.PkgeltPointersEnconding
+	pkgeltDB.CopyBasicFieldsFromPkgelt(&input.Pkgelt)
 
 	query := db.Create(&pkgeltDB)
 	if query.Error != nil {
@@ -143,9 +140,9 @@ func PostPkgelt(c *gin.Context) {
 func GetPkgelt(c *gin.Context) {
 	db := c.MustGet("db").(*gorm.DB)
 
-	// Get pkgelt in DB
-	var pkgelt orm.PkgeltDB
-	if err := db.First(&pkgelt, c.Param("id")).Error; err != nil {
+	// Get pkgeltDB in DB
+	var pkgeltDB orm.PkgeltDB
+	if err := db.First(&pkgeltDB, c.Param("id")).Error; err != nil {
 		var returnError GenericError
 		returnError.Body.Code = http.StatusBadRequest
 		returnError.Body.Message = err.Error()
@@ -153,16 +150,12 @@ func GetPkgelt(c *gin.Context) {
 		return
 	}
 
-	// insertion point for fields value set from nullable fields
-	if pkgelt.Name_Data.Valid {
-		pkgelt.Name = pkgelt.Name_Data.String
-	}
+	var pkgeltAPI orm.PkgeltAPI
+	pkgeltAPI.ID = pkgeltDB.ID
+	pkgeltAPI.PkgeltPointersEnconding = pkgeltDB.PkgeltPointersEnconding
+	pkgeltDB.CopyBasicFieldsToPkgelt(&pkgeltAPI.Pkgelt)
 
-	if pkgelt.Path_Data.Valid {
-		pkgelt.Path = pkgelt.Path_Data.String
-	}
-
-	c.JSON(http.StatusOK, pkgelt)
+	c.JSON(http.StatusOK, pkgeltAPI)
 }
 
 // UpdatePkgelt
@@ -199,14 +192,10 @@ func UpdatePkgelt(c *gin.Context) {
 	}
 
 	// update
-	// insertion point for nullable field set
-	input.Name_Data.String = input.Name
-	input.Name_Data.Valid = true
+	pkgeltDB.CopyBasicFieldsFromPkgelt(&input.Pkgelt)
+	pkgeltDB.PkgeltPointersEnconding = input.PkgeltPointersEnconding
 
-	input.Path_Data.String = input.Path
-	input.Path_Data.Valid = true
-
-	query = db.Model(&pkgeltDB).Updates(input)
+	query = db.Model(&pkgeltDB).Updates(pkgeltDB)
 	if query.Error != nil {
 		var returnError GenericError
 		returnError.Body.Code = http.StatusBadRequest

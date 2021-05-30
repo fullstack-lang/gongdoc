@@ -49,8 +49,9 @@ type FieldInput struct {
 func GetFields(c *gin.Context) {
 	db := c.MustGet("db").(*gorm.DB)
 
-	var fields []orm.FieldDB
-	query := db.Find(&fields)
+	// source slice
+	var fieldDBs []orm.FieldDB
+	query := db.Find(&fieldDBs)
 	if query.Error != nil {
 		var returnError GenericError
 		returnError.Body.Code = http.StatusBadRequest
@@ -59,34 +60,23 @@ func GetFields(c *gin.Context) {
 		return
 	}
 
+	// slice that will be transmitted to the front
+	var fieldAPIs []orm.FieldAPI
+
 	// for each field, update fields from the database nullable fields
-	for idx := range fields {
-		field := &fields[idx]
-		_ = field
+	for idx := range fieldDBs {
+		fieldDB := &fieldDBs[idx]
+		_ = fieldDB
+		var fieldAPI orm.FieldAPI
+
 		// insertion point for updating fields
-		if field.Name_Data.Valid {
-			field.Name = field.Name_Data.String
-		}
-
-		if field.Fieldname_Data.Valid {
-			field.Fieldname = field.Fieldname_Data.String
-		}
-
-		if field.FieldTypeAsString_Data.Valid {
-			field.FieldTypeAsString = field.FieldTypeAsString_Data.String
-		}
-
-		if field.Structname_Data.Valid {
-			field.Structname = field.Structname_Data.String
-		}
-
-		if field.Fieldtypename_Data.Valid {
-			field.Fieldtypename = field.Fieldtypename_Data.String
-		}
-
+		fieldAPI.ID = fieldDB.ID
+		fieldDB.CopyBasicFieldsToField(&fieldAPI.Field)
+		fieldAPI.FieldPointersEnconding = fieldDB.FieldPointersEnconding
+		fieldAPIs = append(fieldAPIs, fieldAPI)
 	}
 
-	c.JSON(http.StatusOK, fields)
+	c.JSON(http.StatusOK, fieldAPIs)
 }
 
 // PostField
@@ -119,22 +109,8 @@ func PostField(c *gin.Context) {
 
 	// Create field
 	fieldDB := orm.FieldDB{}
-	fieldDB.FieldAPI = input
-	// insertion point for nullable field set
-	fieldDB.Name_Data.String = input.Name
-	fieldDB.Name_Data.Valid = true
-
-	fieldDB.Fieldname_Data.String = input.Fieldname
-	fieldDB.Fieldname_Data.Valid = true
-
-	fieldDB.FieldTypeAsString_Data.String = input.FieldTypeAsString
-	fieldDB.FieldTypeAsString_Data.Valid = true
-
-	fieldDB.Structname_Data.String = input.Structname
-	fieldDB.Structname_Data.Valid = true
-
-	fieldDB.Fieldtypename_Data.String = input.Fieldtypename
-	fieldDB.Fieldtypename_Data.Valid = true
+	fieldDB.FieldPointersEnconding = input.FieldPointersEnconding
+	fieldDB.CopyBasicFieldsFromField(&input.Field)
 
 	query := db.Create(&fieldDB)
 	if query.Error != nil {
@@ -164,9 +140,9 @@ func PostField(c *gin.Context) {
 func GetField(c *gin.Context) {
 	db := c.MustGet("db").(*gorm.DB)
 
-	// Get field in DB
-	var field orm.FieldDB
-	if err := db.First(&field, c.Param("id")).Error; err != nil {
+	// Get fieldDB in DB
+	var fieldDB orm.FieldDB
+	if err := db.First(&fieldDB, c.Param("id")).Error; err != nil {
 		var returnError GenericError
 		returnError.Body.Code = http.StatusBadRequest
 		returnError.Body.Message = err.Error()
@@ -174,28 +150,12 @@ func GetField(c *gin.Context) {
 		return
 	}
 
-	// insertion point for fields value set from nullable fields
-	if field.Name_Data.Valid {
-		field.Name = field.Name_Data.String
-	}
+	var fieldAPI orm.FieldAPI
+	fieldAPI.ID = fieldDB.ID
+	fieldAPI.FieldPointersEnconding = fieldDB.FieldPointersEnconding
+	fieldDB.CopyBasicFieldsToField(&fieldAPI.Field)
 
-	if field.Fieldname_Data.Valid {
-		field.Fieldname = field.Fieldname_Data.String
-	}
-
-	if field.FieldTypeAsString_Data.Valid {
-		field.FieldTypeAsString = field.FieldTypeAsString_Data.String
-	}
-
-	if field.Structname_Data.Valid {
-		field.Structname = field.Structname_Data.String
-	}
-
-	if field.Fieldtypename_Data.Valid {
-		field.Fieldtypename = field.Fieldtypename_Data.String
-	}
-
-	c.JSON(http.StatusOK, field)
+	c.JSON(http.StatusOK, fieldAPI)
 }
 
 // UpdateField
@@ -232,23 +192,10 @@ func UpdateField(c *gin.Context) {
 	}
 
 	// update
-	// insertion point for nullable field set
-	input.Name_Data.String = input.Name
-	input.Name_Data.Valid = true
+	fieldDB.CopyBasicFieldsFromField(&input.Field)
+	fieldDB.FieldPointersEnconding = input.FieldPointersEnconding
 
-	input.Fieldname_Data.String = input.Fieldname
-	input.Fieldname_Data.Valid = true
-
-	input.FieldTypeAsString_Data.String = input.FieldTypeAsString
-	input.FieldTypeAsString_Data.Valid = true
-
-	input.Structname_Data.String = input.Structname
-	input.Structname_Data.Valid = true
-
-	input.Fieldtypename_Data.String = input.Fieldtypename
-	input.Fieldtypename_Data.Valid = true
-
-	query = db.Model(&fieldDB).Updates(input)
+	query = db.Model(&fieldDB).Updates(fieldDB)
 	if query.Error != nil {
 		var returnError GenericError
 		returnError.Body.Code = http.StatusBadRequest

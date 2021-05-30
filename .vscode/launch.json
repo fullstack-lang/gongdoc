@@ -57,8 +57,6 @@
                 "maxStructFields": -1
             },
             "args": [
-                "-diagramPkgPath",
-                "go/tests/geometry/diagrams",
                 "-pkgPath",
                 "go/tests/geometry/models",
             ]

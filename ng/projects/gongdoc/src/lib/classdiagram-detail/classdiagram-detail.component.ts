@@ -63,8 +63,6 @@ export class ClassdiagramDetailComponent implements OnInit {
 		this.frontRepoService.pull().subscribe(
 			frontRepo => {
 				this.frontRepo = frontRepo
-				console.log("front repo ClassdiagramPull returned")
-
 				if (id != 0 && association == undefined) {
 					this.classdiagram = frontRepo.Classdiagrams.get(id)
 				} else {
@@ -94,6 +92,7 @@ export class ClassdiagramDetailComponent implements OnInit {
 				this.classdiagram.Pkgelt_ClassdiagramsDBID = new NullInt64
 				this.classdiagram.Pkgelt_ClassdiagramsDBID.Int64 = this.classdiagram.Pkgelt_Classdiagrams_reverse.ID
 				this.classdiagram.Pkgelt_ClassdiagramsDBID.Valid = true
+				this.classdiagram.Pkgelt_ClassdiagramsDBID_Index = new NullInt64
 				this.classdiagram.Pkgelt_ClassdiagramsDBID_Index.Valid = true
 				this.classdiagram.Pkgelt_Classdiagrams_reverse = undefined // very important, otherwise, circular JSON
 			}
@@ -104,8 +103,6 @@ export class ClassdiagramDetailComponent implements OnInit {
 			this.classdiagramService.updateClassdiagram(this.classdiagram)
 				.subscribe(classdiagram => {
 					this.classdiagramService.ClassdiagramServiceChanged.next("update")
-
-					console.log("classdiagram saved")
 				});
 		} else {
 			switch (association) {
@@ -114,6 +111,7 @@ export class ClassdiagramDetailComponent implements OnInit {
 					this.classdiagram.Pkgelt_ClassdiagramsDBID = new NullInt64
 					this.classdiagram.Pkgelt_ClassdiagramsDBID.Int64 = id
 					this.classdiagram.Pkgelt_ClassdiagramsDBID.Valid = true
+					this.classdiagram.Pkgelt_ClassdiagramsDBID_Index = new NullInt64
 					this.classdiagram.Pkgelt_ClassdiagramsDBID_Index.Valid = true
 					break
 			}
@@ -122,7 +120,6 @@ export class ClassdiagramDetailComponent implements OnInit {
 				this.classdiagramService.ClassdiagramServiceChanged.next("post")
 
 				this.classdiagram = {} // reset fields
-				console.log("classdiagram added")
 			});
 		}
 	}
@@ -151,7 +148,6 @@ export class ClassdiagramDetailComponent implements OnInit {
 		);
 
 		dialogRef.afterClosed().subscribe(result => {
-			console.log('The dialog was closed');
 		});
 	}
 
@@ -174,7 +170,6 @@ export class ClassdiagramDetailComponent implements OnInit {
 		);
 
 		dialogRef.afterClosed().subscribe(result => {
-			console.log('The dialog was closed');
 		});
 	}
 }

@@ -235,7 +235,7 @@ func (backRepoGongdocCommand *BackRepoGongdocCommandStruct) CommitPhaseTwoInstan
 
 		gongdoccommandDB.CopyBasicFieldsFromGongdocCommand(gongdoccommand)
 
-		// insertion point for fields commit
+		// insertion point for translating pointers encodings into actual pointers
 		query := backRepoGongdocCommand.db.Save(&gongdoccommandDB)
 		if query.Error != nil {
 			return query.Error
@@ -276,13 +276,10 @@ func (backRepoGongdocCommand *BackRepoGongdocCommandStruct) CheckoutPhaseOne() (
 // models version of the gongdoccommandDB
 func (backRepoGongdocCommand *BackRepoGongdocCommandStruct) CheckoutPhaseOneInstance(gongdoccommandDB *GongdocCommandDB) (Error error) {
 
-	// if absent, create entries in the backRepoGongdocCommand maps.
-	// var gongdoccommand models.GongdocCommand
-	// gongdoccommandDB.CopyBasicFieldsToGongdocCommand(&gongdoccommandWithNewFieldValues)
-
 	gongdoccommand, ok := (*backRepoGongdocCommand.Map_GongdocCommandDBID_GongdocCommandPtr)[gongdoccommandDB.ID]
 	if !ok {
 		gongdoccommand = new(models.GongdocCommand)
+
 		(*backRepoGongdocCommand.Map_GongdocCommandDBID_GongdocCommandPtr)[gongdoccommandDB.ID] = gongdoccommand
 		(*backRepoGongdocCommand.Map_GongdocCommandPtr_GongdocCommandDBID)[gongdoccommand] = gongdoccommandDB.ID
 
@@ -290,7 +287,12 @@ func (backRepoGongdocCommand *BackRepoGongdocCommandStruct) CheckoutPhaseOneInst
 		gongdoccommand.Stage()
 	}
 	gongdoccommandDB.CopyBasicFieldsToGongdocCommand(gongdoccommand)
-	(*backRepoGongdocCommand.Map_GongdocCommandDBID_GongdocCommandDB)[gongdoccommandDB.ID] = gongdoccommandDB
+
+	// preserve pointer to aclassDB. Otherwise, pointer will is recycled and the map of pointers
+	// Map_GongdocCommandDBID_GongdocCommandDB)[gongdoccommandDB hold variable pointers
+	gongdoccommandDB_Data := *gongdoccommandDB
+	preservedPtrToGongdocCommand := &gongdoccommandDB_Data
+	(*backRepoGongdocCommand.Map_GongdocCommandDBID_GongdocCommandDB)[gongdoccommandDB.ID] = preservedPtrToGongdocCommand
 
 	return
 }
@@ -442,6 +444,7 @@ func (backRepoGongdocCommand *BackRepoGongdocCommandStruct) Restore(dirPath stri
 	for _, gongdoccommandDB := range forRestore {
 
 		gongdoccommandDB_ID := gongdoccommandDB.ID
+		gongdoccommandDB.ID = 0
 		query := backRepoGongdocCommand.db.Create(gongdoccommandDB)
 		if query.Error != nil {
 			log.Panic(query.Error)

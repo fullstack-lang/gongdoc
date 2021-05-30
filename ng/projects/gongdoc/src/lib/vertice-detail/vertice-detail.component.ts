@@ -63,8 +63,6 @@ export class VerticeDetailComponent implements OnInit {
 		this.frontRepoService.pull().subscribe(
 			frontRepo => {
 				this.frontRepo = frontRepo
-				console.log("front repo VerticePull returned")
-
 				if (id != 0 && association == undefined) {
 					this.vertice = frontRepo.Vertices.get(id)
 				} else {
@@ -97,8 +95,6 @@ export class VerticeDetailComponent implements OnInit {
 			this.verticeService.updateVertice(this.vertice)
 				.subscribe(vertice => {
 					this.verticeService.VerticeServiceChanged.next("update")
-
-					console.log("vertice saved")
 				});
 		} else {
 			switch (association) {
@@ -109,7 +105,6 @@ export class VerticeDetailComponent implements OnInit {
 				this.verticeService.VerticeServiceChanged.next("post")
 
 				this.vertice = {} // reset fields
-				console.log("vertice added")
 			});
 		}
 	}
@@ -138,7 +133,6 @@ export class VerticeDetailComponent implements OnInit {
 		);
 
 		dialogRef.afterClosed().subscribe(result => {
-			console.log('The dialog was closed');
 		});
 	}
 
@@ -161,7 +155,6 @@ export class VerticeDetailComponent implements OnInit {
 		);
 
 		dialogRef.afterClosed().subscribe(result => {
-			console.log('The dialog was closed');
 		});
 	}
 }

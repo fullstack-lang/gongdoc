@@ -108,7 +108,6 @@ export class ClassshapesTableComponent implements OnInit {
     this.frontRepoService.pull().subscribe(
       frontRepo => {
         this.frontRepo = frontRepo
-        console.log("front repo pull returned")
 
         this.classshapes = this.frontRepo.Classshapes_array;
 
@@ -146,8 +145,6 @@ export class ClassshapesTableComponent implements OnInit {
     this.classshapeService.deleteClassshape(classshapeID).subscribe(
       classshape => {
         this.classshapeService.ClassshapeServiceChanged.next("delete")
-
-        console.log("classshape deleted")
       }
     );
   }
@@ -209,7 +206,6 @@ export class ClassshapesTableComponent implements OnInit {
     // from selection, set classshape that belong to classshape through Anarrayofb
     this.selection.selected.forEach(
       classshape => {
-        console.log("selection ID " + classshape.ID)
         let ID = +this.dialogData.ID
         classshape[this.dialogData.ReversePointer].Int64 = ID
         classshape[this.dialogData.ReversePointer].Valid = true
@@ -223,7 +219,6 @@ export class ClassshapesTableComponent implements OnInit {
         this.classshapeService.updateClassshape(classshape)
           .subscribe(classshape => {
             this.classshapeService.ClassshapeServiceChanged.next("update")
-            console.log("classshape saved")
           });
       }
     )

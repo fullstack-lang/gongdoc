@@ -100,7 +100,6 @@ export class VerticesTableComponent implements OnInit {
     this.frontRepoService.pull().subscribe(
       frontRepo => {
         this.frontRepo = frontRepo
-        console.log("front repo pull returned")
 
         this.vertices = this.frontRepo.Vertices_array;
 
@@ -138,8 +137,6 @@ export class VerticesTableComponent implements OnInit {
     this.verticeService.deleteVertice(verticeID).subscribe(
       vertice => {
         this.verticeService.VerticeServiceChanged.next("delete")
-
-        console.log("vertice deleted")
       }
     );
   }
@@ -201,7 +198,6 @@ export class VerticesTableComponent implements OnInit {
     // from selection, set vertice that belong to vertice through Anarrayofb
     this.selection.selected.forEach(
       vertice => {
-        console.log("selection ID " + vertice.ID)
         let ID = +this.dialogData.ID
         vertice[this.dialogData.ReversePointer].Int64 = ID
         vertice[this.dialogData.ReversePointer].Valid = true
@@ -215,7 +211,6 @@ export class VerticesTableComponent implements OnInit {
         this.verticeService.updateVertice(vertice)
           .subscribe(vertice => {
             this.verticeService.VerticeServiceChanged.next("update")
-            console.log("vertice saved")
           });
       }
     )

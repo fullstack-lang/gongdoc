@@ -98,7 +98,6 @@ export class PkgeltsTableComponent implements OnInit {
     this.frontRepoService.pull().subscribe(
       frontRepo => {
         this.frontRepo = frontRepo
-        console.log("front repo pull returned")
 
         this.pkgelts = this.frontRepo.Pkgelts_array;
 
@@ -136,8 +135,6 @@ export class PkgeltsTableComponent implements OnInit {
     this.pkgeltService.deletePkgelt(pkgeltID).subscribe(
       pkgelt => {
         this.pkgeltService.PkgeltServiceChanged.next("delete")
-
-        console.log("pkgelt deleted")
       }
     );
   }
@@ -199,7 +196,6 @@ export class PkgeltsTableComponent implements OnInit {
     // from selection, set pkgelt that belong to pkgelt through Anarrayofb
     this.selection.selected.forEach(
       pkgelt => {
-        console.log("selection ID " + pkgelt.ID)
         let ID = +this.dialogData.ID
         pkgelt[this.dialogData.ReversePointer].Int64 = ID
         pkgelt[this.dialogData.ReversePointer].Valid = true
@@ -213,7 +209,6 @@ export class PkgeltsTableComponent implements OnInit {
         this.pkgeltService.updatePkgelt(pkgelt)
           .subscribe(pkgelt => {
             this.pkgeltService.PkgeltServiceChanged.next("update")
-            console.log("pkgelt saved")
           });
       }
     )

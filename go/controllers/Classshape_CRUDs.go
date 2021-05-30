@@ -49,8 +49,9 @@ type ClassshapeInput struct {
 func GetClassshapes(c *gin.Context) {
 	db := c.MustGet("db").(*gorm.DB)
 
-	var classshapes []orm.ClassshapeDB
-	query := db.Find(&classshapes)
+	// source slice
+	var classshapeDBs []orm.ClassshapeDB
+	query := db.Find(&classshapeDBs)
 	if query.Error != nil {
 		var returnError GenericError
 		returnError.Body.Code = http.StatusBadRequest
@@ -59,34 +60,23 @@ func GetClassshapes(c *gin.Context) {
 		return
 	}
 
+	// slice that will be transmitted to the front
+	var classshapeAPIs []orm.ClassshapeAPI
+
 	// for each classshape, update fields from the database nullable fields
-	for idx := range classshapes {
-		classshape := &classshapes[idx]
-		_ = classshape
+	for idx := range classshapeDBs {
+		classshapeDB := &classshapeDBs[idx]
+		_ = classshapeDB
+		var classshapeAPI orm.ClassshapeAPI
+
 		// insertion point for updating fields
-		if classshape.Name_Data.Valid {
-			classshape.Name = classshape.Name_Data.String
-		}
-
-		if classshape.Structname_Data.Valid {
-			classshape.Structname = classshape.Structname_Data.String
-		}
-
-		if classshape.Width_Data.Valid {
-			classshape.Width = classshape.Width_Data.Float64
-		}
-
-		if classshape.Heigth_Data.Valid {
-			classshape.Heigth = classshape.Heigth_Data.Float64
-		}
-
-		if classshape.ClassshapeTargetType_Data.Valid {
-			classshape.ClassshapeTargetType = models.ClassshapeTargetType(classshape.ClassshapeTargetType_Data.String)
-		}
-
+		classshapeAPI.ID = classshapeDB.ID
+		classshapeDB.CopyBasicFieldsToClassshape(&classshapeAPI.Classshape)
+		classshapeAPI.ClassshapePointersEnconding = classshapeDB.ClassshapePointersEnconding
+		classshapeAPIs = append(classshapeAPIs, classshapeAPI)
 	}
 
-	c.JSON(http.StatusOK, classshapes)
+	c.JSON(http.StatusOK, classshapeAPIs)
 }
 
 // PostClassshape
@@ -119,22 +109,8 @@ func PostClassshape(c *gin.Context) {
 
 	// Create classshape
 	classshapeDB := orm.ClassshapeDB{}
-	classshapeDB.ClassshapeAPI = input
-	// insertion point for nullable field set
-	classshapeDB.Name_Data.String = input.Name
-	classshapeDB.Name_Data.Valid = true
-
-	classshapeDB.Structname_Data.String = input.Structname
-	classshapeDB.Structname_Data.Valid = true
-
-	classshapeDB.Width_Data.Float64 = input.Width
-	classshapeDB.Width_Data.Valid = true
-
-	classshapeDB.Heigth_Data.Float64 = input.Heigth
-	classshapeDB.Heigth_Data.Valid = true
-
-	classshapeDB.ClassshapeTargetType_Data.String = string(input.ClassshapeTargetType)
-	classshapeDB.ClassshapeTargetType_Data.Valid = true
+	classshapeDB.ClassshapePointersEnconding = input.ClassshapePointersEnconding
+	classshapeDB.CopyBasicFieldsFromClassshape(&input.Classshape)
 
 	query := db.Create(&classshapeDB)
 	if query.Error != nil {
@@ -164,9 +140,9 @@ func PostClassshape(c *gin.Context) {
 func GetClassshape(c *gin.Context) {
 	db := c.MustGet("db").(*gorm.DB)
 
-	// Get classshape in DB
-	var classshape orm.ClassshapeDB
-	if err := db.First(&classshape, c.Param("id")).Error; err != nil {
+	// Get classshapeDB in DB
+	var classshapeDB orm.ClassshapeDB
+	if err := db.First(&classshapeDB, c.Param("id")).Error; err != nil {
 		var returnError GenericError
 		returnError.Body.Code = http.StatusBadRequest
 		returnError.Body.Message = err.Error()
@@ -174,28 +150,12 @@ func GetClassshape(c *gin.Context) {
 		return
 	}
 
-	// insertion point for fields value set from nullable fields
-	if classshape.Name_Data.Valid {
-		classshape.Name = classshape.Name_Data.String
-	}
+	var classshapeAPI orm.ClassshapeAPI
+	classshapeAPI.ID = classshapeDB.ID
+	classshapeAPI.ClassshapePointersEnconding = classshapeDB.ClassshapePointersEnconding
+	classshapeDB.CopyBasicFieldsToClassshape(&classshapeAPI.Classshape)
 
-	if classshape.Structname_Data.Valid {
-		classshape.Structname = classshape.Structname_Data.String
-	}
-
-	if classshape.Width_Data.Valid {
-		classshape.Width = classshape.Width_Data.Float64
-	}
-
-	if classshape.Heigth_Data.Valid {
-		classshape.Heigth = classshape.Heigth_Data.Float64
-	}
-
-	if classshape.ClassshapeTargetType_Data.Valid {
-		classshape.ClassshapeTargetType = models.ClassshapeTargetType(classshape.ClassshapeTargetType_Data.String)
-	}
-
-	c.JSON(http.StatusOK, classshape)
+	c.JSON(http.StatusOK, classshapeAPI)
 }
 
 // UpdateClassshape
@@ -232,23 +192,10 @@ func UpdateClassshape(c *gin.Context) {
 	}
 
 	// update
-	// insertion point for nullable field set
-	input.Name_Data.String = input.Name
-	input.Name_Data.Valid = true
+	classshapeDB.CopyBasicFieldsFromClassshape(&input.Classshape)
+	classshapeDB.ClassshapePointersEnconding = input.ClassshapePointersEnconding
 
-	input.Structname_Data.String = input.Structname
-	input.Structname_Data.Valid = true
-
-	input.Width_Data.Float64 = input.Width
-	input.Width_Data.Valid = true
-
-	input.Heigth_Data.Float64 = input.Heigth
-	input.Heigth_Data.Valid = true
-
-	input.ClassshapeTargetType_Data.String = string(input.ClassshapeTargetType)
-	input.ClassshapeTargetType_Data.Valid = true
-
-	query = db.Model(&classshapeDB).Updates(input)
+	query = db.Model(&classshapeDB).Updates(classshapeDB)
 	if query.Error != nil {
 		var returnError GenericError
 		returnError.Body.Code = http.StatusBadRequest

@@ -49,8 +49,9 @@ type PositionInput struct {
 func GetPositions(c *gin.Context) {
 	db := c.MustGet("db").(*gorm.DB)
 
-	var positions []orm.PositionDB
-	query := db.Find(&positions)
+	// source slice
+	var positionDBs []orm.PositionDB
+	query := db.Find(&positionDBs)
 	if query.Error != nil {
 		var returnError GenericError
 		returnError.Body.Code = http.StatusBadRequest
@@ -59,26 +60,23 @@ func GetPositions(c *gin.Context) {
 		return
 	}
 
+	// slice that will be transmitted to the front
+	var positionAPIs []orm.PositionAPI
+
 	// for each position, update fields from the database nullable fields
-	for idx := range positions {
-		position := &positions[idx]
-		_ = position
+	for idx := range positionDBs {
+		positionDB := &positionDBs[idx]
+		_ = positionDB
+		var positionAPI orm.PositionAPI
+
 		// insertion point for updating fields
-		if position.X_Data.Valid {
-			position.X = position.X_Data.Float64
-		}
-
-		if position.Y_Data.Valid {
-			position.Y = position.Y_Data.Float64
-		}
-
-		if position.Name_Data.Valid {
-			position.Name = position.Name_Data.String
-		}
-
+		positionAPI.ID = positionDB.ID
+		positionDB.CopyBasicFieldsToPosition(&positionAPI.Position)
+		positionAPI.PositionPointersEnconding = positionDB.PositionPointersEnconding
+		positionAPIs = append(positionAPIs, positionAPI)
 	}
 
-	c.JSON(http.StatusOK, positions)
+	c.JSON(http.StatusOK, positionAPIs)
 }
 
 // PostPosition
@@ -111,16 +109,8 @@ func PostPosition(c *gin.Context) {
 
 	// Create position
 	positionDB := orm.PositionDB{}
-	positionDB.PositionAPI = input
-	// insertion point for nullable field set
-	positionDB.X_Data.Float64 = input.X
-	positionDB.X_Data.Valid = true
-
-	positionDB.Y_Data.Float64 = input.Y
-	positionDB.Y_Data.Valid = true
-
-	positionDB.Name_Data.String = input.Name
-	positionDB.Name_Data.Valid = true
+	positionDB.PositionPointersEnconding = input.PositionPointersEnconding
+	positionDB.CopyBasicFieldsFromPosition(&input.Position)
 
 	query := db.Create(&positionDB)
 	if query.Error != nil {
@@ -150,9 +140,9 @@ func PostPosition(c *gin.Context) {
 func GetPosition(c *gin.Context) {
 	db := c.MustGet("db").(*gorm.DB)
 
-	// Get position in DB
-	var position orm.PositionDB
-	if err := db.First(&position, c.Param("id")).Error; err != nil {
+	// Get positionDB in DB
+	var positionDB orm.PositionDB
+	if err := db.First(&positionDB, c.Param("id")).Error; err != nil {
 		var returnError GenericError
 		returnError.Body.Code = http.StatusBadRequest
 		returnError.Body.Message = err.Error()
@@ -160,20 +150,12 @@ func GetPosition(c *gin.Context) {
 		return
 	}
 
-	// insertion point for fields value set from nullable fields
-	if position.X_Data.Valid {
-		position.X = position.X_Data.Float64
-	}
+	var positionAPI orm.PositionAPI
+	positionAPI.ID = positionDB.ID
+	positionAPI.PositionPointersEnconding = positionDB.PositionPointersEnconding
+	positionDB.CopyBasicFieldsToPosition(&positionAPI.Position)
 
-	if position.Y_Data.Valid {
-		position.Y = position.Y_Data.Float64
-	}
-
-	if position.Name_Data.Valid {
-		position.Name = position.Name_Data.String
-	}
-
-	c.JSON(http.StatusOK, position)
+	c.JSON(http.StatusOK, positionAPI)
 }
 
 // UpdatePosition
@@ -210,17 +192,10 @@ func UpdatePosition(c *gin.Context) {
 	}
 
 	// update
-	// insertion point for nullable field set
-	input.X_Data.Float64 = input.X
-	input.X_Data.Valid = true
+	positionDB.CopyBasicFieldsFromPosition(&input.Position)
+	positionDB.PositionPointersEnconding = input.PositionPointersEnconding
 
-	input.Y_Data.Float64 = input.Y
-	input.Y_Data.Valid = true
-
-	input.Name_Data.String = input.Name
-	input.Name_Data.Valid = true
-
-	query = db.Model(&positionDB).Updates(input)
+	query = db.Model(&positionDB).Updates(positionDB)
 	if query.Error != nil {
 		var returnError GenericError
 		returnError.Body.Code = http.StatusBadRequest

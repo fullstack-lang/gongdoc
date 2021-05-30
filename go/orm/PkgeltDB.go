@@ -3,9 +3,13 @@ package orm
 
 import (
 	"database/sql"
+	"encoding/json"
 	"errors"
 	"fmt"
+	"io/ioutil"
 	"log"
+	"os"
+	"path/filepath"
 	"sort"
 	"time"
 
@@ -27,27 +31,38 @@ var dummy_Pkgelt_sort sort.Float64Slice
 //
 // swagger:model pkgeltAPI
 type PkgeltAPI struct {
+	gorm.Model
+
 	models.Pkgelt
 
-	// insertion for fields declaration
+	// encoding of pointers
+	PkgeltPointersEnconding
+}
+
+// PkgeltPointersEnconding encodes pointers to Struct and
+// reverse pointers of slice of poitners to Struct
+type PkgeltPointersEnconding struct {
+	// insertion for pointer fields encoding declaration
+}
+
+// PkgeltDB describes a pkgelt in the database
+//
+// It incorporates the GORM ID, basic fields from the model (because they can be serialized),
+// the encoded version of pointers
+//
+// swagger:model pkgeltDB
+type PkgeltDB struct {
+	gorm.Model
+
+	// insertion for basic fields declaration
 	// Declation for basic field pkgeltDB.Name {{BasicKind}} (to be completed)
 	Name_Data sql.NullString
 
 	// Declation for basic field pkgeltDB.Path {{BasicKind}} (to be completed)
 	Path_Data sql.NullString
 
-	// end of insertion
-}
-
-// PkgeltDB describes a pkgelt in the database
-//
-// It incorporates all fields : from the model, from the generated field for the API and the GORM ID
-//
-// swagger:model pkgeltDB
-type PkgeltDB struct {
-	gorm.Model
-
-	PkgeltAPI
+	// encoding of pointers
+	PkgeltPointersEnconding
 }
 
 // PkgeltDBs arrays pkgeltDBs
@@ -71,6 +86,13 @@ type BackRepoPkgeltStruct struct {
 	Map_PkgeltDBID_PkgeltPtr *map[uint]*models.Pkgelt
 
 	db *gorm.DB
+}
+
+// GetPkgeltDBFromPkgeltPtr is a handy function to access the back repo instance from the stage instance
+func (backRepoPkgelt *BackRepoPkgeltStruct) GetPkgeltDBFromPkgeltPtr(pkgelt *models.Pkgelt) (pkgeltDB *PkgeltDB) {
+	id := (*backRepoPkgelt.Map_PkgeltPtr_PkgeltDBID)[pkgelt]
+	pkgeltDB = (*backRepoPkgelt.Map_PkgeltDBID_PkgeltDB)[id]
+	return
 }
 
 // BackRepoPkgelt.Init set up the BackRepo of the Pkgelt
@@ -154,7 +176,7 @@ func (backRepoPkgelt *BackRepoPkgeltStruct) CommitPhaseOneInstance(pkgelt *model
 
 	// initiate pkgelt
 	var pkgeltDB PkgeltDB
-	pkgeltDB.Pkgelt = *pkgelt
+	pkgeltDB.CopyBasicFieldsFromPkgelt(pkgelt)
 
 	query := backRepoPkgelt.db.Create(&pkgeltDB)
 	if query.Error != nil {
@@ -187,51 +209,47 @@ func (backRepoPkgelt *BackRepoPkgeltStruct) CommitPhaseTwoInstance(backRepo *Bac
 	// fetch matching pkgeltDB
 	if pkgeltDB, ok := (*backRepoPkgelt.Map_PkgeltDBID_PkgeltDB)[idx]; ok {
 
-		{
-			{
-				// insertion point for fields commit
-				pkgeltDB.Name_Data.String = pkgelt.Name
-				pkgeltDB.Name_Data.Valid = true
+		pkgeltDB.CopyBasicFieldsFromPkgelt(pkgelt)
 
-				pkgeltDB.Path_Data.String = pkgelt.Path
-				pkgeltDB.Path_Data.Valid = true
+		// insertion point for translating pointers encodings into actual pointers
+		// This loop encodes the slice of pointers pkgelt.Classdiagrams into the back repo.
+		// Each back repo instance at the end of the association encode the ID of the association start
+		// into a dedicated field for coding the association. The back repo instance is then saved to the db
+		for idx, classdiagramAssocEnd := range pkgelt.Classdiagrams {
 
-				// commit a slice of pointer translates to update reverse pointer to Classdiagram, i.e.
-				index_Classdiagrams := 0
-				for _, classdiagram := range pkgelt.Classdiagrams {
-					if classdiagramDBID, ok := (*backRepo.BackRepoClassdiagram.Map_ClassdiagramPtr_ClassdiagramDBID)[classdiagram]; ok {
-						if classdiagramDB, ok := (*backRepo.BackRepoClassdiagram.Map_ClassdiagramDBID_ClassdiagramDB)[classdiagramDBID]; ok {
-							classdiagramDB.Pkgelt_ClassdiagramsDBID.Int64 = int64(pkgeltDB.ID)
-							classdiagramDB.Pkgelt_ClassdiagramsDBID.Valid = true
-							classdiagramDB.Pkgelt_ClassdiagramsDBID_Index.Int64 = int64(index_Classdiagrams)
-							index_Classdiagrams = index_Classdiagrams + 1
-							classdiagramDB.Pkgelt_ClassdiagramsDBID_Index.Valid = true
-							if q := backRepoPkgelt.db.Save(&classdiagramDB); q.Error != nil {
-								return q.Error
-							}
-						}
-					}
-				}
+			// get the back repo instance at the association end
+			classdiagramAssocEnd_DB :=
+				backRepo.BackRepoClassdiagram.GetClassdiagramDBFromClassdiagramPtr( classdiagramAssocEnd)
 
-				// commit a slice of pointer translates to update reverse pointer to Umlsc, i.e.
-				index_Umlscs := 0
-				for _, umlsc := range pkgelt.Umlscs {
-					if umlscDBID, ok := (*backRepo.BackRepoUmlsc.Map_UmlscPtr_UmlscDBID)[umlsc]; ok {
-						if umlscDB, ok := (*backRepo.BackRepoUmlsc.Map_UmlscDBID_UmlscDB)[umlscDBID]; ok {
-							umlscDB.Pkgelt_UmlscsDBID.Int64 = int64(pkgeltDB.ID)
-							umlscDB.Pkgelt_UmlscsDBID.Valid = true
-							umlscDB.Pkgelt_UmlscsDBID_Index.Int64 = int64(index_Umlscs)
-							index_Umlscs = index_Umlscs + 1
-							umlscDB.Pkgelt_UmlscsDBID_Index.Valid = true
-							if q := backRepoPkgelt.db.Save(&umlscDB); q.Error != nil {
-								return q.Error
-							}
-						}
-					}
-				}
-
+			// encode reverse pointer in the association end back repo instance
+			classdiagramAssocEnd_DB.Pkgelt_ClassdiagramsDBID.Int64 = int64(pkgeltDB.ID)
+			classdiagramAssocEnd_DB.Pkgelt_ClassdiagramsDBID.Valid = true
+			classdiagramAssocEnd_DB.Pkgelt_ClassdiagramsDBID_Index.Int64 = int64(idx)
+			classdiagramAssocEnd_DB.Pkgelt_ClassdiagramsDBID_Index.Valid = true
+			if q := backRepoPkgelt.db.Save(classdiagramAssocEnd_DB); q.Error != nil {
+				return q.Error
 			}
 		}
+
+		// This loop encodes the slice of pointers pkgelt.Umlscs into the back repo.
+		// Each back repo instance at the end of the association encode the ID of the association start
+		// into a dedicated field for coding the association. The back repo instance is then saved to the db
+		for idx, umlscAssocEnd := range pkgelt.Umlscs {
+
+			// get the back repo instance at the association end
+			umlscAssocEnd_DB :=
+				backRepo.BackRepoUmlsc.GetUmlscDBFromUmlscPtr( umlscAssocEnd)
+
+			// encode reverse pointer in the association end back repo instance
+			umlscAssocEnd_DB.Pkgelt_UmlscsDBID.Int64 = int64(pkgeltDB.ID)
+			umlscAssocEnd_DB.Pkgelt_UmlscsDBID.Valid = true
+			umlscAssocEnd_DB.Pkgelt_UmlscsDBID_Index.Int64 = int64(idx)
+			umlscAssocEnd_DB.Pkgelt_UmlscsDBID_Index.Valid = true
+			if q := backRepoPkgelt.db.Save(umlscAssocEnd_DB); q.Error != nil {
+				return q.Error
+			}
+		}
+
 		query := backRepoPkgelt.db.Save(&pkgeltDB)
 		if query.Error != nil {
 			return query.Error
@@ -272,18 +290,23 @@ func (backRepoPkgelt *BackRepoPkgeltStruct) CheckoutPhaseOne() (Error error) {
 // models version of the pkgeltDB
 func (backRepoPkgelt *BackRepoPkgeltStruct) CheckoutPhaseOneInstance(pkgeltDB *PkgeltDB) (Error error) {
 
-	// if absent, create entries in the backRepoPkgelt maps.
-	pkgeltWithNewFieldValues := pkgeltDB.Pkgelt
-	if _, ok := (*backRepoPkgelt.Map_PkgeltDBID_PkgeltPtr)[pkgeltDB.ID]; !ok {
+	pkgelt, ok := (*backRepoPkgelt.Map_PkgeltDBID_PkgeltPtr)[pkgeltDB.ID]
+	if !ok {
+		pkgelt = new(models.Pkgelt)
 
-		(*backRepoPkgelt.Map_PkgeltDBID_PkgeltPtr)[pkgeltDB.ID] = &pkgeltWithNewFieldValues
-		(*backRepoPkgelt.Map_PkgeltPtr_PkgeltDBID)[&pkgeltWithNewFieldValues] = pkgeltDB.ID
+		(*backRepoPkgelt.Map_PkgeltDBID_PkgeltPtr)[pkgeltDB.ID] = pkgelt
+		(*backRepoPkgelt.Map_PkgeltPtr_PkgeltDBID)[pkgelt] = pkgeltDB.ID
 
 		// append model store with the new element
-		pkgeltWithNewFieldValues.Stage()
+		pkgelt.Stage()
 	}
-	pkgeltDBWithNewFieldValues := *pkgeltDB
-	(*backRepoPkgelt.Map_PkgeltDBID_PkgeltDB)[pkgeltDB.ID] = &pkgeltDBWithNewFieldValues
+	pkgeltDB.CopyBasicFieldsToPkgelt(pkgelt)
+
+	// preserve pointer to aclassDB. Otherwise, pointer will is recycled and the map of pointers
+	// Map_PkgeltDBID_PkgeltDB)[pkgeltDB hold variable pointers
+	pkgeltDB_Data := *pkgeltDB
+	preservedPtrToPkgelt := &pkgeltDB_Data
+	(*backRepoPkgelt.Map_PkgeltDBID_PkgeltDB)[pkgeltDB.ID] = preservedPtrToPkgelt
 
 	return
 }
@@ -305,58 +328,62 @@ func (backRepoPkgelt *BackRepoPkgeltStruct) CheckoutPhaseTwoInstance(backRepo *B
 
 	pkgelt := (*backRepoPkgelt.Map_PkgeltDBID_PkgeltPtr)[pkgeltDB.ID]
 	_ = pkgelt // sometimes, there is no code generated. This lines voids the "unused variable" compilation error
-	{
-		{
-			// insertion point for checkout, i.e. update of fields of stage instance from fields of back repo instances
-			//
-			pkgelt.Name = pkgeltDB.Name_Data.String
 
-			pkgelt.Path = pkgeltDB.Path_Data.String
-
-			// parse all ClassdiagramDB and redeem the array of poiners to Pkgelt
-			// first reset the slice
-			pkgelt.Classdiagrams = pkgelt.Classdiagrams[:0]
-			for _, ClassdiagramDB := range *backRepo.BackRepoClassdiagram.Map_ClassdiagramDBID_ClassdiagramDB {
-				if ClassdiagramDB.Pkgelt_ClassdiagramsDBID.Int64 == int64(pkgeltDB.ID) {
-					Classdiagram := (*backRepo.BackRepoClassdiagram.Map_ClassdiagramDBID_ClassdiagramPtr)[ClassdiagramDB.ID]
-					pkgelt.Classdiagrams = append(pkgelt.Classdiagrams, Classdiagram)
-				}
-			}
-			
-			// sort the array according to the order
-			sort.Slice(pkgelt.Classdiagrams, func(i, j int) bool {
-				classdiagramDB_i_ID := (*backRepo.BackRepoClassdiagram.Map_ClassdiagramPtr_ClassdiagramDBID)[pkgelt.Classdiagrams[i]]
-				classdiagramDB_j_ID := (*backRepo.BackRepoClassdiagram.Map_ClassdiagramPtr_ClassdiagramDBID)[pkgelt.Classdiagrams[j]]
-
-				classdiagramDB_i := (*backRepo.BackRepoClassdiagram.Map_ClassdiagramDBID_ClassdiagramDB)[classdiagramDB_i_ID]
-				classdiagramDB_j := (*backRepo.BackRepoClassdiagram.Map_ClassdiagramDBID_ClassdiagramDB)[classdiagramDB_j_ID]
-
-				return classdiagramDB_i.Pkgelt_ClassdiagramsDBID_Index.Int64 < classdiagramDB_j.Pkgelt_ClassdiagramsDBID_Index.Int64
-			})
-
-			// parse all UmlscDB and redeem the array of poiners to Pkgelt
-			// first reset the slice
-			pkgelt.Umlscs = pkgelt.Umlscs[:0]
-			for _, UmlscDB := range *backRepo.BackRepoUmlsc.Map_UmlscDBID_UmlscDB {
-				if UmlscDB.Pkgelt_UmlscsDBID.Int64 == int64(pkgeltDB.ID) {
-					Umlsc := (*backRepo.BackRepoUmlsc.Map_UmlscDBID_UmlscPtr)[UmlscDB.ID]
-					pkgelt.Umlscs = append(pkgelt.Umlscs, Umlsc)
-				}
-			}
-			
-			// sort the array according to the order
-			sort.Slice(pkgelt.Umlscs, func(i, j int) bool {
-				umlscDB_i_ID := (*backRepo.BackRepoUmlsc.Map_UmlscPtr_UmlscDBID)[pkgelt.Umlscs[i]]
-				umlscDB_j_ID := (*backRepo.BackRepoUmlsc.Map_UmlscPtr_UmlscDBID)[pkgelt.Umlscs[j]]
-
-				umlscDB_i := (*backRepo.BackRepoUmlsc.Map_UmlscDBID_UmlscDB)[umlscDB_i_ID]
-				umlscDB_j := (*backRepo.BackRepoUmlsc.Map_UmlscDBID_UmlscDB)[umlscDB_j_ID]
-
-				return umlscDB_i.Pkgelt_UmlscsDBID_Index.Int64 < umlscDB_j.Pkgelt_UmlscsDBID_Index.Int64
-			})
-
+	// insertion point for checkout of pointer encoding
+	// This loop redeem pkgelt.Classdiagrams in the stage from the encode in the back repo
+	// It parses all ClassdiagramDB in the back repo and if the reverse pointer encoding matches the back repo ID
+	// it appends the stage instance
+	// 1. reset the slice
+	pkgelt.Classdiagrams = pkgelt.Classdiagrams[:0]
+	// 2. loop all instances in the type in the association end
+	for _, classdiagramDB_AssocEnd := range *backRepo.BackRepoClassdiagram.Map_ClassdiagramDBID_ClassdiagramDB {
+		// 3. Does the ID encoding at the end and the ID at the start matches ?
+		if classdiagramDB_AssocEnd.Pkgelt_ClassdiagramsDBID.Int64 == int64(pkgeltDB.ID) {
+			// 4. fetch the associated instance in the stage
+			classdiagram_AssocEnd := (*backRepo.BackRepoClassdiagram.Map_ClassdiagramDBID_ClassdiagramPtr)[classdiagramDB_AssocEnd.ID]
+			// 5. append it the association slice
+			pkgelt.Classdiagrams = append(pkgelt.Classdiagrams, classdiagram_AssocEnd)
 		}
 	}
+
+	// sort the array according to the order
+	sort.Slice(pkgelt.Classdiagrams, func(i, j int) bool {
+		classdiagramDB_i_ID := (*backRepo.BackRepoClassdiagram.Map_ClassdiagramPtr_ClassdiagramDBID)[pkgelt.Classdiagrams[i]]
+		classdiagramDB_j_ID := (*backRepo.BackRepoClassdiagram.Map_ClassdiagramPtr_ClassdiagramDBID)[pkgelt.Classdiagrams[j]]
+
+		classdiagramDB_i := (*backRepo.BackRepoClassdiagram.Map_ClassdiagramDBID_ClassdiagramDB)[classdiagramDB_i_ID]
+		classdiagramDB_j := (*backRepo.BackRepoClassdiagram.Map_ClassdiagramDBID_ClassdiagramDB)[classdiagramDB_j_ID]
+
+		return classdiagramDB_i.Pkgelt_ClassdiagramsDBID_Index.Int64 < classdiagramDB_j.Pkgelt_ClassdiagramsDBID_Index.Int64
+	})
+
+	// This loop redeem pkgelt.Umlscs in the stage from the encode in the back repo
+	// It parses all UmlscDB in the back repo and if the reverse pointer encoding matches the back repo ID
+	// it appends the stage instance
+	// 1. reset the slice
+	pkgelt.Umlscs = pkgelt.Umlscs[:0]
+	// 2. loop all instances in the type in the association end
+	for _, umlscDB_AssocEnd := range *backRepo.BackRepoUmlsc.Map_UmlscDBID_UmlscDB {
+		// 3. Does the ID encoding at the end and the ID at the start matches ?
+		if umlscDB_AssocEnd.Pkgelt_UmlscsDBID.Int64 == int64(pkgeltDB.ID) {
+			// 4. fetch the associated instance in the stage
+			umlsc_AssocEnd := (*backRepo.BackRepoUmlsc.Map_UmlscDBID_UmlscPtr)[umlscDB_AssocEnd.ID]
+			// 5. append it the association slice
+			pkgelt.Umlscs = append(pkgelt.Umlscs, umlsc_AssocEnd)
+		}
+	}
+
+	// sort the array according to the order
+	sort.Slice(pkgelt.Umlscs, func(i, j int) bool {
+		umlscDB_i_ID := (*backRepo.BackRepoUmlsc.Map_UmlscPtr_UmlscDBID)[pkgelt.Umlscs[i]]
+		umlscDB_j_ID := (*backRepo.BackRepoUmlsc.Map_UmlscPtr_UmlscDBID)[pkgelt.Umlscs[j]]
+
+		umlscDB_i := (*backRepo.BackRepoUmlsc.Map_UmlscDBID_UmlscDB)[umlscDB_i_ID]
+		umlscDB_j := (*backRepo.BackRepoUmlsc.Map_UmlscDBID_UmlscDB)[umlscDB_j_ID]
+
+		return umlscDB_i.Pkgelt_UmlscsDBID_Index.Int64 < umlscDB_j.Pkgelt_UmlscsDBID_Index.Int64
+	})
+
 	return
 }
 
@@ -383,5 +410,88 @@ func (backRepo *BackRepoStruct) CheckoutPkgelt(pkgelt *models.Pkgelt) {
 			backRepo.BackRepoPkgelt.CheckoutPhaseOneInstance(&pkgeltDB)
 			backRepo.BackRepoPkgelt.CheckoutPhaseTwoInstance(backRepo, &pkgeltDB)
 		}
+	}
+}
+
+// CopyBasicFieldsToPkgeltDB is used to copy basic fields between the Stage or the CRUD to the back repo
+func (pkgeltDB *PkgeltDB) CopyBasicFieldsFromPkgelt(pkgelt *models.Pkgelt) {
+	// insertion point for fields commit
+	pkgeltDB.Name_Data.String = pkgelt.Name
+	pkgeltDB.Name_Data.Valid = true
+
+	pkgeltDB.Path_Data.String = pkgelt.Path
+	pkgeltDB.Path_Data.Valid = true
+
+}
+
+// CopyBasicFieldsToPkgeltDB is used to copy basic fields between the Stage or the CRUD to the back repo
+func (pkgeltDB *PkgeltDB) CopyBasicFieldsToPkgelt(pkgelt *models.Pkgelt) {
+
+	// insertion point for checkout of basic fields (back repo to stage)
+	pkgelt.Name = pkgeltDB.Name_Data.String
+	pkgelt.Path = pkgeltDB.Path_Data.String
+}
+
+// Backup generates a json file from a slice of all PkgeltDB instances in the backrepo
+func (backRepoPkgelt *BackRepoPkgeltStruct) Backup(dirPath string) {
+
+	filename := filepath.Join(dirPath, "PkgeltDB.json")
+
+	// organize the map into an array with increasing IDs, in order to have repoductible
+	// backup file
+	var forBackup []*PkgeltDB
+	for _, pkgeltDB := range *backRepoPkgelt.Map_PkgeltDBID_PkgeltDB {
+		forBackup = append(forBackup, pkgeltDB)
+	}
+
+	sort.Slice(forBackup[:], func(i, j int) bool {
+		return forBackup[i].ID < forBackup[j].ID
+	})
+
+	file, err := json.MarshalIndent(forBackup, "", " ")
+
+	if err != nil {
+		log.Panic("Cannot json Pkgelt ", filename, " ", err.Error())
+	}
+
+	err = ioutil.WriteFile(filename, file, 0644)
+	if err != nil {
+		log.Panic("Cannot write the json Pkgelt file", err.Error())
+	}
+}
+
+func (backRepoPkgelt *BackRepoPkgeltStruct) Restore(dirPath string) {
+
+	filename := filepath.Join(dirPath, "PkgeltDB.json")
+	jsonFile, err := os.Open(filename)
+	// if we os.Open returns an error then handle it
+	if err != nil {
+		log.Panic("Cannot restore/open the json Pkgelt file", filename, " ", err.Error())
+	}
+
+	// read our opened jsonFile as a byte array.
+	byteValue, _ := ioutil.ReadAll(jsonFile)
+
+	var forRestore []*PkgeltDB
+
+	err = json.Unmarshal(byteValue, &forRestore)
+
+	// fill up Map_PkgeltDBID_PkgeltDB
+	for _, pkgeltDB := range forRestore {
+
+		pkgeltDB_ID := pkgeltDB.ID
+		pkgeltDB.ID = 0
+		query := backRepoPkgelt.db.Create(pkgeltDB)
+		if query.Error != nil {
+			log.Panic(query.Error)
+		}
+		if pkgeltDB_ID != pkgeltDB.ID {
+			log.Panicf("ID of Pkgelt restore ID %d, name %s, has wrong ID %d in DB after create",
+				pkgeltDB_ID, pkgeltDB.Name_Data.String, pkgeltDB.ID)
+		}
+	}
+
+	if err != nil {
+		log.Panic("Cannot restore/unmarshall json Pkgelt file", err.Error())
 	}
 }

@@ -63,8 +63,6 @@ export class UmlscDetailComponent implements OnInit {
 		this.frontRepoService.pull().subscribe(
 			frontRepo => {
 				this.frontRepo = frontRepo
-				console.log("front repo UmlscPull returned")
-
 				if (id != 0 && association == undefined) {
 					this.umlsc = frontRepo.Umlscs.get(id)
 				} else {
@@ -94,6 +92,7 @@ export class UmlscDetailComponent implements OnInit {
 				this.umlsc.Pkgelt_UmlscsDBID = new NullInt64
 				this.umlsc.Pkgelt_UmlscsDBID.Int64 = this.umlsc.Pkgelt_Umlscs_reverse.ID
 				this.umlsc.Pkgelt_UmlscsDBID.Valid = true
+				this.umlsc.Pkgelt_UmlscsDBID_Index = new NullInt64
 				this.umlsc.Pkgelt_UmlscsDBID_Index.Valid = true
 				this.umlsc.Pkgelt_Umlscs_reverse = undefined // very important, otherwise, circular JSON
 			}
@@ -104,8 +103,6 @@ export class UmlscDetailComponent implements OnInit {
 			this.umlscService.updateUmlsc(this.umlsc)
 				.subscribe(umlsc => {
 					this.umlscService.UmlscServiceChanged.next("update")
-
-					console.log("umlsc saved")
 				});
 		} else {
 			switch (association) {
@@ -114,6 +111,7 @@ export class UmlscDetailComponent implements OnInit {
 					this.umlsc.Pkgelt_UmlscsDBID = new NullInt64
 					this.umlsc.Pkgelt_UmlscsDBID.Int64 = id
 					this.umlsc.Pkgelt_UmlscsDBID.Valid = true
+					this.umlsc.Pkgelt_UmlscsDBID_Index = new NullInt64
 					this.umlsc.Pkgelt_UmlscsDBID_Index.Valid = true
 					break
 			}
@@ -122,7 +120,6 @@ export class UmlscDetailComponent implements OnInit {
 				this.umlscService.UmlscServiceChanged.next("post")
 
 				this.umlsc = {} // reset fields
-				console.log("umlsc added")
 			});
 		}
 	}
@@ -151,7 +148,6 @@ export class UmlscDetailComponent implements OnInit {
 		);
 
 		dialogRef.afterClosed().subscribe(result => {
-			console.log('The dialog was closed');
 		});
 	}
 
@@ -174,7 +170,6 @@ export class UmlscDetailComponent implements OnInit {
 		);
 
 		dialogRef.afterClosed().subscribe(result => {
-			console.log('The dialog was closed');
 		});
 	}
 }

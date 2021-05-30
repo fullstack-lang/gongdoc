@@ -1069,7 +1069,6 @@ export class SidebarComponent implements OnInit {
   }
 
   setEditorSpecialRouterOutlet( node: GongFlatNode) {
-    console.log("setEditorSpecialRouterOutlet " + node)
     this.router.navigate([{
       outlets: {
         editor: [node.associatedStructName.toLowerCase() + "-adder", node.id, node.structName + "_" + node.name]

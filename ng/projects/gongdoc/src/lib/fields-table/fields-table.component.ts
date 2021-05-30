@@ -106,7 +106,6 @@ export class FieldsTableComponent implements OnInit {
     this.frontRepoService.pull().subscribe(
       frontRepo => {
         this.frontRepo = frontRepo
-        console.log("front repo pull returned")
 
         this.fields = this.frontRepo.Fields_array;
 
@@ -144,8 +143,6 @@ export class FieldsTableComponent implements OnInit {
     this.fieldService.deleteField(fieldID).subscribe(
       field => {
         this.fieldService.FieldServiceChanged.next("delete")
-
-        console.log("field deleted")
       }
     );
   }
@@ -207,7 +204,6 @@ export class FieldsTableComponent implements OnInit {
     // from selection, set field that belong to field through Anarrayofb
     this.selection.selected.forEach(
       field => {
-        console.log("selection ID " + field.ID)
         let ID = +this.dialogData.ID
         field[this.dialogData.ReversePointer].Int64 = ID
         field[this.dialogData.ReversePointer].Valid = true
@@ -221,7 +217,6 @@ export class FieldsTableComponent implements OnInit {
         this.fieldService.updateField(field)
           .subscribe(field => {
             this.fieldService.FieldServiceChanged.next("update")
-            console.log("field saved")
           });
       }
     )

@@ -49,8 +49,9 @@ type UmlscInput struct {
 func GetUmlscs(c *gin.Context) {
 	db := c.MustGet("db").(*gorm.DB)
 
-	var umlscs []orm.UmlscDB
-	query := db.Find(&umlscs)
+	// source slice
+	var umlscDBs []orm.UmlscDB
+	query := db.Find(&umlscDBs)
 	if query.Error != nil {
 		var returnError GenericError
 		returnError.Body.Code = http.StatusBadRequest
@@ -59,22 +60,23 @@ func GetUmlscs(c *gin.Context) {
 		return
 	}
 
+	// slice that will be transmitted to the front
+	var umlscAPIs []orm.UmlscAPI
+
 	// for each umlsc, update fields from the database nullable fields
-	for idx := range umlscs {
-		umlsc := &umlscs[idx]
-		_ = umlsc
+	for idx := range umlscDBs {
+		umlscDB := &umlscDBs[idx]
+		_ = umlscDB
+		var umlscAPI orm.UmlscAPI
+
 		// insertion point for updating fields
-		if umlsc.Name_Data.Valid {
-			umlsc.Name = umlsc.Name_Data.String
-		}
-
-		if umlsc.Activestate_Data.Valid {
-			umlsc.Activestate = umlsc.Activestate_Data.String
-		}
-
+		umlscAPI.ID = umlscDB.ID
+		umlscDB.CopyBasicFieldsToUmlsc(&umlscAPI.Umlsc)
+		umlscAPI.UmlscPointersEnconding = umlscDB.UmlscPointersEnconding
+		umlscAPIs = append(umlscAPIs, umlscAPI)
 	}
 
-	c.JSON(http.StatusOK, umlscs)
+	c.JSON(http.StatusOK, umlscAPIs)
 }
 
 // PostUmlsc
@@ -107,13 +109,8 @@ func PostUmlsc(c *gin.Context) {
 
 	// Create umlsc
 	umlscDB := orm.UmlscDB{}
-	umlscDB.UmlscAPI = input
-	// insertion point for nullable field set
-	umlscDB.Name_Data.String = input.Name
-	umlscDB.Name_Data.Valid = true
-
-	umlscDB.Activestate_Data.String = input.Activestate
-	umlscDB.Activestate_Data.Valid = true
+	umlscDB.UmlscPointersEnconding = input.UmlscPointersEnconding
+	umlscDB.CopyBasicFieldsFromUmlsc(&input.Umlsc)
 
 	query := db.Create(&umlscDB)
 	if query.Error != nil {
@@ -143,9 +140,9 @@ func PostUmlsc(c *gin.Context) {
 func GetUmlsc(c *gin.Context) {
 	db := c.MustGet("db").(*gorm.DB)
 
-	// Get umlsc in DB
-	var umlsc orm.UmlscDB
-	if err := db.First(&umlsc, c.Param("id")).Error; err != nil {
+	// Get umlscDB in DB
+	var umlscDB orm.UmlscDB
+	if err := db.First(&umlscDB, c.Param("id")).Error; err != nil {
 		var returnError GenericError
 		returnError.Body.Code = http.StatusBadRequest
 		returnError.Body.Message = err.Error()
@@ -153,16 +150,12 @@ func GetUmlsc(c *gin.Context) {
 		return
 	}
 
-	// insertion point for fields value set from nullable fields
-	if umlsc.Name_Data.Valid {
-		umlsc.Name = umlsc.Name_Data.String
-	}
+	var umlscAPI orm.UmlscAPI
+	umlscAPI.ID = umlscDB.ID
+	umlscAPI.UmlscPointersEnconding = umlscDB.UmlscPointersEnconding
+	umlscDB.CopyBasicFieldsToUmlsc(&umlscAPI.Umlsc)
 
-	if umlsc.Activestate_Data.Valid {
-		umlsc.Activestate = umlsc.Activestate_Data.String
-	}
-
-	c.JSON(http.StatusOK, umlsc)
+	c.JSON(http.StatusOK, umlscAPI)
 }
 
 // UpdateUmlsc
@@ -199,14 +192,10 @@ func UpdateUmlsc(c *gin.Context) {
 	}
 
 	// update
-	// insertion point for nullable field set
-	input.Name_Data.String = input.Name
-	input.Name_Data.Valid = true
+	umlscDB.CopyBasicFieldsFromUmlsc(&input.Umlsc)
+	umlscDB.UmlscPointersEnconding = input.UmlscPointersEnconding
 
-	input.Activestate_Data.String = input.Activestate
-	input.Activestate_Data.Valid = true
-
-	query = db.Model(&umlscDB).Updates(input)
+	query = db.Model(&umlscDB).Updates(umlscDB)
 	if query.Error != nil {
 		var returnError GenericError
 		returnError.Body.Code = http.StatusBadRequest

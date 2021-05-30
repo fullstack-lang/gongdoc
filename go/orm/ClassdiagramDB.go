@@ -3,9 +3,13 @@ package orm
 
 import (
 	"database/sql"
+	"encoding/json"
 	"errors"
 	"fmt"
+	"io/ioutil"
 	"log"
+	"os"
+	"path/filepath"
 	"sort"
 	"time"
 
@@ -27,28 +31,40 @@ var dummy_Classdiagram_sort sort.Float64Slice
 //
 // swagger:model classdiagramAPI
 type ClassdiagramAPI struct {
+	gorm.Model
+
 	models.Classdiagram
 
-	// insertion for fields declaration
-	// Declation for basic field classdiagramDB.Name {{BasicKind}} (to be completed)
-	Name_Data sql.NullString
+	// encoding of pointers
+	ClassdiagramPointersEnconding
+}
 
+// ClassdiagramPointersEnconding encodes pointers to Struct and
+// reverse pointers of slice of poitners to Struct
+type ClassdiagramPointersEnconding struct {
+	// insertion for pointer fields encoding declaration
 	// Implementation of a reverse ID for field Pkgelt{}.Classdiagrams []*Classdiagram
 	Pkgelt_ClassdiagramsDBID sql.NullInt64
-	Pkgelt_ClassdiagramsDBID_Index sql.NullInt64
 
-	// end of insertion
+	// implementation of the index of the withing the slice
+	Pkgelt_ClassdiagramsDBID_Index sql.NullInt64
 }
 
 // ClassdiagramDB describes a classdiagram in the database
 //
-// It incorporates all fields : from the model, from the generated field for the API and the GORM ID
+// It incorporates the GORM ID, basic fields from the model (because they can be serialized),
+// the encoded version of pointers
 //
 // swagger:model classdiagramDB
 type ClassdiagramDB struct {
 	gorm.Model
 
-	ClassdiagramAPI
+	// insertion for basic fields declaration
+	// Declation for basic field classdiagramDB.Name {{BasicKind}} (to be completed)
+	Name_Data sql.NullString
+
+	// encoding of pointers
+	ClassdiagramPointersEnconding
 }
 
 // ClassdiagramDBs arrays classdiagramDBs
@@ -72,6 +88,13 @@ type BackRepoClassdiagramStruct struct {
 	Map_ClassdiagramDBID_ClassdiagramPtr *map[uint]*models.Classdiagram
 
 	db *gorm.DB
+}
+
+// GetClassdiagramDBFromClassdiagramPtr is a handy function to access the back repo instance from the stage instance
+func (backRepoClassdiagram *BackRepoClassdiagramStruct) GetClassdiagramDBFromClassdiagramPtr(classdiagram *models.Classdiagram) (classdiagramDB *ClassdiagramDB) {
+	id := (*backRepoClassdiagram.Map_ClassdiagramPtr_ClassdiagramDBID)[classdiagram]
+	classdiagramDB = (*backRepoClassdiagram.Map_ClassdiagramDBID_ClassdiagramDB)[id]
+	return
 }
 
 // BackRepoClassdiagram.Init set up the BackRepo of the Classdiagram
@@ -155,7 +178,7 @@ func (backRepoClassdiagram *BackRepoClassdiagramStruct) CommitPhaseOneInstance(c
 
 	// initiate classdiagram
 	var classdiagramDB ClassdiagramDB
-	classdiagramDB.Classdiagram = *classdiagram
+	classdiagramDB.CopyBasicFieldsFromClassdiagram(classdiagram)
 
 	query := backRepoClassdiagram.db.Create(&classdiagramDB)
 	if query.Error != nil {
@@ -188,31 +211,28 @@ func (backRepoClassdiagram *BackRepoClassdiagramStruct) CommitPhaseTwoInstance(b
 	// fetch matching classdiagramDB
 	if classdiagramDB, ok := (*backRepoClassdiagram.Map_ClassdiagramDBID_ClassdiagramDB)[idx]; ok {
 
-		{
-			{
-				// insertion point for fields commit
-				classdiagramDB.Name_Data.String = classdiagram.Name
-				classdiagramDB.Name_Data.Valid = true
+		classdiagramDB.CopyBasicFieldsFromClassdiagram(classdiagram)
 
-				// commit a slice of pointer translates to update reverse pointer to Classshape, i.e.
-				index_Classshapes := 0
-				for _, classshape := range classdiagram.Classshapes {
-					if classshapeDBID, ok := (*backRepo.BackRepoClassshape.Map_ClassshapePtr_ClassshapeDBID)[classshape]; ok {
-						if classshapeDB, ok := (*backRepo.BackRepoClassshape.Map_ClassshapeDBID_ClassshapeDB)[classshapeDBID]; ok {
-							classshapeDB.Classdiagram_ClassshapesDBID.Int64 = int64(classdiagramDB.ID)
-							classshapeDB.Classdiagram_ClassshapesDBID.Valid = true
-							classshapeDB.Classdiagram_ClassshapesDBID_Index.Int64 = int64(index_Classshapes)
-							index_Classshapes = index_Classshapes + 1
-							classshapeDB.Classdiagram_ClassshapesDBID_Index.Valid = true
-							if q := backRepoClassdiagram.db.Save(&classshapeDB); q.Error != nil {
-								return q.Error
-							}
-						}
-					}
-				}
+		// insertion point for translating pointers encodings into actual pointers
+		// This loop encodes the slice of pointers classdiagram.Classshapes into the back repo.
+		// Each back repo instance at the end of the association encode the ID of the association start
+		// into a dedicated field for coding the association. The back repo instance is then saved to the db
+		for idx, classshapeAssocEnd := range classdiagram.Classshapes {
 
+			// get the back repo instance at the association end
+			classshapeAssocEnd_DB :=
+				backRepo.BackRepoClassshape.GetClassshapeDBFromClassshapePtr( classshapeAssocEnd)
+
+			// encode reverse pointer in the association end back repo instance
+			classshapeAssocEnd_DB.Classdiagram_ClassshapesDBID.Int64 = int64(classdiagramDB.ID)
+			classshapeAssocEnd_DB.Classdiagram_ClassshapesDBID.Valid = true
+			classshapeAssocEnd_DB.Classdiagram_ClassshapesDBID_Index.Int64 = int64(idx)
+			classshapeAssocEnd_DB.Classdiagram_ClassshapesDBID_Index.Valid = true
+			if q := backRepoClassdiagram.db.Save(classshapeAssocEnd_DB); q.Error != nil {
+				return q.Error
 			}
 		}
+
 		query := backRepoClassdiagram.db.Save(&classdiagramDB)
 		if query.Error != nil {
 			return query.Error
@@ -253,18 +273,23 @@ func (backRepoClassdiagram *BackRepoClassdiagramStruct) CheckoutPhaseOne() (Erro
 // models version of the classdiagramDB
 func (backRepoClassdiagram *BackRepoClassdiagramStruct) CheckoutPhaseOneInstance(classdiagramDB *ClassdiagramDB) (Error error) {
 
-	// if absent, create entries in the backRepoClassdiagram maps.
-	classdiagramWithNewFieldValues := classdiagramDB.Classdiagram
-	if _, ok := (*backRepoClassdiagram.Map_ClassdiagramDBID_ClassdiagramPtr)[classdiagramDB.ID]; !ok {
+	classdiagram, ok := (*backRepoClassdiagram.Map_ClassdiagramDBID_ClassdiagramPtr)[classdiagramDB.ID]
+	if !ok {
+		classdiagram = new(models.Classdiagram)
 
-		(*backRepoClassdiagram.Map_ClassdiagramDBID_ClassdiagramPtr)[classdiagramDB.ID] = &classdiagramWithNewFieldValues
-		(*backRepoClassdiagram.Map_ClassdiagramPtr_ClassdiagramDBID)[&classdiagramWithNewFieldValues] = classdiagramDB.ID
+		(*backRepoClassdiagram.Map_ClassdiagramDBID_ClassdiagramPtr)[classdiagramDB.ID] = classdiagram
+		(*backRepoClassdiagram.Map_ClassdiagramPtr_ClassdiagramDBID)[classdiagram] = classdiagramDB.ID
 
 		// append model store with the new element
-		classdiagramWithNewFieldValues.Stage()
+		classdiagram.Stage()
 	}
-	classdiagramDBWithNewFieldValues := *classdiagramDB
-	(*backRepoClassdiagram.Map_ClassdiagramDBID_ClassdiagramDB)[classdiagramDB.ID] = &classdiagramDBWithNewFieldValues
+	classdiagramDB.CopyBasicFieldsToClassdiagram(classdiagram)
+
+	// preserve pointer to aclassDB. Otherwise, pointer will is recycled and the map of pointers
+	// Map_ClassdiagramDBID_ClassdiagramDB)[classdiagramDB hold variable pointers
+	classdiagramDB_Data := *classdiagramDB
+	preservedPtrToClassdiagram := &classdiagramDB_Data
+	(*backRepoClassdiagram.Map_ClassdiagramDBID_ClassdiagramDB)[classdiagramDB.ID] = preservedPtrToClassdiagram
 
 	return
 }
@@ -286,35 +311,35 @@ func (backRepoClassdiagram *BackRepoClassdiagramStruct) CheckoutPhaseTwoInstance
 
 	classdiagram := (*backRepoClassdiagram.Map_ClassdiagramDBID_ClassdiagramPtr)[classdiagramDB.ID]
 	_ = classdiagram // sometimes, there is no code generated. This lines voids the "unused variable" compilation error
-	{
-		{
-			// insertion point for checkout, i.e. update of fields of stage instance from fields of back repo instances
-			//
-			classdiagram.Name = classdiagramDB.Name_Data.String
 
-			// parse all ClassshapeDB and redeem the array of poiners to Classdiagram
-			// first reset the slice
-			classdiagram.Classshapes = classdiagram.Classshapes[:0]
-			for _, ClassshapeDB := range *backRepo.BackRepoClassshape.Map_ClassshapeDBID_ClassshapeDB {
-				if ClassshapeDB.Classdiagram_ClassshapesDBID.Int64 == int64(classdiagramDB.ID) {
-					Classshape := (*backRepo.BackRepoClassshape.Map_ClassshapeDBID_ClassshapePtr)[ClassshapeDB.ID]
-					classdiagram.Classshapes = append(classdiagram.Classshapes, Classshape)
-				}
-			}
-			
-			// sort the array according to the order
-			sort.Slice(classdiagram.Classshapes, func(i, j int) bool {
-				classshapeDB_i_ID := (*backRepo.BackRepoClassshape.Map_ClassshapePtr_ClassshapeDBID)[classdiagram.Classshapes[i]]
-				classshapeDB_j_ID := (*backRepo.BackRepoClassshape.Map_ClassshapePtr_ClassshapeDBID)[classdiagram.Classshapes[j]]
-
-				classshapeDB_i := (*backRepo.BackRepoClassshape.Map_ClassshapeDBID_ClassshapeDB)[classshapeDB_i_ID]
-				classshapeDB_j := (*backRepo.BackRepoClassshape.Map_ClassshapeDBID_ClassshapeDB)[classshapeDB_j_ID]
-
-				return classshapeDB_i.Classdiagram_ClassshapesDBID_Index.Int64 < classshapeDB_j.Classdiagram_ClassshapesDBID_Index.Int64
-			})
-
+	// insertion point for checkout of pointer encoding
+	// This loop redeem classdiagram.Classshapes in the stage from the encode in the back repo
+	// It parses all ClassshapeDB in the back repo and if the reverse pointer encoding matches the back repo ID
+	// it appends the stage instance
+	// 1. reset the slice
+	classdiagram.Classshapes = classdiagram.Classshapes[:0]
+	// 2. loop all instances in the type in the association end
+	for _, classshapeDB_AssocEnd := range *backRepo.BackRepoClassshape.Map_ClassshapeDBID_ClassshapeDB {
+		// 3. Does the ID encoding at the end and the ID at the start matches ?
+		if classshapeDB_AssocEnd.Classdiagram_ClassshapesDBID.Int64 == int64(classdiagramDB.ID) {
+			// 4. fetch the associated instance in the stage
+			classshape_AssocEnd := (*backRepo.BackRepoClassshape.Map_ClassshapeDBID_ClassshapePtr)[classshapeDB_AssocEnd.ID]
+			// 5. append it the association slice
+			classdiagram.Classshapes = append(classdiagram.Classshapes, classshape_AssocEnd)
 		}
 	}
+
+	// sort the array according to the order
+	sort.Slice(classdiagram.Classshapes, func(i, j int) bool {
+		classshapeDB_i_ID := (*backRepo.BackRepoClassshape.Map_ClassshapePtr_ClassshapeDBID)[classdiagram.Classshapes[i]]
+		classshapeDB_j_ID := (*backRepo.BackRepoClassshape.Map_ClassshapePtr_ClassshapeDBID)[classdiagram.Classshapes[j]]
+
+		classshapeDB_i := (*backRepo.BackRepoClassshape.Map_ClassshapeDBID_ClassshapeDB)[classshapeDB_i_ID]
+		classshapeDB_j := (*backRepo.BackRepoClassshape.Map_ClassshapeDBID_ClassshapeDB)[classshapeDB_j_ID]
+
+		return classshapeDB_i.Classdiagram_ClassshapesDBID_Index.Int64 < classshapeDB_j.Classdiagram_ClassshapesDBID_Index.Int64
+	})
+
 	return
 }
 
@@ -341,5 +366,84 @@ func (backRepo *BackRepoStruct) CheckoutClassdiagram(classdiagram *models.Classd
 			backRepo.BackRepoClassdiagram.CheckoutPhaseOneInstance(&classdiagramDB)
 			backRepo.BackRepoClassdiagram.CheckoutPhaseTwoInstance(backRepo, &classdiagramDB)
 		}
+	}
+}
+
+// CopyBasicFieldsToClassdiagramDB is used to copy basic fields between the Stage or the CRUD to the back repo
+func (classdiagramDB *ClassdiagramDB) CopyBasicFieldsFromClassdiagram(classdiagram *models.Classdiagram) {
+	// insertion point for fields commit
+	classdiagramDB.Name_Data.String = classdiagram.Name
+	classdiagramDB.Name_Data.Valid = true
+
+}
+
+// CopyBasicFieldsToClassdiagramDB is used to copy basic fields between the Stage or the CRUD to the back repo
+func (classdiagramDB *ClassdiagramDB) CopyBasicFieldsToClassdiagram(classdiagram *models.Classdiagram) {
+
+	// insertion point for checkout of basic fields (back repo to stage)
+	classdiagram.Name = classdiagramDB.Name_Data.String
+}
+
+// Backup generates a json file from a slice of all ClassdiagramDB instances in the backrepo
+func (backRepoClassdiagram *BackRepoClassdiagramStruct) Backup(dirPath string) {
+
+	filename := filepath.Join(dirPath, "ClassdiagramDB.json")
+
+	// organize the map into an array with increasing IDs, in order to have repoductible
+	// backup file
+	var forBackup []*ClassdiagramDB
+	for _, classdiagramDB := range *backRepoClassdiagram.Map_ClassdiagramDBID_ClassdiagramDB {
+		forBackup = append(forBackup, classdiagramDB)
+	}
+
+	sort.Slice(forBackup[:], func(i, j int) bool {
+		return forBackup[i].ID < forBackup[j].ID
+	})
+
+	file, err := json.MarshalIndent(forBackup, "", " ")
+
+	if err != nil {
+		log.Panic("Cannot json Classdiagram ", filename, " ", err.Error())
+	}
+
+	err = ioutil.WriteFile(filename, file, 0644)
+	if err != nil {
+		log.Panic("Cannot write the json Classdiagram file", err.Error())
+	}
+}
+
+func (backRepoClassdiagram *BackRepoClassdiagramStruct) Restore(dirPath string) {
+
+	filename := filepath.Join(dirPath, "ClassdiagramDB.json")
+	jsonFile, err := os.Open(filename)
+	// if we os.Open returns an error then handle it
+	if err != nil {
+		log.Panic("Cannot restore/open the json Classdiagram file", filename, " ", err.Error())
+	}
+
+	// read our opened jsonFile as a byte array.
+	byteValue, _ := ioutil.ReadAll(jsonFile)
+
+	var forRestore []*ClassdiagramDB
+
+	err = json.Unmarshal(byteValue, &forRestore)
+
+	// fill up Map_ClassdiagramDBID_ClassdiagramDB
+	for _, classdiagramDB := range forRestore {
+
+		classdiagramDB_ID := classdiagramDB.ID
+		classdiagramDB.ID = 0
+		query := backRepoClassdiagram.db.Create(classdiagramDB)
+		if query.Error != nil {
+			log.Panic(query.Error)
+		}
+		if classdiagramDB_ID != classdiagramDB.ID {
+			log.Panicf("ID of Classdiagram restore ID %d, name %s, has wrong ID %d in DB after create",
+				classdiagramDB_ID, classdiagramDB.Name_Data.String, classdiagramDB.ID)
+		}
+	}
+
+	if err != nil {
+		log.Panic("Cannot restore/unmarshall json Classdiagram file", err.Error())
 	}
 }

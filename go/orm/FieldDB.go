@@ -3,9 +3,13 @@ package orm
 
 import (
 	"database/sql"
+	"encoding/json"
 	"errors"
 	"fmt"
+	"io/ioutil"
 	"log"
+	"os"
+	"path/filepath"
 	"sort"
 	"time"
 
@@ -27,9 +31,35 @@ var dummy_Field_sort sort.Float64Slice
 //
 // swagger:model fieldAPI
 type FieldAPI struct {
+	gorm.Model
+
 	models.Field
 
-	// insertion for fields declaration
+	// encoding of pointers
+	FieldPointersEnconding
+}
+
+// FieldPointersEnconding encodes pointers to Struct and
+// reverse pointers of slice of poitners to Struct
+type FieldPointersEnconding struct {
+	// insertion for pointer fields encoding declaration
+	// Implementation of a reverse ID for field Classshape{}.Fields []*Field
+	Classshape_FieldsDBID sql.NullInt64
+
+	// implementation of the index of the withing the slice
+	Classshape_FieldsDBID_Index sql.NullInt64
+}
+
+// FieldDB describes a field in the database
+//
+// It incorporates the GORM ID, basic fields from the model (because they can be serialized),
+// the encoded version of pointers
+//
+// swagger:model fieldDB
+type FieldDB struct {
+	gorm.Model
+
+	// insertion for basic fields declaration
 	// Declation for basic field fieldDB.Name {{BasicKind}} (to be completed)
 	Name_Data sql.NullString
 
@@ -45,22 +75,8 @@ type FieldAPI struct {
 	// Declation for basic field fieldDB.Fieldtypename {{BasicKind}} (to be completed)
 	Fieldtypename_Data sql.NullString
 
-	// Implementation of a reverse ID for field Classshape{}.Fields []*Field
-	Classshape_FieldsDBID sql.NullInt64
-	Classshape_FieldsDBID_Index sql.NullInt64
-
-	// end of insertion
-}
-
-// FieldDB describes a field in the database
-//
-// It incorporates all fields : from the model, from the generated field for the API and the GORM ID
-//
-// swagger:model fieldDB
-type FieldDB struct {
-	gorm.Model
-
-	FieldAPI
+	// encoding of pointers
+	FieldPointersEnconding
 }
 
 // FieldDBs arrays fieldDBs
@@ -84,6 +100,13 @@ type BackRepoFieldStruct struct {
 	Map_FieldDBID_FieldPtr *map[uint]*models.Field
 
 	db *gorm.DB
+}
+
+// GetFieldDBFromFieldPtr is a handy function to access the back repo instance from the stage instance
+func (backRepoField *BackRepoFieldStruct) GetFieldDBFromFieldPtr(field *models.Field) (fieldDB *FieldDB) {
+	id := (*backRepoField.Map_FieldPtr_FieldDBID)[field]
+	fieldDB = (*backRepoField.Map_FieldDBID_FieldDB)[id]
+	return
 }
 
 // BackRepoField.Init set up the BackRepo of the Field
@@ -167,7 +190,7 @@ func (backRepoField *BackRepoFieldStruct) CommitPhaseOneInstance(field *models.F
 
 	// initiate field
 	var fieldDB FieldDB
-	fieldDB.Field = *field
+	fieldDB.CopyBasicFieldsFromField(field)
 
 	query := backRepoField.db.Create(&fieldDB)
 	if query.Error != nil {
@@ -200,26 +223,9 @@ func (backRepoField *BackRepoFieldStruct) CommitPhaseTwoInstance(backRepo *BackR
 	// fetch matching fieldDB
 	if fieldDB, ok := (*backRepoField.Map_FieldDBID_FieldDB)[idx]; ok {
 
-		{
-			{
-				// insertion point for fields commit
-				fieldDB.Name_Data.String = field.Name
-				fieldDB.Name_Data.Valid = true
+		fieldDB.CopyBasicFieldsFromField(field)
 
-				fieldDB.Fieldname_Data.String = field.Fieldname
-				fieldDB.Fieldname_Data.Valid = true
-
-				fieldDB.FieldTypeAsString_Data.String = field.FieldTypeAsString
-				fieldDB.FieldTypeAsString_Data.Valid = true
-
-				fieldDB.Structname_Data.String = field.Structname
-				fieldDB.Structname_Data.Valid = true
-
-				fieldDB.Fieldtypename_Data.String = field.Fieldtypename
-				fieldDB.Fieldtypename_Data.Valid = true
-
-			}
-		}
+		// insertion point for translating pointers encodings into actual pointers
 		query := backRepoField.db.Save(&fieldDB)
 		if query.Error != nil {
 			return query.Error
@@ -260,18 +266,23 @@ func (backRepoField *BackRepoFieldStruct) CheckoutPhaseOne() (Error error) {
 // models version of the fieldDB
 func (backRepoField *BackRepoFieldStruct) CheckoutPhaseOneInstance(fieldDB *FieldDB) (Error error) {
 
-	// if absent, create entries in the backRepoField maps.
-	fieldWithNewFieldValues := fieldDB.Field
-	if _, ok := (*backRepoField.Map_FieldDBID_FieldPtr)[fieldDB.ID]; !ok {
+	field, ok := (*backRepoField.Map_FieldDBID_FieldPtr)[fieldDB.ID]
+	if !ok {
+		field = new(models.Field)
 
-		(*backRepoField.Map_FieldDBID_FieldPtr)[fieldDB.ID] = &fieldWithNewFieldValues
-		(*backRepoField.Map_FieldPtr_FieldDBID)[&fieldWithNewFieldValues] = fieldDB.ID
+		(*backRepoField.Map_FieldDBID_FieldPtr)[fieldDB.ID] = field
+		(*backRepoField.Map_FieldPtr_FieldDBID)[field] = fieldDB.ID
 
 		// append model store with the new element
-		fieldWithNewFieldValues.Stage()
+		field.Stage()
 	}
-	fieldDBWithNewFieldValues := *fieldDB
-	(*backRepoField.Map_FieldDBID_FieldDB)[fieldDB.ID] = &fieldDBWithNewFieldValues
+	fieldDB.CopyBasicFieldsToField(field)
+
+	// preserve pointer to aclassDB. Otherwise, pointer will is recycled and the map of pointers
+	// Map_FieldDBID_FieldDB)[fieldDB hold variable pointers
+	fieldDB_Data := *fieldDB
+	preservedPtrToField := &fieldDB_Data
+	(*backRepoField.Map_FieldDBID_FieldDB)[fieldDB.ID] = preservedPtrToField
 
 	return
 }
@@ -293,22 +304,8 @@ func (backRepoField *BackRepoFieldStruct) CheckoutPhaseTwoInstance(backRepo *Bac
 
 	field := (*backRepoField.Map_FieldDBID_FieldPtr)[fieldDB.ID]
 	_ = field // sometimes, there is no code generated. This lines voids the "unused variable" compilation error
-	{
-		{
-			// insertion point for checkout, i.e. update of fields of stage instance from fields of back repo instances
-			//
-			field.Name = fieldDB.Name_Data.String
 
-			field.Fieldname = fieldDB.Fieldname_Data.String
-
-			field.FieldTypeAsString = fieldDB.FieldTypeAsString_Data.String
-
-			field.Structname = fieldDB.Structname_Data.String
-
-			field.Fieldtypename = fieldDB.Fieldtypename_Data.String
-
-		}
-	}
+	// insertion point for checkout of pointer encoding
 	return
 }
 
@@ -335,5 +332,100 @@ func (backRepo *BackRepoStruct) CheckoutField(field *models.Field) {
 			backRepo.BackRepoField.CheckoutPhaseOneInstance(&fieldDB)
 			backRepo.BackRepoField.CheckoutPhaseTwoInstance(backRepo, &fieldDB)
 		}
+	}
+}
+
+// CopyBasicFieldsToFieldDB is used to copy basic fields between the Stage or the CRUD to the back repo
+func (fieldDB *FieldDB) CopyBasicFieldsFromField(field *models.Field) {
+	// insertion point for fields commit
+	fieldDB.Name_Data.String = field.Name
+	fieldDB.Name_Data.Valid = true
+
+	fieldDB.Fieldname_Data.String = field.Fieldname
+	fieldDB.Fieldname_Data.Valid = true
+
+	fieldDB.FieldTypeAsString_Data.String = field.FieldTypeAsString
+	fieldDB.FieldTypeAsString_Data.Valid = true
+
+	fieldDB.Structname_Data.String = field.Structname
+	fieldDB.Structname_Data.Valid = true
+
+	fieldDB.Fieldtypename_Data.String = field.Fieldtypename
+	fieldDB.Fieldtypename_Data.Valid = true
+
+}
+
+// CopyBasicFieldsToFieldDB is used to copy basic fields between the Stage or the CRUD to the back repo
+func (fieldDB *FieldDB) CopyBasicFieldsToField(field *models.Field) {
+
+	// insertion point for checkout of basic fields (back repo to stage)
+	field.Name = fieldDB.Name_Data.String
+	field.Fieldname = fieldDB.Fieldname_Data.String
+	field.FieldTypeAsString = fieldDB.FieldTypeAsString_Data.String
+	field.Structname = fieldDB.Structname_Data.String
+	field.Fieldtypename = fieldDB.Fieldtypename_Data.String
+}
+
+// Backup generates a json file from a slice of all FieldDB instances in the backrepo
+func (backRepoField *BackRepoFieldStruct) Backup(dirPath string) {
+
+	filename := filepath.Join(dirPath, "FieldDB.json")
+
+	// organize the map into an array with increasing IDs, in order to have repoductible
+	// backup file
+	var forBackup []*FieldDB
+	for _, fieldDB := range *backRepoField.Map_FieldDBID_FieldDB {
+		forBackup = append(forBackup, fieldDB)
+	}
+
+	sort.Slice(forBackup[:], func(i, j int) bool {
+		return forBackup[i].ID < forBackup[j].ID
+	})
+
+	file, err := json.MarshalIndent(forBackup, "", " ")
+
+	if err != nil {
+		log.Panic("Cannot json Field ", filename, " ", err.Error())
+	}
+
+	err = ioutil.WriteFile(filename, file, 0644)
+	if err != nil {
+		log.Panic("Cannot write the json Field file", err.Error())
+	}
+}
+
+func (backRepoField *BackRepoFieldStruct) Restore(dirPath string) {
+
+	filename := filepath.Join(dirPath, "FieldDB.json")
+	jsonFile, err := os.Open(filename)
+	// if we os.Open returns an error then handle it
+	if err != nil {
+		log.Panic("Cannot restore/open the json Field file", filename, " ", err.Error())
+	}
+
+	// read our opened jsonFile as a byte array.
+	byteValue, _ := ioutil.ReadAll(jsonFile)
+
+	var forRestore []*FieldDB
+
+	err = json.Unmarshal(byteValue, &forRestore)
+
+	// fill up Map_FieldDBID_FieldDB
+	for _, fieldDB := range forRestore {
+
+		fieldDB_ID := fieldDB.ID
+		fieldDB.ID = 0
+		query := backRepoField.db.Create(fieldDB)
+		if query.Error != nil {
+			log.Panic(query.Error)
+		}
+		if fieldDB_ID != fieldDB.ID {
+			log.Panicf("ID of Field restore ID %d, name %s, has wrong ID %d in DB after create",
+				fieldDB_ID, fieldDB.Name_Data.String, fieldDB.ID)
+		}
+	}
+
+	if err != nil {
+		log.Panic("Cannot restore/unmarshall json Field file", err.Error())
 	}
 }

@@ -49,8 +49,9 @@ type VerticeInput struct {
 func GetVertices(c *gin.Context) {
 	db := c.MustGet("db").(*gorm.DB)
 
-	var vertices []orm.VerticeDB
-	query := db.Find(&vertices)
+	// source slice
+	var verticeDBs []orm.VerticeDB
+	query := db.Find(&verticeDBs)
 	if query.Error != nil {
 		var returnError GenericError
 		returnError.Body.Code = http.StatusBadRequest
@@ -59,26 +60,23 @@ func GetVertices(c *gin.Context) {
 		return
 	}
 
+	// slice that will be transmitted to the front
+	var verticeAPIs []orm.VerticeAPI
+
 	// for each vertice, update fields from the database nullable fields
-	for idx := range vertices {
-		vertice := &vertices[idx]
-		_ = vertice
+	for idx := range verticeDBs {
+		verticeDB := &verticeDBs[idx]
+		_ = verticeDB
+		var verticeAPI orm.VerticeAPI
+
 		// insertion point for updating fields
-		if vertice.X_Data.Valid {
-			vertice.X = vertice.X_Data.Float64
-		}
-
-		if vertice.Y_Data.Valid {
-			vertice.Y = vertice.Y_Data.Float64
-		}
-
-		if vertice.Name_Data.Valid {
-			vertice.Name = vertice.Name_Data.String
-		}
-
+		verticeAPI.ID = verticeDB.ID
+		verticeDB.CopyBasicFieldsToVertice(&verticeAPI.Vertice)
+		verticeAPI.VerticePointersEnconding = verticeDB.VerticePointersEnconding
+		verticeAPIs = append(verticeAPIs, verticeAPI)
 	}
 
-	c.JSON(http.StatusOK, vertices)
+	c.JSON(http.StatusOK, verticeAPIs)
 }
 
 // PostVertice
@@ -111,16 +109,8 @@ func PostVertice(c *gin.Context) {
 
 	// Create vertice
 	verticeDB := orm.VerticeDB{}
-	verticeDB.VerticeAPI = input
-	// insertion point for nullable field set
-	verticeDB.X_Data.Float64 = input.X
-	verticeDB.X_Data.Valid = true
-
-	verticeDB.Y_Data.Float64 = input.Y
-	verticeDB.Y_Data.Valid = true
-
-	verticeDB.Name_Data.String = input.Name
-	verticeDB.Name_Data.Valid = true
+	verticeDB.VerticePointersEnconding = input.VerticePointersEnconding
+	verticeDB.CopyBasicFieldsFromVertice(&input.Vertice)
 
 	query := db.Create(&verticeDB)
 	if query.Error != nil {
@@ -150,9 +140,9 @@ func PostVertice(c *gin.Context) {
 func GetVertice(c *gin.Context) {
 	db := c.MustGet("db").(*gorm.DB)
 
-	// Get vertice in DB
-	var vertice orm.VerticeDB
-	if err := db.First(&vertice, c.Param("id")).Error; err != nil {
+	// Get verticeDB in DB
+	var verticeDB orm.VerticeDB
+	if err := db.First(&verticeDB, c.Param("id")).Error; err != nil {
 		var returnError GenericError
 		returnError.Body.Code = http.StatusBadRequest
 		returnError.Body.Message = err.Error()
@@ -160,20 +150,12 @@ func GetVertice(c *gin.Context) {
 		return
 	}
 
-	// insertion point for fields value set from nullable fields
-	if vertice.X_Data.Valid {
-		vertice.X = vertice.X_Data.Float64
-	}
+	var verticeAPI orm.VerticeAPI
+	verticeAPI.ID = verticeDB.ID
+	verticeAPI.VerticePointersEnconding = verticeDB.VerticePointersEnconding
+	verticeDB.CopyBasicFieldsToVertice(&verticeAPI.Vertice)
 
-	if vertice.Y_Data.Valid {
-		vertice.Y = vertice.Y_Data.Float64
-	}
-
-	if vertice.Name_Data.Valid {
-		vertice.Name = vertice.Name_Data.String
-	}
-
-	c.JSON(http.StatusOK, vertice)
+	c.JSON(http.StatusOK, verticeAPI)
 }
 
 // UpdateVertice
@@ -210,17 +192,10 @@ func UpdateVertice(c *gin.Context) {
 	}
 
 	// update
-	// insertion point for nullable field set
-	input.X_Data.Float64 = input.X
-	input.X_Data.Valid = true
+	verticeDB.CopyBasicFieldsFromVertice(&input.Vertice)
+	verticeDB.VerticePointersEnconding = input.VerticePointersEnconding
 
-	input.Y_Data.Float64 = input.Y
-	input.Y_Data.Valid = true
-
-	input.Name_Data.String = input.Name
-	input.Name_Data.Valid = true
-
-	query = db.Model(&verticeDB).Updates(input)
+	query = db.Model(&verticeDB).Updates(verticeDB)
 	if query.Error != nil {
 		var returnError GenericError
 		returnError.Body.Code = http.StatusBadRequest
