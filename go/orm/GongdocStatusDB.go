@@ -91,6 +91,10 @@ type BackRepoGongdocStatusStruct struct {
 	db *gorm.DB
 }
 
+func (backRepoGongdocStatus *BackRepoGongdocStatusStruct) GetDB() *gorm.DB {
+	return backRepoGongdocStatus.db
+}
+
 // GetGongdocStatusDBFromGongdocStatusPtr is a handy function to access the back repo instance from the stage instance
 func (backRepoGongdocStatus *BackRepoGongdocStatusStruct) GetGongdocStatusDBFromGongdocStatusPtr(gongdocstatus *models.GongdocStatus) (gongdocstatusDB *GongdocStatusDB) {
 	id := (*backRepoGongdocStatus.Map_GongdocStatusPtr_GongdocStatusDBID)[gongdocstatus]

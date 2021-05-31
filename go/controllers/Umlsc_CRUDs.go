@@ -9,7 +9,6 @@ import (
 	"github.com/fullstack-lang/gongdoc/go/orm"
 
 	"github.com/gin-gonic/gin"
-	"github.com/jinzhu/gorm"
 )
 
 // declaration in order to justify use of the models import
@@ -47,8 +46,8 @@ type UmlscInput struct {
 //    default: genericError
 //        200: umlscDBsResponse
 func GetUmlscs(c *gin.Context) {
-	db := c.MustGet("db").(*gorm.DB)
-
+	db := orm.BackRepo.BackRepoUmlsc.GetDB()
+	
 	// source slice
 	var umlscDBs []orm.UmlscDB
 	query := db.Find(&umlscDBs)
@@ -93,7 +92,7 @@ func GetUmlscs(c *gin.Context) {
 //     Responses:
 //       200: umlscDBResponse
 func PostUmlsc(c *gin.Context) {
-	db := c.MustGet("db").(*gorm.DB)
+	db := orm.BackRepo.BackRepoUmlsc.GetDB()
 
 	// Validate input
 	var input orm.UmlscAPI
@@ -138,7 +137,7 @@ func PostUmlsc(c *gin.Context) {
 //    default: genericError
 //        200: umlscDBResponse
 func GetUmlsc(c *gin.Context) {
-	db := c.MustGet("db").(*gorm.DB)
+	db := orm.BackRepo.BackRepoUmlsc.GetDB()
 
 	// Get umlscDB in DB
 	var umlscDB orm.UmlscDB
@@ -168,7 +167,7 @@ func GetUmlsc(c *gin.Context) {
 //    default: genericError
 //        200: umlscDBResponse
 func UpdateUmlsc(c *gin.Context) {
-	db := c.MustGet("db").(*gorm.DB)
+	db := orm.BackRepo.BackRepoUmlsc.GetDB()
 
 	// Get model if exist
 	var umlscDB orm.UmlscDB
@@ -221,7 +220,7 @@ func UpdateUmlsc(c *gin.Context) {
 // Responses:
 //    default: genericError
 func DeleteUmlsc(c *gin.Context) {
-	db := c.MustGet("db").(*gorm.DB)
+	db := orm.BackRepo.BackRepoUmlsc.GetDB()
 
 	// Get model if exist
 	var umlscDB orm.UmlscDB

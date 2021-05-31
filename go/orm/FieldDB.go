@@ -102,6 +102,10 @@ type BackRepoFieldStruct struct {
 	db *gorm.DB
 }
 
+func (backRepoField *BackRepoFieldStruct) GetDB() *gorm.DB {
+	return backRepoField.db
+}
+
 // GetFieldDBFromFieldPtr is a handy function to access the back repo instance from the stage instance
 func (backRepoField *BackRepoFieldStruct) GetFieldDBFromFieldPtr(field *models.Field) (fieldDB *FieldDB) {
 	id := (*backRepoField.Map_FieldPtr_FieldDBID)[field]

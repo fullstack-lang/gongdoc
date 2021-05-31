@@ -93,6 +93,10 @@ type BackRepoUmlscStruct struct {
 	db *gorm.DB
 }
 
+func (backRepoUmlsc *BackRepoUmlscStruct) GetDB() *gorm.DB {
+	return backRepoUmlsc.db
+}
+
 // GetUmlscDBFromUmlscPtr is a handy function to access the back repo instance from the stage instance
 func (backRepoUmlsc *BackRepoUmlscStruct) GetUmlscDBFromUmlscPtr(umlsc *models.Umlsc) (umlscDB *UmlscDB) {
 	id := (*backRepoUmlsc.Map_UmlscPtr_UmlscDBID)[umlsc]

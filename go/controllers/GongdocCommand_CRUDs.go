@@ -9,7 +9,6 @@ import (
 	"github.com/fullstack-lang/gongdoc/go/orm"
 
 	"github.com/gin-gonic/gin"
-	"github.com/jinzhu/gorm"
 )
 
 // declaration in order to justify use of the models import
@@ -47,8 +46,8 @@ type GongdocCommandInput struct {
 //    default: genericError
 //        200: gongdoccommandDBsResponse
 func GetGongdocCommands(c *gin.Context) {
-	db := c.MustGet("db").(*gorm.DB)
-
+	db := orm.BackRepo.BackRepoGongdocCommand.GetDB()
+	
 	// source slice
 	var gongdoccommandDBs []orm.GongdocCommandDB
 	query := db.Find(&gongdoccommandDBs)
@@ -93,7 +92,7 @@ func GetGongdocCommands(c *gin.Context) {
 //     Responses:
 //       200: gongdoccommandDBResponse
 func PostGongdocCommand(c *gin.Context) {
-	db := c.MustGet("db").(*gorm.DB)
+	db := orm.BackRepo.BackRepoGongdocCommand.GetDB()
 
 	// Validate input
 	var input orm.GongdocCommandAPI
@@ -138,7 +137,7 @@ func PostGongdocCommand(c *gin.Context) {
 //    default: genericError
 //        200: gongdoccommandDBResponse
 func GetGongdocCommand(c *gin.Context) {
-	db := c.MustGet("db").(*gorm.DB)
+	db := orm.BackRepo.BackRepoGongdocCommand.GetDB()
 
 	// Get gongdoccommandDB in DB
 	var gongdoccommandDB orm.GongdocCommandDB
@@ -168,7 +167,7 @@ func GetGongdocCommand(c *gin.Context) {
 //    default: genericError
 //        200: gongdoccommandDBResponse
 func UpdateGongdocCommand(c *gin.Context) {
-	db := c.MustGet("db").(*gorm.DB)
+	db := orm.BackRepo.BackRepoGongdocCommand.GetDB()
 
 	// Get model if exist
 	var gongdoccommandDB orm.GongdocCommandDB
@@ -221,7 +220,7 @@ func UpdateGongdocCommand(c *gin.Context) {
 // Responses:
 //    default: genericError
 func DeleteGongdocCommand(c *gin.Context) {
-	db := c.MustGet("db").(*gorm.DB)
+	db := orm.BackRepo.BackRepoGongdocCommand.GetDB()
 
 	// Get model if exist
 	var gongdoccommandDB orm.GongdocCommandDB

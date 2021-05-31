@@ -9,7 +9,6 @@ import (
 	"github.com/fullstack-lang/gongdoc/go/orm"
 
 	"github.com/gin-gonic/gin"
-	"github.com/jinzhu/gorm"
 )
 
 // declaration in order to justify use of the models import
@@ -47,8 +46,8 @@ type LinkInput struct {
 //    default: genericError
 //        200: linkDBsResponse
 func GetLinks(c *gin.Context) {
-	db := c.MustGet("db").(*gorm.DB)
-
+	db := orm.BackRepo.BackRepoLink.GetDB()
+	
 	// source slice
 	var linkDBs []orm.LinkDB
 	query := db.Find(&linkDBs)
@@ -93,7 +92,7 @@ func GetLinks(c *gin.Context) {
 //     Responses:
 //       200: linkDBResponse
 func PostLink(c *gin.Context) {
-	db := c.MustGet("db").(*gorm.DB)
+	db := orm.BackRepo.BackRepoLink.GetDB()
 
 	// Validate input
 	var input orm.LinkAPI
@@ -138,7 +137,7 @@ func PostLink(c *gin.Context) {
 //    default: genericError
 //        200: linkDBResponse
 func GetLink(c *gin.Context) {
-	db := c.MustGet("db").(*gorm.DB)
+	db := orm.BackRepo.BackRepoLink.GetDB()
 
 	// Get linkDB in DB
 	var linkDB orm.LinkDB
@@ -168,7 +167,7 @@ func GetLink(c *gin.Context) {
 //    default: genericError
 //        200: linkDBResponse
 func UpdateLink(c *gin.Context) {
-	db := c.MustGet("db").(*gorm.DB)
+	db := orm.BackRepo.BackRepoLink.GetDB()
 
 	// Get model if exist
 	var linkDB orm.LinkDB
@@ -221,7 +220,7 @@ func UpdateLink(c *gin.Context) {
 // Responses:
 //    default: genericError
 func DeleteLink(c *gin.Context) {
-	db := c.MustGet("db").(*gorm.DB)
+	db := orm.BackRepo.BackRepoLink.GetDB()
 
 	// Get model if exist
 	var linkDB orm.LinkDB

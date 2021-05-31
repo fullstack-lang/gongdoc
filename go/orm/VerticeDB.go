@@ -91,6 +91,10 @@ type BackRepoVerticeStruct struct {
 	db *gorm.DB
 }
 
+func (backRepoVertice *BackRepoVerticeStruct) GetDB() *gorm.DB {
+	return backRepoVertice.db
+}
+
 // GetVerticeDBFromVerticePtr is a handy function to access the back repo instance from the stage instance
 func (backRepoVertice *BackRepoVerticeStruct) GetVerticeDBFromVerticePtr(vertice *models.Vertice) (verticeDB *VerticeDB) {
 	id := (*backRepoVertice.Map_VerticePtr_VerticeDBID)[vertice]

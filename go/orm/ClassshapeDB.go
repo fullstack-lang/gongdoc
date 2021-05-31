@@ -109,6 +109,10 @@ type BackRepoClassshapeStruct struct {
 	db *gorm.DB
 }
 
+func (backRepoClassshape *BackRepoClassshapeStruct) GetDB() *gorm.DB {
+	return backRepoClassshape.db
+}
+
 // GetClassshapeDBFromClassshapePtr is a handy function to access the back repo instance from the stage instance
 func (backRepoClassshape *BackRepoClassshapeStruct) GetClassshapeDBFromClassshapePtr(classshape *models.Classshape) (classshapeDB *ClassshapeDB) {
 	id := (*backRepoClassshape.Map_ClassshapePtr_ClassshapeDBID)[classshape]

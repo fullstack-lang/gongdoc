@@ -9,7 +9,6 @@ import (
 	"github.com/fullstack-lang/gongdoc/go/orm"
 
 	"github.com/gin-gonic/gin"
-	"github.com/jinzhu/gorm"
 )
 
 // declaration in order to justify use of the models import
@@ -47,8 +46,8 @@ type VerticeInput struct {
 //    default: genericError
 //        200: verticeDBsResponse
 func GetVertices(c *gin.Context) {
-	db := c.MustGet("db").(*gorm.DB)
-
+	db := orm.BackRepo.BackRepoVertice.GetDB()
+	
 	// source slice
 	var verticeDBs []orm.VerticeDB
 	query := db.Find(&verticeDBs)
@@ -93,7 +92,7 @@ func GetVertices(c *gin.Context) {
 //     Responses:
 //       200: verticeDBResponse
 func PostVertice(c *gin.Context) {
-	db := c.MustGet("db").(*gorm.DB)
+	db := orm.BackRepo.BackRepoVertice.GetDB()
 
 	// Validate input
 	var input orm.VerticeAPI
@@ -138,7 +137,7 @@ func PostVertice(c *gin.Context) {
 //    default: genericError
 //        200: verticeDBResponse
 func GetVertice(c *gin.Context) {
-	db := c.MustGet("db").(*gorm.DB)
+	db := orm.BackRepo.BackRepoVertice.GetDB()
 
 	// Get verticeDB in DB
 	var verticeDB orm.VerticeDB
@@ -168,7 +167,7 @@ func GetVertice(c *gin.Context) {
 //    default: genericError
 //        200: verticeDBResponse
 func UpdateVertice(c *gin.Context) {
-	db := c.MustGet("db").(*gorm.DB)
+	db := orm.BackRepo.BackRepoVertice.GetDB()
 
 	// Get model if exist
 	var verticeDB orm.VerticeDB
@@ -221,7 +220,7 @@ func UpdateVertice(c *gin.Context) {
 // Responses:
 //    default: genericError
 func DeleteVertice(c *gin.Context) {
-	db := c.MustGet("db").(*gorm.DB)
+	db := orm.BackRepo.BackRepoVertice.GetDB()
 
 	// Get model if exist
 	var verticeDB orm.VerticeDB

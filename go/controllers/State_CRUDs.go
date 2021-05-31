@@ -9,7 +9,6 @@ import (
 	"github.com/fullstack-lang/gongdoc/go/orm"
 
 	"github.com/gin-gonic/gin"
-	"github.com/jinzhu/gorm"
 )
 
 // declaration in order to justify use of the models import
@@ -47,8 +46,8 @@ type StateInput struct {
 //    default: genericError
 //        200: stateDBsResponse
 func GetStates(c *gin.Context) {
-	db := c.MustGet("db").(*gorm.DB)
-
+	db := orm.BackRepo.BackRepoState.GetDB()
+	
 	// source slice
 	var stateDBs []orm.StateDB
 	query := db.Find(&stateDBs)
@@ -93,7 +92,7 @@ func GetStates(c *gin.Context) {
 //     Responses:
 //       200: stateDBResponse
 func PostState(c *gin.Context) {
-	db := c.MustGet("db").(*gorm.DB)
+	db := orm.BackRepo.BackRepoState.GetDB()
 
 	// Validate input
 	var input orm.StateAPI
@@ -138,7 +137,7 @@ func PostState(c *gin.Context) {
 //    default: genericError
 //        200: stateDBResponse
 func GetState(c *gin.Context) {
-	db := c.MustGet("db").(*gorm.DB)
+	db := orm.BackRepo.BackRepoState.GetDB()
 
 	// Get stateDB in DB
 	var stateDB orm.StateDB
@@ -168,7 +167,7 @@ func GetState(c *gin.Context) {
 //    default: genericError
 //        200: stateDBResponse
 func UpdateState(c *gin.Context) {
-	db := c.MustGet("db").(*gorm.DB)
+	db := orm.BackRepo.BackRepoState.GetDB()
 
 	// Get model if exist
 	var stateDB orm.StateDB
@@ -221,7 +220,7 @@ func UpdateState(c *gin.Context) {
 // Responses:
 //    default: genericError
 func DeleteState(c *gin.Context) {
-	db := c.MustGet("db").(*gorm.DB)
+	db := orm.BackRepo.BackRepoState.GetDB()
 
 	// Get model if exist
 	var stateDB orm.StateDB

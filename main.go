@@ -71,8 +71,10 @@ func main() {
 	// setup GORM
 	db := gongdoc_orm.SetupModels(*logBBFlag, ":memory:")
 	db.DB().SetMaxOpenConns(1)
-
 	gong_orm.AutoMigrate(db)
+
+	gongdoc_orm.BackRepo.Init(db)
+	gong_orm.BackRepo.Init(db)
 
 	// setup controlers
 	if !*logGINFlag {
@@ -83,17 +85,6 @@ func main() {
 	// setup controlers
 	r := gin.Default()
 	r.Use(cors.Default())
-
-	// Provide db variable to controllers
-	r.Use(func(c *gin.Context) {
-		c.Set("db", db) // a gin Context can have a map of variable that is set up at runtime
-		c.Next()
-	})
-
-	//
-	// Init BackRepo
-	gongdoc_orm.BackRepo.Init(db)
-	gong_orm.BackRepo.Init(db)
 
 	// load package to analyse
 	modelPkg := &gong_models.ModelPkg{}

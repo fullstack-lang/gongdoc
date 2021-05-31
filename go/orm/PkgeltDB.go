@@ -88,6 +88,10 @@ type BackRepoPkgeltStruct struct {
 	db *gorm.DB
 }
 
+func (backRepoPkgelt *BackRepoPkgeltStruct) GetDB() *gorm.DB {
+	return backRepoPkgelt.db
+}
+
 // GetPkgeltDBFromPkgeltPtr is a handy function to access the back repo instance from the stage instance
 func (backRepoPkgelt *BackRepoPkgeltStruct) GetPkgeltDBFromPkgeltPtr(pkgelt *models.Pkgelt) (pkgeltDB *PkgeltDB) {
 	id := (*backRepoPkgelt.Map_PkgeltPtr_PkgeltDBID)[pkgelt]

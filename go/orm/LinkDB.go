@@ -109,6 +109,10 @@ type BackRepoLinkStruct struct {
 	db *gorm.DB
 }
 
+func (backRepoLink *BackRepoLinkStruct) GetDB() *gorm.DB {
+	return backRepoLink.db
+}
+
 // GetLinkDBFromLinkPtr is a handy function to access the back repo instance from the stage instance
 func (backRepoLink *BackRepoLinkStruct) GetLinkDBFromLinkPtr(link *models.Link) (linkDB *LinkDB) {
 	id := (*backRepoLink.Map_LinkPtr_LinkDBID)[link]

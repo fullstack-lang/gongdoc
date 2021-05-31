@@ -9,7 +9,6 @@ import (
 	"github.com/fullstack-lang/gongdoc/go/orm"
 
 	"github.com/gin-gonic/gin"
-	"github.com/jinzhu/gorm"
 )
 
 // declaration in order to justify use of the models import
@@ -47,8 +46,8 @@ type PkgeltInput struct {
 //    default: genericError
 //        200: pkgeltDBsResponse
 func GetPkgelts(c *gin.Context) {
-	db := c.MustGet("db").(*gorm.DB)
-
+	db := orm.BackRepo.BackRepoPkgelt.GetDB()
+	
 	// source slice
 	var pkgeltDBs []orm.PkgeltDB
 	query := db.Find(&pkgeltDBs)
@@ -93,7 +92,7 @@ func GetPkgelts(c *gin.Context) {
 //     Responses:
 //       200: pkgeltDBResponse
 func PostPkgelt(c *gin.Context) {
-	db := c.MustGet("db").(*gorm.DB)
+	db := orm.BackRepo.BackRepoPkgelt.GetDB()
 
 	// Validate input
 	var input orm.PkgeltAPI
@@ -138,7 +137,7 @@ func PostPkgelt(c *gin.Context) {
 //    default: genericError
 //        200: pkgeltDBResponse
 func GetPkgelt(c *gin.Context) {
-	db := c.MustGet("db").(*gorm.DB)
+	db := orm.BackRepo.BackRepoPkgelt.GetDB()
 
 	// Get pkgeltDB in DB
 	var pkgeltDB orm.PkgeltDB
@@ -168,7 +167,7 @@ func GetPkgelt(c *gin.Context) {
 //    default: genericError
 //        200: pkgeltDBResponse
 func UpdatePkgelt(c *gin.Context) {
-	db := c.MustGet("db").(*gorm.DB)
+	db := orm.BackRepo.BackRepoPkgelt.GetDB()
 
 	// Get model if exist
 	var pkgeltDB orm.PkgeltDB
@@ -221,7 +220,7 @@ func UpdatePkgelt(c *gin.Context) {
 // Responses:
 //    default: genericError
 func DeletePkgelt(c *gin.Context) {
-	db := c.MustGet("db").(*gorm.DB)
+	db := orm.BackRepo.BackRepoPkgelt.GetDB()
 
 	// Get model if exist
 	var pkgeltDB orm.PkgeltDB

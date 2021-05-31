@@ -9,7 +9,6 @@ import (
 	"github.com/fullstack-lang/gongdoc/go/orm"
 
 	"github.com/gin-gonic/gin"
-	"github.com/jinzhu/gorm"
 )
 
 // declaration in order to justify use of the models import
@@ -47,8 +46,8 @@ type FieldInput struct {
 //    default: genericError
 //        200: fieldDBsResponse
 func GetFields(c *gin.Context) {
-	db := c.MustGet("db").(*gorm.DB)
-
+	db := orm.BackRepo.BackRepoField.GetDB()
+	
 	// source slice
 	var fieldDBs []orm.FieldDB
 	query := db.Find(&fieldDBs)
@@ -93,7 +92,7 @@ func GetFields(c *gin.Context) {
 //     Responses:
 //       200: fieldDBResponse
 func PostField(c *gin.Context) {
-	db := c.MustGet("db").(*gorm.DB)
+	db := orm.BackRepo.BackRepoField.GetDB()
 
 	// Validate input
 	var input orm.FieldAPI
@@ -138,7 +137,7 @@ func PostField(c *gin.Context) {
 //    default: genericError
 //        200: fieldDBResponse
 func GetField(c *gin.Context) {
-	db := c.MustGet("db").(*gorm.DB)
+	db := orm.BackRepo.BackRepoField.GetDB()
 
 	// Get fieldDB in DB
 	var fieldDB orm.FieldDB
@@ -168,7 +167,7 @@ func GetField(c *gin.Context) {
 //    default: genericError
 //        200: fieldDBResponse
 func UpdateField(c *gin.Context) {
-	db := c.MustGet("db").(*gorm.DB)
+	db := orm.BackRepo.BackRepoField.GetDB()
 
 	// Get model if exist
 	var fieldDB orm.FieldDB
@@ -221,7 +220,7 @@ func UpdateField(c *gin.Context) {
 // Responses:
 //    default: genericError
 func DeleteField(c *gin.Context) {
-	db := c.MustGet("db").(*gorm.DB)
+	db := orm.BackRepo.BackRepoField.GetDB()
 
 	// Get model if exist
 	var fieldDB orm.FieldDB

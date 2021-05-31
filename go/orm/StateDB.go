@@ -96,6 +96,10 @@ type BackRepoStateStruct struct {
 	db *gorm.DB
 }
 
+func (backRepoState *BackRepoStateStruct) GetDB() *gorm.DB {
+	return backRepoState.db
+}
+
 // GetStateDBFromStatePtr is a handy function to access the back repo instance from the stage instance
 func (backRepoState *BackRepoStateStruct) GetStateDBFromStatePtr(state *models.State) (stateDB *StateDB) {
 	id := (*backRepoState.Map_StatePtr_StateDBID)[state]

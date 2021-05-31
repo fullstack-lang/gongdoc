@@ -91,6 +91,10 @@ type BackRepoPositionStruct struct {
 	db *gorm.DB
 }
 
+func (backRepoPosition *BackRepoPositionStruct) GetDB() *gorm.DB {
+	return backRepoPosition.db
+}
+
 // GetPositionDBFromPositionPtr is a handy function to access the back repo instance from the stage instance
 func (backRepoPosition *BackRepoPositionStruct) GetPositionDBFromPositionPtr(position *models.Position) (positionDB *PositionDB) {
 	id := (*backRepoPosition.Map_PositionPtr_PositionDBID)[position]

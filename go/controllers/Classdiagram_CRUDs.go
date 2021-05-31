@@ -9,7 +9,6 @@ import (
 	"github.com/fullstack-lang/gongdoc/go/orm"
 
 	"github.com/gin-gonic/gin"
-	"github.com/jinzhu/gorm"
 )
 
 // declaration in order to justify use of the models import
@@ -47,8 +46,8 @@ type ClassdiagramInput struct {
 //    default: genericError
 //        200: classdiagramDBsResponse
 func GetClassdiagrams(c *gin.Context) {
-	db := c.MustGet("db").(*gorm.DB)
-
+	db := orm.BackRepo.BackRepoClassdiagram.GetDB()
+	
 	// source slice
 	var classdiagramDBs []orm.ClassdiagramDB
 	query := db.Find(&classdiagramDBs)
@@ -93,7 +92,7 @@ func GetClassdiagrams(c *gin.Context) {
 //     Responses:
 //       200: classdiagramDBResponse
 func PostClassdiagram(c *gin.Context) {
-	db := c.MustGet("db").(*gorm.DB)
+	db := orm.BackRepo.BackRepoClassdiagram.GetDB()
 
 	// Validate input
 	var input orm.ClassdiagramAPI
@@ -138,7 +137,7 @@ func PostClassdiagram(c *gin.Context) {
 //    default: genericError
 //        200: classdiagramDBResponse
 func GetClassdiagram(c *gin.Context) {
-	db := c.MustGet("db").(*gorm.DB)
+	db := orm.BackRepo.BackRepoClassdiagram.GetDB()
 
 	// Get classdiagramDB in DB
 	var classdiagramDB orm.ClassdiagramDB
@@ -168,7 +167,7 @@ func GetClassdiagram(c *gin.Context) {
 //    default: genericError
 //        200: classdiagramDBResponse
 func UpdateClassdiagram(c *gin.Context) {
-	db := c.MustGet("db").(*gorm.DB)
+	db := orm.BackRepo.BackRepoClassdiagram.GetDB()
 
 	// Get model if exist
 	var classdiagramDB orm.ClassdiagramDB
@@ -221,7 +220,7 @@ func UpdateClassdiagram(c *gin.Context) {
 // Responses:
 //    default: genericError
 func DeleteClassdiagram(c *gin.Context) {
-	db := c.MustGet("db").(*gorm.DB)
+	db := orm.BackRepo.BackRepoClassdiagram.GetDB()
 
 	// Get model if exist
 	var classdiagramDB orm.ClassdiagramDB

@@ -90,6 +90,10 @@ type BackRepoClassdiagramStruct struct {
 	db *gorm.DB
 }
 
+func (backRepoClassdiagram *BackRepoClassdiagramStruct) GetDB() *gorm.DB {
+	return backRepoClassdiagram.db
+}
+
 // GetClassdiagramDBFromClassdiagramPtr is a handy function to access the back repo instance from the stage instance
 func (backRepoClassdiagram *BackRepoClassdiagramStruct) GetClassdiagramDBFromClassdiagramPtr(classdiagram *models.Classdiagram) (classdiagramDB *ClassdiagramDB) {
 	id := (*backRepoClassdiagram.Map_ClassdiagramPtr_ClassdiagramDBID)[classdiagram]

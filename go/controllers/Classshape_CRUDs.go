@@ -9,7 +9,6 @@ import (
 	"github.com/fullstack-lang/gongdoc/go/orm"
 
 	"github.com/gin-gonic/gin"
-	"github.com/jinzhu/gorm"
 )
 
 // declaration in order to justify use of the models import
@@ -47,8 +46,8 @@ type ClassshapeInput struct {
 //    default: genericError
 //        200: classshapeDBsResponse
 func GetClassshapes(c *gin.Context) {
-	db := c.MustGet("db").(*gorm.DB)
-
+	db := orm.BackRepo.BackRepoClassshape.GetDB()
+	
 	// source slice
 	var classshapeDBs []orm.ClassshapeDB
 	query := db.Find(&classshapeDBs)
@@ -93,7 +92,7 @@ func GetClassshapes(c *gin.Context) {
 //     Responses:
 //       200: classshapeDBResponse
 func PostClassshape(c *gin.Context) {
-	db := c.MustGet("db").(*gorm.DB)
+	db := orm.BackRepo.BackRepoClassshape.GetDB()
 
 	// Validate input
 	var input orm.ClassshapeAPI
@@ -138,7 +137,7 @@ func PostClassshape(c *gin.Context) {
 //    default: genericError
 //        200: classshapeDBResponse
 func GetClassshape(c *gin.Context) {
-	db := c.MustGet("db").(*gorm.DB)
+	db := orm.BackRepo.BackRepoClassshape.GetDB()
 
 	// Get classshapeDB in DB
 	var classshapeDB orm.ClassshapeDB
@@ -168,7 +167,7 @@ func GetClassshape(c *gin.Context) {
 //    default: genericError
 //        200: classshapeDBResponse
 func UpdateClassshape(c *gin.Context) {
-	db := c.MustGet("db").(*gorm.DB)
+	db := orm.BackRepo.BackRepoClassshape.GetDB()
 
 	// Get model if exist
 	var classshapeDB orm.ClassshapeDB
@@ -221,7 +220,7 @@ func UpdateClassshape(c *gin.Context) {
 // Responses:
 //    default: genericError
 func DeleteClassshape(c *gin.Context) {
-	db := c.MustGet("db").(*gorm.DB)
+	db := orm.BackRepo.BackRepoClassshape.GetDB()
 
 	// Get model if exist
 	var classshapeDB orm.ClassshapeDB

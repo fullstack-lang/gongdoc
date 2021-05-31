@@ -9,7 +9,6 @@ import (
 	"github.com/fullstack-lang/gongdoc/go/orm"
 
 	"github.com/gin-gonic/gin"
-	"github.com/jinzhu/gorm"
 )
 
 // declaration in order to justify use of the models import
@@ -47,8 +46,8 @@ type PositionInput struct {
 //    default: genericError
 //        200: positionDBsResponse
 func GetPositions(c *gin.Context) {
-	db := c.MustGet("db").(*gorm.DB)
-
+	db := orm.BackRepo.BackRepoPosition.GetDB()
+	
 	// source slice
 	var positionDBs []orm.PositionDB
 	query := db.Find(&positionDBs)
@@ -93,7 +92,7 @@ func GetPositions(c *gin.Context) {
 //     Responses:
 //       200: positionDBResponse
 func PostPosition(c *gin.Context) {
-	db := c.MustGet("db").(*gorm.DB)
+	db := orm.BackRepo.BackRepoPosition.GetDB()
 
 	// Validate input
 	var input orm.PositionAPI
@@ -138,7 +137,7 @@ func PostPosition(c *gin.Context) {
 //    default: genericError
 //        200: positionDBResponse
 func GetPosition(c *gin.Context) {
-	db := c.MustGet("db").(*gorm.DB)
+	db := orm.BackRepo.BackRepoPosition.GetDB()
 
 	// Get positionDB in DB
 	var positionDB orm.PositionDB
@@ -168,7 +167,7 @@ func GetPosition(c *gin.Context) {
 //    default: genericError
 //        200: positionDBResponse
 func UpdatePosition(c *gin.Context) {
-	db := c.MustGet("db").(*gorm.DB)
+	db := orm.BackRepo.BackRepoPosition.GetDB()
 
 	// Get model if exist
 	var positionDB orm.PositionDB
@@ -221,7 +220,7 @@ func UpdatePosition(c *gin.Context) {
 // Responses:
 //    default: genericError
 func DeletePosition(c *gin.Context) {
-	db := c.MustGet("db").(*gorm.DB)
+	db := orm.BackRepo.BackRepoPosition.GetDB()
 
 	// Get model if exist
 	var positionDB orm.PositionDB
