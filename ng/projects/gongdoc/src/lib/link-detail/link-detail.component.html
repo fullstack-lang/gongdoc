@@ -51,7 +51,7 @@
     <div class="details__item">
         <mat-form-field>
             <mat-label>Middlevertice</mat-label>
-            <mat-select [(ngModel)]="link.Middlevertice">
+            <mat-select [(ngModel)]="link.Middlevertice" (selectionChange)="fillUpNameIfEmpty($event)">
                 <mat-option>None</mat-option>
                 <mat-option *ngFor="let vertice of frontRepo.Vertices_array" [value]="vertice">
                     {{vertice.Name}}

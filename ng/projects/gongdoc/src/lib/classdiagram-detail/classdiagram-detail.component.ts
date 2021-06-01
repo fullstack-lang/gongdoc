@@ -172,4 +172,10 @@ export class ClassdiagramDetailComponent implements OnInit {
 		dialogRef.afterClosed().subscribe(result => {
 		});
 	}
+
+	fillUpNameIfEmpty(event) {
+		if (this.classdiagram.Name == undefined) {
+			this.classdiagram.Name = event.value.Name		
+		}
+	}
 }

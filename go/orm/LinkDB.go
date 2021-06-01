@@ -297,7 +297,7 @@ func (backRepoLink *BackRepoLinkStruct) CheckoutPhaseOneInstance(linkDB *LinkDB)
 	}
 	linkDB.CopyBasicFieldsToLink(link)
 
-	// preserve pointer to aclassDB. Otherwise, pointer will is recycled and the map of pointers
+	// preserve pointer to linkDB. Otherwise, pointer will is recycled and the map of pointers
 	// Map_LinkDBID_LinkDB)[linkDB hold variable pointers
 	linkDB_Data := *linkDB
 	preservedPtrToLink := &linkDB_Data
@@ -396,7 +396,7 @@ func (backRepoLink *BackRepoLinkStruct) Backup(dirPath string) {
 
 	// organize the map into an array with increasing IDs, in order to have repoductible
 	// backup file
-	var forBackup []*LinkDB
+	forBackup := make([]*LinkDB, 0)
 	for _, linkDB := range *backRepoLink.Map_LinkDBID_LinkDB {
 		forBackup = append(forBackup, linkDB)
 	}
@@ -417,7 +417,13 @@ func (backRepoLink *BackRepoLinkStruct) Backup(dirPath string) {
 	}
 }
 
-func (backRepoLink *BackRepoLinkStruct) Restore(dirPath string) {
+// RestorePhaseOne read the file "LinkDB.json" in dirPath that stores an array
+// of LinkDB and stores it in the database
+// the map BackRepoLinkid_atBckpTime_newID is updated accordingly
+func (backRepoLink *BackRepoLinkStruct) RestorePhaseOne(dirPath string) {
+
+	// resets the map
+	BackRepoLinkid_atBckpTime_newID = make(map[uint]uint)
 
 	filename := filepath.Join(dirPath, "LinkDB.json")
 	jsonFile, err := os.Open(filename)
@@ -436,19 +442,51 @@ func (backRepoLink *BackRepoLinkStruct) Restore(dirPath string) {
 	// fill up Map_LinkDBID_LinkDB
 	for _, linkDB := range forRestore {
 
-		linkDB_ID := linkDB.ID
+		linkDB_ID_atBackupTime := linkDB.ID
 		linkDB.ID = 0
 		query := backRepoLink.db.Create(linkDB)
 		if query.Error != nil {
 			log.Panic(query.Error)
 		}
-		if linkDB_ID != linkDB.ID {
-			log.Panicf("ID of Link restore ID %d, name %s, has wrong ID %d in DB after create",
-				linkDB_ID, linkDB.Name_Data.String, linkDB.ID)
-		}
+		(*backRepoLink.Map_LinkDBID_LinkDB)[linkDB.ID] = linkDB
+		BackRepoLinkid_atBckpTime_newID[linkDB_ID_atBackupTime] = linkDB.ID
 	}
 
 	if err != nil {
 		log.Panic("Cannot restore/unmarshall json Link file", err.Error())
 	}
 }
+
+// RestorePhaseTwo uses all map BackRepo<Link>id_atBckpTime_newID
+// to compute new index
+func (backRepoLink *BackRepoLinkStruct) RestorePhaseTwo() {
+
+	for _, linkDB := range (*backRepoLink.Map_LinkDBID_LinkDB) {
+
+		// next line of code is to avert unused variable compilation error
+		_ = linkDB
+
+		// insertion point for reindexing pointers encoding
+		// reindexing Middlevertice field
+		if linkDB.MiddleverticeID.Int64 != 0 {
+			linkDB.MiddleverticeID.Int64 = int64(BackRepoVerticeid_atBckpTime_newID[uint(linkDB.MiddleverticeID.Int64)])
+		}
+
+		// This reindex link.Links
+		if linkDB.Classshape_LinksDBID.Int64 != 0 {
+			linkDB.Classshape_LinksDBID.Int64 = 
+				int64(BackRepoClassshapeid_atBckpTime_newID[uint(linkDB.Classshape_LinksDBID.Int64)])
+		}
+
+		// update databse with new index encoding
+		query := backRepoLink.db.Model(linkDB).Updates(*linkDB)
+		if query.Error != nil {
+			log.Panic(query.Error)
+		}
+	}
+
+}
+
+// this field is used during the restauration process.
+// it stores the ID at the backup time and is used for renumbering
+var BackRepoLinkid_atBckpTime_newID map[uint]uint

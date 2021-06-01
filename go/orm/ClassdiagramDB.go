@@ -289,7 +289,7 @@ func (backRepoClassdiagram *BackRepoClassdiagramStruct) CheckoutPhaseOneInstance
 	}
 	classdiagramDB.CopyBasicFieldsToClassdiagram(classdiagram)
 
-	// preserve pointer to aclassDB. Otherwise, pointer will is recycled and the map of pointers
+	// preserve pointer to classdiagramDB. Otherwise, pointer will is recycled and the map of pointers
 	// Map_ClassdiagramDBID_ClassdiagramDB)[classdiagramDB hold variable pointers
 	classdiagramDB_Data := *classdiagramDB
 	preservedPtrToClassdiagram := &classdiagramDB_Data
@@ -395,7 +395,7 @@ func (backRepoClassdiagram *BackRepoClassdiagramStruct) Backup(dirPath string) {
 
 	// organize the map into an array with increasing IDs, in order to have repoductible
 	// backup file
-	var forBackup []*ClassdiagramDB
+	forBackup := make([]*ClassdiagramDB, 0)
 	for _, classdiagramDB := range *backRepoClassdiagram.Map_ClassdiagramDBID_ClassdiagramDB {
 		forBackup = append(forBackup, classdiagramDB)
 	}
@@ -416,7 +416,13 @@ func (backRepoClassdiagram *BackRepoClassdiagramStruct) Backup(dirPath string) {
 	}
 }
 
-func (backRepoClassdiagram *BackRepoClassdiagramStruct) Restore(dirPath string) {
+// RestorePhaseOne read the file "ClassdiagramDB.json" in dirPath that stores an array
+// of ClassdiagramDB and stores it in the database
+// the map BackRepoClassdiagramid_atBckpTime_newID is updated accordingly
+func (backRepoClassdiagram *BackRepoClassdiagramStruct) RestorePhaseOne(dirPath string) {
+
+	// resets the map
+	BackRepoClassdiagramid_atBckpTime_newID = make(map[uint]uint)
 
 	filename := filepath.Join(dirPath, "ClassdiagramDB.json")
 	jsonFile, err := os.Open(filename)
@@ -435,19 +441,46 @@ func (backRepoClassdiagram *BackRepoClassdiagramStruct) Restore(dirPath string) 
 	// fill up Map_ClassdiagramDBID_ClassdiagramDB
 	for _, classdiagramDB := range forRestore {
 
-		classdiagramDB_ID := classdiagramDB.ID
+		classdiagramDB_ID_atBackupTime := classdiagramDB.ID
 		classdiagramDB.ID = 0
 		query := backRepoClassdiagram.db.Create(classdiagramDB)
 		if query.Error != nil {
 			log.Panic(query.Error)
 		}
-		if classdiagramDB_ID != classdiagramDB.ID {
-			log.Panicf("ID of Classdiagram restore ID %d, name %s, has wrong ID %d in DB after create",
-				classdiagramDB_ID, classdiagramDB.Name_Data.String, classdiagramDB.ID)
-		}
+		(*backRepoClassdiagram.Map_ClassdiagramDBID_ClassdiagramDB)[classdiagramDB.ID] = classdiagramDB
+		BackRepoClassdiagramid_atBckpTime_newID[classdiagramDB_ID_atBackupTime] = classdiagramDB.ID
 	}
 
 	if err != nil {
 		log.Panic("Cannot restore/unmarshall json Classdiagram file", err.Error())
 	}
 }
+
+// RestorePhaseTwo uses all map BackRepo<Classdiagram>id_atBckpTime_newID
+// to compute new index
+func (backRepoClassdiagram *BackRepoClassdiagramStruct) RestorePhaseTwo() {
+
+	for _, classdiagramDB := range (*backRepoClassdiagram.Map_ClassdiagramDBID_ClassdiagramDB) {
+
+		// next line of code is to avert unused variable compilation error
+		_ = classdiagramDB
+
+		// insertion point for reindexing pointers encoding
+		// This reindex classdiagram.Classdiagrams
+		if classdiagramDB.Pkgelt_ClassdiagramsDBID.Int64 != 0 {
+			classdiagramDB.Pkgelt_ClassdiagramsDBID.Int64 = 
+				int64(BackRepoPkgeltid_atBckpTime_newID[uint(classdiagramDB.Pkgelt_ClassdiagramsDBID.Int64)])
+		}
+
+		// update databse with new index encoding
+		query := backRepoClassdiagram.db.Model(classdiagramDB).Updates(*classdiagramDB)
+		if query.Error != nil {
+			log.Panic(query.Error)
+		}
+	}
+
+}
+
+// this field is used during the restauration process.
+// it stores the ID at the backup time and is used for renumbering
+var BackRepoClassdiagramid_atBckpTime_newID map[uint]uint

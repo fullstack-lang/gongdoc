@@ -163,4 +163,10 @@ export class GongdocCommandDetailComponent implements OnInit {
 		dialogRef.afterClosed().subscribe(result => {
 		});
 	}
+
+	fillUpNameIfEmpty(event) {
+		if (this.gongdoccommand.Name == undefined) {
+			this.gongdoccommand.Name = event.value.Name		
+		}
+	}
 }

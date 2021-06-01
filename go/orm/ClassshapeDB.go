@@ -335,7 +335,7 @@ func (backRepoClassshape *BackRepoClassshapeStruct) CheckoutPhaseOneInstance(cla
 	}
 	classshapeDB.CopyBasicFieldsToClassshape(classshape)
 
-	// preserve pointer to aclassDB. Otherwise, pointer will is recycled and the map of pointers
+	// preserve pointer to classshapeDB. Otherwise, pointer will is recycled and the map of pointers
 	// Map_ClassshapeDBID_ClassshapeDB)[classshapeDB hold variable pointers
 	classshapeDB_Data := *classshapeDB
 	preservedPtrToClassshape := &classshapeDB_Data
@@ -488,7 +488,7 @@ func (backRepoClassshape *BackRepoClassshapeStruct) Backup(dirPath string) {
 
 	// organize the map into an array with increasing IDs, in order to have repoductible
 	// backup file
-	var forBackup []*ClassshapeDB
+	forBackup := make([]*ClassshapeDB, 0)
 	for _, classshapeDB := range *backRepoClassshape.Map_ClassshapeDBID_ClassshapeDB {
 		forBackup = append(forBackup, classshapeDB)
 	}
@@ -509,7 +509,13 @@ func (backRepoClassshape *BackRepoClassshapeStruct) Backup(dirPath string) {
 	}
 }
 
-func (backRepoClassshape *BackRepoClassshapeStruct) Restore(dirPath string) {
+// RestorePhaseOne read the file "ClassshapeDB.json" in dirPath that stores an array
+// of ClassshapeDB and stores it in the database
+// the map BackRepoClassshapeid_atBckpTime_newID is updated accordingly
+func (backRepoClassshape *BackRepoClassshapeStruct) RestorePhaseOne(dirPath string) {
+
+	// resets the map
+	BackRepoClassshapeid_atBckpTime_newID = make(map[uint]uint)
 
 	filename := filepath.Join(dirPath, "ClassshapeDB.json")
 	jsonFile, err := os.Open(filename)
@@ -528,19 +534,51 @@ func (backRepoClassshape *BackRepoClassshapeStruct) Restore(dirPath string) {
 	// fill up Map_ClassshapeDBID_ClassshapeDB
 	for _, classshapeDB := range forRestore {
 
-		classshapeDB_ID := classshapeDB.ID
+		classshapeDB_ID_atBackupTime := classshapeDB.ID
 		classshapeDB.ID = 0
 		query := backRepoClassshape.db.Create(classshapeDB)
 		if query.Error != nil {
 			log.Panic(query.Error)
 		}
-		if classshapeDB_ID != classshapeDB.ID {
-			log.Panicf("ID of Classshape restore ID %d, name %s, has wrong ID %d in DB after create",
-				classshapeDB_ID, classshapeDB.Name_Data.String, classshapeDB.ID)
-		}
+		(*backRepoClassshape.Map_ClassshapeDBID_ClassshapeDB)[classshapeDB.ID] = classshapeDB
+		BackRepoClassshapeid_atBckpTime_newID[classshapeDB_ID_atBackupTime] = classshapeDB.ID
 	}
 
 	if err != nil {
 		log.Panic("Cannot restore/unmarshall json Classshape file", err.Error())
 	}
 }
+
+// RestorePhaseTwo uses all map BackRepo<Classshape>id_atBckpTime_newID
+// to compute new index
+func (backRepoClassshape *BackRepoClassshapeStruct) RestorePhaseTwo() {
+
+	for _, classshapeDB := range (*backRepoClassshape.Map_ClassshapeDBID_ClassshapeDB) {
+
+		// next line of code is to avert unused variable compilation error
+		_ = classshapeDB
+
+		// insertion point for reindexing pointers encoding
+		// reindexing Position field
+		if classshapeDB.PositionID.Int64 != 0 {
+			classshapeDB.PositionID.Int64 = int64(BackRepoPositionid_atBckpTime_newID[uint(classshapeDB.PositionID.Int64)])
+		}
+
+		// This reindex classshape.Classshapes
+		if classshapeDB.Classdiagram_ClassshapesDBID.Int64 != 0 {
+			classshapeDB.Classdiagram_ClassshapesDBID.Int64 = 
+				int64(BackRepoClassdiagramid_atBckpTime_newID[uint(classshapeDB.Classdiagram_ClassshapesDBID.Int64)])
+		}
+
+		// update databse with new index encoding
+		query := backRepoClassshape.db.Model(classshapeDB).Updates(*classshapeDB)
+		if query.Error != nil {
+			log.Panic(query.Error)
+		}
+	}
+
+}
+
+// this field is used during the restauration process.
+// it stores the ID at the backup time and is used for renumbering
+var BackRepoClassshapeid_atBckpTime_newID map[uint]uint

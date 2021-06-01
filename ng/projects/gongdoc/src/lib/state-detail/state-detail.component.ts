@@ -172,4 +172,10 @@ export class StateDetailComponent implements OnInit {
 		dialogRef.afterClosed().subscribe(result => {
 		});
 	}
+
+	fillUpNameIfEmpty(event) {
+		if (this.state.Name == undefined) {
+			this.state.Name = event.value.Name		
+		}
+	}
 }

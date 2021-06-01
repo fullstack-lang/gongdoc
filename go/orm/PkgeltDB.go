@@ -306,7 +306,7 @@ func (backRepoPkgelt *BackRepoPkgeltStruct) CheckoutPhaseOneInstance(pkgeltDB *P
 	}
 	pkgeltDB.CopyBasicFieldsToPkgelt(pkgelt)
 
-	// preserve pointer to aclassDB. Otherwise, pointer will is recycled and the map of pointers
+	// preserve pointer to pkgeltDB. Otherwise, pointer will is recycled and the map of pointers
 	// Map_PkgeltDBID_PkgeltDB)[pkgeltDB hold variable pointers
 	pkgeltDB_Data := *pkgeltDB
 	preservedPtrToPkgelt := &pkgeltDB_Data
@@ -443,7 +443,7 @@ func (backRepoPkgelt *BackRepoPkgeltStruct) Backup(dirPath string) {
 
 	// organize the map into an array with increasing IDs, in order to have repoductible
 	// backup file
-	var forBackup []*PkgeltDB
+	forBackup := make([]*PkgeltDB, 0)
 	for _, pkgeltDB := range *backRepoPkgelt.Map_PkgeltDBID_PkgeltDB {
 		forBackup = append(forBackup, pkgeltDB)
 	}
@@ -464,7 +464,13 @@ func (backRepoPkgelt *BackRepoPkgeltStruct) Backup(dirPath string) {
 	}
 }
 
-func (backRepoPkgelt *BackRepoPkgeltStruct) Restore(dirPath string) {
+// RestorePhaseOne read the file "PkgeltDB.json" in dirPath that stores an array
+// of PkgeltDB and stores it in the database
+// the map BackRepoPkgeltid_atBckpTime_newID is updated accordingly
+func (backRepoPkgelt *BackRepoPkgeltStruct) RestorePhaseOne(dirPath string) {
+
+	// resets the map
+	BackRepoPkgeltid_atBckpTime_newID = make(map[uint]uint)
 
 	filename := filepath.Join(dirPath, "PkgeltDB.json")
 	jsonFile, err := os.Open(filename)
@@ -483,19 +489,40 @@ func (backRepoPkgelt *BackRepoPkgeltStruct) Restore(dirPath string) {
 	// fill up Map_PkgeltDBID_PkgeltDB
 	for _, pkgeltDB := range forRestore {
 
-		pkgeltDB_ID := pkgeltDB.ID
+		pkgeltDB_ID_atBackupTime := pkgeltDB.ID
 		pkgeltDB.ID = 0
 		query := backRepoPkgelt.db.Create(pkgeltDB)
 		if query.Error != nil {
 			log.Panic(query.Error)
 		}
-		if pkgeltDB_ID != pkgeltDB.ID {
-			log.Panicf("ID of Pkgelt restore ID %d, name %s, has wrong ID %d in DB after create",
-				pkgeltDB_ID, pkgeltDB.Name_Data.String, pkgeltDB.ID)
-		}
+		(*backRepoPkgelt.Map_PkgeltDBID_PkgeltDB)[pkgeltDB.ID] = pkgeltDB
+		BackRepoPkgeltid_atBckpTime_newID[pkgeltDB_ID_atBackupTime] = pkgeltDB.ID
 	}
 
 	if err != nil {
 		log.Panic("Cannot restore/unmarshall json Pkgelt file", err.Error())
 	}
 }
+
+// RestorePhaseTwo uses all map BackRepo<Pkgelt>id_atBckpTime_newID
+// to compute new index
+func (backRepoPkgelt *BackRepoPkgeltStruct) RestorePhaseTwo() {
+
+	for _, pkgeltDB := range (*backRepoPkgelt.Map_PkgeltDBID_PkgeltDB) {
+
+		// next line of code is to avert unused variable compilation error
+		_ = pkgeltDB
+
+		// insertion point for reindexing pointers encoding
+		// update databse with new index encoding
+		query := backRepoPkgelt.db.Model(pkgeltDB).Updates(*pkgeltDB)
+		if query.Error != nil {
+			log.Panic(query.Error)
+		}
+	}
+
+}
+
+// this field is used during the restauration process.
+// it stores the ID at the backup time and is used for renumbering
+var BackRepoPkgeltid_atBckpTime_newID map[uint]uint

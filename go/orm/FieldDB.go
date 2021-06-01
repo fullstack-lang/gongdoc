@@ -282,7 +282,7 @@ func (backRepoField *BackRepoFieldStruct) CheckoutPhaseOneInstance(fieldDB *Fiel
 	}
 	fieldDB.CopyBasicFieldsToField(field)
 
-	// preserve pointer to aclassDB. Otherwise, pointer will is recycled and the map of pointers
+	// preserve pointer to fieldDB. Otherwise, pointer will is recycled and the map of pointers
 	// Map_FieldDBID_FieldDB)[fieldDB hold variable pointers
 	fieldDB_Data := *fieldDB
 	preservedPtrToField := &fieldDB_Data
@@ -377,7 +377,7 @@ func (backRepoField *BackRepoFieldStruct) Backup(dirPath string) {
 
 	// organize the map into an array with increasing IDs, in order to have repoductible
 	// backup file
-	var forBackup []*FieldDB
+	forBackup := make([]*FieldDB, 0)
 	for _, fieldDB := range *backRepoField.Map_FieldDBID_FieldDB {
 		forBackup = append(forBackup, fieldDB)
 	}
@@ -398,7 +398,13 @@ func (backRepoField *BackRepoFieldStruct) Backup(dirPath string) {
 	}
 }
 
-func (backRepoField *BackRepoFieldStruct) Restore(dirPath string) {
+// RestorePhaseOne read the file "FieldDB.json" in dirPath that stores an array
+// of FieldDB and stores it in the database
+// the map BackRepoFieldid_atBckpTime_newID is updated accordingly
+func (backRepoField *BackRepoFieldStruct) RestorePhaseOne(dirPath string) {
+
+	// resets the map
+	BackRepoFieldid_atBckpTime_newID = make(map[uint]uint)
 
 	filename := filepath.Join(dirPath, "FieldDB.json")
 	jsonFile, err := os.Open(filename)
@@ -417,19 +423,46 @@ func (backRepoField *BackRepoFieldStruct) Restore(dirPath string) {
 	// fill up Map_FieldDBID_FieldDB
 	for _, fieldDB := range forRestore {
 
-		fieldDB_ID := fieldDB.ID
+		fieldDB_ID_atBackupTime := fieldDB.ID
 		fieldDB.ID = 0
 		query := backRepoField.db.Create(fieldDB)
 		if query.Error != nil {
 			log.Panic(query.Error)
 		}
-		if fieldDB_ID != fieldDB.ID {
-			log.Panicf("ID of Field restore ID %d, name %s, has wrong ID %d in DB after create",
-				fieldDB_ID, fieldDB.Name_Data.String, fieldDB.ID)
-		}
+		(*backRepoField.Map_FieldDBID_FieldDB)[fieldDB.ID] = fieldDB
+		BackRepoFieldid_atBckpTime_newID[fieldDB_ID_atBackupTime] = fieldDB.ID
 	}
 
 	if err != nil {
 		log.Panic("Cannot restore/unmarshall json Field file", err.Error())
 	}
 }
+
+// RestorePhaseTwo uses all map BackRepo<Field>id_atBckpTime_newID
+// to compute new index
+func (backRepoField *BackRepoFieldStruct) RestorePhaseTwo() {
+
+	for _, fieldDB := range (*backRepoField.Map_FieldDBID_FieldDB) {
+
+		// next line of code is to avert unused variable compilation error
+		_ = fieldDB
+
+		// insertion point for reindexing pointers encoding
+		// This reindex field.Fields
+		if fieldDB.Classshape_FieldsDBID.Int64 != 0 {
+			fieldDB.Classshape_FieldsDBID.Int64 = 
+				int64(BackRepoClassshapeid_atBckpTime_newID[uint(fieldDB.Classshape_FieldsDBID.Int64)])
+		}
+
+		// update databse with new index encoding
+		query := backRepoField.db.Model(fieldDB).Updates(*fieldDB)
+		if query.Error != nil {
+			log.Panic(query.Error)
+		}
+	}
+
+}
+
+// this field is used during the restauration process.
+// it stores the ID at the backup time and is used for renumbering
+var BackRepoFieldid_atBckpTime_newID map[uint]uint

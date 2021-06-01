@@ -13,7 +13,7 @@
     <div class="details__item">
         <mat-form-field>
             <mat-label>Position</mat-label>
-            <mat-select [(ngModel)]="classshape.Position">
+            <mat-select [(ngModel)]="classshape.Position" (selectionChange)="fillUpNameIfEmpty($event)">
                 <mat-option>None</mat-option>
                 <mat-option *ngFor="let position of frontRepo.Positions_array" [value]="position">
                     {{position.Name}}

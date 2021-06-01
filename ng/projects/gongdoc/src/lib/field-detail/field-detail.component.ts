@@ -172,4 +172,10 @@ export class FieldDetailComponent implements OnInit {
 		dialogRef.afterClosed().subscribe(result => {
 		});
 	}
+
+	fillUpNameIfEmpty(event) {
+		if (this.field.Name == undefined) {
+			this.field.Name = event.value.Name		
+		}
+	}
 }

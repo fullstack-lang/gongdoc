@@ -292,7 +292,7 @@ func (backRepoUmlsc *BackRepoUmlscStruct) CheckoutPhaseOneInstance(umlscDB *Umls
 	}
 	umlscDB.CopyBasicFieldsToUmlsc(umlsc)
 
-	// preserve pointer to aclassDB. Otherwise, pointer will is recycled and the map of pointers
+	// preserve pointer to umlscDB. Otherwise, pointer will is recycled and the map of pointers
 	// Map_UmlscDBID_UmlscDB)[umlscDB hold variable pointers
 	umlscDB_Data := *umlscDB
 	preservedPtrToUmlsc := &umlscDB_Data
@@ -402,7 +402,7 @@ func (backRepoUmlsc *BackRepoUmlscStruct) Backup(dirPath string) {
 
 	// organize the map into an array with increasing IDs, in order to have repoductible
 	// backup file
-	var forBackup []*UmlscDB
+	forBackup := make([]*UmlscDB, 0)
 	for _, umlscDB := range *backRepoUmlsc.Map_UmlscDBID_UmlscDB {
 		forBackup = append(forBackup, umlscDB)
 	}
@@ -423,7 +423,13 @@ func (backRepoUmlsc *BackRepoUmlscStruct) Backup(dirPath string) {
 	}
 }
 
-func (backRepoUmlsc *BackRepoUmlscStruct) Restore(dirPath string) {
+// RestorePhaseOne read the file "UmlscDB.json" in dirPath that stores an array
+// of UmlscDB and stores it in the database
+// the map BackRepoUmlscid_atBckpTime_newID is updated accordingly
+func (backRepoUmlsc *BackRepoUmlscStruct) RestorePhaseOne(dirPath string) {
+
+	// resets the map
+	BackRepoUmlscid_atBckpTime_newID = make(map[uint]uint)
 
 	filename := filepath.Join(dirPath, "UmlscDB.json")
 	jsonFile, err := os.Open(filename)
@@ -442,19 +448,46 @@ func (backRepoUmlsc *BackRepoUmlscStruct) Restore(dirPath string) {
 	// fill up Map_UmlscDBID_UmlscDB
 	for _, umlscDB := range forRestore {
 
-		umlscDB_ID := umlscDB.ID
+		umlscDB_ID_atBackupTime := umlscDB.ID
 		umlscDB.ID = 0
 		query := backRepoUmlsc.db.Create(umlscDB)
 		if query.Error != nil {
 			log.Panic(query.Error)
 		}
-		if umlscDB_ID != umlscDB.ID {
-			log.Panicf("ID of Umlsc restore ID %d, name %s, has wrong ID %d in DB after create",
-				umlscDB_ID, umlscDB.Name_Data.String, umlscDB.ID)
-		}
+		(*backRepoUmlsc.Map_UmlscDBID_UmlscDB)[umlscDB.ID] = umlscDB
+		BackRepoUmlscid_atBckpTime_newID[umlscDB_ID_atBackupTime] = umlscDB.ID
 	}
 
 	if err != nil {
 		log.Panic("Cannot restore/unmarshall json Umlsc file", err.Error())
 	}
 }
+
+// RestorePhaseTwo uses all map BackRepo<Umlsc>id_atBckpTime_newID
+// to compute new index
+func (backRepoUmlsc *BackRepoUmlscStruct) RestorePhaseTwo() {
+
+	for _, umlscDB := range (*backRepoUmlsc.Map_UmlscDBID_UmlscDB) {
+
+		// next line of code is to avert unused variable compilation error
+		_ = umlscDB
+
+		// insertion point for reindexing pointers encoding
+		// This reindex umlsc.Umlscs
+		if umlscDB.Pkgelt_UmlscsDBID.Int64 != 0 {
+			umlscDB.Pkgelt_UmlscsDBID.Int64 = 
+				int64(BackRepoPkgeltid_atBckpTime_newID[uint(umlscDB.Pkgelt_UmlscsDBID.Int64)])
+		}
+
+		// update databse with new index encoding
+		query := backRepoUmlsc.db.Model(umlscDB).Updates(*umlscDB)
+		if query.Error != nil {
+			log.Panic(query.Error)
+		}
+	}
+
+}
+
+// this field is used during the restauration process.
+// it stores the ID at the backup time and is used for renumbering
+var BackRepoUmlscid_atBckpTime_newID map[uint]uint

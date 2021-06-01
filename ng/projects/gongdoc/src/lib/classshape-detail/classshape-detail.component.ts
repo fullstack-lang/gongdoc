@@ -187,4 +187,10 @@ export class ClassshapeDetailComponent implements OnInit {
 		dialogRef.afterClosed().subscribe(result => {
 		});
 	}
+
+	fillUpNameIfEmpty(event) {
+		if (this.classshape.Name == undefined) {
+			this.classshape.Name = event.value.Name		
+		}
+	}
 }

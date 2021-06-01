@@ -271,7 +271,7 @@ func (backRepoPosition *BackRepoPositionStruct) CheckoutPhaseOneInstance(positio
 	}
 	positionDB.CopyBasicFieldsToPosition(position)
 
-	// preserve pointer to aclassDB. Otherwise, pointer will is recycled and the map of pointers
+	// preserve pointer to positionDB. Otherwise, pointer will is recycled and the map of pointers
 	// Map_PositionDBID_PositionDB)[positionDB hold variable pointers
 	positionDB_Data := *positionDB
 	preservedPtrToPosition := &positionDB_Data
@@ -358,7 +358,7 @@ func (backRepoPosition *BackRepoPositionStruct) Backup(dirPath string) {
 
 	// organize the map into an array with increasing IDs, in order to have repoductible
 	// backup file
-	var forBackup []*PositionDB
+	forBackup := make([]*PositionDB, 0)
 	for _, positionDB := range *backRepoPosition.Map_PositionDBID_PositionDB {
 		forBackup = append(forBackup, positionDB)
 	}
@@ -379,7 +379,13 @@ func (backRepoPosition *BackRepoPositionStruct) Backup(dirPath string) {
 	}
 }
 
-func (backRepoPosition *BackRepoPositionStruct) Restore(dirPath string) {
+// RestorePhaseOne read the file "PositionDB.json" in dirPath that stores an array
+// of PositionDB and stores it in the database
+// the map BackRepoPositionid_atBckpTime_newID is updated accordingly
+func (backRepoPosition *BackRepoPositionStruct) RestorePhaseOne(dirPath string) {
+
+	// resets the map
+	BackRepoPositionid_atBckpTime_newID = make(map[uint]uint)
 
 	filename := filepath.Join(dirPath, "PositionDB.json")
 	jsonFile, err := os.Open(filename)
@@ -398,19 +404,40 @@ func (backRepoPosition *BackRepoPositionStruct) Restore(dirPath string) {
 	// fill up Map_PositionDBID_PositionDB
 	for _, positionDB := range forRestore {
 
-		positionDB_ID := positionDB.ID
+		positionDB_ID_atBackupTime := positionDB.ID
 		positionDB.ID = 0
 		query := backRepoPosition.db.Create(positionDB)
 		if query.Error != nil {
 			log.Panic(query.Error)
 		}
-		if positionDB_ID != positionDB.ID {
-			log.Panicf("ID of Position restore ID %d, name %s, has wrong ID %d in DB after create",
-				positionDB_ID, positionDB.Name_Data.String, positionDB.ID)
-		}
+		(*backRepoPosition.Map_PositionDBID_PositionDB)[positionDB.ID] = positionDB
+		BackRepoPositionid_atBckpTime_newID[positionDB_ID_atBackupTime] = positionDB.ID
 	}
 
 	if err != nil {
 		log.Panic("Cannot restore/unmarshall json Position file", err.Error())
 	}
 }
+
+// RestorePhaseTwo uses all map BackRepo<Position>id_atBckpTime_newID
+// to compute new index
+func (backRepoPosition *BackRepoPositionStruct) RestorePhaseTwo() {
+
+	for _, positionDB := range (*backRepoPosition.Map_PositionDBID_PositionDB) {
+
+		// next line of code is to avert unused variable compilation error
+		_ = positionDB
+
+		// insertion point for reindexing pointers encoding
+		// update databse with new index encoding
+		query := backRepoPosition.db.Model(positionDB).Updates(*positionDB)
+		if query.Error != nil {
+			log.Panic(query.Error)
+		}
+	}
+
+}
+
+// this field is used during the restauration process.
+// it stores the ID at the backup time and is used for renumbering
+var BackRepoPositionid_atBckpTime_newID map[uint]uint

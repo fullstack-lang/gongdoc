@@ -157,4 +157,10 @@ export class VerticeDetailComponent implements OnInit {
 		dialogRef.afterClosed().subscribe(result => {
 		});
 	}
+
+	fillUpNameIfEmpty(event) {
+		if (this.vertice.Name == undefined) {
+			this.vertice.Name = event.value.Name		
+		}
+	}
 }

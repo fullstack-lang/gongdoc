@@ -172,4 +172,10 @@ export class UmlscDetailComponent implements OnInit {
 		dialogRef.afterClosed().subscribe(result => {
 		});
 	}
+
+	fillUpNameIfEmpty(event) {
+		if (this.umlsc.Name == undefined) {
+			this.umlsc.Name = event.value.Name		
+		}
+	}
 }

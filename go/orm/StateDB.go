@@ -276,7 +276,7 @@ func (backRepoState *BackRepoStateStruct) CheckoutPhaseOneInstance(stateDB *Stat
 	}
 	stateDB.CopyBasicFieldsToState(state)
 
-	// preserve pointer to aclassDB. Otherwise, pointer will is recycled and the map of pointers
+	// preserve pointer to stateDB. Otherwise, pointer will is recycled and the map of pointers
 	// Map_StateDBID_StateDB)[stateDB hold variable pointers
 	stateDB_Data := *stateDB
 	preservedPtrToState := &stateDB_Data
@@ -363,7 +363,7 @@ func (backRepoState *BackRepoStateStruct) Backup(dirPath string) {
 
 	// organize the map into an array with increasing IDs, in order to have repoductible
 	// backup file
-	var forBackup []*StateDB
+	forBackup := make([]*StateDB, 0)
 	for _, stateDB := range *backRepoState.Map_StateDBID_StateDB {
 		forBackup = append(forBackup, stateDB)
 	}
@@ -384,7 +384,13 @@ func (backRepoState *BackRepoStateStruct) Backup(dirPath string) {
 	}
 }
 
-func (backRepoState *BackRepoStateStruct) Restore(dirPath string) {
+// RestorePhaseOne read the file "StateDB.json" in dirPath that stores an array
+// of StateDB and stores it in the database
+// the map BackRepoStateid_atBckpTime_newID is updated accordingly
+func (backRepoState *BackRepoStateStruct) RestorePhaseOne(dirPath string) {
+
+	// resets the map
+	BackRepoStateid_atBckpTime_newID = make(map[uint]uint)
 
 	filename := filepath.Join(dirPath, "StateDB.json")
 	jsonFile, err := os.Open(filename)
@@ -403,19 +409,46 @@ func (backRepoState *BackRepoStateStruct) Restore(dirPath string) {
 	// fill up Map_StateDBID_StateDB
 	for _, stateDB := range forRestore {
 
-		stateDB_ID := stateDB.ID
+		stateDB_ID_atBackupTime := stateDB.ID
 		stateDB.ID = 0
 		query := backRepoState.db.Create(stateDB)
 		if query.Error != nil {
 			log.Panic(query.Error)
 		}
-		if stateDB_ID != stateDB.ID {
-			log.Panicf("ID of State restore ID %d, name %s, has wrong ID %d in DB after create",
-				stateDB_ID, stateDB.Name_Data.String, stateDB.ID)
-		}
+		(*backRepoState.Map_StateDBID_StateDB)[stateDB.ID] = stateDB
+		BackRepoStateid_atBckpTime_newID[stateDB_ID_atBackupTime] = stateDB.ID
 	}
 
 	if err != nil {
 		log.Panic("Cannot restore/unmarshall json State file", err.Error())
 	}
 }
+
+// RestorePhaseTwo uses all map BackRepo<State>id_atBckpTime_newID
+// to compute new index
+func (backRepoState *BackRepoStateStruct) RestorePhaseTwo() {
+
+	for _, stateDB := range (*backRepoState.Map_StateDBID_StateDB) {
+
+		// next line of code is to avert unused variable compilation error
+		_ = stateDB
+
+		// insertion point for reindexing pointers encoding
+		// This reindex state.States
+		if stateDB.Umlsc_StatesDBID.Int64 != 0 {
+			stateDB.Umlsc_StatesDBID.Int64 = 
+				int64(BackRepoUmlscid_atBckpTime_newID[uint(stateDB.Umlsc_StatesDBID.Int64)])
+		}
+
+		// update databse with new index encoding
+		query := backRepoState.db.Model(stateDB).Updates(*stateDB)
+		if query.Error != nil {
+			log.Panic(query.Error)
+		}
+	}
+
+}
+
+// this field is used during the restauration process.
+// it stores the ID at the backup time and is used for renumbering
+var BackRepoStateid_atBckpTime_newID map[uint]uint

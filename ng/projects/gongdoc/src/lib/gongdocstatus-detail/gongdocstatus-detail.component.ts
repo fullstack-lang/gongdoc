@@ -160,4 +160,10 @@ export class GongdocStatusDetailComponent implements OnInit {
 		dialogRef.afterClosed().subscribe(result => {
 		});
 	}
+
+	fillUpNameIfEmpty(event) {
+		if (this.gongdocstatus.Name == undefined) {
+			this.gongdocstatus.Name = event.value.Name		
+		}
+	}
 }

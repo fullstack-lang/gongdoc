@@ -157,4 +157,10 @@ export class PositionDetailComponent implements OnInit {
 		dialogRef.afterClosed().subscribe(result => {
 		});
 	}
+
+	fillUpNameIfEmpty(event) {
+		if (this.position.Name == undefined) {
+			this.position.Name = event.value.Name		
+		}
+	}
 }

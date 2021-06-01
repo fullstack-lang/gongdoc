@@ -271,7 +271,7 @@ func (backRepoVertice *BackRepoVerticeStruct) CheckoutPhaseOneInstance(verticeDB
 	}
 	verticeDB.CopyBasicFieldsToVertice(vertice)
 
-	// preserve pointer to aclassDB. Otherwise, pointer will is recycled and the map of pointers
+	// preserve pointer to verticeDB. Otherwise, pointer will is recycled and the map of pointers
 	// Map_VerticeDBID_VerticeDB)[verticeDB hold variable pointers
 	verticeDB_Data := *verticeDB
 	preservedPtrToVertice := &verticeDB_Data
@@ -358,7 +358,7 @@ func (backRepoVertice *BackRepoVerticeStruct) Backup(dirPath string) {
 
 	// organize the map into an array with increasing IDs, in order to have repoductible
 	// backup file
-	var forBackup []*VerticeDB
+	forBackup := make([]*VerticeDB, 0)
 	for _, verticeDB := range *backRepoVertice.Map_VerticeDBID_VerticeDB {
 		forBackup = append(forBackup, verticeDB)
 	}
@@ -379,7 +379,13 @@ func (backRepoVertice *BackRepoVerticeStruct) Backup(dirPath string) {
 	}
 }
 
-func (backRepoVertice *BackRepoVerticeStruct) Restore(dirPath string) {
+// RestorePhaseOne read the file "VerticeDB.json" in dirPath that stores an array
+// of VerticeDB and stores it in the database
+// the map BackRepoVerticeid_atBckpTime_newID is updated accordingly
+func (backRepoVertice *BackRepoVerticeStruct) RestorePhaseOne(dirPath string) {
+
+	// resets the map
+	BackRepoVerticeid_atBckpTime_newID = make(map[uint]uint)
 
 	filename := filepath.Join(dirPath, "VerticeDB.json")
 	jsonFile, err := os.Open(filename)
@@ -398,19 +404,40 @@ func (backRepoVertice *BackRepoVerticeStruct) Restore(dirPath string) {
 	// fill up Map_VerticeDBID_VerticeDB
 	for _, verticeDB := range forRestore {
 
-		verticeDB_ID := verticeDB.ID
+		verticeDB_ID_atBackupTime := verticeDB.ID
 		verticeDB.ID = 0
 		query := backRepoVertice.db.Create(verticeDB)
 		if query.Error != nil {
 			log.Panic(query.Error)
 		}
-		if verticeDB_ID != verticeDB.ID {
-			log.Panicf("ID of Vertice restore ID %d, name %s, has wrong ID %d in DB after create",
-				verticeDB_ID, verticeDB.Name_Data.String, verticeDB.ID)
-		}
+		(*backRepoVertice.Map_VerticeDBID_VerticeDB)[verticeDB.ID] = verticeDB
+		BackRepoVerticeid_atBckpTime_newID[verticeDB_ID_atBackupTime] = verticeDB.ID
 	}
 
 	if err != nil {
 		log.Panic("Cannot restore/unmarshall json Vertice file", err.Error())
 	}
 }
+
+// RestorePhaseTwo uses all map BackRepo<Vertice>id_atBckpTime_newID
+// to compute new index
+func (backRepoVertice *BackRepoVerticeStruct) RestorePhaseTwo() {
+
+	for _, verticeDB := range (*backRepoVertice.Map_VerticeDBID_VerticeDB) {
+
+		// next line of code is to avert unused variable compilation error
+		_ = verticeDB
+
+		// insertion point for reindexing pointers encoding
+		// update databse with new index encoding
+		query := backRepoVertice.db.Model(verticeDB).Updates(*verticeDB)
+		if query.Error != nil {
+			log.Panic(query.Error)
+		}
+	}
+
+}
+
+// this field is used during the restauration process.
+// it stores the ID at the backup time and is used for renumbering
+var BackRepoVerticeid_atBckpTime_newID map[uint]uint

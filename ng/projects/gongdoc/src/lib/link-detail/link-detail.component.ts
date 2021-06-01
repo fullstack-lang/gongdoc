@@ -187,4 +187,10 @@ export class LinkDetailComponent implements OnInit {
 		dialogRef.afterClosed().subscribe(result => {
 		});
 	}
+
+	fillUpNameIfEmpty(event) {
+		if (this.link.Name == undefined) {
+			this.link.Name = event.value.Name		
+		}
+	}
 }

@@ -157,4 +157,10 @@ export class PkgeltDetailComponent implements OnInit {
 		dialogRef.afterClosed().subscribe(result => {
 		});
 	}
+
+	fillUpNameIfEmpty(event) {
+		if (this.pkgelt.Name == undefined) {
+			this.pkgelt.Name = event.value.Name		
+		}
+	}
 }
