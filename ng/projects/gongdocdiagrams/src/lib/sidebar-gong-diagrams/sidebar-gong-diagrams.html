@@ -14,6 +14,11 @@
                 <button mat-icon-button disabled></button>
                 <span>{{node.name}} &nbsp;</span>
             </div>
+            <div *ngIf="node.type == 'ROOT_OF_TIME_FIELDS'">
+                <!-- use a disabled button to provide padding for tree leaf -->
+                <button mat-icon-button disabled></button>
+                <span>{{node.name}} &nbsp;</span>
+            </div>
             <div *ngIf="node.type == 'ROOT_OF_POINTER_TO_STRUCT_FIELDS'">
                 <!-- use a disabled button to provide padding for tree leaf -->
                 <button mat-icon-button disabled></button>
@@ -89,6 +94,34 @@
             </div>
 
             <div *ngIf="node.type == 'BASIC_FIELD'">
+                <div *ngIf="node.canBeIncluded == true">
+                    <!-- use a disabled button to provide padding for tree leaf -->
+                    <button mat-icon-button disabled></button>
+                    <span>{{node.name}} &nbsp;</span>
+                    <!-- if then else block to deal wether the object is present or not -->
+                    <div *ngIf="node.present; then leafPresentBlock else leafNotPresentBlock"></div>
+
+                    <!-- if the element is present, display an icon to allow for the removal of the element -->
+                    <ng-template #leafPresentBlock>
+                        <mat-icon class="node-link-icon" (click)="removeBasicFieldFromDiagram(node)">
+                            visibility_off
+                        </mat-icon>
+                    </ng-template>
+
+                    <!-- -->
+                    <ng-template #leafNotPresentBlock>
+                        <mat-icon class="node-link-icon" (click)="addBasicFieldToDiagram(node)">
+                            visibility
+                        </mat-icon>
+                    </ng-template>
+                </div>
+                <div *ngIf="node.canBeIncluded == false">
+                    <button mat-icon-button disabled></button>
+                    <span>{{node.name}} &nbsp;</span>
+                </div>
+            </div>
+
+            <div *ngIf="node.type == 'TIME_FIELD'">
                 <div *ngIf="node.canBeIncluded == true">
                     <!-- use a disabled button to provide padding for tree leaf -->
                     <button mat-icon-button disabled></button>

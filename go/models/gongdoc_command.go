@@ -139,7 +139,7 @@ func init() {
 						}
 
 						Stage.Commit()
-					case BASIC_FIELD:
+					case BASIC_FIELD, TIME_FIELD:
 						var basicField *Field
 						var idx int
 						for _idx, _basicField := range classshape.Fields {
@@ -205,7 +205,7 @@ func init() {
 
 						classDiagram.Classshapes = append(classDiagram.Classshapes, &classshape)
 						Stage.Commit()
-					case BASIC_FIELD:
+					case BASIC_FIELD, TIME_FIELD:
 						// check wether the classshape of the basic field is present
 						foundClassshape := false
 						var classshape *Classshape
@@ -222,15 +222,19 @@ func init() {
 						}
 						_ = classshape
 
-						var basicField Field
-						basicField.Name = GongdocCommandSingloton.FieldName
-						basicField.Fieldname = GongdocCommandSingloton.FieldName
-						basicField.Fieldtypename = GongdocCommandSingloton.FieldTypeName
-						basicField.Structname = classshape.Structname
-						basicField.Stage()
+						var basicOrTimeField Field
+						basicOrTimeField.Name = GongdocCommandSingloton.FieldName
+						basicOrTimeField.Fieldname = GongdocCommandSingloton.FieldName
+						if GongdocCommandSingloton.GongdocNodeType != TIME_FIELD {
+							basicOrTimeField.Fieldtypename = GongdocCommandSingloton.FieldTypeName
+						} else {
+							basicOrTimeField.Fieldtypename = "Time"
+						}
+						basicOrTimeField.Structname = classshape.Structname
+						basicOrTimeField.Stage()
 
 						classshape.Heigth = classshape.Heigth + 15
-						classshape.Fields = append(classshape.Fields, &basicField)
+						classshape.Fields = append(classshape.Fields, &basicOrTimeField)
 						Stage.Commit()
 
 					case POINTER_TO_STRUCT, SLICE_OF_POINTER_TO_STRUCT:

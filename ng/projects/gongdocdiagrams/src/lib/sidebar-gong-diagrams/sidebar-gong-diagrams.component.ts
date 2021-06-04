@@ -351,6 +351,43 @@ export class SidebarGongDiagramsComponent implements OnInit {
           })
 
           /**
+          * let append a node for the slide of pointer GongTimeFields
+          */
+          let GongTimeFieldsGongNodeAssociation: GongNode = {
+            name: "GongTimeFields",
+            type: gongdoc.GongdocNodeType.ROOT_OF_TIME_FIELDS,
+            id: 0,
+            uniqueIdPerStack: 19 * nonInstanceNodeId,
+            structName: "GongStruct",
+            children: new Array<GongNode>(),
+
+          }
+          nonInstanceNodeId = nonInstanceNodeId + 1
+          gongstructGongNodeInstance.children.push(GongTimeFieldsGongNodeAssociation)
+
+          gongstructDB.GongTimeFields?.forEach(gongtimefieldDB => {
+
+            let structIsPresent = arrayOfDisplayedClassshape.has(gongtimefieldDB.GongStruct_GongTimeFields_reverse.Name)
+
+            let presentInDiagram = arrayOfDisplayedBasicField.has(gongstructDB.Name + "." + gongtimefieldDB.Name)
+
+            let gongbasicfieldNode: GongNode = {
+              name: gongtimefieldDB.Name,
+              type: gongdoc.GongdocNodeType.TIME_FIELD,
+              id: gongtimefieldDB.ID,
+              uniqueIdPerStack: // godel numbering (thank you kurt)
+                7 * gong.getGongStructUniqueID(gongstructDB.ID)
+                + 11 * gong.getGongBasicFieldUniqueID(gongtimefieldDB.ID),
+              structName: gongstructDB.Name,
+              gongBasicField: gongtimefieldDB,
+              children: new Array<GongNode>(),
+              presentInDiagram: presentInDiagram,
+              canBeIncluded: structIsPresent,
+            }
+            GongTimeFieldsGongNodeAssociation.children.push(gongbasicfieldNode)
+          })
+
+          /**
           * let append a node for the slide of pointer PointerToGongStructFields
           */
           let PointerToGongStructFieldsGongNodeAssociation: GongNode = {
