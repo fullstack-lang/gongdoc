@@ -15,6 +15,8 @@ import (
 
 	"github.com/jinzhu/gorm"
 
+	"github.com/tealeg/xlsx/v3"
+
 	"github.com/fullstack-lang/gongdoc/go/models"
 )
 
@@ -79,6 +81,27 @@ type UmlscDBs []UmlscDB
 type UmlscDBResponse struct {
 	UmlscDB
 }
+
+// UmlscWOP is a Umlsc without pointers
+// it holds the same basic fields but pointers are encoded into uint
+type UmlscWOP struct {
+	ID int
+
+	// insertion for WOP basic fields
+
+	Name string
+
+	Activestate string
+	// insertion for WOP pointer fields
+}
+
+var Umlsc_Fields = []string{
+	// insertion for WOP basic fields
+	"ID",
+	"Name",
+	"Activestate",
+}
+
 
 type BackRepoUmlscStruct struct {
 	// stores UmlscDB according to their gorm ID
@@ -376,7 +399,7 @@ func (backRepo *BackRepoStruct) CheckoutUmlsc(umlsc *models.Umlsc) {
 	}
 }
 
-// CopyBasicFieldsToUmlscDB is used to copy basic fields between the Stage or the CRUD to the back repo
+// CopyBasicFieldsFromUmlsc
 func (umlscDB *UmlscDB) CopyBasicFieldsFromUmlsc(umlsc *models.Umlsc) {
 	// insertion point for fields commit
 	umlscDB.Name_Data.String = umlsc.Name
@@ -387,9 +410,27 @@ func (umlscDB *UmlscDB) CopyBasicFieldsFromUmlsc(umlsc *models.Umlsc) {
 
 }
 
-// CopyBasicFieldsToUmlscDB is used to copy basic fields between the Stage or the CRUD to the back repo
-func (umlscDB *UmlscDB) CopyBasicFieldsToUmlsc(umlsc *models.Umlsc) {
+// CopyBasicFieldsFromUmlscWOP
+func (umlscDB *UmlscDB) CopyBasicFieldsFromUmlscWOP(umlsc *UmlscWOP) {
+	// insertion point for fields commit
+	umlscDB.Name_Data.String = umlsc.Name
+	umlscDB.Name_Data.Valid = true
 
+	umlscDB.Activestate_Data.String = umlsc.Activestate
+	umlscDB.Activestate_Data.Valid = true
+
+}
+
+// CopyBasicFieldsToUmlsc
+func (umlscDB *UmlscDB) CopyBasicFieldsToUmlsc(umlsc *models.Umlsc) {
+	// insertion point for checkout of basic fields (back repo to stage)
+	umlsc.Name = umlscDB.Name_Data.String
+	umlsc.Activestate = umlscDB.Activestate_Data.String
+}
+
+// CopyBasicFieldsToUmlscWOP
+func (umlscDB *UmlscDB) CopyBasicFieldsToUmlscWOP(umlsc *UmlscWOP) {
+	umlsc.ID = int(umlscDB.ID)
 	// insertion point for checkout of basic fields (back repo to stage)
 	umlsc.Name = umlscDB.Name_Data.String
 	umlsc.Activestate = umlscDB.Activestate_Data.String
@@ -420,6 +461,38 @@ func (backRepoUmlsc *BackRepoUmlscStruct) Backup(dirPath string) {
 	err = ioutil.WriteFile(filename, file, 0644)
 	if err != nil {
 		log.Panic("Cannot write the json Umlsc file", err.Error())
+	}
+}
+
+// Backup generates a json file from a slice of all UmlscDB instances in the backrepo
+func (backRepoUmlsc *BackRepoUmlscStruct) BackupXL(file *xlsx.File) {
+
+	// organize the map into an array with increasing IDs, in order to have repoductible
+	// backup file
+	forBackup := make([]*UmlscDB, 0)
+	for _, umlscDB := range *backRepoUmlsc.Map_UmlscDBID_UmlscDB {
+		forBackup = append(forBackup, umlscDB)
+	}
+
+	sort.Slice(forBackup[:], func(i, j int) bool {
+		return forBackup[i].ID < forBackup[j].ID
+	})
+
+	sh, err := file.AddSheet("Umlsc")
+	if err != nil {
+		log.Panic("Cannot add XL file", err.Error())
+	}
+	_ = sh
+
+	row := sh.AddRow()
+	row.WriteSlice(&Umlsc_Fields, -1)
+	for _, umlscDB := range forBackup {
+
+		var umlscWOP UmlscWOP
+		umlscDB.CopyBasicFieldsToUmlscWOP(&umlscWOP)
+
+		row := sh.AddRow()
+		row.WriteStruct(&umlscWOP, -1)
 	}
 }
 

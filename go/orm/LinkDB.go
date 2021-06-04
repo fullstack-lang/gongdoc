@@ -15,6 +15,8 @@ import (
 
 	"github.com/jinzhu/gorm"
 
+	"github.com/tealeg/xlsx/v3"
+
 	"github.com/fullstack-lang/gongdoc/go/models"
 )
 
@@ -95,6 +97,36 @@ type LinkDBs []LinkDB
 type LinkDBResponse struct {
 	LinkDB
 }
+
+// LinkWOP is a Link without pointers
+// it holds the same basic fields but pointers are encoded into uint
+type LinkWOP struct {
+	ID int
+
+	// insertion for WOP basic fields
+
+	Name string
+
+	Fieldname string
+
+	Structname string
+
+	Fieldtypename string
+
+	Multiplicity models.MultiplicityType
+	// insertion for WOP pointer fields
+}
+
+var Link_Fields = []string{
+	// insertion for WOP basic fields
+	"ID",
+	"Name",
+	"Fieldname",
+	"Structname",
+	"Fieldtypename",
+	"Multiplicity",
+}
+
 
 type BackRepoLinkStruct struct {
 	// stores LinkDB according to their gorm ID
@@ -358,7 +390,7 @@ func (backRepo *BackRepoStruct) CheckoutLink(link *models.Link) {
 	}
 }
 
-// CopyBasicFieldsToLinkDB is used to copy basic fields between the Stage or the CRUD to the back repo
+// CopyBasicFieldsFromLink
 func (linkDB *LinkDB) CopyBasicFieldsFromLink(link *models.Link) {
 	// insertion point for fields commit
 	linkDB.Name_Data.String = link.Name
@@ -378,9 +410,39 @@ func (linkDB *LinkDB) CopyBasicFieldsFromLink(link *models.Link) {
 
 }
 
-// CopyBasicFieldsToLinkDB is used to copy basic fields between the Stage or the CRUD to the back repo
-func (linkDB *LinkDB) CopyBasicFieldsToLink(link *models.Link) {
+// CopyBasicFieldsFromLinkWOP
+func (linkDB *LinkDB) CopyBasicFieldsFromLinkWOP(link *LinkWOP) {
+	// insertion point for fields commit
+	linkDB.Name_Data.String = link.Name
+	linkDB.Name_Data.Valid = true
 
+	linkDB.Fieldname_Data.String = link.Fieldname
+	linkDB.Fieldname_Data.Valid = true
+
+	linkDB.Structname_Data.String = link.Structname
+	linkDB.Structname_Data.Valid = true
+
+	linkDB.Fieldtypename_Data.String = link.Fieldtypename
+	linkDB.Fieldtypename_Data.Valid = true
+
+	linkDB.Multiplicity_Data.String = string(link.Multiplicity)
+	linkDB.Multiplicity_Data.Valid = true
+
+}
+
+// CopyBasicFieldsToLink
+func (linkDB *LinkDB) CopyBasicFieldsToLink(link *models.Link) {
+	// insertion point for checkout of basic fields (back repo to stage)
+	link.Name = linkDB.Name_Data.String
+	link.Fieldname = linkDB.Fieldname_Data.String
+	link.Structname = linkDB.Structname_Data.String
+	link.Fieldtypename = linkDB.Fieldtypename_Data.String
+	link.Multiplicity = models.MultiplicityType(linkDB.Multiplicity_Data.String)
+}
+
+// CopyBasicFieldsToLinkWOP
+func (linkDB *LinkDB) CopyBasicFieldsToLinkWOP(link *LinkWOP) {
+	link.ID = int(linkDB.ID)
 	// insertion point for checkout of basic fields (back repo to stage)
 	link.Name = linkDB.Name_Data.String
 	link.Fieldname = linkDB.Fieldname_Data.String
@@ -414,6 +476,38 @@ func (backRepoLink *BackRepoLinkStruct) Backup(dirPath string) {
 	err = ioutil.WriteFile(filename, file, 0644)
 	if err != nil {
 		log.Panic("Cannot write the json Link file", err.Error())
+	}
+}
+
+// Backup generates a json file from a slice of all LinkDB instances in the backrepo
+func (backRepoLink *BackRepoLinkStruct) BackupXL(file *xlsx.File) {
+
+	// organize the map into an array with increasing IDs, in order to have repoductible
+	// backup file
+	forBackup := make([]*LinkDB, 0)
+	for _, linkDB := range *backRepoLink.Map_LinkDBID_LinkDB {
+		forBackup = append(forBackup, linkDB)
+	}
+
+	sort.Slice(forBackup[:], func(i, j int) bool {
+		return forBackup[i].ID < forBackup[j].ID
+	})
+
+	sh, err := file.AddSheet("Link")
+	if err != nil {
+		log.Panic("Cannot add XL file", err.Error())
+	}
+	_ = sh
+
+	row := sh.AddRow()
+	row.WriteSlice(&Link_Fields, -1)
+	for _, linkDB := range forBackup {
+
+		var linkWOP LinkWOP
+		linkDB.CopyBasicFieldsToLinkWOP(&linkWOP)
+
+		row := sh.AddRow()
+		row.WriteStruct(&linkWOP, -1)
 	}
 }
 

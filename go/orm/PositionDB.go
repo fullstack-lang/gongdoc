@@ -15,6 +15,8 @@ import (
 
 	"github.com/jinzhu/gorm"
 
+	"github.com/tealeg/xlsx/v3"
+
 	"github.com/fullstack-lang/gongdoc/go/models"
 )
 
@@ -77,6 +79,30 @@ type PositionDBs []PositionDB
 type PositionDBResponse struct {
 	PositionDB
 }
+
+// PositionWOP is a Position without pointers
+// it holds the same basic fields but pointers are encoded into uint
+type PositionWOP struct {
+	ID int
+
+	// insertion for WOP basic fields
+
+	X float64
+
+	Y float64
+
+	Name string
+	// insertion for WOP pointer fields
+}
+
+var Position_Fields = []string{
+	// insertion for WOP basic fields
+	"ID",
+	"X",
+	"Y",
+	"Name",
+}
+
 
 type BackRepoPositionStruct struct {
 	// stores PositionDB according to their gorm ID
@@ -328,7 +354,7 @@ func (backRepo *BackRepoStruct) CheckoutPosition(position *models.Position) {
 	}
 }
 
-// CopyBasicFieldsToPositionDB is used to copy basic fields between the Stage or the CRUD to the back repo
+// CopyBasicFieldsFromPosition
 func (positionDB *PositionDB) CopyBasicFieldsFromPosition(position *models.Position) {
 	// insertion point for fields commit
 	positionDB.X_Data.Float64 = position.X
@@ -342,9 +368,31 @@ func (positionDB *PositionDB) CopyBasicFieldsFromPosition(position *models.Posit
 
 }
 
-// CopyBasicFieldsToPositionDB is used to copy basic fields between the Stage or the CRUD to the back repo
-func (positionDB *PositionDB) CopyBasicFieldsToPosition(position *models.Position) {
+// CopyBasicFieldsFromPositionWOP
+func (positionDB *PositionDB) CopyBasicFieldsFromPositionWOP(position *PositionWOP) {
+	// insertion point for fields commit
+	positionDB.X_Data.Float64 = position.X
+	positionDB.X_Data.Valid = true
 
+	positionDB.Y_Data.Float64 = position.Y
+	positionDB.Y_Data.Valid = true
+
+	positionDB.Name_Data.String = position.Name
+	positionDB.Name_Data.Valid = true
+
+}
+
+// CopyBasicFieldsToPosition
+func (positionDB *PositionDB) CopyBasicFieldsToPosition(position *models.Position) {
+	// insertion point for checkout of basic fields (back repo to stage)
+	position.X = positionDB.X_Data.Float64
+	position.Y = positionDB.Y_Data.Float64
+	position.Name = positionDB.Name_Data.String
+}
+
+// CopyBasicFieldsToPositionWOP
+func (positionDB *PositionDB) CopyBasicFieldsToPositionWOP(position *PositionWOP) {
+	position.ID = int(positionDB.ID)
 	// insertion point for checkout of basic fields (back repo to stage)
 	position.X = positionDB.X_Data.Float64
 	position.Y = positionDB.Y_Data.Float64
@@ -376,6 +424,38 @@ func (backRepoPosition *BackRepoPositionStruct) Backup(dirPath string) {
 	err = ioutil.WriteFile(filename, file, 0644)
 	if err != nil {
 		log.Panic("Cannot write the json Position file", err.Error())
+	}
+}
+
+// Backup generates a json file from a slice of all PositionDB instances in the backrepo
+func (backRepoPosition *BackRepoPositionStruct) BackupXL(file *xlsx.File) {
+
+	// organize the map into an array with increasing IDs, in order to have repoductible
+	// backup file
+	forBackup := make([]*PositionDB, 0)
+	for _, positionDB := range *backRepoPosition.Map_PositionDBID_PositionDB {
+		forBackup = append(forBackup, positionDB)
+	}
+
+	sort.Slice(forBackup[:], func(i, j int) bool {
+		return forBackup[i].ID < forBackup[j].ID
+	})
+
+	sh, err := file.AddSheet("Position")
+	if err != nil {
+		log.Panic("Cannot add XL file", err.Error())
+	}
+	_ = sh
+
+	row := sh.AddRow()
+	row.WriteSlice(&Position_Fields, -1)
+	for _, positionDB := range forBackup {
+
+		var positionWOP PositionWOP
+		positionDB.CopyBasicFieldsToPositionWOP(&positionWOP)
+
+		row := sh.AddRow()
+		row.WriteStruct(&positionWOP, -1)
 	}
 }
 

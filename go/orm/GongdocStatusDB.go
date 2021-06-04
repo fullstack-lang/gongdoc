@@ -15,6 +15,8 @@ import (
 
 	"github.com/jinzhu/gorm"
 
+	"github.com/tealeg/xlsx/v3"
+
 	"github.com/fullstack-lang/gongdoc/go/models"
 )
 
@@ -77,6 +79,30 @@ type GongdocStatusDBs []GongdocStatusDB
 type GongdocStatusDBResponse struct {
 	GongdocStatusDB
 }
+
+// GongdocStatusWOP is a GongdocStatus without pointers
+// it holds the same basic fields but pointers are encoded into uint
+type GongdocStatusWOP struct {
+	ID int
+
+	// insertion for WOP basic fields
+
+	Name string
+
+	Status models.GongdocCommandType
+
+	CommandCompletionDate string
+	// insertion for WOP pointer fields
+}
+
+var GongdocStatus_Fields = []string{
+	// insertion for WOP basic fields
+	"ID",
+	"Name",
+	"Status",
+	"CommandCompletionDate",
+}
+
 
 type BackRepoGongdocStatusStruct struct {
 	// stores GongdocStatusDB according to their gorm ID
@@ -328,7 +354,7 @@ func (backRepo *BackRepoStruct) CheckoutGongdocStatus(gongdocstatus *models.Gong
 	}
 }
 
-// CopyBasicFieldsToGongdocStatusDB is used to copy basic fields between the Stage or the CRUD to the back repo
+// CopyBasicFieldsFromGongdocStatus
 func (gongdocstatusDB *GongdocStatusDB) CopyBasicFieldsFromGongdocStatus(gongdocstatus *models.GongdocStatus) {
 	// insertion point for fields commit
 	gongdocstatusDB.Name_Data.String = gongdocstatus.Name
@@ -342,9 +368,31 @@ func (gongdocstatusDB *GongdocStatusDB) CopyBasicFieldsFromGongdocStatus(gongdoc
 
 }
 
-// CopyBasicFieldsToGongdocStatusDB is used to copy basic fields between the Stage or the CRUD to the back repo
-func (gongdocstatusDB *GongdocStatusDB) CopyBasicFieldsToGongdocStatus(gongdocstatus *models.GongdocStatus) {
+// CopyBasicFieldsFromGongdocStatusWOP
+func (gongdocstatusDB *GongdocStatusDB) CopyBasicFieldsFromGongdocStatusWOP(gongdocstatus *GongdocStatusWOP) {
+	// insertion point for fields commit
+	gongdocstatusDB.Name_Data.String = gongdocstatus.Name
+	gongdocstatusDB.Name_Data.Valid = true
 
+	gongdocstatusDB.Status_Data.String = string(gongdocstatus.Status)
+	gongdocstatusDB.Status_Data.Valid = true
+
+	gongdocstatusDB.CommandCompletionDate_Data.String = gongdocstatus.CommandCompletionDate
+	gongdocstatusDB.CommandCompletionDate_Data.Valid = true
+
+}
+
+// CopyBasicFieldsToGongdocStatus
+func (gongdocstatusDB *GongdocStatusDB) CopyBasicFieldsToGongdocStatus(gongdocstatus *models.GongdocStatus) {
+	// insertion point for checkout of basic fields (back repo to stage)
+	gongdocstatus.Name = gongdocstatusDB.Name_Data.String
+	gongdocstatus.Status = models.GongdocCommandType(gongdocstatusDB.Status_Data.String)
+	gongdocstatus.CommandCompletionDate = gongdocstatusDB.CommandCompletionDate_Data.String
+}
+
+// CopyBasicFieldsToGongdocStatusWOP
+func (gongdocstatusDB *GongdocStatusDB) CopyBasicFieldsToGongdocStatusWOP(gongdocstatus *GongdocStatusWOP) {
+	gongdocstatus.ID = int(gongdocstatusDB.ID)
 	// insertion point for checkout of basic fields (back repo to stage)
 	gongdocstatus.Name = gongdocstatusDB.Name_Data.String
 	gongdocstatus.Status = models.GongdocCommandType(gongdocstatusDB.Status_Data.String)
@@ -376,6 +424,38 @@ func (backRepoGongdocStatus *BackRepoGongdocStatusStruct) Backup(dirPath string)
 	err = ioutil.WriteFile(filename, file, 0644)
 	if err != nil {
 		log.Panic("Cannot write the json GongdocStatus file", err.Error())
+	}
+}
+
+// Backup generates a json file from a slice of all GongdocStatusDB instances in the backrepo
+func (backRepoGongdocStatus *BackRepoGongdocStatusStruct) BackupXL(file *xlsx.File) {
+
+	// organize the map into an array with increasing IDs, in order to have repoductible
+	// backup file
+	forBackup := make([]*GongdocStatusDB, 0)
+	for _, gongdocstatusDB := range *backRepoGongdocStatus.Map_GongdocStatusDBID_GongdocStatusDB {
+		forBackup = append(forBackup, gongdocstatusDB)
+	}
+
+	sort.Slice(forBackup[:], func(i, j int) bool {
+		return forBackup[i].ID < forBackup[j].ID
+	})
+
+	sh, err := file.AddSheet("GongdocStatus")
+	if err != nil {
+		log.Panic("Cannot add XL file", err.Error())
+	}
+	_ = sh
+
+	row := sh.AddRow()
+	row.WriteSlice(&GongdocStatus_Fields, -1)
+	for _, gongdocstatusDB := range forBackup {
+
+		var gongdocstatusWOP GongdocStatusWOP
+		gongdocstatusDB.CopyBasicFieldsToGongdocStatusWOP(&gongdocstatusWOP)
+
+		row := sh.AddRow()
+		row.WriteStruct(&gongdocstatusWOP, -1)
 	}
 }
 

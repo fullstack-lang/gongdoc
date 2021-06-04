@@ -15,6 +15,8 @@ import (
 
 	"github.com/jinzhu/gorm"
 
+	"github.com/tealeg/xlsx/v3"
+
 	"github.com/fullstack-lang/gongdoc/go/models"
 )
 
@@ -82,6 +84,30 @@ type StateDBs []StateDB
 type StateDBResponse struct {
 	StateDB
 }
+
+// StateWOP is a State without pointers
+// it holds the same basic fields but pointers are encoded into uint
+type StateWOP struct {
+	ID int
+
+	// insertion for WOP basic fields
+
+	Name string
+
+	X float64
+
+	Y float64
+	// insertion for WOP pointer fields
+}
+
+var State_Fields = []string{
+	// insertion for WOP basic fields
+	"ID",
+	"Name",
+	"X",
+	"Y",
+}
+
 
 type BackRepoStateStruct struct {
 	// stores StateDB according to their gorm ID
@@ -333,7 +359,7 @@ func (backRepo *BackRepoStruct) CheckoutState(state *models.State) {
 	}
 }
 
-// CopyBasicFieldsToStateDB is used to copy basic fields between the Stage or the CRUD to the back repo
+// CopyBasicFieldsFromState
 func (stateDB *StateDB) CopyBasicFieldsFromState(state *models.State) {
 	// insertion point for fields commit
 	stateDB.Name_Data.String = state.Name
@@ -347,9 +373,31 @@ func (stateDB *StateDB) CopyBasicFieldsFromState(state *models.State) {
 
 }
 
-// CopyBasicFieldsToStateDB is used to copy basic fields between the Stage or the CRUD to the back repo
-func (stateDB *StateDB) CopyBasicFieldsToState(state *models.State) {
+// CopyBasicFieldsFromStateWOP
+func (stateDB *StateDB) CopyBasicFieldsFromStateWOP(state *StateWOP) {
+	// insertion point for fields commit
+	stateDB.Name_Data.String = state.Name
+	stateDB.Name_Data.Valid = true
 
+	stateDB.X_Data.Float64 = state.X
+	stateDB.X_Data.Valid = true
+
+	stateDB.Y_Data.Float64 = state.Y
+	stateDB.Y_Data.Valid = true
+
+}
+
+// CopyBasicFieldsToState
+func (stateDB *StateDB) CopyBasicFieldsToState(state *models.State) {
+	// insertion point for checkout of basic fields (back repo to stage)
+	state.Name = stateDB.Name_Data.String
+	state.X = stateDB.X_Data.Float64
+	state.Y = stateDB.Y_Data.Float64
+}
+
+// CopyBasicFieldsToStateWOP
+func (stateDB *StateDB) CopyBasicFieldsToStateWOP(state *StateWOP) {
+	state.ID = int(stateDB.ID)
 	// insertion point for checkout of basic fields (back repo to stage)
 	state.Name = stateDB.Name_Data.String
 	state.X = stateDB.X_Data.Float64
@@ -381,6 +429,38 @@ func (backRepoState *BackRepoStateStruct) Backup(dirPath string) {
 	err = ioutil.WriteFile(filename, file, 0644)
 	if err != nil {
 		log.Panic("Cannot write the json State file", err.Error())
+	}
+}
+
+// Backup generates a json file from a slice of all StateDB instances in the backrepo
+func (backRepoState *BackRepoStateStruct) BackupXL(file *xlsx.File) {
+
+	// organize the map into an array with increasing IDs, in order to have repoductible
+	// backup file
+	forBackup := make([]*StateDB, 0)
+	for _, stateDB := range *backRepoState.Map_StateDBID_StateDB {
+		forBackup = append(forBackup, stateDB)
+	}
+
+	sort.Slice(forBackup[:], func(i, j int) bool {
+		return forBackup[i].ID < forBackup[j].ID
+	})
+
+	sh, err := file.AddSheet("State")
+	if err != nil {
+		log.Panic("Cannot add XL file", err.Error())
+	}
+	_ = sh
+
+	row := sh.AddRow()
+	row.WriteSlice(&State_Fields, -1)
+	for _, stateDB := range forBackup {
+
+		var stateWOP StateWOP
+		stateDB.CopyBasicFieldsToStateWOP(&stateWOP)
+
+		row := sh.AddRow()
+		row.WriteStruct(&stateWOP, -1)
 	}
 }
 

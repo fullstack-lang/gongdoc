@@ -15,6 +15,8 @@ import (
 
 	"github.com/jinzhu/gorm"
 
+	"github.com/tealeg/xlsx/v3"
+
 	"github.com/fullstack-lang/gongdoc/go/models"
 )
 
@@ -98,6 +100,51 @@ type GongdocCommandDBs []GongdocCommandDB
 type GongdocCommandDBResponse struct {
 	GongdocCommandDB
 }
+
+// GongdocCommandWOP is a GongdocCommand without pointers
+// it holds the same basic fields but pointers are encoded into uint
+type GongdocCommandWOP struct {
+	ID int
+
+	// insertion for WOP basic fields
+
+	Name string
+
+	Command models.GongdocCommandType
+
+	DiagramName string
+
+	Date string
+
+	GongdocNodeType models.GongdocNodeType
+
+	StructName string
+
+	FieldName string
+
+	FieldTypeName string
+
+	PositionX int
+
+	PositionY int
+	// insertion for WOP pointer fields
+}
+
+var GongdocCommand_Fields = []string{
+	// insertion for WOP basic fields
+	"ID",
+	"Name",
+	"Command",
+	"DiagramName",
+	"Date",
+	"GongdocNodeType",
+	"StructName",
+	"FieldName",
+	"FieldTypeName",
+	"PositionX",
+	"PositionY",
+}
+
 
 type BackRepoGongdocCommandStruct struct {
 	// stores GongdocCommandDB according to their gorm ID
@@ -349,7 +396,7 @@ func (backRepo *BackRepoStruct) CheckoutGongdocCommand(gongdoccommand *models.Go
 	}
 }
 
-// CopyBasicFieldsToGongdocCommandDB is used to copy basic fields between the Stage or the CRUD to the back repo
+// CopyBasicFieldsFromGongdocCommand
 func (gongdoccommandDB *GongdocCommandDB) CopyBasicFieldsFromGongdocCommand(gongdoccommand *models.GongdocCommand) {
 	// insertion point for fields commit
 	gongdoccommandDB.Name_Data.String = gongdoccommand.Name
@@ -384,9 +431,59 @@ func (gongdoccommandDB *GongdocCommandDB) CopyBasicFieldsFromGongdocCommand(gong
 
 }
 
-// CopyBasicFieldsToGongdocCommandDB is used to copy basic fields between the Stage or the CRUD to the back repo
-func (gongdoccommandDB *GongdocCommandDB) CopyBasicFieldsToGongdocCommand(gongdoccommand *models.GongdocCommand) {
+// CopyBasicFieldsFromGongdocCommandWOP
+func (gongdoccommandDB *GongdocCommandDB) CopyBasicFieldsFromGongdocCommandWOP(gongdoccommand *GongdocCommandWOP) {
+	// insertion point for fields commit
+	gongdoccommandDB.Name_Data.String = gongdoccommand.Name
+	gongdoccommandDB.Name_Data.Valid = true
 
+	gongdoccommandDB.Command_Data.String = string(gongdoccommand.Command)
+	gongdoccommandDB.Command_Data.Valid = true
+
+	gongdoccommandDB.DiagramName_Data.String = gongdoccommand.DiagramName
+	gongdoccommandDB.DiagramName_Data.Valid = true
+
+	gongdoccommandDB.Date_Data.String = gongdoccommand.Date
+	gongdoccommandDB.Date_Data.Valid = true
+
+	gongdoccommandDB.GongdocNodeType_Data.String = string(gongdoccommand.GongdocNodeType)
+	gongdoccommandDB.GongdocNodeType_Data.Valid = true
+
+	gongdoccommandDB.StructName_Data.String = gongdoccommand.StructName
+	gongdoccommandDB.StructName_Data.Valid = true
+
+	gongdoccommandDB.FieldName_Data.String = gongdoccommand.FieldName
+	gongdoccommandDB.FieldName_Data.Valid = true
+
+	gongdoccommandDB.FieldTypeName_Data.String = gongdoccommand.FieldTypeName
+	gongdoccommandDB.FieldTypeName_Data.Valid = true
+
+	gongdoccommandDB.PositionX_Data.Int64 = int64(gongdoccommand.PositionX)
+	gongdoccommandDB.PositionX_Data.Valid = true
+
+	gongdoccommandDB.PositionY_Data.Int64 = int64(gongdoccommand.PositionY)
+	gongdoccommandDB.PositionY_Data.Valid = true
+
+}
+
+// CopyBasicFieldsToGongdocCommand
+func (gongdoccommandDB *GongdocCommandDB) CopyBasicFieldsToGongdocCommand(gongdoccommand *models.GongdocCommand) {
+	// insertion point for checkout of basic fields (back repo to stage)
+	gongdoccommand.Name = gongdoccommandDB.Name_Data.String
+	gongdoccommand.Command = models.GongdocCommandType(gongdoccommandDB.Command_Data.String)
+	gongdoccommand.DiagramName = gongdoccommandDB.DiagramName_Data.String
+	gongdoccommand.Date = gongdoccommandDB.Date_Data.String
+	gongdoccommand.GongdocNodeType = models.GongdocNodeType(gongdoccommandDB.GongdocNodeType_Data.String)
+	gongdoccommand.StructName = gongdoccommandDB.StructName_Data.String
+	gongdoccommand.FieldName = gongdoccommandDB.FieldName_Data.String
+	gongdoccommand.FieldTypeName = gongdoccommandDB.FieldTypeName_Data.String
+	gongdoccommand.PositionX = int(gongdoccommandDB.PositionX_Data.Int64)
+	gongdoccommand.PositionY = int(gongdoccommandDB.PositionY_Data.Int64)
+}
+
+// CopyBasicFieldsToGongdocCommandWOP
+func (gongdoccommandDB *GongdocCommandDB) CopyBasicFieldsToGongdocCommandWOP(gongdoccommand *GongdocCommandWOP) {
+	gongdoccommand.ID = int(gongdoccommandDB.ID)
 	// insertion point for checkout of basic fields (back repo to stage)
 	gongdoccommand.Name = gongdoccommandDB.Name_Data.String
 	gongdoccommand.Command = models.GongdocCommandType(gongdoccommandDB.Command_Data.String)
@@ -425,6 +522,38 @@ func (backRepoGongdocCommand *BackRepoGongdocCommandStruct) Backup(dirPath strin
 	err = ioutil.WriteFile(filename, file, 0644)
 	if err != nil {
 		log.Panic("Cannot write the json GongdocCommand file", err.Error())
+	}
+}
+
+// Backup generates a json file from a slice of all GongdocCommandDB instances in the backrepo
+func (backRepoGongdocCommand *BackRepoGongdocCommandStruct) BackupXL(file *xlsx.File) {
+
+	// organize the map into an array with increasing IDs, in order to have repoductible
+	// backup file
+	forBackup := make([]*GongdocCommandDB, 0)
+	for _, gongdoccommandDB := range *backRepoGongdocCommand.Map_GongdocCommandDBID_GongdocCommandDB {
+		forBackup = append(forBackup, gongdoccommandDB)
+	}
+
+	sort.Slice(forBackup[:], func(i, j int) bool {
+		return forBackup[i].ID < forBackup[j].ID
+	})
+
+	sh, err := file.AddSheet("GongdocCommand")
+	if err != nil {
+		log.Panic("Cannot add XL file", err.Error())
+	}
+	_ = sh
+
+	row := sh.AddRow()
+	row.WriteSlice(&GongdocCommand_Fields, -1)
+	for _, gongdoccommandDB := range forBackup {
+
+		var gongdoccommandWOP GongdocCommandWOP
+		gongdoccommandDB.CopyBasicFieldsToGongdocCommandWOP(&gongdoccommandWOP)
+
+		row := sh.AddRow()
+		row.WriteStruct(&gongdoccommandWOP, -1)
 	}
 }
 

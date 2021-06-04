@@ -188,7 +188,7 @@ export class SidebarGongdocDiagramsComponent implements OnInit {
       * fill up the Classdiagram part of the mat tree
       */
       let classdiagramGongNodeStruct: GongNode = {
-        name: "Classdiagram",
+        name: "Classdiagrams  (impl. as a go variables)",
         type: GongNodeType.ROOT_OF_CLASS_DIAGRAMS,
         id: 2 * nodeId++,
         structName: "Classdiagram",
@@ -200,7 +200,7 @@ export class SidebarGongdocDiagramsComponent implements OnInit {
       this.frontRepo.Classdiagrams_array.forEach(
         classdiagramDB => {
           let classdiagramGongNodeInstance: GongNode = {
-            name: classdiagramDB.Name,
+            name: "var : "  + classdiagramDB.Name,
             type: GongNodeType.CLASS_DIAGRAM_INSTANCE,
             id: 3 * classdiagramDB.ID,
             structName: "Classdiagram",
@@ -241,7 +241,7 @@ export class SidebarGongdocDiagramsComponent implements OnInit {
       * fill up the Umlsc part of the mat tree
       */
       let umlscGongNodeStruct: GongNode = {
-        name: "Umlsc",
+        name: "Umlscs  (impl. as a go variables)",
         type: GongNodeType.ROOT_OF_STATE_CHARTS,
         id: 2 * nodeId++,
         structName: "Umlsc",
@@ -253,7 +253,7 @@ export class SidebarGongdocDiagramsComponent implements OnInit {
       this.frontRepo.Umlscs_array.forEach(
         umlscDB => {
           let umlscGongNodeInstance: GongNode = {
-            name: umlscDB.Name,
+            name: "var : " +  umlscDB.Name,
             type: GongNodeType.STATE_CHART_INSTANCE,
             id: 7 * umlscDB.ID,
             structName: "Umlsc",

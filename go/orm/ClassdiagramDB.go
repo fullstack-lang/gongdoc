@@ -15,6 +15,8 @@ import (
 
 	"github.com/jinzhu/gorm"
 
+	"github.com/tealeg/xlsx/v3"
+
 	"github.com/fullstack-lang/gongdoc/go/models"
 )
 
@@ -76,6 +78,24 @@ type ClassdiagramDBs []ClassdiagramDB
 type ClassdiagramDBResponse struct {
 	ClassdiagramDB
 }
+
+// ClassdiagramWOP is a Classdiagram without pointers
+// it holds the same basic fields but pointers are encoded into uint
+type ClassdiagramWOP struct {
+	ID int
+
+	// insertion for WOP basic fields
+
+	Name string
+	// insertion for WOP pointer fields
+}
+
+var Classdiagram_Fields = []string{
+	// insertion for WOP basic fields
+	"ID",
+	"Name",
+}
+
 
 type BackRepoClassdiagramStruct struct {
 	// stores ClassdiagramDB according to their gorm ID
@@ -373,7 +393,7 @@ func (backRepo *BackRepoStruct) CheckoutClassdiagram(classdiagram *models.Classd
 	}
 }
 
-// CopyBasicFieldsToClassdiagramDB is used to copy basic fields between the Stage or the CRUD to the back repo
+// CopyBasicFieldsFromClassdiagram
 func (classdiagramDB *ClassdiagramDB) CopyBasicFieldsFromClassdiagram(classdiagram *models.Classdiagram) {
 	// insertion point for fields commit
 	classdiagramDB.Name_Data.String = classdiagram.Name
@@ -381,9 +401,23 @@ func (classdiagramDB *ClassdiagramDB) CopyBasicFieldsFromClassdiagram(classdiagr
 
 }
 
-// CopyBasicFieldsToClassdiagramDB is used to copy basic fields between the Stage or the CRUD to the back repo
-func (classdiagramDB *ClassdiagramDB) CopyBasicFieldsToClassdiagram(classdiagram *models.Classdiagram) {
+// CopyBasicFieldsFromClassdiagramWOP
+func (classdiagramDB *ClassdiagramDB) CopyBasicFieldsFromClassdiagramWOP(classdiagram *ClassdiagramWOP) {
+	// insertion point for fields commit
+	classdiagramDB.Name_Data.String = classdiagram.Name
+	classdiagramDB.Name_Data.Valid = true
 
+}
+
+// CopyBasicFieldsToClassdiagram
+func (classdiagramDB *ClassdiagramDB) CopyBasicFieldsToClassdiagram(classdiagram *models.Classdiagram) {
+	// insertion point for checkout of basic fields (back repo to stage)
+	classdiagram.Name = classdiagramDB.Name_Data.String
+}
+
+// CopyBasicFieldsToClassdiagramWOP
+func (classdiagramDB *ClassdiagramDB) CopyBasicFieldsToClassdiagramWOP(classdiagram *ClassdiagramWOP) {
+	classdiagram.ID = int(classdiagramDB.ID)
 	// insertion point for checkout of basic fields (back repo to stage)
 	classdiagram.Name = classdiagramDB.Name_Data.String
 }
@@ -413,6 +447,38 @@ func (backRepoClassdiagram *BackRepoClassdiagramStruct) Backup(dirPath string) {
 	err = ioutil.WriteFile(filename, file, 0644)
 	if err != nil {
 		log.Panic("Cannot write the json Classdiagram file", err.Error())
+	}
+}
+
+// Backup generates a json file from a slice of all ClassdiagramDB instances in the backrepo
+func (backRepoClassdiagram *BackRepoClassdiagramStruct) BackupXL(file *xlsx.File) {
+
+	// organize the map into an array with increasing IDs, in order to have repoductible
+	// backup file
+	forBackup := make([]*ClassdiagramDB, 0)
+	for _, classdiagramDB := range *backRepoClassdiagram.Map_ClassdiagramDBID_ClassdiagramDB {
+		forBackup = append(forBackup, classdiagramDB)
+	}
+
+	sort.Slice(forBackup[:], func(i, j int) bool {
+		return forBackup[i].ID < forBackup[j].ID
+	})
+
+	sh, err := file.AddSheet("Classdiagram")
+	if err != nil {
+		log.Panic("Cannot add XL file", err.Error())
+	}
+	_ = sh
+
+	row := sh.AddRow()
+	row.WriteSlice(&Classdiagram_Fields, -1)
+	for _, classdiagramDB := range forBackup {
+
+		var classdiagramWOP ClassdiagramWOP
+		classdiagramDB.CopyBasicFieldsToClassdiagramWOP(&classdiagramWOP)
+
+		row := sh.AddRow()
+		row.WriteStruct(&classdiagramWOP, -1)
 	}
 }
 

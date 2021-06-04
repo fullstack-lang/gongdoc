@@ -15,6 +15,8 @@ import (
 
 	"github.com/jinzhu/gorm"
 
+	"github.com/tealeg/xlsx/v3"
+
 	"github.com/fullstack-lang/gongdoc/go/models"
 )
 
@@ -88,6 +90,36 @@ type FieldDBs []FieldDB
 type FieldDBResponse struct {
 	FieldDB
 }
+
+// FieldWOP is a Field without pointers
+// it holds the same basic fields but pointers are encoded into uint
+type FieldWOP struct {
+	ID int
+
+	// insertion for WOP basic fields
+
+	Name string
+
+	Fieldname string
+
+	FieldTypeAsString string
+
+	Structname string
+
+	Fieldtypename string
+	// insertion for WOP pointer fields
+}
+
+var Field_Fields = []string{
+	// insertion for WOP basic fields
+	"ID",
+	"Name",
+	"Fieldname",
+	"FieldTypeAsString",
+	"Structname",
+	"Fieldtypename",
+}
+
 
 type BackRepoFieldStruct struct {
 	// stores FieldDB according to their gorm ID
@@ -339,7 +371,7 @@ func (backRepo *BackRepoStruct) CheckoutField(field *models.Field) {
 	}
 }
 
-// CopyBasicFieldsToFieldDB is used to copy basic fields between the Stage or the CRUD to the back repo
+// CopyBasicFieldsFromField
 func (fieldDB *FieldDB) CopyBasicFieldsFromField(field *models.Field) {
 	// insertion point for fields commit
 	fieldDB.Name_Data.String = field.Name
@@ -359,9 +391,39 @@ func (fieldDB *FieldDB) CopyBasicFieldsFromField(field *models.Field) {
 
 }
 
-// CopyBasicFieldsToFieldDB is used to copy basic fields between the Stage or the CRUD to the back repo
-func (fieldDB *FieldDB) CopyBasicFieldsToField(field *models.Field) {
+// CopyBasicFieldsFromFieldWOP
+func (fieldDB *FieldDB) CopyBasicFieldsFromFieldWOP(field *FieldWOP) {
+	// insertion point for fields commit
+	fieldDB.Name_Data.String = field.Name
+	fieldDB.Name_Data.Valid = true
 
+	fieldDB.Fieldname_Data.String = field.Fieldname
+	fieldDB.Fieldname_Data.Valid = true
+
+	fieldDB.FieldTypeAsString_Data.String = field.FieldTypeAsString
+	fieldDB.FieldTypeAsString_Data.Valid = true
+
+	fieldDB.Structname_Data.String = field.Structname
+	fieldDB.Structname_Data.Valid = true
+
+	fieldDB.Fieldtypename_Data.String = field.Fieldtypename
+	fieldDB.Fieldtypename_Data.Valid = true
+
+}
+
+// CopyBasicFieldsToField
+func (fieldDB *FieldDB) CopyBasicFieldsToField(field *models.Field) {
+	// insertion point for checkout of basic fields (back repo to stage)
+	field.Name = fieldDB.Name_Data.String
+	field.Fieldname = fieldDB.Fieldname_Data.String
+	field.FieldTypeAsString = fieldDB.FieldTypeAsString_Data.String
+	field.Structname = fieldDB.Structname_Data.String
+	field.Fieldtypename = fieldDB.Fieldtypename_Data.String
+}
+
+// CopyBasicFieldsToFieldWOP
+func (fieldDB *FieldDB) CopyBasicFieldsToFieldWOP(field *FieldWOP) {
+	field.ID = int(fieldDB.ID)
 	// insertion point for checkout of basic fields (back repo to stage)
 	field.Name = fieldDB.Name_Data.String
 	field.Fieldname = fieldDB.Fieldname_Data.String
@@ -395,6 +457,38 @@ func (backRepoField *BackRepoFieldStruct) Backup(dirPath string) {
 	err = ioutil.WriteFile(filename, file, 0644)
 	if err != nil {
 		log.Panic("Cannot write the json Field file", err.Error())
+	}
+}
+
+// Backup generates a json file from a slice of all FieldDB instances in the backrepo
+func (backRepoField *BackRepoFieldStruct) BackupXL(file *xlsx.File) {
+
+	// organize the map into an array with increasing IDs, in order to have repoductible
+	// backup file
+	forBackup := make([]*FieldDB, 0)
+	for _, fieldDB := range *backRepoField.Map_FieldDBID_FieldDB {
+		forBackup = append(forBackup, fieldDB)
+	}
+
+	sort.Slice(forBackup[:], func(i, j int) bool {
+		return forBackup[i].ID < forBackup[j].ID
+	})
+
+	sh, err := file.AddSheet("Field")
+	if err != nil {
+		log.Panic("Cannot add XL file", err.Error())
+	}
+	_ = sh
+
+	row := sh.AddRow()
+	row.WriteSlice(&Field_Fields, -1)
+	for _, fieldDB := range forBackup {
+
+		var fieldWOP FieldWOP
+		fieldDB.CopyBasicFieldsToFieldWOP(&fieldWOP)
+
+		row := sh.AddRow()
+		row.WriteStruct(&fieldWOP, -1)
 	}
 }
 

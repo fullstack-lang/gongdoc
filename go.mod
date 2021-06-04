@@ -15,6 +15,7 @@ require (
 	github.com/tdewolff/canvas v0.0.0-20210210144621-f73efe64c447
 	github.com/tdewolff/minify/v2 v2.9.13 // indirect
 	github.com/tdewolff/parse/v2 v2.5.12 // indirect
+	github.com/tealeg/xlsx/v3 v3.2.3
 	github.com/ugorji/go v1.2.5 // indirect
 	golang.org/x/crypto v0.0.0-20210421170649-83a5a9bb288b // indirect
 	golang.org/x/image v0.0.0-20210220032944-ac19c3e999fb // indirect
