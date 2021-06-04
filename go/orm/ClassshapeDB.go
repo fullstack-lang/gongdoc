@@ -15,6 +15,8 @@ import (
 
 	"github.com/jinzhu/gorm"
 
+	"github.com/tealeg/xlsx/v3"
+
 	"github.com/fullstack-lang/gongdoc/go/models"
 )
 
@@ -95,6 +97,36 @@ type ClassshapeDBs []ClassshapeDB
 type ClassshapeDBResponse struct {
 	ClassshapeDB
 }
+
+// ClassshapeWOP is a Classshape without pointers
+// it holds the same basic fields but pointers are encoded into uint
+type ClassshapeWOP struct {
+	ID int
+
+	// insertion for WOP basic fields
+
+	Name string
+
+	Structname string
+
+	Width float64
+
+	Heigth float64
+
+	ClassshapeTargetType models.ClassshapeTargetType
+	// insertion for WOP pointer fields
+}
+
+var Classshape_Fields = []string{
+	// insertion for WOP basic fields
+	"ID",
+	"Name",
+	"Structname",
+	"Width",
+	"Heigth",
+	"ClassshapeTargetType",
+}
+
 
 type BackRepoClassshapeStruct struct {
 	// stores ClassshapeDB according to their gorm ID
@@ -450,7 +482,7 @@ func (backRepo *BackRepoStruct) CheckoutClassshape(classshape *models.Classshape
 	}
 }
 
-// CopyBasicFieldsToClassshapeDB is used to copy basic fields between the Stage or the CRUD to the back repo
+// CopyBasicFieldsFromClassshape
 func (classshapeDB *ClassshapeDB) CopyBasicFieldsFromClassshape(classshape *models.Classshape) {
 	// insertion point for fields commit
 	classshapeDB.Name_Data.String = classshape.Name
@@ -470,9 +502,39 @@ func (classshapeDB *ClassshapeDB) CopyBasicFieldsFromClassshape(classshape *mode
 
 }
 
-// CopyBasicFieldsToClassshapeDB is used to copy basic fields between the Stage or the CRUD to the back repo
-func (classshapeDB *ClassshapeDB) CopyBasicFieldsToClassshape(classshape *models.Classshape) {
+// CopyBasicFieldsFromClassshapeWOP
+func (classshapeDB *ClassshapeDB) CopyBasicFieldsFromClassshapeWOP(classshape *ClassshapeWOP) {
+	// insertion point for fields commit
+	classshapeDB.Name_Data.String = classshape.Name
+	classshapeDB.Name_Data.Valid = true
 
+	classshapeDB.Structname_Data.String = classshape.Structname
+	classshapeDB.Structname_Data.Valid = true
+
+	classshapeDB.Width_Data.Float64 = classshape.Width
+	classshapeDB.Width_Data.Valid = true
+
+	classshapeDB.Heigth_Data.Float64 = classshape.Heigth
+	classshapeDB.Heigth_Data.Valid = true
+
+	classshapeDB.ClassshapeTargetType_Data.String = string(classshape.ClassshapeTargetType)
+	classshapeDB.ClassshapeTargetType_Data.Valid = true
+
+}
+
+// CopyBasicFieldsToClassshape
+func (classshapeDB *ClassshapeDB) CopyBasicFieldsToClassshape(classshape *models.Classshape) {
+	// insertion point for checkout of basic fields (back repo to stage)
+	classshape.Name = classshapeDB.Name_Data.String
+	classshape.Structname = classshapeDB.Structname_Data.String
+	classshape.Width = classshapeDB.Width_Data.Float64
+	classshape.Heigth = classshapeDB.Heigth_Data.Float64
+	classshape.ClassshapeTargetType = models.ClassshapeTargetType(classshapeDB.ClassshapeTargetType_Data.String)
+}
+
+// CopyBasicFieldsToClassshapeWOP
+func (classshapeDB *ClassshapeDB) CopyBasicFieldsToClassshapeWOP(classshape *ClassshapeWOP) {
+	classshape.ID = int(classshapeDB.ID)
 	// insertion point for checkout of basic fields (back repo to stage)
 	classshape.Name = classshapeDB.Name_Data.String
 	classshape.Structname = classshapeDB.Structname_Data.String
@@ -506,6 +568,38 @@ func (backRepoClassshape *BackRepoClassshapeStruct) Backup(dirPath string) {
 	err = ioutil.WriteFile(filename, file, 0644)
 	if err != nil {
 		log.Panic("Cannot write the json Classshape file", err.Error())
+	}
+}
+
+// Backup generates a json file from a slice of all ClassshapeDB instances in the backrepo
+func (backRepoClassshape *BackRepoClassshapeStruct) BackupXL(file *xlsx.File) {
+
+	// organize the map into an array with increasing IDs, in order to have repoductible
+	// backup file
+	forBackup := make([]*ClassshapeDB, 0)
+	for _, classshapeDB := range *backRepoClassshape.Map_ClassshapeDBID_ClassshapeDB {
+		forBackup = append(forBackup, classshapeDB)
+	}
+
+	sort.Slice(forBackup[:], func(i, j int) bool {
+		return forBackup[i].ID < forBackup[j].ID
+	})
+
+	sh, err := file.AddSheet("Classshape")
+	if err != nil {
+		log.Panic("Cannot add XL file", err.Error())
+	}
+	_ = sh
+
+	row := sh.AddRow()
+	row.WriteSlice(&Classshape_Fields, -1)
+	for _, classshapeDB := range forBackup {
+
+		var classshapeWOP ClassshapeWOP
+		classshapeDB.CopyBasicFieldsToClassshapeWOP(&classshapeWOP)
+
+		row := sh.AddRow()
+		row.WriteStruct(&classshapeWOP, -1)
 	}
 }
 

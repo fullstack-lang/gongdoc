@@ -15,6 +15,8 @@ import (
 
 	"github.com/jinzhu/gorm"
 
+	"github.com/tealeg/xlsx/v3"
+
 	"github.com/fullstack-lang/gongdoc/go/models"
 )
 
@@ -77,6 +79,30 @@ type VerticeDBs []VerticeDB
 type VerticeDBResponse struct {
 	VerticeDB
 }
+
+// VerticeWOP is a Vertice without pointers
+// it holds the same basic fields but pointers are encoded into uint
+type VerticeWOP struct {
+	ID int
+
+	// insertion for WOP basic fields
+
+	X float64
+
+	Y float64
+
+	Name string
+	// insertion for WOP pointer fields
+}
+
+var Vertice_Fields = []string{
+	// insertion for WOP basic fields
+	"ID",
+	"X",
+	"Y",
+	"Name",
+}
+
 
 type BackRepoVerticeStruct struct {
 	// stores VerticeDB according to their gorm ID
@@ -328,7 +354,7 @@ func (backRepo *BackRepoStruct) CheckoutVertice(vertice *models.Vertice) {
 	}
 }
 
-// CopyBasicFieldsToVerticeDB is used to copy basic fields between the Stage or the CRUD to the back repo
+// CopyBasicFieldsFromVertice
 func (verticeDB *VerticeDB) CopyBasicFieldsFromVertice(vertice *models.Vertice) {
 	// insertion point for fields commit
 	verticeDB.X_Data.Float64 = vertice.X
@@ -342,9 +368,31 @@ func (verticeDB *VerticeDB) CopyBasicFieldsFromVertice(vertice *models.Vertice) 
 
 }
 
-// CopyBasicFieldsToVerticeDB is used to copy basic fields between the Stage or the CRUD to the back repo
-func (verticeDB *VerticeDB) CopyBasicFieldsToVertice(vertice *models.Vertice) {
+// CopyBasicFieldsFromVerticeWOP
+func (verticeDB *VerticeDB) CopyBasicFieldsFromVerticeWOP(vertice *VerticeWOP) {
+	// insertion point for fields commit
+	verticeDB.X_Data.Float64 = vertice.X
+	verticeDB.X_Data.Valid = true
 
+	verticeDB.Y_Data.Float64 = vertice.Y
+	verticeDB.Y_Data.Valid = true
+
+	verticeDB.Name_Data.String = vertice.Name
+	verticeDB.Name_Data.Valid = true
+
+}
+
+// CopyBasicFieldsToVertice
+func (verticeDB *VerticeDB) CopyBasicFieldsToVertice(vertice *models.Vertice) {
+	// insertion point for checkout of basic fields (back repo to stage)
+	vertice.X = verticeDB.X_Data.Float64
+	vertice.Y = verticeDB.Y_Data.Float64
+	vertice.Name = verticeDB.Name_Data.String
+}
+
+// CopyBasicFieldsToVerticeWOP
+func (verticeDB *VerticeDB) CopyBasicFieldsToVerticeWOP(vertice *VerticeWOP) {
+	vertice.ID = int(verticeDB.ID)
 	// insertion point for checkout of basic fields (back repo to stage)
 	vertice.X = verticeDB.X_Data.Float64
 	vertice.Y = verticeDB.Y_Data.Float64
@@ -376,6 +424,38 @@ func (backRepoVertice *BackRepoVerticeStruct) Backup(dirPath string) {
 	err = ioutil.WriteFile(filename, file, 0644)
 	if err != nil {
 		log.Panic("Cannot write the json Vertice file", err.Error())
+	}
+}
+
+// Backup generates a json file from a slice of all VerticeDB instances in the backrepo
+func (backRepoVertice *BackRepoVerticeStruct) BackupXL(file *xlsx.File) {
+
+	// organize the map into an array with increasing IDs, in order to have repoductible
+	// backup file
+	forBackup := make([]*VerticeDB, 0)
+	for _, verticeDB := range *backRepoVertice.Map_VerticeDBID_VerticeDB {
+		forBackup = append(forBackup, verticeDB)
+	}
+
+	sort.Slice(forBackup[:], func(i, j int) bool {
+		return forBackup[i].ID < forBackup[j].ID
+	})
+
+	sh, err := file.AddSheet("Vertice")
+	if err != nil {
+		log.Panic("Cannot add XL file", err.Error())
+	}
+	_ = sh
+
+	row := sh.AddRow()
+	row.WriteSlice(&Vertice_Fields, -1)
+	for _, verticeDB := range forBackup {
+
+		var verticeWOP VerticeWOP
+		verticeDB.CopyBasicFieldsToVerticeWOP(&verticeWOP)
+
+		row := sh.AddRow()
+		row.WriteStruct(&verticeWOP, -1)
 	}
 }
 

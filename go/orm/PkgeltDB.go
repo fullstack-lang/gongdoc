@@ -15,6 +15,8 @@ import (
 
 	"github.com/jinzhu/gorm"
 
+	"github.com/tealeg/xlsx/v3"
+
 	"github.com/fullstack-lang/gongdoc/go/models"
 )
 
@@ -74,6 +76,27 @@ type PkgeltDBs []PkgeltDB
 type PkgeltDBResponse struct {
 	PkgeltDB
 }
+
+// PkgeltWOP is a Pkgelt without pointers
+// it holds the same basic fields but pointers are encoded into uint
+type PkgeltWOP struct {
+	ID int
+
+	// insertion for WOP basic fields
+
+	Name string
+
+	Path string
+	// insertion for WOP pointer fields
+}
+
+var Pkgelt_Fields = []string{
+	// insertion for WOP basic fields
+	"ID",
+	"Name",
+	"Path",
+}
+
 
 type BackRepoPkgeltStruct struct {
 	// stores PkgeltDB according to their gorm ID
@@ -417,7 +440,7 @@ func (backRepo *BackRepoStruct) CheckoutPkgelt(pkgelt *models.Pkgelt) {
 	}
 }
 
-// CopyBasicFieldsToPkgeltDB is used to copy basic fields between the Stage or the CRUD to the back repo
+// CopyBasicFieldsFromPkgelt
 func (pkgeltDB *PkgeltDB) CopyBasicFieldsFromPkgelt(pkgelt *models.Pkgelt) {
 	// insertion point for fields commit
 	pkgeltDB.Name_Data.String = pkgelt.Name
@@ -428,9 +451,27 @@ func (pkgeltDB *PkgeltDB) CopyBasicFieldsFromPkgelt(pkgelt *models.Pkgelt) {
 
 }
 
-// CopyBasicFieldsToPkgeltDB is used to copy basic fields between the Stage or the CRUD to the back repo
-func (pkgeltDB *PkgeltDB) CopyBasicFieldsToPkgelt(pkgelt *models.Pkgelt) {
+// CopyBasicFieldsFromPkgeltWOP
+func (pkgeltDB *PkgeltDB) CopyBasicFieldsFromPkgeltWOP(pkgelt *PkgeltWOP) {
+	// insertion point for fields commit
+	pkgeltDB.Name_Data.String = pkgelt.Name
+	pkgeltDB.Name_Data.Valid = true
 
+	pkgeltDB.Path_Data.String = pkgelt.Path
+	pkgeltDB.Path_Data.Valid = true
+
+}
+
+// CopyBasicFieldsToPkgelt
+func (pkgeltDB *PkgeltDB) CopyBasicFieldsToPkgelt(pkgelt *models.Pkgelt) {
+	// insertion point for checkout of basic fields (back repo to stage)
+	pkgelt.Name = pkgeltDB.Name_Data.String
+	pkgelt.Path = pkgeltDB.Path_Data.String
+}
+
+// CopyBasicFieldsToPkgeltWOP
+func (pkgeltDB *PkgeltDB) CopyBasicFieldsToPkgeltWOP(pkgelt *PkgeltWOP) {
+	pkgelt.ID = int(pkgeltDB.ID)
 	// insertion point for checkout of basic fields (back repo to stage)
 	pkgelt.Name = pkgeltDB.Name_Data.String
 	pkgelt.Path = pkgeltDB.Path_Data.String
@@ -461,6 +502,38 @@ func (backRepoPkgelt *BackRepoPkgeltStruct) Backup(dirPath string) {
 	err = ioutil.WriteFile(filename, file, 0644)
 	if err != nil {
 		log.Panic("Cannot write the json Pkgelt file", err.Error())
+	}
+}
+
+// Backup generates a json file from a slice of all PkgeltDB instances in the backrepo
+func (backRepoPkgelt *BackRepoPkgeltStruct) BackupXL(file *xlsx.File) {
+
+	// organize the map into an array with increasing IDs, in order to have repoductible
+	// backup file
+	forBackup := make([]*PkgeltDB, 0)
+	for _, pkgeltDB := range *backRepoPkgelt.Map_PkgeltDBID_PkgeltDB {
+		forBackup = append(forBackup, pkgeltDB)
+	}
+
+	sort.Slice(forBackup[:], func(i, j int) bool {
+		return forBackup[i].ID < forBackup[j].ID
+	})
+
+	sh, err := file.AddSheet("Pkgelt")
+	if err != nil {
+		log.Panic("Cannot add XL file", err.Error())
+	}
+	_ = sh
+
+	row := sh.AddRow()
+	row.WriteSlice(&Pkgelt_Fields, -1)
+	for _, pkgeltDB := range forBackup {
+
+		var pkgeltWOP PkgeltWOP
+		pkgeltDB.CopyBasicFieldsToPkgeltWOP(&pkgeltWOP)
+
+		row := sh.AddRow()
+		row.WriteStruct(&pkgeltWOP, -1)
 	}
 }
 

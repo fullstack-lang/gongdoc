@@ -15,6 +15,8 @@ import (
 
 	"github.com/jinzhu/gorm"
 
+	"github.com/tealeg/xlsx/v3"
+
 	"github.com/fullstack-lang/gongdoc/go/models"
 )
 
@@ -77,6 +79,23 @@ type ClassdiagramDBResponse struct {
 	ClassdiagramDB
 }
 
+// ClassdiagramWOP is a Classdiagram without pointers
+// it holds the same basic fields but pointers are encoded into uint
+type ClassdiagramWOP struct {
+	ID int
+
+	// insertion for WOP basic fields
+
+	Name string
+	// insertion for WOP pointer fields
+}
+
+var Classdiagram_Fields = []string{
+	// insertion for WOP basic fields
+	"ID",
+	"Name",
+}
+
 type BackRepoClassdiagramStruct struct {
 	// stores ClassdiagramDB according to their gorm ID
 	Map_ClassdiagramDBID_ClassdiagramDB *map[uint]*ClassdiagramDB
@@ -136,7 +155,17 @@ func (backRepoClassdiagram *BackRepoClassdiagramStruct) Init(db *gorm.DB) (Error
 // Phase One is the creation of instance in the database if it is not yet done to get the unique ID for each staged instance
 func (backRepoClassdiagram *BackRepoClassdiagramStruct) CommitPhaseOne(stage *models.StageStruct) (Error error) {
 
+	//
+	forCommit := make([]*models.Classdiagram, 0)
 	for classdiagram := range stage.Classdiagrams {
+		forCommit = append(forCommit, classdiagram)
+	}
+
+	sort.Slice(forCommit[:], func(i, j int) bool {
+		return forCommit[i].Name < forCommit[j].Name
+	})
+
+	for _, classdiagram := range forCommit {
 		backRepoClassdiagram.CommitPhaseOneInstance(classdiagram)
 	}
 
@@ -225,7 +254,7 @@ func (backRepoClassdiagram *BackRepoClassdiagramStruct) CommitPhaseTwoInstance(b
 
 			// get the back repo instance at the association end
 			classshapeAssocEnd_DB :=
-				backRepo.BackRepoClassshape.GetClassshapeDBFromClassshapePtr( classshapeAssocEnd)
+				backRepo.BackRepoClassshape.GetClassshapeDBFromClassshapePtr(classshapeAssocEnd)
 
 			// encode reverse pointer in the association end back repo instance
 			classshapeAssocEnd_DB.Classdiagram_ClassshapesDBID.Int64 = int64(classdiagramDB.ID)
@@ -373,7 +402,7 @@ func (backRepo *BackRepoStruct) CheckoutClassdiagram(classdiagram *models.Classd
 	}
 }
 
-// CopyBasicFieldsToClassdiagramDB is used to copy basic fields between the Stage or the CRUD to the back repo
+// CopyBasicFieldsFromClassdiagram
 func (classdiagramDB *ClassdiagramDB) CopyBasicFieldsFromClassdiagram(classdiagram *models.Classdiagram) {
 	// insertion point for fields commit
 	classdiagramDB.Name_Data.String = classdiagram.Name
@@ -381,9 +410,23 @@ func (classdiagramDB *ClassdiagramDB) CopyBasicFieldsFromClassdiagram(classdiagr
 
 }
 
-// CopyBasicFieldsToClassdiagramDB is used to copy basic fields between the Stage or the CRUD to the back repo
-func (classdiagramDB *ClassdiagramDB) CopyBasicFieldsToClassdiagram(classdiagram *models.Classdiagram) {
+// CopyBasicFieldsFromClassdiagramWOP
+func (classdiagramDB *ClassdiagramDB) CopyBasicFieldsFromClassdiagramWOP(classdiagram *ClassdiagramWOP) {
+	// insertion point for fields commit
+	classdiagramDB.Name_Data.String = classdiagram.Name
+	classdiagramDB.Name_Data.Valid = true
 
+}
+
+// CopyBasicFieldsToClassdiagram
+func (classdiagramDB *ClassdiagramDB) CopyBasicFieldsToClassdiagram(classdiagram *models.Classdiagram) {
+	// insertion point for checkout of basic fields (back repo to stage)
+	classdiagram.Name = classdiagramDB.Name_Data.String
+}
+
+// CopyBasicFieldsToClassdiagramWOP
+func (classdiagramDB *ClassdiagramDB) CopyBasicFieldsToClassdiagramWOP(classdiagram *ClassdiagramWOP) {
+	classdiagram.ID = int(classdiagramDB.ID)
 	// insertion point for checkout of basic fields (back repo to stage)
 	classdiagram.Name = classdiagramDB.Name_Data.String
 }
@@ -413,6 +456,38 @@ func (backRepoClassdiagram *BackRepoClassdiagramStruct) Backup(dirPath string) {
 	err = ioutil.WriteFile(filename, file, 0644)
 	if err != nil {
 		log.Panic("Cannot write the json Classdiagram file", err.Error())
+	}
+}
+
+// Backup generates a json file from a slice of all ClassdiagramDB instances in the backrepo
+func (backRepoClassdiagram *BackRepoClassdiagramStruct) BackupXL(file *xlsx.File) {
+
+	// organize the map into an array with increasing IDs, in order to have repoductible
+	// backup file
+	forBackup := make([]*ClassdiagramDB, 0)
+	for _, classdiagramDB := range *backRepoClassdiagram.Map_ClassdiagramDBID_ClassdiagramDB {
+		forBackup = append(forBackup, classdiagramDB)
+	}
+
+	sort.Slice(forBackup[:], func(i, j int) bool {
+		return forBackup[i].ID < forBackup[j].ID
+	})
+
+	sh, err := file.AddSheet("Classdiagram")
+	if err != nil {
+		log.Panic("Cannot add XL file", err.Error())
+	}
+	_ = sh
+
+	row := sh.AddRow()
+	row.WriteSlice(&Classdiagram_Fields, -1)
+	for _, classdiagramDB := range forBackup {
+
+		var classdiagramWOP ClassdiagramWOP
+		classdiagramDB.CopyBasicFieldsToClassdiagramWOP(&classdiagramWOP)
+
+		row := sh.AddRow()
+		row.WriteStruct(&classdiagramWOP, -1)
 	}
 }
 
@@ -460,7 +535,7 @@ func (backRepoClassdiagram *BackRepoClassdiagramStruct) RestorePhaseOne(dirPath 
 // to compute new index
 func (backRepoClassdiagram *BackRepoClassdiagramStruct) RestorePhaseTwo() {
 
-	for _, classdiagramDB := range (*backRepoClassdiagram.Map_ClassdiagramDBID_ClassdiagramDB) {
+	for _, classdiagramDB := range *backRepoClassdiagram.Map_ClassdiagramDBID_ClassdiagramDB {
 
 		// next line of code is to avert unused variable compilation error
 		_ = classdiagramDB
@@ -468,7 +543,7 @@ func (backRepoClassdiagram *BackRepoClassdiagramStruct) RestorePhaseTwo() {
 		// insertion point for reindexing pointers encoding
 		// This reindex classdiagram.Classdiagrams
 		if classdiagramDB.Pkgelt_ClassdiagramsDBID.Int64 != 0 {
-			classdiagramDB.Pkgelt_ClassdiagramsDBID.Int64 = 
+			classdiagramDB.Pkgelt_ClassdiagramsDBID.Int64 =
 				int64(BackRepoPkgeltid_atBckpTime_newID[uint(classdiagramDB.Pkgelt_ClassdiagramsDBID.Int64)])
 		}
 
