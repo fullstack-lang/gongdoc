@@ -11,6 +11,9 @@ const (
 	ROOT_OF_BASIC_FIELDS GongdocNodeType = "ROOT_OF_BASIC_FIELDS"
 	BASIC_FIELD          GongdocNodeType = "BASIC_FIELD"
 
+	ROOT_OF_TIME_FIELDS GongdocNodeType = "ROOT_OF_TIME_FIELDS"
+	TIME_FIELD          GongdocNodeType = "TIME_FIELD"
+
 	ROOT_OF_POINTER_TO_STRUCT_FIELDS GongdocNodeType = "ROOT_OF_POINTER_TO_STRUCT_FIELDS"
 	POINTER_TO_STRUCT                GongdocNodeType = "POINTER_TO_STRUCT"
 

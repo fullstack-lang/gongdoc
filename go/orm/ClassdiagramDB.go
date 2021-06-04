@@ -96,6 +96,7 @@ var Classdiagram_Fields = []string{
 	"Name",
 }
 
+
 type BackRepoClassdiagramStruct struct {
 	// stores ClassdiagramDB according to their gorm ID
 	Map_ClassdiagramDBID_ClassdiagramDB *map[uint]*ClassdiagramDB
@@ -155,17 +156,7 @@ func (backRepoClassdiagram *BackRepoClassdiagramStruct) Init(db *gorm.DB) (Error
 // Phase One is the creation of instance in the database if it is not yet done to get the unique ID for each staged instance
 func (backRepoClassdiagram *BackRepoClassdiagramStruct) CommitPhaseOne(stage *models.StageStruct) (Error error) {
 
-	//
-	forCommit := make([]*models.Classdiagram, 0)
 	for classdiagram := range stage.Classdiagrams {
-		forCommit = append(forCommit, classdiagram)
-	}
-
-	sort.Slice(forCommit[:], func(i, j int) bool {
-		return forCommit[i].Name < forCommit[j].Name
-	})
-
-	for _, classdiagram := range forCommit {
 		backRepoClassdiagram.CommitPhaseOneInstance(classdiagram)
 	}
 
@@ -254,7 +245,7 @@ func (backRepoClassdiagram *BackRepoClassdiagramStruct) CommitPhaseTwoInstance(b
 
 			// get the back repo instance at the association end
 			classshapeAssocEnd_DB :=
-				backRepo.BackRepoClassshape.GetClassshapeDBFromClassshapePtr(classshapeAssocEnd)
+				backRepo.BackRepoClassshape.GetClassshapeDBFromClassshapePtr( classshapeAssocEnd)
 
 			// encode reverse pointer in the association end back repo instance
 			classshapeAssocEnd_DB.Classdiagram_ClassshapesDBID.Int64 = int64(classdiagramDB.ID)
@@ -535,7 +526,7 @@ func (backRepoClassdiagram *BackRepoClassdiagramStruct) RestorePhaseOne(dirPath 
 // to compute new index
 func (backRepoClassdiagram *BackRepoClassdiagramStruct) RestorePhaseTwo() {
 
-	for _, classdiagramDB := range *backRepoClassdiagram.Map_ClassdiagramDBID_ClassdiagramDB {
+	for _, classdiagramDB := range (*backRepoClassdiagram.Map_ClassdiagramDBID_ClassdiagramDB) {
 
 		// next line of code is to avert unused variable compilation error
 		_ = classdiagramDB
@@ -543,7 +534,7 @@ func (backRepoClassdiagram *BackRepoClassdiagramStruct) RestorePhaseTwo() {
 		// insertion point for reindexing pointers encoding
 		// This reindex classdiagram.Classdiagrams
 		if classdiagramDB.Pkgelt_ClassdiagramsDBID.Int64 != 0 {
-			classdiagramDB.Pkgelt_ClassdiagramsDBID.Int64 =
+			classdiagramDB.Pkgelt_ClassdiagramsDBID.Int64 = 
 				int64(BackRepoPkgeltid_atBckpTime_newID[uint(classdiagramDB.Pkgelt_ClassdiagramsDBID.Int64)])
 		}
 

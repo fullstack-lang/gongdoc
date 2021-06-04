@@ -13,26 +13,37 @@ var __member __void
 // swagger:ignore
 type StageStruct struct { // insertion point for definition of arrays registering instances
 	Classdiagrams map[*Classdiagram]struct{}
+	Classdiagrams_mapString map[string]*Classdiagram
 
 	Classshapes map[*Classshape]struct{}
+	Classshapes_mapString map[string]*Classshape
 
 	Fields map[*Field]struct{}
+	Fields_mapString map[string]*Field
 
 	GongdocCommands map[*GongdocCommand]struct{}
+	GongdocCommands_mapString map[string]*GongdocCommand
 
 	GongdocStatuss map[*GongdocStatus]struct{}
+	GongdocStatuss_mapString map[string]*GongdocStatus
 
 	Links map[*Link]struct{}
+	Links_mapString map[string]*Link
 
 	Pkgelts map[*Pkgelt]struct{}
+	Pkgelts_mapString map[string]*Pkgelt
 
 	Positions map[*Position]struct{}
+	Positions_mapString map[string]*Position
 
 	States map[*State]struct{}
+	States_mapString map[string]*State
 
 	Umlscs map[*Umlsc]struct{}
+	Umlscs_mapString map[string]*Umlsc
 
 	Vertices map[*Vertice]struct{}
+	Vertices_mapString map[string]*Vertice
 
 	AllModelsStructCreateCallback AllModelsStructCreateInterface
 
@@ -84,26 +95,37 @@ type BackRepoInterface interface {
 // swagger:ignore instructs the gong compiler (gongc) to avoid this particular struct
 var Stage StageStruct = StageStruct{ // insertion point for array initiatialisation
 	Classdiagrams: make(map[*Classdiagram]struct{}, 0),
+	Classdiagrams_mapString: make(map[string]*Classdiagram, 0),
 
 	Classshapes: make(map[*Classshape]struct{}, 0),
+	Classshapes_mapString: make(map[string]*Classshape, 0),
 
 	Fields: make(map[*Field]struct{}, 0),
+	Fields_mapString: make(map[string]*Field, 0),
 
 	GongdocCommands: make(map[*GongdocCommand]struct{}, 0),
+	GongdocCommands_mapString: make(map[string]*GongdocCommand, 0),
 
 	GongdocStatuss: make(map[*GongdocStatus]struct{}, 0),
+	GongdocStatuss_mapString: make(map[string]*GongdocStatus, 0),
 
 	Links: make(map[*Link]struct{}, 0),
+	Links_mapString: make(map[string]*Link, 0),
 
 	Pkgelts: make(map[*Pkgelt]struct{}, 0),
+	Pkgelts_mapString: make(map[string]*Pkgelt, 0),
 
 	Positions: make(map[*Position]struct{}, 0),
+	Positions_mapString: make(map[string]*Position, 0),
 
 	States: make(map[*State]struct{}, 0),
+	States_mapString: make(map[string]*State, 0),
 
 	Umlscs: make(map[*Umlsc]struct{}, 0),
+	Umlscs_mapString: make(map[string]*Umlsc, 0),
 
 	Vertices: make(map[*Vertice]struct{}, 0),
+	Vertices_mapString: make(map[string]*Vertice, 0),
 
 	// end of insertion point
 }
@@ -164,12 +186,15 @@ func (stage *StageStruct) getClassdiagramOrderedStructWithNameField() []*Classdi
 // Stage puts classdiagram to the model stage
 func (classdiagram *Classdiagram) Stage() *Classdiagram {
 	Stage.Classdiagrams[classdiagram] = __member
+	Stage.Classdiagrams_mapString[classdiagram.Name] = classdiagram
+	
 	return classdiagram
 }
 
 // Unstage removes classdiagram off the model stage
 func (classdiagram *Classdiagram) Unstage() *Classdiagram {
 	delete(Stage.Classdiagrams, classdiagram)
+	delete(Stage.Classdiagrams_mapString, classdiagram.Name)
 	return classdiagram
 }
 
@@ -263,12 +288,15 @@ func (stage *StageStruct) getClassshapeOrderedStructWithNameField() []*Classshap
 // Stage puts classshape to the model stage
 func (classshape *Classshape) Stage() *Classshape {
 	Stage.Classshapes[classshape] = __member
+	Stage.Classshapes_mapString[classshape.Name] = classshape
+	
 	return classshape
 }
 
 // Unstage removes classshape off the model stage
 func (classshape *Classshape) Unstage() *Classshape {
 	delete(Stage.Classshapes, classshape)
+	delete(Stage.Classshapes_mapString, classshape.Name)
 	return classshape
 }
 
@@ -362,12 +390,15 @@ func (stage *StageStruct) getFieldOrderedStructWithNameField() []*Field {
 // Stage puts field to the model stage
 func (field *Field) Stage() *Field {
 	Stage.Fields[field] = __member
+	Stage.Fields_mapString[field.Name] = field
+	
 	return field
 }
 
 // Unstage removes field off the model stage
 func (field *Field) Unstage() *Field {
 	delete(Stage.Fields, field)
+	delete(Stage.Fields_mapString, field.Name)
 	return field
 }
 
@@ -461,12 +492,15 @@ func (stage *StageStruct) getGongdocCommandOrderedStructWithNameField() []*Gongd
 // Stage puts gongdoccommand to the model stage
 func (gongdoccommand *GongdocCommand) Stage() *GongdocCommand {
 	Stage.GongdocCommands[gongdoccommand] = __member
+	Stage.GongdocCommands_mapString[gongdoccommand.Name] = gongdoccommand
+	
 	return gongdoccommand
 }
 
 // Unstage removes gongdoccommand off the model stage
 func (gongdoccommand *GongdocCommand) Unstage() *GongdocCommand {
 	delete(Stage.GongdocCommands, gongdoccommand)
+	delete(Stage.GongdocCommands_mapString, gongdoccommand.Name)
 	return gongdoccommand
 }
 
@@ -560,12 +594,15 @@ func (stage *StageStruct) getGongdocStatusOrderedStructWithNameField() []*Gongdo
 // Stage puts gongdocstatus to the model stage
 func (gongdocstatus *GongdocStatus) Stage() *GongdocStatus {
 	Stage.GongdocStatuss[gongdocstatus] = __member
+	Stage.GongdocStatuss_mapString[gongdocstatus.Name] = gongdocstatus
+	
 	return gongdocstatus
 }
 
 // Unstage removes gongdocstatus off the model stage
 func (gongdocstatus *GongdocStatus) Unstage() *GongdocStatus {
 	delete(Stage.GongdocStatuss, gongdocstatus)
+	delete(Stage.GongdocStatuss_mapString, gongdocstatus.Name)
 	return gongdocstatus
 }
 
@@ -659,12 +696,15 @@ func (stage *StageStruct) getLinkOrderedStructWithNameField() []*Link {
 // Stage puts link to the model stage
 func (link *Link) Stage() *Link {
 	Stage.Links[link] = __member
+	Stage.Links_mapString[link.Name] = link
+	
 	return link
 }
 
 // Unstage removes link off the model stage
 func (link *Link) Unstage() *Link {
 	delete(Stage.Links, link)
+	delete(Stage.Links_mapString, link.Name)
 	return link
 }
 
@@ -758,12 +798,15 @@ func (stage *StageStruct) getPkgeltOrderedStructWithNameField() []*Pkgelt {
 // Stage puts pkgelt to the model stage
 func (pkgelt *Pkgelt) Stage() *Pkgelt {
 	Stage.Pkgelts[pkgelt] = __member
+	Stage.Pkgelts_mapString[pkgelt.Name] = pkgelt
+	
 	return pkgelt
 }
 
 // Unstage removes pkgelt off the model stage
 func (pkgelt *Pkgelt) Unstage() *Pkgelt {
 	delete(Stage.Pkgelts, pkgelt)
+	delete(Stage.Pkgelts_mapString, pkgelt.Name)
 	return pkgelt
 }
 
@@ -857,12 +900,15 @@ func (stage *StageStruct) getPositionOrderedStructWithNameField() []*Position {
 // Stage puts position to the model stage
 func (position *Position) Stage() *Position {
 	Stage.Positions[position] = __member
+	Stage.Positions_mapString[position.Name] = position
+	
 	return position
 }
 
 // Unstage removes position off the model stage
 func (position *Position) Unstage() *Position {
 	delete(Stage.Positions, position)
+	delete(Stage.Positions_mapString, position.Name)
 	return position
 }
 
@@ -956,12 +1002,15 @@ func (stage *StageStruct) getStateOrderedStructWithNameField() []*State {
 // Stage puts state to the model stage
 func (state *State) Stage() *State {
 	Stage.States[state] = __member
+	Stage.States_mapString[state.Name] = state
+	
 	return state
 }
 
 // Unstage removes state off the model stage
 func (state *State) Unstage() *State {
 	delete(Stage.States, state)
+	delete(Stage.States_mapString, state.Name)
 	return state
 }
 
@@ -1055,12 +1104,15 @@ func (stage *StageStruct) getUmlscOrderedStructWithNameField() []*Umlsc {
 // Stage puts umlsc to the model stage
 func (umlsc *Umlsc) Stage() *Umlsc {
 	Stage.Umlscs[umlsc] = __member
+	Stage.Umlscs_mapString[umlsc.Name] = umlsc
+	
 	return umlsc
 }
 
 // Unstage removes umlsc off the model stage
 func (umlsc *Umlsc) Unstage() *Umlsc {
 	delete(Stage.Umlscs, umlsc)
+	delete(Stage.Umlscs_mapString, umlsc.Name)
 	return umlsc
 }
 
@@ -1154,12 +1206,15 @@ func (stage *StageStruct) getVerticeOrderedStructWithNameField() []*Vertice {
 // Stage puts vertice to the model stage
 func (vertice *Vertice) Stage() *Vertice {
 	Stage.Vertices[vertice] = __member
+	Stage.Vertices_mapString[vertice.Name] = vertice
+	
 	return vertice
 }
 
 // Unstage removes vertice off the model stage
 func (vertice *Vertice) Unstage() *Vertice {
 	delete(Stage.Vertices, vertice)
+	delete(Stage.Vertices_mapString, vertice.Name)
 	return vertice
 }
 
@@ -1269,39 +1324,72 @@ type AllModelsStructDeleteInterface interface { // insertion point for Callbacks
 
 func (stage *StageStruct) Reset() { // insertion point for array reset
 	stage.Classdiagrams = make(map[*Classdiagram]struct{}, 0)
+	stage.Classdiagrams_mapString = make(map[string]*Classdiagram, 0)
 
 	stage.Classshapes = make(map[*Classshape]struct{}, 0)
+	stage.Classshapes_mapString = make(map[string]*Classshape, 0)
 
 	stage.Fields = make(map[*Field]struct{}, 0)
+	stage.Fields_mapString = make(map[string]*Field, 0)
 
 	stage.GongdocCommands = make(map[*GongdocCommand]struct{}, 0)
+	stage.GongdocCommands_mapString = make(map[string]*GongdocCommand, 0)
 
 	stage.GongdocStatuss = make(map[*GongdocStatus]struct{}, 0)
+	stage.GongdocStatuss_mapString = make(map[string]*GongdocStatus, 0)
 
 	stage.Links = make(map[*Link]struct{}, 0)
+	stage.Links_mapString = make(map[string]*Link, 0)
 
 	stage.Pkgelts = make(map[*Pkgelt]struct{}, 0)
+	stage.Pkgelts_mapString = make(map[string]*Pkgelt, 0)
 
 	stage.Positions = make(map[*Position]struct{}, 0)
+	stage.Positions_mapString = make(map[string]*Position, 0)
 
 	stage.States = make(map[*State]struct{}, 0)
+	stage.States_mapString = make(map[string]*State, 0)
 
 	stage.Umlscs = make(map[*Umlsc]struct{}, 0)
+	stage.Umlscs_mapString = make(map[string]*Umlsc, 0)
 
 	stage.Vertices = make(map[*Vertice]struct{}, 0)
+	stage.Vertices_mapString = make(map[string]*Vertice, 0)
 
 }
 
 func (stage *StageStruct) Nil() { // insertion point for array nil
 	stage.Classdiagrams = nil
+	stage.Classdiagrams_mapString = nil
+
 	stage.Classshapes = nil
+	stage.Classshapes_mapString = nil
+
 	stage.Fields = nil
+	stage.Fields_mapString = nil
+
 	stage.GongdocCommands = nil
+	stage.GongdocCommands_mapString = nil
+
 	stage.GongdocStatuss = nil
+	stage.GongdocStatuss_mapString = nil
+
 	stage.Links = nil
+	stage.Links_mapString = nil
+
 	stage.Pkgelts = nil
+	stage.Pkgelts_mapString = nil
+
 	stage.Positions = nil
+	stage.Positions_mapString = nil
+
 	stage.States = nil
+	stage.States_mapString = nil
+
 	stage.Umlscs = nil
+	stage.Umlscs_mapString = nil
+
 	stage.Vertices = nil
+	stage.Vertices_mapString = nil
+
 }

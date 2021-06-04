@@ -43,8 +43,11 @@ var Diagram1 uml.Classdiagram = uml.Classdiagram{
 				Y: 90.000000,
 			},
 			Width:  240.000000,
-			Heigth: 78.000000,
+			Heigth: 93.000000,
 			Fields: []*uml.Field{
+				{
+					Field: models.Point{}.CreatedAt,
+				},
 				{
 					Field: models.Point{}.X,
 				},
@@ -84,7 +87,7 @@ var Diagram1 uml.Classdiagram = uml.Classdiagram{
 				Y: 380.000000,
 			},
 			Width:  240.000000,
-			Heigth: 63.000000,
+			Heigth: 48.000000,
 			Links: []*uml.Link{
 				{
 					Field: models.Polyline{}.Points,
