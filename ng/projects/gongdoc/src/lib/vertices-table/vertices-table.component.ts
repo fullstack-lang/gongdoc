@@ -20,7 +20,7 @@ import { FrontRepoService, FrontRepo } from '../front-repo.service'
 
 // generated table component
 @Component({
-  selector: 'app-vertices-table',
+  selector: 'app-verticestable',
   templateUrl: './vertices-table.component.html',
   styleUrls: ['./vertices-table.component.css'],
 })
@@ -47,6 +47,32 @@ export class VerticesTableComponent implements OnInit {
   @ViewChild(MatPaginator) paginator: MatPaginator;
 
   ngAfterViewInit() {
+
+	// enable sorting on all fields (including pointers and reverse pointer)
+	this.matTableDataSource.sortingDataAccessor = (verticeDB: VerticeDB, property: string) => {
+		switch (property) {
+				// insertion point for specific sorting accessor
+				default:
+					return VerticeDB[property];
+		}
+	}; 
+
+	// enable filtering on all fields (including pointers and reverse pointer, which is not done by default)
+	this.matTableDataSource.filterPredicate = (verticeDB: VerticeDB, filter: string) => {
+
+		// filtering is based on finding a lower case filter into a concatenated string
+		// the verticeDB properties
+		let mergedContent = ""
+
+		// insertion point for merging of fields
+		mergedContent += verticeDB.X.toString()
+		mergedContent += verticeDB.Y.toString()
+		mergedContent += verticeDB.Name.toLowerCase()
+
+		let isSelected = mergedContent.includes(filter.toLowerCase())
+		return isSelected
+	};
+
     this.matTableDataSource.sort = this.sort;
     this.matTableDataSource.paginator = this.paginator;
   }
@@ -147,14 +173,14 @@ export class VerticesTableComponent implements OnInit {
 
   // display vertice in router
   displayVerticeInRouter(verticeID: number) {
-    this.router.navigate(["vertice-display", verticeID])
+    this.router.navigate(["github_com_fullstack_lang_gongdoc_go-" + "vertice-display", verticeID])
   }
 
   // set editor outlet
   setEditorRouterOutlet(verticeID: number) {
     this.router.navigate([{
       outlets: {
-        editor: ["vertice-detail", verticeID]
+        github_com_fullstack_lang_gongdoc_go_editor: ["github_com_fullstack_lang_gongdoc_go-" + "vertice-detail", verticeID]
       }
     }]);
   }
@@ -163,7 +189,7 @@ export class VerticesTableComponent implements OnInit {
   setPresentationRouterOutlet(verticeID: number) {
     this.router.navigate([{
       outlets: {
-        presentation: ["vertice-presentation", verticeID]
+        github_com_fullstack_lang_gongdoc_go_presentation: ["github_com_fullstack_lang_gongdoc_go-" + "vertice-presentation", verticeID]
       }
     }]);
   }

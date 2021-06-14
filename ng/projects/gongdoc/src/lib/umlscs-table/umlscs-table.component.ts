@@ -20,7 +20,7 @@ import { FrontRepoService, FrontRepo } from '../front-repo.service'
 
 // generated table component
 @Component({
-  selector: 'app-umlscs-table',
+  selector: 'app-umlscstable',
   templateUrl: './umlscs-table.component.html',
   styleUrls: ['./umlscs-table.component.css'],
 })
@@ -47,6 +47,38 @@ export class UmlscsTableComponent implements OnInit {
   @ViewChild(MatPaginator) paginator: MatPaginator;
 
   ngAfterViewInit() {
+
+	// enable sorting on all fields (including pointers and reverse pointer)
+	this.matTableDataSource.sortingDataAccessor = (umlscDB: UmlscDB, property: string) => {
+		switch (property) {
+				// insertion point for specific sorting accessor
+				case 'Umlscs':
+					return this.frontRepo.Pkgelts.get(umlscDB.Pkgelt_UmlscsDBID.Int64)?.Name;
+
+				default:
+					return UmlscDB[property];
+		}
+	}; 
+
+	// enable filtering on all fields (including pointers and reverse pointer, which is not done by default)
+	this.matTableDataSource.filterPredicate = (umlscDB: UmlscDB, filter: string) => {
+
+		// filtering is based on finding a lower case filter into a concatenated string
+		// the umlscDB properties
+		let mergedContent = ""
+
+		// insertion point for merging of fields
+		mergedContent += umlscDB.Name.toLowerCase()
+		mergedContent += umlscDB.Activestate.toLowerCase()
+		if (umlscDB.Pkgelt_UmlscsDBID.Int64 != 0) {
+        	mergedContent += this.frontRepo.Pkgelts.get(umlscDB.Pkgelt_UmlscsDBID.Int64)?.Name.toLowerCase()
+    	}
+
+
+		let isSelected = mergedContent.includes(filter.toLowerCase())
+		return isSelected
+	};
+
     this.matTableDataSource.sort = this.sort;
     this.matTableDataSource.paginator = this.paginator;
   }
@@ -147,14 +179,14 @@ export class UmlscsTableComponent implements OnInit {
 
   // display umlsc in router
   displayUmlscInRouter(umlscID: number) {
-    this.router.navigate(["umlsc-display", umlscID])
+    this.router.navigate(["github_com_fullstack_lang_gongdoc_go-" + "umlsc-display", umlscID])
   }
 
   // set editor outlet
   setEditorRouterOutlet(umlscID: number) {
     this.router.navigate([{
       outlets: {
-        editor: ["umlsc-detail", umlscID]
+        github_com_fullstack_lang_gongdoc_go_editor: ["github_com_fullstack_lang_gongdoc_go-" + "umlsc-detail", umlscID]
       }
     }]);
   }
@@ -163,7 +195,7 @@ export class UmlscsTableComponent implements OnInit {
   setPresentationRouterOutlet(umlscID: number) {
     this.router.navigate([{
       outlets: {
-        presentation: ["umlsc-presentation", umlscID]
+        github_com_fullstack_lang_gongdoc_go_presentation: ["github_com_fullstack_lang_gongdoc_go-" + "umlsc-presentation", umlscID]
       }
     }]);
   }

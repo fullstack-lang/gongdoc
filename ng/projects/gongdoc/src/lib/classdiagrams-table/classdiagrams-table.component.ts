@@ -20,7 +20,7 @@ import { FrontRepoService, FrontRepo } from '../front-repo.service'
 
 // generated table component
 @Component({
-  selector: 'app-classdiagrams-table',
+  selector: 'app-classdiagramstable',
   templateUrl: './classdiagrams-table.component.html',
   styleUrls: ['./classdiagrams-table.component.css'],
 })
@@ -47,6 +47,37 @@ export class ClassdiagramsTableComponent implements OnInit {
   @ViewChild(MatPaginator) paginator: MatPaginator;
 
   ngAfterViewInit() {
+
+	// enable sorting on all fields (including pointers and reverse pointer)
+	this.matTableDataSource.sortingDataAccessor = (classdiagramDB: ClassdiagramDB, property: string) => {
+		switch (property) {
+				// insertion point for specific sorting accessor
+				case 'Classdiagrams':
+					return this.frontRepo.Pkgelts.get(classdiagramDB.Pkgelt_ClassdiagramsDBID.Int64)?.Name;
+
+				default:
+					return ClassdiagramDB[property];
+		}
+	}; 
+
+	// enable filtering on all fields (including pointers and reverse pointer, which is not done by default)
+	this.matTableDataSource.filterPredicate = (classdiagramDB: ClassdiagramDB, filter: string) => {
+
+		// filtering is based on finding a lower case filter into a concatenated string
+		// the classdiagramDB properties
+		let mergedContent = ""
+
+		// insertion point for merging of fields
+		mergedContent += classdiagramDB.Name.toLowerCase()
+		if (classdiagramDB.Pkgelt_ClassdiagramsDBID.Int64 != 0) {
+        	mergedContent += this.frontRepo.Pkgelts.get(classdiagramDB.Pkgelt_ClassdiagramsDBID.Int64)?.Name.toLowerCase()
+    	}
+
+
+		let isSelected = mergedContent.includes(filter.toLowerCase())
+		return isSelected
+	};
+
     this.matTableDataSource.sort = this.sort;
     this.matTableDataSource.paginator = this.paginator;
   }
@@ -145,14 +176,14 @@ export class ClassdiagramsTableComponent implements OnInit {
 
   // display classdiagram in router
   displayClassdiagramInRouter(classdiagramID: number) {
-    this.router.navigate(["classdiagram-display", classdiagramID])
+    this.router.navigate(["github_com_fullstack_lang_gongdoc_go-" + "classdiagram-display", classdiagramID])
   }
 
   // set editor outlet
   setEditorRouterOutlet(classdiagramID: number) {
     this.router.navigate([{
       outlets: {
-        editor: ["classdiagram-detail", classdiagramID]
+        github_com_fullstack_lang_gongdoc_go_editor: ["github_com_fullstack_lang_gongdoc_go-" + "classdiagram-detail", classdiagramID]
       }
     }]);
   }
@@ -161,7 +192,7 @@ export class ClassdiagramsTableComponent implements OnInit {
   setPresentationRouterOutlet(classdiagramID: number) {
     this.router.navigate([{
       outlets: {
-        presentation: ["classdiagram-presentation", classdiagramID]
+        github_com_fullstack_lang_gongdoc_go_presentation: ["github_com_fullstack_lang_gongdoc_go-" + "classdiagram-presentation", classdiagramID]
       }
     }]);
   }

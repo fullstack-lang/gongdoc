@@ -13,7 +13,7 @@ import (
 	"sort"
 	"time"
 
-	"github.com/jinzhu/gorm"
+	"gorm.io/gorm"
 
 	"github.com/tealeg/xlsx/v3"
 
@@ -325,6 +325,7 @@ func (backRepoPkgelt *BackRepoPkgeltStruct) CheckoutPhaseOneInstance(pkgeltDB *P
 		(*backRepoPkgelt.Map_PkgeltPtr_PkgeltDBID)[pkgelt] = pkgeltDB.ID
 
 		// append model store with the new element
+		pkgelt.Name = pkgeltDB.Name_Data.String
 		pkgelt.Stage()
 	}
 	pkgeltDB.CopyBasicFieldsToPkgelt(pkgelt)

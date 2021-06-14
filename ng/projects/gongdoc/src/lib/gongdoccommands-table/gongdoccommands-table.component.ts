@@ -20,7 +20,7 @@ import { FrontRepoService, FrontRepo } from '../front-repo.service'
 
 // generated table component
 @Component({
-  selector: 'app-gongdoccommands-table',
+  selector: 'app-gongdoccommandstable',
   templateUrl: './gongdoccommands-table.component.html',
   styleUrls: ['./gongdoccommands-table.component.css'],
 })
@@ -47,6 +47,39 @@ export class GongdocCommandsTableComponent implements OnInit {
   @ViewChild(MatPaginator) paginator: MatPaginator;
 
   ngAfterViewInit() {
+
+	// enable sorting on all fields (including pointers and reverse pointer)
+	this.matTableDataSource.sortingDataAccessor = (gongdoccommandDB: GongdocCommandDB, property: string) => {
+		switch (property) {
+				// insertion point for specific sorting accessor
+				default:
+					return GongdocCommandDB[property];
+		}
+	}; 
+
+	// enable filtering on all fields (including pointers and reverse pointer, which is not done by default)
+	this.matTableDataSource.filterPredicate = (gongdoccommandDB: GongdocCommandDB, filter: string) => {
+
+		// filtering is based on finding a lower case filter into a concatenated string
+		// the gongdoccommandDB properties
+		let mergedContent = ""
+
+		// insertion point for merging of fields
+		mergedContent += gongdoccommandDB.Name.toLowerCase()
+		mergedContent += gongdoccommandDB.Command.toLowerCase()
+		mergedContent += gongdoccommandDB.DiagramName.toLowerCase()
+		mergedContent += gongdoccommandDB.Date.toLowerCase()
+		mergedContent += gongdoccommandDB.GongdocNodeType.toLowerCase()
+		mergedContent += gongdoccommandDB.StructName.toLowerCase()
+		mergedContent += gongdoccommandDB.FieldName.toLowerCase()
+		mergedContent += gongdoccommandDB.FieldTypeName.toLowerCase()
+		mergedContent += gongdoccommandDB.PositionX.toString()
+		mergedContent += gongdoccommandDB.PositionY.toString()
+
+		let isSelected = mergedContent.includes(filter.toLowerCase())
+		return isSelected
+	};
+
     this.matTableDataSource.sort = this.sort;
     this.matTableDataSource.paginator = this.paginator;
   }
@@ -161,14 +194,14 @@ export class GongdocCommandsTableComponent implements OnInit {
 
   // display gongdoccommand in router
   displayGongdocCommandInRouter(gongdoccommandID: number) {
-    this.router.navigate(["gongdoccommand-display", gongdoccommandID])
+    this.router.navigate(["github_com_fullstack_lang_gongdoc_go-" + "gongdoccommand-display", gongdoccommandID])
   }
 
   // set editor outlet
   setEditorRouterOutlet(gongdoccommandID: number) {
     this.router.navigate([{
       outlets: {
-        editor: ["gongdoccommand-detail", gongdoccommandID]
+        github_com_fullstack_lang_gongdoc_go_editor: ["github_com_fullstack_lang_gongdoc_go-" + "gongdoccommand-detail", gongdoccommandID]
       }
     }]);
   }
@@ -177,7 +210,7 @@ export class GongdocCommandsTableComponent implements OnInit {
   setPresentationRouterOutlet(gongdoccommandID: number) {
     this.router.navigate([{
       outlets: {
-        presentation: ["gongdoccommand-presentation", gongdoccommandID]
+        github_com_fullstack_lang_gongdoc_go_presentation: ["github_com_fullstack_lang_gongdoc_go-" + "gongdoccommand-presentation", gongdoccommandID]
       }
     }]);
   }

@@ -70,7 +70,6 @@ func main() {
 
 	// setup GORM
 	db := gongdoc_orm.SetupModels(*logBBFlag, ":memory:")
-	db.DB().SetMaxOpenConns(1)
 	gong_orm.AutoMigrate(db)
 
 	gongdoc_orm.BackRepo.Init(db)

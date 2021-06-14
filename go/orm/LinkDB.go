@@ -13,7 +13,7 @@ import (
 	"sort"
 	"time"
 
-	"github.com/jinzhu/gorm"
+	"gorm.io/gorm"
 
 	"github.com/tealeg/xlsx/v3"
 
@@ -48,9 +48,6 @@ type LinkPointersEnconding struct {
 	// field Middlevertice is a pointer to another Struct (optional or 0..1)
 	// This field is generated into another field to enable AS ONE association
 	MiddleverticeID sql.NullInt64
-
-	// all gong Struct has a Name field, this enables this data to object field
-	MiddleverticeName string
 
 	// Implementation of a reverse ID for field Classshape{}.Links []*Link
 	Classshape_LinksDBID sql.NullInt64
@@ -325,6 +322,7 @@ func (backRepoLink *BackRepoLinkStruct) CheckoutPhaseOneInstance(linkDB *LinkDB)
 		(*backRepoLink.Map_LinkPtr_LinkDBID)[link] = linkDB.ID
 
 		// append model store with the new element
+		link.Name = linkDB.Name_Data.String
 		link.Stage()
 	}
 	linkDB.CopyBasicFieldsToLink(link)

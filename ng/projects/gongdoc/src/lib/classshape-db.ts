@@ -22,7 +22,6 @@ export class ClassshapeDB {
 	// insertion point for other declarations
 	Position?: PositionDB
 	PositionID?: NullInt64
-	PositionName?: string
 
 	Fields?: Array<FieldDB>
 	Links?: Array<LinkDB>

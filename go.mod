@@ -4,14 +4,12 @@ go 1.16
 
 require (
 	github.com/blend/go-sdk v2.0.0+incompatible // indirect
-	github.com/fullstack-lang/gong v0.0.0-20210604141345-5580eadd4419
+	github.com/fullstack-lang/gong v0.0.0-20210613094321-5440e2d7e0f9
 	github.com/gin-contrib/cors v1.3.1
 	github.com/gin-contrib/static v0.0.1
 	github.com/gin-gonic/gin v1.7.1
 	github.com/go-playground/validator/v10 v10.5.0 // indirect
 	github.com/golang/protobuf v1.5.2 // indirect
-	github.com/jinzhu/gorm v1.9.16
-	github.com/mattn/go-sqlite3 v1.14.7 // indirect
 	github.com/tdewolff/canvas v0.0.0-20210210144621-f73efe64c447
 	github.com/tdewolff/minify/v2 v2.9.13 // indirect
 	github.com/tdewolff/parse/v2 v2.5.12 // indirect
@@ -24,4 +22,6 @@ require (
 	golang.org/x/text v0.3.6 // indirect
 	golang.org/x/tools v0.1.0
 	gonum.org/v1/plot v0.8.1 // indirect
+	gorm.io/driver/sqlite v1.1.4
+	gorm.io/gorm v1.21.10
 )

@@ -20,7 +20,7 @@ import { FrontRepoService, FrontRepo } from '../front-repo.service'
 
 // generated table component
 @Component({
-  selector: 'app-gongdocstatuss-table',
+  selector: 'app-gongdocstatusstable',
   templateUrl: './gongdocstatuss-table.component.html',
   styleUrls: ['./gongdocstatuss-table.component.css'],
 })
@@ -47,6 +47,32 @@ export class GongdocStatussTableComponent implements OnInit {
   @ViewChild(MatPaginator) paginator: MatPaginator;
 
   ngAfterViewInit() {
+
+	// enable sorting on all fields (including pointers and reverse pointer)
+	this.matTableDataSource.sortingDataAccessor = (gongdocstatusDB: GongdocStatusDB, property: string) => {
+		switch (property) {
+				// insertion point for specific sorting accessor
+				default:
+					return GongdocStatusDB[property];
+		}
+	}; 
+
+	// enable filtering on all fields (including pointers and reverse pointer, which is not done by default)
+	this.matTableDataSource.filterPredicate = (gongdocstatusDB: GongdocStatusDB, filter: string) => {
+
+		// filtering is based on finding a lower case filter into a concatenated string
+		// the gongdocstatusDB properties
+		let mergedContent = ""
+
+		// insertion point for merging of fields
+		mergedContent += gongdocstatusDB.Name.toLowerCase()
+		mergedContent += gongdocstatusDB.Status.toLowerCase()
+		mergedContent += gongdocstatusDB.CommandCompletionDate.toLowerCase()
+
+		let isSelected = mergedContent.includes(filter.toLowerCase())
+		return isSelected
+	};
+
     this.matTableDataSource.sort = this.sort;
     this.matTableDataSource.paginator = this.paginator;
   }
@@ -147,14 +173,14 @@ export class GongdocStatussTableComponent implements OnInit {
 
   // display gongdocstatus in router
   displayGongdocStatusInRouter(gongdocstatusID: number) {
-    this.router.navigate(["gongdocstatus-display", gongdocstatusID])
+    this.router.navigate(["github_com_fullstack_lang_gongdoc_go-" + "gongdocstatus-display", gongdocstatusID])
   }
 
   // set editor outlet
   setEditorRouterOutlet(gongdocstatusID: number) {
     this.router.navigate([{
       outlets: {
-        editor: ["gongdocstatus-detail", gongdocstatusID]
+        github_com_fullstack_lang_gongdoc_go_editor: ["github_com_fullstack_lang_gongdoc_go-" + "gongdocstatus-detail", gongdocstatusID]
       }
     }]);
   }
@@ -163,7 +189,7 @@ export class GongdocStatussTableComponent implements OnInit {
   setPresentationRouterOutlet(gongdocstatusID: number) {
     this.router.navigate([{
       outlets: {
-        presentation: ["gongdocstatus-presentation", gongdocstatusID]
+        github_com_fullstack_lang_gongdoc_go_presentation: ["github_com_fullstack_lang_gongdoc_go-" + "gongdocstatus-presentation", gongdocstatusID]
       }
     }]);
   }

@@ -93,11 +93,9 @@ export class LinkDetailComponent implements OnInit {
 		if (this.link.Middlevertice != undefined) {
 			this.link.MiddleverticeID.Int64 = this.link.Middlevertice.ID
 			this.link.MiddleverticeID.Valid = true
-			this.link.MiddleverticeName = this.link.Middlevertice.Name
 		} else {
 			this.link.MiddleverticeID.Int64 = 0
 			this.link.MiddleverticeID.Valid = true
-			this.link.MiddleverticeName = ""
 		}
 		
 		// save from the front pointer space to the non pointer space for serialization

@@ -20,7 +20,7 @@ import { FrontRepoService, FrontRepo } from '../front-repo.service'
 
 // generated table component
 @Component({
-  selector: 'app-classshapes-table',
+  selector: 'app-classshapestable',
   templateUrl: './classshapes-table.component.html',
   styleUrls: ['./classshapes-table.component.css'],
 })
@@ -47,6 +47,47 @@ export class ClassshapesTableComponent implements OnInit {
   @ViewChild(MatPaginator) paginator: MatPaginator;
 
   ngAfterViewInit() {
+
+	// enable sorting on all fields (including pointers and reverse pointer)
+	this.matTableDataSource.sortingDataAccessor = (classshapeDB: ClassshapeDB, property: string) => {
+		switch (property) {
+				// insertion point for specific sorting accessor
+  			case 'Position':
+				return (classshapeDB.Position ? classshapeDB.Position.Name : '');
+
+				case 'Classshapes':
+					return this.frontRepo.Classdiagrams.get(classshapeDB.Classdiagram_ClassshapesDBID.Int64)?.Name;
+
+				default:
+					return ClassshapeDB[property];
+		}
+	}; 
+
+	// enable filtering on all fields (including pointers and reverse pointer, which is not done by default)
+	this.matTableDataSource.filterPredicate = (classshapeDB: ClassshapeDB, filter: string) => {
+
+		// filtering is based on finding a lower case filter into a concatenated string
+		// the classshapeDB properties
+		let mergedContent = ""
+
+		// insertion point for merging of fields
+		mergedContent += classshapeDB.Name.toLowerCase()
+		if (classshapeDB.Position) {
+    		mergedContent += classshapeDB.Position.Name.toLowerCase()
+		}
+		mergedContent += classshapeDB.Structname.toLowerCase()
+		mergedContent += classshapeDB.Width.toString()
+		mergedContent += classshapeDB.Heigth.toString()
+		mergedContent += classshapeDB.ClassshapeTargetType.toLowerCase()
+		if (classshapeDB.Classdiagram_ClassshapesDBID.Int64 != 0) {
+        	mergedContent += this.frontRepo.Classdiagrams.get(classshapeDB.Classdiagram_ClassshapesDBID.Int64)?.Name.toLowerCase()
+    	}
+
+
+		let isSelected = mergedContent.includes(filter.toLowerCase())
+		return isSelected
+	};
+
     this.matTableDataSource.sort = this.sort;
     this.matTableDataSource.paginator = this.paginator;
   }
@@ -155,14 +196,14 @@ export class ClassshapesTableComponent implements OnInit {
 
   // display classshape in router
   displayClassshapeInRouter(classshapeID: number) {
-    this.router.navigate(["classshape-display", classshapeID])
+    this.router.navigate(["github_com_fullstack_lang_gongdoc_go-" + "classshape-display", classshapeID])
   }
 
   // set editor outlet
   setEditorRouterOutlet(classshapeID: number) {
     this.router.navigate([{
       outlets: {
-        editor: ["classshape-detail", classshapeID]
+        github_com_fullstack_lang_gongdoc_go_editor: ["github_com_fullstack_lang_gongdoc_go-" + "classshape-detail", classshapeID]
       }
     }]);
   }
@@ -171,7 +212,7 @@ export class ClassshapesTableComponent implements OnInit {
   setPresentationRouterOutlet(classshapeID: number) {
     this.router.navigate([{
       outlets: {
-        presentation: ["classshape-presentation", classshapeID]
+        github_com_fullstack_lang_gongdoc_go_presentation: ["github_com_fullstack_lang_gongdoc_go-" + "classshape-presentation", classshapeID]
       }
     }]);
   }

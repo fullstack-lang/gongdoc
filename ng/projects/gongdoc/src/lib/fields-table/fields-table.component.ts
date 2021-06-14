@@ -20,7 +20,7 @@ import { FrontRepoService, FrontRepo } from '../front-repo.service'
 
 // generated table component
 @Component({
-  selector: 'app-fields-table',
+  selector: 'app-fieldstable',
   templateUrl: './fields-table.component.html',
   styleUrls: ['./fields-table.component.css'],
 })
@@ -47,6 +47,41 @@ export class FieldsTableComponent implements OnInit {
   @ViewChild(MatPaginator) paginator: MatPaginator;
 
   ngAfterViewInit() {
+
+	// enable sorting on all fields (including pointers and reverse pointer)
+	this.matTableDataSource.sortingDataAccessor = (fieldDB: FieldDB, property: string) => {
+		switch (property) {
+				// insertion point for specific sorting accessor
+				case 'Fields':
+					return this.frontRepo.Classshapes.get(fieldDB.Classshape_FieldsDBID.Int64)?.Name;
+
+				default:
+					return FieldDB[property];
+		}
+	}; 
+
+	// enable filtering on all fields (including pointers and reverse pointer, which is not done by default)
+	this.matTableDataSource.filterPredicate = (fieldDB: FieldDB, filter: string) => {
+
+		// filtering is based on finding a lower case filter into a concatenated string
+		// the fieldDB properties
+		let mergedContent = ""
+
+		// insertion point for merging of fields
+		mergedContent += fieldDB.Name.toLowerCase()
+		mergedContent += fieldDB.Fieldname.toLowerCase()
+		mergedContent += fieldDB.FieldTypeAsString.toLowerCase()
+		mergedContent += fieldDB.Structname.toLowerCase()
+		mergedContent += fieldDB.Fieldtypename.toLowerCase()
+		if (fieldDB.Classshape_FieldsDBID.Int64 != 0) {
+        	mergedContent += this.frontRepo.Classshapes.get(fieldDB.Classshape_FieldsDBID.Int64)?.Name.toLowerCase()
+    	}
+
+
+		let isSelected = mergedContent.includes(filter.toLowerCase())
+		return isSelected
+	};
+
     this.matTableDataSource.sort = this.sort;
     this.matTableDataSource.paginator = this.paginator;
   }
@@ -153,14 +188,14 @@ export class FieldsTableComponent implements OnInit {
 
   // display field in router
   displayFieldInRouter(fieldID: number) {
-    this.router.navigate(["field-display", fieldID])
+    this.router.navigate(["github_com_fullstack_lang_gongdoc_go-" + "field-display", fieldID])
   }
 
   // set editor outlet
   setEditorRouterOutlet(fieldID: number) {
     this.router.navigate([{
       outlets: {
-        editor: ["field-detail", fieldID]
+        github_com_fullstack_lang_gongdoc_go_editor: ["github_com_fullstack_lang_gongdoc_go-" + "field-detail", fieldID]
       }
     }]);
   }
@@ -169,7 +204,7 @@ export class FieldsTableComponent implements OnInit {
   setPresentationRouterOutlet(fieldID: number) {
     this.router.navigate([{
       outlets: {
-        presentation: ["field-presentation", fieldID]
+        github_com_fullstack_lang_gongdoc_go_presentation: ["github_com_fullstack_lang_gongdoc_go-" + "field-presentation", fieldID]
       }
     }]);
   }

@@ -93,11 +93,9 @@ export class ClassshapeDetailComponent implements OnInit {
 		if (this.classshape.Position != undefined) {
 			this.classshape.PositionID.Int64 = this.classshape.Position.ID
 			this.classshape.PositionID.Valid = true
-			this.classshape.PositionName = this.classshape.Position.Name
 		} else {
 			this.classshape.PositionID.Int64 = 0
 			this.classshape.PositionID.Valid = true
-			this.classshape.PositionName = ""
 		}
 		
 		// save from the front pointer space to the non pointer space for serialization

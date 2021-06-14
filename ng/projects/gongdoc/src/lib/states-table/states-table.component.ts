@@ -20,7 +20,7 @@ import { FrontRepoService, FrontRepo } from '../front-repo.service'
 
 // generated table component
 @Component({
-  selector: 'app-states-table',
+  selector: 'app-statestable',
   templateUrl: './states-table.component.html',
   styleUrls: ['./states-table.component.css'],
 })
@@ -47,6 +47,39 @@ export class StatesTableComponent implements OnInit {
   @ViewChild(MatPaginator) paginator: MatPaginator;
 
   ngAfterViewInit() {
+
+	// enable sorting on all fields (including pointers and reverse pointer)
+	this.matTableDataSource.sortingDataAccessor = (stateDB: StateDB, property: string) => {
+		switch (property) {
+				// insertion point for specific sorting accessor
+				case 'States':
+					return this.frontRepo.Umlscs.get(stateDB.Umlsc_StatesDBID.Int64)?.Name;
+
+				default:
+					return StateDB[property];
+		}
+	}; 
+
+	// enable filtering on all fields (including pointers and reverse pointer, which is not done by default)
+	this.matTableDataSource.filterPredicate = (stateDB: StateDB, filter: string) => {
+
+		// filtering is based on finding a lower case filter into a concatenated string
+		// the stateDB properties
+		let mergedContent = ""
+
+		// insertion point for merging of fields
+		mergedContent += stateDB.Name.toLowerCase()
+		mergedContent += stateDB.X.toString()
+		mergedContent += stateDB.Y.toString()
+		if (stateDB.Umlsc_StatesDBID.Int64 != 0) {
+        	mergedContent += this.frontRepo.Umlscs.get(stateDB.Umlsc_StatesDBID.Int64)?.Name.toLowerCase()
+    	}
+
+
+		let isSelected = mergedContent.includes(filter.toLowerCase())
+		return isSelected
+	};
+
     this.matTableDataSource.sort = this.sort;
     this.matTableDataSource.paginator = this.paginator;
   }
@@ -149,14 +182,14 @@ export class StatesTableComponent implements OnInit {
 
   // display state in router
   displayStateInRouter(stateID: number) {
-    this.router.navigate(["state-display", stateID])
+    this.router.navigate(["github_com_fullstack_lang_gongdoc_go-" + "state-display", stateID])
   }
 
   // set editor outlet
   setEditorRouterOutlet(stateID: number) {
     this.router.navigate([{
       outlets: {
-        editor: ["state-detail", stateID]
+        github_com_fullstack_lang_gongdoc_go_editor: ["github_com_fullstack_lang_gongdoc_go-" + "state-detail", stateID]
       }
     }]);
   }
@@ -165,7 +198,7 @@ export class StatesTableComponent implements OnInit {
   setPresentationRouterOutlet(stateID: number) {
     this.router.navigate([{
       outlets: {
-        presentation: ["state-presentation", stateID]
+        github_com_fullstack_lang_gongdoc_go_presentation: ["github_com_fullstack_lang_gongdoc_go-" + "state-presentation", stateID]
       }
     }]);
   }

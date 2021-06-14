@@ -13,7 +13,7 @@ import (
 	"sort"
 	"time"
 
-	"github.com/jinzhu/gorm"
+	"gorm.io/gorm"
 
 	"github.com/tealeg/xlsx/v3"
 
@@ -311,6 +311,7 @@ func (backRepoUmlsc *BackRepoUmlscStruct) CheckoutPhaseOneInstance(umlscDB *Umls
 		(*backRepoUmlsc.Map_UmlscPtr_UmlscDBID)[umlsc] = umlscDB.ID
 
 		// append model store with the new element
+		umlsc.Name = umlscDB.Name_Data.String
 		umlsc.Stage()
 	}
 	umlscDB.CopyBasicFieldsToUmlsc(umlsc)

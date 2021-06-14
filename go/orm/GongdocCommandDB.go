@@ -13,7 +13,7 @@ import (
 	"sort"
 	"time"
 
-	"github.com/jinzhu/gorm"
+	"gorm.io/gorm"
 
 	"github.com/tealeg/xlsx/v3"
 
@@ -335,6 +335,7 @@ func (backRepoGongdocCommand *BackRepoGongdocCommandStruct) CheckoutPhaseOneInst
 		(*backRepoGongdocCommand.Map_GongdocCommandPtr_GongdocCommandDBID)[gongdoccommand] = gongdoccommandDB.ID
 
 		// append model store with the new element
+		gongdoccommand.Name = gongdoccommandDB.Name_Data.String
 		gongdoccommand.Stage()
 	}
 	gongdoccommandDB.CopyBasicFieldsToGongdocCommand(gongdoccommand)

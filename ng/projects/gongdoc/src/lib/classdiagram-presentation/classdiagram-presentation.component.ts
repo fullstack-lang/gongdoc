@@ -1,8 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup} from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 
 import { ClassdiagramDB } from '../classdiagram-db'
 import { ClassdiagramService } from '../classdiagram.service'
+
+import { FrontRepoService, FrontRepo } from '../front-repo.service'
 
 import { Router, RouterState, ActivatedRoute } from '@angular/router';
 
@@ -25,9 +27,13 @@ export class ClassdiagramPresentationComponent implements OnInit {
 	dataSource = ELEMENT_DATA;
 
 	classdiagram: ClassdiagramDB;
+
+	// front repo
+	frontRepo: FrontRepo
  
 	constructor(
 		private classdiagramService: ClassdiagramService,
+		private frontRepoService: FrontRepoService,
 		private route: ActivatedRoute,
 		private router: Router,
 	) {
@@ -51,22 +57,22 @@ export class ClassdiagramPresentationComponent implements OnInit {
 
 	getClassdiagram(): void {
 		const id = +this.route.snapshot.paramMap.get('id');
-		this.classdiagramService.getClassdiagram(id)
-			.subscribe(
-				classdiagram => {
-					this.classdiagram = classdiagram
+		this.frontRepoService.pull().subscribe(
+			frontRepo => {
+				this.frontRepo = frontRepo
 
-					// insertion point for recovery of durations
+				this.classdiagram = this.frontRepo.Classdiagrams.get(id)
 
-				}
-			);
+				// insertion point for recovery of durations
+			}
+		);
 	}
 
 	// set presentation outlet
 	setPresentationRouterOutlet(structName: string, ID: number) {
 		this.router.navigate([{
 			outlets: {
-				presentation: [structName + "-presentation", ID]
+				github_com_fullstack_lang_gongdoc_go_presentation: ["github_com_fullstack_lang_gongdoc_go-" + structName + "-presentation", ID]
 			}
 		}]);
 	}
@@ -75,7 +81,7 @@ export class ClassdiagramPresentationComponent implements OnInit {
 	setEditorRouterOutlet(ID: number) {
 		this.router.navigate([{
 			outlets: {
-				editor: ["classdiagram-detail", ID]
+				github_com_fullstack_lang_gongdoc_go_editor: ["github_com_fullstack_lang_gongdoc_go-" + "classdiagram-detail", ID]
 			}
 		}]);
 	}

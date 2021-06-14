@@ -13,7 +13,7 @@ import (
 	"sort"
 	"time"
 
-	"github.com/jinzhu/gorm"
+	"gorm.io/gorm"
 
 	"github.com/tealeg/xlsx/v3"
 
@@ -310,6 +310,7 @@ func (backRepoField *BackRepoFieldStruct) CheckoutPhaseOneInstance(fieldDB *Fiel
 		(*backRepoField.Map_FieldPtr_FieldDBID)[field] = fieldDB.ID
 
 		// append model store with the new element
+		field.Name = fieldDB.Name_Data.String
 		field.Stage()
 	}
 	fieldDB.CopyBasicFieldsToField(field)

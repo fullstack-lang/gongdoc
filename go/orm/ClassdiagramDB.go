@@ -13,7 +13,7 @@ import (
 	"sort"
 	"time"
 
-	"github.com/jinzhu/gorm"
+	"gorm.io/gorm"
 
 	"github.com/tealeg/xlsx/v3"
 
@@ -305,6 +305,7 @@ func (backRepoClassdiagram *BackRepoClassdiagramStruct) CheckoutPhaseOneInstance
 		(*backRepoClassdiagram.Map_ClassdiagramPtr_ClassdiagramDBID)[classdiagram] = classdiagramDB.ID
 
 		// append model store with the new element
+		classdiagram.Name = classdiagramDB.Name_Data.String
 		classdiagram.Stage()
 	}
 	classdiagramDB.CopyBasicFieldsToClassdiagram(classdiagram)

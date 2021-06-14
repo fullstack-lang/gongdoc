@@ -1,8 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup} from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 
 import { UmlscDB } from '../umlsc-db'
 import { UmlscService } from '../umlsc.service'
+
+import { FrontRepoService, FrontRepo } from '../front-repo.service'
 
 import { Router, RouterState, ActivatedRoute } from '@angular/router';
 
@@ -25,9 +27,13 @@ export class UmlscPresentationComponent implements OnInit {
 	dataSource = ELEMENT_DATA;
 
 	umlsc: UmlscDB;
+
+	// front repo
+	frontRepo: FrontRepo
  
 	constructor(
 		private umlscService: UmlscService,
+		private frontRepoService: FrontRepoService,
 		private route: ActivatedRoute,
 		private router: Router,
 	) {
@@ -51,22 +57,22 @@ export class UmlscPresentationComponent implements OnInit {
 
 	getUmlsc(): void {
 		const id = +this.route.snapshot.paramMap.get('id');
-		this.umlscService.getUmlsc(id)
-			.subscribe(
-				umlsc => {
-					this.umlsc = umlsc
+		this.frontRepoService.pull().subscribe(
+			frontRepo => {
+				this.frontRepo = frontRepo
 
-					// insertion point for recovery of durations
+				this.umlsc = this.frontRepo.Umlscs.get(id)
 
-				}
-			);
+				// insertion point for recovery of durations
+			}
+		);
 	}
 
 	// set presentation outlet
 	setPresentationRouterOutlet(structName: string, ID: number) {
 		this.router.navigate([{
 			outlets: {
-				presentation: [structName + "-presentation", ID]
+				github_com_fullstack_lang_gongdoc_go_presentation: ["github_com_fullstack_lang_gongdoc_go-" + structName + "-presentation", ID]
 			}
 		}]);
 	}
@@ -75,7 +81,7 @@ export class UmlscPresentationComponent implements OnInit {
 	setEditorRouterOutlet(ID: number) {
 		this.router.navigate([{
 			outlets: {
-				editor: ["umlsc-detail", ID]
+				github_com_fullstack_lang_gongdoc_go_editor: ["github_com_fullstack_lang_gongdoc_go-" + "umlsc-detail", ID]
 			}
 		}]);
 	}

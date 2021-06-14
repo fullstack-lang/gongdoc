@@ -1,8 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup} from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 
 import { GongdocStatusDB } from '../gongdocstatus-db'
 import { GongdocStatusService } from '../gongdocstatus.service'
+
+import { FrontRepoService, FrontRepo } from '../front-repo.service'
 
 import { Router, RouterState, ActivatedRoute } from '@angular/router';
 
@@ -25,9 +27,13 @@ export class GongdocStatusPresentationComponent implements OnInit {
 	dataSource = ELEMENT_DATA;
 
 	gongdocstatus: GongdocStatusDB;
+
+	// front repo
+	frontRepo: FrontRepo
  
 	constructor(
 		private gongdocstatusService: GongdocStatusService,
+		private frontRepoService: FrontRepoService,
 		private route: ActivatedRoute,
 		private router: Router,
 	) {
@@ -51,22 +57,22 @@ export class GongdocStatusPresentationComponent implements OnInit {
 
 	getGongdocStatus(): void {
 		const id = +this.route.snapshot.paramMap.get('id');
-		this.gongdocstatusService.getGongdocStatus(id)
-			.subscribe(
-				gongdocstatus => {
-					this.gongdocstatus = gongdocstatus
+		this.frontRepoService.pull().subscribe(
+			frontRepo => {
+				this.frontRepo = frontRepo
 
-					// insertion point for recovery of durations
+				this.gongdocstatus = this.frontRepo.GongdocStatuss.get(id)
 
-				}
-			);
+				// insertion point for recovery of durations
+			}
+		);
 	}
 
 	// set presentation outlet
 	setPresentationRouterOutlet(structName: string, ID: number) {
 		this.router.navigate([{
 			outlets: {
-				presentation: [structName + "-presentation", ID]
+				github_com_fullstack_lang_gongdoc_go_presentation: ["github_com_fullstack_lang_gongdoc_go-" + structName + "-presentation", ID]
 			}
 		}]);
 	}
@@ -75,7 +81,7 @@ export class GongdocStatusPresentationComponent implements OnInit {
 	setEditorRouterOutlet(ID: number) {
 		this.router.navigate([{
 			outlets: {
-				editor: ["gongdocstatus-detail", ID]
+				github_com_fullstack_lang_gongdoc_go_editor: ["github_com_fullstack_lang_gongdoc_go-" + "gongdocstatus-detail", ID]
 			}
 		}]);
 	}

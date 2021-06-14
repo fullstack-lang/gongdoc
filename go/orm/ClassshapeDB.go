@@ -13,7 +13,7 @@ import (
 	"sort"
 	"time"
 
-	"github.com/jinzhu/gorm"
+	"gorm.io/gorm"
 
 	"github.com/tealeg/xlsx/v3"
 
@@ -48,9 +48,6 @@ type ClassshapePointersEnconding struct {
 	// field Position is a pointer to another Struct (optional or 0..1)
 	// This field is generated into another field to enable AS ONE association
 	PositionID sql.NullInt64
-
-	// all gong Struct has a Name field, this enables this data to object field
-	PositionName string
 
 	// Implementation of a reverse ID for field Classdiagram{}.Classshapes []*Classshape
 	Classdiagram_ClassshapesDBID sql.NullInt64
@@ -363,6 +360,7 @@ func (backRepoClassshape *BackRepoClassshapeStruct) CheckoutPhaseOneInstance(cla
 		(*backRepoClassshape.Map_ClassshapePtr_ClassshapeDBID)[classshape] = classshapeDB.ID
 
 		// append model store with the new element
+		classshape.Name = classshapeDB.Name_Data.String
 		classshape.Stage()
 	}
 	classshapeDB.CopyBasicFieldsToClassshape(classshape)

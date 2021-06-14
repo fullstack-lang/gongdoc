@@ -20,7 +20,6 @@ export class LinkDB {
 	// insertion point for other declarations
 	Middlevertice?: VerticeDB
 	MiddleverticeID?: NullInt64
-	MiddleverticeName?: string
 
 	Classshape_LinksDBID?: NullInt64
 	Classshape_LinksDBID_Index?: NullInt64 // store the index of the link instance in Classshape.Links

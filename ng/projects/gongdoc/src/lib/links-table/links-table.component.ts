@@ -20,7 +20,7 @@ import { FrontRepoService, FrontRepo } from '../front-repo.service'
 
 // generated table component
 @Component({
-  selector: 'app-links-table',
+  selector: 'app-linkstable',
   templateUrl: './links-table.component.html',
   styleUrls: ['./links-table.component.css'],
 })
@@ -47,6 +47,47 @@ export class LinksTableComponent implements OnInit {
   @ViewChild(MatPaginator) paginator: MatPaginator;
 
   ngAfterViewInit() {
+
+	// enable sorting on all fields (including pointers and reverse pointer)
+	this.matTableDataSource.sortingDataAccessor = (linkDB: LinkDB, property: string) => {
+		switch (property) {
+				// insertion point for specific sorting accessor
+  			case 'Middlevertice':
+				return (linkDB.Middlevertice ? linkDB.Middlevertice.Name : '');
+
+				case 'Links':
+					return this.frontRepo.Classshapes.get(linkDB.Classshape_LinksDBID.Int64)?.Name;
+
+				default:
+					return LinkDB[property];
+		}
+	}; 
+
+	// enable filtering on all fields (including pointers and reverse pointer, which is not done by default)
+	this.matTableDataSource.filterPredicate = (linkDB: LinkDB, filter: string) => {
+
+		// filtering is based on finding a lower case filter into a concatenated string
+		// the linkDB properties
+		let mergedContent = ""
+
+		// insertion point for merging of fields
+		mergedContent += linkDB.Name.toLowerCase()
+		mergedContent += linkDB.Fieldname.toLowerCase()
+		mergedContent += linkDB.Structname.toLowerCase()
+		mergedContent += linkDB.Fieldtypename.toLowerCase()
+		mergedContent += linkDB.Multiplicity.toLowerCase()
+		if (linkDB.Middlevertice) {
+    		mergedContent += linkDB.Middlevertice.Name.toLowerCase()
+		}
+		if (linkDB.Classshape_LinksDBID.Int64 != 0) {
+        	mergedContent += this.frontRepo.Classshapes.get(linkDB.Classshape_LinksDBID.Int64)?.Name.toLowerCase()
+    	}
+
+
+		let isSelected = mergedContent.includes(filter.toLowerCase())
+		return isSelected
+	};
+
     this.matTableDataSource.sort = this.sort;
     this.matTableDataSource.paginator = this.paginator;
   }
@@ -155,14 +196,14 @@ export class LinksTableComponent implements OnInit {
 
   // display link in router
   displayLinkInRouter(linkID: number) {
-    this.router.navigate(["link-display", linkID])
+    this.router.navigate(["github_com_fullstack_lang_gongdoc_go-" + "link-display", linkID])
   }
 
   // set editor outlet
   setEditorRouterOutlet(linkID: number) {
     this.router.navigate([{
       outlets: {
-        editor: ["link-detail", linkID]
+        github_com_fullstack_lang_gongdoc_go_editor: ["github_com_fullstack_lang_gongdoc_go-" + "link-detail", linkID]
       }
     }]);
   }
@@ -171,7 +212,7 @@ export class LinksTableComponent implements OnInit {
   setPresentationRouterOutlet(linkID: number) {
     this.router.navigate([{
       outlets: {
-        presentation: ["link-presentation", linkID]
+        github_com_fullstack_lang_gongdoc_go_presentation: ["github_com_fullstack_lang_gongdoc_go-" + "link-presentation", linkID]
       }
     }]);
   }

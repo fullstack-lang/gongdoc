@@ -13,7 +13,7 @@ import (
 	"sort"
 	"time"
 
-	"github.com/jinzhu/gorm"
+	"gorm.io/gorm"
 
 	"github.com/tealeg/xlsx/v3"
 
@@ -293,6 +293,7 @@ func (backRepoGongdocStatus *BackRepoGongdocStatusStruct) CheckoutPhaseOneInstan
 		(*backRepoGongdocStatus.Map_GongdocStatusPtr_GongdocStatusDBID)[gongdocstatus] = gongdocstatusDB.ID
 
 		// append model store with the new element
+		gongdocstatus.Name = gongdocstatusDB.Name_Data.String
 		gongdocstatus.Stage()
 	}
 	gongdocstatusDB.CopyBasicFieldsToGongdocStatus(gongdocstatus)

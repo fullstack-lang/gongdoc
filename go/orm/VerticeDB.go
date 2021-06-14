@@ -13,7 +13,7 @@ import (
 	"sort"
 	"time"
 
-	"github.com/jinzhu/gorm"
+	"gorm.io/gorm"
 
 	"github.com/tealeg/xlsx/v3"
 
@@ -293,6 +293,7 @@ func (backRepoVertice *BackRepoVerticeStruct) CheckoutPhaseOneInstance(verticeDB
 		(*backRepoVertice.Map_VerticePtr_VerticeDBID)[vertice] = verticeDB.ID
 
 		// append model store with the new element
+		vertice.Name = verticeDB.Name_Data.String
 		vertice.Stage()
 	}
 	verticeDB.CopyBasicFieldsToVertice(vertice)

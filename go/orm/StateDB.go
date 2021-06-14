@@ -13,7 +13,7 @@ import (
 	"sort"
 	"time"
 
-	"github.com/jinzhu/gorm"
+	"gorm.io/gorm"
 
 	"github.com/tealeg/xlsx/v3"
 
@@ -298,6 +298,7 @@ func (backRepoState *BackRepoStateStruct) CheckoutPhaseOneInstance(stateDB *Stat
 		(*backRepoState.Map_StatePtr_StateDBID)[state] = stateDB.ID
 
 		// append model store with the new element
+		state.Name = stateDB.Name_Data.String
 		state.Stage()
 	}
 	stateDB.CopyBasicFieldsToState(state)

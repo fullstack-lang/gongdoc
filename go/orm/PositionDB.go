@@ -13,7 +13,7 @@ import (
 	"sort"
 	"time"
 
-	"github.com/jinzhu/gorm"
+	"gorm.io/gorm"
 
 	"github.com/tealeg/xlsx/v3"
 
@@ -293,6 +293,7 @@ func (backRepoPosition *BackRepoPositionStruct) CheckoutPhaseOneInstance(positio
 		(*backRepoPosition.Map_PositionPtr_PositionDBID)[position] = positionDB.ID
 
 		// append model store with the new element
+		position.Name = positionDB.Name_Data.String
 		position.Stage()
 	}
 	positionDB.CopyBasicFieldsToPosition(position)

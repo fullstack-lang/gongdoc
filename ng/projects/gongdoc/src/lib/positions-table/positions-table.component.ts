@@ -20,7 +20,7 @@ import { FrontRepoService, FrontRepo } from '../front-repo.service'
 
 // generated table component
 @Component({
-  selector: 'app-positions-table',
+  selector: 'app-positionstable',
   templateUrl: './positions-table.component.html',
   styleUrls: ['./positions-table.component.css'],
 })
@@ -47,6 +47,32 @@ export class PositionsTableComponent implements OnInit {
   @ViewChild(MatPaginator) paginator: MatPaginator;
 
   ngAfterViewInit() {
+
+	// enable sorting on all fields (including pointers and reverse pointer)
+	this.matTableDataSource.sortingDataAccessor = (positionDB: PositionDB, property: string) => {
+		switch (property) {
+				// insertion point for specific sorting accessor
+				default:
+					return PositionDB[property];
+		}
+	}; 
+
+	// enable filtering on all fields (including pointers and reverse pointer, which is not done by default)
+	this.matTableDataSource.filterPredicate = (positionDB: PositionDB, filter: string) => {
+
+		// filtering is based on finding a lower case filter into a concatenated string
+		// the positionDB properties
+		let mergedContent = ""
+
+		// insertion point for merging of fields
+		mergedContent += positionDB.X.toString()
+		mergedContent += positionDB.Y.toString()
+		mergedContent += positionDB.Name.toLowerCase()
+
+		let isSelected = mergedContent.includes(filter.toLowerCase())
+		return isSelected
+	};
+
     this.matTableDataSource.sort = this.sort;
     this.matTableDataSource.paginator = this.paginator;
   }
@@ -147,14 +173,14 @@ export class PositionsTableComponent implements OnInit {
 
   // display position in router
   displayPositionInRouter(positionID: number) {
-    this.router.navigate(["position-display", positionID])
+    this.router.navigate(["github_com_fullstack_lang_gongdoc_go-" + "position-display", positionID])
   }
 
   // set editor outlet
   setEditorRouterOutlet(positionID: number) {
     this.router.navigate([{
       outlets: {
-        editor: ["position-detail", positionID]
+        github_com_fullstack_lang_gongdoc_go_editor: ["github_com_fullstack_lang_gongdoc_go-" + "position-detail", positionID]
       }
     }]);
   }
@@ -163,7 +189,7 @@ export class PositionsTableComponent implements OnInit {
   setPresentationRouterOutlet(positionID: number) {
     this.router.navigate([{
       outlets: {
-        presentation: ["position-presentation", positionID]
+        github_com_fullstack_lang_gongdoc_go_presentation: ["github_com_fullstack_lang_gongdoc_go-" + "position-presentation", positionID]
       }
     }]);
   }

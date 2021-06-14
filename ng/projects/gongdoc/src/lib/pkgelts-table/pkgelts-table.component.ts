@@ -20,7 +20,7 @@ import { FrontRepoService, FrontRepo } from '../front-repo.service'
 
 // generated table component
 @Component({
-  selector: 'app-pkgelts-table',
+  selector: 'app-pkgeltstable',
   templateUrl: './pkgelts-table.component.html',
   styleUrls: ['./pkgelts-table.component.css'],
 })
@@ -47,6 +47,31 @@ export class PkgeltsTableComponent implements OnInit {
   @ViewChild(MatPaginator) paginator: MatPaginator;
 
   ngAfterViewInit() {
+
+	// enable sorting on all fields (including pointers and reverse pointer)
+	this.matTableDataSource.sortingDataAccessor = (pkgeltDB: PkgeltDB, property: string) => {
+		switch (property) {
+				// insertion point for specific sorting accessor
+				default:
+					return PkgeltDB[property];
+		}
+	}; 
+
+	// enable filtering on all fields (including pointers and reverse pointer, which is not done by default)
+	this.matTableDataSource.filterPredicate = (pkgeltDB: PkgeltDB, filter: string) => {
+
+		// filtering is based on finding a lower case filter into a concatenated string
+		// the pkgeltDB properties
+		let mergedContent = ""
+
+		// insertion point for merging of fields
+		mergedContent += pkgeltDB.Name.toLowerCase()
+		mergedContent += pkgeltDB.Path.toLowerCase()
+
+		let isSelected = mergedContent.includes(filter.toLowerCase())
+		return isSelected
+	};
+
     this.matTableDataSource.sort = this.sort;
     this.matTableDataSource.paginator = this.paginator;
   }
@@ -145,14 +170,14 @@ export class PkgeltsTableComponent implements OnInit {
 
   // display pkgelt in router
   displayPkgeltInRouter(pkgeltID: number) {
-    this.router.navigate(["pkgelt-display", pkgeltID])
+    this.router.navigate(["github_com_fullstack_lang_gongdoc_go-" + "pkgelt-display", pkgeltID])
   }
 
   // set editor outlet
   setEditorRouterOutlet(pkgeltID: number) {
     this.router.navigate([{
       outlets: {
-        editor: ["pkgelt-detail", pkgeltID]
+        github_com_fullstack_lang_gongdoc_go_editor: ["github_com_fullstack_lang_gongdoc_go-" + "pkgelt-detail", pkgeltID]
       }
     }]);
   }
@@ -161,7 +186,7 @@ export class PkgeltsTableComponent implements OnInit {
   setPresentationRouterOutlet(pkgeltID: number) {
     this.router.navigate([{
       outlets: {
-        presentation: ["pkgelt-presentation", pkgeltID]
+        github_com_fullstack_lang_gongdoc_go_presentation: ["github_com_fullstack_lang_gongdoc_go-" + "pkgelt-presentation", pkgeltID]
       }
     }]);
   }
