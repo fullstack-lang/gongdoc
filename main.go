@@ -69,11 +69,11 @@ func main() {
 	}
 
 	// setup GORM
-	db := gongdoc_orm.SetupModels(*logBBFlag, ":memory:")
-	gong_orm.AutoMigrate(db)
+	gongdocDB := gongdoc_orm.SetupModels(*logBBFlag, "file:memdb1?mode=memory&cache=shared")
+	gongDB := gong_orm.SetupModels(*logBBFlag, "file:memdb2?mode=memory&cache=shared")
 
-	gongdoc_orm.BackRepo.Init(db)
-	gong_orm.BackRepo.Init(db)
+	gongdoc_orm.BackRepo.Init(gongdocDB)
+	gong_orm.BackRepo.Init(gongDB)
 
 	// setup controlers
 	if !*logGINFlag {
