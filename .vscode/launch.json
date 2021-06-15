@@ -81,6 +81,25 @@
             ]
         },
         {
+            "name": "go server on gongproject",
+            "type": "go",
+            "request": "launch",
+            "mode": "debug",
+            "program": "${workspaceFolder}",
+            "cwd": "${workspaceFolder}/../gongproject",
+            "dlvLoadConfig": {
+                "followPointers": true,
+                "maxVariableRecurse": 1,
+                "maxStringLen": 300,
+                "maxArrayValues": 64,
+                "maxStructFields": -1
+            },
+            "args": [
+                "-pkgPath",
+                "go/models",
+            ]
+        },
+        {
             "name": "go server on gongsvg -genDefaultDiagram",
             "type": "go",
             "request": "launch",

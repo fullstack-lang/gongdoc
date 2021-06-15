@@ -8,6 +8,7 @@ import { FrontRepoService, FrontRepo } from 'gongdoc'
 import { ClassdiagramService } from 'gongdoc'
 
 import { Observable, timer } from 'rxjs';
+import { stringify } from '@angular/compiler/src/util';
 
 /**
  * Types of a GongNode / GongFlatNode
@@ -320,13 +321,13 @@ export class SidebarGongdocDiagramsComponent implements OnInit {
     }]);
   }
 
-  setEditorRouterOutlet(path) {
+  setEditorRouterOutlet(path: string) {
 
     console.log("setEditorRouterOutlet " + path)
 
     this.router.navigate([{
       outlets: {
-        elementeditor: [path.toLowerCase()]
+        elementeditor: ["github_com_fullstack_lang_gongdoc_go-" + path.toLowerCase()]
       }
     }]);
   }

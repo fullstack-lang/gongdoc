@@ -22,12 +22,10 @@ func GenGoDefaultDiagram(modelPkg *gong_models.ModelPkg, pkgPath string) {
 
 	// if directory does not exist, creates it
 	if os.IsNotExist(err) {
-
 		errd := os.Mkdir(diagramPkgPath, os.ModePerm)
 		if os.IsNotExist(errd) {
 			log.Println("creating directory : " + diagramPkgPath)
 		}
-
 	}
 
 	// generates default diagram

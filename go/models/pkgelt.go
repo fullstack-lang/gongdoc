@@ -125,39 +125,15 @@ func (pkgelt *Pkgelt) Unmarshall(DiagramPackagePath string) {
 
 	pkgelt.Path = DiagramPackagePath
 
-	directory, err := filepath.Abs(DiagramPackagePath)
-	if err != nil {
+	var directory string
+	var err error
+	if directory, err = filepath.Abs(DiagramPackagePath); err != nil {
 		log.Panic("Diagram package path does not exist %s ;" + directory)
 	}
 	log.Println("Loading package " + directory)
 
 	pkgelt.FillUpMapExprComments(DiagramPackagePath)
-
-	// we fill up the map of fields of variable with their
-	// corresponding type, it is usefull to find the type of a field
-	// for instance
-	// Links: []*uml.Link{
-	// 	{
-	// 		Field: models.Line{}.Start,
-	// 	},
-	// },
 	MapExpToType = make(map[string]string, 0)
-
-	// get all files from the directory
-	// files, err := ioutil.ReadDir(directory)
-	// if err != nil {
-	// 	log.Fatal(err)
-	// }
-
-	// for _, file := range files {
-	// 	if !file.IsDir() {
-	// 		fileExtension := filepath.Ext(file.Name())
-
-	// 		if fileExtension == ".go" {
-	// 			extractTypeFromVariables(directory, file.Name(), &MapExpToType)
-	// 		}
-	// 	}
-	// }
 
 	var fset token.FileSet
 	cfg := &packages.Config{
@@ -167,8 +143,21 @@ func (pkgelt *Pkgelt) Unmarshall(DiagramPackagePath string) {
 
 		Fset: &fset,
 	}
-	pkgs, err2 := packages.Load(cfg, "./...")
-	if err2 != nil {
+
+	// if "diagrams" directory does not exists, creates it
+	// check existance of path
+	_, err = os.Stat(DiagramPackagePath)
+
+	// if directory does not exist, creates it
+	if os.IsNotExist(err) {
+		errd := os.Mkdir(DiagramPackagePath, os.ModePerm)
+		if os.IsNotExist(errd) {
+			log.Println("creating directory : " + DiagramPackagePath)
+		}
+	}
+
+	var pkgs []*packages.Package
+	if pkgs, err = packages.Load(cfg, "./..."); err != nil {
 		s := fmt.Sprintf("cannot process package at path %s, err %s", DiagramPackagePath, err.Error())
 		log.Panic(s)
 	}
