@@ -1,4 +1,3 @@
-
 package controllers
 
 import (
@@ -11,7 +10,7 @@ import (
 )
 
 // genQuery return the name of the column
-func genQuery( columnName string) string {
+func genQuery(columnName string) string {
 	return fmt.Sprintf("%s = ?", columnName)
 }
 
@@ -22,7 +21,7 @@ func genQuery( columnName string) string {
 type GenericError struct {
 	// in: body
 	Body struct {
-		Code    int32 `json:"code"`
+		Code    int32  `json:"code"`
 		Message string `json:"message"`
 	} `json:"body"`
 }
@@ -43,7 +42,7 @@ type ValidationError struct {
 // RegisterControllers register controllers
 func RegisterControllers(r *gin.Engine) {
 	v1 := r.Group("/api/github.com/fullstack-lang/gongdoc/go")
-	{// insertion point for registrations
+	{ // insertion point for registrations
 		v1.GET("/v1/classdiagrams", GetClassdiagrams)
 		v1.GET("/v1/classdiagrams/:id", GetClassdiagram)
 		v1.POST("/v1/classdiagrams", PostClassdiagram)
@@ -121,8 +120,8 @@ func RegisterControllers(r *gin.Engine) {
 		v1.PUT("/v1/vertices/:id", UpdateVertice)
 		v1.DELETE("/v1/vertices/:id", DeleteVertice)
 
-
 		v1.GET("/commitnb", GetLastCommitNb)
+		v1.GET("/pushfromfrontnb", GetLastPushFromFrontNb)
 	}
 }
 
@@ -133,3 +132,9 @@ func GetLastCommitNb(c *gin.Context) {
 	c.JSON(http.StatusOK, res)
 }
 
+// swagger:route GET /pushfromfrontnb backrepo GetLastPushFromFrontNb
+func GetLastPushFromFrontNb(c *gin.Context) {
+	res := orm.GetLastPushFromFrontNb()
+
+	c.JSON(http.StatusOK, res)
+}

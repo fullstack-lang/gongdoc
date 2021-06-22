@@ -1624,6 +1624,11 @@ paths:
           $ref: '#/responses/genericError'
       tags:
       - positions
+  /pushfromfrontnb:
+    get:
+      operationId: GetLastPushFromFrontNb
+      tags:
+      - backrepo
   /states:
     get:
       description: Get all states
