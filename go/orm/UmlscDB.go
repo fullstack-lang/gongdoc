@@ -82,7 +82,7 @@ type UmlscDBResponse struct {
 	UmlscDB
 }
 
-// UmlscWOP is a Umlsc without pointers
+// UmlscWOP is a Umlsc without pointers (WOP is an acronym for "Without Pointers")
 // it holds the same basic fields but pointers are encoded into uint
 type UmlscWOP struct {
 	ID int
@@ -101,7 +101,6 @@ var Umlsc_Fields = []string{
 	"Name",
 	"Activestate",
 }
-
 
 type BackRepoUmlscStruct struct {
 	// stores UmlscDB according to their gorm ID
@@ -251,7 +250,7 @@ func (backRepoUmlsc *BackRepoUmlscStruct) CommitPhaseTwoInstance(backRepo *BackR
 
 			// get the back repo instance at the association end
 			stateAssocEnd_DB :=
-				backRepo.BackRepoState.GetStateDBFromStatePtr( stateAssocEnd)
+				backRepo.BackRepoState.GetStateDBFromStatePtr(stateAssocEnd)
 
 			// encode reverse pointer in the association end back repo instance
 			stateAssocEnd_DB.Umlsc_StatesDBID.Int64 = int64(umlscDB.ID)
@@ -279,9 +278,8 @@ func (backRepoUmlsc *BackRepoUmlscStruct) CommitPhaseTwoInstance(backRepo *BackR
 
 // BackRepoUmlsc.CheckoutPhaseOne Checkouts all BackRepo instances to the Stage
 //
-// Phase One is the creation of instance in the stage
-//
-// NOTE: the is supposed to have been reset before
+// Phase One will result in having instances on the stage aligned with the back repo
+// pointers are not initialized yet (this is for pahse two)
 //
 func (backRepoUmlsc *BackRepoUmlscStruct) CheckoutPhaseOne() (Error error) {
 
@@ -291,9 +289,34 @@ func (backRepoUmlsc *BackRepoUmlscStruct) CheckoutPhaseOne() (Error error) {
 		return query.Error
 	}
 
+	// list of instances to be removed
+	// start from the initial map on the stage and remove instances that have been checked out
+	umlscInstancesToBeRemovedFromTheStage := make(map[*models.Umlsc]struct{})
+	for key, value := range models.Stage.Umlscs {
+		umlscInstancesToBeRemovedFromTheStage[key] = value
+	}
+
 	// copy orm objects to the the map
 	for _, umlscDB := range umlscDBArray {
 		backRepoUmlsc.CheckoutPhaseOneInstance(&umlscDB)
+
+		// do not remove this instance from the stage, therefore
+		// remove instance from the list of instances to be be removed from the stage
+		umlsc, ok := (*backRepoUmlsc.Map_UmlscDBID_UmlscPtr)[umlscDB.ID]
+		if ok {
+			delete(umlscInstancesToBeRemovedFromTheStage, umlsc)
+		}
+	}
+
+	// remove from stage and back repo's 3 maps all umlscs that are not in the checkout
+	for umlsc := range umlscInstancesToBeRemovedFromTheStage {
+		umlsc.Unstage()
+
+		// remove instance from the back repo 3 maps
+		umlscID := (*backRepoUmlsc.Map_UmlscPtr_UmlscDBID)[umlsc]
+		delete((*backRepoUmlsc.Map_UmlscPtr_UmlscDBID), umlsc)
+		delete((*backRepoUmlsc.Map_UmlscDBID_UmlscDB), umlscID)
+		delete((*backRepoUmlsc.Map_UmlscDBID_UmlscPtr), umlscID)
 	}
 
 	return
@@ -541,7 +564,7 @@ func (backRepoUmlsc *BackRepoUmlscStruct) RestorePhaseOne(dirPath string) {
 // to compute new index
 func (backRepoUmlsc *BackRepoUmlscStruct) RestorePhaseTwo() {
 
-	for _, umlscDB := range (*backRepoUmlsc.Map_UmlscDBID_UmlscDB) {
+	for _, umlscDB := range *backRepoUmlsc.Map_UmlscDBID_UmlscDB {
 
 		// next line of code is to avert unused variable compilation error
 		_ = umlscDB
@@ -549,7 +572,7 @@ func (backRepoUmlsc *BackRepoUmlscStruct) RestorePhaseTwo() {
 		// insertion point for reindexing pointers encoding
 		// This reindex umlsc.Umlscs
 		if umlscDB.Pkgelt_UmlscsDBID.Int64 != 0 {
-			umlscDB.Pkgelt_UmlscsDBID.Int64 = 
+			umlscDB.Pkgelt_UmlscsDBID.Int64 =
 				int64(BackRepoPkgeltid_atBckpTime_newID[uint(umlscDB.Pkgelt_UmlscsDBID.Int64)])
 		}
 

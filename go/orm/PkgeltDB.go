@@ -77,7 +77,7 @@ type PkgeltDBResponse struct {
 	PkgeltDB
 }
 
-// PkgeltWOP is a Pkgelt without pointers
+// PkgeltWOP is a Pkgelt without pointers (WOP is an acronym for "Without Pointers")
 // it holds the same basic fields but pointers are encoded into uint
 type PkgeltWOP struct {
 	ID int
@@ -96,7 +96,6 @@ var Pkgelt_Fields = []string{
 	"Name",
 	"Path",
 }
-
 
 type BackRepoPkgeltStruct struct {
 	// stores PkgeltDB according to their gorm ID
@@ -246,7 +245,7 @@ func (backRepoPkgelt *BackRepoPkgeltStruct) CommitPhaseTwoInstance(backRepo *Bac
 
 			// get the back repo instance at the association end
 			classdiagramAssocEnd_DB :=
-				backRepo.BackRepoClassdiagram.GetClassdiagramDBFromClassdiagramPtr( classdiagramAssocEnd)
+				backRepo.BackRepoClassdiagram.GetClassdiagramDBFromClassdiagramPtr(classdiagramAssocEnd)
 
 			// encode reverse pointer in the association end back repo instance
 			classdiagramAssocEnd_DB.Pkgelt_ClassdiagramsDBID.Int64 = int64(pkgeltDB.ID)
@@ -265,7 +264,7 @@ func (backRepoPkgelt *BackRepoPkgeltStruct) CommitPhaseTwoInstance(backRepo *Bac
 
 			// get the back repo instance at the association end
 			umlscAssocEnd_DB :=
-				backRepo.BackRepoUmlsc.GetUmlscDBFromUmlscPtr( umlscAssocEnd)
+				backRepo.BackRepoUmlsc.GetUmlscDBFromUmlscPtr(umlscAssocEnd)
 
 			// encode reverse pointer in the association end back repo instance
 			umlscAssocEnd_DB.Pkgelt_UmlscsDBID.Int64 = int64(pkgeltDB.ID)
@@ -293,9 +292,8 @@ func (backRepoPkgelt *BackRepoPkgeltStruct) CommitPhaseTwoInstance(backRepo *Bac
 
 // BackRepoPkgelt.CheckoutPhaseOne Checkouts all BackRepo instances to the Stage
 //
-// Phase One is the creation of instance in the stage
-//
-// NOTE: the is supposed to have been reset before
+// Phase One will result in having instances on the stage aligned with the back repo
+// pointers are not initialized yet (this is for pahse two)
 //
 func (backRepoPkgelt *BackRepoPkgeltStruct) CheckoutPhaseOne() (Error error) {
 
@@ -305,9 +303,34 @@ func (backRepoPkgelt *BackRepoPkgeltStruct) CheckoutPhaseOne() (Error error) {
 		return query.Error
 	}
 
+	// list of instances to be removed
+	// start from the initial map on the stage and remove instances that have been checked out
+	pkgeltInstancesToBeRemovedFromTheStage := make(map[*models.Pkgelt]struct{})
+	for key, value := range models.Stage.Pkgelts {
+		pkgeltInstancesToBeRemovedFromTheStage[key] = value
+	}
+
 	// copy orm objects to the the map
 	for _, pkgeltDB := range pkgeltDBArray {
 		backRepoPkgelt.CheckoutPhaseOneInstance(&pkgeltDB)
+
+		// do not remove this instance from the stage, therefore
+		// remove instance from the list of instances to be be removed from the stage
+		pkgelt, ok := (*backRepoPkgelt.Map_PkgeltDBID_PkgeltPtr)[pkgeltDB.ID]
+		if ok {
+			delete(pkgeltInstancesToBeRemovedFromTheStage, pkgelt)
+		}
+	}
+
+	// remove from stage and back repo's 3 maps all pkgelts that are not in the checkout
+	for pkgelt := range pkgeltInstancesToBeRemovedFromTheStage {
+		pkgelt.Unstage()
+
+		// remove instance from the back repo 3 maps
+		pkgeltID := (*backRepoPkgelt.Map_PkgeltPtr_PkgeltDBID)[pkgelt]
+		delete((*backRepoPkgelt.Map_PkgeltPtr_PkgeltDBID), pkgelt)
+		delete((*backRepoPkgelt.Map_PkgeltDBID_PkgeltDB), pkgeltID)
+		delete((*backRepoPkgelt.Map_PkgeltDBID_PkgeltPtr), pkgeltID)
 	}
 
 	return
@@ -582,7 +605,7 @@ func (backRepoPkgelt *BackRepoPkgeltStruct) RestorePhaseOne(dirPath string) {
 // to compute new index
 func (backRepoPkgelt *BackRepoPkgeltStruct) RestorePhaseTwo() {
 
-	for _, pkgeltDB := range (*backRepoPkgelt.Map_PkgeltDBID_PkgeltDB) {
+	for _, pkgeltDB := range *backRepoPkgelt.Map_PkgeltDBID_PkgeltDB {
 
 		// next line of code is to avert unused variable compilation error
 		_ = pkgeltDB

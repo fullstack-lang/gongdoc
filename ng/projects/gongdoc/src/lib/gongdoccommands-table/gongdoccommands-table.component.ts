@@ -52,6 +52,36 @@ export class GongdocCommandsTableComponent implements OnInit {
 	this.matTableDataSource.sortingDataAccessor = (gongdoccommandDB: GongdocCommandDB, property: string) => {
 		switch (property) {
 				// insertion point for specific sorting accessor
+			case 'Name':
+				return gongdoccommandDB.Name;
+
+			case 'Command':
+				return gongdoccommandDB.Command;
+
+			case 'DiagramName':
+				return gongdoccommandDB.DiagramName;
+
+			case 'Date':
+				return gongdoccommandDB.Date;
+
+			case 'GongdocNodeType':
+				return gongdoccommandDB.GongdocNodeType;
+
+			case 'StructName':
+				return gongdoccommandDB.StructName;
+
+			case 'FieldName':
+				return gongdoccommandDB.FieldName;
+
+			case 'FieldTypeName':
+				return gongdoccommandDB.FieldTypeName;
+
+			case 'PositionX':
+				return gongdoccommandDB.PositionX;
+
+			case 'PositionY':
+				return gongdoccommandDB.PositionY;
+
 				default:
 					return GongdocCommandDB[property];
 		}

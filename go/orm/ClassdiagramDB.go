@@ -79,7 +79,7 @@ type ClassdiagramDBResponse struct {
 	ClassdiagramDB
 }
 
-// ClassdiagramWOP is a Classdiagram without pointers
+// ClassdiagramWOP is a Classdiagram without pointers (WOP is an acronym for "Without Pointers")
 // it holds the same basic fields but pointers are encoded into uint
 type ClassdiagramWOP struct {
 	ID int
@@ -95,7 +95,6 @@ var Classdiagram_Fields = []string{
 	"ID",
 	"Name",
 }
-
 
 type BackRepoClassdiagramStruct struct {
 	// stores ClassdiagramDB according to their gorm ID
@@ -245,7 +244,7 @@ func (backRepoClassdiagram *BackRepoClassdiagramStruct) CommitPhaseTwoInstance(b
 
 			// get the back repo instance at the association end
 			classshapeAssocEnd_DB :=
-				backRepo.BackRepoClassshape.GetClassshapeDBFromClassshapePtr( classshapeAssocEnd)
+				backRepo.BackRepoClassshape.GetClassshapeDBFromClassshapePtr(classshapeAssocEnd)
 
 			// encode reverse pointer in the association end back repo instance
 			classshapeAssocEnd_DB.Classdiagram_ClassshapesDBID.Int64 = int64(classdiagramDB.ID)
@@ -273,9 +272,8 @@ func (backRepoClassdiagram *BackRepoClassdiagramStruct) CommitPhaseTwoInstance(b
 
 // BackRepoClassdiagram.CheckoutPhaseOne Checkouts all BackRepo instances to the Stage
 //
-// Phase One is the creation of instance in the stage
-//
-// NOTE: the is supposed to have been reset before
+// Phase One will result in having instances on the stage aligned with the back repo
+// pointers are not initialized yet (this is for pahse two)
 //
 func (backRepoClassdiagram *BackRepoClassdiagramStruct) CheckoutPhaseOne() (Error error) {
 
@@ -285,9 +283,34 @@ func (backRepoClassdiagram *BackRepoClassdiagramStruct) CheckoutPhaseOne() (Erro
 		return query.Error
 	}
 
+	// list of instances to be removed
+	// start from the initial map on the stage and remove instances that have been checked out
+	classdiagramInstancesToBeRemovedFromTheStage := make(map[*models.Classdiagram]struct{})
+	for key, value := range models.Stage.Classdiagrams {
+		classdiagramInstancesToBeRemovedFromTheStage[key] = value
+	}
+
 	// copy orm objects to the the map
 	for _, classdiagramDB := range classdiagramDBArray {
 		backRepoClassdiagram.CheckoutPhaseOneInstance(&classdiagramDB)
+
+		// do not remove this instance from the stage, therefore
+		// remove instance from the list of instances to be be removed from the stage
+		classdiagram, ok := (*backRepoClassdiagram.Map_ClassdiagramDBID_ClassdiagramPtr)[classdiagramDB.ID]
+		if ok {
+			delete(classdiagramInstancesToBeRemovedFromTheStage, classdiagram)
+		}
+	}
+
+	// remove from stage and back repo's 3 maps all classdiagrams that are not in the checkout
+	for classdiagram := range classdiagramInstancesToBeRemovedFromTheStage {
+		classdiagram.Unstage()
+
+		// remove instance from the back repo 3 maps
+		classdiagramID := (*backRepoClassdiagram.Map_ClassdiagramPtr_ClassdiagramDBID)[classdiagram]
+		delete((*backRepoClassdiagram.Map_ClassdiagramPtr_ClassdiagramDBID), classdiagram)
+		delete((*backRepoClassdiagram.Map_ClassdiagramDBID_ClassdiagramDB), classdiagramID)
+		delete((*backRepoClassdiagram.Map_ClassdiagramDBID_ClassdiagramPtr), classdiagramID)
 	}
 
 	return
@@ -527,7 +550,7 @@ func (backRepoClassdiagram *BackRepoClassdiagramStruct) RestorePhaseOne(dirPath 
 // to compute new index
 func (backRepoClassdiagram *BackRepoClassdiagramStruct) RestorePhaseTwo() {
 
-	for _, classdiagramDB := range (*backRepoClassdiagram.Map_ClassdiagramDBID_ClassdiagramDB) {
+	for _, classdiagramDB := range *backRepoClassdiagram.Map_ClassdiagramDBID_ClassdiagramDB {
 
 		// next line of code is to avert unused variable compilation error
 		_ = classdiagramDB
@@ -535,7 +558,7 @@ func (backRepoClassdiagram *BackRepoClassdiagramStruct) RestorePhaseTwo() {
 		// insertion point for reindexing pointers encoding
 		// This reindex classdiagram.Classdiagrams
 		if classdiagramDB.Pkgelt_ClassdiagramsDBID.Int64 != 0 {
-			classdiagramDB.Pkgelt_ClassdiagramsDBID.Int64 = 
+			classdiagramDB.Pkgelt_ClassdiagramsDBID.Int64 =
 				int64(BackRepoPkgeltid_atBckpTime_newID[uint(classdiagramDB.Pkgelt_ClassdiagramsDBID.Int64)])
 		}
 

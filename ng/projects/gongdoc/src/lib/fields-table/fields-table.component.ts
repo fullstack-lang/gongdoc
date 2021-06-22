@@ -52,6 +52,21 @@ export class FieldsTableComponent implements OnInit {
 	this.matTableDataSource.sortingDataAccessor = (fieldDB: FieldDB, property: string) => {
 		switch (property) {
 				// insertion point for specific sorting accessor
+			case 'Name':
+				return fieldDB.Name;
+
+			case 'Fieldname':
+				return fieldDB.Fieldname;
+
+			case 'FieldTypeAsString':
+				return fieldDB.FieldTypeAsString;
+
+			case 'Structname':
+				return fieldDB.Structname;
+
+			case 'Fieldtypename':
+				return fieldDB.Fieldtypename;
+
 				case 'Fields':
 					return this.frontRepo.Classshapes.get(fieldDB.Classshape_FieldsDBID.Int64)?.Name;
 

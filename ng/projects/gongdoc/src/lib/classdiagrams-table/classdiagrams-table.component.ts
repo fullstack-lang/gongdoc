@@ -52,6 +52,9 @@ export class ClassdiagramsTableComponent implements OnInit {
 	this.matTableDataSource.sortingDataAccessor = (classdiagramDB: ClassdiagramDB, property: string) => {
 		switch (property) {
 				// insertion point for specific sorting accessor
+			case 'Name':
+				return classdiagramDB.Name;
+
 				case 'Classdiagrams':
 					return this.frontRepo.Pkgelts.get(classdiagramDB.Pkgelt_ClassdiagramsDBID.Int64)?.Name;
 

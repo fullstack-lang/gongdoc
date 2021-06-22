@@ -89,10 +89,14 @@ export class StateDetailComponent implements OnInit {
 		if (association == undefined) {
 			// insertion point for translation/nullation of each pointers
 			if (this.state.Umlsc_States_reverse != undefined) {
-				this.state.Umlsc_StatesDBID = new NullInt64
+				if (this.state.Umlsc_StatesDBID == undefined) {
+					this.state.Umlsc_StatesDBID = new NullInt64
+				}
 				this.state.Umlsc_StatesDBID.Int64 = this.state.Umlsc_States_reverse.ID
 				this.state.Umlsc_StatesDBID.Valid = true
-				this.state.Umlsc_StatesDBID_Index = new NullInt64
+				if (this.state.Umlsc_StatesDBID_Index == undefined) {
+					this.state.Umlsc_StatesDBID_Index = new NullInt64
+				}
 				this.state.Umlsc_StatesDBID_Index.Valid = true
 				this.state.Umlsc_States_reverse = undefined // very important, otherwise, circular JSON
 			}

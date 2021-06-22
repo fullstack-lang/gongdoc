@@ -52,6 +52,15 @@ export class StatesTableComponent implements OnInit {
 	this.matTableDataSource.sortingDataAccessor = (stateDB: StateDB, property: string) => {
 		switch (property) {
 				// insertion point for specific sorting accessor
+			case 'Name':
+				return stateDB.Name;
+
+			case 'X':
+				return stateDB.X;
+
+			case 'Y':
+				return stateDB.Y;
+
 				case 'States':
 					return this.frontRepo.Umlscs.get(stateDB.Umlsc_StatesDBID.Int64)?.Name;
 

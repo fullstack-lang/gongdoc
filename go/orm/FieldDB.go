@@ -91,7 +91,7 @@ type FieldDBResponse struct {
 	FieldDB
 }
 
-// FieldWOP is a Field without pointers
+// FieldWOP is a Field without pointers (WOP is an acronym for "Without Pointers")
 // it holds the same basic fields but pointers are encoded into uint
 type FieldWOP struct {
 	ID int
@@ -119,7 +119,6 @@ var Field_Fields = []string{
 	"Structname",
 	"Fieldtypename",
 }
-
 
 type BackRepoFieldStruct struct {
 	// stores FieldDB according to their gorm ID
@@ -278,9 +277,8 @@ func (backRepoField *BackRepoFieldStruct) CommitPhaseTwoInstance(backRepo *BackR
 
 // BackRepoField.CheckoutPhaseOne Checkouts all BackRepo instances to the Stage
 //
-// Phase One is the creation of instance in the stage
-//
-// NOTE: the is supposed to have been reset before
+// Phase One will result in having instances on the stage aligned with the back repo
+// pointers are not initialized yet (this is for pahse two)
 //
 func (backRepoField *BackRepoFieldStruct) CheckoutPhaseOne() (Error error) {
 
@@ -290,9 +288,34 @@ func (backRepoField *BackRepoFieldStruct) CheckoutPhaseOne() (Error error) {
 		return query.Error
 	}
 
+	// list of instances to be removed
+	// start from the initial map on the stage and remove instances that have been checked out
+	fieldInstancesToBeRemovedFromTheStage := make(map[*models.Field]struct{})
+	for key, value := range models.Stage.Fields {
+		fieldInstancesToBeRemovedFromTheStage[key] = value
+	}
+
 	// copy orm objects to the the map
 	for _, fieldDB := range fieldDBArray {
 		backRepoField.CheckoutPhaseOneInstance(&fieldDB)
+
+		// do not remove this instance from the stage, therefore
+		// remove instance from the list of instances to be be removed from the stage
+		field, ok := (*backRepoField.Map_FieldDBID_FieldPtr)[fieldDB.ID]
+		if ok {
+			delete(fieldInstancesToBeRemovedFromTheStage, field)
+		}
+	}
+
+	// remove from stage and back repo's 3 maps all fields that are not in the checkout
+	for field := range fieldInstancesToBeRemovedFromTheStage {
+		field.Unstage()
+
+		// remove instance from the back repo 3 maps
+		fieldID := (*backRepoField.Map_FieldPtr_FieldDBID)[field]
+		delete((*backRepoField.Map_FieldPtr_FieldDBID), field)
+		delete((*backRepoField.Map_FieldDBID_FieldDB), fieldID)
+		delete((*backRepoField.Map_FieldDBID_FieldPtr), fieldID)
 	}
 
 	return
@@ -537,7 +560,7 @@ func (backRepoField *BackRepoFieldStruct) RestorePhaseOne(dirPath string) {
 // to compute new index
 func (backRepoField *BackRepoFieldStruct) RestorePhaseTwo() {
 
-	for _, fieldDB := range (*backRepoField.Map_FieldDBID_FieldDB) {
+	for _, fieldDB := range *backRepoField.Map_FieldDBID_FieldDB {
 
 		// next line of code is to avert unused variable compilation error
 		_ = fieldDB
@@ -545,7 +568,7 @@ func (backRepoField *BackRepoFieldStruct) RestorePhaseTwo() {
 		// insertion point for reindexing pointers encoding
 		// This reindex field.Fields
 		if fieldDB.Classshape_FieldsDBID.Int64 != 0 {
-			fieldDB.Classshape_FieldsDBID.Int64 = 
+			fieldDB.Classshape_FieldsDBID.Int64 =
 				int64(BackRepoClassshapeid_atBckpTime_newID[uint(fieldDB.Classshape_FieldsDBID.Int64)])
 		}
 

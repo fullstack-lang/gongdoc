@@ -89,10 +89,14 @@ export class ClassdiagramDetailComponent implements OnInit {
 		if (association == undefined) {
 			// insertion point for translation/nullation of each pointers
 			if (this.classdiagram.Pkgelt_Classdiagrams_reverse != undefined) {
-				this.classdiagram.Pkgelt_ClassdiagramsDBID = new NullInt64
+				if (this.classdiagram.Pkgelt_ClassdiagramsDBID == undefined) {
+					this.classdiagram.Pkgelt_ClassdiagramsDBID = new NullInt64
+				}
 				this.classdiagram.Pkgelt_ClassdiagramsDBID.Int64 = this.classdiagram.Pkgelt_Classdiagrams_reverse.ID
 				this.classdiagram.Pkgelt_ClassdiagramsDBID.Valid = true
-				this.classdiagram.Pkgelt_ClassdiagramsDBID_Index = new NullInt64
+				if (this.classdiagram.Pkgelt_ClassdiagramsDBID_Index == undefined) {
+					this.classdiagram.Pkgelt_ClassdiagramsDBID_Index = new NullInt64
+				}
 				this.classdiagram.Pkgelt_ClassdiagramsDBID_Index.Valid = true
 				this.classdiagram.Pkgelt_Classdiagrams_reverse = undefined // very important, otherwise, circular JSON
 			}

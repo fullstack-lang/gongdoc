@@ -52,7 +52,22 @@ export class LinksTableComponent implements OnInit {
 	this.matTableDataSource.sortingDataAccessor = (linkDB: LinkDB, property: string) => {
 		switch (property) {
 				// insertion point for specific sorting accessor
-  			case 'Middlevertice':
+			case 'Name':
+				return linkDB.Name;
+
+			case 'Fieldname':
+				return linkDB.Fieldname;
+
+			case 'Structname':
+				return linkDB.Structname;
+
+			case 'Fieldtypename':
+				return linkDB.Fieldtypename;
+
+			case 'Multiplicity':
+				return linkDB.Multiplicity;
+
+			case 'Middlevertice':
 				return (linkDB.Middlevertice ? linkDB.Middlevertice.Name : '');
 
 				case 'Links':

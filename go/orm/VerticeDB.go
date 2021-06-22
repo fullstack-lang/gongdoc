@@ -80,7 +80,7 @@ type VerticeDBResponse struct {
 	VerticeDB
 }
 
-// VerticeWOP is a Vertice without pointers
+// VerticeWOP is a Vertice without pointers (WOP is an acronym for "Without Pointers")
 // it holds the same basic fields but pointers are encoded into uint
 type VerticeWOP struct {
 	ID int
@@ -102,7 +102,6 @@ var Vertice_Fields = []string{
 	"Y",
 	"Name",
 }
-
 
 type BackRepoVerticeStruct struct {
 	// stores VerticeDB according to their gorm ID
@@ -261,9 +260,8 @@ func (backRepoVertice *BackRepoVerticeStruct) CommitPhaseTwoInstance(backRepo *B
 
 // BackRepoVertice.CheckoutPhaseOne Checkouts all BackRepo instances to the Stage
 //
-// Phase One is the creation of instance in the stage
-//
-// NOTE: the is supposed to have been reset before
+// Phase One will result in having instances on the stage aligned with the back repo
+// pointers are not initialized yet (this is for pahse two)
 //
 func (backRepoVertice *BackRepoVerticeStruct) CheckoutPhaseOne() (Error error) {
 
@@ -273,9 +271,34 @@ func (backRepoVertice *BackRepoVerticeStruct) CheckoutPhaseOne() (Error error) {
 		return query.Error
 	}
 
+	// list of instances to be removed
+	// start from the initial map on the stage and remove instances that have been checked out
+	verticeInstancesToBeRemovedFromTheStage := make(map[*models.Vertice]struct{})
+	for key, value := range models.Stage.Vertices {
+		verticeInstancesToBeRemovedFromTheStage[key] = value
+	}
+
 	// copy orm objects to the the map
 	for _, verticeDB := range verticeDBArray {
 		backRepoVertice.CheckoutPhaseOneInstance(&verticeDB)
+
+		// do not remove this instance from the stage, therefore
+		// remove instance from the list of instances to be be removed from the stage
+		vertice, ok := (*backRepoVertice.Map_VerticeDBID_VerticePtr)[verticeDB.ID]
+		if ok {
+			delete(verticeInstancesToBeRemovedFromTheStage, vertice)
+		}
+	}
+
+	// remove from stage and back repo's 3 maps all vertices that are not in the checkout
+	for vertice := range verticeInstancesToBeRemovedFromTheStage {
+		vertice.Unstage()
+
+		// remove instance from the back repo 3 maps
+		verticeID := (*backRepoVertice.Map_VerticePtr_VerticeDBID)[vertice]
+		delete((*backRepoVertice.Map_VerticePtr_VerticeDBID), vertice)
+		delete((*backRepoVertice.Map_VerticeDBID_VerticeDB), verticeID)
+		delete((*backRepoVertice.Map_VerticeDBID_VerticePtr), verticeID)
 	}
 
 	return
@@ -504,7 +527,7 @@ func (backRepoVertice *BackRepoVerticeStruct) RestorePhaseOne(dirPath string) {
 // to compute new index
 func (backRepoVertice *BackRepoVerticeStruct) RestorePhaseTwo() {
 
-	for _, verticeDB := range (*backRepoVertice.Map_VerticeDBID_VerticeDB) {
+	for _, verticeDB := range *backRepoVertice.Map_VerticeDBID_VerticeDB {
 
 		// next line of code is to avert unused variable compilation error
 		_ = verticeDB

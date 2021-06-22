@@ -122,7 +122,7 @@ func PostGongdocCommand(c *gin.Context) {
 
 	// a POST is equivalent to a back repo commit increase
 	// (this will be improved with implementation of unit of work design pattern)
-	orm.BackRepo.IncrementCommitNb()
+	orm.BackRepo.IncrementPushFromFrontNb()
 
 	c.JSON(http.StatusOK, gongdoccommandDB)
 }
@@ -205,7 +205,7 @@ func UpdateGongdocCommand(c *gin.Context) {
 
 	// an UPDATE generates a back repo commit increase
 	// (this will be improved with implementation of unit of work design pattern)
-	orm.BackRepo.IncrementCommitNb()
+	orm.BackRepo.IncrementPushFromFrontNb()
 
 	// return status OK with the marshalling of the the gongdoccommandDB
 	c.JSON(http.StatusOK, gongdoccommandDB)
@@ -237,7 +237,7 @@ func DeleteGongdocCommand(c *gin.Context) {
 
 	// a DELETE generates a back repo commit increase
 	// (this will be improved with implementation of unit of work design pattern)
-	orm.BackRepo.IncrementCommitNb()
+	orm.BackRepo.IncrementPushFromFrontNb()
 
 	c.JSON(http.StatusOK, gin.H{"data": true})
 }

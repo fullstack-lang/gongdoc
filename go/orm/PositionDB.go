@@ -80,7 +80,7 @@ type PositionDBResponse struct {
 	PositionDB
 }
 
-// PositionWOP is a Position without pointers
+// PositionWOP is a Position without pointers (WOP is an acronym for "Without Pointers")
 // it holds the same basic fields but pointers are encoded into uint
 type PositionWOP struct {
 	ID int
@@ -102,7 +102,6 @@ var Position_Fields = []string{
 	"Y",
 	"Name",
 }
-
 
 type BackRepoPositionStruct struct {
 	// stores PositionDB according to their gorm ID
@@ -261,9 +260,8 @@ func (backRepoPosition *BackRepoPositionStruct) CommitPhaseTwoInstance(backRepo 
 
 // BackRepoPosition.CheckoutPhaseOne Checkouts all BackRepo instances to the Stage
 //
-// Phase One is the creation of instance in the stage
-//
-// NOTE: the is supposed to have been reset before
+// Phase One will result in having instances on the stage aligned with the back repo
+// pointers are not initialized yet (this is for pahse two)
 //
 func (backRepoPosition *BackRepoPositionStruct) CheckoutPhaseOne() (Error error) {
 
@@ -273,9 +271,34 @@ func (backRepoPosition *BackRepoPositionStruct) CheckoutPhaseOne() (Error error)
 		return query.Error
 	}
 
+	// list of instances to be removed
+	// start from the initial map on the stage and remove instances that have been checked out
+	positionInstancesToBeRemovedFromTheStage := make(map[*models.Position]struct{})
+	for key, value := range models.Stage.Positions {
+		positionInstancesToBeRemovedFromTheStage[key] = value
+	}
+
 	// copy orm objects to the the map
 	for _, positionDB := range positionDBArray {
 		backRepoPosition.CheckoutPhaseOneInstance(&positionDB)
+
+		// do not remove this instance from the stage, therefore
+		// remove instance from the list of instances to be be removed from the stage
+		position, ok := (*backRepoPosition.Map_PositionDBID_PositionPtr)[positionDB.ID]
+		if ok {
+			delete(positionInstancesToBeRemovedFromTheStage, position)
+		}
+	}
+
+	// remove from stage and back repo's 3 maps all positions that are not in the checkout
+	for position := range positionInstancesToBeRemovedFromTheStage {
+		position.Unstage()
+
+		// remove instance from the back repo 3 maps
+		positionID := (*backRepoPosition.Map_PositionPtr_PositionDBID)[position]
+		delete((*backRepoPosition.Map_PositionPtr_PositionDBID), position)
+		delete((*backRepoPosition.Map_PositionDBID_PositionDB), positionID)
+		delete((*backRepoPosition.Map_PositionDBID_PositionPtr), positionID)
 	}
 
 	return
@@ -504,7 +527,7 @@ func (backRepoPosition *BackRepoPositionStruct) RestorePhaseOne(dirPath string) 
 // to compute new index
 func (backRepoPosition *BackRepoPositionStruct) RestorePhaseTwo() {
 
-	for _, positionDB := range (*backRepoPosition.Map_PositionDBID_PositionDB) {
+	for _, positionDB := range *backRepoPosition.Map_PositionDBID_PositionDB {
 
 		// next line of code is to avert unused variable compilation error
 		_ = positionDB

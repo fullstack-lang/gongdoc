@@ -89,10 +89,14 @@ export class UmlscDetailComponent implements OnInit {
 		if (association == undefined) {
 			// insertion point for translation/nullation of each pointers
 			if (this.umlsc.Pkgelt_Umlscs_reverse != undefined) {
-				this.umlsc.Pkgelt_UmlscsDBID = new NullInt64
+				if (this.umlsc.Pkgelt_UmlscsDBID == undefined) {
+					this.umlsc.Pkgelt_UmlscsDBID = new NullInt64
+				}
 				this.umlsc.Pkgelt_UmlscsDBID.Int64 = this.umlsc.Pkgelt_Umlscs_reverse.ID
 				this.umlsc.Pkgelt_UmlscsDBID.Valid = true
-				this.umlsc.Pkgelt_UmlscsDBID_Index = new NullInt64
+				if (this.umlsc.Pkgelt_UmlscsDBID_Index == undefined) {
+					this.umlsc.Pkgelt_UmlscsDBID_Index = new NullInt64
+				}
 				this.umlsc.Pkgelt_UmlscsDBID_Index.Valid = true
 				this.umlsc.Pkgelt_Umlscs_reverse = undefined // very important, otherwise, circular JSON
 			}

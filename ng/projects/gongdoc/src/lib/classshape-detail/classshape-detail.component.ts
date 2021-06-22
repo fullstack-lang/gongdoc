@@ -102,10 +102,14 @@ export class ClassshapeDetailComponent implements OnInit {
 		if (association == undefined) {
 			// insertion point for translation/nullation of each pointers
 			if (this.classshape.Classdiagram_Classshapes_reverse != undefined) {
-				this.classshape.Classdiagram_ClassshapesDBID = new NullInt64
+				if (this.classshape.Classdiagram_ClassshapesDBID == undefined) {
+					this.classshape.Classdiagram_ClassshapesDBID = new NullInt64
+				}
 				this.classshape.Classdiagram_ClassshapesDBID.Int64 = this.classshape.Classdiagram_Classshapes_reverse.ID
 				this.classshape.Classdiagram_ClassshapesDBID.Valid = true
-				this.classshape.Classdiagram_ClassshapesDBID_Index = new NullInt64
+				if (this.classshape.Classdiagram_ClassshapesDBID_Index == undefined) {
+					this.classshape.Classdiagram_ClassshapesDBID_Index = new NullInt64
+				}
 				this.classshape.Classdiagram_ClassshapesDBID_Index.Valid = true
 				this.classshape.Classdiagram_Classshapes_reverse = undefined // very important, otherwise, circular JSON
 			}

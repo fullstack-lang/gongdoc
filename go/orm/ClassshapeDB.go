@@ -95,7 +95,7 @@ type ClassshapeDBResponse struct {
 	ClassshapeDB
 }
 
-// ClassshapeWOP is a Classshape without pointers
+// ClassshapeWOP is a Classshape without pointers (WOP is an acronym for "Without Pointers")
 // it holds the same basic fields but pointers are encoded into uint
 type ClassshapeWOP struct {
 	ID int
@@ -123,7 +123,6 @@ var Classshape_Fields = []string{
 	"Heigth",
 	"ClassshapeTargetType",
 }
-
 
 type BackRepoClassshapeStruct struct {
 	// stores ClassshapeDB according to their gorm ID
@@ -281,7 +280,7 @@ func (backRepoClassshape *BackRepoClassshapeStruct) CommitPhaseTwoInstance(backR
 
 			// get the back repo instance at the association end
 			fieldAssocEnd_DB :=
-				backRepo.BackRepoField.GetFieldDBFromFieldPtr( fieldAssocEnd)
+				backRepo.BackRepoField.GetFieldDBFromFieldPtr(fieldAssocEnd)
 
 			// encode reverse pointer in the association end back repo instance
 			fieldAssocEnd_DB.Classshape_FieldsDBID.Int64 = int64(classshapeDB.ID)
@@ -300,7 +299,7 @@ func (backRepoClassshape *BackRepoClassshapeStruct) CommitPhaseTwoInstance(backR
 
 			// get the back repo instance at the association end
 			linkAssocEnd_DB :=
-				backRepo.BackRepoLink.GetLinkDBFromLinkPtr( linkAssocEnd)
+				backRepo.BackRepoLink.GetLinkDBFromLinkPtr(linkAssocEnd)
 
 			// encode reverse pointer in the association end back repo instance
 			linkAssocEnd_DB.Classshape_LinksDBID.Int64 = int64(classshapeDB.ID)
@@ -328,9 +327,8 @@ func (backRepoClassshape *BackRepoClassshapeStruct) CommitPhaseTwoInstance(backR
 
 // BackRepoClassshape.CheckoutPhaseOne Checkouts all BackRepo instances to the Stage
 //
-// Phase One is the creation of instance in the stage
-//
-// NOTE: the is supposed to have been reset before
+// Phase One will result in having instances on the stage aligned with the back repo
+// pointers are not initialized yet (this is for pahse two)
 //
 func (backRepoClassshape *BackRepoClassshapeStruct) CheckoutPhaseOne() (Error error) {
 
@@ -340,9 +338,34 @@ func (backRepoClassshape *BackRepoClassshapeStruct) CheckoutPhaseOne() (Error er
 		return query.Error
 	}
 
+	// list of instances to be removed
+	// start from the initial map on the stage and remove instances that have been checked out
+	classshapeInstancesToBeRemovedFromTheStage := make(map[*models.Classshape]struct{})
+	for key, value := range models.Stage.Classshapes {
+		classshapeInstancesToBeRemovedFromTheStage[key] = value
+	}
+
 	// copy orm objects to the the map
 	for _, classshapeDB := range classshapeDBArray {
 		backRepoClassshape.CheckoutPhaseOneInstance(&classshapeDB)
+
+		// do not remove this instance from the stage, therefore
+		// remove instance from the list of instances to be be removed from the stage
+		classshape, ok := (*backRepoClassshape.Map_ClassshapeDBID_ClassshapePtr)[classshapeDB.ID]
+		if ok {
+			delete(classshapeInstancesToBeRemovedFromTheStage, classshape)
+		}
+	}
+
+	// remove from stage and back repo's 3 maps all classshapes that are not in the checkout
+	for classshape := range classshapeInstancesToBeRemovedFromTheStage {
+		classshape.Unstage()
+
+		// remove instance from the back repo 3 maps
+		classshapeID := (*backRepoClassshape.Map_ClassshapePtr_ClassshapeDBID)[classshape]
+		delete((*backRepoClassshape.Map_ClassshapePtr_ClassshapeDBID), classshape)
+		delete((*backRepoClassshape.Map_ClassshapeDBID_ClassshapeDB), classshapeID)
+		delete((*backRepoClassshape.Map_ClassshapeDBID_ClassshapePtr), classshapeID)
 	}
 
 	return
@@ -645,7 +668,7 @@ func (backRepoClassshape *BackRepoClassshapeStruct) RestorePhaseOne(dirPath stri
 // to compute new index
 func (backRepoClassshape *BackRepoClassshapeStruct) RestorePhaseTwo() {
 
-	for _, classshapeDB := range (*backRepoClassshape.Map_ClassshapeDBID_ClassshapeDB) {
+	for _, classshapeDB := range *backRepoClassshape.Map_ClassshapeDBID_ClassshapeDB {
 
 		// next line of code is to avert unused variable compilation error
 		_ = classshapeDB
@@ -658,7 +681,7 @@ func (backRepoClassshape *BackRepoClassshapeStruct) RestorePhaseTwo() {
 
 		// This reindex classshape.Classshapes
 		if classshapeDB.Classdiagram_ClassshapesDBID.Int64 != 0 {
-			classshapeDB.Classdiagram_ClassshapesDBID.Int64 = 
+			classshapeDB.Classdiagram_ClassshapesDBID.Int64 =
 				int64(BackRepoClassdiagramid_atBckpTime_newID[uint(classshapeDB.Classdiagram_ClassshapesDBID.Int64)])
 		}
 

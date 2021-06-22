@@ -85,7 +85,7 @@ type StateDBResponse struct {
 	StateDB
 }
 
-// StateWOP is a State without pointers
+// StateWOP is a State without pointers (WOP is an acronym for "Without Pointers")
 // it holds the same basic fields but pointers are encoded into uint
 type StateWOP struct {
 	ID int
@@ -107,7 +107,6 @@ var State_Fields = []string{
 	"X",
 	"Y",
 }
-
 
 type BackRepoStateStruct struct {
 	// stores StateDB according to their gorm ID
@@ -266,9 +265,8 @@ func (backRepoState *BackRepoStateStruct) CommitPhaseTwoInstance(backRepo *BackR
 
 // BackRepoState.CheckoutPhaseOne Checkouts all BackRepo instances to the Stage
 //
-// Phase One is the creation of instance in the stage
-//
-// NOTE: the is supposed to have been reset before
+// Phase One will result in having instances on the stage aligned with the back repo
+// pointers are not initialized yet (this is for pahse two)
 //
 func (backRepoState *BackRepoStateStruct) CheckoutPhaseOne() (Error error) {
 
@@ -278,9 +276,34 @@ func (backRepoState *BackRepoStateStruct) CheckoutPhaseOne() (Error error) {
 		return query.Error
 	}
 
+	// list of instances to be removed
+	// start from the initial map on the stage and remove instances that have been checked out
+	stateInstancesToBeRemovedFromTheStage := make(map[*models.State]struct{})
+	for key, value := range models.Stage.States {
+		stateInstancesToBeRemovedFromTheStage[key] = value
+	}
+
 	// copy orm objects to the the map
 	for _, stateDB := range stateDBArray {
 		backRepoState.CheckoutPhaseOneInstance(&stateDB)
+
+		// do not remove this instance from the stage, therefore
+		// remove instance from the list of instances to be be removed from the stage
+		state, ok := (*backRepoState.Map_StateDBID_StatePtr)[stateDB.ID]
+		if ok {
+			delete(stateInstancesToBeRemovedFromTheStage, state)
+		}
+	}
+
+	// remove from stage and back repo's 3 maps all states that are not in the checkout
+	for state := range stateInstancesToBeRemovedFromTheStage {
+		state.Unstage()
+
+		// remove instance from the back repo 3 maps
+		stateID := (*backRepoState.Map_StatePtr_StateDBID)[state]
+		delete((*backRepoState.Map_StatePtr_StateDBID), state)
+		delete((*backRepoState.Map_StateDBID_StateDB), stateID)
+		delete((*backRepoState.Map_StateDBID_StatePtr), stateID)
 	}
 
 	return
@@ -509,7 +532,7 @@ func (backRepoState *BackRepoStateStruct) RestorePhaseOne(dirPath string) {
 // to compute new index
 func (backRepoState *BackRepoStateStruct) RestorePhaseTwo() {
 
-	for _, stateDB := range (*backRepoState.Map_StateDBID_StateDB) {
+	for _, stateDB := range *backRepoState.Map_StateDBID_StateDB {
 
 		// next line of code is to avert unused variable compilation error
 		_ = stateDB
@@ -517,7 +540,7 @@ func (backRepoState *BackRepoStateStruct) RestorePhaseTwo() {
 		// insertion point for reindexing pointers encoding
 		// This reindex state.States
 		if stateDB.Umlsc_StatesDBID.Int64 != 0 {
-			stateDB.Umlsc_StatesDBID.Int64 = 
+			stateDB.Umlsc_StatesDBID.Int64 =
 				int64(BackRepoUmlscid_atBckpTime_newID[uint(stateDB.Umlsc_StatesDBID.Int64)])
 		}
 

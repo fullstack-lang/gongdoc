@@ -52,6 +52,15 @@ export class GongdocStatussTableComponent implements OnInit {
 	this.matTableDataSource.sortingDataAccessor = (gongdocstatusDB: GongdocStatusDB, property: string) => {
 		switch (property) {
 				// insertion point for specific sorting accessor
+			case 'Name':
+				return gongdocstatusDB.Name;
+
+			case 'Status':
+				return gongdocstatusDB.Status;
+
+			case 'CommandCompletionDate':
+				return gongdocstatusDB.CommandCompletionDate;
+
 				default:
 					return GongdocStatusDB[property];
 		}

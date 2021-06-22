@@ -52,6 +52,12 @@ export class PkgeltsTableComponent implements OnInit {
 	this.matTableDataSource.sortingDataAccessor = (pkgeltDB: PkgeltDB, property: string) => {
 		switch (property) {
 				// insertion point for specific sorting accessor
+			case 'Name':
+				return pkgeltDB.Name;
+
+			case 'Path':
+				return pkgeltDB.Path;
+
 				default:
 					return PkgeltDB[property];
 		}

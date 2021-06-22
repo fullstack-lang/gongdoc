@@ -102,10 +102,14 @@ export class LinkDetailComponent implements OnInit {
 		if (association == undefined) {
 			// insertion point for translation/nullation of each pointers
 			if (this.link.Classshape_Links_reverse != undefined) {
-				this.link.Classshape_LinksDBID = new NullInt64
+				if (this.link.Classshape_LinksDBID == undefined) {
+					this.link.Classshape_LinksDBID = new NullInt64
+				}
 				this.link.Classshape_LinksDBID.Int64 = this.link.Classshape_Links_reverse.ID
 				this.link.Classshape_LinksDBID.Valid = true
-				this.link.Classshape_LinksDBID_Index = new NullInt64
+				if (this.link.Classshape_LinksDBID_Index == undefined) {
+					this.link.Classshape_LinksDBID_Index = new NullInt64
+				}
 				this.link.Classshape_LinksDBID_Index.Valid = true
 				this.link.Classshape_Links_reverse = undefined // very important, otherwise, circular JSON
 			}

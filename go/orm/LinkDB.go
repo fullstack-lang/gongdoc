@@ -95,7 +95,7 @@ type LinkDBResponse struct {
 	LinkDB
 }
 
-// LinkWOP is a Link without pointers
+// LinkWOP is a Link without pointers (WOP is an acronym for "Without Pointers")
 // it holds the same basic fields but pointers are encoded into uint
 type LinkWOP struct {
 	ID int
@@ -123,7 +123,6 @@ var Link_Fields = []string{
 	"Fieldtypename",
 	"Multiplicity",
 }
-
 
 type BackRepoLinkStruct struct {
 	// stores LinkDB according to their gorm ID
@@ -290,9 +289,8 @@ func (backRepoLink *BackRepoLinkStruct) CommitPhaseTwoInstance(backRepo *BackRep
 
 // BackRepoLink.CheckoutPhaseOne Checkouts all BackRepo instances to the Stage
 //
-// Phase One is the creation of instance in the stage
-//
-// NOTE: the is supposed to have been reset before
+// Phase One will result in having instances on the stage aligned with the back repo
+// pointers are not initialized yet (this is for pahse two)
 //
 func (backRepoLink *BackRepoLinkStruct) CheckoutPhaseOne() (Error error) {
 
@@ -302,9 +300,34 @@ func (backRepoLink *BackRepoLinkStruct) CheckoutPhaseOne() (Error error) {
 		return query.Error
 	}
 
+	// list of instances to be removed
+	// start from the initial map on the stage and remove instances that have been checked out
+	linkInstancesToBeRemovedFromTheStage := make(map[*models.Link]struct{})
+	for key, value := range models.Stage.Links {
+		linkInstancesToBeRemovedFromTheStage[key] = value
+	}
+
 	// copy orm objects to the the map
 	for _, linkDB := range linkDBArray {
 		backRepoLink.CheckoutPhaseOneInstance(&linkDB)
+
+		// do not remove this instance from the stage, therefore
+		// remove instance from the list of instances to be be removed from the stage
+		link, ok := (*backRepoLink.Map_LinkDBID_LinkPtr)[linkDB.ID]
+		if ok {
+			delete(linkInstancesToBeRemovedFromTheStage, link)
+		}
+	}
+
+	// remove from stage and back repo's 3 maps all links that are not in the checkout
+	for link := range linkInstancesToBeRemovedFromTheStage {
+		link.Unstage()
+
+		// remove instance from the back repo 3 maps
+		linkID := (*backRepoLink.Map_LinkPtr_LinkDBID)[link]
+		delete((*backRepoLink.Map_LinkPtr_LinkDBID), link)
+		delete((*backRepoLink.Map_LinkDBID_LinkDB), linkID)
+		delete((*backRepoLink.Map_LinkDBID_LinkPtr), linkID)
 	}
 
 	return
@@ -553,7 +576,7 @@ func (backRepoLink *BackRepoLinkStruct) RestorePhaseOne(dirPath string) {
 // to compute new index
 func (backRepoLink *BackRepoLinkStruct) RestorePhaseTwo() {
 
-	for _, linkDB := range (*backRepoLink.Map_LinkDBID_LinkDB) {
+	for _, linkDB := range *backRepoLink.Map_LinkDBID_LinkDB {
 
 		// next line of code is to avert unused variable compilation error
 		_ = linkDB
@@ -566,7 +589,7 @@ func (backRepoLink *BackRepoLinkStruct) RestorePhaseTwo() {
 
 		// This reindex link.Links
 		if linkDB.Classshape_LinksDBID.Int64 != 0 {
-			linkDB.Classshape_LinksDBID.Int64 = 
+			linkDB.Classshape_LinksDBID.Int64 =
 				int64(BackRepoClassshapeid_atBckpTime_newID[uint(linkDB.Classshape_LinksDBID.Int64)])
 		}
 

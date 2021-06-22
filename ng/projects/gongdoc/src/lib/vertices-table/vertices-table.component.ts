@@ -52,6 +52,15 @@ export class VerticesTableComponent implements OnInit {
 	this.matTableDataSource.sortingDataAccessor = (verticeDB: VerticeDB, property: string) => {
 		switch (property) {
 				// insertion point for specific sorting accessor
+			case 'X':
+				return verticeDB.X;
+
+			case 'Y':
+				return verticeDB.Y;
+
+			case 'Name':
+				return verticeDB.Name;
+
 				default:
 					return VerticeDB[property];
 		}

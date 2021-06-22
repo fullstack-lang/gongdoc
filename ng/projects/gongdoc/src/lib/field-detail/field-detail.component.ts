@@ -89,10 +89,14 @@ export class FieldDetailComponent implements OnInit {
 		if (association == undefined) {
 			// insertion point for translation/nullation of each pointers
 			if (this.field.Classshape_Fields_reverse != undefined) {
-				this.field.Classshape_FieldsDBID = new NullInt64
+				if (this.field.Classshape_FieldsDBID == undefined) {
+					this.field.Classshape_FieldsDBID = new NullInt64
+				}
 				this.field.Classshape_FieldsDBID.Int64 = this.field.Classshape_Fields_reverse.ID
 				this.field.Classshape_FieldsDBID.Valid = true
-				this.field.Classshape_FieldsDBID_Index = new NullInt64
+				if (this.field.Classshape_FieldsDBID_Index == undefined) {
+					this.field.Classshape_FieldsDBID_Index = new NullInt64
+				}
 				this.field.Classshape_FieldsDBID_Index.Valid = true
 				this.field.Classshape_Fields_reverse = undefined // very important, otherwise, circular JSON
 			}

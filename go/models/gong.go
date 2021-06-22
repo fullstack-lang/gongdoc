@@ -12,37 +12,37 @@ var __member __void
 // StageStruct enables storage of staged instances
 // swagger:ignore
 type StageStruct struct { // insertion point for definition of arrays registering instances
-	Classdiagrams map[*Classdiagram]struct{}
+	Classdiagrams           map[*Classdiagram]struct{}
 	Classdiagrams_mapString map[string]*Classdiagram
 
-	Classshapes map[*Classshape]struct{}
+	Classshapes           map[*Classshape]struct{}
 	Classshapes_mapString map[string]*Classshape
 
-	Fields map[*Field]struct{}
+	Fields           map[*Field]struct{}
 	Fields_mapString map[string]*Field
 
-	GongdocCommands map[*GongdocCommand]struct{}
+	GongdocCommands           map[*GongdocCommand]struct{}
 	GongdocCommands_mapString map[string]*GongdocCommand
 
-	GongdocStatuss map[*GongdocStatus]struct{}
+	GongdocStatuss           map[*GongdocStatus]struct{}
 	GongdocStatuss_mapString map[string]*GongdocStatus
 
-	Links map[*Link]struct{}
+	Links           map[*Link]struct{}
 	Links_mapString map[string]*Link
 
-	Pkgelts map[*Pkgelt]struct{}
+	Pkgelts           map[*Pkgelt]struct{}
 	Pkgelts_mapString map[string]*Pkgelt
 
-	Positions map[*Position]struct{}
+	Positions           map[*Position]struct{}
 	Positions_mapString map[string]*Position
 
-	States map[*State]struct{}
+	States           map[*State]struct{}
 	States_mapString map[string]*State
 
-	Umlscs map[*Umlsc]struct{}
+	Umlscs           map[*Umlsc]struct{}
 	Umlscs_mapString map[string]*Umlsc
 
-	Vertices map[*Vertice]struct{}
+	Vertices           map[*Vertice]struct{}
 	Vertices_mapString map[string]*Vertice
 
 	AllModelsStructCreateCallback AllModelsStructCreateInterface
@@ -90,41 +90,42 @@ type BackRepoInterface interface {
 	CommitVertice(vertice *Vertice)
 	CheckoutVertice(vertice *Vertice)
 	GetLastCommitNb() uint
+	GetLastPushFromFrontNb() uint
 }
 
 // swagger:ignore instructs the gong compiler (gongc) to avoid this particular struct
 var Stage StageStruct = StageStruct{ // insertion point for array initiatialisation
-	Classdiagrams: make(map[*Classdiagram]struct{}, 0),
+	Classdiagrams:           make(map[*Classdiagram]struct{}, 0),
 	Classdiagrams_mapString: make(map[string]*Classdiagram, 0),
 
-	Classshapes: make(map[*Classshape]struct{}, 0),
+	Classshapes:           make(map[*Classshape]struct{}, 0),
 	Classshapes_mapString: make(map[string]*Classshape, 0),
 
-	Fields: make(map[*Field]struct{}, 0),
+	Fields:           make(map[*Field]struct{}, 0),
 	Fields_mapString: make(map[string]*Field, 0),
 
-	GongdocCommands: make(map[*GongdocCommand]struct{}, 0),
+	GongdocCommands:           make(map[*GongdocCommand]struct{}, 0),
 	GongdocCommands_mapString: make(map[string]*GongdocCommand, 0),
 
-	GongdocStatuss: make(map[*GongdocStatus]struct{}, 0),
+	GongdocStatuss:           make(map[*GongdocStatus]struct{}, 0),
 	GongdocStatuss_mapString: make(map[string]*GongdocStatus, 0),
 
-	Links: make(map[*Link]struct{}, 0),
+	Links:           make(map[*Link]struct{}, 0),
 	Links_mapString: make(map[string]*Link, 0),
 
-	Pkgelts: make(map[*Pkgelt]struct{}, 0),
+	Pkgelts:           make(map[*Pkgelt]struct{}, 0),
 	Pkgelts_mapString: make(map[string]*Pkgelt, 0),
 
-	Positions: make(map[*Position]struct{}, 0),
+	Positions:           make(map[*Position]struct{}, 0),
 	Positions_mapString: make(map[string]*Position, 0),
 
-	States: make(map[*State]struct{}, 0),
+	States:           make(map[*State]struct{}, 0),
 	States_mapString: make(map[string]*State, 0),
 
-	Umlscs: make(map[*Umlsc]struct{}, 0),
+	Umlscs:           make(map[*Umlsc]struct{}, 0),
 	Umlscs_mapString: make(map[string]*Umlsc, 0),
 
-	Vertices: make(map[*Vertice]struct{}, 0),
+	Vertices:           make(map[*Vertice]struct{}, 0),
 	Vertices_mapString: make(map[string]*Vertice, 0),
 
 	// end of insertion point
@@ -187,7 +188,7 @@ func (stage *StageStruct) getClassdiagramOrderedStructWithNameField() []*Classdi
 func (classdiagram *Classdiagram) Stage() *Classdiagram {
 	Stage.Classdiagrams[classdiagram] = __member
 	Stage.Classdiagrams_mapString[classdiagram.Name] = classdiagram
-	
+
 	return classdiagram
 }
 
@@ -289,7 +290,7 @@ func (stage *StageStruct) getClassshapeOrderedStructWithNameField() []*Classshap
 func (classshape *Classshape) Stage() *Classshape {
 	Stage.Classshapes[classshape] = __member
 	Stage.Classshapes_mapString[classshape.Name] = classshape
-	
+
 	return classshape
 }
 
@@ -391,7 +392,7 @@ func (stage *StageStruct) getFieldOrderedStructWithNameField() []*Field {
 func (field *Field) Stage() *Field {
 	Stage.Fields[field] = __member
 	Stage.Fields_mapString[field.Name] = field
-	
+
 	return field
 }
 
@@ -493,7 +494,7 @@ func (stage *StageStruct) getGongdocCommandOrderedStructWithNameField() []*Gongd
 func (gongdoccommand *GongdocCommand) Stage() *GongdocCommand {
 	Stage.GongdocCommands[gongdoccommand] = __member
 	Stage.GongdocCommands_mapString[gongdoccommand.Name] = gongdoccommand
-	
+
 	return gongdoccommand
 }
 
@@ -595,7 +596,7 @@ func (stage *StageStruct) getGongdocStatusOrderedStructWithNameField() []*Gongdo
 func (gongdocstatus *GongdocStatus) Stage() *GongdocStatus {
 	Stage.GongdocStatuss[gongdocstatus] = __member
 	Stage.GongdocStatuss_mapString[gongdocstatus.Name] = gongdocstatus
-	
+
 	return gongdocstatus
 }
 
@@ -697,7 +698,7 @@ func (stage *StageStruct) getLinkOrderedStructWithNameField() []*Link {
 func (link *Link) Stage() *Link {
 	Stage.Links[link] = __member
 	Stage.Links_mapString[link.Name] = link
-	
+
 	return link
 }
 
@@ -799,7 +800,7 @@ func (stage *StageStruct) getPkgeltOrderedStructWithNameField() []*Pkgelt {
 func (pkgelt *Pkgelt) Stage() *Pkgelt {
 	Stage.Pkgelts[pkgelt] = __member
 	Stage.Pkgelts_mapString[pkgelt.Name] = pkgelt
-	
+
 	return pkgelt
 }
 
@@ -901,7 +902,7 @@ func (stage *StageStruct) getPositionOrderedStructWithNameField() []*Position {
 func (position *Position) Stage() *Position {
 	Stage.Positions[position] = __member
 	Stage.Positions_mapString[position.Name] = position
-	
+
 	return position
 }
 
@@ -1003,7 +1004,7 @@ func (stage *StageStruct) getStateOrderedStructWithNameField() []*State {
 func (state *State) Stage() *State {
 	Stage.States[state] = __member
 	Stage.States_mapString[state.Name] = state
-	
+
 	return state
 }
 
@@ -1105,7 +1106,7 @@ func (stage *StageStruct) getUmlscOrderedStructWithNameField() []*Umlsc {
 func (umlsc *Umlsc) Stage() *Umlsc {
 	Stage.Umlscs[umlsc] = __member
 	Stage.Umlscs_mapString[umlsc.Name] = umlsc
-	
+
 	return umlsc
 }
 
@@ -1207,7 +1208,7 @@ func (stage *StageStruct) getVerticeOrderedStructWithNameField() []*Vertice {
 func (vertice *Vertice) Stage() *Vertice {
 	Stage.Vertices[vertice] = __member
 	Stage.Vertices_mapString[vertice.Name] = vertice
-	
+
 	return vertice
 }
 

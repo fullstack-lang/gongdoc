@@ -80,7 +80,7 @@ type GongdocStatusDBResponse struct {
 	GongdocStatusDB
 }
 
-// GongdocStatusWOP is a GongdocStatus without pointers
+// GongdocStatusWOP is a GongdocStatus without pointers (WOP is an acronym for "Without Pointers")
 // it holds the same basic fields but pointers are encoded into uint
 type GongdocStatusWOP struct {
 	ID int
@@ -102,7 +102,6 @@ var GongdocStatus_Fields = []string{
 	"Status",
 	"CommandCompletionDate",
 }
-
 
 type BackRepoGongdocStatusStruct struct {
 	// stores GongdocStatusDB according to their gorm ID
@@ -261,9 +260,8 @@ func (backRepoGongdocStatus *BackRepoGongdocStatusStruct) CommitPhaseTwoInstance
 
 // BackRepoGongdocStatus.CheckoutPhaseOne Checkouts all BackRepo instances to the Stage
 //
-// Phase One is the creation of instance in the stage
-//
-// NOTE: the is supposed to have been reset before
+// Phase One will result in having instances on the stage aligned with the back repo
+// pointers are not initialized yet (this is for pahse two)
 //
 func (backRepoGongdocStatus *BackRepoGongdocStatusStruct) CheckoutPhaseOne() (Error error) {
 
@@ -273,9 +271,34 @@ func (backRepoGongdocStatus *BackRepoGongdocStatusStruct) CheckoutPhaseOne() (Er
 		return query.Error
 	}
 
+	// list of instances to be removed
+	// start from the initial map on the stage and remove instances that have been checked out
+	gongdocstatusInstancesToBeRemovedFromTheStage := make(map[*models.GongdocStatus]struct{})
+	for key, value := range models.Stage.GongdocStatuss {
+		gongdocstatusInstancesToBeRemovedFromTheStage[key] = value
+	}
+
 	// copy orm objects to the the map
 	for _, gongdocstatusDB := range gongdocstatusDBArray {
 		backRepoGongdocStatus.CheckoutPhaseOneInstance(&gongdocstatusDB)
+
+		// do not remove this instance from the stage, therefore
+		// remove instance from the list of instances to be be removed from the stage
+		gongdocstatus, ok := (*backRepoGongdocStatus.Map_GongdocStatusDBID_GongdocStatusPtr)[gongdocstatusDB.ID]
+		if ok {
+			delete(gongdocstatusInstancesToBeRemovedFromTheStage, gongdocstatus)
+		}
+	}
+
+	// remove from stage and back repo's 3 maps all gongdocstatuss that are not in the checkout
+	for gongdocstatus := range gongdocstatusInstancesToBeRemovedFromTheStage {
+		gongdocstatus.Unstage()
+
+		// remove instance from the back repo 3 maps
+		gongdocstatusID := (*backRepoGongdocStatus.Map_GongdocStatusPtr_GongdocStatusDBID)[gongdocstatus]
+		delete((*backRepoGongdocStatus.Map_GongdocStatusPtr_GongdocStatusDBID), gongdocstatus)
+		delete((*backRepoGongdocStatus.Map_GongdocStatusDBID_GongdocStatusDB), gongdocstatusID)
+		delete((*backRepoGongdocStatus.Map_GongdocStatusDBID_GongdocStatusPtr), gongdocstatusID)
 	}
 
 	return
@@ -504,7 +527,7 @@ func (backRepoGongdocStatus *BackRepoGongdocStatusStruct) RestorePhaseOne(dirPat
 // to compute new index
 func (backRepoGongdocStatus *BackRepoGongdocStatusStruct) RestorePhaseTwo() {
 
-	for _, gongdocstatusDB := range (*backRepoGongdocStatus.Map_GongdocStatusDBID_GongdocStatusDB) {
+	for _, gongdocstatusDB := range *backRepoGongdocStatus.Map_GongdocStatusDBID_GongdocStatusDB {
 
 		// next line of code is to avert unused variable compilation error
 		_ = gongdocstatusDB

@@ -52,6 +52,15 @@ export class PositionsTableComponent implements OnInit {
 	this.matTableDataSource.sortingDataAccessor = (positionDB: PositionDB, property: string) => {
 		switch (property) {
 				// insertion point for specific sorting accessor
+			case 'X':
+				return positionDB.X;
+
+			case 'Y':
+				return positionDB.Y;
+
+			case 'Name':
+				return positionDB.Name;
+
 				default:
 					return PositionDB[property];
 		}

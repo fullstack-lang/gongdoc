@@ -52,6 +52,12 @@ export class UmlscsTableComponent implements OnInit {
 	this.matTableDataSource.sortingDataAccessor = (umlscDB: UmlscDB, property: string) => {
 		switch (property) {
 				// insertion point for specific sorting accessor
+			case 'Name':
+				return umlscDB.Name;
+
+			case 'Activestate':
+				return umlscDB.Activestate;
+
 				case 'Umlscs':
 					return this.frontRepo.Pkgelts.get(umlscDB.Pkgelt_UmlscsDBID.Int64)?.Name;
 

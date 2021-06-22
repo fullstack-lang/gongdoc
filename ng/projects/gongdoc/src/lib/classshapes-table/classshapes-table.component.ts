@@ -52,8 +52,23 @@ export class ClassshapesTableComponent implements OnInit {
 	this.matTableDataSource.sortingDataAccessor = (classshapeDB: ClassshapeDB, property: string) => {
 		switch (property) {
 				// insertion point for specific sorting accessor
-  			case 'Position':
+			case 'Name':
+				return classshapeDB.Name;
+
+			case 'Position':
 				return (classshapeDB.Position ? classshapeDB.Position.Name : '');
+
+			case 'Structname':
+				return classshapeDB.Structname;
+
+			case 'Width':
+				return classshapeDB.Width;
+
+			case 'Heigth':
+				return classshapeDB.Heigth;
+
+			case 'ClassshapeTargetType':
+				return classshapeDB.ClassshapeTargetType;
 
 				case 'Classshapes':
 					return this.frontRepo.Classdiagrams.get(classshapeDB.Classdiagram_ClassshapesDBID.Int64)?.Name;
