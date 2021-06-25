@@ -34,6 +34,11 @@ export class ClassshapeDetailComponent implements OnInit {
 	// front repo
 	frontRepo: FrontRepo
 
+	// this stores the information related to string fields
+	// if false, the field is inputed with an <input ...> form 
+	// if true, it is inputed with a <textarea ...> </textarea>
+	mapFields_displayAsTextArea = new Map<string, boolean>()
+
 	constructor(
 		private classshapeService: ClassshapeService,
 		private frontRepoService: FrontRepoService,
@@ -85,7 +90,7 @@ export class ClassshapeDetailComponent implements OnInit {
 
 		// some fields needs to be translated into serializable forms
 		// pointers fields, after the translation, are nulled in order to perform serialization
-		
+
 		// insertion point for translation/nullation of each field
 		if (this.classshape.PositionID == undefined) {
 			this.classshape.PositionID = new NullInt64
@@ -97,7 +102,7 @@ export class ClassshapeDetailComponent implements OnInit {
 			this.classshape.PositionID.Int64 = 0
 			this.classshape.PositionID.Valid = true
 		}
-		
+
 		// save from the front pointer space to the non pointer space for serialization
 		if (association == undefined) {
 			// insertion point for translation/nullation of each pointers
@@ -192,7 +197,33 @@ export class ClassshapeDetailComponent implements OnInit {
 
 	fillUpNameIfEmpty(event) {
 		if (this.classshape.Name == undefined) {
-			this.classshape.Name = event.value.Name		
+			this.classshape.Name = event.value.Name
+		}
+	}
+
+	toggleTextArea(fieldName: string) {
+		if (this.mapFields_displayAsTextArea.has(fieldName)) {
+			let displayAsTextArea = this.mapFields_displayAsTextArea.get(fieldName)
+			this.mapFields_displayAsTextArea.set(fieldName, !displayAsTextArea)
+		} else {
+			this.mapFields_displayAsTextArea.set(fieldName, true)
+		}
+	}
+
+	isATextArea(fieldName: string): boolean {
+		if (this.mapFields_displayAsTextArea.has(fieldName)) {
+			return this.mapFields_displayAsTextArea.get(fieldName)
+		} else {
+			return false
+		}
+	}
+
+	compareObjects(o1: any, o2: any) {
+		if (o1?.ID == o2?.ID) {
+			return true;
+		}
+		else {
+			return false
 		}
 	}
 }

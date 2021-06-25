@@ -1,24 +1,46 @@
-<div *ngIf="pkgelt" class="details">
+<form *ngIf="pkgelt" class="details">
     <h1 class="details__title">pkgelt</h1>
     <!-- insertion point for fields specific code -->
-    <!-- -->
-    <div class="details__item">
-        <form>
-            <mat-form-field>
+    <mat-grid-list *ngIf='!isATextArea("Name")' cols="4" rowHeight="6:1">
+        <mat-grid-tile [colspan]="3">
+            <mat-form-field mat-form-field class="detail-full-width">
                 <mat-label>Name</mat-label>
                 <input name="" [ngModelOptions]="{standalone: true}" matInput [(ngModel)]="pkgelt.Name">
             </mat-form-field>
-        </form>
-    </div>
-    <!-- -->
-    <div class="details__item">
-        <form>
-            <mat-form-field>
+        </mat-grid-tile>
+        <mat-grid-tile>
+            <button mat-raised-button (click)="toggleTextArea('Name')">
+                <mat-icon>
+                    expand_more
+                </mat-icon>
+            </button>
+        </mat-grid-tile>
+    </mat-grid-list>
+    <mat-form-field *ngIf='isATextArea("Name")' mat-form-field class="detail-full-width">
+        <mat-label>Name</mat-label>
+        <textarea name="" [ngModelOptions]="{standalone: true}" matInput [(ngModel)]="pkgelt.Name"></textarea>
+    </mat-form-field>
+
+    <mat-grid-list *ngIf='!isATextArea("Path")' cols="4" rowHeight="6:1">
+        <mat-grid-tile [colspan]="3">
+            <mat-form-field mat-form-field class="detail-full-width">
                 <mat-label>Path</mat-label>
                 <input name="" [ngModelOptions]="{standalone: true}" matInput [(ngModel)]="pkgelt.Path">
             </mat-form-field>
-        </form>
-    </div>
+        </mat-grid-tile>
+        <mat-grid-tile>
+            <button mat-raised-button (click)="toggleTextArea('Path')">
+                <mat-icon>
+                    expand_more
+                </mat-icon>
+            </button>
+        </mat-grid-tile>
+    </mat-grid-list>
+    <mat-form-field *ngIf='isATextArea("Path")' mat-form-field class="detail-full-width">
+        <mat-label>Path</mat-label>
+        <textarea name="" [ngModelOptions]="{standalone: true}" matInput [(ngModel)]="pkgelt.Path"></textarea>
+    </mat-form-field>
+
     <mat-grid-list cols="2" rowHeight="6:1">
         <mat-grid-tile>
             <div style="width: 100vw; text-align: right;">
@@ -58,4 +80,4 @@
 			Save pkgelt
 		</button>
     </div>
-</div>
+</form>

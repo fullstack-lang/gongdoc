@@ -1,15 +1,26 @@
-<div *ngIf="umlsc" class="details">
+<form *ngIf="umlsc" class="details">
     <h1 class="details__title">umlsc</h1>
     <!-- insertion point for fields specific code -->
-    <!-- -->
-    <div class="details__item">
-        <form>
-            <mat-form-field>
+    <mat-grid-list *ngIf='!isATextArea("Name")' cols="4" rowHeight="6:1">
+        <mat-grid-tile [colspan]="3">
+            <mat-form-field mat-form-field class="detail-full-width">
                 <mat-label>Name</mat-label>
                 <input name="" [ngModelOptions]="{standalone: true}" matInput [(ngModel)]="umlsc.Name">
             </mat-form-field>
-        </form>
-    </div>
+        </mat-grid-tile>
+        <mat-grid-tile>
+            <button mat-raised-button (click)="toggleTextArea('Name')">
+                <mat-icon>
+                    expand_more
+                </mat-icon>
+            </button>
+        </mat-grid-tile>
+    </mat-grid-list>
+    <mat-form-field *ngIf='isATextArea("Name")' mat-form-field class="detail-full-width">
+        <mat-label>Name</mat-label>
+        <textarea name="" [ngModelOptions]="{standalone: true}" matInput [(ngModel)]="umlsc.Name"></textarea>
+    </mat-form-field>
+
     <mat-grid-list cols="2" rowHeight="6:1">
         <mat-grid-tile>
             <div style="width: 100vw; text-align: right;">
@@ -27,29 +38,38 @@
             </div>
         </mat-grid-tile>
     </mat-grid-list>
-    <!-- -->
-    <div class="details__item">
-        <form>
-            <mat-form-field>
+    <mat-grid-list *ngIf='!isATextArea("Activestate")' cols="4" rowHeight="6:1">
+        <mat-grid-tile [colspan]="3">
+            <mat-form-field mat-form-field class="detail-full-width">
                 <mat-label>Activestate</mat-label>
                 <input name="" [ngModelOptions]="{standalone: true}" matInput [(ngModel)]="umlsc.Activestate">
             </mat-form-field>
-        </form>
-    </div>
-    <div class="details__item">
-    <mat-form-field>
+        </mat-grid-tile>
+        <mat-grid-tile>
+            <button mat-raised-button (click)="toggleTextArea('Activestate')">
+                <mat-icon>
+                    expand_more
+                </mat-icon>
+            </button>
+        </mat-grid-tile>
+    </mat-grid-list>
+    <mat-form-field *ngIf='isATextArea("Activestate")' mat-form-field class="detail-full-width">
+        <mat-label>Activestate</mat-label>
+        <textarea name="" [ngModelOptions]="{standalone: true}" matInput [(ngModel)]="umlsc.Activestate"></textarea>
+    </mat-form-field>
+
+    <mat-form-field class="detail-full-width">
         <mat-label><- Umlscs</mat-label>
-        <mat-select [(ngModel)]="umlsc.Pkgelt_Umlscs_reverse">
+        <mat-select [compareWith]="compareObjects" [(ngModel)]="umlsc.Pkgelt_Umlscs_reverse" [ngModelOptions]="{standalone: true}">
             <mat-option>None</mat-option>
             <mat-option *ngFor="let pkgelt of frontRepo.Pkgelts_array" [value]="pkgelt">
                 {{pkgelt.Name}}
             </mat-option>
         </mat-select>
     </mat-form-field>
-</div>
     <div class="details__save">
         <button mat-raised-button color="primary" (click)="save()">
 			Save umlsc
 		</button>
     </div>
-</div>
+</form>
