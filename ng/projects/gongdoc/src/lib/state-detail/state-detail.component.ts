@@ -17,6 +17,15 @@ import { MatDialog, MAT_DIALOG_DATA, MatDialogRef, MatDialogConfig } from '@angu
 
 import { NullInt64 } from '../front-repo.service'
 
+// StateDetailComponent is initilizaed from different routes
+// StateDetailComponentState detail different cases 
+enum StateDetailComponentState {
+	CREATE_INSTANCE,
+	UPDATE_INSTANCE,
+	// insertion point for declarations of enum values of state
+	CREATE_INSTANCE_WITH_ASSOCIATION_Umlsc_States_SET,
+}
+
 @Component({
 	selector: 'app-state-detail',
 	templateUrl: './state-detail.component.html',
@@ -37,6 +46,17 @@ export class StateDetailComponent implements OnInit {
 	// if true, it is inputed with a <textarea ...> </textarea>
 	mapFields_displayAsTextArea = new Map<string, boolean>()
 
+	// the state at initialization (CREATION, UPDATE or CREATE with one association set)
+	state: StateDetailComponentState
+
+	// in UDPATE state, if is the id of the instance to update
+	// in CREATE state with one association set, this is the id of the associated instance
+	id: number
+
+	// in CREATE state with one association set, this is the id of the associated instance
+	originStruct: string
+	originStructFieldName: string
+
 	constructor(
 		private stateService: StateService,
 		private frontRepoService: FrontRepoService,
@@ -47,6 +67,31 @@ export class StateDetailComponent implements OnInit {
 	}
 
 	ngOnInit(): void {
+
+		// compute state
+		this.id = +this.route.snapshot.paramMap.get('id');
+		this.originStruct = this.route.snapshot.paramMap.get('originStruct');
+		this.originStructFieldName = this.route.snapshot.paramMap.get('originStructFieldName');
+
+		const association = this.route.snapshot.paramMap.get('association');
+		if (this.id == 0) {
+			this.state = StateDetailComponentState.CREATE_INSTANCE
+		} else {
+			if (this.originStruct == undefined) {
+				this.state = StateDetailComponentState.UPDATE_INSTANCE
+			} else {
+				switch (this.originStructFieldName) {
+					// insertion point for state computation
+					case "States":
+						console.log("State" + " is instanciated with back pointer to instance " + this.id + " Umlsc association States")
+						this.state = StateDetailComponentState.CREATE_INSTANCE_WITH_ASSOCIATION_Umlsc_States_SET
+						break;
+					default:
+						console.log(this.originStructFieldName + " is unkown association")
+				}
+			}
+		}
+
 		this.getState()
 
 		// observable for changes in structs
@@ -62,16 +107,25 @@ export class StateDetailComponent implements OnInit {
 	}
 
 	getState(): void {
-		const id = +this.route.snapshot.paramMap.get('id');
-		const association = this.route.snapshot.paramMap.get('association');
 
 		this.frontRepoService.pull().subscribe(
 			frontRepo => {
 				this.frontRepo = frontRepo
-				if (id != 0 && association == undefined) {
-					this.state = frontRepo.States.get(id)
-				} else {
-					this.state = new (StateDB)
+
+				switch (this.state) {
+					case StateDetailComponentState.CREATE_INSTANCE:
+						this.state = new (StateDB)
+						break;
+					case StateDetailComponentState.UPDATE_INSTANCE:
+						this.state = frontRepo.States.get(this.id)
+						break;
+					// insertion point for init of association field
+					case StateDetailComponentState.CREATE_INSTANCE_WITH_ASSOCIATION_Umlsc_States_SET:
+						this.state = new (StateDB)
+						this.state.Umlsc_States_reverse = frontRepo.Umlscs.get(this.id)
+						break;
+					default:
+						console.log(this.state + " is unkown state")
 				}
 
 				// insertion point for recovery of form controls value for bool fields
@@ -82,8 +136,6 @@ export class StateDetailComponent implements OnInit {
 	}
 
 	save(): void {
-		const id = +this.route.snapshot.paramMap.get('id');
-		const association = this.route.snapshot.paramMap.get('association');
 
 		// some fields needs to be translated into serializable forms
 		// pointers fields, after the translation, are nulled in order to perform serialization
@@ -91,45 +143,33 @@ export class StateDetailComponent implements OnInit {
 		// insertion point for translation/nullation of each field
 
 		// save from the front pointer space to the non pointer space for serialization
-		if (association == undefined) {
-			// insertion point for translation/nullation of each pointers
-			if (this.state.Umlsc_States_reverse != undefined) {
-				if (this.state.Umlsc_StatesDBID == undefined) {
-					this.state.Umlsc_StatesDBID = new NullInt64
-				}
-				this.state.Umlsc_StatesDBID.Int64 = this.state.Umlsc_States_reverse.ID
-				this.state.Umlsc_StatesDBID.Valid = true
-				if (this.state.Umlsc_StatesDBID_Index == undefined) {
-					this.state.Umlsc_StatesDBID_Index = new NullInt64
-				}
-				this.state.Umlsc_StatesDBID_Index.Valid = true
-				this.state.Umlsc_States_reverse = undefined // very important, otherwise, circular JSON
+
+		// insertion point for translation/nullation of each pointers
+		if (this.state.Umlsc_States_reverse != undefined) {
+			if (this.state.Umlsc_StatesDBID == undefined) {
+				this.state.Umlsc_StatesDBID = new NullInt64
 			}
+			this.state.Umlsc_StatesDBID.Int64 = this.state.Umlsc_States_reverse.ID
+			this.state.Umlsc_StatesDBID.Valid = true
+			if (this.state.Umlsc_StatesDBID_Index == undefined) {
+				this.state.Umlsc_StatesDBID_Index = new NullInt64
+			}
+			this.state.Umlsc_StatesDBID_Index.Valid = true
+			this.state.Umlsc_States_reverse = undefined // very important, otherwise, circular JSON
 		}
 
-		if (id != 0 && association == undefined) {
-
-			this.stateService.updateState(this.state)
-				.subscribe(state => {
-					this.stateService.StateServiceChanged.next("update")
+		switch (this.state) {
+			case StateDetailComponentState.UPDATE_INSTANCE:
+				this.stateService.updateState(this.state)
+					.subscribe(state => {
+						this.stateService.StateServiceChanged.next("update")
+					});
+				break;
+			default:
+				this.stateService.postState(this.state).subscribe(state => {
+					this.stateService.StateServiceChanged.next("post")
+					this.state = {} // reset fields
 				});
-		} else {
-			switch (association) {
-				// insertion point for saving value of ONE_MANY association reverse pointer
-				case "Umlsc_States":
-					this.state.Umlsc_StatesDBID = new NullInt64
-					this.state.Umlsc_StatesDBID.Int64 = id
-					this.state.Umlsc_StatesDBID.Valid = true
-					this.state.Umlsc_StatesDBID_Index = new NullInt64
-					this.state.Umlsc_StatesDBID_Index.Valid = true
-					break
-			}
-			this.stateService.postState(this.state).subscribe(state => {
-
-				this.stateService.StateServiceChanged.next("post")
-
-				this.state = {} // reset fields
-			});
 		}
 	}
 

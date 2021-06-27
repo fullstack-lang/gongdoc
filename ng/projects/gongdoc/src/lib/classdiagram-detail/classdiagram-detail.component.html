@@ -1,8 +1,8 @@
 <form *ngIf="classdiagram" class="details">
-    <h1 class="details__title">classdiagram</h1>
+    <h2 class="details__title">classdiagram</h2>
     <!-- insertion point for fields specific code -->
-    <mat-grid-list *ngIf='!isATextArea("Name")' cols="4" rowHeight="6:1">
-        <mat-grid-tile [colspan]="3">
+    <mat-grid-list *ngIf='!isATextArea("Name")' cols="5" rowHeight="2:1">
+        <mat-grid-tile [colspan]="4">
             <mat-form-field mat-form-field class="detail-full-width">
                 <mat-label>Name</mat-label>
                 <input name="" [ngModelOptions]="{standalone: true}" matInput [(ngModel)]="classdiagram.Name">
@@ -21,25 +21,21 @@
         <textarea name="" [ngModelOptions]="{standalone: true}" matInput [(ngModel)]="classdiagram.Name"></textarea>
     </mat-form-field>
 
-    <mat-grid-list cols="2" rowHeight="6:1">
-        <mat-grid-tile>
-            <div style="width: 100vw; text-align: right;">
-                <button mat-raised-button
-                    (click)="openReverseSelection('Classshape', 'Classdiagram_ClassshapesDBID')">Classshapes</button>
-            </div>
+    <mat-grid-list cols="5" rowHeight="2:1">
+        <mat-grid-tile [colspan]="4">
+            <button mat-raised-button
+                (click)="openReverseSelection('Classshape', 'Classdiagram_ClassshapesDBID')">Classshapes</button>
         </mat-grid-tile>
         <mat-grid-tile>
-            <div style="width: 100vw; text-align: left;">
-                <button mat-raised-button (click)="openDragAndDropOrdering('Classshape', 'Classdiagram_ClassshapesDBID')">
-                    <mat-icon>
-                        shuffle
-                    </mat-icon>
-                </button>
-            </div>
+            <button mat-raised-button (click)="openDragAndDropOrdering('Classshape', 'Classdiagram_ClassshapesDBID')">
+                <mat-icon>
+                    shuffle
+                </mat-icon>
+            </button>
         </mat-grid-tile>
     </mat-grid-list>
     <mat-form-field class="detail-full-width">
-        <mat-label><- Classdiagrams</mat-label>
+        <mat-label>(Pkgelt) Classdiagrams</mat-label>
         <mat-select [compareWith]="compareObjects" [(ngModel)]="classdiagram.Pkgelt_Classdiagrams_reverse" [ngModelOptions]="{standalone: true}">
             <mat-option>None</mat-option>
             <mat-option *ngFor="let pkgelt of frontRepo.Pkgelts_array" [value]="pkgelt">

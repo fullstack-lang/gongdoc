@@ -17,6 +17,14 @@ import { MatDialog, MAT_DIALOG_DATA, MatDialogRef, MatDialogConfig } from '@angu
 
 import { NullInt64 } from '../front-repo.service'
 
+// PositionDetailComponent is initilizaed from different routes
+// PositionDetailComponentState detail different cases 
+enum PositionDetailComponentState {
+	CREATE_INSTANCE,
+	UPDATE_INSTANCE,
+	// insertion point for declarations of enum values of state
+}
+
 @Component({
 	selector: 'app-position-detail',
 	templateUrl: './position-detail.component.html',
@@ -37,6 +45,17 @@ export class PositionDetailComponent implements OnInit {
 	// if true, it is inputed with a <textarea ...> </textarea>
 	mapFields_displayAsTextArea = new Map<string, boolean>()
 
+	// the state at initialization (CREATION, UPDATE or CREATE with one association set)
+	state: PositionDetailComponentState
+
+	// in UDPATE state, if is the id of the instance to update
+	// in CREATE state with one association set, this is the id of the associated instance
+	id: number
+
+	// in CREATE state with one association set, this is the id of the associated instance
+	originStruct: string
+	originStructFieldName: string
+
 	constructor(
 		private positionService: PositionService,
 		private frontRepoService: FrontRepoService,
@@ -47,6 +66,27 @@ export class PositionDetailComponent implements OnInit {
 	}
 
 	ngOnInit(): void {
+
+		// compute state
+		this.id = +this.route.snapshot.paramMap.get('id');
+		this.originStruct = this.route.snapshot.paramMap.get('originStruct');
+		this.originStructFieldName = this.route.snapshot.paramMap.get('originStructFieldName');
+
+		const association = this.route.snapshot.paramMap.get('association');
+		if (this.id == 0) {
+			this.state = PositionDetailComponentState.CREATE_INSTANCE
+		} else {
+			if (this.originStruct == undefined) {
+				this.state = PositionDetailComponentState.UPDATE_INSTANCE
+			} else {
+				switch (this.originStructFieldName) {
+					// insertion point for state computation
+					default:
+						console.log(this.originStructFieldName + " is unkown association")
+				}
+			}
+		}
+
 		this.getPosition()
 
 		// observable for changes in structs
@@ -62,16 +102,21 @@ export class PositionDetailComponent implements OnInit {
 	}
 
 	getPosition(): void {
-		const id = +this.route.snapshot.paramMap.get('id');
-		const association = this.route.snapshot.paramMap.get('association');
 
 		this.frontRepoService.pull().subscribe(
 			frontRepo => {
 				this.frontRepo = frontRepo
-				if (id != 0 && association == undefined) {
-					this.position = frontRepo.Positions.get(id)
-				} else {
-					this.position = new (PositionDB)
+
+				switch (this.state) {
+					case PositionDetailComponentState.CREATE_INSTANCE:
+						this.position = new (PositionDB)
+						break;
+					case PositionDetailComponentState.UPDATE_INSTANCE:
+						this.position = frontRepo.Positions.get(this.id)
+						break;
+					// insertion point for init of association field
+					default:
+						console.log(this.state + " is unkown state")
 				}
 
 				// insertion point for recovery of form controls value for bool fields
@@ -82,8 +127,6 @@ export class PositionDetailComponent implements OnInit {
 	}
 
 	save(): void {
-		const id = +this.route.snapshot.paramMap.get('id');
-		const association = this.route.snapshot.paramMap.get('association');
 
 		// some fields needs to be translated into serializable forms
 		// pointers fields, after the translation, are nulled in order to perform serialization
@@ -91,26 +134,21 @@ export class PositionDetailComponent implements OnInit {
 		// insertion point for translation/nullation of each field
 
 		// save from the front pointer space to the non pointer space for serialization
-		if (association == undefined) {
-			// insertion point for translation/nullation of each pointers
-		}
 
-		if (id != 0 && association == undefined) {
+		// insertion point for translation/nullation of each pointers
 
-			this.positionService.updatePosition(this.position)
-				.subscribe(position => {
-					this.positionService.PositionServiceChanged.next("update")
+		switch (this.state) {
+			case PositionDetailComponentState.UPDATE_INSTANCE:
+				this.positionService.updatePosition(this.position)
+					.subscribe(position => {
+						this.positionService.PositionServiceChanged.next("update")
+					});
+				break;
+			default:
+				this.positionService.postPosition(this.position).subscribe(position => {
+					this.positionService.PositionServiceChanged.next("post")
+					this.position = {} // reset fields
 				});
-		} else {
-			switch (association) {
-				// insertion point for saving value of ONE_MANY association reverse pointer
-			}
-			this.positionService.postPosition(this.position).subscribe(position => {
-
-				this.positionService.PositionServiceChanged.next("post")
-
-				this.position = {} // reset fields
-			});
 		}
 	}
 

@@ -17,6 +17,15 @@ import { MatDialog, MAT_DIALOG_DATA, MatDialogRef, MatDialogConfig } from '@angu
 
 import { NullInt64 } from '../front-repo.service'
 
+// FieldDetailComponent is initilizaed from different routes
+// FieldDetailComponentState detail different cases 
+enum FieldDetailComponentState {
+	CREATE_INSTANCE,
+	UPDATE_INSTANCE,
+	// insertion point for declarations of enum values of state
+	CREATE_INSTANCE_WITH_ASSOCIATION_Classshape_Fields_SET,
+}
+
 @Component({
 	selector: 'app-field-detail',
 	templateUrl: './field-detail.component.html',
@@ -37,6 +46,17 @@ export class FieldDetailComponent implements OnInit {
 	// if true, it is inputed with a <textarea ...> </textarea>
 	mapFields_displayAsTextArea = new Map<string, boolean>()
 
+	// the state at initialization (CREATION, UPDATE or CREATE with one association set)
+	state: FieldDetailComponentState
+
+	// in UDPATE state, if is the id of the instance to update
+	// in CREATE state with one association set, this is the id of the associated instance
+	id: number
+
+	// in CREATE state with one association set, this is the id of the associated instance
+	originStruct: string
+	originStructFieldName: string
+
 	constructor(
 		private fieldService: FieldService,
 		private frontRepoService: FrontRepoService,
@@ -47,6 +67,31 @@ export class FieldDetailComponent implements OnInit {
 	}
 
 	ngOnInit(): void {
+
+		// compute state
+		this.id = +this.route.snapshot.paramMap.get('id');
+		this.originStruct = this.route.snapshot.paramMap.get('originStruct');
+		this.originStructFieldName = this.route.snapshot.paramMap.get('originStructFieldName');
+
+		const association = this.route.snapshot.paramMap.get('association');
+		if (this.id == 0) {
+			this.state = FieldDetailComponentState.CREATE_INSTANCE
+		} else {
+			if (this.originStruct == undefined) {
+				this.state = FieldDetailComponentState.UPDATE_INSTANCE
+			} else {
+				switch (this.originStructFieldName) {
+					// insertion point for state computation
+					case "Fields":
+						console.log("Field" + " is instanciated with back pointer to instance " + this.id + " Classshape association Fields")
+						this.state = FieldDetailComponentState.CREATE_INSTANCE_WITH_ASSOCIATION_Classshape_Fields_SET
+						break;
+					default:
+						console.log(this.originStructFieldName + " is unkown association")
+				}
+			}
+		}
+
 		this.getField()
 
 		// observable for changes in structs
@@ -62,16 +107,25 @@ export class FieldDetailComponent implements OnInit {
 	}
 
 	getField(): void {
-		const id = +this.route.snapshot.paramMap.get('id');
-		const association = this.route.snapshot.paramMap.get('association');
 
 		this.frontRepoService.pull().subscribe(
 			frontRepo => {
 				this.frontRepo = frontRepo
-				if (id != 0 && association == undefined) {
-					this.field = frontRepo.Fields.get(id)
-				} else {
-					this.field = new (FieldDB)
+
+				switch (this.state) {
+					case FieldDetailComponentState.CREATE_INSTANCE:
+						this.field = new (FieldDB)
+						break;
+					case FieldDetailComponentState.UPDATE_INSTANCE:
+						this.field = frontRepo.Fields.get(this.id)
+						break;
+					// insertion point for init of association field
+					case FieldDetailComponentState.CREATE_INSTANCE_WITH_ASSOCIATION_Classshape_Fields_SET:
+						this.field = new (FieldDB)
+						this.field.Classshape_Fields_reverse = frontRepo.Classshapes.get(this.id)
+						break;
+					default:
+						console.log(this.state + " is unkown state")
 				}
 
 				// insertion point for recovery of form controls value for bool fields
@@ -82,8 +136,6 @@ export class FieldDetailComponent implements OnInit {
 	}
 
 	save(): void {
-		const id = +this.route.snapshot.paramMap.get('id');
-		const association = this.route.snapshot.paramMap.get('association');
 
 		// some fields needs to be translated into serializable forms
 		// pointers fields, after the translation, are nulled in order to perform serialization
@@ -91,45 +143,33 @@ export class FieldDetailComponent implements OnInit {
 		// insertion point for translation/nullation of each field
 
 		// save from the front pointer space to the non pointer space for serialization
-		if (association == undefined) {
-			// insertion point for translation/nullation of each pointers
-			if (this.field.Classshape_Fields_reverse != undefined) {
-				if (this.field.Classshape_FieldsDBID == undefined) {
-					this.field.Classshape_FieldsDBID = new NullInt64
-				}
-				this.field.Classshape_FieldsDBID.Int64 = this.field.Classshape_Fields_reverse.ID
-				this.field.Classshape_FieldsDBID.Valid = true
-				if (this.field.Classshape_FieldsDBID_Index == undefined) {
-					this.field.Classshape_FieldsDBID_Index = new NullInt64
-				}
-				this.field.Classshape_FieldsDBID_Index.Valid = true
-				this.field.Classshape_Fields_reverse = undefined // very important, otherwise, circular JSON
+
+		// insertion point for translation/nullation of each pointers
+		if (this.field.Classshape_Fields_reverse != undefined) {
+			if (this.field.Classshape_FieldsDBID == undefined) {
+				this.field.Classshape_FieldsDBID = new NullInt64
 			}
+			this.field.Classshape_FieldsDBID.Int64 = this.field.Classshape_Fields_reverse.ID
+			this.field.Classshape_FieldsDBID.Valid = true
+			if (this.field.Classshape_FieldsDBID_Index == undefined) {
+				this.field.Classshape_FieldsDBID_Index = new NullInt64
+			}
+			this.field.Classshape_FieldsDBID_Index.Valid = true
+			this.field.Classshape_Fields_reverse = undefined // very important, otherwise, circular JSON
 		}
 
-		if (id != 0 && association == undefined) {
-
-			this.fieldService.updateField(this.field)
-				.subscribe(field => {
-					this.fieldService.FieldServiceChanged.next("update")
+		switch (this.state) {
+			case FieldDetailComponentState.UPDATE_INSTANCE:
+				this.fieldService.updateField(this.field)
+					.subscribe(field => {
+						this.fieldService.FieldServiceChanged.next("update")
+					});
+				break;
+			default:
+				this.fieldService.postField(this.field).subscribe(field => {
+					this.fieldService.FieldServiceChanged.next("post")
+					this.field = {} // reset fields
 				});
-		} else {
-			switch (association) {
-				// insertion point for saving value of ONE_MANY association reverse pointer
-				case "Classshape_Fields":
-					this.field.Classshape_FieldsDBID = new NullInt64
-					this.field.Classshape_FieldsDBID.Int64 = id
-					this.field.Classshape_FieldsDBID.Valid = true
-					this.field.Classshape_FieldsDBID_Index = new NullInt64
-					this.field.Classshape_FieldsDBID_Index.Valid = true
-					break
-			}
-			this.fieldService.postField(this.field).subscribe(field => {
-
-				this.fieldService.FieldServiceChanged.next("post")
-
-				this.field = {} // reset fields
-			});
 		}
 	}
 

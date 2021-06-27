@@ -18,6 +18,15 @@ import { MatDialog, MAT_DIALOG_DATA, MatDialogRef, MatDialogConfig } from '@angu
 
 import { NullInt64 } from '../front-repo.service'
 
+// LinkDetailComponent is initilizaed from different routes
+// LinkDetailComponentState detail different cases 
+enum LinkDetailComponentState {
+	CREATE_INSTANCE,
+	UPDATE_INSTANCE,
+	// insertion point for declarations of enum values of state
+	CREATE_INSTANCE_WITH_ASSOCIATION_Classshape_Links_SET,
+}
+
 @Component({
 	selector: 'app-link-detail',
 	templateUrl: './link-detail.component.html',
@@ -39,6 +48,17 @@ export class LinkDetailComponent implements OnInit {
 	// if true, it is inputed with a <textarea ...> </textarea>
 	mapFields_displayAsTextArea = new Map<string, boolean>()
 
+	// the state at initialization (CREATION, UPDATE or CREATE with one association set)
+	state: LinkDetailComponentState
+
+	// in UDPATE state, if is the id of the instance to update
+	// in CREATE state with one association set, this is the id of the associated instance
+	id: number
+
+	// in CREATE state with one association set, this is the id of the associated instance
+	originStruct: string
+	originStructFieldName: string
+
 	constructor(
 		private linkService: LinkService,
 		private frontRepoService: FrontRepoService,
@@ -49,6 +69,31 @@ export class LinkDetailComponent implements OnInit {
 	}
 
 	ngOnInit(): void {
+
+		// compute state
+		this.id = +this.route.snapshot.paramMap.get('id');
+		this.originStruct = this.route.snapshot.paramMap.get('originStruct');
+		this.originStructFieldName = this.route.snapshot.paramMap.get('originStructFieldName');
+
+		const association = this.route.snapshot.paramMap.get('association');
+		if (this.id == 0) {
+			this.state = LinkDetailComponentState.CREATE_INSTANCE
+		} else {
+			if (this.originStruct == undefined) {
+				this.state = LinkDetailComponentState.UPDATE_INSTANCE
+			} else {
+				switch (this.originStructFieldName) {
+					// insertion point for state computation
+					case "Links":
+						console.log("Link" + " is instanciated with back pointer to instance " + this.id + " Classshape association Links")
+						this.state = LinkDetailComponentState.CREATE_INSTANCE_WITH_ASSOCIATION_Classshape_Links_SET
+						break;
+					default:
+						console.log(this.originStructFieldName + " is unkown association")
+				}
+			}
+		}
+
 		this.getLink()
 
 		// observable for changes in structs
@@ -65,16 +110,25 @@ export class LinkDetailComponent implements OnInit {
 	}
 
 	getLink(): void {
-		const id = +this.route.snapshot.paramMap.get('id');
-		const association = this.route.snapshot.paramMap.get('association');
 
 		this.frontRepoService.pull().subscribe(
 			frontRepo => {
 				this.frontRepo = frontRepo
-				if (id != 0 && association == undefined) {
-					this.link = frontRepo.Links.get(id)
-				} else {
-					this.link = new (LinkDB)
+
+				switch (this.state) {
+					case LinkDetailComponentState.CREATE_INSTANCE:
+						this.link = new (LinkDB)
+						break;
+					case LinkDetailComponentState.UPDATE_INSTANCE:
+						this.link = frontRepo.Links.get(this.id)
+						break;
+					// insertion point for init of association field
+					case LinkDetailComponentState.CREATE_INSTANCE_WITH_ASSOCIATION_Classshape_Links_SET:
+						this.link = new (LinkDB)
+						this.link.Classshape_Links_reverse = frontRepo.Classshapes.get(this.id)
+						break;
+					default:
+						console.log(this.state + " is unkown state")
 				}
 
 				// insertion point for recovery of form controls value for bool fields
@@ -85,8 +139,6 @@ export class LinkDetailComponent implements OnInit {
 	}
 
 	save(): void {
-		const id = +this.route.snapshot.paramMap.get('id');
-		const association = this.route.snapshot.paramMap.get('association');
 
 		// some fields needs to be translated into serializable forms
 		// pointers fields, after the translation, are nulled in order to perform serialization
@@ -104,45 +156,33 @@ export class LinkDetailComponent implements OnInit {
 		}
 
 		// save from the front pointer space to the non pointer space for serialization
-		if (association == undefined) {
-			// insertion point for translation/nullation of each pointers
-			if (this.link.Classshape_Links_reverse != undefined) {
-				if (this.link.Classshape_LinksDBID == undefined) {
-					this.link.Classshape_LinksDBID = new NullInt64
-				}
-				this.link.Classshape_LinksDBID.Int64 = this.link.Classshape_Links_reverse.ID
-				this.link.Classshape_LinksDBID.Valid = true
-				if (this.link.Classshape_LinksDBID_Index == undefined) {
-					this.link.Classshape_LinksDBID_Index = new NullInt64
-				}
-				this.link.Classshape_LinksDBID_Index.Valid = true
-				this.link.Classshape_Links_reverse = undefined // very important, otherwise, circular JSON
+
+		// insertion point for translation/nullation of each pointers
+		if (this.link.Classshape_Links_reverse != undefined) {
+			if (this.link.Classshape_LinksDBID == undefined) {
+				this.link.Classshape_LinksDBID = new NullInt64
 			}
+			this.link.Classshape_LinksDBID.Int64 = this.link.Classshape_Links_reverse.ID
+			this.link.Classshape_LinksDBID.Valid = true
+			if (this.link.Classshape_LinksDBID_Index == undefined) {
+				this.link.Classshape_LinksDBID_Index = new NullInt64
+			}
+			this.link.Classshape_LinksDBID_Index.Valid = true
+			this.link.Classshape_Links_reverse = undefined // very important, otherwise, circular JSON
 		}
 
-		if (id != 0 && association == undefined) {
-
-			this.linkService.updateLink(this.link)
-				.subscribe(link => {
-					this.linkService.LinkServiceChanged.next("update")
+		switch (this.state) {
+			case LinkDetailComponentState.UPDATE_INSTANCE:
+				this.linkService.updateLink(this.link)
+					.subscribe(link => {
+						this.linkService.LinkServiceChanged.next("update")
+					});
+				break;
+			default:
+				this.linkService.postLink(this.link).subscribe(link => {
+					this.linkService.LinkServiceChanged.next("post")
+					this.link = {} // reset fields
 				});
-		} else {
-			switch (association) {
-				// insertion point for saving value of ONE_MANY association reverse pointer
-				case "Classshape_Links":
-					this.link.Classshape_LinksDBID = new NullInt64
-					this.link.Classshape_LinksDBID.Int64 = id
-					this.link.Classshape_LinksDBID.Valid = true
-					this.link.Classshape_LinksDBID_Index = new NullInt64
-					this.link.Classshape_LinksDBID_Index.Valid = true
-					break
-			}
-			this.linkService.postLink(this.link).subscribe(link => {
-
-				this.linkService.LinkServiceChanged.next("post")
-
-				this.link = {} // reset fields
-			});
 		}
 	}
 

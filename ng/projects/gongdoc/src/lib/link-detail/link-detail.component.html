@@ -1,8 +1,8 @@
 <form *ngIf="link" class="details">
-    <h1 class="details__title">link</h1>
+    <h2 class="details__title">link</h2>
     <!-- insertion point for fields specific code -->
-    <mat-grid-list *ngIf='!isATextArea("Name")' cols="4" rowHeight="6:1">
-        <mat-grid-tile [colspan]="3">
+    <mat-grid-list *ngIf='!isATextArea("Name")' cols="5" rowHeight="2:1">
+        <mat-grid-tile [colspan]="4">
             <mat-form-field mat-form-field class="detail-full-width">
                 <mat-label>Name</mat-label>
                 <input name="" [ngModelOptions]="{standalone: true}" matInput [(ngModel)]="link.Name">
@@ -21,8 +21,8 @@
         <textarea name="" [ngModelOptions]="{standalone: true}" matInput [(ngModel)]="link.Name"></textarea>
     </mat-form-field>
 
-    <mat-grid-list *ngIf='!isATextArea("Fieldname")' cols="4" rowHeight="6:1">
-        <mat-grid-tile [colspan]="3">
+    <mat-grid-list *ngIf='!isATextArea("Fieldname")' cols="5" rowHeight="2:1">
+        <mat-grid-tile [colspan]="4">
             <mat-form-field mat-form-field class="detail-full-width">
                 <mat-label>Fieldname</mat-label>
                 <input name="" [ngModelOptions]="{standalone: true}" matInput [(ngModel)]="link.Fieldname">
@@ -41,8 +41,8 @@
         <textarea name="" [ngModelOptions]="{standalone: true}" matInput [(ngModel)]="link.Fieldname"></textarea>
     </mat-form-field>
 
-    <mat-grid-list *ngIf='!isATextArea("Structname")' cols="4" rowHeight="6:1">
-        <mat-grid-tile [colspan]="3">
+    <mat-grid-list *ngIf='!isATextArea("Structname")' cols="5" rowHeight="2:1">
+        <mat-grid-tile [colspan]="4">
             <mat-form-field mat-form-field class="detail-full-width">
                 <mat-label>Structname</mat-label>
                 <input name="" [ngModelOptions]="{standalone: true}" matInput [(ngModel)]="link.Structname">
@@ -61,8 +61,8 @@
         <textarea name="" [ngModelOptions]="{standalone: true}" matInput [(ngModel)]="link.Structname"></textarea>
     </mat-form-field>
 
-    <mat-grid-list *ngIf='!isATextArea("Fieldtypename")' cols="4" rowHeight="6:1">
-        <mat-grid-tile [colspan]="3">
+    <mat-grid-list *ngIf='!isATextArea("Fieldtypename")' cols="5" rowHeight="2:1">
+        <mat-grid-tile [colspan]="4">
             <mat-form-field mat-form-field class="detail-full-width">
                 <mat-label>Fieldtypename</mat-label>
                 <input name="" [ngModelOptions]="{standalone: true}" matInput [(ngModel)]="link.Fieldtypename">
@@ -102,7 +102,7 @@
     </mat-form-field>
 
     <mat-form-field class="detail-full-width">
-        <mat-label><- Links</mat-label>
+        <mat-label>(Classshape) Links</mat-label>
         <mat-select [compareWith]="compareObjects" [(ngModel)]="link.Classshape_Links_reverse" [ngModelOptions]="{standalone: true}">
             <mat-option>None</mat-option>
             <mat-option *ngFor="let classshape of frontRepo.Classshapes_array" [value]="classshape">

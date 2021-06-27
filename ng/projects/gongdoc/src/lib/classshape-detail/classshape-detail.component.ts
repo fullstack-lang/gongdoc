@@ -18,6 +18,15 @@ import { MatDialog, MAT_DIALOG_DATA, MatDialogRef, MatDialogConfig } from '@angu
 
 import { NullInt64 } from '../front-repo.service'
 
+// ClassshapeDetailComponent is initilizaed from different routes
+// ClassshapeDetailComponentState detail different cases 
+enum ClassshapeDetailComponentState {
+	CREATE_INSTANCE,
+	UPDATE_INSTANCE,
+	// insertion point for declarations of enum values of state
+	CREATE_INSTANCE_WITH_ASSOCIATION_Classdiagram_Classshapes_SET,
+}
+
 @Component({
 	selector: 'app-classshape-detail',
 	templateUrl: './classshape-detail.component.html',
@@ -39,6 +48,17 @@ export class ClassshapeDetailComponent implements OnInit {
 	// if true, it is inputed with a <textarea ...> </textarea>
 	mapFields_displayAsTextArea = new Map<string, boolean>()
 
+	// the state at initialization (CREATION, UPDATE or CREATE with one association set)
+	state: ClassshapeDetailComponentState
+
+	// in UDPATE state, if is the id of the instance to update
+	// in CREATE state with one association set, this is the id of the associated instance
+	id: number
+
+	// in CREATE state with one association set, this is the id of the associated instance
+	originStruct: string
+	originStructFieldName: string
+
 	constructor(
 		private classshapeService: ClassshapeService,
 		private frontRepoService: FrontRepoService,
@@ -49,6 +69,31 @@ export class ClassshapeDetailComponent implements OnInit {
 	}
 
 	ngOnInit(): void {
+
+		// compute state
+		this.id = +this.route.snapshot.paramMap.get('id');
+		this.originStruct = this.route.snapshot.paramMap.get('originStruct');
+		this.originStructFieldName = this.route.snapshot.paramMap.get('originStructFieldName');
+
+		const association = this.route.snapshot.paramMap.get('association');
+		if (this.id == 0) {
+			this.state = ClassshapeDetailComponentState.CREATE_INSTANCE
+		} else {
+			if (this.originStruct == undefined) {
+				this.state = ClassshapeDetailComponentState.UPDATE_INSTANCE
+			} else {
+				switch (this.originStructFieldName) {
+					// insertion point for state computation
+					case "Classshapes":
+						console.log("Classshape" + " is instanciated with back pointer to instance " + this.id + " Classdiagram association Classshapes")
+						this.state = ClassshapeDetailComponentState.CREATE_INSTANCE_WITH_ASSOCIATION_Classdiagram_Classshapes_SET
+						break;
+					default:
+						console.log(this.originStructFieldName + " is unkown association")
+				}
+			}
+		}
+
 		this.getClassshape()
 
 		// observable for changes in structs
@@ -65,16 +110,25 @@ export class ClassshapeDetailComponent implements OnInit {
 	}
 
 	getClassshape(): void {
-		const id = +this.route.snapshot.paramMap.get('id');
-		const association = this.route.snapshot.paramMap.get('association');
 
 		this.frontRepoService.pull().subscribe(
 			frontRepo => {
 				this.frontRepo = frontRepo
-				if (id != 0 && association == undefined) {
-					this.classshape = frontRepo.Classshapes.get(id)
-				} else {
-					this.classshape = new (ClassshapeDB)
+
+				switch (this.state) {
+					case ClassshapeDetailComponentState.CREATE_INSTANCE:
+						this.classshape = new (ClassshapeDB)
+						break;
+					case ClassshapeDetailComponentState.UPDATE_INSTANCE:
+						this.classshape = frontRepo.Classshapes.get(this.id)
+						break;
+					// insertion point for init of association field
+					case ClassshapeDetailComponentState.CREATE_INSTANCE_WITH_ASSOCIATION_Classdiagram_Classshapes_SET:
+						this.classshape = new (ClassshapeDB)
+						this.classshape.Classdiagram_Classshapes_reverse = frontRepo.Classdiagrams.get(this.id)
+						break;
+					default:
+						console.log(this.state + " is unkown state")
 				}
 
 				// insertion point for recovery of form controls value for bool fields
@@ -85,8 +139,6 @@ export class ClassshapeDetailComponent implements OnInit {
 	}
 
 	save(): void {
-		const id = +this.route.snapshot.paramMap.get('id');
-		const association = this.route.snapshot.paramMap.get('association');
 
 		// some fields needs to be translated into serializable forms
 		// pointers fields, after the translation, are nulled in order to perform serialization
@@ -104,45 +156,33 @@ export class ClassshapeDetailComponent implements OnInit {
 		}
 
 		// save from the front pointer space to the non pointer space for serialization
-		if (association == undefined) {
-			// insertion point for translation/nullation of each pointers
-			if (this.classshape.Classdiagram_Classshapes_reverse != undefined) {
-				if (this.classshape.Classdiagram_ClassshapesDBID == undefined) {
-					this.classshape.Classdiagram_ClassshapesDBID = new NullInt64
-				}
-				this.classshape.Classdiagram_ClassshapesDBID.Int64 = this.classshape.Classdiagram_Classshapes_reverse.ID
-				this.classshape.Classdiagram_ClassshapesDBID.Valid = true
-				if (this.classshape.Classdiagram_ClassshapesDBID_Index == undefined) {
-					this.classshape.Classdiagram_ClassshapesDBID_Index = new NullInt64
-				}
-				this.classshape.Classdiagram_ClassshapesDBID_Index.Valid = true
-				this.classshape.Classdiagram_Classshapes_reverse = undefined // very important, otherwise, circular JSON
+
+		// insertion point for translation/nullation of each pointers
+		if (this.classshape.Classdiagram_Classshapes_reverse != undefined) {
+			if (this.classshape.Classdiagram_ClassshapesDBID == undefined) {
+				this.classshape.Classdiagram_ClassshapesDBID = new NullInt64
 			}
+			this.classshape.Classdiagram_ClassshapesDBID.Int64 = this.classshape.Classdiagram_Classshapes_reverse.ID
+			this.classshape.Classdiagram_ClassshapesDBID.Valid = true
+			if (this.classshape.Classdiagram_ClassshapesDBID_Index == undefined) {
+				this.classshape.Classdiagram_ClassshapesDBID_Index = new NullInt64
+			}
+			this.classshape.Classdiagram_ClassshapesDBID_Index.Valid = true
+			this.classshape.Classdiagram_Classshapes_reverse = undefined // very important, otherwise, circular JSON
 		}
 
-		if (id != 0 && association == undefined) {
-
-			this.classshapeService.updateClassshape(this.classshape)
-				.subscribe(classshape => {
-					this.classshapeService.ClassshapeServiceChanged.next("update")
+		switch (this.state) {
+			case ClassshapeDetailComponentState.UPDATE_INSTANCE:
+				this.classshapeService.updateClassshape(this.classshape)
+					.subscribe(classshape => {
+						this.classshapeService.ClassshapeServiceChanged.next("update")
+					});
+				break;
+			default:
+				this.classshapeService.postClassshape(this.classshape).subscribe(classshape => {
+					this.classshapeService.ClassshapeServiceChanged.next("post")
+					this.classshape = {} // reset fields
 				});
-		} else {
-			switch (association) {
-				// insertion point for saving value of ONE_MANY association reverse pointer
-				case "Classdiagram_Classshapes":
-					this.classshape.Classdiagram_ClassshapesDBID = new NullInt64
-					this.classshape.Classdiagram_ClassshapesDBID.Int64 = id
-					this.classshape.Classdiagram_ClassshapesDBID.Valid = true
-					this.classshape.Classdiagram_ClassshapesDBID_Index = new NullInt64
-					this.classshape.Classdiagram_ClassshapesDBID_Index.Valid = true
-					break
-			}
-			this.classshapeService.postClassshape(this.classshape).subscribe(classshape => {
-
-				this.classshapeService.ClassshapeServiceChanged.next("post")
-
-				this.classshape = {} // reset fields
-			});
 		}
 	}
 

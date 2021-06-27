@@ -17,6 +17,15 @@ import { MatDialog, MAT_DIALOG_DATA, MatDialogRef, MatDialogConfig } from '@angu
 
 import { NullInt64 } from '../front-repo.service'
 
+// ClassdiagramDetailComponent is initilizaed from different routes
+// ClassdiagramDetailComponentState detail different cases 
+enum ClassdiagramDetailComponentState {
+	CREATE_INSTANCE,
+	UPDATE_INSTANCE,
+	// insertion point for declarations of enum values of state
+	CREATE_INSTANCE_WITH_ASSOCIATION_Pkgelt_Classdiagrams_SET,
+}
+
 @Component({
 	selector: 'app-classdiagram-detail',
 	templateUrl: './classdiagram-detail.component.html',
@@ -37,6 +46,17 @@ export class ClassdiagramDetailComponent implements OnInit {
 	// if true, it is inputed with a <textarea ...> </textarea>
 	mapFields_displayAsTextArea = new Map<string, boolean>()
 
+	// the state at initialization (CREATION, UPDATE or CREATE with one association set)
+	state: ClassdiagramDetailComponentState
+
+	// in UDPATE state, if is the id of the instance to update
+	// in CREATE state with one association set, this is the id of the associated instance
+	id: number
+
+	// in CREATE state with one association set, this is the id of the associated instance
+	originStruct: string
+	originStructFieldName: string
+
 	constructor(
 		private classdiagramService: ClassdiagramService,
 		private frontRepoService: FrontRepoService,
@@ -47,6 +67,31 @@ export class ClassdiagramDetailComponent implements OnInit {
 	}
 
 	ngOnInit(): void {
+
+		// compute state
+		this.id = +this.route.snapshot.paramMap.get('id');
+		this.originStruct = this.route.snapshot.paramMap.get('originStruct');
+		this.originStructFieldName = this.route.snapshot.paramMap.get('originStructFieldName');
+
+		const association = this.route.snapshot.paramMap.get('association');
+		if (this.id == 0) {
+			this.state = ClassdiagramDetailComponentState.CREATE_INSTANCE
+		} else {
+			if (this.originStruct == undefined) {
+				this.state = ClassdiagramDetailComponentState.UPDATE_INSTANCE
+			} else {
+				switch (this.originStructFieldName) {
+					// insertion point for state computation
+					case "Classdiagrams":
+						console.log("Classdiagram" + " is instanciated with back pointer to instance " + this.id + " Pkgelt association Classdiagrams")
+						this.state = ClassdiagramDetailComponentState.CREATE_INSTANCE_WITH_ASSOCIATION_Pkgelt_Classdiagrams_SET
+						break;
+					default:
+						console.log(this.originStructFieldName + " is unkown association")
+				}
+			}
+		}
+
 		this.getClassdiagram()
 
 		// observable for changes in structs
@@ -62,16 +107,25 @@ export class ClassdiagramDetailComponent implements OnInit {
 	}
 
 	getClassdiagram(): void {
-		const id = +this.route.snapshot.paramMap.get('id');
-		const association = this.route.snapshot.paramMap.get('association');
 
 		this.frontRepoService.pull().subscribe(
 			frontRepo => {
 				this.frontRepo = frontRepo
-				if (id != 0 && association == undefined) {
-					this.classdiagram = frontRepo.Classdiagrams.get(id)
-				} else {
-					this.classdiagram = new (ClassdiagramDB)
+
+				switch (this.state) {
+					case ClassdiagramDetailComponentState.CREATE_INSTANCE:
+						this.classdiagram = new (ClassdiagramDB)
+						break;
+					case ClassdiagramDetailComponentState.UPDATE_INSTANCE:
+						this.classdiagram = frontRepo.Classdiagrams.get(this.id)
+						break;
+					// insertion point for init of association field
+					case ClassdiagramDetailComponentState.CREATE_INSTANCE_WITH_ASSOCIATION_Pkgelt_Classdiagrams_SET:
+						this.classdiagram = new (ClassdiagramDB)
+						this.classdiagram.Pkgelt_Classdiagrams_reverse = frontRepo.Pkgelts.get(this.id)
+						break;
+					default:
+						console.log(this.state + " is unkown state")
 				}
 
 				// insertion point for recovery of form controls value for bool fields
@@ -82,8 +136,6 @@ export class ClassdiagramDetailComponent implements OnInit {
 	}
 
 	save(): void {
-		const id = +this.route.snapshot.paramMap.get('id');
-		const association = this.route.snapshot.paramMap.get('association');
 
 		// some fields needs to be translated into serializable forms
 		// pointers fields, after the translation, are nulled in order to perform serialization
@@ -91,45 +143,33 @@ export class ClassdiagramDetailComponent implements OnInit {
 		// insertion point for translation/nullation of each field
 
 		// save from the front pointer space to the non pointer space for serialization
-		if (association == undefined) {
-			// insertion point for translation/nullation of each pointers
-			if (this.classdiagram.Pkgelt_Classdiagrams_reverse != undefined) {
-				if (this.classdiagram.Pkgelt_ClassdiagramsDBID == undefined) {
-					this.classdiagram.Pkgelt_ClassdiagramsDBID = new NullInt64
-				}
-				this.classdiagram.Pkgelt_ClassdiagramsDBID.Int64 = this.classdiagram.Pkgelt_Classdiagrams_reverse.ID
-				this.classdiagram.Pkgelt_ClassdiagramsDBID.Valid = true
-				if (this.classdiagram.Pkgelt_ClassdiagramsDBID_Index == undefined) {
-					this.classdiagram.Pkgelt_ClassdiagramsDBID_Index = new NullInt64
-				}
-				this.classdiagram.Pkgelt_ClassdiagramsDBID_Index.Valid = true
-				this.classdiagram.Pkgelt_Classdiagrams_reverse = undefined // very important, otherwise, circular JSON
+
+		// insertion point for translation/nullation of each pointers
+		if (this.classdiagram.Pkgelt_Classdiagrams_reverse != undefined) {
+			if (this.classdiagram.Pkgelt_ClassdiagramsDBID == undefined) {
+				this.classdiagram.Pkgelt_ClassdiagramsDBID = new NullInt64
 			}
+			this.classdiagram.Pkgelt_ClassdiagramsDBID.Int64 = this.classdiagram.Pkgelt_Classdiagrams_reverse.ID
+			this.classdiagram.Pkgelt_ClassdiagramsDBID.Valid = true
+			if (this.classdiagram.Pkgelt_ClassdiagramsDBID_Index == undefined) {
+				this.classdiagram.Pkgelt_ClassdiagramsDBID_Index = new NullInt64
+			}
+			this.classdiagram.Pkgelt_ClassdiagramsDBID_Index.Valid = true
+			this.classdiagram.Pkgelt_Classdiagrams_reverse = undefined // very important, otherwise, circular JSON
 		}
 
-		if (id != 0 && association == undefined) {
-
-			this.classdiagramService.updateClassdiagram(this.classdiagram)
-				.subscribe(classdiagram => {
-					this.classdiagramService.ClassdiagramServiceChanged.next("update")
+		switch (this.state) {
+			case ClassdiagramDetailComponentState.UPDATE_INSTANCE:
+				this.classdiagramService.updateClassdiagram(this.classdiagram)
+					.subscribe(classdiagram => {
+						this.classdiagramService.ClassdiagramServiceChanged.next("update")
+					});
+				break;
+			default:
+				this.classdiagramService.postClassdiagram(this.classdiagram).subscribe(classdiagram => {
+					this.classdiagramService.ClassdiagramServiceChanged.next("post")
+					this.classdiagram = {} // reset fields
 				});
-		} else {
-			switch (association) {
-				// insertion point for saving value of ONE_MANY association reverse pointer
-				case "Pkgelt_Classdiagrams":
-					this.classdiagram.Pkgelt_ClassdiagramsDBID = new NullInt64
-					this.classdiagram.Pkgelt_ClassdiagramsDBID.Int64 = id
-					this.classdiagram.Pkgelt_ClassdiagramsDBID.Valid = true
-					this.classdiagram.Pkgelt_ClassdiagramsDBID_Index = new NullInt64
-					this.classdiagram.Pkgelt_ClassdiagramsDBID_Index.Valid = true
-					break
-			}
-			this.classdiagramService.postClassdiagram(this.classdiagram).subscribe(classdiagram => {
-
-				this.classdiagramService.ClassdiagramServiceChanged.next("post")
-
-				this.classdiagram = {} // reset fields
-			});
 		}
 	}
 

@@ -1,8 +1,8 @@
 <form *ngIf="state" class="details">
-    <h1 class="details__title">state</h1>
+    <h2 class="details__title">state</h2>
     <!-- insertion point for fields specific code -->
-    <mat-grid-list *ngIf='!isATextArea("Name")' cols="4" rowHeight="6:1">
-        <mat-grid-tile [colspan]="3">
+    <mat-grid-list *ngIf='!isATextArea("Name")' cols="5" rowHeight="2:1">
+        <mat-grid-tile [colspan]="4">
             <mat-form-field mat-form-field class="detail-full-width">
                 <mat-label>Name</mat-label>
                 <input name="" [ngModelOptions]="{standalone: true}" matInput [(ngModel)]="state.Name">
@@ -34,7 +34,7 @@
     </mat-form-field>
 
     <mat-form-field class="detail-full-width">
-        <mat-label><- States</mat-label>
+        <mat-label>(Umlsc) States</mat-label>
         <mat-select [compareWith]="compareObjects" [(ngModel)]="state.Umlsc_States_reverse" [ngModelOptions]="{standalone: true}">
             <mat-option>None</mat-option>
             <mat-option *ngFor="let umlsc of frontRepo.Umlscs_array" [value]="umlsc">

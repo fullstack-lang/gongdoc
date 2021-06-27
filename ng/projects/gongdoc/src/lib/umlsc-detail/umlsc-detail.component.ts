@@ -17,6 +17,15 @@ import { MatDialog, MAT_DIALOG_DATA, MatDialogRef, MatDialogConfig } from '@angu
 
 import { NullInt64 } from '../front-repo.service'
 
+// UmlscDetailComponent is initilizaed from different routes
+// UmlscDetailComponentState detail different cases 
+enum UmlscDetailComponentState {
+	CREATE_INSTANCE,
+	UPDATE_INSTANCE,
+	// insertion point for declarations of enum values of state
+	CREATE_INSTANCE_WITH_ASSOCIATION_Pkgelt_Umlscs_SET,
+}
+
 @Component({
 	selector: 'app-umlsc-detail',
 	templateUrl: './umlsc-detail.component.html',
@@ -37,6 +46,17 @@ export class UmlscDetailComponent implements OnInit {
 	// if true, it is inputed with a <textarea ...> </textarea>
 	mapFields_displayAsTextArea = new Map<string, boolean>()
 
+	// the state at initialization (CREATION, UPDATE or CREATE with one association set)
+	state: UmlscDetailComponentState
+
+	// in UDPATE state, if is the id of the instance to update
+	// in CREATE state with one association set, this is the id of the associated instance
+	id: number
+
+	// in CREATE state with one association set, this is the id of the associated instance
+	originStruct: string
+	originStructFieldName: string
+
 	constructor(
 		private umlscService: UmlscService,
 		private frontRepoService: FrontRepoService,
@@ -47,6 +67,31 @@ export class UmlscDetailComponent implements OnInit {
 	}
 
 	ngOnInit(): void {
+
+		// compute state
+		this.id = +this.route.snapshot.paramMap.get('id');
+		this.originStruct = this.route.snapshot.paramMap.get('originStruct');
+		this.originStructFieldName = this.route.snapshot.paramMap.get('originStructFieldName');
+
+		const association = this.route.snapshot.paramMap.get('association');
+		if (this.id == 0) {
+			this.state = UmlscDetailComponentState.CREATE_INSTANCE
+		} else {
+			if (this.originStruct == undefined) {
+				this.state = UmlscDetailComponentState.UPDATE_INSTANCE
+			} else {
+				switch (this.originStructFieldName) {
+					// insertion point for state computation
+					case "Umlscs":
+						console.log("Umlsc" + " is instanciated with back pointer to instance " + this.id + " Pkgelt association Umlscs")
+						this.state = UmlscDetailComponentState.CREATE_INSTANCE_WITH_ASSOCIATION_Pkgelt_Umlscs_SET
+						break;
+					default:
+						console.log(this.originStructFieldName + " is unkown association")
+				}
+			}
+		}
+
 		this.getUmlsc()
 
 		// observable for changes in structs
@@ -62,16 +107,25 @@ export class UmlscDetailComponent implements OnInit {
 	}
 
 	getUmlsc(): void {
-		const id = +this.route.snapshot.paramMap.get('id');
-		const association = this.route.snapshot.paramMap.get('association');
 
 		this.frontRepoService.pull().subscribe(
 			frontRepo => {
 				this.frontRepo = frontRepo
-				if (id != 0 && association == undefined) {
-					this.umlsc = frontRepo.Umlscs.get(id)
-				} else {
-					this.umlsc = new (UmlscDB)
+
+				switch (this.state) {
+					case UmlscDetailComponentState.CREATE_INSTANCE:
+						this.umlsc = new (UmlscDB)
+						break;
+					case UmlscDetailComponentState.UPDATE_INSTANCE:
+						this.umlsc = frontRepo.Umlscs.get(this.id)
+						break;
+					// insertion point for init of association field
+					case UmlscDetailComponentState.CREATE_INSTANCE_WITH_ASSOCIATION_Pkgelt_Umlscs_SET:
+						this.umlsc = new (UmlscDB)
+						this.umlsc.Pkgelt_Umlscs_reverse = frontRepo.Pkgelts.get(this.id)
+						break;
+					default:
+						console.log(this.state + " is unkown state")
 				}
 
 				// insertion point for recovery of form controls value for bool fields
@@ -82,8 +136,6 @@ export class UmlscDetailComponent implements OnInit {
 	}
 
 	save(): void {
-		const id = +this.route.snapshot.paramMap.get('id');
-		const association = this.route.snapshot.paramMap.get('association');
 
 		// some fields needs to be translated into serializable forms
 		// pointers fields, after the translation, are nulled in order to perform serialization
@@ -91,45 +143,33 @@ export class UmlscDetailComponent implements OnInit {
 		// insertion point for translation/nullation of each field
 
 		// save from the front pointer space to the non pointer space for serialization
-		if (association == undefined) {
-			// insertion point for translation/nullation of each pointers
-			if (this.umlsc.Pkgelt_Umlscs_reverse != undefined) {
-				if (this.umlsc.Pkgelt_UmlscsDBID == undefined) {
-					this.umlsc.Pkgelt_UmlscsDBID = new NullInt64
-				}
-				this.umlsc.Pkgelt_UmlscsDBID.Int64 = this.umlsc.Pkgelt_Umlscs_reverse.ID
-				this.umlsc.Pkgelt_UmlscsDBID.Valid = true
-				if (this.umlsc.Pkgelt_UmlscsDBID_Index == undefined) {
-					this.umlsc.Pkgelt_UmlscsDBID_Index = new NullInt64
-				}
-				this.umlsc.Pkgelt_UmlscsDBID_Index.Valid = true
-				this.umlsc.Pkgelt_Umlscs_reverse = undefined // very important, otherwise, circular JSON
+
+		// insertion point for translation/nullation of each pointers
+		if (this.umlsc.Pkgelt_Umlscs_reverse != undefined) {
+			if (this.umlsc.Pkgelt_UmlscsDBID == undefined) {
+				this.umlsc.Pkgelt_UmlscsDBID = new NullInt64
 			}
+			this.umlsc.Pkgelt_UmlscsDBID.Int64 = this.umlsc.Pkgelt_Umlscs_reverse.ID
+			this.umlsc.Pkgelt_UmlscsDBID.Valid = true
+			if (this.umlsc.Pkgelt_UmlscsDBID_Index == undefined) {
+				this.umlsc.Pkgelt_UmlscsDBID_Index = new NullInt64
+			}
+			this.umlsc.Pkgelt_UmlscsDBID_Index.Valid = true
+			this.umlsc.Pkgelt_Umlscs_reverse = undefined // very important, otherwise, circular JSON
 		}
 
-		if (id != 0 && association == undefined) {
-
-			this.umlscService.updateUmlsc(this.umlsc)
-				.subscribe(umlsc => {
-					this.umlscService.UmlscServiceChanged.next("update")
+		switch (this.state) {
+			case UmlscDetailComponentState.UPDATE_INSTANCE:
+				this.umlscService.updateUmlsc(this.umlsc)
+					.subscribe(umlsc => {
+						this.umlscService.UmlscServiceChanged.next("update")
+					});
+				break;
+			default:
+				this.umlscService.postUmlsc(this.umlsc).subscribe(umlsc => {
+					this.umlscService.UmlscServiceChanged.next("post")
+					this.umlsc = {} // reset fields
 				});
-		} else {
-			switch (association) {
-				// insertion point for saving value of ONE_MANY association reverse pointer
-				case "Pkgelt_Umlscs":
-					this.umlsc.Pkgelt_UmlscsDBID = new NullInt64
-					this.umlsc.Pkgelt_UmlscsDBID.Int64 = id
-					this.umlsc.Pkgelt_UmlscsDBID.Valid = true
-					this.umlsc.Pkgelt_UmlscsDBID_Index = new NullInt64
-					this.umlsc.Pkgelt_UmlscsDBID_Index.Valid = true
-					break
-			}
-			this.umlscService.postUmlsc(this.umlsc).subscribe(umlsc => {
-
-				this.umlscService.UmlscServiceChanged.next("post")
-
-				this.umlsc = {} // reset fields
-			});
 		}
 	}
 
