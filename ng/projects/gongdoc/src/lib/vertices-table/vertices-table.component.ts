@@ -7,7 +7,7 @@ import { MatTableDataSource } from '@angular/material/table';
 import { MatButton } from '@angular/material/button'
 
 import { MatDialogRef, MAT_DIALOG_DATA, MatDialog } from '@angular/material/dialog'
-import { DialogData } from '../front-repo.service'
+import { DialogData, FrontRepoService, FrontRepo, NullInt64, SelectionMode } from '../front-repo.service'
 import { SelectionModel } from '@angular/cdk/collections';
 
 const allowMultiSelect = true;
@@ -16,7 +16,13 @@ import { Router, RouterState } from '@angular/router';
 import { VerticeDB } from '../vertice-db'
 import { VerticeService } from '../vertice.service'
 
-import { FrontRepoService, FrontRepo } from '../front-repo.service'
+// TableComponent is initilizaed from different routes
+// TableComponentMode detail different cases 
+enum TableComponentMode {
+  DISPLAY_MODE,
+  ONE_MANY_ASSOCIATION_MODE,
+  MANY_MANY_ASSOCIATION_MODE,
+}
 
 // generated table component
 @Component({
@@ -26,6 +32,9 @@ import { FrontRepoService, FrontRepo } from '../front-repo.service'
 })
 export class VerticesTableComponent implements OnInit {
 
+  // mode at invocation
+  mode: TableComponentMode
+
   // used if the component is called as a selection component of Vertice instances
   selection: SelectionModel<VerticeDB>;
   initialSelection = new Array<VerticeDB>();
@@ -33,7 +42,6 @@ export class VerticesTableComponent implements OnInit {
   // the data source for the table
   vertices: VerticeDB[];
   matTableDataSource: MatTableDataSource<VerticeDB>
-
 
   // front repo, that will be referenced by this.vertices
   frontRepo: FrontRepo
@@ -48,39 +56,39 @@ export class VerticesTableComponent implements OnInit {
 
   ngAfterViewInit() {
 
-	// enable sorting on all fields (including pointers and reverse pointer)
-	this.matTableDataSource.sortingDataAccessor = (verticeDB: VerticeDB, property: string) => {
-		switch (property) {
-				// insertion point for specific sorting accessor
-			case 'X':
-				return verticeDB.X;
+    // enable sorting on all fields (including pointers and reverse pointer)
+    this.matTableDataSource.sortingDataAccessor = (verticeDB: VerticeDB, property: string) => {
+      switch (property) {
+        // insertion point for specific sorting accessor
+        case 'X':
+          return verticeDB.X;
 
-			case 'Y':
-				return verticeDB.Y;
+        case 'Y':
+          return verticeDB.Y;
 
-			case 'Name':
-				return verticeDB.Name;
+        case 'Name':
+          return verticeDB.Name;
 
-				default:
-					return VerticeDB[property];
-		}
-	}; 
+        default:
+          return VerticeDB[property];
+      }
+    };
 
-	// enable filtering on all fields (including pointers and reverse pointer, which is not done by default)
-	this.matTableDataSource.filterPredicate = (verticeDB: VerticeDB, filter: string) => {
+    // enable filtering on all fields (including pointers and reverse pointer, which is not done by default)
+    this.matTableDataSource.filterPredicate = (verticeDB: VerticeDB, filter: string) => {
 
-		// filtering is based on finding a lower case filter into a concatenated string
-		// the verticeDB properties
-		let mergedContent = ""
+      // filtering is based on finding a lower case filter into a concatenated string
+      // the verticeDB properties
+      let mergedContent = ""
 
-		// insertion point for merging of fields
-		mergedContent += verticeDB.X.toString()
-		mergedContent += verticeDB.Y.toString()
-		mergedContent += verticeDB.Name.toLowerCase()
+      // insertion point for merging of fields
+      mergedContent += verticeDB.X.toString()
+      mergedContent += verticeDB.Y.toString()
+      mergedContent += verticeDB.Name.toLowerCase()
 
-		let isSelected = mergedContent.includes(filter.toLowerCase())
-		return isSelected
-	};
+      let isSelected = mergedContent.includes(filter.toLowerCase())
+      return isSelected
+    };
 
     this.matTableDataSource.sort = this.sort;
     this.matTableDataSource.paginator = this.paginator;
@@ -101,6 +109,22 @@ export class VerticesTableComponent implements OnInit {
 
     private router: Router,
   ) {
+
+    // compute mode
+    if (dialogData == undefined) {
+      this.mode = TableComponentMode.DISPLAY_MODE
+    } else {
+      switch (dialogData.SelectionMode) {
+        case SelectionMode.ONE_MANY_ASSOCIATION_MODE:
+          this.mode = TableComponentMode.ONE_MANY_ASSOCIATION_MODE
+          break
+        case SelectionMode.MANY_MANY_ASSOCIATION_MODE:
+          this.mode = TableComponentMode.MANY_MANY_ASSOCIATION_MODE
+          break
+        default:
+      }
+    }
+
     // observable for changes in structs
     this.verticeService.VerticeServiceChanged.subscribe(
       message => {
@@ -109,7 +133,7 @@ export class VerticesTableComponent implements OnInit {
         }
       }
     )
-    if (dialogData == undefined) {
+    if (this.mode == TableComponentMode.DISPLAY_MODE) {
       this.displayedColumns = ['ID', 'Edit', 'Delete', // insertion point for columns to display
         "X",
         "Y",
@@ -141,7 +165,7 @@ export class VerticesTableComponent implements OnInit {
         // insertion point for variables Recoveries
 
         // in case the component is called as a selection component
-        if (this.dialogData != undefined) {
+        if (this.mode == TableComponentMode.ONE_MANY_ASSOCIATION_MODE) {
           this.vertices.forEach(
             vertice => {
               let ID = this.dialogData.ID
@@ -151,6 +175,20 @@ export class VerticesTableComponent implements OnInit {
               }
             }
           )
+          this.selection = new SelectionModel<VerticeDB>(allowMultiSelect, this.initialSelection);
+        }
+
+        if (this.mode == TableComponentMode.MANY_MANY_ASSOCIATION_MODE) {
+
+          let mapOfSourceInstances = this.frontRepo[this.dialogData.SourceStruct + "s"]
+          let sourceInstance = mapOfSourceInstances.get(this.dialogData.ID)
+
+          if (sourceInstance[this.dialogData.SourceField]) {
+            for (let associationInstance of sourceInstance[this.dialogData.SourceField]) {
+              let vertice = associationInstance[this.dialogData.IntermediateStructField]
+              this.initialSelection.push(vertice)
+            }
+          }
           this.selection = new SelectionModel<VerticeDB>(allowMultiSelect, this.initialSelection);
         }
 
@@ -219,36 +257,106 @@ export class VerticesTableComponent implements OnInit {
 
   save() {
 
-    let toUpdate = new Set<VerticeDB>()
+    if (this.mode == TableComponentMode.ONE_MANY_ASSOCIATION_MODE) {
 
-    // reset all initial selection of vertice that belong to vertice through Anarrayofb
-    this.initialSelection.forEach(
-      vertice => {
-        vertice[this.dialogData.ReversePointer].Int64 = 0
-        vertice[this.dialogData.ReversePointer].Valid = true
-        toUpdate.add(vertice)
-      }
-    )
+      let toUpdate = new Set<VerticeDB>()
 
-    // from selection, set vertice that belong to vertice through Anarrayofb
-    this.selection.selected.forEach(
-      vertice => {
-        let ID = +this.dialogData.ID
-        vertice[this.dialogData.ReversePointer].Int64 = ID
-        vertice[this.dialogData.ReversePointer].Valid = true
-        toUpdate.add(vertice)
-      }
-    )
+      // reset all initial selection of vertice that belong to vertice
+      this.initialSelection.forEach(
+        vertice => {
+          vertice[this.dialogData.ReversePointer].Int64 = 0
+          vertice[this.dialogData.ReversePointer].Valid = true
+          toUpdate.add(vertice)
+        }
+      )
 
-    // update all vertice (only update selection & initial selection)
-    toUpdate.forEach(
-      vertice => {
-        this.verticeService.updateVertice(vertice)
-          .subscribe(vertice => {
-            this.verticeService.VerticeServiceChanged.next("update")
-          });
+      // from selection, set vertice that belong to vertice
+      this.selection.selected.forEach(
+        vertice => {
+          let ID = +this.dialogData.ID
+          vertice[this.dialogData.ReversePointer].Int64 = ID
+          vertice[this.dialogData.ReversePointer].Valid = true
+          toUpdate.add(vertice)
+        }
+      )
+
+      // update all vertice (only update selection & initial selection)
+      toUpdate.forEach(
+        vertice => {
+          this.verticeService.updateVertice(vertice)
+            .subscribe(vertice => {
+              this.verticeService.VerticeServiceChanged.next("update")
+            });
+        }
+      )
+    }
+
+    if (this.mode == TableComponentMode.MANY_MANY_ASSOCIATION_MODE) {
+
+      let mapOfSourceInstances = this.frontRepo[this.dialogData.SourceStruct + "s"]
+      let sourceInstance = mapOfSourceInstances.get(this.dialogData.ID)
+
+      // First, parse all instance of the association struct and remove the instance
+      // that have unselect
+      let unselectedVertice = new Set<number>()
+      for (let vertice of this.initialSelection) {
+        if (this.selection.selected.includes(vertice)) {
+          // console.log("vertice " + vertice.Name + " is still selected")
+        } else {
+          console.log("vertice " + vertice.Name + " has been unselected")
+          unselectedVertice.add(vertice.ID)
+          console.log("is unselected " + unselectedVertice.has(vertice.ID))
+        }
       }
-    )
+
+      // delete the association instance
+      if (sourceInstance[this.dialogData.SourceField]) {
+        for (let associationInstance of sourceInstance[this.dialogData.SourceField]) {
+          let vertice = associationInstance[this.dialogData.IntermediateStructField]
+          if (unselectedVertice.has(vertice.ID)) {
+
+            this.frontRepoService.deleteService( this.dialogData.IntermediateStruct, associationInstance )
+          }
+        }
+      }
+
+      // is the source array is emptyn create it
+      if (sourceInstance[this.dialogData.SourceField] == undefined) {
+        sourceInstance[this.dialogData.SourceField] = new Array<any>()
+      }
+
+      // second, parse all instance of the selected
+      if (sourceInstance[this.dialogData.SourceField]) {
+        this.selection.selected.forEach(
+          vertice => {
+            if (!this.initialSelection.includes(vertice)) {
+              // console.log("vertice " + vertice.Name + " has been added to the selection")
+
+              let associationInstance = {
+                Name: sourceInstance["Name"] + "-" + vertice.Name,
+              }
+
+              associationInstance[this.dialogData.IntermediateStructField+"ID"] = new NullInt64
+              associationInstance[this.dialogData.IntermediateStructField+"ID"].Int64 = vertice.ID
+              associationInstance[this.dialogData.IntermediateStructField+"ID"].Valid = true
+
+              associationInstance[this.dialogData.SourceStruct + "_" + this.dialogData.SourceField + "DBID"] = new NullInt64
+              associationInstance[this.dialogData.SourceStruct + "_" + this.dialogData.SourceField + "DBID"].Int64 = sourceInstance["ID"]
+              associationInstance[this.dialogData.SourceStruct + "_" + this.dialogData.SourceField + "DBID"].Valid = true
+
+              this.frontRepoService.postService( this.dialogData.IntermediateStruct, associationInstance )
+
+            } else {
+              // console.log("vertice " + vertice.Name + " is still selected")
+            }
+          }
+        )
+      }
+
+      // this.selection = new SelectionModel<VerticeDB>(allowMultiSelect, this.initialSelection);
+    }
+
+    // why pizza ?
     this.dialogRef.close('Pizza!');
   }
 }

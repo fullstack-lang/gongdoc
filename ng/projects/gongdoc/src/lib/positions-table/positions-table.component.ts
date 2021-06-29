@@ -7,7 +7,7 @@ import { MatTableDataSource } from '@angular/material/table';
 import { MatButton } from '@angular/material/button'
 
 import { MatDialogRef, MAT_DIALOG_DATA, MatDialog } from '@angular/material/dialog'
-import { DialogData } from '../front-repo.service'
+import { DialogData, FrontRepoService, FrontRepo, NullInt64, SelectionMode } from '../front-repo.service'
 import { SelectionModel } from '@angular/cdk/collections';
 
 const allowMultiSelect = true;
@@ -16,7 +16,13 @@ import { Router, RouterState } from '@angular/router';
 import { PositionDB } from '../position-db'
 import { PositionService } from '../position.service'
 
-import { FrontRepoService, FrontRepo } from '../front-repo.service'
+// TableComponent is initilizaed from different routes
+// TableComponentMode detail different cases 
+enum TableComponentMode {
+  DISPLAY_MODE,
+  ONE_MANY_ASSOCIATION_MODE,
+  MANY_MANY_ASSOCIATION_MODE,
+}
 
 // generated table component
 @Component({
@@ -26,6 +32,9 @@ import { FrontRepoService, FrontRepo } from '../front-repo.service'
 })
 export class PositionsTableComponent implements OnInit {
 
+  // mode at invocation
+  mode: TableComponentMode
+
   // used if the component is called as a selection component of Position instances
   selection: SelectionModel<PositionDB>;
   initialSelection = new Array<PositionDB>();
@@ -33,7 +42,6 @@ export class PositionsTableComponent implements OnInit {
   // the data source for the table
   positions: PositionDB[];
   matTableDataSource: MatTableDataSource<PositionDB>
-
 
   // front repo, that will be referenced by this.positions
   frontRepo: FrontRepo
@@ -48,39 +56,39 @@ export class PositionsTableComponent implements OnInit {
 
   ngAfterViewInit() {
 
-	// enable sorting on all fields (including pointers and reverse pointer)
-	this.matTableDataSource.sortingDataAccessor = (positionDB: PositionDB, property: string) => {
-		switch (property) {
-				// insertion point for specific sorting accessor
-			case 'X':
-				return positionDB.X;
+    // enable sorting on all fields (including pointers and reverse pointer)
+    this.matTableDataSource.sortingDataAccessor = (positionDB: PositionDB, property: string) => {
+      switch (property) {
+        // insertion point for specific sorting accessor
+        case 'X':
+          return positionDB.X;
 
-			case 'Y':
-				return positionDB.Y;
+        case 'Y':
+          return positionDB.Y;
 
-			case 'Name':
-				return positionDB.Name;
+        case 'Name':
+          return positionDB.Name;
 
-				default:
-					return PositionDB[property];
-		}
-	}; 
+        default:
+          return PositionDB[property];
+      }
+    };
 
-	// enable filtering on all fields (including pointers and reverse pointer, which is not done by default)
-	this.matTableDataSource.filterPredicate = (positionDB: PositionDB, filter: string) => {
+    // enable filtering on all fields (including pointers and reverse pointer, which is not done by default)
+    this.matTableDataSource.filterPredicate = (positionDB: PositionDB, filter: string) => {
 
-		// filtering is based on finding a lower case filter into a concatenated string
-		// the positionDB properties
-		let mergedContent = ""
+      // filtering is based on finding a lower case filter into a concatenated string
+      // the positionDB properties
+      let mergedContent = ""
 
-		// insertion point for merging of fields
-		mergedContent += positionDB.X.toString()
-		mergedContent += positionDB.Y.toString()
-		mergedContent += positionDB.Name.toLowerCase()
+      // insertion point for merging of fields
+      mergedContent += positionDB.X.toString()
+      mergedContent += positionDB.Y.toString()
+      mergedContent += positionDB.Name.toLowerCase()
 
-		let isSelected = mergedContent.includes(filter.toLowerCase())
-		return isSelected
-	};
+      let isSelected = mergedContent.includes(filter.toLowerCase())
+      return isSelected
+    };
 
     this.matTableDataSource.sort = this.sort;
     this.matTableDataSource.paginator = this.paginator;
@@ -101,6 +109,22 @@ export class PositionsTableComponent implements OnInit {
 
     private router: Router,
   ) {
+
+    // compute mode
+    if (dialogData == undefined) {
+      this.mode = TableComponentMode.DISPLAY_MODE
+    } else {
+      switch (dialogData.SelectionMode) {
+        case SelectionMode.ONE_MANY_ASSOCIATION_MODE:
+          this.mode = TableComponentMode.ONE_MANY_ASSOCIATION_MODE
+          break
+        case SelectionMode.MANY_MANY_ASSOCIATION_MODE:
+          this.mode = TableComponentMode.MANY_MANY_ASSOCIATION_MODE
+          break
+        default:
+      }
+    }
+
     // observable for changes in structs
     this.positionService.PositionServiceChanged.subscribe(
       message => {
@@ -109,7 +133,7 @@ export class PositionsTableComponent implements OnInit {
         }
       }
     )
-    if (dialogData == undefined) {
+    if (this.mode == TableComponentMode.DISPLAY_MODE) {
       this.displayedColumns = ['ID', 'Edit', 'Delete', // insertion point for columns to display
         "X",
         "Y",
@@ -141,7 +165,7 @@ export class PositionsTableComponent implements OnInit {
         // insertion point for variables Recoveries
 
         // in case the component is called as a selection component
-        if (this.dialogData != undefined) {
+        if (this.mode == TableComponentMode.ONE_MANY_ASSOCIATION_MODE) {
           this.positions.forEach(
             position => {
               let ID = this.dialogData.ID
@@ -151,6 +175,20 @@ export class PositionsTableComponent implements OnInit {
               }
             }
           )
+          this.selection = new SelectionModel<PositionDB>(allowMultiSelect, this.initialSelection);
+        }
+
+        if (this.mode == TableComponentMode.MANY_MANY_ASSOCIATION_MODE) {
+
+          let mapOfSourceInstances = this.frontRepo[this.dialogData.SourceStruct + "s"]
+          let sourceInstance = mapOfSourceInstances.get(this.dialogData.ID)
+
+          if (sourceInstance[this.dialogData.SourceField]) {
+            for (let associationInstance of sourceInstance[this.dialogData.SourceField]) {
+              let position = associationInstance[this.dialogData.IntermediateStructField]
+              this.initialSelection.push(position)
+            }
+          }
           this.selection = new SelectionModel<PositionDB>(allowMultiSelect, this.initialSelection);
         }
 
@@ -219,36 +257,106 @@ export class PositionsTableComponent implements OnInit {
 
   save() {
 
-    let toUpdate = new Set<PositionDB>()
+    if (this.mode == TableComponentMode.ONE_MANY_ASSOCIATION_MODE) {
 
-    // reset all initial selection of position that belong to position through Anarrayofb
-    this.initialSelection.forEach(
-      position => {
-        position[this.dialogData.ReversePointer].Int64 = 0
-        position[this.dialogData.ReversePointer].Valid = true
-        toUpdate.add(position)
-      }
-    )
+      let toUpdate = new Set<PositionDB>()
 
-    // from selection, set position that belong to position through Anarrayofb
-    this.selection.selected.forEach(
-      position => {
-        let ID = +this.dialogData.ID
-        position[this.dialogData.ReversePointer].Int64 = ID
-        position[this.dialogData.ReversePointer].Valid = true
-        toUpdate.add(position)
-      }
-    )
+      // reset all initial selection of position that belong to position
+      this.initialSelection.forEach(
+        position => {
+          position[this.dialogData.ReversePointer].Int64 = 0
+          position[this.dialogData.ReversePointer].Valid = true
+          toUpdate.add(position)
+        }
+      )
 
-    // update all position (only update selection & initial selection)
-    toUpdate.forEach(
-      position => {
-        this.positionService.updatePosition(position)
-          .subscribe(position => {
-            this.positionService.PositionServiceChanged.next("update")
-          });
+      // from selection, set position that belong to position
+      this.selection.selected.forEach(
+        position => {
+          let ID = +this.dialogData.ID
+          position[this.dialogData.ReversePointer].Int64 = ID
+          position[this.dialogData.ReversePointer].Valid = true
+          toUpdate.add(position)
+        }
+      )
+
+      // update all position (only update selection & initial selection)
+      toUpdate.forEach(
+        position => {
+          this.positionService.updatePosition(position)
+            .subscribe(position => {
+              this.positionService.PositionServiceChanged.next("update")
+            });
+        }
+      )
+    }
+
+    if (this.mode == TableComponentMode.MANY_MANY_ASSOCIATION_MODE) {
+
+      let mapOfSourceInstances = this.frontRepo[this.dialogData.SourceStruct + "s"]
+      let sourceInstance = mapOfSourceInstances.get(this.dialogData.ID)
+
+      // First, parse all instance of the association struct and remove the instance
+      // that have unselect
+      let unselectedPosition = new Set<number>()
+      for (let position of this.initialSelection) {
+        if (this.selection.selected.includes(position)) {
+          // console.log("position " + position.Name + " is still selected")
+        } else {
+          console.log("position " + position.Name + " has been unselected")
+          unselectedPosition.add(position.ID)
+          console.log("is unselected " + unselectedPosition.has(position.ID))
+        }
       }
-    )
+
+      // delete the association instance
+      if (sourceInstance[this.dialogData.SourceField]) {
+        for (let associationInstance of sourceInstance[this.dialogData.SourceField]) {
+          let position = associationInstance[this.dialogData.IntermediateStructField]
+          if (unselectedPosition.has(position.ID)) {
+
+            this.frontRepoService.deleteService( this.dialogData.IntermediateStruct, associationInstance )
+          }
+        }
+      }
+
+      // is the source array is emptyn create it
+      if (sourceInstance[this.dialogData.SourceField] == undefined) {
+        sourceInstance[this.dialogData.SourceField] = new Array<any>()
+      }
+
+      // second, parse all instance of the selected
+      if (sourceInstance[this.dialogData.SourceField]) {
+        this.selection.selected.forEach(
+          position => {
+            if (!this.initialSelection.includes(position)) {
+              // console.log("position " + position.Name + " has been added to the selection")
+
+              let associationInstance = {
+                Name: sourceInstance["Name"] + "-" + position.Name,
+              }
+
+              associationInstance[this.dialogData.IntermediateStructField+"ID"] = new NullInt64
+              associationInstance[this.dialogData.IntermediateStructField+"ID"].Int64 = position.ID
+              associationInstance[this.dialogData.IntermediateStructField+"ID"].Valid = true
+
+              associationInstance[this.dialogData.SourceStruct + "_" + this.dialogData.SourceField + "DBID"] = new NullInt64
+              associationInstance[this.dialogData.SourceStruct + "_" + this.dialogData.SourceField + "DBID"].Int64 = sourceInstance["ID"]
+              associationInstance[this.dialogData.SourceStruct + "_" + this.dialogData.SourceField + "DBID"].Valid = true
+
+              this.frontRepoService.postService( this.dialogData.IntermediateStruct, associationInstance )
+
+            } else {
+              // console.log("position " + position.Name + " is still selected")
+            }
+          }
+        )
+      }
+
+      // this.selection = new SelectionModel<PositionDB>(allowMultiSelect, this.initialSelection);
+    }
+
+    // why pizza ?
     this.dialogRef.close('Pizza!');
   }
 }

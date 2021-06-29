@@ -82,16 +82,45 @@ export const FrontRepoSingloton = new (FrontRepo)
 
 // define the type of nullable Int64 in order to support back pointers IDs
 export class NullInt64 {
-    Int64: number
-    Valid: boolean
+  Int64: number
+  Valid: boolean
 }
 
-// define the interface for information that is forwarded from the calling instance to 
+// the table component is called in different ways
+//
+// DISPLAY or ASSOCIATION MODE
+//
+// in ASSOCIATION MODE, it is invoked within a diaglo and a Dialog Data item is used to
+// configure the component
+// DialogData define the interface for information that is forwarded from the calling instance to 
 // the select table
-export interface DialogData {
+export class DialogData {
   ID: number; // ID of the calling instance
+
+  // the reverse pointer is the name of the generated field on the destination
+  // struct of the ONE-MANY association
   ReversePointer: string; // field of {{Structname}} that serve as reverse pointer
   OrderingMode: boolean; // if true, this is for ordering items
+
+  // there are different selection mode : ONE_MANY or MANY_MANY
+  SelectionMode: SelectionMode;
+
+  // used if SelectionMode is MANY_MANY_ASSOCIATION_MODE
+  //
+  // In Gong, a MANY-MANY association is implemented as a ONE-ZERO/ONE followed by a ONE_MANY association
+  // 
+  // in the MANY_MANY_ASSOCIATION_MODE case, we need also the Struct and the FieldName that are
+  // at the end of the ONE-MANY association
+  SourceStruct: string;  // The "Aclass"
+  SourceField: string; // the "AnarrayofbUse"
+  IntermediateStruct: string; // the "AclassBclassUse" 
+  IntermediateStructField: string; // the "Bclass" as field
+  NextAssociationStruct: string; // the "Bclass"
+}
+
+export enum SelectionMode {
+  ONE_MANY_ASSOCIATION_MODE = "ONE_MANY_ASSOCIATION_MODE",
+  MANY_MANY_ASSOCIATION_MODE = "MANY_MANY_ASSOCIATION_MODE",
 }
 
 //
@@ -120,6 +149,26 @@ export class FrontRepoService {
     private umlscService: UmlscService,
     private verticeService: VerticeService,
   ) { }
+
+  // postService provides a post function for each struct name
+  postService(structName: string, instanceToBePosted: any) {
+    let service = this[structName.toLowerCase() + "Service"]
+    service["post" + structName](instanceToBePosted).subscribe(
+      instance => {
+        service[structName + "ServiceChanged"].next("post")
+      }
+    );
+  }
+
+  // deleteService provides a delete function for each struct name
+  deleteService(structName: string, instanceToBeDeleted: any) {
+    let service = this[structName.toLowerCase() + "Service"]
+    service["delete" + structName](instanceToBeDeleted).subscribe(
+      instance => {
+        service[structName + "ServiceChanged"].next("delete")
+      }
+    );
+  }
 
   // typing of observable can be messy in typescript. Therefore, one force the type
   observableFrontRepo: [ // insertion point sub template 
@@ -206,14 +255,14 @@ export class FrontRepoService {
 
             // clear the map that counts Classdiagram in the GET
             FrontRepoSingloton.Classdiagrams_batch.clear()
-            
+
             classdiagrams.forEach(
               classdiagram => {
                 FrontRepoSingloton.Classdiagrams.set(classdiagram.ID, classdiagram)
                 FrontRepoSingloton.Classdiagrams_batch.set(classdiagram.ID, classdiagram)
               }
             )
-            
+
             // clear classdiagrams that are absent from the batch
             FrontRepoSingloton.Classdiagrams.forEach(
               classdiagram => {
@@ -222,7 +271,7 @@ export class FrontRepoService {
                 }
               }
             )
-            
+
             // sort Classdiagrams_array array
             FrontRepoSingloton.Classdiagrams_array.sort((t1, t2) => {
               if (t1.Name > t2.Name) {
@@ -233,20 +282,20 @@ export class FrontRepoService {
               }
               return 0;
             });
-            
+
             // init the array
             FrontRepoSingloton.Classshapes_array = classshapes
 
             // clear the map that counts Classshape in the GET
             FrontRepoSingloton.Classshapes_batch.clear()
-            
+
             classshapes.forEach(
               classshape => {
                 FrontRepoSingloton.Classshapes.set(classshape.ID, classshape)
                 FrontRepoSingloton.Classshapes_batch.set(classshape.ID, classshape)
               }
             )
-            
+
             // clear classshapes that are absent from the batch
             FrontRepoSingloton.Classshapes.forEach(
               classshape => {
@@ -255,7 +304,7 @@ export class FrontRepoService {
                 }
               }
             )
-            
+
             // sort Classshapes_array array
             FrontRepoSingloton.Classshapes_array.sort((t1, t2) => {
               if (t1.Name > t2.Name) {
@@ -266,20 +315,20 @@ export class FrontRepoService {
               }
               return 0;
             });
-            
+
             // init the array
             FrontRepoSingloton.Fields_array = fields
 
             // clear the map that counts Field in the GET
             FrontRepoSingloton.Fields_batch.clear()
-            
+
             fields.forEach(
               field => {
                 FrontRepoSingloton.Fields.set(field.ID, field)
                 FrontRepoSingloton.Fields_batch.set(field.ID, field)
               }
             )
-            
+
             // clear fields that are absent from the batch
             FrontRepoSingloton.Fields.forEach(
               field => {
@@ -288,7 +337,7 @@ export class FrontRepoService {
                 }
               }
             )
-            
+
             // sort Fields_array array
             FrontRepoSingloton.Fields_array.sort((t1, t2) => {
               if (t1.Name > t2.Name) {
@@ -299,20 +348,20 @@ export class FrontRepoService {
               }
               return 0;
             });
-            
+
             // init the array
             FrontRepoSingloton.GongdocCommands_array = gongdoccommands
 
             // clear the map that counts GongdocCommand in the GET
             FrontRepoSingloton.GongdocCommands_batch.clear()
-            
+
             gongdoccommands.forEach(
               gongdoccommand => {
                 FrontRepoSingloton.GongdocCommands.set(gongdoccommand.ID, gongdoccommand)
                 FrontRepoSingloton.GongdocCommands_batch.set(gongdoccommand.ID, gongdoccommand)
               }
             )
-            
+
             // clear gongdoccommands that are absent from the batch
             FrontRepoSingloton.GongdocCommands.forEach(
               gongdoccommand => {
@@ -321,7 +370,7 @@ export class FrontRepoService {
                 }
               }
             )
-            
+
             // sort GongdocCommands_array array
             FrontRepoSingloton.GongdocCommands_array.sort((t1, t2) => {
               if (t1.Name > t2.Name) {
@@ -332,20 +381,20 @@ export class FrontRepoService {
               }
               return 0;
             });
-            
+
             // init the array
             FrontRepoSingloton.GongdocStatuss_array = gongdocstatuss
 
             // clear the map that counts GongdocStatus in the GET
             FrontRepoSingloton.GongdocStatuss_batch.clear()
-            
+
             gongdocstatuss.forEach(
               gongdocstatus => {
                 FrontRepoSingloton.GongdocStatuss.set(gongdocstatus.ID, gongdocstatus)
                 FrontRepoSingloton.GongdocStatuss_batch.set(gongdocstatus.ID, gongdocstatus)
               }
             )
-            
+
             // clear gongdocstatuss that are absent from the batch
             FrontRepoSingloton.GongdocStatuss.forEach(
               gongdocstatus => {
@@ -354,7 +403,7 @@ export class FrontRepoService {
                 }
               }
             )
-            
+
             // sort GongdocStatuss_array array
             FrontRepoSingloton.GongdocStatuss_array.sort((t1, t2) => {
               if (t1.Name > t2.Name) {
@@ -365,20 +414,20 @@ export class FrontRepoService {
               }
               return 0;
             });
-            
+
             // init the array
             FrontRepoSingloton.Links_array = links
 
             // clear the map that counts Link in the GET
             FrontRepoSingloton.Links_batch.clear()
-            
+
             links.forEach(
               link => {
                 FrontRepoSingloton.Links.set(link.ID, link)
                 FrontRepoSingloton.Links_batch.set(link.ID, link)
               }
             )
-            
+
             // clear links that are absent from the batch
             FrontRepoSingloton.Links.forEach(
               link => {
@@ -387,7 +436,7 @@ export class FrontRepoService {
                 }
               }
             )
-            
+
             // sort Links_array array
             FrontRepoSingloton.Links_array.sort((t1, t2) => {
               if (t1.Name > t2.Name) {
@@ -398,20 +447,20 @@ export class FrontRepoService {
               }
               return 0;
             });
-            
+
             // init the array
             FrontRepoSingloton.Pkgelts_array = pkgelts
 
             // clear the map that counts Pkgelt in the GET
             FrontRepoSingloton.Pkgelts_batch.clear()
-            
+
             pkgelts.forEach(
               pkgelt => {
                 FrontRepoSingloton.Pkgelts.set(pkgelt.ID, pkgelt)
                 FrontRepoSingloton.Pkgelts_batch.set(pkgelt.ID, pkgelt)
               }
             )
-            
+
             // clear pkgelts that are absent from the batch
             FrontRepoSingloton.Pkgelts.forEach(
               pkgelt => {
@@ -420,7 +469,7 @@ export class FrontRepoService {
                 }
               }
             )
-            
+
             // sort Pkgelts_array array
             FrontRepoSingloton.Pkgelts_array.sort((t1, t2) => {
               if (t1.Name > t2.Name) {
@@ -431,20 +480,20 @@ export class FrontRepoService {
               }
               return 0;
             });
-            
+
             // init the array
             FrontRepoSingloton.Positions_array = positions
 
             // clear the map that counts Position in the GET
             FrontRepoSingloton.Positions_batch.clear()
-            
+
             positions.forEach(
               position => {
                 FrontRepoSingloton.Positions.set(position.ID, position)
                 FrontRepoSingloton.Positions_batch.set(position.ID, position)
               }
             )
-            
+
             // clear positions that are absent from the batch
             FrontRepoSingloton.Positions.forEach(
               position => {
@@ -453,7 +502,7 @@ export class FrontRepoService {
                 }
               }
             )
-            
+
             // sort Positions_array array
             FrontRepoSingloton.Positions_array.sort((t1, t2) => {
               if (t1.Name > t2.Name) {
@@ -464,20 +513,20 @@ export class FrontRepoService {
               }
               return 0;
             });
-            
+
             // init the array
             FrontRepoSingloton.States_array = states
 
             // clear the map that counts State in the GET
             FrontRepoSingloton.States_batch.clear()
-            
+
             states.forEach(
               state => {
                 FrontRepoSingloton.States.set(state.ID, state)
                 FrontRepoSingloton.States_batch.set(state.ID, state)
               }
             )
-            
+
             // clear states that are absent from the batch
             FrontRepoSingloton.States.forEach(
               state => {
@@ -486,7 +535,7 @@ export class FrontRepoService {
                 }
               }
             )
-            
+
             // sort States_array array
             FrontRepoSingloton.States_array.sort((t1, t2) => {
               if (t1.Name > t2.Name) {
@@ -497,20 +546,20 @@ export class FrontRepoService {
               }
               return 0;
             });
-            
+
             // init the array
             FrontRepoSingloton.Umlscs_array = umlscs
 
             // clear the map that counts Umlsc in the GET
             FrontRepoSingloton.Umlscs_batch.clear()
-            
+
             umlscs.forEach(
               umlsc => {
                 FrontRepoSingloton.Umlscs.set(umlsc.ID, umlsc)
                 FrontRepoSingloton.Umlscs_batch.set(umlsc.ID, umlsc)
               }
             )
-            
+
             // clear umlscs that are absent from the batch
             FrontRepoSingloton.Umlscs.forEach(
               umlsc => {
@@ -519,7 +568,7 @@ export class FrontRepoService {
                 }
               }
             )
-            
+
             // sort Umlscs_array array
             FrontRepoSingloton.Umlscs_array.sort((t1, t2) => {
               if (t1.Name > t2.Name) {
@@ -530,20 +579,20 @@ export class FrontRepoService {
               }
               return 0;
             });
-            
+
             // init the array
             FrontRepoSingloton.Vertices_array = vertices
 
             // clear the map that counts Vertice in the GET
             FrontRepoSingloton.Vertices_batch.clear()
-            
+
             vertices.forEach(
               vertice => {
                 FrontRepoSingloton.Vertices.set(vertice.ID, vertice)
                 FrontRepoSingloton.Vertices_batch.set(vertice.ID, vertice)
               }
             )
-            
+
             // clear vertices that are absent from the batch
             FrontRepoSingloton.Vertices.forEach(
               vertice => {
@@ -552,7 +601,7 @@ export class FrontRepoService {
                 }
               }
             )
-            
+
             // sort Vertices_array array
             FrontRepoSingloton.Vertices_array.sort((t1, t2) => {
               if (t1.Name > t2.Name) {
@@ -563,7 +612,7 @@ export class FrontRepoService {
               }
               return 0;
             });
-            
+
 
             // 
             // Second Step: redeem pointers between instances (thanks to maps in the First Step)
@@ -772,9 +821,9 @@ export class FrontRepoService {
                 FrontRepoSingloton.Classdiagrams.set(classdiagram.ID, classdiagram)
                 FrontRepoSingloton.Classdiagrams_batch.set(classdiagram.ID, classdiagram)
 
-                // insertion point for redeeming ONE/ZERO-ONE associations 
+                // insertion point for redeeming ONE/ZERO-ONE associations
 
-                // insertion point for redeeming ONE-MANY associations 
+                // insertion point for redeeming ONE-MANY associations
                 // insertion point for slice of pointer field Pkgelt.Classdiagrams redeeming
                 {
                   let _pkgelt = FrontRepoSingloton.Pkgelts.get(classdiagram.Pkgelt_ClassdiagramsDBID.Int64)
@@ -836,7 +885,7 @@ export class FrontRepoService {
                 FrontRepoSingloton.Classshapes.set(classshape.ID, classshape)
                 FrontRepoSingloton.Classshapes_batch.set(classshape.ID, classshape)
 
-                // insertion point for redeeming ONE/ZERO-ONE associations 
+                // insertion point for redeeming ONE/ZERO-ONE associations
                 // insertion point for pointer field Position redeeming
                 {
                   let _position = FrontRepoSingloton.Positions.get(classshape.PositionID.Int64)
@@ -845,7 +894,7 @@ export class FrontRepoService {
                   }
                 }
 
-                // insertion point for redeeming ONE-MANY associations 
+                // insertion point for redeeming ONE-MANY associations
                 // insertion point for slice of pointer field Classdiagram.Classshapes redeeming
                 {
                   let _classdiagram = FrontRepoSingloton.Classdiagrams.get(classshape.Classdiagram_ClassshapesDBID.Int64)
@@ -907,9 +956,9 @@ export class FrontRepoService {
                 FrontRepoSingloton.Fields.set(field.ID, field)
                 FrontRepoSingloton.Fields_batch.set(field.ID, field)
 
-                // insertion point for redeeming ONE/ZERO-ONE associations 
+                // insertion point for redeeming ONE/ZERO-ONE associations
 
-                // insertion point for redeeming ONE-MANY associations 
+                // insertion point for redeeming ONE-MANY associations
                 // insertion point for slice of pointer field Classshape.Fields redeeming
                 {
                   let _classshape = FrontRepoSingloton.Classshapes.get(field.Classshape_FieldsDBID.Int64)
@@ -971,9 +1020,9 @@ export class FrontRepoService {
                 FrontRepoSingloton.GongdocCommands.set(gongdoccommand.ID, gongdoccommand)
                 FrontRepoSingloton.GongdocCommands_batch.set(gongdoccommand.ID, gongdoccommand)
 
-                // insertion point for redeeming ONE/ZERO-ONE associations 
+                // insertion point for redeeming ONE/ZERO-ONE associations
 
-                // insertion point for redeeming ONE-MANY associations 
+                // insertion point for redeeming ONE-MANY associations
               }
             )
 
@@ -1022,9 +1071,9 @@ export class FrontRepoService {
                 FrontRepoSingloton.GongdocStatuss.set(gongdocstatus.ID, gongdocstatus)
                 FrontRepoSingloton.GongdocStatuss_batch.set(gongdocstatus.ID, gongdocstatus)
 
-                // insertion point for redeeming ONE/ZERO-ONE associations 
+                // insertion point for redeeming ONE/ZERO-ONE associations
 
-                // insertion point for redeeming ONE-MANY associations 
+                // insertion point for redeeming ONE-MANY associations
               }
             )
 
@@ -1073,7 +1122,7 @@ export class FrontRepoService {
                 FrontRepoSingloton.Links.set(link.ID, link)
                 FrontRepoSingloton.Links_batch.set(link.ID, link)
 
-                // insertion point for redeeming ONE/ZERO-ONE associations 
+                // insertion point for redeeming ONE/ZERO-ONE associations
                 // insertion point for pointer field Middlevertice redeeming
                 {
                   let _vertice = FrontRepoSingloton.Vertices.get(link.MiddleverticeID.Int64)
@@ -1082,7 +1131,7 @@ export class FrontRepoService {
                   }
                 }
 
-                // insertion point for redeeming ONE-MANY associations 
+                // insertion point for redeeming ONE-MANY associations
                 // insertion point for slice of pointer field Classshape.Links redeeming
                 {
                   let _classshape = FrontRepoSingloton.Classshapes.get(link.Classshape_LinksDBID.Int64)
@@ -1144,9 +1193,9 @@ export class FrontRepoService {
                 FrontRepoSingloton.Pkgelts.set(pkgelt.ID, pkgelt)
                 FrontRepoSingloton.Pkgelts_batch.set(pkgelt.ID, pkgelt)
 
-                // insertion point for redeeming ONE/ZERO-ONE associations 
+                // insertion point for redeeming ONE/ZERO-ONE associations
 
-                // insertion point for redeeming ONE-MANY associations 
+                // insertion point for redeeming ONE-MANY associations
               }
             )
 
@@ -1195,9 +1244,9 @@ export class FrontRepoService {
                 FrontRepoSingloton.Positions.set(position.ID, position)
                 FrontRepoSingloton.Positions_batch.set(position.ID, position)
 
-                // insertion point for redeeming ONE/ZERO-ONE associations 
+                // insertion point for redeeming ONE/ZERO-ONE associations
 
-                // insertion point for redeeming ONE-MANY associations 
+                // insertion point for redeeming ONE-MANY associations
               }
             )
 
@@ -1246,9 +1295,9 @@ export class FrontRepoService {
                 FrontRepoSingloton.States.set(state.ID, state)
                 FrontRepoSingloton.States_batch.set(state.ID, state)
 
-                // insertion point for redeeming ONE/ZERO-ONE associations 
+                // insertion point for redeeming ONE/ZERO-ONE associations
 
-                // insertion point for redeeming ONE-MANY associations 
+                // insertion point for redeeming ONE-MANY associations
                 // insertion point for slice of pointer field Umlsc.States redeeming
                 {
                   let _umlsc = FrontRepoSingloton.Umlscs.get(state.Umlsc_StatesDBID.Int64)
@@ -1310,9 +1359,9 @@ export class FrontRepoService {
                 FrontRepoSingloton.Umlscs.set(umlsc.ID, umlsc)
                 FrontRepoSingloton.Umlscs_batch.set(umlsc.ID, umlsc)
 
-                // insertion point for redeeming ONE/ZERO-ONE associations 
+                // insertion point for redeeming ONE/ZERO-ONE associations
 
-                // insertion point for redeeming ONE-MANY associations 
+                // insertion point for redeeming ONE-MANY associations
                 // insertion point for slice of pointer field Pkgelt.Umlscs redeeming
                 {
                   let _pkgelt = FrontRepoSingloton.Pkgelts.get(umlsc.Pkgelt_UmlscsDBID.Int64)
@@ -1374,9 +1423,9 @@ export class FrontRepoService {
                 FrontRepoSingloton.Vertices.set(vertice.ID, vertice)
                 FrontRepoSingloton.Vertices_batch.set(vertice.ID, vertice)
 
-                // insertion point for redeeming ONE/ZERO-ONE associations 
+                // insertion point for redeeming ONE/ZERO-ONE associations
 
-                // insertion point for redeeming ONE-MANY associations 
+                // insertion point for redeeming ONE-MANY associations
               }
             )
 

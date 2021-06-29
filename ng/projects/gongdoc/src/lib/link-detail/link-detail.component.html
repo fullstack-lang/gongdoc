@@ -2,7 +2,7 @@
     <h2 class="details__title">link</h2>
     <!-- insertion point for fields specific code -->
     <mat-grid-list *ngIf='!isATextArea("Name")' cols="5" rowHeight="2:1">
-        <mat-grid-tile [colspan]="4">
+        <mat-grid-tile [colspan]="3">
             <mat-form-field mat-form-field class="detail-full-width">
                 <mat-label>Name</mat-label>
                 <input name="" [ngModelOptions]="{standalone: true}" matInput [(ngModel)]="link.Name">
@@ -22,7 +22,7 @@
     </mat-form-field>
 
     <mat-grid-list *ngIf='!isATextArea("Fieldname")' cols="5" rowHeight="2:1">
-        <mat-grid-tile [colspan]="4">
+        <mat-grid-tile [colspan]="3">
             <mat-form-field mat-form-field class="detail-full-width">
                 <mat-label>Fieldname</mat-label>
                 <input name="" [ngModelOptions]="{standalone: true}" matInput [(ngModel)]="link.Fieldname">
@@ -42,7 +42,7 @@
     </mat-form-field>
 
     <mat-grid-list *ngIf='!isATextArea("Structname")' cols="5" rowHeight="2:1">
-        <mat-grid-tile [colspan]="4">
+        <mat-grid-tile [colspan]="3">
             <mat-form-field mat-form-field class="detail-full-width">
                 <mat-label>Structname</mat-label>
                 <input name="" [ngModelOptions]="{standalone: true}" matInput [(ngModel)]="link.Structname">
@@ -62,7 +62,7 @@
     </mat-form-field>
 
     <mat-grid-list *ngIf='!isATextArea("Fieldtypename")' cols="5" rowHeight="2:1">
-        <mat-grid-tile [colspan]="4">
+        <mat-grid-tile [colspan]="3">
             <mat-form-field mat-form-field class="detail-full-width">
                 <mat-label>Fieldtypename</mat-label>
                 <input name="" [ngModelOptions]="{standalone: true}" matInput [(ngModel)]="link.Fieldtypename">
@@ -112,7 +112,7 @@
     </mat-form-field>
     <div class="details__save">
         <button mat-raised-button color="primary" (click)="save()">
-			Save link
-		</button>
+            Save link
+        </button>
     </div>
 </form>

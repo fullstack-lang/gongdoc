@@ -2,7 +2,7 @@
     <h2 class="details__title">pkgelt</h2>
     <!-- insertion point for fields specific code -->
     <mat-grid-list *ngIf='!isATextArea("Name")' cols="5" rowHeight="2:1">
-        <mat-grid-tile [colspan]="4">
+        <mat-grid-tile [colspan]="3">
             <mat-form-field mat-form-field class="detail-full-width">
                 <mat-label>Name</mat-label>
                 <input name="" [ngModelOptions]="{standalone: true}" matInput [(ngModel)]="pkgelt.Name">
@@ -22,7 +22,7 @@
     </mat-form-field>
 
     <mat-grid-list *ngIf='!isATextArea("Path")' cols="5" rowHeight="2:1">
-        <mat-grid-tile [colspan]="4">
+        <mat-grid-tile [colspan]="3">
             <mat-form-field mat-form-field class="detail-full-width">
                 <mat-label>Path</mat-label>
                 <input name="" [ngModelOptions]="{standalone: true}" matInput [(ngModel)]="pkgelt.Path">
@@ -42,10 +42,10 @@
     </mat-form-field>
 
     <mat-grid-list cols="5" rowHeight="2:1">
-        <mat-grid-tile [colspan]="4">
-            <button mat-raised-button
-                (click)="openReverseSelection('Classdiagram', 'Pkgelt_ClassdiagramsDBID')">Classdiagrams</button>
+        <mat-grid-tile [colspan]="3">
+            <button mat-raised-button (click)="openReverseSelection('Classdiagram', 'Pkgelt_ClassdiagramsDBID', 'ONE_MANY_ASSOCIATION_MODE', '', '', '')">Classdiagrams</button>
         </mat-grid-tile>
+        <!-- insertion point for the button of the MANY_MANY association-->
         <mat-grid-tile>
             <button mat-raised-button (click)="openDragAndDropOrdering('Classdiagram', 'Pkgelt_ClassdiagramsDBID')">
                 <mat-icon>
@@ -55,10 +55,10 @@
         </mat-grid-tile>
     </mat-grid-list>
     <mat-grid-list cols="5" rowHeight="2:1">
-        <mat-grid-tile [colspan]="4">
-            <button mat-raised-button
-                (click)="openReverseSelection('Umlsc', 'Pkgelt_UmlscsDBID')">Umlscs</button>
+        <mat-grid-tile [colspan]="3">
+            <button mat-raised-button (click)="openReverseSelection('Umlsc', 'Pkgelt_UmlscsDBID', 'ONE_MANY_ASSOCIATION_MODE', '', '', '')">Umlscs</button>
         </mat-grid-tile>
+        <!-- insertion point for the button of the MANY_MANY association-->
         <mat-grid-tile>
             <button mat-raised-button (click)="openDragAndDropOrdering('Umlsc', 'Pkgelt_UmlscsDBID')">
                 <mat-icon>
@@ -69,7 +69,7 @@
     </mat-grid-list>
     <div class="details__save">
         <button mat-raised-button color="primary" (click)="save()">
-			Save pkgelt
-		</button>
+            Save pkgelt
+        </button>
     </div>
 </form>

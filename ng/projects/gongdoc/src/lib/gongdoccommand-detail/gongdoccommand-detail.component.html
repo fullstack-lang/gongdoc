@@ -2,7 +2,7 @@
     <h2 class="details__title">gongdoccommand</h2>
     <!-- insertion point for fields specific code -->
     <mat-grid-list *ngIf='!isATextArea("Name")' cols="5" rowHeight="2:1">
-        <mat-grid-tile [colspan]="4">
+        <mat-grid-tile [colspan]="3">
             <mat-form-field mat-form-field class="detail-full-width">
                 <mat-label>Name</mat-label>
                 <input name="" [ngModelOptions]="{standalone: true}" matInput [(ngModel)]="gongdoccommand.Name">
@@ -32,7 +32,7 @@
     </mat-form-field>
 
     <mat-grid-list *ngIf='!isATextArea("DiagramName")' cols="5" rowHeight="2:1">
-        <mat-grid-tile [colspan]="4">
+        <mat-grid-tile [colspan]="3">
             <mat-form-field mat-form-field class="detail-full-width">
                 <mat-label>DiagramName</mat-label>
                 <input name="" [ngModelOptions]="{standalone: true}" matInput [(ngModel)]="gongdoccommand.DiagramName">
@@ -52,7 +52,7 @@
     </mat-form-field>
 
     <mat-grid-list *ngIf='!isATextArea("Date")' cols="5" rowHeight="2:1">
-        <mat-grid-tile [colspan]="4">
+        <mat-grid-tile [colspan]="3">
             <mat-form-field mat-form-field class="detail-full-width">
                 <mat-label>Date</mat-label>
                 <input name="" [ngModelOptions]="{standalone: true}" matInput [(ngModel)]="gongdoccommand.Date">
@@ -82,7 +82,7 @@
     </mat-form-field>
 
     <mat-grid-list *ngIf='!isATextArea("StructName")' cols="5" rowHeight="2:1">
-        <mat-grid-tile [colspan]="4">
+        <mat-grid-tile [colspan]="3">
             <mat-form-field mat-form-field class="detail-full-width">
                 <mat-label>StructName</mat-label>
                 <input name="" [ngModelOptions]="{standalone: true}" matInput [(ngModel)]="gongdoccommand.StructName">
@@ -102,7 +102,7 @@
     </mat-form-field>
 
     <mat-grid-list *ngIf='!isATextArea("FieldName")' cols="5" rowHeight="2:1">
-        <mat-grid-tile [colspan]="4">
+        <mat-grid-tile [colspan]="3">
             <mat-form-field mat-form-field class="detail-full-width">
                 <mat-label>FieldName</mat-label>
                 <input name="" [ngModelOptions]="{standalone: true}" matInput [(ngModel)]="gongdoccommand.FieldName">
@@ -122,7 +122,7 @@
     </mat-form-field>
 
     <mat-grid-list *ngIf='!isATextArea("FieldTypeName")' cols="5" rowHeight="2:1">
-        <mat-grid-tile [colspan]="4">
+        <mat-grid-tile [colspan]="3">
             <mat-form-field mat-form-field class="detail-full-width">
                 <mat-label>FieldTypeName</mat-label>
                 <input name="" [ngModelOptions]="{standalone: true}" matInput [(ngModel)]="gongdoccommand.FieldTypeName">
@@ -155,7 +155,7 @@
 
     <div class="details__save">
         <button mat-raised-button color="primary" (click)="save()">
-			Save gongdoccommand
-		</button>
+            Save gongdoccommand
+        </button>
     </div>
 </form>

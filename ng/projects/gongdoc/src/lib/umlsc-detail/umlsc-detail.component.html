@@ -2,7 +2,7 @@
     <h2 class="details__title">umlsc</h2>
     <!-- insertion point for fields specific code -->
     <mat-grid-list *ngIf='!isATextArea("Name")' cols="5" rowHeight="2:1">
-        <mat-grid-tile [colspan]="4">
+        <mat-grid-tile [colspan]="3">
             <mat-form-field mat-form-field class="detail-full-width">
                 <mat-label>Name</mat-label>
                 <input name="" [ngModelOptions]="{standalone: true}" matInput [(ngModel)]="umlsc.Name">
@@ -22,10 +22,10 @@
     </mat-form-field>
 
     <mat-grid-list cols="5" rowHeight="2:1">
-        <mat-grid-tile [colspan]="4">
-            <button mat-raised-button
-                (click)="openReverseSelection('State', 'Umlsc_StatesDBID')">States</button>
+        <mat-grid-tile [colspan]="3">
+            <button mat-raised-button (click)="openReverseSelection('State', 'Umlsc_StatesDBID', 'ONE_MANY_ASSOCIATION_MODE', '', '', '')">States</button>
         </mat-grid-tile>
+        <!-- insertion point for the button of the MANY_MANY association-->
         <mat-grid-tile>
             <button mat-raised-button (click)="openDragAndDropOrdering('State', 'Umlsc_StatesDBID')">
                 <mat-icon>
@@ -35,7 +35,7 @@
         </mat-grid-tile>
     </mat-grid-list>
     <mat-grid-list *ngIf='!isATextArea("Activestate")' cols="5" rowHeight="2:1">
-        <mat-grid-tile [colspan]="4">
+        <mat-grid-tile [colspan]="3">
             <mat-form-field mat-form-field class="detail-full-width">
                 <mat-label>Activestate</mat-label>
                 <input name="" [ngModelOptions]="{standalone: true}" matInput [(ngModel)]="umlsc.Activestate">
@@ -65,7 +65,7 @@
     </mat-form-field>
     <div class="details__save">
         <button mat-raised-button color="primary" (click)="save()">
-			Save umlsc
-		</button>
+            Save umlsc
+        </button>
     </div>
 </form>
