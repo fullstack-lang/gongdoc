@@ -8,7 +8,7 @@ export function newUmlClassShape(classshape: gongdoc.ClassshapeDB): joint.shapes
     var attributes = new Array<string>()
     classshape.Fields?.forEach(
         field => {
-            console.log(field.Fieldname + " " + field.Structname + " " + field.Fieldtypename)
+            // console.log(field.Fieldname + " " + field.Structname + " " + field.Fieldtypename)
             attributes.push(field.Fieldname + " : " + field.Fieldtypename)
         }
     )

@@ -68,8 +68,13 @@ export class ClassDiagramComponent implements OnInit, OnDestroy {
   // the saving it into the Link object
   public Map_CellId_LinkDB = new Map<string, gongdoc.LinkDB>();
 
+  // store the id of the drawn classdiagram. Usefull for knowing if
+  // one has to redraw the diagram by comparaison with the route
+  public idOfDrawnClassDiagram: number
+
   constructor(
     private route: ActivatedRoute,
+    private router: Router,
 
     private PositionService: gongdoc.PositionService,
     private VerticeService: gongdoc.VerticeService,
@@ -80,40 +85,50 @@ export class ClassDiagramComponent implements OnInit, OnDestroy {
   ) {
     // https://stackoverflow.com/questions/54627478/angular-7-routing-to-same-component-but-different-param-not-working
     // this is for routerLink on same component when only queryParameter changes
-    // this.router.routeReuseStrategy.shouldReuseRoute = function () {
-    //   return false;
-    // };
+    this.router.routeReuseStrategy.shouldReuseRoute = function () {
+      return false;
+    };
   }
 
   // Since this component is not reused when a new diagram is selected, there can be many
   // instances of the diagram and each instance will stay alive. For instance,
   // the instance will be in the control flow if an observable the component subscribes to emits an event.
   // Therefore, it is mandatory to manage subscriptions in order to unscribe them on the ngOnDestroy hook
+  checkGongdocCommitNbTimerSubscription: Subscription
+  gongdocCommitNbService_getCommitNb: Subscription
+
   subscriptionToDragAndDropEvent: Subscription
   subscriptionToRemoveFromDiagramEvent: Subscription
 
   // neccessary to unsubscribe
   ngOnDestroy() {
     console.log("on destroy")
+    this.checkGongdocCommitNbTimerSubscription.unsubscribe()
+    this.gongdocCommitNbService_getCommitNb.unsubscribe()
   }
 
   ngOnInit(): void {
 
     // check loop for refresh from the back repo
-    this.checkGongdocCommitNbTimer.subscribe(
+    this.checkGongdocCommitNbTimerSubscription = this.checkGongdocCommitNbTimer.subscribe(
       currTime => {
         this.currTime = currTime
 
-        const id = +this.route.snapshot.paramMap.get('id');
-
-        this.gongdocCommitNbService.getCommitNb().subscribe(
+        this.gongdocCommitNbService_getCommitNb = this.gongdocCommitNbService.getCommitNb().subscribe(
           commitNb => {
 
+            const id = +this.route.snapshot.paramMap.get('id');
+
+            // console.log("last commit nb " + this.lastCommitNb + " new: " + commitNb)
+            // console.log("last diagram id " + this.lastDiagramId + " new: " + id)
+            console.log("last drawn diagram id " + this.idOfDrawnClassDiagram + " new: " + id)
+
             // condition for refresh
-            if (this.lastCommitNb < commitNb || this.lastDiagramId != id) {
+            if (this.lastCommitNb < commitNb || this.lastDiagramId != id || this.idOfDrawnClassDiagram != id ) {
 
               console.log("last commit nb " + this.lastCommitNb + " new: " + commitNb)
               console.log("last diagram id " + this.lastDiagramId + " new: " + id)
+              console.log("last drawn diagram id " + this.idOfDrawnClassDiagram + " new: " + id)
               this.pullGongdocAndDrawDiagram()
               this.lastCommitNb = commitNb
               this.lastDiagramId = id
@@ -165,6 +180,8 @@ export class ClassDiagramComponent implements OnInit, OnDestroy {
         diagramWidth = (this.classdiagram.Classshapes.length + 1) * 300
       }
     }
+
+    this.idOfDrawnClassDiagram = this.classdiagram.ID
 
     //
     // a jointjs diagram is a Graph instance with a Paper instance
