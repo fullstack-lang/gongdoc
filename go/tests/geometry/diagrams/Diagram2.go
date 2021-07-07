@@ -43,7 +43,15 @@ var Diagram2 uml.Classdiagram = uml.Classdiagram{
 				Y: 140.000000,
 			},
 			Width:  240.000000,
-			Heigth: 48.000000,
+			Heigth: 78.000000,
+			Fields: []*uml.Field{
+				{
+					Field: models.Point{}.X,
+				},
+				{
+					Field: models.Point{}.Y,
+				},
+			},
 		},
 	},
 }

@@ -8,9 +8,9 @@ import (
 	"os"
 )
 
-// State mirrors joint.shapes.uml.State
-// swagger:model State
-type State struct {
+// UmlState mirrors joint.shapes.uml.UmlState
+// swagger:model UmlState
+type UmlState struct {
 	Name string
 
 	X float64
@@ -18,7 +18,7 @@ type State struct {
 }
 
 // Marshall provides the element of state as declaration
-func (state *State) Marshall(file *os.File, nbIndentation int) error {
+func (state *UmlState) Marshall(file *os.File, nbIndentation int) error {
 	indent(file, nbIndentation)
 	fmt.Fprintf(file, "{\n")
 	indent(file, nbIndentation)
@@ -35,7 +35,7 @@ func (state *State) Marshall(file *os.File, nbIndentation int) error {
 }
 
 // MarshallAsVariable ...
-func (state *State) MarshallAsVariable(file *os.File) error {
+func (state *UmlState) MarshallAsVariable(file *os.File) error {
 
 	fmt.Fprintf(file, "var %s uml.State = uml.State", state.Name)
 	state.Marshall(file, 0)
@@ -49,13 +49,13 @@ func (state *State) MarshallAsVariable(file *os.File) error {
 var stateLastID uint
 
 // StateMap is a Map of all State via their Name
-type StateMap map[string]*State
+type StateMap map[string]*UmlState
 
 // StateStore is a handy StateMap
-var StateStore StateMap = make(map[string]*State, 0)
+var StateStore StateMap = make(map[string]*UmlState, 0)
 
 // Unmarshall updates state values from an ast.Epr
-func (state *State) Unmarshall(expr ast.Expr, fset *token.FileSet) {
+func (state *UmlState) Unmarshall(expr ast.Expr, fset *token.FileSet) {
 
 	// expression should be a composite literal expression
 	// models.State{Position: uml.Position{X: 10, Y: 12}, Struct: &(models.Point{})}
@@ -126,7 +126,7 @@ func (state *State) Unmarshall(expr ast.Expr, fset *token.FileSet) {
 
 // serialize the package and its elements to the Stage
 // this is used if one Umlsc is dynamicaly created
-func (state *State) SerializeToStage() {
+func (state *UmlState) SerializeToStage() {
 
 	state.Stage()
 }

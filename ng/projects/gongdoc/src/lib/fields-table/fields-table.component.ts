@@ -75,7 +75,7 @@ export class FieldsTableComponent implements OnInit {
         case 'Fieldtypename':
           return fieldDB.Fieldtypename;
 
-        case 'Fields':
+        case 'Classshape_Fields':
           return this.frontRepo.Classshapes.get(fieldDB.Classshape_FieldsDBID.Int64)?.Name;
 
         default:
@@ -155,7 +155,7 @@ export class FieldsTableComponent implements OnInit {
         "FieldTypeAsString",
         "Structname",
         "Fieldtypename",
-        "Fields",
+        "Classshape_Fields",
       ]
     } else {
       this.displayedColumns = ['select', 'ID', // insertion point for columns to display
@@ -164,7 +164,7 @@ export class FieldsTableComponent implements OnInit {
         "FieldTypeAsString",
         "Structname",
         "Fieldtypename",
-        "Fields",
+        "Classshape_Fields",
       ]
       this.selection = new SelectionModel<FieldDB>(allowMultiSelect, this.initialSelection);
     }

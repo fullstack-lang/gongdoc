@@ -36,8 +36,8 @@ type StageStruct struct { // insertion point for definition of arrays registerin
 	Positions           map[*Position]struct{}
 	Positions_mapString map[string]*Position
 
-	States           map[*State]struct{}
-	States_mapString map[string]*State
+	UmlStates           map[*UmlState]struct{}
+	UmlStates_mapString map[string]*UmlState
 
 	Umlscs           map[*Umlsc]struct{}
 	Umlscs_mapString map[string]*Umlsc
@@ -83,8 +83,8 @@ type BackRepoInterface interface {
 	CheckoutPkgelt(pkgelt *Pkgelt)
 	CommitPosition(position *Position)
 	CheckoutPosition(position *Position)
-	CommitState(state *State)
-	CheckoutState(state *State)
+	CommitUmlState(umlstate *UmlState)
+	CheckoutUmlState(umlstate *UmlState)
 	CommitUmlsc(umlsc *Umlsc)
 	CheckoutUmlsc(umlsc *Umlsc)
 	CommitVertice(vertice *Vertice)
@@ -119,8 +119,8 @@ var Stage StageStruct = StageStruct{ // insertion point for array initiatialisat
 	Positions:           make(map[*Position]struct{}, 0),
 	Positions_mapString: make(map[string]*Position, 0),
 
-	States:           make(map[*State]struct{}, 0),
-	States_mapString: make(map[string]*State, 0),
+	UmlStates:           make(map[*UmlState]struct{}, 0),
+	UmlStates_mapString: make(map[string]*UmlState, 0),
 
 	Umlscs:           make(map[*Umlsc]struct{}, 0),
 	Umlscs_mapString: make(map[string]*Umlsc, 0),
@@ -988,105 +988,105 @@ func DeleteORMPosition(position *Position) {
 	}
 }
 
-func (stage *StageStruct) getStateOrderedStructWithNameField() []*State {
+func (stage *StageStruct) getUmlStateOrderedStructWithNameField() []*UmlState {
 	// have alphabetical order generation
-	stateOrdered := []*State{}
-	for state := range stage.States {
-		stateOrdered = append(stateOrdered, state)
+	umlstateOrdered := []*UmlState{}
+	for umlstate := range stage.UmlStates {
+		umlstateOrdered = append(umlstateOrdered, umlstate)
 	}
-	sort.Slice(stateOrdered[:], func(i, j int) bool {
-		return stateOrdered[i].Name < stateOrdered[j].Name
+	sort.Slice(umlstateOrdered[:], func(i, j int) bool {
+		return umlstateOrdered[i].Name < umlstateOrdered[j].Name
 	})
-	return stateOrdered
+	return umlstateOrdered
 }
 
-// Stage puts state to the model stage
-func (state *State) Stage() *State {
-	Stage.States[state] = __member
-	Stage.States_mapString[state.Name] = state
+// Stage puts umlstate to the model stage
+func (umlstate *UmlState) Stage() *UmlState {
+	Stage.UmlStates[umlstate] = __member
+	Stage.UmlStates_mapString[umlstate.Name] = umlstate
 
-	return state
+	return umlstate
 }
 
-// Unstage removes state off the model stage
-func (state *State) Unstage() *State {
-	delete(Stage.States, state)
-	delete(Stage.States_mapString, state.Name)
-	return state
+// Unstage removes umlstate off the model stage
+func (umlstate *UmlState) Unstage() *UmlState {
+	delete(Stage.UmlStates, umlstate)
+	delete(Stage.UmlStates_mapString, umlstate.Name)
+	return umlstate
 }
 
-// commit state to the back repo (if it is already staged)
-func (state *State) Commit() *State {
-	if _, ok := Stage.States[state]; ok {
+// commit umlstate to the back repo (if it is already staged)
+func (umlstate *UmlState) Commit() *UmlState {
+	if _, ok := Stage.UmlStates[umlstate]; ok {
 		if Stage.BackRepo != nil {
-			Stage.BackRepo.CommitState(state)
+			Stage.BackRepo.CommitUmlState(umlstate)
 		}
 	}
-	return state
+	return umlstate
 }
 
-// Checkout state to the back repo (if it is already staged)
-func (state *State) Checkout() *State {
-	if _, ok := Stage.States[state]; ok {
+// Checkout umlstate to the back repo (if it is already staged)
+func (umlstate *UmlState) Checkout() *UmlState {
+	if _, ok := Stage.UmlStates[umlstate]; ok {
 		if Stage.BackRepo != nil {
-			Stage.BackRepo.CheckoutState(state)
+			Stage.BackRepo.CheckoutUmlState(umlstate)
 		}
 	}
-	return state
+	return umlstate
 }
 
 //
 // Legacy, to be deleted
 //
 
-// StageCopy appends a copy of state to the model stage
-func (state *State) StageCopy() *State {
-	_state := new(State)
-	*_state = *state
-	_state.Stage()
-	return _state
+// StageCopy appends a copy of umlstate to the model stage
+func (umlstate *UmlState) StageCopy() *UmlState {
+	_umlstate := new(UmlState)
+	*_umlstate = *umlstate
+	_umlstate.Stage()
+	return _umlstate
 }
 
-// StageAndCommit appends state to the model stage and commit to the orm repo
-func (state *State) StageAndCommit() *State {
-	state.Stage()
+// StageAndCommit appends umlstate to the model stage and commit to the orm repo
+func (umlstate *UmlState) StageAndCommit() *UmlState {
+	umlstate.Stage()
 	if Stage.AllModelsStructCreateCallback != nil {
-		Stage.AllModelsStructCreateCallback.CreateORMState(state)
+		Stage.AllModelsStructCreateCallback.CreateORMUmlState(umlstate)
 	}
-	return state
+	return umlstate
 }
 
-// DeleteStageAndCommit appends state to the model stage and commit to the orm repo
-func (state *State) DeleteStageAndCommit() *State {
-	state.Unstage()
-	DeleteORMState(state)
-	return state
+// DeleteStageAndCommit appends umlstate to the model stage and commit to the orm repo
+func (umlstate *UmlState) DeleteStageAndCommit() *UmlState {
+	umlstate.Unstage()
+	DeleteORMUmlState(umlstate)
+	return umlstate
 }
 
-// StageCopyAndCommit appends a copy of state to the model stage and commit to the orm repo
-func (state *State) StageCopyAndCommit() *State {
-	_state := new(State)
-	*_state = *state
-	_state.Stage()
+// StageCopyAndCommit appends a copy of umlstate to the model stage and commit to the orm repo
+func (umlstate *UmlState) StageCopyAndCommit() *UmlState {
+	_umlstate := new(UmlState)
+	*_umlstate = *umlstate
+	_umlstate.Stage()
 	if Stage.AllModelsStructCreateCallback != nil {
-		Stage.AllModelsStructCreateCallback.CreateORMState(state)
+		Stage.AllModelsStructCreateCallback.CreateORMUmlState(umlstate)
 	}
-	return _state
+	return _umlstate
 }
 
-// CreateORMState enables dynamic staging of a State instance
-func CreateORMState(state *State) {
-	state.Stage()
+// CreateORMUmlState enables dynamic staging of a UmlState instance
+func CreateORMUmlState(umlstate *UmlState) {
+	umlstate.Stage()
 	if Stage.AllModelsStructCreateCallback != nil {
-		Stage.AllModelsStructCreateCallback.CreateORMState(state)
+		Stage.AllModelsStructCreateCallback.CreateORMUmlState(umlstate)
 	}
 }
 
-// DeleteORMState enables dynamic staging of a State instance
-func DeleteORMState(state *State) {
-	state.Unstage()
+// DeleteORMUmlState enables dynamic staging of a UmlState instance
+func DeleteORMUmlState(umlstate *UmlState) {
+	umlstate.Unstage()
 	if Stage.AllModelsStructDeleteCallback != nil {
-		Stage.AllModelsStructDeleteCallback.DeleteORMState(state)
+		Stage.AllModelsStructDeleteCallback.DeleteORMUmlState(umlstate)
 	}
 }
 
@@ -1304,7 +1304,7 @@ type AllModelsStructCreateInterface interface { // insertion point for Callbacks
 	CreateORMLink(Link *Link)
 	CreateORMPkgelt(Pkgelt *Pkgelt)
 	CreateORMPosition(Position *Position)
-	CreateORMState(State *State)
+	CreateORMUmlState(UmlState *UmlState)
 	CreateORMUmlsc(Umlsc *Umlsc)
 	CreateORMVertice(Vertice *Vertice)
 }
@@ -1318,7 +1318,7 @@ type AllModelsStructDeleteInterface interface { // insertion point for Callbacks
 	DeleteORMLink(Link *Link)
 	DeleteORMPkgelt(Pkgelt *Pkgelt)
 	DeleteORMPosition(Position *Position)
-	DeleteORMState(State *State)
+	DeleteORMUmlState(UmlState *UmlState)
 	DeleteORMUmlsc(Umlsc *Umlsc)
 	DeleteORMVertice(Vertice *Vertice)
 }
@@ -1348,8 +1348,8 @@ func (stage *StageStruct) Reset() { // insertion point for array reset
 	stage.Positions = make(map[*Position]struct{}, 0)
 	stage.Positions_mapString = make(map[string]*Position, 0)
 
-	stage.States = make(map[*State]struct{}, 0)
-	stage.States_mapString = make(map[string]*State, 0)
+	stage.UmlStates = make(map[*UmlState]struct{}, 0)
+	stage.UmlStates_mapString = make(map[string]*UmlState, 0)
 
 	stage.Umlscs = make(map[*Umlsc]struct{}, 0)
 	stage.Umlscs_mapString = make(map[string]*Umlsc, 0)
@@ -1384,8 +1384,8 @@ func (stage *StageStruct) Nil() { // insertion point for array nil
 	stage.Positions = nil
 	stage.Positions_mapString = nil
 
-	stage.States = nil
-	stage.States_mapString = nil
+	stage.UmlStates = nil
+	stage.UmlStates_mapString = nil
 
 	stage.Umlscs = nil
 	stage.Umlscs_mapString = nil

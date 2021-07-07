@@ -1,38 +1,38 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 
-import { StateDB } from '../state-db'
-import { StateService } from '../state.service'
+import { UmlStateDB } from '../umlstate-db'
+import { UmlStateService } from '../umlstate.service'
 
 import { FrontRepoService, FrontRepo } from '../front-repo.service'
 
 import { Router, RouterState, ActivatedRoute } from '@angular/router';
 
-export interface stateDummyElement {
+export interface umlstateDummyElement {
 }
 
-const ELEMENT_DATA: stateDummyElement[] = [
+const ELEMENT_DATA: umlstateDummyElement[] = [
 ];
 
 @Component({
-	selector: 'app-state-presentation',
-	templateUrl: './state-presentation.component.html',
-	styleUrls: ['./state-presentation.component.css'],
+	selector: 'app-umlstate-presentation',
+	templateUrl: './umlstate-presentation.component.html',
+	styleUrls: ['./umlstate-presentation.component.css'],
 })
-export class StatePresentationComponent implements OnInit {
+export class UmlStatePresentationComponent implements OnInit {
 
 	// insertion point for declarations
 
 	displayedColumns: string[] = [];
 	dataSource = ELEMENT_DATA;
 
-	state: StateDB;
+	umlstate: UmlStateDB;
 
 	// front repo
 	frontRepo: FrontRepo
  
 	constructor(
-		private stateService: StateService,
+		private umlstateService: UmlStateService,
 		private frontRepoService: FrontRepoService,
 		private route: ActivatedRoute,
 		private router: Router,
@@ -43,25 +43,25 @@ export class StatePresentationComponent implements OnInit {
 	}
 
 	ngOnInit(): void {
-		this.getState();
+		this.getUmlState();
 
 		// observable for changes in 
-		this.stateService.StateServiceChanged.subscribe(
+		this.umlstateService.UmlStateServiceChanged.subscribe(
 			message => {
 				if (message == "update") {
-					this.getState()
+					this.getUmlState()
 				}
 			}
 		)
 	}
 
-	getState(): void {
+	getUmlState(): void {
 		const id = +this.route.snapshot.paramMap.get('id');
 		this.frontRepoService.pull().subscribe(
 			frontRepo => {
 				this.frontRepo = frontRepo
 
-				this.state = this.frontRepo.States.get(id)
+				this.umlstate = this.frontRepo.UmlStates.get(id)
 
 				// insertion point for recovery of durations
 			}
@@ -81,7 +81,7 @@ export class StatePresentationComponent implements OnInit {
 	setEditorRouterOutlet(ID: number) {
 		this.router.navigate([{
 			outlets: {
-				github_com_fullstack_lang_gongdoc_go_editor: ["github_com_fullstack_lang_gongdoc_go-" + "state-detail", ID]
+				github_com_fullstack_lang_gongdoc_go_editor: ["github_com_fullstack_lang_gongdoc_go-" + "umlstate-detail", ID]
 			}
 		}]);
 	}

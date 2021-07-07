@@ -66,7 +66,7 @@ export class UmlscsTableComponent implements OnInit {
         case 'Activestate':
           return umlscDB.Activestate;
 
-        case 'Umlscs':
+        case 'Pkgelt_Umlscs':
           return this.frontRepo.Pkgelts.get(umlscDB.Pkgelt_UmlscsDBID.Int64)?.Name;
 
         default:
@@ -140,13 +140,13 @@ export class UmlscsTableComponent implements OnInit {
       this.displayedColumns = ['ID', 'Edit', 'Delete', // insertion point for columns to display
         "Name",
         "Activestate",
-        "Umlscs",
+        "Pkgelt_Umlscs",
       ]
     } else {
       this.displayedColumns = ['select', 'ID', // insertion point for columns to display
         "Name",
         "Activestate",
-        "Umlscs",
+        "Pkgelt_Umlscs",
       ]
       this.selection = new SelectionModel<UmlscDB>(allowMultiSelect, this.initialSelection);
     }

@@ -78,7 +78,7 @@ export class LinksTableComponent implements OnInit {
         case 'Middlevertice':
           return (linkDB.Middlevertice ? linkDB.Middlevertice.Name : '');
 
-        case 'Links':
+        case 'Classshape_Links':
           return this.frontRepo.Classshapes.get(linkDB.Classshape_LinksDBID.Int64)?.Name;
 
         default:
@@ -162,7 +162,7 @@ export class LinksTableComponent implements OnInit {
         "Fieldtypename",
         "Multiplicity",
         "Middlevertice",
-        "Links",
+        "Classshape_Links",
       ]
     } else {
       this.displayedColumns = ['select', 'ID', // insertion point for columns to display
@@ -172,7 +172,7 @@ export class LinksTableComponent implements OnInit {
         "Fieldtypename",
         "Multiplicity",
         "Middlevertice",
-        "Links",
+        "Classshape_Links",
       ]
       this.selection = new SelectionModel<LinkDB>(allowMultiSelect, this.initialSelection);
     }

@@ -18,7 +18,7 @@ type Umlsc struct {
 
 	// this is the memory model (and not the "memory motel" of the Rolling Stones)
 	// it is not ignored by swagger because it is used by the angular model
-	States []*State
+	States []*UmlState
 
 	// in this version, only one state is active mong the states
 	// (with the embedded states version, that might change)
@@ -99,10 +99,10 @@ func (umlsc *Umlsc) Unmarshall(expr ast.Expr, fset *token.FileSet) {
 						// get the array of shapes (either as definition or as reference)
 						for _, expr := range cl.Elts {
 
-							var state *State
+							var state *UmlState
 							switch exp := expr.(type) {
 							case *ast.CompositeLit: // this is a definition
-								var _state State
+								var _state UmlState
 								state = &_state
 								state.Unmarshall(exp, fset)
 							default:

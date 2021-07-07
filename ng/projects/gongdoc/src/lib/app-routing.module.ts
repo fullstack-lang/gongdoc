@@ -34,9 +34,9 @@ import { PositionsTableComponent } from './positions-table/positions-table.compo
 import { PositionDetailComponent } from './position-detail/position-detail.component'
 import { PositionPresentationComponent } from './position-presentation/position-presentation.component'
 
-import { StatesTableComponent } from './states-table/states-table.component'
-import { StateDetailComponent } from './state-detail/state-detail.component'
-import { StatePresentationComponent } from './state-presentation/state-presentation.component'
+import { UmlStatesTableComponent } from './umlstates-table/umlstates-table.component'
+import { UmlStateDetailComponent } from './umlstate-detail/umlstate-detail.component'
+import { UmlStatePresentationComponent } from './umlstate-presentation/umlstate-presentation.component'
 
 import { UmlscsTableComponent } from './umlscs-table/umlscs-table.component'
 import { UmlscDetailComponent } from './umlsc-detail/umlsc-detail.component'
@@ -104,12 +104,12 @@ const routes: Routes = [ // insertion point for routes declarations
 	{ path: 'github_com_fullstack_lang_gongdoc_go-position-presentation/:id', component: PositionPresentationComponent, outlet: 'github_com_fullstack_lang_gongdoc_go_presentation' },
 	{ path: 'github_com_fullstack_lang_gongdoc_go-position-presentation-special/:id', component: PositionPresentationComponent, outlet: 'github_com_fullstack_lang_gongdoc_gopositionpres' },
 
-	{ path: 'github_com_fullstack_lang_gongdoc_go-states', component: StatesTableComponent, outlet: 'github_com_fullstack_lang_gongdoc_go_table' },
-	{ path: 'github_com_fullstack_lang_gongdoc_go-state-adder', component: StateDetailComponent, outlet: 'github_com_fullstack_lang_gongdoc_go_editor' },
-	{ path: 'github_com_fullstack_lang_gongdoc_go-state-adder/:id/:originStruct/:originStructFieldName', component: StateDetailComponent, outlet: 'github_com_fullstack_lang_gongdoc_go_editor' },
-	{ path: 'github_com_fullstack_lang_gongdoc_go-state-detail/:id', component: StateDetailComponent, outlet: 'github_com_fullstack_lang_gongdoc_go_editor' },
-	{ path: 'github_com_fullstack_lang_gongdoc_go-state-presentation/:id', component: StatePresentationComponent, outlet: 'github_com_fullstack_lang_gongdoc_go_presentation' },
-	{ path: 'github_com_fullstack_lang_gongdoc_go-state-presentation-special/:id', component: StatePresentationComponent, outlet: 'github_com_fullstack_lang_gongdoc_gostatepres' },
+	{ path: 'github_com_fullstack_lang_gongdoc_go-umlstates', component: UmlStatesTableComponent, outlet: 'github_com_fullstack_lang_gongdoc_go_table' },
+	{ path: 'github_com_fullstack_lang_gongdoc_go-umlstate-adder', component: UmlStateDetailComponent, outlet: 'github_com_fullstack_lang_gongdoc_go_editor' },
+	{ path: 'github_com_fullstack_lang_gongdoc_go-umlstate-adder/:id/:originStruct/:originStructFieldName', component: UmlStateDetailComponent, outlet: 'github_com_fullstack_lang_gongdoc_go_editor' },
+	{ path: 'github_com_fullstack_lang_gongdoc_go-umlstate-detail/:id', component: UmlStateDetailComponent, outlet: 'github_com_fullstack_lang_gongdoc_go_editor' },
+	{ path: 'github_com_fullstack_lang_gongdoc_go-umlstate-presentation/:id', component: UmlStatePresentationComponent, outlet: 'github_com_fullstack_lang_gongdoc_go_presentation' },
+	{ path: 'github_com_fullstack_lang_gongdoc_go-umlstate-presentation-special/:id', component: UmlStatePresentationComponent, outlet: 'github_com_fullstack_lang_gongdoc_goumlstatepres' },
 
 	{ path: 'github_com_fullstack_lang_gongdoc_go-umlscs', component: UmlscsTableComponent, outlet: 'github_com_fullstack_lang_gongdoc_go_table' },
 	{ path: 'github_com_fullstack_lang_gongdoc_go-umlsc-adder', component: UmlscDetailComponent, outlet: 'github_com_fullstack_lang_gongdoc_go_editor' },

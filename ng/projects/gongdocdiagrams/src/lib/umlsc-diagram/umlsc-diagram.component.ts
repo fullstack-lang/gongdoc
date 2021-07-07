@@ -5,6 +5,7 @@ import * as joint from 'jointjs';
 import { ActivatedRoute, Router } from '@angular/router';
 
 import * as gongdoc from 'gongdoc'
+
 import { state } from '@angular/animations';
 
 @Component({
@@ -36,14 +37,14 @@ export class UmlscDiagramComponent implements OnInit {
   public stateChartDiagram: gongdoc.UmlscDB;
 
   // map states of the diagram
-  mapStateDBIDStateDBs = new Map<number, gongdoc.StateDB>()
+  mapStateDBIDStateDBs = new Map<number, gongdoc.UmlStateDB>()
 
   // map of States according to the joint.shapes.uml.State
   // it is used to save the diagram (which only know the ids)
-  public MapJointjsIdsStates = new Map<string, gongdoc.StateDB>();
+  public MapJointjsIdsStates = new Map<string, gongdoc.UmlStateDB>();
   public MapStateDBIDJointjsStateID = new Map<number, string>()
 
-  public MapNamesStates = new Map<string, gongdoc.StateDB>()
+  public MapNamesStates = new Map<string, gongdoc.UmlStateDB>()
 
   // front repo, that will be used to access backend elements
   gongdocFrontRepo: gongdoc.FrontRepo
@@ -52,7 +53,7 @@ export class UmlscDiagramComponent implements OnInit {
     private route: ActivatedRoute,
     private router: Router,
     private UmlscService: gongdoc.UmlscService,
-    private StateService: gongdoc.StateService,
+    private UmlStateService: gongdoc.UmlStateService,
     private gongdocFrontRepoService: gongdoc.FrontRepoService,
     private GongdocCommandService: gongdoc.GongdocCommandService,
     private gongdocCommitNbService: gongdoc.CommitNbService,
@@ -224,7 +225,7 @@ export class UmlscDiagramComponent implements OnInit {
           stateDB.Y = cell.attributes.position.y
 
           // update position to DB
-          this.StateService.updateState(stateDB).subscribe(
+          this.UmlStateService.updateUmlState(stateDB).subscribe(
             state => {
               console.log("state updated")
             }

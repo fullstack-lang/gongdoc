@@ -72,10 +72,10 @@ import { PositionSortingComponent } from './position-sorting/position-sorting.co
 import { PositionDetailComponent } from './position-detail/position-detail.component'
 import { PositionPresentationComponent } from './position-presentation/position-presentation.component'
 
-import { StatesTableComponent } from './states-table/states-table.component'
-import { StateSortingComponent } from './state-sorting/state-sorting.component'
-import { StateDetailComponent } from './state-detail/state-detail.component'
-import { StatePresentationComponent } from './state-presentation/state-presentation.component'
+import { UmlStatesTableComponent } from './umlstates-table/umlstates-table.component'
+import { UmlStateSortingComponent } from './umlstate-sorting/umlstate-sorting.component'
+import { UmlStateDetailComponent } from './umlstate-detail/umlstate-detail.component'
+import { UmlStatePresentationComponent } from './umlstate-presentation/umlstate-presentation.component'
 
 import { UmlscsTableComponent } from './umlscs-table/umlscs-table.component'
 import { UmlscSortingComponent } from './umlsc-sorting/umlsc-sorting.component'
@@ -131,10 +131,10 @@ import { VerticePresentationComponent } from './vertice-presentation/vertice-pre
 		PositionDetailComponent,
 		PositionPresentationComponent,
 
-		StatesTableComponent,
-		StateSortingComponent,
-		StateDetailComponent,
-		StatePresentationComponent,
+		UmlStatesTableComponent,
+		UmlStateSortingComponent,
+		UmlStateDetailComponent,
+		UmlStatePresentationComponent,
 
 		UmlscsTableComponent,
 		UmlscSortingComponent,
@@ -221,10 +221,10 @@ import { VerticePresentationComponent } from './vertice-presentation/vertice-pre
 		PositionDetailComponent,
 		PositionPresentationComponent,
 
-		StatesTableComponent,
-		StateSortingComponent,
-		StateDetailComponent,
-		StatePresentationComponent,
+		UmlStatesTableComponent,
+		UmlStateSortingComponent,
+		UmlStateDetailComponent,
+		UmlStatePresentationComponent,
 
 		UmlscsTableComponent,
 		UmlscSortingComponent,

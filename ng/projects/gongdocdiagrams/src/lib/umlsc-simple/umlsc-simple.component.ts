@@ -6,7 +6,7 @@ import { Router, RouterState, ActivatedRoute, ParamMap  } from '@angular/router'
 
 import { UmlscDB } from 'gongdoc';
 import { UmlscService } from 'gongdoc'
-import { StateDB, StateService } from 'gongdoc'
+import { UmlStateDB, UmlStateService } from 'gongdoc'
 
 
 // generated table component
@@ -23,7 +23,7 @@ export class UmlscSimpleTableComponent implements OnInit {
   // the selected umlsc 
   umlsc: UmlscDB;
 
-  states: StateDB[]
+  states: UmlStateDB[]
 
   @Input() ID : number; // ID of the caller when component called from struct in reverse relation
   @Input() struct : string; // struct with pointer to Umlsc
@@ -33,7 +33,7 @@ export class UmlscSimpleTableComponent implements OnInit {
 
   constructor(
     private umlscService: UmlscService,
-    private stateService: StateService,
+    private umlStateService: UmlStateService,
 
     private router: Router,
     private route: ActivatedRoute,
@@ -51,7 +51,7 @@ export class UmlscSimpleTableComponent implements OnInit {
   ngOnInit(): void {
     this.getUmlscs()
 
-    this.stateService.getStates().subscribe(
+    this.umlStateService.getUmlStates().subscribe(
       states => {
         this.states = states
       }

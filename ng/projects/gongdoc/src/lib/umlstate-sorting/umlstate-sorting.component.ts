@@ -7,28 +7,28 @@ import { DialogData } from '../front-repo.service'
 import { SelectionModel } from '@angular/cdk/collections';
 
 import { Router, RouterState } from '@angular/router';
-import { StateDB } from '../state-db'
-import { StateService } from '../state.service'
+import { UmlStateDB } from '../umlstate-db'
+import { UmlStateService } from '../umlstate.service'
 
 import { FrontRepoService, FrontRepo, NullInt64 } from '../front-repo.service'
 @Component({
-  selector: 'lib-state-sorting',
-  templateUrl: './state-sorting.component.html',
-  styleUrls: ['./state-sorting.component.css']
+  selector: 'lib-umlstate-sorting',
+  templateUrl: './umlstate-sorting.component.html',
+  styleUrls: ['./umlstate-sorting.component.css']
 })
-export class StateSortingComponent implements OnInit {
+export class UmlStateSortingComponent implements OnInit {
 
   frontRepo: FrontRepo
 
-  // array of State instances that are in the association
-  associatedStates = new Array<StateDB>();
+  // array of UmlState instances that are in the association
+  associatedUmlStates = new Array<UmlStateDB>();
 
   constructor(
-    private stateService: StateService,
+    private umlstateService: UmlStateService,
     private frontRepoService: FrontRepoService,
 
-    // not null if the component is called as a selection component of state instances
-    public dialogRef: MatDialogRef<StateSortingComponent>,
+    // not null if the component is called as a selection component of umlstate instances
+    public dialogRef: MatDialogRef<UmlStateSortingComponent>,
     @Optional() @Inject(MAT_DIALOG_DATA) public dialogData: DialogData,
 
     private router: Router,
@@ -39,31 +39,31 @@ export class StateSortingComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.getStates()
+    this.getUmlStates()
   }
 
-  getStates(): void {
+  getUmlStates(): void {
     this.frontRepoService.pull().subscribe(
       frontRepo => {
         this.frontRepo = frontRepo
 
         let index = 0
-        for (let state of this.frontRepo.States_array) {
+        for (let umlstate of this.frontRepo.UmlStates_array) {
           let ID = this.dialogData.ID
-          let revPointerID = state[this.dialogData.ReversePointer]
-          let revPointerID_Index = state[this.dialogData.ReversePointer+"_Index"]
+          let revPointerID = umlstate[this.dialogData.ReversePointer]
+          let revPointerID_Index = umlstate[this.dialogData.ReversePointer+"_Index"]
           if (revPointerID.Int64 == ID) {
             if (revPointerID_Index == undefined) {
               revPointerID_Index = new NullInt64
               revPointerID_Index.Valid = true
               revPointerID_Index.Int64 = index++
             }
-            this.associatedStates.push(state)
+            this.associatedUmlStates.push(umlstate)
           }
         }
 
-        // sort associated state according to order
-        this.associatedStates.sort((t1, t2) => {
+        // sort associated umlstate according to order
+        this.associatedUmlStates.sort((t1, t2) => {
           let t1_revPointerID_Index = t1[this.dialogData.ReversePointer+"_Index"]
           let t2_revPointerID_Index = t2[this.dialogData.ReversePointer+"_Index"]
           if (t1_revPointerID_Index && t2_revPointerID_Index) {
@@ -81,13 +81,13 @@ export class StateSortingComponent implements OnInit {
   }
 
   drop(event: CdkDragDrop<string[]>) {
-    moveItemInArray(this.associatedStates, event.previousIndex, event.currentIndex);
+    moveItemInArray(this.associatedUmlStates, event.previousIndex, event.currentIndex);
 
-    // set the order of State instances
+    // set the order of UmlState instances
     let index = 0
     
-    for (let state of this.associatedStates) {
-      let revPointerID_Index = state[this.dialogData.ReversePointer+"_Index"]
+    for (let umlstate of this.associatedUmlStates) {
+      let revPointerID_Index = umlstate[this.dialogData.ReversePointer+"_Index"]
       revPointerID_Index.Valid = true
       revPointerID_Index.Int64 = index++
     }
@@ -95,11 +95,11 @@ export class StateSortingComponent implements OnInit {
 
   save() {
 
-    this.associatedStates.forEach(
-      state => {
-        this.stateService.updateState(state)
-          .subscribe(state => {
-            this.stateService.StateServiceChanged.next("update")
+    this.associatedUmlStates.forEach(
+      umlstate => {
+        this.umlstateService.updateUmlState(umlstate)
+          .subscribe(umlstate => {
+            this.umlstateService.UmlStateServiceChanged.next("update")
           });
       }
     )

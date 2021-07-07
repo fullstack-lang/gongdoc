@@ -63,7 +63,7 @@ export class ClassdiagramsTableComponent implements OnInit {
         case 'Name':
           return classdiagramDB.Name;
 
-        case 'Classdiagrams':
+        case 'Pkgelt_Classdiagrams':
           return this.frontRepo.Pkgelts.get(classdiagramDB.Pkgelt_ClassdiagramsDBID.Int64)?.Name;
 
         default:
@@ -135,12 +135,12 @@ export class ClassdiagramsTableComponent implements OnInit {
     if (this.mode == TableComponentMode.DISPLAY_MODE) {
       this.displayedColumns = ['ID', 'Edit', 'Delete', // insertion point for columns to display
         "Name",
-        "Classdiagrams",
+        "Pkgelt_Classdiagrams",
       ]
     } else {
       this.displayedColumns = ['select', 'ID', // insertion point for columns to display
         "Name",
-        "Classdiagrams",
+        "Pkgelt_Classdiagrams",
       ]
       this.selection = new SelectionModel<ClassdiagramDB>(allowMultiSelect, this.initialSelection);
     }

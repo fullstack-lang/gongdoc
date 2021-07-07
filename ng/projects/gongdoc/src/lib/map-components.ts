@@ -15,8 +15,8 @@
   import { PkgeltSortingComponent } from './pkgelt-sorting/pkgelt-sorting.component'
   import { PositionsTableComponent } from './positions-table/positions-table.component'
   import { PositionSortingComponent } from './position-sorting/position-sorting.component'
-  import { StatesTableComponent } from './states-table/states-table.component'
-  import { StateSortingComponent } from './state-sorting/state-sorting.component'
+  import { UmlStatesTableComponent } from './umlstates-table/umlstates-table.component'
+  import { UmlStateSortingComponent } from './umlstate-sorting/umlstate-sorting.component'
   import { UmlscsTableComponent } from './umlscs-table/umlscs-table.component'
   import { UmlscSortingComponent } from './umlsc-sorting/umlsc-sorting.component'
   import { VerticesTableComponent } from './vertices-table/vertices-table.component'
@@ -39,8 +39,8 @@
   export const MapOfPkgeltSortingComponents: Map<string, any> = new Map([["PkgeltSortingComponent", PkgeltSortingComponent],])
   export const MapOfPositionsComponents: Map<string, any> = new Map([["PositionsTableComponent", PositionsTableComponent],])
   export const MapOfPositionSortingComponents: Map<string, any> = new Map([["PositionSortingComponent", PositionSortingComponent],])
-  export const MapOfStatesComponents: Map<string, any> = new Map([["StatesTableComponent", StatesTableComponent],])
-  export const MapOfStateSortingComponents: Map<string, any> = new Map([["StateSortingComponent", StateSortingComponent],])
+  export const MapOfUmlStatesComponents: Map<string, any> = new Map([["UmlStatesTableComponent", UmlStatesTableComponent],])
+  export const MapOfUmlStateSortingComponents: Map<string, any> = new Map([["UmlStateSortingComponent", UmlStateSortingComponent],])
   export const MapOfUmlscsComponents: Map<string, any> = new Map([["UmlscsTableComponent", UmlscsTableComponent],])
   export const MapOfUmlscSortingComponents: Map<string, any> = new Map([["UmlscSortingComponent", UmlscSortingComponent],])
   export const MapOfVerticesComponents: Map<string, any> = new Map([["VerticesTableComponent", VerticesTableComponent],])
@@ -59,7 +59,7 @@ export const MapOfComponents: Map<string, any> =
       ["Link", MapOfLinksComponents],
       ["Pkgelt", MapOfPkgeltsComponents],
       ["Position", MapOfPositionsComponents],
-      ["State", MapOfStatesComponents],
+      ["UmlState", MapOfUmlStatesComponents],
       ["Umlsc", MapOfUmlscsComponents],
       ["Vertice", MapOfVerticesComponents],
     ]
@@ -78,7 +78,7 @@ export const MapOfSortingComponents: Map<string, any> =
       ["Link", MapOfLinkSortingComponents],
       ["Pkgelt", MapOfPkgeltSortingComponents],
       ["Position", MapOfPositionSortingComponents],
-      ["State", MapOfStateSortingComponents],
+      ["UmlState", MapOfUmlStateSortingComponents],
       ["Umlsc", MapOfUmlscSortingComponents],
       ["Vertice", MapOfVerticeSortingComponents],
     ]

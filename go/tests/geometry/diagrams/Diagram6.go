@@ -21,8 +21,8 @@ var Diagram6 uml.Classdiagram = uml.Classdiagram{
 				{
 					Field: models.Line{}.End,
 					Middlevertice: &uml.Vertice{
-						X: 380.000000,
-						Y: 556.000000,
+						X: 80.000000,
+						Y: 186.000000,
 					},
 					Multiplicity: "0..1",
 				},
@@ -43,7 +43,7 @@ var Diagram6 uml.Classdiagram = uml.Classdiagram{
 				Y: 353.000000,
 			},
 			Width:  240.000000,
-			Heigth: 63.000000,
+			Heigth: 48.000000,
 			Links: []*uml.Link{
 				{
 					Field: models.Line2{}.End,

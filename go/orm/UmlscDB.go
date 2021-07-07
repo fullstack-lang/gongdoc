@@ -246,18 +246,18 @@ func (backRepoUmlsc *BackRepoUmlscStruct) CommitPhaseTwoInstance(backRepo *BackR
 		// This loop encodes the slice of pointers umlsc.States into the back repo.
 		// Each back repo instance at the end of the association encode the ID of the association start
 		// into a dedicated field for coding the association. The back repo instance is then saved to the db
-		for idx, stateAssocEnd := range umlsc.States {
+		for idx, umlstateAssocEnd := range umlsc.States {
 
 			// get the back repo instance at the association end
-			stateAssocEnd_DB :=
-				backRepo.BackRepoState.GetStateDBFromStatePtr(stateAssocEnd)
+			umlstateAssocEnd_DB :=
+				backRepo.BackRepoUmlState.GetUmlStateDBFromUmlStatePtr(umlstateAssocEnd)
 
 			// encode reverse pointer in the association end back repo instance
-			stateAssocEnd_DB.Umlsc_StatesDBID.Int64 = int64(umlscDB.ID)
-			stateAssocEnd_DB.Umlsc_StatesDBID.Valid = true
-			stateAssocEnd_DB.Umlsc_StatesDBID_Index.Int64 = int64(idx)
-			stateAssocEnd_DB.Umlsc_StatesDBID_Index.Valid = true
-			if q := backRepoUmlsc.db.Save(stateAssocEnd_DB); q.Error != nil {
+			umlstateAssocEnd_DB.Umlsc_StatesDBID.Int64 = int64(umlscDB.ID)
+			umlstateAssocEnd_DB.Umlsc_StatesDBID.Valid = true
+			umlstateAssocEnd_DB.Umlsc_StatesDBID_Index.Int64 = int64(idx)
+			umlstateAssocEnd_DB.Umlsc_StatesDBID_Index.Valid = true
+			if q := backRepoUmlsc.db.Save(umlstateAssocEnd_DB); q.Error != nil {
 				return q.Error
 			}
 		}
@@ -368,30 +368,30 @@ func (backRepoUmlsc *BackRepoUmlscStruct) CheckoutPhaseTwoInstance(backRepo *Bac
 
 	// insertion point for checkout of pointer encoding
 	// This loop redeem umlsc.States in the stage from the encode in the back repo
-	// It parses all StateDB in the back repo and if the reverse pointer encoding matches the back repo ID
+	// It parses all UmlStateDB in the back repo and if the reverse pointer encoding matches the back repo ID
 	// it appends the stage instance
 	// 1. reset the slice
 	umlsc.States = umlsc.States[:0]
 	// 2. loop all instances in the type in the association end
-	for _, stateDB_AssocEnd := range *backRepo.BackRepoState.Map_StateDBID_StateDB {
+	for _, umlstateDB_AssocEnd := range *backRepo.BackRepoUmlState.Map_UmlStateDBID_UmlStateDB {
 		// 3. Does the ID encoding at the end and the ID at the start matches ?
-		if stateDB_AssocEnd.Umlsc_StatesDBID.Int64 == int64(umlscDB.ID) {
+		if umlstateDB_AssocEnd.Umlsc_StatesDBID.Int64 == int64(umlscDB.ID) {
 			// 4. fetch the associated instance in the stage
-			state_AssocEnd := (*backRepo.BackRepoState.Map_StateDBID_StatePtr)[stateDB_AssocEnd.ID]
+			umlstate_AssocEnd := (*backRepo.BackRepoUmlState.Map_UmlStateDBID_UmlStatePtr)[umlstateDB_AssocEnd.ID]
 			// 5. append it the association slice
-			umlsc.States = append(umlsc.States, state_AssocEnd)
+			umlsc.States = append(umlsc.States, umlstate_AssocEnd)
 		}
 	}
 
 	// sort the array according to the order
 	sort.Slice(umlsc.States, func(i, j int) bool {
-		stateDB_i_ID := (*backRepo.BackRepoState.Map_StatePtr_StateDBID)[umlsc.States[i]]
-		stateDB_j_ID := (*backRepo.BackRepoState.Map_StatePtr_StateDBID)[umlsc.States[j]]
+		umlstateDB_i_ID := (*backRepo.BackRepoUmlState.Map_UmlStatePtr_UmlStateDBID)[umlsc.States[i]]
+		umlstateDB_j_ID := (*backRepo.BackRepoUmlState.Map_UmlStatePtr_UmlStateDBID)[umlsc.States[j]]
 
-		stateDB_i := (*backRepo.BackRepoState.Map_StateDBID_StateDB)[stateDB_i_ID]
-		stateDB_j := (*backRepo.BackRepoState.Map_StateDBID_StateDB)[stateDB_j_ID]
+		umlstateDB_i := (*backRepo.BackRepoUmlState.Map_UmlStateDBID_UmlStateDB)[umlstateDB_i_ID]
+		umlstateDB_j := (*backRepo.BackRepoUmlState.Map_UmlStateDBID_UmlStateDB)[umlstateDB_j_ID]
 
-		return stateDB_i.Umlsc_StatesDBID_Index.Int64 < stateDB_j.Umlsc_StatesDBID_Index.Int64
+		return umlstateDB_i.Umlsc_StatesDBID_Index.Int64 < umlstateDB_j.Umlsc_StatesDBID_Index.Int64
 	})
 
 	return

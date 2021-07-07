@@ -13,8 +13,8 @@ import { SelectionModel } from '@angular/cdk/collections';
 const allowMultiSelect = true;
 
 import { Router, RouterState } from '@angular/router';
-import { StateDB } from '../state-db'
-import { StateService } from '../state.service'
+import { UmlStateDB } from '../umlstate-db'
+import { UmlStateService } from '../umlstate.service'
 
 // TableComponent is initilizaed from different routes
 // TableComponentMode detail different cases 
@@ -26,24 +26,24 @@ enum TableComponentMode {
 
 // generated table component
 @Component({
-  selector: 'app-statestable',
-  templateUrl: './states-table.component.html',
-  styleUrls: ['./states-table.component.css'],
+  selector: 'app-umlstatestable',
+  templateUrl: './umlstates-table.component.html',
+  styleUrls: ['./umlstates-table.component.css'],
 })
-export class StatesTableComponent implements OnInit {
+export class UmlStatesTableComponent implements OnInit {
 
   // mode at invocation
   mode: TableComponentMode
 
-  // used if the component is called as a selection component of State instances
-  selection: SelectionModel<StateDB>;
-  initialSelection = new Array<StateDB>();
+  // used if the component is called as a selection component of UmlState instances
+  selection: SelectionModel<UmlStateDB>;
+  initialSelection = new Array<UmlStateDB>();
 
   // the data source for the table
-  states: StateDB[];
-  matTableDataSource: MatTableDataSource<StateDB>
+  umlstates: UmlStateDB[];
+  matTableDataSource: MatTableDataSource<UmlStateDB>
 
-  // front repo, that will be referenced by this.states
+  // front repo, that will be referenced by this.umlstates
   frontRepo: FrontRepo
 
   // displayedColumns is referenced by the MatTable component for specify what columns
@@ -57,39 +57,39 @@ export class StatesTableComponent implements OnInit {
   ngAfterViewInit() {
 
     // enable sorting on all fields (including pointers and reverse pointer)
-    this.matTableDataSource.sortingDataAccessor = (stateDB: StateDB, property: string) => {
+    this.matTableDataSource.sortingDataAccessor = (umlstateDB: UmlStateDB, property: string) => {
       switch (property) {
         // insertion point for specific sorting accessor
         case 'Name':
-          return stateDB.Name;
+          return umlstateDB.Name;
 
         case 'X':
-          return stateDB.X;
+          return umlstateDB.X;
 
         case 'Y':
-          return stateDB.Y;
+          return umlstateDB.Y;
 
-        case 'States':
-          return this.frontRepo.Umlscs.get(stateDB.Umlsc_StatesDBID.Int64)?.Name;
+        case 'Umlsc_States':
+          return this.frontRepo.Umlscs.get(umlstateDB.Umlsc_StatesDBID.Int64)?.Name;
 
         default:
-          return StateDB[property];
+          return UmlStateDB[property];
       }
     };
 
     // enable filtering on all fields (including pointers and reverse pointer, which is not done by default)
-    this.matTableDataSource.filterPredicate = (stateDB: StateDB, filter: string) => {
+    this.matTableDataSource.filterPredicate = (umlstateDB: UmlStateDB, filter: string) => {
 
       // filtering is based on finding a lower case filter into a concatenated string
-      // the stateDB properties
+      // the umlstateDB properties
       let mergedContent = ""
 
       // insertion point for merging of fields
-      mergedContent += stateDB.Name.toLowerCase()
-      mergedContent += stateDB.X.toString()
-      mergedContent += stateDB.Y.toString()
-      if (stateDB.Umlsc_StatesDBID.Int64 != 0) {
-        mergedContent += this.frontRepo.Umlscs.get(stateDB.Umlsc_StatesDBID.Int64)?.Name.toLowerCase()
+      mergedContent += umlstateDB.Name.toLowerCase()
+      mergedContent += umlstateDB.X.toString()
+      mergedContent += umlstateDB.Y.toString()
+      if (umlstateDB.Umlsc_StatesDBID.Int64 != 0) {
+        mergedContent += this.frontRepo.Umlscs.get(umlstateDB.Umlsc_StatesDBID.Int64)?.Name.toLowerCase()
       }
 
 
@@ -107,11 +107,11 @@ export class StatesTableComponent implements OnInit {
   }
 
   constructor(
-    private stateService: StateService,
+    private umlstateService: UmlStateService,
     private frontRepoService: FrontRepoService,
 
-    // not null if the component is called as a selection component of state instances
-    public dialogRef: MatDialogRef<StatesTableComponent>,
+    // not null if the component is called as a selection component of umlstate instances
+    public dialogRef: MatDialogRef<UmlStatesTableComponent>,
     @Optional() @Inject(MAT_DIALOG_DATA) public dialogData: DialogData,
 
     private router: Router,
@@ -133,10 +133,10 @@ export class StatesTableComponent implements OnInit {
     }
 
     // observable for changes in structs
-    this.stateService.StateServiceChanged.subscribe(
+    this.umlstateService.UmlStateServiceChanged.subscribe(
       message => {
         if (message == "post" || message == "update" || message == "delete") {
-          this.getStates()
+          this.getUmlStates()
         }
       }
     )
@@ -145,46 +145,46 @@ export class StatesTableComponent implements OnInit {
         "Name",
         "X",
         "Y",
-        "States",
+        "Umlsc_States",
       ]
     } else {
       this.displayedColumns = ['select', 'ID', // insertion point for columns to display
         "Name",
         "X",
         "Y",
-        "States",
+        "Umlsc_States",
       ]
-      this.selection = new SelectionModel<StateDB>(allowMultiSelect, this.initialSelection);
+      this.selection = new SelectionModel<UmlStateDB>(allowMultiSelect, this.initialSelection);
     }
 
   }
 
   ngOnInit(): void {
-    this.getStates()
-    this.matTableDataSource = new MatTableDataSource(this.states)
+    this.getUmlStates()
+    this.matTableDataSource = new MatTableDataSource(this.umlstates)
   }
 
-  getStates(): void {
+  getUmlStates(): void {
     this.frontRepoService.pull().subscribe(
       frontRepo => {
         this.frontRepo = frontRepo
 
-        this.states = this.frontRepo.States_array;
+        this.umlstates = this.frontRepo.UmlStates_array;
 
         // insertion point for variables Recoveries
 
         // in case the component is called as a selection component
         if (this.mode == TableComponentMode.ONE_MANY_ASSOCIATION_MODE) {
-          this.states.forEach(
-            state => {
+          this.umlstates.forEach(
+            umlstate => {
               let ID = this.dialogData.ID
-              let revPointer = state[this.dialogData.ReversePointer]
+              let revPointer = umlstate[this.dialogData.ReversePointer]
               if (revPointer.Int64 == ID) {
-                this.initialSelection.push(state)
+                this.initialSelection.push(umlstate)
               }
             }
           )
-          this.selection = new SelectionModel<StateDB>(allowMultiSelect, this.initialSelection);
+          this.selection = new SelectionModel<UmlStateDB>(allowMultiSelect, this.initialSelection);
         }
 
         if (this.mode == TableComponentMode.MANY_MANY_ASSOCIATION_MODE) {
@@ -194,58 +194,58 @@ export class StatesTableComponent implements OnInit {
 
           if (sourceInstance[this.dialogData.SourceField]) {
             for (let associationInstance of sourceInstance[this.dialogData.SourceField]) {
-              let state = associationInstance[this.dialogData.IntermediateStructField]
-              this.initialSelection.push(state)
+              let umlstate = associationInstance[this.dialogData.IntermediateStructField]
+              this.initialSelection.push(umlstate)
             }
           }
-          this.selection = new SelectionModel<StateDB>(allowMultiSelect, this.initialSelection);
+          this.selection = new SelectionModel<UmlStateDB>(allowMultiSelect, this.initialSelection);
         }
 
         // update the mat table data source
-        this.matTableDataSource.data = this.states
+        this.matTableDataSource.data = this.umlstates
       }
     )
   }
 
-  // newState initiate a new state
-  // create a new State objet
-  newState() {
+  // newUmlState initiate a new umlstate
+  // create a new UmlState objet
+  newUmlState() {
   }
 
-  deleteState(stateID: number, state: StateDB) {
-    // list of states is truncated of state before the delete
-    this.states = this.states.filter(h => h !== state);
+  deleteUmlState(umlstateID: number, umlstate: UmlStateDB) {
+    // list of umlstates is truncated of umlstate before the delete
+    this.umlstates = this.umlstates.filter(h => h !== umlstate);
 
-    this.stateService.deleteState(stateID).subscribe(
-      state => {
-        this.stateService.StateServiceChanged.next("delete")
+    this.umlstateService.deleteUmlState(umlstateID).subscribe(
+      umlstate => {
+        this.umlstateService.UmlStateServiceChanged.next("delete")
       }
     );
   }
 
-  editState(stateID: number, state: StateDB) {
+  editUmlState(umlstateID: number, umlstate: UmlStateDB) {
 
   }
 
-  // display state in router
-  displayStateInRouter(stateID: number) {
-    this.router.navigate(["github_com_fullstack_lang_gongdoc_go-" + "state-display", stateID])
+  // display umlstate in router
+  displayUmlStateInRouter(umlstateID: number) {
+    this.router.navigate(["github_com_fullstack_lang_gongdoc_go-" + "umlstate-display", umlstateID])
   }
 
   // set editor outlet
-  setEditorRouterOutlet(stateID: number) {
+  setEditorRouterOutlet(umlstateID: number) {
     this.router.navigate([{
       outlets: {
-        github_com_fullstack_lang_gongdoc_go_editor: ["github_com_fullstack_lang_gongdoc_go-" + "state-detail", stateID]
+        github_com_fullstack_lang_gongdoc_go_editor: ["github_com_fullstack_lang_gongdoc_go-" + "umlstate-detail", umlstateID]
       }
     }]);
   }
 
   // set presentation outlet
-  setPresentationRouterOutlet(stateID: number) {
+  setPresentationRouterOutlet(umlstateID: number) {
     this.router.navigate([{
       outlets: {
-        github_com_fullstack_lang_gongdoc_go_presentation: ["github_com_fullstack_lang_gongdoc_go-" + "state-presentation", stateID]
+        github_com_fullstack_lang_gongdoc_go_presentation: ["github_com_fullstack_lang_gongdoc_go-" + "umlstate-presentation", umlstateID]
       }
     }]);
   }
@@ -253,7 +253,7 @@ export class StatesTableComponent implements OnInit {
   /** Whether the number of selected elements matches the total number of rows. */
   isAllSelected() {
     const numSelected = this.selection.selected.length;
-    const numRows = this.states.length;
+    const numRows = this.umlstates.length;
     return numSelected === numRows;
   }
 
@@ -261,40 +261,40 @@ export class StatesTableComponent implements OnInit {
   masterToggle() {
     this.isAllSelected() ?
       this.selection.clear() :
-      this.states.forEach(row => this.selection.select(row));
+      this.umlstates.forEach(row => this.selection.select(row));
   }
 
   save() {
 
     if (this.mode == TableComponentMode.ONE_MANY_ASSOCIATION_MODE) {
 
-      let toUpdate = new Set<StateDB>()
+      let toUpdate = new Set<UmlStateDB>()
 
-      // reset all initial selection of state that belong to state
+      // reset all initial selection of umlstate that belong to umlstate
       this.initialSelection.forEach(
-        state => {
-          state[this.dialogData.ReversePointer].Int64 = 0
-          state[this.dialogData.ReversePointer].Valid = true
-          toUpdate.add(state)
+        umlstate => {
+          umlstate[this.dialogData.ReversePointer].Int64 = 0
+          umlstate[this.dialogData.ReversePointer].Valid = true
+          toUpdate.add(umlstate)
         }
       )
 
-      // from selection, set state that belong to state
+      // from selection, set umlstate that belong to umlstate
       this.selection.selected.forEach(
-        state => {
+        umlstate => {
           let ID = +this.dialogData.ID
-          state[this.dialogData.ReversePointer].Int64 = ID
-          state[this.dialogData.ReversePointer].Valid = true
-          toUpdate.add(state)
+          umlstate[this.dialogData.ReversePointer].Int64 = ID
+          umlstate[this.dialogData.ReversePointer].Valid = true
+          toUpdate.add(umlstate)
         }
       )
 
-      // update all state (only update selection & initial selection)
+      // update all umlstate (only update selection & initial selection)
       toUpdate.forEach(
-        state => {
-          this.stateService.updateState(state)
-            .subscribe(state => {
-              this.stateService.StateServiceChanged.next("update")
+        umlstate => {
+          this.umlstateService.updateUmlState(umlstate)
+            .subscribe(umlstate => {
+              this.umlstateService.UmlStateServiceChanged.next("update")
             });
         }
       )
@@ -307,22 +307,22 @@ export class StatesTableComponent implements OnInit {
 
       // First, parse all instance of the association struct and remove the instance
       // that have unselect
-      let unselectedState = new Set<number>()
-      for (let state of this.initialSelection) {
-        if (this.selection.selected.includes(state)) {
-          // console.log("state " + state.Name + " is still selected")
+      let unselectedUmlState = new Set<number>()
+      for (let umlstate of this.initialSelection) {
+        if (this.selection.selected.includes(umlstate)) {
+          // console.log("umlstate " + umlstate.Name + " is still selected")
         } else {
-          console.log("state " + state.Name + " has been unselected")
-          unselectedState.add(state.ID)
-          console.log("is unselected " + unselectedState.has(state.ID))
+          console.log("umlstate " + umlstate.Name + " has been unselected")
+          unselectedUmlState.add(umlstate.ID)
+          console.log("is unselected " + unselectedUmlState.has(umlstate.ID))
         }
       }
 
       // delete the association instance
       if (sourceInstance[this.dialogData.SourceField]) {
         for (let associationInstance of sourceInstance[this.dialogData.SourceField]) {
-          let state = associationInstance[this.dialogData.IntermediateStructField]
-          if (unselectedState.has(state.ID)) {
+          let umlstate = associationInstance[this.dialogData.IntermediateStructField]
+          if (unselectedUmlState.has(umlstate.ID)) {
 
             this.frontRepoService.deleteService( this.dialogData.IntermediateStruct, associationInstance )
           }
@@ -337,16 +337,16 @@ export class StatesTableComponent implements OnInit {
       // second, parse all instance of the selected
       if (sourceInstance[this.dialogData.SourceField]) {
         this.selection.selected.forEach(
-          state => {
-            if (!this.initialSelection.includes(state)) {
-              // console.log("state " + state.Name + " has been added to the selection")
+          umlstate => {
+            if (!this.initialSelection.includes(umlstate)) {
+              // console.log("umlstate " + umlstate.Name + " has been added to the selection")
 
               let associationInstance = {
-                Name: sourceInstance["Name"] + "-" + state.Name,
+                Name: sourceInstance["Name"] + "-" + umlstate.Name,
               }
 
               associationInstance[this.dialogData.IntermediateStructField+"ID"] = new NullInt64
-              associationInstance[this.dialogData.IntermediateStructField+"ID"].Int64 = state.ID
+              associationInstance[this.dialogData.IntermediateStructField+"ID"].Int64 = umlstate.ID
               associationInstance[this.dialogData.IntermediateStructField+"ID"].Valid = true
 
               associationInstance[this.dialogData.SourceStruct + "_" + this.dialogData.SourceField + "DBID"] = new NullInt64
@@ -356,13 +356,13 @@ export class StatesTableComponent implements OnInit {
               this.frontRepoService.postService( this.dialogData.IntermediateStruct, associationInstance )
 
             } else {
-              // console.log("state " + state.Name + " is still selected")
+              // console.log("umlstate " + umlstate.Name + " is still selected")
             }
           }
         )
       }
 
-      // this.selection = new SelectionModel<StateDB>(allowMultiSelect, this.initialSelection);
+      // this.selection = new SelectionModel<UmlStateDB>(allowMultiSelect, this.initialSelection);
     }
 
     // why pizza ?

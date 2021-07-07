@@ -28,8 +28,8 @@ import { PkgeltService } from './pkgelt.service'
 import { PositionDB } from './position-db'
 import { PositionService } from './position.service'
 
-import { StateDB } from './state-db'
-import { StateService } from './state.service'
+import { UmlStateDB } from './umlstate-db'
+import { UmlStateService } from './umlstate.service'
 
 import { UmlscDB } from './umlsc-db'
 import { UmlscService } from './umlsc.service'
@@ -64,9 +64,9 @@ export class FrontRepo { // insertion point sub template
   Positions_array = new Array<PositionDB>(); // array of repo instances
   Positions = new Map<number, PositionDB>(); // map of repo instances
   Positions_batch = new Map<number, PositionDB>(); // same but only in last GET (for finding repo instances to delete)
-  States_array = new Array<StateDB>(); // array of repo instances
-  States = new Map<number, StateDB>(); // map of repo instances
-  States_batch = new Map<number, StateDB>(); // same but only in last GET (for finding repo instances to delete)
+  UmlStates_array = new Array<UmlStateDB>(); // array of repo instances
+  UmlStates = new Map<number, UmlStateDB>(); // map of repo instances
+  UmlStates_batch = new Map<number, UmlStateDB>(); // same but only in last GET (for finding repo instances to delete)
   Umlscs_array = new Array<UmlscDB>(); // array of repo instances
   Umlscs = new Map<number, UmlscDB>(); // map of repo instances
   Umlscs_batch = new Map<number, UmlscDB>(); // same but only in last GET (for finding repo instances to delete)
@@ -145,7 +145,7 @@ export class FrontRepoService {
     private linkService: LinkService,
     private pkgeltService: PkgeltService,
     private positionService: PositionService,
-    private stateService: StateService,
+    private umlstateService: UmlStateService,
     private umlscService: UmlscService,
     private verticeService: VerticeService,
   ) { }
@@ -180,7 +180,7 @@ export class FrontRepoService {
     Observable<LinkDB[]>,
     Observable<PkgeltDB[]>,
     Observable<PositionDB[]>,
-    Observable<StateDB[]>,
+    Observable<UmlStateDB[]>,
     Observable<UmlscDB[]>,
     Observable<VerticeDB[]>,
   ] = [ // insertion point sub template 
@@ -192,7 +192,7 @@ export class FrontRepoService {
       this.linkService.getLinks(),
       this.pkgeltService.getPkgelts(),
       this.positionService.getPositions(),
-      this.stateService.getStates(),
+      this.umlstateService.getUmlStates(),
       this.umlscService.getUmlscs(),
       this.verticeService.getVertices(),
     ];
@@ -218,7 +218,7 @@ export class FrontRepoService {
             links_,
             pkgelts_,
             positions_,
-            states_,
+            umlstates_,
             umlscs_,
             vertices_,
           ]) => {
@@ -240,8 +240,8 @@ export class FrontRepoService {
             pkgelts = pkgelts_
             var positions: PositionDB[]
             positions = positions_
-            var states: StateDB[]
-            states = states_
+            var umlstates: UmlStateDB[]
+            umlstates = umlstates_
             var umlscs: UmlscDB[]
             umlscs = umlscs_
             var vertices: VerticeDB[]
@@ -515,29 +515,29 @@ export class FrontRepoService {
             });
 
             // init the array
-            FrontRepoSingloton.States_array = states
+            FrontRepoSingloton.UmlStates_array = umlstates
 
-            // clear the map that counts State in the GET
-            FrontRepoSingloton.States_batch.clear()
+            // clear the map that counts UmlState in the GET
+            FrontRepoSingloton.UmlStates_batch.clear()
 
-            states.forEach(
-              state => {
-                FrontRepoSingloton.States.set(state.ID, state)
-                FrontRepoSingloton.States_batch.set(state.ID, state)
+            umlstates.forEach(
+              umlstate => {
+                FrontRepoSingloton.UmlStates.set(umlstate.ID, umlstate)
+                FrontRepoSingloton.UmlStates_batch.set(umlstate.ID, umlstate)
               }
             )
 
-            // clear states that are absent from the batch
-            FrontRepoSingloton.States.forEach(
-              state => {
-                if (FrontRepoSingloton.States_batch.get(state.ID) == undefined) {
-                  FrontRepoSingloton.States.delete(state.ID)
+            // clear umlstates that are absent from the batch
+            FrontRepoSingloton.UmlStates.forEach(
+              umlstate => {
+                if (FrontRepoSingloton.UmlStates_batch.get(umlstate.ID) == undefined) {
+                  FrontRepoSingloton.UmlStates.delete(umlstate.ID)
                 }
               }
             )
 
-            // sort States_array array
-            FrontRepoSingloton.States_array.sort((t1, t2) => {
+            // sort UmlStates_array array
+            FrontRepoSingloton.UmlStates_array.sort((t1, t2) => {
               if (t1.Name > t2.Name) {
                 return 1;
               }
@@ -739,21 +739,21 @@ export class FrontRepoService {
                 // insertion point for redeeming ONE-MANY associations
               }
             )
-            states.forEach(
-              state => {
+            umlstates.forEach(
+              umlstate => {
                 // insertion point sub sub template for ONE-/ZERO-ONE associations pointers redeeming
 
                 // insertion point for redeeming ONE-MANY associations
                 // insertion point for slice of pointer field Umlsc.States redeeming
                 {
-                  let _umlsc = FrontRepoSingloton.Umlscs.get(state.Umlsc_StatesDBID.Int64)
+                  let _umlsc = FrontRepoSingloton.Umlscs.get(umlstate.Umlsc_StatesDBID.Int64)
                   if (_umlsc) {
                     if (_umlsc.States == undefined) {
-                      _umlsc.States = new Array<StateDB>()
+                      _umlsc.States = new Array<UmlStateDB>()
                     }
-                    _umlsc.States.push(state)
-                    if (state.Umlsc_States_reverse == undefined) {
-                      state.Umlsc_States_reverse = _umlsc
+                    _umlsc.States.push(umlstate)
+                    if (umlstate.Umlsc_States_reverse == undefined) {
+                      umlstate.Umlsc_States_reverse = _umlsc
                     }
                   }
                 }
@@ -1271,54 +1271,54 @@ export class FrontRepoService {
     )
   }
 
-  // StatePull performs a GET on State of the stack and redeem association pointers 
-  StatePull(): Observable<FrontRepo> {
+  // UmlStatePull performs a GET on UmlState of the stack and redeem association pointers 
+  UmlStatePull(): Observable<FrontRepo> {
     return new Observable<FrontRepo>(
       (observer) => {
         combineLatest([
-          this.stateService.getStates()
+          this.umlstateService.getUmlStates()
         ]).subscribe(
           ([ // insertion point sub template 
-            states,
+            umlstates,
           ]) => {
             // init the array
-            FrontRepoSingloton.States_array = states
+            FrontRepoSingloton.UmlStates_array = umlstates
 
-            // clear the map that counts State in the GET
-            FrontRepoSingloton.States_batch.clear()
+            // clear the map that counts UmlState in the GET
+            FrontRepoSingloton.UmlStates_batch.clear()
 
             // 
             // First Step: init map of instances
             // insertion point sub template 
-            states.forEach(
-              state => {
-                FrontRepoSingloton.States.set(state.ID, state)
-                FrontRepoSingloton.States_batch.set(state.ID, state)
+            umlstates.forEach(
+              umlstate => {
+                FrontRepoSingloton.UmlStates.set(umlstate.ID, umlstate)
+                FrontRepoSingloton.UmlStates_batch.set(umlstate.ID, umlstate)
 
                 // insertion point for redeeming ONE/ZERO-ONE associations
 
                 // insertion point for redeeming ONE-MANY associations
                 // insertion point for slice of pointer field Umlsc.States redeeming
                 {
-                  let _umlsc = FrontRepoSingloton.Umlscs.get(state.Umlsc_StatesDBID.Int64)
+                  let _umlsc = FrontRepoSingloton.Umlscs.get(umlstate.Umlsc_StatesDBID.Int64)
                   if (_umlsc) {
                     if (_umlsc.States == undefined) {
-                      _umlsc.States = new Array<StateDB>()
+                      _umlsc.States = new Array<UmlStateDB>()
                     }
-                    _umlsc.States.push(state)
-                    if (state.Umlsc_States_reverse == undefined) {
-                      state.Umlsc_States_reverse = _umlsc
+                    _umlsc.States.push(umlstate)
+                    if (umlstate.Umlsc_States_reverse == undefined) {
+                      umlstate.Umlsc_States_reverse = _umlsc
                     }
                   }
                 }
               }
             )
 
-            // clear states that are absent from the GET
-            FrontRepoSingloton.States.forEach(
-              state => {
-                if (FrontRepoSingloton.States_batch.get(state.ID) == undefined) {
-                  FrontRepoSingloton.States.delete(state.ID)
+            // clear umlstates that are absent from the GET
+            FrontRepoSingloton.UmlStates.forEach(
+              umlstate => {
+                if (FrontRepoSingloton.UmlStates_batch.get(umlstate.ID) == undefined) {
+                  FrontRepoSingloton.UmlStates.delete(umlstate.ID)
                 }
               }
             )
@@ -1476,7 +1476,7 @@ export function getPkgeltUniqueID(id: number): number {
 export function getPositionUniqueID(id: number): number {
   return 61 * id
 }
-export function getStateUniqueID(id: number): number {
+export function getUmlStateUniqueID(id: number): number {
   return 67 * id
 }
 export function getUmlscUniqueID(id: number): number {

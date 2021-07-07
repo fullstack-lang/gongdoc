@@ -12,14 +12,14 @@ import (
 )
 
 // declaration in order to justify use of the models import
-var __State__dummysDeclaration__ models.State
-var __State_time__dummyDeclaration time.Duration
+var __UmlState__dummysDeclaration__ models.UmlState
+var __UmlState_time__dummyDeclaration time.Duration
 
-// An StateID parameter model.
+// An UmlStateID parameter model.
 //
 // This is used for operations that want the ID of an order in the path
-// swagger:parameters getState updateState deleteState
-type StateID struct {
+// swagger:parameters getUmlState updateUmlState deleteUmlState
+type UmlStateID struct {
 	// The ID of the order
 	//
 	// in: path
@@ -27,30 +27,30 @@ type StateID struct {
 	ID int64
 }
 
-// StateInput is a schema that can validate the user’s
+// UmlStateInput is a schema that can validate the user’s
 // input to prevent us from getting invalid data
-// swagger:parameters postState updateState
-type StateInput struct {
-	// The State to submit or modify
+// swagger:parameters postUmlState updateUmlState
+type UmlStateInput struct {
+	// The UmlState to submit or modify
 	// in: body
-	State *orm.StateAPI
+	UmlState *orm.UmlStateAPI
 }
 
-// GetStates
+// GetUmlStates
 //
-// swagger:route GET /states states getStates
+// swagger:route GET /umlstates umlstates getUmlStates
 //
-// Get all states
+// Get all umlstates
 //
 // Responses:
 //    default: genericError
-//        200: stateDBsResponse
-func GetStates(c *gin.Context) {
-	db := orm.BackRepo.BackRepoState.GetDB()
+//        200: umlstateDBsResponse
+func GetUmlStates(c *gin.Context) {
+	db := orm.BackRepo.BackRepoUmlState.GetDB()
 	
 	// source slice
-	var stateDBs []orm.StateDB
-	query := db.Find(&stateDBs)
+	var umlstateDBs []orm.UmlStateDB
+	query := db.Find(&umlstateDBs)
 	if query.Error != nil {
 		var returnError GenericError
 		returnError.Body.Code = http.StatusBadRequest
@@ -60,29 +60,29 @@ func GetStates(c *gin.Context) {
 	}
 
 	// slice that will be transmitted to the front
-	stateAPIs := make([]orm.StateAPI, 0)
+	umlstateAPIs := make([]orm.UmlStateAPI, 0)
 
-	// for each state, update fields from the database nullable fields
-	for idx := range stateDBs {
-		stateDB := &stateDBs[idx]
-		_ = stateDB
-		var stateAPI orm.StateAPI
+	// for each umlstate, update fields from the database nullable fields
+	for idx := range umlstateDBs {
+		umlstateDB := &umlstateDBs[idx]
+		_ = umlstateDB
+		var umlstateAPI orm.UmlStateAPI
 
 		// insertion point for updating fields
-		stateAPI.ID = stateDB.ID
-		stateDB.CopyBasicFieldsToState(&stateAPI.State)
-		stateAPI.StatePointersEnconding = stateDB.StatePointersEnconding
-		stateAPIs = append(stateAPIs, stateAPI)
+		umlstateAPI.ID = umlstateDB.ID
+		umlstateDB.CopyBasicFieldsToUmlState(&umlstateAPI.UmlState)
+		umlstateAPI.UmlStatePointersEnconding = umlstateDB.UmlStatePointersEnconding
+		umlstateAPIs = append(umlstateAPIs, umlstateAPI)
 	}
 
-	c.JSON(http.StatusOK, stateAPIs)
+	c.JSON(http.StatusOK, umlstateAPIs)
 }
 
-// PostState
+// PostUmlState
 //
-// swagger:route POST /states states postState
+// swagger:route POST /umlstates umlstates postUmlState
 //
-// Creates a state
+// Creates a umlstate
 //     Consumes:
 //     - application/json
 //
@@ -90,12 +90,12 @@ func GetStates(c *gin.Context) {
 //     - application/json
 //
 //     Responses:
-//       200: stateDBResponse
-func PostState(c *gin.Context) {
-	db := orm.BackRepo.BackRepoState.GetDB()
+//       200: umlstateDBResponse
+func PostUmlState(c *gin.Context) {
+	db := orm.BackRepo.BackRepoUmlState.GetDB()
 
 	// Validate input
-	var input orm.StateAPI
+	var input orm.UmlStateAPI
 
 	err := c.ShouldBindJSON(&input)
 	if err != nil {
@@ -106,12 +106,12 @@ func PostState(c *gin.Context) {
 		return
 	}
 
-	// Create state
-	stateDB := orm.StateDB{}
-	stateDB.StatePointersEnconding = input.StatePointersEnconding
-	stateDB.CopyBasicFieldsFromState(&input.State)
+	// Create umlstate
+	umlstateDB := orm.UmlStateDB{}
+	umlstateDB.UmlStatePointersEnconding = input.UmlStatePointersEnconding
+	umlstateDB.CopyBasicFieldsFromUmlState(&input.UmlState)
 
-	query := db.Create(&stateDB)
+	query := db.Create(&umlstateDB)
 	if query.Error != nil {
 		var returnError GenericError
 		returnError.Body.Code = http.StatusBadRequest
@@ -124,24 +124,24 @@ func PostState(c *gin.Context) {
 	// (this will be improved with implementation of unit of work design pattern)
 	orm.BackRepo.IncrementPushFromFrontNb()
 
-	c.JSON(http.StatusOK, stateDB)
+	c.JSON(http.StatusOK, umlstateDB)
 }
 
-// GetState
+// GetUmlState
 //
-// swagger:route GET /states/{ID} states getState
+// swagger:route GET /umlstates/{ID} umlstates getUmlState
 //
-// Gets the details for a state.
+// Gets the details for a umlstate.
 //
 // Responses:
 //    default: genericError
-//        200: stateDBResponse
-func GetState(c *gin.Context) {
-	db := orm.BackRepo.BackRepoState.GetDB()
+//        200: umlstateDBResponse
+func GetUmlState(c *gin.Context) {
+	db := orm.BackRepo.BackRepoUmlState.GetDB()
 
-	// Get stateDB in DB
-	var stateDB orm.StateDB
-	if err := db.First(&stateDB, c.Param("id")).Error; err != nil {
+	// Get umlstateDB in DB
+	var umlstateDB orm.UmlStateDB
+	if err := db.First(&umlstateDB, c.Param("id")).Error; err != nil {
 		var returnError GenericError
 		returnError.Body.Code = http.StatusBadRequest
 		returnError.Body.Message = err.Error()
@@ -149,31 +149,31 @@ func GetState(c *gin.Context) {
 		return
 	}
 
-	var stateAPI orm.StateAPI
-	stateAPI.ID = stateDB.ID
-	stateAPI.StatePointersEnconding = stateDB.StatePointersEnconding
-	stateDB.CopyBasicFieldsToState(&stateAPI.State)
+	var umlstateAPI orm.UmlStateAPI
+	umlstateAPI.ID = umlstateDB.ID
+	umlstateAPI.UmlStatePointersEnconding = umlstateDB.UmlStatePointersEnconding
+	umlstateDB.CopyBasicFieldsToUmlState(&umlstateAPI.UmlState)
 
-	c.JSON(http.StatusOK, stateAPI)
+	c.JSON(http.StatusOK, umlstateAPI)
 }
 
-// UpdateState
+// UpdateUmlState
 //
-// swagger:route PATCH /states/{ID} states updateState
+// swagger:route PATCH /umlstates/{ID} umlstates updateUmlState
 //
-// Update a state
+// Update a umlstate
 //
 // Responses:
 //    default: genericError
-//        200: stateDBResponse
-func UpdateState(c *gin.Context) {
-	db := orm.BackRepo.BackRepoState.GetDB()
+//        200: umlstateDBResponse
+func UpdateUmlState(c *gin.Context) {
+	db := orm.BackRepo.BackRepoUmlState.GetDB()
 
 	// Get model if exist
-	var stateDB orm.StateDB
+	var umlstateDB orm.UmlStateDB
 
-	// fetch the state
-	query := db.First(&stateDB, c.Param("id"))
+	// fetch the umlstate
+	query := db.First(&umlstateDB, c.Param("id"))
 
 	if query.Error != nil {
 		var returnError GenericError
@@ -184,17 +184,17 @@ func UpdateState(c *gin.Context) {
 	}
 
 	// Validate input
-	var input orm.StateAPI
+	var input orm.UmlStateAPI
 	if err := c.ShouldBindJSON(&input); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
 
 	// update
-	stateDB.CopyBasicFieldsFromState(&input.State)
-	stateDB.StatePointersEnconding = input.StatePointersEnconding
+	umlstateDB.CopyBasicFieldsFromUmlState(&input.UmlState)
+	umlstateDB.UmlStatePointersEnconding = input.UmlStatePointersEnconding
 
-	query = db.Model(&stateDB).Updates(stateDB)
+	query = db.Model(&umlstateDB).Updates(umlstateDB)
 	if query.Error != nil {
 		var returnError GenericError
 		returnError.Body.Code = http.StatusBadRequest
@@ -207,24 +207,24 @@ func UpdateState(c *gin.Context) {
 	// (this will be improved with implementation of unit of work design pattern)
 	orm.BackRepo.IncrementPushFromFrontNb()
 
-	// return status OK with the marshalling of the the stateDB
-	c.JSON(http.StatusOK, stateDB)
+	// return status OK with the marshalling of the the umlstateDB
+	c.JSON(http.StatusOK, umlstateDB)
 }
 
-// DeleteState
+// DeleteUmlState
 //
-// swagger:route DELETE /states/{ID} states deleteState
+// swagger:route DELETE /umlstates/{ID} umlstates deleteUmlState
 //
-// Delete a state
+// Delete a umlstate
 //
 // Responses:
 //    default: genericError
-func DeleteState(c *gin.Context) {
-	db := orm.BackRepo.BackRepoState.GetDB()
+func DeleteUmlState(c *gin.Context) {
+	db := orm.BackRepo.BackRepoUmlState.GetDB()
 
 	// Get model if exist
-	var stateDB orm.StateDB
-	if err := db.First(&stateDB, c.Param("id")).Error; err != nil {
+	var umlstateDB orm.UmlStateDB
+	if err := db.First(&umlstateDB, c.Param("id")).Error; err != nil {
 		var returnError GenericError
 		returnError.Body.Code = http.StatusBadRequest
 		returnError.Body.Message = err.Error()
@@ -233,7 +233,7 @@ func DeleteState(c *gin.Context) {
 	}
 
 	// with gorm.Model field, default delete is a soft delete. Unscoped() force delete
-	db.Unscoped().Delete(&stateDB)
+	db.Unscoped().Delete(&umlstateDB)
 
 	// a DELETE generates a back repo commit increase
 	// (this will be improved with implementation of unit of work design pattern)

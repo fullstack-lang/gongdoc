@@ -2,8 +2,8 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl } from '@angular/forms';
 
-import { StateDB } from '../state-db'
-import { StateService } from '../state.service'
+import { UmlStateDB } from '../umlstate-db'
+import { UmlStateService } from '../umlstate.service'
 
 import { FrontRepoService, FrontRepo, SelectionMode, DialogData } from '../front-repo.service'
 import { MapOfComponents } from '../map-components'
@@ -17,9 +17,9 @@ import { MatDialog, MAT_DIALOG_DATA, MatDialogRef, MatDialogConfig } from '@angu
 
 import { NullInt64 } from '../front-repo.service'
 
-// StateDetailComponent is initilizaed from different routes
-// StateDetailComponentState detail different cases 
-enum StateDetailComponentState {
+// UmlStateDetailComponent is initilizaed from different routes
+// UmlStateDetailComponentState detail different cases 
+enum UmlStateDetailComponentState {
 	CREATE_INSTANCE,
 	UPDATE_INSTANCE,
 	// insertion point for declarations of enum values of state
@@ -27,16 +27,16 @@ enum StateDetailComponentState {
 }
 
 @Component({
-	selector: 'app-state-detail',
-	templateUrl: './state-detail.component.html',
-	styleUrls: ['./state-detail.component.css'],
+	selector: 'app-umlstate-detail',
+	templateUrl: './umlstate-detail.component.html',
+	styleUrls: ['./umlstate-detail.component.css'],
 })
-export class StateDetailComponent implements OnInit {
+export class UmlStateDetailComponent implements OnInit {
 
 	// insertion point for declarations
 
-	// the StateDB of interest
-	state: StateDB;
+	// the UmlStateDB of interest
+	umlstate: UmlStateDB;
 
 	// front repo
 	frontRepo: FrontRepo
@@ -47,7 +47,7 @@ export class StateDetailComponent implements OnInit {
 	mapFields_displayAsTextArea = new Map<string, boolean>()
 
 	// the state at initialization (CREATION, UPDATE or CREATE with one association set)
-	state: StateDetailComponentState
+	state: UmlStateDetailComponentState
 
 	// in UDPATE state, if is the id of the instance to update
 	// in CREATE state with one association set, this is the id of the associated instance
@@ -58,7 +58,7 @@ export class StateDetailComponent implements OnInit {
 	originStructFieldName: string
 
 	constructor(
-		private stateService: StateService,
+		private umlstateService: UmlStateService,
 		private frontRepoService: FrontRepoService,
 		public dialog: MatDialog,
 		private route: ActivatedRoute,
@@ -75,16 +75,16 @@ export class StateDetailComponent implements OnInit {
 
 		const association = this.route.snapshot.paramMap.get('association');
 		if (this.id == 0) {
-			this.state = StateDetailComponentState.CREATE_INSTANCE
+			this.state = UmlStateDetailComponentState.CREATE_INSTANCE
 		} else {
 			if (this.originStruct == undefined) {
-				this.state = StateDetailComponentState.UPDATE_INSTANCE
+				this.state = UmlStateDetailComponentState.UPDATE_INSTANCE
 			} else {
 				switch (this.originStructFieldName) {
 					// insertion point for state computation
 					case "States":
-						console.log("State" + " is instanciated with back pointer to instance " + this.id + " Umlsc association States")
-						this.state = StateDetailComponentState.CREATE_INSTANCE_WITH_ASSOCIATION_Umlsc_States_SET
+						console.log("UmlState" + " is instanciated with back pointer to instance " + this.id + " Umlsc association States")
+						this.state = UmlStateDetailComponentState.CREATE_INSTANCE_WITH_ASSOCIATION_Umlsc_States_SET
 						break;
 					default:
 						console.log(this.originStructFieldName + " is unkown association")
@@ -92,13 +92,13 @@ export class StateDetailComponent implements OnInit {
 			}
 		}
 
-		this.getState()
+		this.getUmlState()
 
 		// observable for changes in structs
-		this.stateService.StateServiceChanged.subscribe(
+		this.umlstateService.UmlStateServiceChanged.subscribe(
 			message => {
 				if (message == "post" || message == "update" || message == "delete") {
-					this.getState()
+					this.getUmlState()
 				}
 			}
 		)
@@ -106,23 +106,23 @@ export class StateDetailComponent implements OnInit {
 		// insertion point for initialisation of enums list
 	}
 
-	getState(): void {
+	getUmlState(): void {
 
 		this.frontRepoService.pull().subscribe(
 			frontRepo => {
 				this.frontRepo = frontRepo
 
 				switch (this.state) {
-					case StateDetailComponentState.CREATE_INSTANCE:
-						this.state = new (StateDB)
+					case UmlStateDetailComponentState.CREATE_INSTANCE:
+						this.umlstate = new (UmlStateDB)
 						break;
-					case StateDetailComponentState.UPDATE_INSTANCE:
-						this.state = frontRepo.States.get(this.id)
+					case UmlStateDetailComponentState.UPDATE_INSTANCE:
+						this.umlstate = frontRepo.UmlStates.get(this.id)
 						break;
 					// insertion point for init of association field
-					case StateDetailComponentState.CREATE_INSTANCE_WITH_ASSOCIATION_Umlsc_States_SET:
-						this.state = new (StateDB)
-						this.state.Umlsc_States_reverse = frontRepo.Umlscs.get(this.id)
+					case UmlStateDetailComponentState.CREATE_INSTANCE_WITH_ASSOCIATION_Umlsc_States_SET:
+						this.umlstate = new (UmlStateDB)
+						this.umlstate.Umlsc_States_reverse = frontRepo.Umlscs.get(this.id)
 						break;
 					default:
 						console.log(this.state + " is unkown state")
@@ -145,30 +145,30 @@ export class StateDetailComponent implements OnInit {
 		// save from the front pointer space to the non pointer space for serialization
 
 		// insertion point for translation/nullation of each pointers
-		if (this.state.Umlsc_States_reverse != undefined) {
-			if (this.state.Umlsc_StatesDBID == undefined) {
-				this.state.Umlsc_StatesDBID = new NullInt64
+		if (this.umlstate.Umlsc_States_reverse != undefined) {
+			if (this.umlstate.Umlsc_StatesDBID == undefined) {
+				this.umlstate.Umlsc_StatesDBID = new NullInt64
 			}
-			this.state.Umlsc_StatesDBID.Int64 = this.state.Umlsc_States_reverse.ID
-			this.state.Umlsc_StatesDBID.Valid = true
-			if (this.state.Umlsc_StatesDBID_Index == undefined) {
-				this.state.Umlsc_StatesDBID_Index = new NullInt64
+			this.umlstate.Umlsc_StatesDBID.Int64 = this.umlstate.Umlsc_States_reverse.ID
+			this.umlstate.Umlsc_StatesDBID.Valid = true
+			if (this.umlstate.Umlsc_StatesDBID_Index == undefined) {
+				this.umlstate.Umlsc_StatesDBID_Index = new NullInt64
 			}
-			this.state.Umlsc_StatesDBID_Index.Valid = true
-			this.state.Umlsc_States_reverse = undefined // very important, otherwise, circular JSON
+			this.umlstate.Umlsc_StatesDBID_Index.Valid = true
+			this.umlstate.Umlsc_States_reverse = undefined // very important, otherwise, circular JSON
 		}
 
 		switch (this.state) {
-			case StateDetailComponentState.UPDATE_INSTANCE:
-				this.stateService.updateState(this.state)
-					.subscribe(state => {
-						this.stateService.StateServiceChanged.next("update")
+			case UmlStateDetailComponentState.UPDATE_INSTANCE:
+				this.umlstateService.updateUmlState(this.umlstate)
+					.subscribe(umlstate => {
+						this.umlstateService.UmlStateServiceChanged.next("update")
 					});
 				break;
 			default:
-				this.stateService.postState(this.state).subscribe(state => {
-					this.stateService.StateServiceChanged.next("post")
-					this.state = {} // reset fields
+				this.umlstateService.postUmlState(this.umlstate).subscribe(umlstate => {
+					this.umlstateService.UmlStateServiceChanged.next("post")
+					this.umlstate = {} // reset fields
 				});
 		}
 	}
@@ -176,7 +176,7 @@ export class StateDetailComponent implements OnInit {
 	// openReverseSelection is a generic function that calls dialog for the edition of 
 	// ONE-MANY association
 	// It uses the MapOfComponent provided by the front repo
-	openReverseSelection(AssociatedStruct: string, reverseField: string, selectionMode: SelectionMode,
+	openReverseSelection(AssociatedStruct: string, reverseField: string, selectionMode: string,
 		sourceField: string, intermediateStructField: string, nextAssociatedStruct: string ) {
 
 		console.log("mode " + selectionMode)
@@ -191,7 +191,7 @@ export class StateDetailComponent implements OnInit {
 		dialogConfig.height = "50%"
 		if (selectionMode == SelectionMode.ONE_MANY_ASSOCIATION_MODE) {
 
-			dialogData.ID = this.state.ID
+			dialogData.ID = this.umlstate.ID
 			dialogData.ReversePointer = reverseField
 			dialogData.OrderingMode = false
 			dialogData.SelectionMode = selectionMode
@@ -207,13 +207,13 @@ export class StateDetailComponent implements OnInit {
 			});
 		}
 		if (selectionMode == SelectionMode.MANY_MANY_ASSOCIATION_MODE) {
-			dialogData.ID = this.state.ID
+			dialogData.ID = this.umlstate.ID
 			dialogData.ReversePointer = reverseField
 			dialogData.OrderingMode = false
 			dialogData.SelectionMode = selectionMode
 
 			// set up the source
-			dialogData.SourceStruct = "State"
+			dialogData.SourceStruct = "UmlState"
 			dialogData.SourceField = sourceField
 
 			// set up the intermediate struct
@@ -243,7 +243,7 @@ export class StateDetailComponent implements OnInit {
 		// dialogConfig.disableClose = true;
 		dialogConfig.autoFocus = true;
 		dialogConfig.data = {
-			ID: this.state.ID,
+			ID: this.umlstate.ID,
 			ReversePointer: reverseField,
 			OrderingMode: true,
 		};
@@ -259,8 +259,8 @@ export class StateDetailComponent implements OnInit {
 	}
 
 	fillUpNameIfEmpty(event) {
-		if (this.state.Name == undefined) {
-			this.state.Name = event.value.Name
+		if (this.umlstate.Name == undefined) {
+			this.umlstate.Name = event.value.Name
 		}
 	}
 

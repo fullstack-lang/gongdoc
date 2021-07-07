@@ -1,5 +1,5 @@
 // insertion point for imports
-import { StateDB } from './state-db'
+import { UmlStateDB } from './umlstate-db'
 import { PkgeltDB } from './pkgelt-db'
 
 // usefull for managing pointer ID values that can be nullable
@@ -15,7 +15,7 @@ export class UmlscDB {
 	Activestate?: string
 
 	// insertion point for other declarations
-	States?: Array<StateDB>
+	States?: Array<UmlStateDB>
 	Pkgelt_UmlscsDBID?: NullInt64
 	Pkgelt_UmlscsDBID_Index?: NullInt64 // store the index of the umlsc instance in Pkgelt.Umlscs
 	Pkgelt_Umlscs_reverse?: PkgeltDB

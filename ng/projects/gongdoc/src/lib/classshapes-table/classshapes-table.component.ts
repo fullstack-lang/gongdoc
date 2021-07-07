@@ -78,7 +78,7 @@ export class ClassshapesTableComponent implements OnInit {
         case 'ClassshapeTargetType':
           return classshapeDB.ClassshapeTargetType;
 
-        case 'Classshapes':
+        case 'Classdiagram_Classshapes':
           return this.frontRepo.Classdiagrams.get(classshapeDB.Classdiagram_ClassshapesDBID.Int64)?.Name;
 
         default:
@@ -162,7 +162,7 @@ export class ClassshapesTableComponent implements OnInit {
         "Width",
         "Heigth",
         "ClassshapeTargetType",
-        "Classshapes",
+        "Classdiagram_Classshapes",
       ]
     } else {
       this.displayedColumns = ['select', 'ID', // insertion point for columns to display
@@ -172,7 +172,7 @@ export class ClassshapesTableComponent implements OnInit {
         "Width",
         "Heigth",
         "ClassshapeTargetType",
-        "Classshapes",
+        "Classdiagram_Classshapes",
       ]
       this.selection = new SelectionModel<ClassshapeDB>(allowMultiSelect, this.initialSelection);
     }

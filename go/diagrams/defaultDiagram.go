@@ -243,7 +243,7 @@ var defaultDiagram uml.Classdiagram = uml.Classdiagram{
 			},
 		},
 		{
-			Struct: &(models.State{}),
+			Struct: &(models.UmlState{}),
 			Position: &uml.Position{
 				X: 2140.000000,
 				Y: 40.000000,
@@ -252,13 +252,13 @@ var defaultDiagram uml.Classdiagram = uml.Classdiagram{
 			Heigth: 93.000000,
 			Fields: []*uml.Field{
 				{
-					Field: models.State{}.Name,
+					Field: models.UmlState{}.Name,
 				},
 				{
-					Field: models.State{}.X,
+					Field: models.UmlState{}.X,
 				},
 				{
-					Field: models.State{}.Y,
+					Field: models.UmlState{}.Y,
 				},
 			},
 		},

@@ -99,12 +99,12 @@ func RegisterControllers(r *gin.Engine) {
 		v1.PUT("/v1/positions/:id", UpdatePosition)
 		v1.DELETE("/v1/positions/:id", DeletePosition)
 
-		v1.GET("/v1/states", GetStates)
-		v1.GET("/v1/states/:id", GetState)
-		v1.POST("/v1/states", PostState)
-		v1.PATCH("/v1/states/:id", UpdateState)
-		v1.PUT("/v1/states/:id", UpdateState)
-		v1.DELETE("/v1/states/:id", DeleteState)
+		v1.GET("/v1/umlstates", GetUmlStates)
+		v1.GET("/v1/umlstates/:id", GetUmlState)
+		v1.POST("/v1/umlstates", PostUmlState)
+		v1.PATCH("/v1/umlstates/:id", UpdateUmlState)
+		v1.PUT("/v1/umlstates/:id", UpdateUmlState)
+		v1.DELETE("/v1/umlstates/:id", DeleteUmlState)
 
 		v1.GET("/v1/umlscs", GetUmlscs)
 		v1.GET("/v1/umlscs/:id", GetUmlsc)

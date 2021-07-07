@@ -24,8 +24,8 @@ import { PkgeltService } from '../pkgelt.service'
 import { getPkgeltUniqueID } from '../front-repo.service'
 import { PositionService } from '../position.service'
 import { getPositionUniqueID } from '../front-repo.service'
-import { StateService } from '../state.service'
-import { getStateUniqueID } from '../front-repo.service'
+import { UmlStateService } from '../umlstate.service'
+import { getUmlStateUniqueID } from '../front-repo.service'
 import { UmlscService } from '../umlsc.service'
 import { getUmlscUniqueID } from '../front-repo.service'
 import { VerticeService } from '../vertice.service'
@@ -173,7 +173,7 @@ export class SidebarComponent implements OnInit {
     private linkService: LinkService,
     private pkgeltService: PkgeltService,
     private positionService: PositionService,
-    private stateService: StateService,
+    private umlstateService: UmlStateService,
     private umlscService: UmlscService,
     private verticeService: VerticeService,
   ) { }
@@ -247,7 +247,7 @@ export class SidebarComponent implements OnInit {
       }
     )
     // observable for changes in structs
-    this.stateService.StateServiceChanged.subscribe(
+    this.umlstateService.UmlStateServiceChanged.subscribe(
       message => {
         if (message == "post" || message == "update" || message == "delete") {
           this.refresh()
@@ -878,22 +878,22 @@ export class SidebarComponent implements OnInit {
       )
 
       /**
-      * fill up the State part of the mat tree
+      * fill up the UmlState part of the mat tree
       */
-      let stateGongNodeStruct: GongNode = {
-        name: "State",
+      let umlstateGongNodeStruct: GongNode = {
+        name: "UmlState",
         type: GongNodeType.STRUCT,
         id: 0,
         uniqueIdPerStack: 13 * nonInstanceNodeId,
-        structName: "State",
+        structName: "UmlState",
         associationField: "",
         associatedStructName: "",
         children: new Array<GongNode>()
       }
       nonInstanceNodeId = nonInstanceNodeId + 1
-      this.gongNodeTree.push(stateGongNodeStruct)
+      this.gongNodeTree.push(umlstateGongNodeStruct)
 
-      this.frontRepo.States_array.sort((t1, t2) => {
+      this.frontRepo.UmlStates_array.sort((t1, t2) => {
         if (t1.Name > t2.Name) {
           return 1;
         }
@@ -903,19 +903,19 @@ export class SidebarComponent implements OnInit {
         return 0;
       });
 
-      this.frontRepo.States_array.forEach(
-        stateDB => {
-          let stateGongNodeInstance: GongNode = {
-            name: stateDB.Name,
+      this.frontRepo.UmlStates_array.forEach(
+        umlstateDB => {
+          let umlstateGongNodeInstance: GongNode = {
+            name: umlstateDB.Name,
             type: GongNodeType.INSTANCE,
-            id: stateDB.ID,
-            uniqueIdPerStack: getStateUniqueID(stateDB.ID),
-            structName: "State",
+            id: umlstateDB.ID,
+            uniqueIdPerStack: getUmlStateUniqueID(umlstateDB.ID),
+            structName: "UmlState",
             associationField: "",
             associatedStructName: "",
             children: new Array<GongNode>()
           }
-          stateGongNodeStruct.children.push(stateGongNodeInstance)
+          umlstateGongNodeStruct.children.push(umlstateGongNodeInstance)
 
           // insertion point for per field code
         }
@@ -966,32 +966,32 @@ export class SidebarComponent implements OnInit {
           * let append a node for the slide of pointer States
           */
           let StatesGongNodeAssociation: GongNode = {
-            name: "(State) States",
+            name: "(UmlState) States",
             type: GongNodeType.ONE__ZERO_MANY_ASSOCIATION,
             id: umlscDB.ID,
             uniqueIdPerStack: 19 * nonInstanceNodeId,
             structName: "Umlsc",
             associationField: "States",
-            associatedStructName: "State",
+            associatedStructName: "UmlState",
             children: new Array<GongNode>()
           }
           nonInstanceNodeId = nonInstanceNodeId + 1
           umlscGongNodeInstance.children.push(StatesGongNodeAssociation)
 
-          umlscDB.States?.forEach(stateDB => {
-            let stateNode: GongNode = {
-              name: stateDB.Name,
+          umlscDB.States?.forEach(umlstateDB => {
+            let umlstateNode: GongNode = {
+              name: umlstateDB.Name,
               type: GongNodeType.INSTANCE,
-              id: stateDB.ID,
+              id: umlstateDB.ID,
               uniqueIdPerStack: // godel numbering (thank you kurt)
                 7 * getUmlscUniqueID(umlscDB.ID)
-                + 11 * getStateUniqueID(stateDB.ID),
-              structName: "State",
+                + 11 * getUmlStateUniqueID(umlstateDB.ID),
+              structName: "UmlState",
               associationField: "",
               associatedStructName: "",
               children: new Array<GongNode>()
             }
-            StatesGongNodeAssociation.children.push(stateNode)
+            StatesGongNodeAssociation.children.push(umlstateNode)
           })
 
         }
