@@ -29,6 +29,18 @@
       "@angular/*": [
         "./node_modules/@angular/*"
       ],
+      "rxjs/operators": [
+        "./node_modules/rxjs/operators"
+      ],
+      "rxjs": [
+        "./node_modules/rxjs"
+      ],
+      "angular-split": [
+        "./node_modules/angular-split"
+      ],
+      "tslib": [
+        "./node_modules/tslib"
+      ],
       //
       "gong": [
         "../../gong/ng/projects/gong/src/public-api.ts"
