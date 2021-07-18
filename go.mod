@@ -5,7 +5,7 @@ go 1.16
 require (
 	github.com/blend/go-sdk v2.0.0+incompatible // indirect
 	github.com/frankban/quicktest v1.13.0 // indirect
-	github.com/fullstack-lang/gong v0.0.0-20210621154555-5ac069c49bb9
+	github.com/fullstack-lang/gong v0.0.0-20210710093608-589b682f06f7
 	github.com/gin-contrib/cors v1.3.1
 	github.com/gin-contrib/static v0.0.1
 	github.com/gin-gonic/gin v1.7.2
