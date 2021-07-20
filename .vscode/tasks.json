@@ -2,6 +2,12 @@
 	"version": "2.0.0",
 	"tasks": [
 		{
+			"label": "03 - lsof -i tcp:8080 ",
+			"type": "shell",
+			"command": "lsof -i tcp:8080 ",
+			"group": "build"
+		},
+		{
 			"label": "03 - ng serve",
 			"type": "shell",
 			"options": {
