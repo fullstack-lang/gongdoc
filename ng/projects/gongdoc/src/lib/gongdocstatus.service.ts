@@ -10,7 +10,6 @@ import { BehaviorSubject } from 'rxjs';
 import { Observable, of } from 'rxjs';
 import { catchError, map, tap } from 'rxjs/operators';
 
-import { GongdocStatusAPI } from './gongdocstatus-api';
 import { GongdocStatusDB } from './gongdocstatus-db';
 
 @Injectable({

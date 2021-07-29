@@ -10,7 +10,6 @@ import { BehaviorSubject } from 'rxjs';
 import { Observable, of } from 'rxjs';
 import { catchError, map, tap } from 'rxjs/operators';
 
-import { PkgeltAPI } from './pkgelt-api';
 import { PkgeltDB } from './pkgelt-db';
 
 @Injectable({

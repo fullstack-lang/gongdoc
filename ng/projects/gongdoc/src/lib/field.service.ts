@@ -10,7 +10,6 @@ import { BehaviorSubject } from 'rxjs';
 import { Observable, of } from 'rxjs';
 import { catchError, map, tap } from 'rxjs/operators';
 
-import { FieldAPI } from './field-api';
 import { FieldDB } from './field-db';
 
 @Injectable({

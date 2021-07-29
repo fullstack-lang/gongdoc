@@ -10,7 +10,6 @@ import { BehaviorSubject } from 'rxjs';
 import { Observable, of } from 'rxjs';
 import { catchError, map, tap } from 'rxjs/operators';
 
-import { LinkAPI } from './link-api';
 import { LinkDB } from './link-db';
 
 @Injectable({
