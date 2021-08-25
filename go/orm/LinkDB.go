@@ -21,8 +21,8 @@ import (
 )
 
 // dummy variable to have the import declaration wihthout compile failure (even if no code needing this import is generated)
-var dummy_Link sql.NullBool
-var __Link_time__dummyDeclaration time.Duration
+var dummy_Link_sql sql.NullBool
+var dummy_Link_time time.Duration
 var dummy_Link_sort sort.Float64Slice
 
 // LinkAPI is the input in POST API

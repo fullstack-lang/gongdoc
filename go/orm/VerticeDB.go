@@ -21,8 +21,8 @@ import (
 )
 
 // dummy variable to have the import declaration wihthout compile failure (even if no code needing this import is generated)
-var dummy_Vertice sql.NullBool
-var __Vertice_time__dummyDeclaration time.Duration
+var dummy_Vertice_sql sql.NullBool
+var dummy_Vertice_time time.Duration
 var dummy_Vertice_sort sort.Float64Slice
 
 // VerticeAPI is the input in POST API

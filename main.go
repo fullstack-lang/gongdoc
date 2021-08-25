@@ -69,11 +69,8 @@ func main() {
 	}
 
 	// setup GORM
-	gongdocDB := gongdoc_orm.SetupModels(*logBBFlag, "file:memdb1?mode=memory&cache=shared")
-	gongDB := gong_orm.SetupModels(*logBBFlag, "file:memdb2?mode=memory&cache=shared")
-
-	gongdoc_orm.BackRepo.Init(gongdocDB)
-	gong_orm.BackRepo.Init(gongDB)
+	gongdoc_orm.SetupModels(*logBBFlag, "file:memdb1?mode=memory&cache=shared")
+	gong_orm.SetupModels(*logBBFlag, "file:memdb2?mode=memory&cache=shared")
 
 	// setup controlers
 	if !*logGINFlag {

@@ -21,8 +21,8 @@ import (
 )
 
 // dummy variable to have the import declaration wihthout compile failure (even if no code needing this import is generated)
-var dummy_Umlsc sql.NullBool
-var __Umlsc_time__dummyDeclaration time.Duration
+var dummy_Umlsc_sql sql.NullBool
+var dummy_Umlsc_time time.Duration
 var dummy_Umlsc_sort sort.Float64Slice
 
 // UmlscAPI is the input in POST API

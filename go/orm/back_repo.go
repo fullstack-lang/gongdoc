@@ -68,7 +68,7 @@ func (backRepo *BackRepoStruct) IncrementPushFromFrontNb() uint {
 }
 
 // Init the BackRepoStruct inner variables and link to the database
-func (backRepo *BackRepoStruct) Init(db *gorm.DB) {
+func (backRepo *BackRepoStruct) init(db *gorm.DB) {
 	// insertion point for per struct back repo declarations
 	backRepo.BackRepoClassdiagram.Init(db)
 	backRepo.BackRepoClassshape.Init(db)

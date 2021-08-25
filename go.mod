@@ -1,15 +1,15 @@
 module github.com/fullstack-lang/gongdoc
 
-go 1.16
+go 1.17
 
 require (
 	github.com/blend/go-sdk v2.0.0+incompatible // indirect
-	github.com/frankban/quicktest v1.13.0 // indirect
-	github.com/fullstack-lang/gong v0.0.0-20210710093608-589b682f06f7
+	github.com/frankban/quicktest v1.13.1 // indirect
+	github.com/fullstack-lang/gong v0.0.0-20210825200014-2b24a9a2e9a6
 	github.com/gin-contrib/cors v1.3.1
 	github.com/gin-contrib/static v0.0.1
-	github.com/gin-gonic/gin v1.7.2
-	github.com/go-playground/validator/v10 v10.6.1 // indirect
+	github.com/gin-gonic/gin v1.7.4
+	github.com/go-playground/validator/v10 v10.9.0 // indirect
 	github.com/golang/protobuf v1.5.2 // indirect
 	github.com/google/btree v1.0.1 // indirect
 	github.com/google/go-cmp v0.5.6 // indirect
@@ -21,13 +21,40 @@ require (
 	github.com/tdewolff/minify/v2 v2.9.13 // indirect
 	github.com/tdewolff/parse/v2 v2.5.12 // indirect
 	github.com/tealeg/xlsx/v3 v3.2.3
-	github.com/ugorji/go v1.2.6 // indirect
-	golang.org/x/crypto v0.0.0-20210513164829-c07d793c2f9a // indirect
+	golang.org/x/crypto v0.0.0-20210817164053-32db794688a5 // indirect
 	golang.org/x/image v0.0.0-20210220032944-ac19c3e999fb // indirect
-	golang.org/x/sys v0.0.0-20210611083646-a4fc73990273 // indirect
-	golang.org/x/text v0.3.6 // indirect
-	golang.org/x/tools v0.1.3
+	golang.org/x/sys v0.0.0-20210823070655-63515b42dcdf // indirect
+	golang.org/x/text v0.3.7 // indirect
+	golang.org/x/tools v0.1.5
 	gonum.org/v1/plot v0.8.1 // indirect
 	gorm.io/driver/sqlite v1.1.4
-	gorm.io/gorm v1.21.10
+	gorm.io/gorm v1.21.13
+)
+
+require (
+	github.com/ByteArena/poly2tri-go v0.0.0-20170716161910-d102ad91854f // indirect
+	github.com/ajstarks/svgo v0.0.0-20200725142600-7a3c8b57fecb // indirect
+	github.com/dsnet/compress v0.0.1 // indirect
+	github.com/fogleman/gg v1.3.0 // indirect
+	github.com/gin-contrib/sse v0.1.0 // indirect
+	github.com/go-playground/locales v0.14.0 // indirect
+	github.com/go-playground/universal-translator v0.18.0 // indirect
+	github.com/golang/freetype v0.0.0-20170609003504-e2365dfdc4a0 // indirect
+	github.com/jinzhu/inflection v1.0.0 // indirect
+	github.com/jinzhu/now v1.1.2 // indirect
+	github.com/jung-kurt/gofpdf v1.16.2 // indirect
+	github.com/kr/pretty v0.3.0 // indirect
+	github.com/leodido/go-urn v1.2.1 // indirect
+	github.com/mattn/go-sqlite3 v1.14.8 // indirect
+	github.com/modern-go/concurrent v0.0.0-20180306012644-bacd9c7ef1dd // indirect
+	github.com/modern-go/reflect2 v1.0.1 // indirect
+	github.com/peterbourgon/diskv v2.0.1+incompatible // indirect
+	github.com/rogpeppe/fastuuid v1.2.0 // indirect
+	github.com/rogpeppe/go-internal v1.8.0 // indirect
+	github.com/ugorji/go/codec v1.2.6 // indirect
+	github.com/wcharczuk/go-chart v2.0.2-0.20191206192251-962b9abdec2b+incompatible // indirect
+	golang.org/x/mod v0.5.0 // indirect
+	golang.org/x/xerrors v0.0.0-20200804184101-5ec99f83aff1 // indirect
+	google.golang.org/protobuf v1.27.1 // indirect
+	gopkg.in/yaml.v2 v2.4.0 // indirect
 )
