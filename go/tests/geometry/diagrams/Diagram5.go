@@ -93,7 +93,7 @@ var Diagram5 uml.Classdiagram = uml.Classdiagram{
 				Y: 655.000000,
 			},
 			Width:  240.000000,
-			Heigth: 63.000000,
+			Heigth: 48.000000,
 			Links: []*uml.Link{
 				{
 					Field: models.Polyline{}.Follower,

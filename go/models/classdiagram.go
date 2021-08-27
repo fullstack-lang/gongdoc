@@ -12,8 +12,8 @@ import (
 	"strings"
 
 	"github.com/tdewolff/canvas"
-	"github.com/tdewolff/canvas/rasterizer"
-	"github.com/tdewolff/canvas/svg"
+	"github.com/tdewolff/canvas/renderers/rasterizer"
+	"github.com/tdewolff/canvas/renderers/svg"
 
 	"github.com/fullstack-lang/gongdoc/go/static"
 	"github.com/fullstack-lang/gongdoc/go/walk"
@@ -223,6 +223,7 @@ func (classdiagram *Classdiagram) OutputSVG(path string) {
 	staticFontFile := []byte(static.Files["../gongdoc/DejaVuSerif.ttf"])
 	if err := dejaVuSerif.LoadFont(
 		staticFontFile,
+		0,
 		canvas.FontRegular); err != nil { // TTF, OTF, WOFF, or WOFF2
 		log.Panic("cannot load font", err.Error())
 	}
