@@ -38,7 +38,7 @@ func (umlsc *Umlsc) MarshallAsVariable(file *os.File) error {
 	sort.Slice(umlsc.States[:], func(i, j int) bool {
 		return umlsc.States[i].Name < umlsc.States[j].Name
 	})
-	fmt.Fprintf(file, "\tStates: []*uml.State{\n")
+	fmt.Fprintf(file, "\tStates: []*uml.UmlState{\n")
 	for _, state := range umlsc.States {
 		state.Marshall(file, 2)
 		fmt.Fprintf(file, ",\n")
@@ -61,7 +61,7 @@ func (umlsc *Umlsc) Unmarshall(expr ast.Expr, fset *token.FileSet) {
 
 	// expression should be a composite literal expression
 	// "uml.Umlsc{
-	//   	States: []*uml.State{ ...
+	//   	States: []*uml.UmlState{ ...
 
 	if cl, ok := expr.(*ast.CompositeLit); ok {
 

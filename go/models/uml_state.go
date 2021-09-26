@@ -37,7 +37,7 @@ func (state *UmlState) Marshall(file *os.File, nbIndentation int) error {
 // MarshallAsVariable ...
 func (state *UmlState) MarshallAsVariable(file *os.File) error {
 
-	fmt.Fprintf(file, "var %s uml.State = uml.State", state.Name)
+	fmt.Fprintf(file, "var %s uml.UmlState = uml.UmlState", state.Name)
 	state.Marshall(file, 0)
 	fmt.Fprintf(file, "\n\n")
 	return nil
