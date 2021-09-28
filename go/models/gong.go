@@ -95,38 +95,38 @@ type BackRepoInterface interface {
 
 // swagger:ignore instructs the gong compiler (gongc) to avoid this particular struct
 var Stage StageStruct = StageStruct{ // insertion point for array initiatialisation
-	Classdiagrams:           make(map[*Classdiagram]struct{}, 0),
-	Classdiagrams_mapString: make(map[string]*Classdiagram, 0),
+	Classdiagrams:           make(map[*Classdiagram]struct{}),
+	Classdiagrams_mapString: make(map[string]*Classdiagram),
 
-	Classshapes:           make(map[*Classshape]struct{}, 0),
-	Classshapes_mapString: make(map[string]*Classshape, 0),
+	Classshapes:           make(map[*Classshape]struct{}),
+	Classshapes_mapString: make(map[string]*Classshape),
 
-	Fields:           make(map[*Field]struct{}, 0),
-	Fields_mapString: make(map[string]*Field, 0),
+	Fields:           make(map[*Field]struct{}),
+	Fields_mapString: make(map[string]*Field),
 
-	GongdocCommands:           make(map[*GongdocCommand]struct{}, 0),
-	GongdocCommands_mapString: make(map[string]*GongdocCommand, 0),
+	GongdocCommands:           make(map[*GongdocCommand]struct{}),
+	GongdocCommands_mapString: make(map[string]*GongdocCommand),
 
-	GongdocStatuss:           make(map[*GongdocStatus]struct{}, 0),
-	GongdocStatuss_mapString: make(map[string]*GongdocStatus, 0),
+	GongdocStatuss:           make(map[*GongdocStatus]struct{}),
+	GongdocStatuss_mapString: make(map[string]*GongdocStatus),
 
-	Links:           make(map[*Link]struct{}, 0),
-	Links_mapString: make(map[string]*Link, 0),
+	Links:           make(map[*Link]struct{}),
+	Links_mapString: make(map[string]*Link),
 
-	Pkgelts:           make(map[*Pkgelt]struct{}, 0),
-	Pkgelts_mapString: make(map[string]*Pkgelt, 0),
+	Pkgelts:           make(map[*Pkgelt]struct{}),
+	Pkgelts_mapString: make(map[string]*Pkgelt),
 
-	Positions:           make(map[*Position]struct{}, 0),
-	Positions_mapString: make(map[string]*Position, 0),
+	Positions:           make(map[*Position]struct{}),
+	Positions_mapString: make(map[string]*Position),
 
-	UmlStates:           make(map[*UmlState]struct{}, 0),
-	UmlStates_mapString: make(map[string]*UmlState, 0),
+	UmlStates:           make(map[*UmlState]struct{}),
+	UmlStates_mapString: make(map[string]*UmlState),
 
-	Umlscs:           make(map[*Umlsc]struct{}, 0),
-	Umlscs_mapString: make(map[string]*Umlsc, 0),
+	Umlscs:           make(map[*Umlsc]struct{}),
+	Umlscs_mapString: make(map[string]*Umlsc),
 
-	Vertices:           make(map[*Vertice]struct{}, 0),
-	Vertices_mapString: make(map[string]*Vertice, 0),
+	Vertices:           make(map[*Vertice]struct{}),
+	Vertices_mapString: make(map[string]*Vertice),
 
 	// end of insertion point
 }
@@ -1324,38 +1324,38 @@ type AllModelsStructDeleteInterface interface { // insertion point for Callbacks
 }
 
 func (stage *StageStruct) Reset() { // insertion point for array reset
-	stage.Classdiagrams = make(map[*Classdiagram]struct{}, 0)
-	stage.Classdiagrams_mapString = make(map[string]*Classdiagram, 0)
+	stage.Classdiagrams = make(map[*Classdiagram]struct{})
+	stage.Classdiagrams_mapString = make(map[string]*Classdiagram)
 
-	stage.Classshapes = make(map[*Classshape]struct{}, 0)
-	stage.Classshapes_mapString = make(map[string]*Classshape, 0)
+	stage.Classshapes = make(map[*Classshape]struct{})
+	stage.Classshapes_mapString = make(map[string]*Classshape)
 
-	stage.Fields = make(map[*Field]struct{}, 0)
-	stage.Fields_mapString = make(map[string]*Field, 0)
+	stage.Fields = make(map[*Field]struct{})
+	stage.Fields_mapString = make(map[string]*Field)
 
-	stage.GongdocCommands = make(map[*GongdocCommand]struct{}, 0)
-	stage.GongdocCommands_mapString = make(map[string]*GongdocCommand, 0)
+	stage.GongdocCommands = make(map[*GongdocCommand]struct{})
+	stage.GongdocCommands_mapString = make(map[string]*GongdocCommand)
 
-	stage.GongdocStatuss = make(map[*GongdocStatus]struct{}, 0)
-	stage.GongdocStatuss_mapString = make(map[string]*GongdocStatus, 0)
+	stage.GongdocStatuss = make(map[*GongdocStatus]struct{})
+	stage.GongdocStatuss_mapString = make(map[string]*GongdocStatus)
 
-	stage.Links = make(map[*Link]struct{}, 0)
-	stage.Links_mapString = make(map[string]*Link, 0)
+	stage.Links = make(map[*Link]struct{})
+	stage.Links_mapString = make(map[string]*Link)
 
-	stage.Pkgelts = make(map[*Pkgelt]struct{}, 0)
-	stage.Pkgelts_mapString = make(map[string]*Pkgelt, 0)
+	stage.Pkgelts = make(map[*Pkgelt]struct{})
+	stage.Pkgelts_mapString = make(map[string]*Pkgelt)
 
-	stage.Positions = make(map[*Position]struct{}, 0)
-	stage.Positions_mapString = make(map[string]*Position, 0)
+	stage.Positions = make(map[*Position]struct{})
+	stage.Positions_mapString = make(map[string]*Position)
 
-	stage.UmlStates = make(map[*UmlState]struct{}, 0)
-	stage.UmlStates_mapString = make(map[string]*UmlState, 0)
+	stage.UmlStates = make(map[*UmlState]struct{})
+	stage.UmlStates_mapString = make(map[string]*UmlState)
 
-	stage.Umlscs = make(map[*Umlsc]struct{}, 0)
-	stage.Umlscs_mapString = make(map[string]*Umlsc, 0)
+	stage.Umlscs = make(map[*Umlsc]struct{})
+	stage.Umlscs_mapString = make(map[string]*Umlsc)
 
-	stage.Vertices = make(map[*Vertice]struct{}, 0)
-	stage.Vertices_mapString = make(map[string]*Vertice, 0)
+	stage.Vertices = make(map[*Vertice]struct{})
+	stage.Vertices_mapString = make(map[string]*Vertice)
 
 }
 
