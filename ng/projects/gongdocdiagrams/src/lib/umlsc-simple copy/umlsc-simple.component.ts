@@ -2,11 +2,11 @@ import { Component, OnInit, OnChanges, Input, Output, EventEmitter } from '@angu
 import { MatTableDataSource } from '@angular/material/table';
 import { MatButton } from '@angular/material/button'
 
-import { Router, RouterState, ActivatedRoute, ParamMap  } from '@angular/router';
+import { Router, RouterState, ActivatedRoute, ParamMap } from '@angular/router';
 
 import { UmlscDB } from 'gongdoc';
 import { UmlscService } from 'gongdoc'
-import { StateDB, StateService } from 'gongdoc'
+import { UmlStateDB, UmlStateService } from 'gongdoc'
 
 
 // generated table component
@@ -18,22 +18,22 @@ import { StateDB, StateService } from 'gongdoc'
 export class UmlscSimpleTableComponent implements OnInit {
 
   // the data source for the table
-  umlscs: UmlscDB[];
+  umlscs: UmlscDB[] = []
 
   // the selected umlsc 
-  umlsc: UmlscDB;
+  umlsc?: UmlscDB
 
-  states: StateDB[]
+  states: UmlStateDB[] = []
 
-  @Input() ID : number; // ID of the caller when component called from struct in reverse relation
-  @Input() struct : string; // struct with pointer to Umlsc
-  @Input() field : string; // field to display
+  @Input() ID: number = 0 // ID of the caller when component called from struct in reverse relation
+  @Input() struct: string = "" // struct with pointer to Umlsc
+  @Input() field: string = "" // field to display
 
   displayedColumns: string[] = ['ID', 'Name', 'Delete'];
 
   constructor(
     private umlscService: UmlscService,
-    private stateService: StateService,
+    private umlStateService: UmlStateService,
 
     private router: Router,
     private route: ActivatedRoute,
@@ -51,7 +51,7 @@ export class UmlscSimpleTableComponent implements OnInit {
   ngOnInit(): void {
     this.getUmlscs()
 
-    this.stateService.getStates().subscribe(
+    this.umlStateService.getUmlStates().subscribe(
       states => {
         this.states = states
       }
@@ -66,7 +66,7 @@ export class UmlscSimpleTableComponent implements OnInit {
         }
       )
     }
-  
+
   }
 
   // newUmlsc initiate a new umlsc
@@ -89,7 +89,7 @@ export class UmlscSimpleTableComponent implements OnInit {
   // set editor outlet
   setEditorRouterOutlet(umlscID: number) {
 
-    this.umlscService.getUmlsc( umlscID).subscribe(
+    this.umlscService.getUmlsc(umlscID).subscribe(
       umlsc => {
         this.umlsc = umlsc
       }
@@ -97,22 +97,22 @@ export class UmlscSimpleTableComponent implements OnInit {
 
     this.router.navigate([{
       outlets: {
-        diagrameditor: ["umlsc-detail", umlscID, { savebutton: "true"}]
+        diagrameditor: ["umlsc-detail", umlscID, { savebutton: "true" }]
       }
     }]);
   }
 
   switchState() {
 
-    if (this.umlsc != undefined) {
+    if (this.umlsc) {
       // parse all states
       var activeStateChanged = false
       this.states.forEach(
         state => {
-          if (this.umlsc.Activestate != state.Name && ! activeStateChanged) {
-            this.umlsc.Activestate = state.Name
+          if (this.umlsc!.Activestate != state.Name && !activeStateChanged) {
+            this.umlsc!.Activestate = state.Name
             activeStateChanged = true
-            this.umlscService.updateUmlsc( this.umlsc).subscribe(
+            this.umlscService.updateUmlsc(this.umlsc!).subscribe(
               umlsc => {
                 console.log("state diagram updated")
               }

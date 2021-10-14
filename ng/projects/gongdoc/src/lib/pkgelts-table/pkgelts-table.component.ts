@@ -7,7 +7,8 @@ import { MatTableDataSource } from '@angular/material/table';
 import { MatButton } from '@angular/material/button'
 
 import { MatDialogRef, MAT_DIALOG_DATA, MatDialog } from '@angular/material/dialog'
-import { DialogData, FrontRepoService, FrontRepo, NullInt64, SelectionMode } from '../front-repo.service'
+import { DialogData, FrontRepoService, FrontRepo, SelectionMode } from '../front-repo.service'
+import { NullInt64 } from '../null-int64'
 import { SelectionModel } from '@angular/cdk/collections';
 
 const allowMultiSelect = true;
@@ -33,26 +34,28 @@ enum TableComponentMode {
 export class PkgeltsTableComponent implements OnInit {
 
   // mode at invocation
-  mode: TableComponentMode
+  mode: TableComponentMode = TableComponentMode.DISPLAY_MODE
 
   // used if the component is called as a selection component of Pkgelt instances
-  selection: SelectionModel<PkgeltDB>;
-  initialSelection = new Array<PkgeltDB>();
+  selection: SelectionModel<PkgeltDB> = new (SelectionModel)
+  initialSelection = new Array<PkgeltDB>()
 
   // the data source for the table
-  pkgelts: PkgeltDB[];
-  matTableDataSource: MatTableDataSource<PkgeltDB>
+  pkgelts: PkgeltDB[] = []
+  matTableDataSource: MatTableDataSource<PkgeltDB> = new (MatTableDataSource)
 
   // front repo, that will be referenced by this.pkgelts
-  frontRepo: FrontRepo
+  frontRepo: FrontRepo = new (FrontRepo)
 
   // displayedColumns is referenced by the MatTable component for specify what columns
   // have to be displayed and in what order
   displayedColumns: string[];
 
   // for sorting & pagination
-  @ViewChild(MatSort) sort: MatSort;
-  @ViewChild(MatPaginator) paginator: MatPaginator;
+  @ViewChild(MatSort)
+  sort: MatSort | undefined
+  @ViewChild(MatPaginator)
+  paginator: MatPaginator | undefined;
 
   ngAfterViewInit() {
 
@@ -67,7 +70,8 @@ export class PkgeltsTableComponent implements OnInit {
           return pkgeltDB.Path;
 
         default:
-          return PkgeltDB[property];
+          console.assert(false, "Unknown field")
+          return "";
       }
     };
 
@@ -86,8 +90,8 @@ export class PkgeltsTableComponent implements OnInit {
       return isSelected
     };
 
-    this.matTableDataSource.sort = this.sort;
-    this.matTableDataSource.paginator = this.paginator;
+    this.matTableDataSource.sort = this.sort!
+    this.matTableDataSource.paginator = this.paginator!
   }
 
   applyFilter(event: Event) {
@@ -163,7 +167,7 @@ export class PkgeltsTableComponent implements OnInit {
           this.pkgelts.forEach(
             pkgelt => {
               let ID = this.dialogData.ID
-              let revPointer = pkgelt[this.dialogData.ReversePointer]
+              let revPointer = pkgelt[this.dialogData.ReversePointer as keyof PkgeltDB] as unknown as NullInt64
               if (revPointer.Int64 == ID) {
                 this.initialSelection.push(pkgelt)
               }
@@ -174,15 +178,15 @@ export class PkgeltsTableComponent implements OnInit {
 
         if (this.mode == TableComponentMode.MANY_MANY_ASSOCIATION_MODE) {
 
-          let mapOfSourceInstances = this.frontRepo[this.dialogData.SourceStruct + "s"]
-          let sourceInstance = mapOfSourceInstances.get(this.dialogData.ID)
+          let mapOfSourceInstances = this.frontRepo[this.dialogData.SourceStruct + "s" as keyof FrontRepo] as Map<number, PkgeltDB>
+          let sourceInstance = mapOfSourceInstances.get(this.dialogData.ID)!
 
-          if (sourceInstance[this.dialogData.SourceField]) {
-            for (let associationInstance of sourceInstance[this.dialogData.SourceField]) {
-              let pkgelt = associationInstance[this.dialogData.IntermediateStructField]
-              this.initialSelection.push(pkgelt)
-            }
+          let sourceField = sourceInstance[this.dialogData.SourceField as keyof typeof sourceInstance]! as unknown as PkgeltDB[]
+          for (let associationInstance of sourceField) {
+            let pkgelt = associationInstance[this.dialogData.IntermediateStructField as keyof typeof associationInstance] as unknown as PkgeltDB
+            this.initialSelection.push(pkgelt)
           }
+
           this.selection = new SelectionModel<PkgeltDB>(allowMultiSelect, this.initialSelection);
         }
 
@@ -258,8 +262,9 @@ export class PkgeltsTableComponent implements OnInit {
       // reset all initial selection of pkgelt that belong to pkgelt
       this.initialSelection.forEach(
         pkgelt => {
-          pkgelt[this.dialogData.ReversePointer].Int64 = 0
-          pkgelt[this.dialogData.ReversePointer].Valid = true
+          let index = pkgelt[this.dialogData.ReversePointer as keyof PkgeltDB] as unknown as NullInt64
+          index.Int64 = 0
+          index.Valid = true
           toUpdate.add(pkgelt)
         }
       )
@@ -267,9 +272,9 @@ export class PkgeltsTableComponent implements OnInit {
       // from selection, set pkgelt that belong to pkgelt
       this.selection.selected.forEach(
         pkgelt => {
-          let ID = +this.dialogData.ID
-          pkgelt[this.dialogData.ReversePointer].Int64 = ID
-          pkgelt[this.dialogData.ReversePointer].Valid = true
+          let ID = this.dialogData.ID as number
+          let reversePointer = pkgelt[this.dialogData.ReversePointer  as keyof PkgeltDB] as unknown as NullInt64
+          reversePointer.Int64 = ID
           toUpdate.add(pkgelt)
         }
       )
@@ -287,8 +292,9 @@ export class PkgeltsTableComponent implements OnInit {
 
     if (this.mode == TableComponentMode.MANY_MANY_ASSOCIATION_MODE) {
 
-      let mapOfSourceInstances = this.frontRepo[this.dialogData.SourceStruct + "s"]
-      let sourceInstance = mapOfSourceInstances.get(this.dialogData.ID)
+      // get the source instance via the map of instances in the front repo
+      let mapOfSourceInstances = this.frontRepo[this.dialogData.SourceStruct + "s" as keyof FrontRepo] as Map<number, PkgeltDB>
+      let sourceInstance = mapOfSourceInstances.get(this.dialogData.ID)!
 
       // First, parse all instance of the association struct and remove the instance
       // that have unselect
@@ -304,23 +310,21 @@ export class PkgeltsTableComponent implements OnInit {
       }
 
       // delete the association instance
-      if (sourceInstance[this.dialogData.SourceField]) {
-        for (let associationInstance of sourceInstance[this.dialogData.SourceField]) {
-          let pkgelt = associationInstance[this.dialogData.IntermediateStructField]
-          if (unselectedPkgelt.has(pkgelt.ID)) {
+      let associationInstance = sourceInstance[this.dialogData.SourceField as keyof typeof sourceInstance]
+      let pkgelt = associationInstance![this.dialogData.IntermediateStructField as keyof typeof associationInstance] as unknown as PkgeltDB
+      if (unselectedPkgelt.has(pkgelt.ID)) {
+        this.frontRepoService.deleteService(this.dialogData.IntermediateStruct, associationInstance)
 
-            this.frontRepoService.deleteService( this.dialogData.IntermediateStruct, associationInstance )
-          }
-        }
+
       }
 
-      // is the source array is emptyn create it
-      if (sourceInstance[this.dialogData.SourceField] == undefined) {
-        sourceInstance[this.dialogData.SourceField] = new Array<any>()
+      // is the source array is empty create it
+      if (sourceInstance[this.dialogData.SourceField as keyof typeof sourceInstance] == undefined) {
+        (sourceInstance[this.dialogData.SourceField as keyof typeof sourceInstance] as unknown as Array<PkgeltDB>) = new Array<PkgeltDB>()
       }
 
       // second, parse all instance of the selected
-      if (sourceInstance[this.dialogData.SourceField]) {
+      if (sourceInstance[this.dialogData.SourceField as keyof typeof sourceInstance]) {
         this.selection.selected.forEach(
           pkgelt => {
             if (!this.initialSelection.includes(pkgelt)) {
@@ -330,13 +334,11 @@ export class PkgeltsTableComponent implements OnInit {
                 Name: sourceInstance["Name"] + "-" + pkgelt.Name,
               }
 
-              associationInstance[this.dialogData.IntermediateStructField+"ID"] = new NullInt64
-              associationInstance[this.dialogData.IntermediateStructField+"ID"].Int64 = pkgelt.ID
-              associationInstance[this.dialogData.IntermediateStructField+"ID"].Valid = true
+              let index = associationInstance[this.dialogData.IntermediateStructField+"ID" as keyof typeof associationInstance] as unknown as NullInt64
+              index.Int64 = pkgelt.ID
 
-              associationInstance[this.dialogData.SourceStruct + "_" + this.dialogData.SourceField + "DBID"] = new NullInt64
-              associationInstance[this.dialogData.SourceStruct + "_" + this.dialogData.SourceField + "DBID"].Int64 = sourceInstance["ID"]
-              associationInstance[this.dialogData.SourceStruct + "_" + this.dialogData.SourceField + "DBID"].Valid = true
+              let indexDB = associationInstance[this.dialogData.IntermediateStructField+"DBID" as keyof typeof associationInstance] as unknown as NullInt64
+              indexDB.Int64 = pkgelt.ID
 
               this.frontRepoService.postService( this.dialogData.IntermediateStruct, associationInstance )
 

@@ -23,13 +23,13 @@ export class LinkPresentationComponent implements OnInit {
 
 	// insertion point for declarations
 
-	displayedColumns: string[] = [];
-	dataSource = ELEMENT_DATA;
+	displayedColumns: string[] = []
+	dataSource = ELEMENT_DATA
 
-	link: LinkDB;
+	link: LinkDB = new (LinkDB)
 
 	// front repo
-	frontRepo: FrontRepo
+	frontRepo: FrontRepo = new (FrontRepo)
  
 	constructor(
 		private linkService: LinkService,
@@ -56,12 +56,12 @@ export class LinkPresentationComponent implements OnInit {
 	}
 
 	getLink(): void {
-		const id = +this.route.snapshot.paramMap.get('id');
+		const id = +this.route.snapshot.paramMap.get('id')!
 		this.frontRepoService.pull().subscribe(
 			frontRepo => {
 				this.frontRepo = frontRepo
 
-				this.link = this.frontRepo.Links.get(id)
+				this.link = this.frontRepo.Links.get(id)!
 
 				// insertion point for recovery of durations
 			}

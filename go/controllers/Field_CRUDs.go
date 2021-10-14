@@ -2,6 +2,7 @@
 package controllers
 
 import (
+	"log"
 	"net/http"
 	"time"
 
@@ -47,7 +48,7 @@ type FieldInput struct {
 //        200: fieldDBsResponse
 func GetFields(c *gin.Context) {
 	db := orm.BackRepo.BackRepoField.GetDB()
-	
+
 	// source slice
 	var fieldDBs []orm.FieldDB
 	query := db.Find(&fieldDBs)
@@ -55,6 +56,7 @@ func GetFields(c *gin.Context) {
 		var returnError GenericError
 		returnError.Body.Code = http.StatusBadRequest
 		returnError.Body.Message = query.Error.Error()
+		log.Println(query.Error.Error())
 		c.JSON(http.StatusBadRequest, returnError.Body)
 		return
 	}
@@ -102,6 +104,7 @@ func PostField(c *gin.Context) {
 		var returnError GenericError
 		returnError.Body.Code = http.StatusBadRequest
 		returnError.Body.Message = err.Error()
+		log.Println(err.Error())
 		c.JSON(http.StatusBadRequest, returnError.Body)
 		return
 	}
@@ -116,6 +119,7 @@ func PostField(c *gin.Context) {
 		var returnError GenericError
 		returnError.Body.Code = http.StatusBadRequest
 		returnError.Body.Message = query.Error.Error()
+		log.Println(query.Error.Error())
 		c.JSON(http.StatusBadRequest, returnError.Body)
 		return
 	}
@@ -145,6 +149,7 @@ func GetField(c *gin.Context) {
 		var returnError GenericError
 		returnError.Body.Code = http.StatusBadRequest
 		returnError.Body.Message = err.Error()
+		log.Println(err.Error())
 		c.JSON(http.StatusBadRequest, returnError.Body)
 		return
 	}
@@ -179,6 +184,7 @@ func UpdateField(c *gin.Context) {
 		var returnError GenericError
 		returnError.Body.Code = http.StatusBadRequest
 		returnError.Body.Message = query.Error.Error()
+		log.Println(query.Error.Error())
 		c.JSON(http.StatusBadRequest, returnError.Body)
 		return
 	}
@@ -186,6 +192,7 @@ func UpdateField(c *gin.Context) {
 	// Validate input
 	var input orm.FieldAPI
 	if err := c.ShouldBindJSON(&input); err != nil {
+		log.Println(err.Error())
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
@@ -199,6 +206,7 @@ func UpdateField(c *gin.Context) {
 		var returnError GenericError
 		returnError.Body.Code = http.StatusBadRequest
 		returnError.Body.Message = query.Error.Error()
+		log.Println(query.Error.Error())
 		c.JSON(http.StatusBadRequest, returnError.Body)
 		return
 	}
@@ -228,6 +236,7 @@ func DeleteField(c *gin.Context) {
 		var returnError GenericError
 		returnError.Body.Code = http.StatusBadRequest
 		returnError.Body.Message = err.Error()
+		log.Println(err.Error())
 		c.JSON(http.StatusBadRequest, returnError.Body)
 		return
 	}

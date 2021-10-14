@@ -2,6 +2,7 @@
 package controllers
 
 import (
+	"log"
 	"net/http"
 	"time"
 
@@ -47,7 +48,7 @@ type UmlStateInput struct {
 //        200: umlstateDBsResponse
 func GetUmlStates(c *gin.Context) {
 	db := orm.BackRepo.BackRepoUmlState.GetDB()
-	
+
 	// source slice
 	var umlstateDBs []orm.UmlStateDB
 	query := db.Find(&umlstateDBs)
@@ -55,6 +56,7 @@ func GetUmlStates(c *gin.Context) {
 		var returnError GenericError
 		returnError.Body.Code = http.StatusBadRequest
 		returnError.Body.Message = query.Error.Error()
+		log.Println(query.Error.Error())
 		c.JSON(http.StatusBadRequest, returnError.Body)
 		return
 	}
@@ -102,6 +104,7 @@ func PostUmlState(c *gin.Context) {
 		var returnError GenericError
 		returnError.Body.Code = http.StatusBadRequest
 		returnError.Body.Message = err.Error()
+		log.Println(err.Error())
 		c.JSON(http.StatusBadRequest, returnError.Body)
 		return
 	}
@@ -116,6 +119,7 @@ func PostUmlState(c *gin.Context) {
 		var returnError GenericError
 		returnError.Body.Code = http.StatusBadRequest
 		returnError.Body.Message = query.Error.Error()
+		log.Println(query.Error.Error())
 		c.JSON(http.StatusBadRequest, returnError.Body)
 		return
 	}
@@ -145,6 +149,7 @@ func GetUmlState(c *gin.Context) {
 		var returnError GenericError
 		returnError.Body.Code = http.StatusBadRequest
 		returnError.Body.Message = err.Error()
+		log.Println(err.Error())
 		c.JSON(http.StatusBadRequest, returnError.Body)
 		return
 	}
@@ -179,6 +184,7 @@ func UpdateUmlState(c *gin.Context) {
 		var returnError GenericError
 		returnError.Body.Code = http.StatusBadRequest
 		returnError.Body.Message = query.Error.Error()
+		log.Println(query.Error.Error())
 		c.JSON(http.StatusBadRequest, returnError.Body)
 		return
 	}
@@ -186,6 +192,7 @@ func UpdateUmlState(c *gin.Context) {
 	// Validate input
 	var input orm.UmlStateAPI
 	if err := c.ShouldBindJSON(&input); err != nil {
+		log.Println(err.Error())
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
@@ -199,6 +206,7 @@ func UpdateUmlState(c *gin.Context) {
 		var returnError GenericError
 		returnError.Body.Code = http.StatusBadRequest
 		returnError.Body.Message = query.Error.Error()
+		log.Println(query.Error.Error())
 		c.JSON(http.StatusBadRequest, returnError.Body)
 		return
 	}
@@ -228,6 +236,7 @@ func DeleteUmlState(c *gin.Context) {
 		var returnError GenericError
 		returnError.Body.Code = http.StatusBadRequest
 		returnError.Body.Message = err.Error()
+		log.Println(err.Error())
 		c.JSON(http.StatusBadRequest, returnError.Body)
 		return
 	}

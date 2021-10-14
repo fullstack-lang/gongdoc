@@ -13,6 +13,10 @@ import { catchError, map, tap } from 'rxjs/operators';
 
 import { ClassshapeDB } from './classshape-db';
 
+// insertion point for imports
+import { PositionDB } from './position-db'
+import { ClassdiagramDB } from './classdiagram-db'
+
 @Injectable({
   providedIn: 'root'
 })
@@ -35,14 +39,14 @@ export class ClassshapeService {
   ) {
     // path to the service share the same origin with the path to the document
     // get the origin in the URL to the document
-	let origin = this.document.location.origin
-    
-	// if debugging with ng, replace 4200 with 8080
-	origin = origin.replace("4200", "8080")
+    let origin = this.document.location.origin
+
+    // if debugging with ng, replace 4200 with 8080
+    origin = origin.replace("4200", "8080")
 
     // compute path to the service
     this.classshapesUrl = origin + '/api/github.com/fullstack-lang/gongdoc/go/v1/classshapes';
-   }
+  }
 
   /** GET classshapes from the server */
   getClassshapes(): Observable<ClassshapeDB[]> {
@@ -67,21 +71,21 @@ export class ClassshapeService {
   /** POST: add a new classshape to the server */
   postClassshape(classshapedb: ClassshapeDB): Observable<ClassshapeDB> {
 
-		// insertion point for reset of pointers and reverse pointers (to avoid circular JSON)
-    classshapedb.Position = {}
+    // insertion point for reset of pointers and reverse pointers (to avoid circular JSON)
+    classshapedb.Position = new PositionDB
     classshapedb.Fields = []
     classshapedb.Links = []
     let _Classdiagram_Classshapes_reverse = classshapedb.Classdiagram_Classshapes_reverse
-    classshapedb.Classdiagram_Classshapes_reverse = {}
+    classshapedb.Classdiagram_Classshapes_reverse = new ClassdiagramDB
 
-		return this.http.post<ClassshapeDB>(this.classshapesUrl, classshapedb, this.httpOptions).pipe(
-			tap(_ => {
-				// insertion point for restoration of reverse pointers
+    return this.http.post<ClassshapeDB>(this.classshapesUrl, classshapedb, this.httpOptions).pipe(
+      tap(_ => {
+        // insertion point for restoration of reverse pointers
         classshapedb.Classdiagram_Classshapes_reverse = _Classdiagram_Classshapes_reverse
-				this.log(`posted classshapedb id=${classshapedb.ID}`)
-			}),
-			catchError(this.handleError<ClassshapeDB>('postClassshape'))
-		);
+        this.log(`posted classshapedb id=${classshapedb.ID}`)
+      }),
+      catchError(this.handleError<ClassshapeDB>('postClassshape'))
+    );
   }
 
   /** DELETE: delete the classshapedb from the server */
@@ -101,13 +105,13 @@ export class ClassshapeService {
     const url = `${this.classshapesUrl}/${id}`;
 
     // insertion point for reset of pointers and reverse pointers (to avoid circular JSON)
-    classshapedb.Position = {}
+    classshapedb.Position = new PositionDB
     classshapedb.Fields = []
     classshapedb.Links = []
     let _Classdiagram_Classshapes_reverse = classshapedb.Classdiagram_Classshapes_reverse
-    classshapedb.Classdiagram_Classshapes_reverse = {}
+    classshapedb.Classdiagram_Classshapes_reverse = new ClassdiagramDB
 
-    return this.http.put(url, classshapedb, this.httpOptions).pipe(
+    return this.http.put<ClassshapeDB>(url, classshapedb, this.httpOptions).pipe(
       tap(_ => {
         // insertion point for restoration of reverse pointers
         classshapedb.Classdiagram_Classshapes_reverse = _Classdiagram_Classshapes_reverse

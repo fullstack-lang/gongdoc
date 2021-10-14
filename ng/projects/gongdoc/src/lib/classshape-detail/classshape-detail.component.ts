@@ -11,12 +11,13 @@ import { MapOfSortingComponents } from '../map-components'
 
 // insertion point for imports
 import { ClassshapeTargetTypeSelect, ClassshapeTargetTypeList } from '../ClassshapeTargetType'
+import { ClassdiagramDB } from '../classdiagram-db'
 
 import { Router, RouterState, ActivatedRoute } from '@angular/router';
 
 import { MatDialog, MAT_DIALOG_DATA, MatDialogRef, MatDialogConfig } from '@angular/material/dialog';
 
-import { NullInt64 } from '../front-repo.service'
+import { NullInt64 } from '../null-int64'
 
 // ClassshapeDetailComponent is initilizaed from different routes
 // ClassshapeDetailComponentState detail different cases 
@@ -35,13 +36,13 @@ enum ClassshapeDetailComponentState {
 export class ClassshapeDetailComponent implements OnInit {
 
 	// insertion point for declarations
-	ClassshapeTargetTypeList: ClassshapeTargetTypeSelect[]
+	ClassshapeTargetTypeList: ClassshapeTargetTypeSelect[] = []
 
 	// the ClassshapeDB of interest
-	classshape: ClassshapeDB;
+	classshape: ClassshapeDB = new ClassshapeDB
 
 	// front repo
-	frontRepo: FrontRepo
+	frontRepo: FrontRepo = new FrontRepo
 
 	// this stores the information related to string fields
 	// if false, the field is inputed with an <input ...> form 
@@ -49,15 +50,15 @@ export class ClassshapeDetailComponent implements OnInit {
 	mapFields_displayAsTextArea = new Map<string, boolean>()
 
 	// the state at initialization (CREATION, UPDATE or CREATE with one association set)
-	state: ClassshapeDetailComponentState
+	state: ClassshapeDetailComponentState = ClassshapeDetailComponentState.CREATE_INSTANCE
 
 	// in UDPATE state, if is the id of the instance to update
 	// in CREATE state with one association set, this is the id of the associated instance
-	id: number
+	id: number = 0
 
 	// in CREATE state with one association set, this is the id of the associated instance
-	originStruct: string
-	originStructFieldName: string
+	originStruct: string = ""
+	originStructFieldName: string = ""
 
 	constructor(
 		private classshapeService: ClassshapeService,
@@ -71,9 +72,9 @@ export class ClassshapeDetailComponent implements OnInit {
 	ngOnInit(): void {
 
 		// compute state
-		this.id = +this.route.snapshot.paramMap.get('id');
-		this.originStruct = this.route.snapshot.paramMap.get('originStruct');
-		this.originStructFieldName = this.route.snapshot.paramMap.get('originStructFieldName');
+		this.id = +this.route.snapshot.paramMap.get('id')!;
+		this.originStruct = this.route.snapshot.paramMap.get('originStruct')!;
+		this.originStructFieldName = this.route.snapshot.paramMap.get('originStructFieldName')!;
 
 		const association = this.route.snapshot.paramMap.get('association');
 		if (this.id == 0) {
@@ -85,7 +86,7 @@ export class ClassshapeDetailComponent implements OnInit {
 				switch (this.originStructFieldName) {
 					// insertion point for state computation
 					case "Classshapes":
-						console.log("Classshape" + " is instanciated with back pointer to instance " + this.id + " Classdiagram association Classshapes")
+						// console.log("Classshape" + " is instanciated with back pointer to instance " + this.id + " Classdiagram association Classshapes")
 						this.state = ClassshapeDetailComponentState.CREATE_INSTANCE_WITH_ASSOCIATION_Classdiagram_Classshapes_SET
 						break;
 					default:
@@ -120,12 +121,14 @@ export class ClassshapeDetailComponent implements OnInit {
 						this.classshape = new (ClassshapeDB)
 						break;
 					case ClassshapeDetailComponentState.UPDATE_INSTANCE:
-						this.classshape = frontRepo.Classshapes.get(this.id)
+						let classshape = frontRepo.Classshapes.get(this.id)
+						console.assert(classshape != undefined, "missing classshape with id:" + this.id)
+						this.classshape = classshape!
 						break;
 					// insertion point for init of association field
 					case ClassshapeDetailComponentState.CREATE_INSTANCE_WITH_ASSOCIATION_Classdiagram_Classshapes_SET:
 						this.classshape = new (ClassshapeDB)
-						this.classshape.Classdiagram_Classshapes_reverse = frontRepo.Classdiagrams.get(this.id)
+						this.classshape.Classdiagram_Classshapes_reverse = frontRepo.Classdiagrams.get(this.id)!
 						break;
 					default:
 						console.log(this.state + " is unkown state")
@@ -168,7 +171,7 @@ export class ClassshapeDetailComponent implements OnInit {
 				this.classshape.Classdiagram_ClassshapesDBID_Index = new NullInt64
 			}
 			this.classshape.Classdiagram_ClassshapesDBID_Index.Valid = true
-			this.classshape.Classdiagram_Classshapes_reverse = undefined // very important, otherwise, circular JSON
+			this.classshape.Classdiagram_Classshapes_reverse = new ClassdiagramDB // very important, otherwise, circular JSON
 		}
 
 		switch (this.state) {
@@ -181,7 +184,7 @@ export class ClassshapeDetailComponent implements OnInit {
 			default:
 				this.classshapeService.postClassshape(this.classshape).subscribe(classshape => {
 					this.classshapeService.ClassshapeServiceChanged.next("post")
-					this.classshape = {} // reset fields
+					this.classshape = new (ClassshapeDB) // reset fields
 				});
 		}
 	}
@@ -190,7 +193,7 @@ export class ClassshapeDetailComponent implements OnInit {
 	// ONE-MANY association
 	// It uses the MapOfComponent provided by the front repo
 	openReverseSelection(AssociatedStruct: string, reverseField: string, selectionMode: string,
-		sourceField: string, intermediateStructField: string, nextAssociatedStruct: string ) {
+		sourceField: string, intermediateStructField: string, nextAssociatedStruct: string) {
 
 		console.log("mode " + selectionMode)
 
@@ -204,7 +207,7 @@ export class ClassshapeDetailComponent implements OnInit {
 		dialogConfig.height = "50%"
 		if (selectionMode == SelectionMode.ONE_MANY_ASSOCIATION_MODE) {
 
-			dialogData.ID = this.classshape.ID
+			dialogData.ID = this.classshape.ID!
 			dialogData.ReversePointer = reverseField
 			dialogData.OrderingMode = false
 			dialogData.SelectionMode = selectionMode
@@ -220,7 +223,7 @@ export class ClassshapeDetailComponent implements OnInit {
 			});
 		}
 		if (selectionMode == SelectionMode.MANY_MANY_ASSOCIATION_MODE) {
-			dialogData.ID = this.classshape.ID
+			dialogData.ID = this.classshape.ID!
 			dialogData.ReversePointer = reverseField
 			dialogData.OrderingMode = false
 			dialogData.SelectionMode = selectionMode
@@ -271,7 +274,7 @@ export class ClassshapeDetailComponent implements OnInit {
 		});
 	}
 
-	fillUpNameIfEmpty(event) {
+	fillUpNameIfEmpty(event: { value: { Name: string; }; }) {
 		if (this.classshape.Name == undefined) {
 			this.classshape.Name = event.value.Name
 		}
@@ -288,7 +291,7 @@ export class ClassshapeDetailComponent implements OnInit {
 
 	isATextArea(fieldName: string): boolean {
 		if (this.mapFields_displayAsTextArea.has(fieldName)) {
-			return this.mapFields_displayAsTextArea.get(fieldName)
+			return this.mapFields_displayAsTextArea.get(fieldName)!
 		} else {
 			return false
 		}

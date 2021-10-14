@@ -23,13 +23,13 @@ export class VerticePresentationComponent implements OnInit {
 
 	// insertion point for declarations
 
-	displayedColumns: string[] = [];
-	dataSource = ELEMENT_DATA;
+	displayedColumns: string[] = []
+	dataSource = ELEMENT_DATA
 
-	vertice: VerticeDB;
+	vertice: VerticeDB = new (VerticeDB)
 
 	// front repo
-	frontRepo: FrontRepo
+	frontRepo: FrontRepo = new (FrontRepo)
  
 	constructor(
 		private verticeService: VerticeService,
@@ -56,12 +56,12 @@ export class VerticePresentationComponent implements OnInit {
 	}
 
 	getVertice(): void {
-		const id = +this.route.snapshot.paramMap.get('id');
+		const id = +this.route.snapshot.paramMap.get('id')!
 		this.frontRepoService.pull().subscribe(
 			frontRepo => {
 				this.frontRepo = frontRepo
 
-				this.vertice = this.frontRepo.Vertices.get(id)
+				this.vertice = this.frontRepo.Vertices.get(id)!
 
 				// insertion point for recovery of durations
 			}

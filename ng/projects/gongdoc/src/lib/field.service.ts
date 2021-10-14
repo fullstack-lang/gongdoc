@@ -13,6 +13,9 @@ import { catchError, map, tap } from 'rxjs/operators';
 
 import { FieldDB } from './field-db';
 
+// insertion point for imports
+import { ClassshapeDB } from './classshape-db'
+
 @Injectable({
   providedIn: 'root'
 })
@@ -35,14 +38,14 @@ export class FieldService {
   ) {
     // path to the service share the same origin with the path to the document
     // get the origin in the URL to the document
-	let origin = this.document.location.origin
-    
-	// if debugging with ng, replace 4200 with 8080
-	origin = origin.replace("4200", "8080")
+    let origin = this.document.location.origin
+
+    // if debugging with ng, replace 4200 with 8080
+    origin = origin.replace("4200", "8080")
 
     // compute path to the service
     this.fieldsUrl = origin + '/api/github.com/fullstack-lang/gongdoc/go/v1/fields';
-   }
+  }
 
   /** GET fields from the server */
   getFields(): Observable<FieldDB[]> {
@@ -67,18 +70,18 @@ export class FieldService {
   /** POST: add a new field to the server */
   postField(fielddb: FieldDB): Observable<FieldDB> {
 
-		// insertion point for reset of pointers and reverse pointers (to avoid circular JSON)
+    // insertion point for reset of pointers and reverse pointers (to avoid circular JSON)
     let _Classshape_Fields_reverse = fielddb.Classshape_Fields_reverse
-    fielddb.Classshape_Fields_reverse = {}
+    fielddb.Classshape_Fields_reverse = new ClassshapeDB
 
-		return this.http.post<FieldDB>(this.fieldsUrl, fielddb, this.httpOptions).pipe(
-			tap(_ => {
-				// insertion point for restoration of reverse pointers
+    return this.http.post<FieldDB>(this.fieldsUrl, fielddb, this.httpOptions).pipe(
+      tap(_ => {
+        // insertion point for restoration of reverse pointers
         fielddb.Classshape_Fields_reverse = _Classshape_Fields_reverse
-				this.log(`posted fielddb id=${fielddb.ID}`)
-			}),
-			catchError(this.handleError<FieldDB>('postField'))
-		);
+        this.log(`posted fielddb id=${fielddb.ID}`)
+      }),
+      catchError(this.handleError<FieldDB>('postField'))
+    );
   }
 
   /** DELETE: delete the fielddb from the server */
@@ -99,9 +102,9 @@ export class FieldService {
 
     // insertion point for reset of pointers and reverse pointers (to avoid circular JSON)
     let _Classshape_Fields_reverse = fielddb.Classshape_Fields_reverse
-    fielddb.Classshape_Fields_reverse = {}
+    fielddb.Classshape_Fields_reverse = new ClassshapeDB
 
-    return this.http.put(url, fielddb, this.httpOptions).pipe(
+    return this.http.put<FieldDB>(url, fielddb, this.httpOptions).pipe(
       tap(_ => {
         // insertion point for restoration of reverse pointers
         fielddb.Classshape_Fields_reverse = _Classshape_Fields_reverse

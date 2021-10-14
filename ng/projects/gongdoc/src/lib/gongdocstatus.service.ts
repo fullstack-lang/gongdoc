@@ -13,6 +13,8 @@ import { catchError, map, tap } from 'rxjs/operators';
 
 import { GongdocStatusDB } from './gongdocstatus-db';
 
+// insertion point for imports
+
 @Injectable({
   providedIn: 'root'
 })
@@ -35,14 +37,14 @@ export class GongdocStatusService {
   ) {
     // path to the service share the same origin with the path to the document
     // get the origin in the URL to the document
-	let origin = this.document.location.origin
-    
-	// if debugging with ng, replace 4200 with 8080
-	origin = origin.replace("4200", "8080")
+    let origin = this.document.location.origin
+
+    // if debugging with ng, replace 4200 with 8080
+    origin = origin.replace("4200", "8080")
 
     // compute path to the service
     this.gongdocstatussUrl = origin + '/api/github.com/fullstack-lang/gongdoc/go/v1/gongdocstatuss';
-   }
+  }
 
   /** GET gongdocstatuss from the server */
   getGongdocStatuss(): Observable<GongdocStatusDB[]> {
@@ -67,15 +69,15 @@ export class GongdocStatusService {
   /** POST: add a new gongdocstatus to the server */
   postGongdocStatus(gongdocstatusdb: GongdocStatusDB): Observable<GongdocStatusDB> {
 
-		// insertion point for reset of pointers and reverse pointers (to avoid circular JSON)
+    // insertion point for reset of pointers and reverse pointers (to avoid circular JSON)
 
-		return this.http.post<GongdocStatusDB>(this.gongdocstatussUrl, gongdocstatusdb, this.httpOptions).pipe(
-			tap(_ => {
-				// insertion point for restoration of reverse pointers
-				this.log(`posted gongdocstatusdb id=${gongdocstatusdb.ID}`)
-			}),
-			catchError(this.handleError<GongdocStatusDB>('postGongdocStatus'))
-		);
+    return this.http.post<GongdocStatusDB>(this.gongdocstatussUrl, gongdocstatusdb, this.httpOptions).pipe(
+      tap(_ => {
+        // insertion point for restoration of reverse pointers
+        this.log(`posted gongdocstatusdb id=${gongdocstatusdb.ID}`)
+      }),
+      catchError(this.handleError<GongdocStatusDB>('postGongdocStatus'))
+    );
   }
 
   /** DELETE: delete the gongdocstatusdb from the server */
@@ -96,7 +98,7 @@ export class GongdocStatusService {
 
     // insertion point for reset of pointers and reverse pointers (to avoid circular JSON)
 
-    return this.http.put(url, gongdocstatusdb, this.httpOptions).pipe(
+    return this.http.put<GongdocStatusDB>(url, gongdocstatusdb, this.httpOptions).pipe(
       tap(_ => {
         // insertion point for restoration of reverse pointers
         this.log(`updated gongdocstatusdb id=${gongdocstatusdb.ID}`)

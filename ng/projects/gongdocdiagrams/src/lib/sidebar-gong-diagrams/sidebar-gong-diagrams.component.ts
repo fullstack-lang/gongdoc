@@ -87,10 +87,16 @@ export class SidebarGongDiagramsComponent implements OnInit {
    * innerHTMLelement is the html elemnt of the diagram
    * it allows the Sidebar component to devise the drop position of the gongstruct
    */
-  @ViewChild('innerHTMLelement') innerHTMLelement: ElementRef;
+  /**
+   * innerHTMLelement is the html elemnt of the diagram
+   * it allows the Sidebar component to devise the drop position of the gongstruct
+   */
+
+  @ViewChild('innerHTMLelement')
+  innerHTMLelement!: ElementRef;
 
   // the classdiagram that is currently displayed
-  currentClassdiagram: gongdoc.ClassdiagramDB
+  currentClassdiagram: gongdoc.ClassdiagramDB = new gongdoc.ClassdiagramDB
 
   /**
    * initial node expansion
@@ -180,14 +186,14 @@ export class SidebarGongDiagramsComponent implements OnInit {
   hasChild = (_: number, node: GongFlatNode) => node.expandable;
 
   // front repo
-  gongFrontRepo: gong.FrontRepo
-  gongdocFrontRepo: gongdoc.FrontRepo
+  gongFrontRepo: gong.FrontRepo = new gong.FrontRepo
+  gongdocFrontRepo: gongdoc.FrontRepo = new gongdoc.FrontRepo
 
   // "data" tree that is constructed during NgInit and is passed to the mat-tree component
   gongNodeTree = new Array<GongNode>();
 
   // provide the current display context
-  classdiagramContext: ClassdiagramContext
+  classdiagramContext: ClassdiagramContext = new ClassdiagramContext
 
   constructor(
     private gongFrontRepoService: gong.FrontRepoService,
@@ -221,7 +227,7 @@ export class SidebarGongDiagramsComponent implements OnInit {
         ClassdiagramContextSubject.subscribe(
           classdiagramContext => {
             this.classdiagramContext = classdiagramContext
-            this.currentClassdiagram = this.gongdocFrontRepo.Classdiagrams.get(classdiagramContext.ClassdiagramID)
+            this.currentClassdiagram = this.gongdocFrontRepo.Classdiagrams.get(classdiagramContext.ClassdiagramID)!
             this.refresh()
           }
         )
@@ -241,9 +247,9 @@ export class SidebarGongDiagramsComponent implements OnInit {
         this.treeControl.dataNodes.forEach(
           node => {
             if (this.treeControl.isExpanded(node)) {
-              memoryOfExpandedNodes[node.uniqueIdPerStack] = true
+              memoryOfExpandedNodes.set(node.uniqueIdPerStack, true)
             } else {
-              memoryOfExpandedNodes[node.uniqueIdPerStack] = false
+              memoryOfExpandedNodes.set(node.uniqueIdPerStack, false)
             }
           }
         )

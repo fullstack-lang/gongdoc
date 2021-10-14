@@ -23,13 +23,13 @@ export class PkgeltPresentationComponent implements OnInit {
 
 	// insertion point for declarations
 
-	displayedColumns: string[] = [];
-	dataSource = ELEMENT_DATA;
+	displayedColumns: string[] = []
+	dataSource = ELEMENT_DATA
 
-	pkgelt: PkgeltDB;
+	pkgelt: PkgeltDB = new (PkgeltDB)
 
 	// front repo
-	frontRepo: FrontRepo
+	frontRepo: FrontRepo = new (FrontRepo)
  
 	constructor(
 		private pkgeltService: PkgeltService,
@@ -56,12 +56,12 @@ export class PkgeltPresentationComponent implements OnInit {
 	}
 
 	getPkgelt(): void {
-		const id = +this.route.snapshot.paramMap.get('id');
+		const id = +this.route.snapshot.paramMap.get('id')!
 		this.frontRepoService.pull().subscribe(
 			frontRepo => {
 				this.frontRepo = frontRepo
 
-				this.pkgelt = this.frontRepo.Pkgelts.get(id)
+				this.pkgelt = this.frontRepo.Pkgelts.get(id)!
 
 				// insertion point for recovery of durations
 			}

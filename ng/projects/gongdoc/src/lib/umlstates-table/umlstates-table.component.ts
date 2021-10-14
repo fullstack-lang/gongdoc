@@ -7,7 +7,8 @@ import { MatTableDataSource } from '@angular/material/table';
 import { MatButton } from '@angular/material/button'
 
 import { MatDialogRef, MAT_DIALOG_DATA, MatDialog } from '@angular/material/dialog'
-import { DialogData, FrontRepoService, FrontRepo, NullInt64, SelectionMode } from '../front-repo.service'
+import { DialogData, FrontRepoService, FrontRepo, SelectionMode } from '../front-repo.service'
+import { NullInt64 } from '../null-int64'
 import { SelectionModel } from '@angular/cdk/collections';
 
 const allowMultiSelect = true;
@@ -33,26 +34,28 @@ enum TableComponentMode {
 export class UmlStatesTableComponent implements OnInit {
 
   // mode at invocation
-  mode: TableComponentMode
+  mode: TableComponentMode = TableComponentMode.DISPLAY_MODE
 
   // used if the component is called as a selection component of UmlState instances
-  selection: SelectionModel<UmlStateDB>;
-  initialSelection = new Array<UmlStateDB>();
+  selection: SelectionModel<UmlStateDB> = new (SelectionModel)
+  initialSelection = new Array<UmlStateDB>()
 
   // the data source for the table
-  umlstates: UmlStateDB[];
-  matTableDataSource: MatTableDataSource<UmlStateDB>
+  umlstates: UmlStateDB[] = []
+  matTableDataSource: MatTableDataSource<UmlStateDB> = new (MatTableDataSource)
 
   // front repo, that will be referenced by this.umlstates
-  frontRepo: FrontRepo
+  frontRepo: FrontRepo = new (FrontRepo)
 
   // displayedColumns is referenced by the MatTable component for specify what columns
   // have to be displayed and in what order
   displayedColumns: string[];
 
   // for sorting & pagination
-  @ViewChild(MatSort) sort: MatSort;
-  @ViewChild(MatPaginator) paginator: MatPaginator;
+  @ViewChild(MatSort)
+  sort: MatSort | undefined
+  @ViewChild(MatPaginator)
+  paginator: MatPaginator | undefined;
 
   ngAfterViewInit() {
 
@@ -70,10 +73,11 @@ export class UmlStatesTableComponent implements OnInit {
           return umlstateDB.Y;
 
         case 'Umlsc_States':
-          return this.frontRepo.Umlscs.get(umlstateDB.Umlsc_StatesDBID.Int64)?.Name;
+          return this.frontRepo.Umlscs.get(umlstateDB.Umlsc_StatesDBID.Int64)!.Name;
 
         default:
-          return UmlStateDB[property];
+          console.assert(false, "Unknown field")
+          return "";
       }
     };
 
@@ -89,7 +93,7 @@ export class UmlStatesTableComponent implements OnInit {
       mergedContent += umlstateDB.X.toString()
       mergedContent += umlstateDB.Y.toString()
       if (umlstateDB.Umlsc_StatesDBID.Int64 != 0) {
-        mergedContent += this.frontRepo.Umlscs.get(umlstateDB.Umlsc_StatesDBID.Int64)?.Name.toLowerCase()
+        mergedContent += this.frontRepo.Umlscs.get(umlstateDB.Umlsc_StatesDBID.Int64)!.Name.toLowerCase()
       }
 
 
@@ -97,8 +101,8 @@ export class UmlStatesTableComponent implements OnInit {
       return isSelected
     };
 
-    this.matTableDataSource.sort = this.sort;
-    this.matTableDataSource.paginator = this.paginator;
+    this.matTableDataSource.sort = this.sort!
+    this.matTableDataSource.paginator = this.paginator!
   }
 
   applyFilter(event: Event) {
@@ -178,7 +182,7 @@ export class UmlStatesTableComponent implements OnInit {
           this.umlstates.forEach(
             umlstate => {
               let ID = this.dialogData.ID
-              let revPointer = umlstate[this.dialogData.ReversePointer]
+              let revPointer = umlstate[this.dialogData.ReversePointer as keyof UmlStateDB] as unknown as NullInt64
               if (revPointer.Int64 == ID) {
                 this.initialSelection.push(umlstate)
               }
@@ -189,15 +193,15 @@ export class UmlStatesTableComponent implements OnInit {
 
         if (this.mode == TableComponentMode.MANY_MANY_ASSOCIATION_MODE) {
 
-          let mapOfSourceInstances = this.frontRepo[this.dialogData.SourceStruct + "s"]
-          let sourceInstance = mapOfSourceInstances.get(this.dialogData.ID)
+          let mapOfSourceInstances = this.frontRepo[this.dialogData.SourceStruct + "s" as keyof FrontRepo] as Map<number, UmlStateDB>
+          let sourceInstance = mapOfSourceInstances.get(this.dialogData.ID)!
 
-          if (sourceInstance[this.dialogData.SourceField]) {
-            for (let associationInstance of sourceInstance[this.dialogData.SourceField]) {
-              let umlstate = associationInstance[this.dialogData.IntermediateStructField]
-              this.initialSelection.push(umlstate)
-            }
+          let sourceField = sourceInstance[this.dialogData.SourceField as keyof typeof sourceInstance]! as unknown as UmlStateDB[]
+          for (let associationInstance of sourceField) {
+            let umlstate = associationInstance[this.dialogData.IntermediateStructField as keyof typeof associationInstance] as unknown as UmlStateDB
+            this.initialSelection.push(umlstate)
           }
+
           this.selection = new SelectionModel<UmlStateDB>(allowMultiSelect, this.initialSelection);
         }
 
@@ -273,8 +277,9 @@ export class UmlStatesTableComponent implements OnInit {
       // reset all initial selection of umlstate that belong to umlstate
       this.initialSelection.forEach(
         umlstate => {
-          umlstate[this.dialogData.ReversePointer].Int64 = 0
-          umlstate[this.dialogData.ReversePointer].Valid = true
+          let index = umlstate[this.dialogData.ReversePointer as keyof UmlStateDB] as unknown as NullInt64
+          index.Int64 = 0
+          index.Valid = true
           toUpdate.add(umlstate)
         }
       )
@@ -282,9 +287,9 @@ export class UmlStatesTableComponent implements OnInit {
       // from selection, set umlstate that belong to umlstate
       this.selection.selected.forEach(
         umlstate => {
-          let ID = +this.dialogData.ID
-          umlstate[this.dialogData.ReversePointer].Int64 = ID
-          umlstate[this.dialogData.ReversePointer].Valid = true
+          let ID = this.dialogData.ID as number
+          let reversePointer = umlstate[this.dialogData.ReversePointer  as keyof UmlStateDB] as unknown as NullInt64
+          reversePointer.Int64 = ID
           toUpdate.add(umlstate)
         }
       )
@@ -302,8 +307,9 @@ export class UmlStatesTableComponent implements OnInit {
 
     if (this.mode == TableComponentMode.MANY_MANY_ASSOCIATION_MODE) {
 
-      let mapOfSourceInstances = this.frontRepo[this.dialogData.SourceStruct + "s"]
-      let sourceInstance = mapOfSourceInstances.get(this.dialogData.ID)
+      // get the source instance via the map of instances in the front repo
+      let mapOfSourceInstances = this.frontRepo[this.dialogData.SourceStruct + "s" as keyof FrontRepo] as Map<number, UmlStateDB>
+      let sourceInstance = mapOfSourceInstances.get(this.dialogData.ID)!
 
       // First, parse all instance of the association struct and remove the instance
       // that have unselect
@@ -319,23 +325,21 @@ export class UmlStatesTableComponent implements OnInit {
       }
 
       // delete the association instance
-      if (sourceInstance[this.dialogData.SourceField]) {
-        for (let associationInstance of sourceInstance[this.dialogData.SourceField]) {
-          let umlstate = associationInstance[this.dialogData.IntermediateStructField]
-          if (unselectedUmlState.has(umlstate.ID)) {
+      let associationInstance = sourceInstance[this.dialogData.SourceField as keyof typeof sourceInstance]
+      let umlstate = associationInstance![this.dialogData.IntermediateStructField as keyof typeof associationInstance] as unknown as UmlStateDB
+      if (unselectedUmlState.has(umlstate.ID)) {
+        this.frontRepoService.deleteService(this.dialogData.IntermediateStruct, associationInstance)
 
-            this.frontRepoService.deleteService( this.dialogData.IntermediateStruct, associationInstance )
-          }
-        }
+
       }
 
-      // is the source array is emptyn create it
-      if (sourceInstance[this.dialogData.SourceField] == undefined) {
-        sourceInstance[this.dialogData.SourceField] = new Array<any>()
+      // is the source array is empty create it
+      if (sourceInstance[this.dialogData.SourceField as keyof typeof sourceInstance] == undefined) {
+        (sourceInstance[this.dialogData.SourceField as keyof typeof sourceInstance] as unknown as Array<UmlStateDB>) = new Array<UmlStateDB>()
       }
 
       // second, parse all instance of the selected
-      if (sourceInstance[this.dialogData.SourceField]) {
+      if (sourceInstance[this.dialogData.SourceField as keyof typeof sourceInstance]) {
         this.selection.selected.forEach(
           umlstate => {
             if (!this.initialSelection.includes(umlstate)) {
@@ -345,13 +349,11 @@ export class UmlStatesTableComponent implements OnInit {
                 Name: sourceInstance["Name"] + "-" + umlstate.Name,
               }
 
-              associationInstance[this.dialogData.IntermediateStructField+"ID"] = new NullInt64
-              associationInstance[this.dialogData.IntermediateStructField+"ID"].Int64 = umlstate.ID
-              associationInstance[this.dialogData.IntermediateStructField+"ID"].Valid = true
+              let index = associationInstance[this.dialogData.IntermediateStructField+"ID" as keyof typeof associationInstance] as unknown as NullInt64
+              index.Int64 = umlstate.ID
 
-              associationInstance[this.dialogData.SourceStruct + "_" + this.dialogData.SourceField + "DBID"] = new NullInt64
-              associationInstance[this.dialogData.SourceStruct + "_" + this.dialogData.SourceField + "DBID"].Int64 = sourceInstance["ID"]
-              associationInstance[this.dialogData.SourceStruct + "_" + this.dialogData.SourceField + "DBID"].Valid = true
+              let indexDB = associationInstance[this.dialogData.IntermediateStructField+"DBID" as keyof typeof associationInstance] as unknown as NullInt64
+              indexDB.Int64 = umlstate.ID
 
               this.frontRepoService.postService( this.dialogData.IntermediateStruct, associationInstance )
 

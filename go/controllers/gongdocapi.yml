@@ -1919,17 +1919,20 @@ responses:
     description: ClassshapeDBResponse provides response
     headers:
       Classdiagram_ClassshapesDBID:
-        description: Implementation of a reverse ID for field Classdiagram{}.Classshapes []*Classshape
+        description: Implementation of a reverse ID for field Classdiagram{}.Classshapes
+          []*Classshape
       Classdiagram_ClassshapesDBID_Index:
         description: implementation of the index of the withing the slice
       ClassshapeTargetType_Data:
-        description: Declation for basic field classshapeDB.ClassshapeTargetType {{BasicKind}} (to be completed)
+        description: Declation for basic field classshapeDB.ClassshapeTargetType {{BasicKind}}
+          (to be completed)
       CreatedAt:
         format: date-time
         type: string
       DeletedAt: {}
       Heigth_Data:
-        description: Declation for basic field classshapeDB.Heigth {{BasicKind}} (to be completed)
+        description: Declation for basic field classshapeDB.Heigth {{BasicKind}} (to
+          be completed)
       ID:
         format: uint64
         type: integer
@@ -1943,12 +1946,14 @@ responses:
           field Position is a pointer to another Struct (optional or 0..1)
           This field is generated into another field to enable AS ONE association
       Structname_Data:
-        description: Declation for basic field classshapeDB.Structname {{BasicKind}} (to be completed)
+        description: Declation for basic field classshapeDB.Structname {{BasicKind}}
+          (to be completed)
       UpdatedAt:
         format: date-time
         type: string
       Width_Data:
-        description: Declation for basic field classshapeDB.Width {{BasicKind}} (to be completed)
+        description: Declation for basic field classshapeDB.Width {{BasicKind}} (to
+          be completed)
     schema:
       $ref: '#/definitions/NullInt64'
   classshapeDBsResponse:
@@ -1971,11 +1976,14 @@ responses:
         type: string
       DeletedAt: {}
       FieldTypeAsString_Data:
-        description: Declation for basic field fieldDB.FieldTypeAsString {{BasicKind}} (to be completed)
+        description: Declation for basic field fieldDB.FieldTypeAsString {{BasicKind}}
+          (to be completed)
       Fieldname_Data:
-        description: Declation for basic field fieldDB.Fieldname {{BasicKind}} (to be completed)
+        description: Declation for basic field fieldDB.Fieldname {{BasicKind}} (to
+          be completed)
       Fieldtypename_Data:
-        description: Declation for basic field fieldDB.Fieldtypename {{BasicKind}} (to be completed)
+        description: Declation for basic field fieldDB.Fieldtypename {{BasicKind}}
+          (to be completed)
       ID:
         format: uint64
         type: integer
@@ -1984,7 +1992,8 @@ responses:
           insertion for basic fields declaration
           Declation for basic field fieldDB.Name {{BasicKind}} (to be completed)
       Structname_Data:
-        description: Declation for basic field fieldDB.Structname {{BasicKind}} (to be completed)
+        description: Declation for basic field fieldDB.Structname {{BasicKind}} (to
+          be completed)
       UpdatedAt:
         format: date-time
         type: string
@@ -2014,21 +2023,27 @@ responses:
     description: GongdocCommandDBResponse provides response
     headers:
       Command_Data:
-        description: Declation for basic field gongdoccommandDB.Command {{BasicKind}} (to be completed)
+        description: Declation for basic field gongdoccommandDB.Command {{BasicKind}}
+          (to be completed)
       CreatedAt:
         format: date-time
         type: string
       Date_Data:
-        description: Declation for basic field gongdoccommandDB.Date {{BasicKind}} (to be completed)
+        description: Declation for basic field gongdoccommandDB.Date {{BasicKind}}
+          (to be completed)
       DeletedAt: {}
       DiagramName_Data:
-        description: Declation for basic field gongdoccommandDB.DiagramName {{BasicKind}} (to be completed)
+        description: Declation for basic field gongdoccommandDB.DiagramName {{BasicKind}}
+          (to be completed)
       FieldName_Data:
-        description: Declation for basic field gongdoccommandDB.FieldName {{BasicKind}} (to be completed)
+        description: Declation for basic field gongdoccommandDB.FieldName {{BasicKind}}
+          (to be completed)
       FieldTypeName_Data:
-        description: Declation for basic field gongdoccommandDB.FieldTypeName {{BasicKind}} (to be completed)
+        description: Declation for basic field gongdoccommandDB.FieldTypeName {{BasicKind}}
+          (to be completed)
       GongdocNodeType_Data:
-        description: Declation for basic field gongdoccommandDB.GongdocNodeType {{BasicKind}} (to be completed)
+        description: Declation for basic field gongdoccommandDB.GongdocNodeType {{BasicKind}}
+          (to be completed)
       ID:
         format: uint64
         type: integer
@@ -2037,11 +2052,14 @@ responses:
           insertion for basic fields declaration
           Declation for basic field gongdoccommandDB.Name {{BasicKind}} (to be completed)
       PositionX_Data:
-        description: Declation for basic field gongdoccommandDB.PositionX {{BasicKind}} (to be completed)
+        description: Declation for basic field gongdoccommandDB.PositionX {{BasicKind}}
+          (to be completed)
       PositionY_Data:
-        description: Declation for basic field gongdoccommandDB.PositionY {{BasicKind}} (to be completed)
+        description: Declation for basic field gongdoccommandDB.PositionY {{BasicKind}}
+          (to be completed)
       StructName_Data:
-        description: Declation for basic field gongdoccommandDB.StructName {{BasicKind}} (to be completed)
+        description: Declation for basic field gongdoccommandDB.StructName {{BasicKind}}
+          (to be completed)
       UpdatedAt:
         format: date-time
         type: string
@@ -2057,7 +2075,8 @@ responses:
     description: GongdocStatusDBResponse provides response
     headers:
       CommandCompletionDate_Data:
-        description: Declation for basic field gongdocstatusDB.CommandCompletionDate {{BasicKind}} (to be completed)
+        description: Declation for basic field gongdocstatusDB.CommandCompletionDate
+          {{BasicKind}} (to be completed)
       CreatedAt:
         format: date-time
         type: string
@@ -2070,7 +2089,8 @@ responses:
           insertion for basic fields declaration
           Declation for basic field gongdocstatusDB.Name {{BasicKind}} (to be completed)
       Status_Data:
-        description: Declation for basic field gongdocstatusDB.Status {{BasicKind}} (to be completed)
+        description: Declation for basic field gongdocstatusDB.Status {{BasicKind}}
+          (to be completed)
       UpdatedAt:
         format: date-time
         type: string
@@ -2094,9 +2114,11 @@ responses:
         type: string
       DeletedAt: {}
       Fieldname_Data:
-        description: Declation for basic field linkDB.Fieldname {{BasicKind}} (to be completed)
+        description: Declation for basic field linkDB.Fieldname {{BasicKind}} (to
+          be completed)
       Fieldtypename_Data:
-        description: Declation for basic field linkDB.Fieldtypename {{BasicKind}} (to be completed)
+        description: Declation for basic field linkDB.Fieldtypename {{BasicKind}}
+          (to be completed)
       ID:
         format: uint64
         type: integer
@@ -2106,13 +2128,15 @@ responses:
           field Middlevertice is a pointer to another Struct (optional or 0..1)
           This field is generated into another field to enable AS ONE association
       Multiplicity_Data:
-        description: Declation for basic field linkDB.Multiplicity {{BasicKind}} (to be completed)
+        description: Declation for basic field linkDB.Multiplicity {{BasicKind}} (to
+          be completed)
       Name_Data:
         description: |-
           insertion for basic fields declaration
           Declation for basic field linkDB.Name {{BasicKind}} (to be completed)
       Structname_Data:
-        description: Declation for basic field linkDB.Structname {{BasicKind}} (to be completed)
+        description: Declation for basic field linkDB.Structname {{BasicKind}} (to
+          be completed)
       UpdatedAt:
         format: date-time
         type: string
@@ -2139,7 +2163,8 @@ responses:
           insertion for basic fields declaration
           Declation for basic field pkgeltDB.Name {{BasicKind}} (to be completed)
       Path_Data:
-        description: Declation for basic field pkgeltDB.Path {{BasicKind}} (to be completed)
+        description: Declation for basic field pkgeltDB.Path {{BasicKind}} (to be
+          completed)
       UpdatedAt:
         format: date-time
         type: string
@@ -2162,7 +2187,8 @@ responses:
         format: uint64
         type: integer
       Name_Data:
-        description: Declation for basic field positionDB.Name {{BasicKind}} (to be completed)
+        description: Declation for basic field positionDB.Name {{BasicKind}} (to be
+          completed)
       UpdatedAt:
         format: date-time
         type: string
@@ -2184,7 +2210,8 @@ responses:
     description: UmlscDBResponse provides response
     headers:
       Activestate_Data:
-        description: Declation for basic field umlscDB.Activestate {{BasicKind}} (to be completed)
+        description: Declation for basic field umlscDB.Activestate {{BasicKind}} (to
+          be completed)
       CreatedAt:
         format: date-time
         type: string
@@ -2276,7 +2303,8 @@ responses:
         format: uint64
         type: integer
       Name_Data:
-        description: Declation for basic field verticeDB.Name {{BasicKind}} (to be completed)
+        description: Declation for basic field verticeDB.Name {{BasicKind}} (to be
+          completed)
       UpdatedAt:
         format: date-time
         type: string

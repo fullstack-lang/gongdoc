@@ -23,13 +23,13 @@ export class PositionPresentationComponent implements OnInit {
 
 	// insertion point for declarations
 
-	displayedColumns: string[] = [];
-	dataSource = ELEMENT_DATA;
+	displayedColumns: string[] = []
+	dataSource = ELEMENT_DATA
 
-	position: PositionDB;
+	position: PositionDB = new (PositionDB)
 
 	// front repo
-	frontRepo: FrontRepo
+	frontRepo: FrontRepo = new (FrontRepo)
  
 	constructor(
 		private positionService: PositionService,
@@ -56,12 +56,12 @@ export class PositionPresentationComponent implements OnInit {
 	}
 
 	getPosition(): void {
-		const id = +this.route.snapshot.paramMap.get('id');
+		const id = +this.route.snapshot.paramMap.get('id')!
 		this.frontRepoService.pull().subscribe(
 			frontRepo => {
 				this.frontRepo = frontRepo
 
-				this.position = this.frontRepo.Positions.get(id)
+				this.position = this.frontRepo.Positions.get(id)!
 
 				// insertion point for recovery of durations
 			}
