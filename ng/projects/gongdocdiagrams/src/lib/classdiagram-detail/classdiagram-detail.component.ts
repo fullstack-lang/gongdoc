@@ -10,7 +10,8 @@ import { PkgeltService } from 'gongdoc'
 
 
 
-import { FrontRepoService, FrontRepo, NullInt64 } from 'gongdoc'
+import { FrontRepoService, FrontRepo } from 'gongdoc'
+import { NullInt64 } from 'gongdoc'
 
 
 // insertion point for import of enums lists 
@@ -32,10 +33,10 @@ export class ClassdiagramDetailComponent implements OnInit {
 	// insertion point for declation of form controls for bool 
 
 	// the ClassdiagramDB of interest
-	classdiagram: ClassdiagramDB;
+	classdiagram: ClassdiagramDB = new ClassdiagramDB;
 
 	// front repo
-	frontRepo: FrontRepo
+	frontRepo: FrontRepo = new FrontRepo
 
 	constructor(
 		private pkgeltService: PkgeltService,
@@ -68,7 +69,7 @@ export class ClassdiagramDetailComponent implements OnInit {
 	}
 
 	getClassdiagram(): void {
-		const id = +this.route.snapshot.paramMap.get('id');
+		const id = +this.route.snapshot.paramMap.get('id')!
 
 		this.frontRepoService.pull().subscribe(
 			frontRepo => {
@@ -76,7 +77,7 @@ export class ClassdiagramDetailComponent implements OnInit {
 				console.log("front repo ClassdiagramPull returned")
 
 				if (id != 0) {
-					this.classdiagram = frontRepo.Classdiagrams.get(id)
+					this.classdiagram = frontRepo.Classdiagrams.get(id)!
 				} else {
 					this.classdiagram = new (ClassdiagramDB)
 				}
@@ -89,7 +90,7 @@ export class ClassdiagramDetailComponent implements OnInit {
 	}
 
 	save(): void {
-		const id = +this.route.snapshot.paramMap.get('id');
+		const id = +this.route.snapshot.paramMap.get('id')!
 
 		if (id != 0) {
 
@@ -122,7 +123,7 @@ export class ClassdiagramDetailComponent implements OnInit {
 				.subscribe(classdiagram => {
 					this.classdiagramService.ClassdiagramServiceChanged.next("post")
 
-					this.classdiagram = {} // reset fields
+					this.classdiagram = new ClassdiagramDB // reset fields
 					console.log("classdiagram added")
 				});
 		}
