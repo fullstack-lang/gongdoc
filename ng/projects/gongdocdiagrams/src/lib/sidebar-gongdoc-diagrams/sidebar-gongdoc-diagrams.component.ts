@@ -9,6 +9,8 @@ import { ClassdiagramService } from 'gongdoc'
 
 import { Observable, timer } from 'rxjs';
 import { stringify } from '@angular/compiler/src/util';
+import { ClassdiagramDB } from 'projects/gongdoc/src/lib/classdiagram-db';
+import { UmlscDB } from 'projects/gongdoc/src/lib/umlsc-db';
 
 /**
  * Types of a GongNode / GongFlatNode
@@ -155,7 +157,7 @@ export class SidebarGongdocDiagramsComponent implements OnInit {
 
     // observable for changes in structs
     this.classdiagramService.ClassdiagramServiceChanged.subscribe(
-      message => {
+      (message:string) => {
         if (message == "post" || message == "update" || message == "delete") {
           this.refresh()
         }
@@ -164,7 +166,7 @@ export class SidebarGongdocDiagramsComponent implements OnInit {
 
   }
   refresh(): void {
-    this.frontRepoService.pull().subscribe(frontRepo => {
+    this.frontRepoService.pull().subscribe( (frontRepo: FrontRepo) => {
       this.frontRepo = frontRepo
 
       // use of a Gödel number to uniquely identfy nodes : 2 * node.id + 3 * node.level
@@ -199,7 +201,7 @@ export class SidebarGongdocDiagramsComponent implements OnInit {
       this.gongNodeTree.push(classdiagramGongNodeStruct)
 
       this.frontRepo.Classdiagrams_array.forEach(
-        classdiagramDB => {
+        (classdiagramDB: ClassdiagramDB) => {
           let classdiagramGongNodeInstance: GongNode = {
             name: "var : " + classdiagramDB.Name,
             type: GongNodeType.CLASS_DIAGRAM_INSTANCE,
@@ -252,7 +254,7 @@ export class SidebarGongdocDiagramsComponent implements OnInit {
       this.gongNodeTree.push(umlscGongNodeStruct)
 
       this.frontRepo.Umlscs_array.forEach(
-        umlscDB => {
+        (umlscDB: UmlscDB) => {
           let umlscGongNodeInstance: GongNode = {
             name: "var : " + umlscDB.Name,
             type: GongNodeType.STATE_CHART_INSTANCE,
@@ -367,7 +369,7 @@ export class SidebarGongdocDiagramsComponent implements OnInit {
     if (node.structName == "Classdiagram") {
 
       this.classdiagramService.deleteClassdiagram(node.bdId).subscribe(
-        classdiagram => {
+        (classdiagram: ClassdiagramDB) => {
           this.classdiagramService.ClassdiagramServiceChanged.next("delete")
 
           console.log("classdiagram deleted " + classdiagram.Name)
