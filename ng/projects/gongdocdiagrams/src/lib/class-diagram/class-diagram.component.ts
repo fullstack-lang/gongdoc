@@ -10,6 +10,7 @@ import * as gong from 'gong'
 import { newUmlClassShape } from './newUmlClassShape'
 import { ClassdiagramContextSubject, ClassdiagramContext } from '../diagram-displayed-gongstruct'
 import { ClassshapeDB, LinkDB } from 'gongdoc';
+import { Model } from 'backbone';
 
 @Component({
   selector: 'lib-class-diagram',
@@ -35,8 +36,8 @@ export class ClassDiagramComponent implements OnInit, OnDestroy {
    * jointjs stuff
    */
   namespace = joint.shapes;
-  private paper: joint.dia.Paper
-  private graph: joint.dia.Graph
+  private paper?: joint.dia.Paper
+  private graph?: joint.dia.Graph
 
   // the gong diagram of interest ot be drawn
   public classdiagram: gongdoc.ClassdiagramDB = new gongdoc.ClassdiagramDB
@@ -150,7 +151,7 @@ export class ClassDiagramComponent implements OnInit, OnDestroy {
     const umlClassShape = newUmlClassShape(classshape)
 
     // structRectangle.attributes = ['firstName: String']
-    umlClassShape.addTo(this.graph);
+    umlClassShape.addTo(this.graph!);
 
     // horrible hack because the TS compiles assets that umlclasshape.id is not a string but a 
     // an attribute of type joint.dia.Dimension
@@ -191,22 +192,17 @@ export class ClassDiagramComponent implements OnInit, OnDestroy {
       {},
       { cellNamespace: this.namespace } // critical piece of code. 
     );
-    this.paper = new joint.dia.Paper(
-      {
-        el: document.getElementById('jointjs-holder'),
 
-        model: this.graph,
-        // Estimate the total width of the diagram >> 1 class width: (200px * 1.2 (css transform scale)) + margin: 30px * 2 (left-right)
-        // The shapes are divided on 2 rows
-        // MANAGE_ODD_NUMBERSHAPES = numbershapes % 2 ? 300 / 2 : 0
-        // => Total width: numbershapes / 2 * 300 + MANAGE_ODD_NUMBERSHAPES
-        width: diagramWidth,
-        height: 1000,
-        gridSize: 10,
-        drawGrid: false,
-        cellViewNamespace: namespace
-      }
-    );
+    let paperOptions: joint.dia.Paper.Options = {}
+    paperOptions.el = document.getElementById('jointjs-holder')!
+    paperOptions.model = this.graph
+    paperOptions.width = diagramWidth
+    paperOptions.height = 1000
+    paperOptions.gridSize = 10
+    paperOptions.drawGrid = false
+    paperOptions.cellViewNamespace = namespace
+
+    this.paper = new joint.dia.Paper(paperOptions)
 
     // draw class shapes from the gong classshapes
     if (this.classdiagram?.Classshapes != undefined) {
@@ -236,8 +232,8 @@ export class ClassDiagramComponent implements OnInit, OnDestroy {
               continue;
             }
 
-            let xFrom = fromShape.get('position').x
-            let yFrom = fromShape.get('position').y
+            let xFrom = fromShape!.get('position').x
+            let yFrom = fromShape!.get('position').y
             let xTo = toShape.get('position').x
             let yTo = toShape.get('position').y
             var vertices = [{ x: (xFrom + yTo) / 2, y: (yFrom + yTo) / 2 }]
@@ -325,11 +321,11 @@ export class ClassDiagramComponent implements OnInit, OnDestroy {
     console.log("save diagram")
 
     // parse shapes positions
-    var cells = this.graph.getCells()
+    var cells = this.graph!.getCells()
     console.log(cells.length)
 
     cells.forEach(
-      (cell: { id: any; attributes: { position: { x: number; y: number; }; vertices: { x: number; y: number; }[]; }; }) => {
+      (cell: joint.dia.Cell) => {
         // ugly hack because cell.id is considered a Dimension by the ts compiler
         // vive golang
         var classshapeDB: gongdoc.ClassshapeDB;

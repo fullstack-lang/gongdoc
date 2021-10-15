@@ -212,7 +212,7 @@ export class UmlscDiagramComponent implements OnInit {
     console.log(cells.length)
 
     cells.forEach(
-      (cell: { id: any; attributes: { position: { x: number; y: number; }; }; }) => {
+      (cell: joint.dia.Cell) => {
         // ugly hack because cell.id is considered a Dimension by the ts compiler
         // vive golang
         var cellId: any

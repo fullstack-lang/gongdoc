@@ -225,7 +225,7 @@ export class FrontRepoService {
             // Typing can be messy with many items. Therefore, type casting is necessary here
             // insertion point sub template for type casting 
             var classdiagrams: ClassdiagramDB[]
-            classdiagrams = classdiagrams_
+            classdiagrams = classdiagrams_ as ClassdiagramDB[]
             var classshapes: ClassshapeDB[]
             classshapes = classshapes_
             var fields: FieldDB[]
