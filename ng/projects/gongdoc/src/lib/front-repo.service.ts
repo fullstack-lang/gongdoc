@@ -227,25 +227,25 @@ export class FrontRepoService {
             var classdiagrams: ClassdiagramDB[]
             classdiagrams = classdiagrams_ as ClassdiagramDB[]
             var classshapes: ClassshapeDB[]
-            classshapes = classshapes_
+            classshapes = classshapes_ as ClassshapeDB[]
             var fields: FieldDB[]
-            fields = fields_
+            fields = fields_ as FieldDB[]
             var gongdoccommands: GongdocCommandDB[]
-            gongdoccommands = gongdoccommands_
+            gongdoccommands = gongdoccommands_ as GongdocCommandDB[]
             var gongdocstatuss: GongdocStatusDB[]
-            gongdocstatuss = gongdocstatuss_
+            gongdocstatuss = gongdocstatuss_ as GongdocStatusDB[]
             var links: LinkDB[]
-            links = links_
+            links = links_ as LinkDB[]
             var pkgelts: PkgeltDB[]
-            pkgelts = pkgelts_
+            pkgelts = pkgelts_ as PkgeltDB[]
             var positions: PositionDB[]
-            positions = positions_
+            positions = positions_ as PositionDB[]
             var umlstates: UmlStateDB[]
-            umlstates = umlstates_
+            umlstates = umlstates_ as UmlStateDB[]
             var umlscs: UmlscDB[]
-            umlscs = umlscs_
+            umlscs = umlscs_ as UmlscDB[]
             var vertices: VerticeDB[]
-            vertices = vertices_
+            vertices = vertices_ as VerticeDB[]
 
             // 
             // First Step: init map of instances

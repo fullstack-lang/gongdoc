@@ -12,6 +12,7 @@
     "importHelpers": true,
     "target": "es2015",
     "strict": true,
+    "skipLibCheck": true, // for compiling jointjs
     "typeRoots": [
       "node_modules/@types"
     ],
@@ -29,6 +30,9 @@
       // it might get a different Angular module instead, which would cause your application to break.
       "@angular/*": [
         "./node_modules/@angular/*"
+      ],
+      "@angular-material-components/datetime-picker":[
+        "./node_modules/@angular-material-components/datetime-picker"
       ],
       "rxjs/operators": [
         "./node_modules/rxjs/operators"
