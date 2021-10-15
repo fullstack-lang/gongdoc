@@ -4,13 +4,11 @@ import { Router, RouterState } from '@angular/router';
 import { FlatTreeControl } from '@angular/cdk/tree';
 import { MatTreeFlatDataSource, MatTreeFlattener } from '@angular/material/tree';
 
-import { FrontRepoService, FrontRepo } from 'gongdoc'
-import { ClassdiagramService } from 'gongdoc'
+import * as gongdoc from 'gongdoc'
+
 
 import { Observable, timer } from 'rxjs';
 import { stringify } from '@angular/compiler/src/util';
-import { ClassdiagramDB } from 'projects/gongdoc/src/lib/classdiagram-db';
-import { UmlscDB } from 'projects/gongdoc/src/lib/umlsc-db';
 
 /**
  * Types of a GongNode / GongFlatNode
@@ -123,16 +121,16 @@ export class SidebarGongdocDiagramsComponent implements OnInit {
   hasChild = (_: number, node: GongFlatNode) => node.expandable;
 
   // front repo
-  frontRepo?: FrontRepo
+  frontRepo?: gongdoc.FrontRepo
 
   // "data" tree that is constructed during NgInit and is passed to the mat-tree component
   gongNodeTree = new Array<GongNode>();
 
   constructor(
     private router: Router,
-    private frontRepoService: FrontRepoService,
+    private frontRepoService: gongdoc.FrontRepoService,
 
-    private classdiagramService: ClassdiagramService,
+    private classdiagramService: gongdoc.ClassdiagramService,
   ) { }
   ngOnInit(): void {
     this.refresh()
@@ -166,7 +164,7 @@ export class SidebarGongdocDiagramsComponent implements OnInit {
 
   }
   refresh(): void {
-    this.frontRepoService.pull().subscribe( (frontRepo: FrontRepo) => {
+    this.frontRepoService.pull().subscribe( (frontRepo: gongdoc.FrontRepo) => {
       this.frontRepo = frontRepo
 
       // use of a Gödel number to uniquely identfy nodes : 2 * node.id + 3 * node.level
@@ -201,7 +199,7 @@ export class SidebarGongdocDiagramsComponent implements OnInit {
       this.gongNodeTree.push(classdiagramGongNodeStruct)
 
       this.frontRepo.Classdiagrams_array.forEach(
-        (classdiagramDB: ClassdiagramDB) => {
+        (classdiagramDB: gongdoc.ClassdiagramDB) => {
           let classdiagramGongNodeInstance: GongNode = {
             name: "var : " + classdiagramDB.Name,
             type: GongNodeType.CLASS_DIAGRAM_INSTANCE,
@@ -254,7 +252,7 @@ export class SidebarGongdocDiagramsComponent implements OnInit {
       this.gongNodeTree.push(umlscGongNodeStruct)
 
       this.frontRepo.Umlscs_array.forEach(
-        (umlscDB: UmlscDB) => {
+        (umlscDB: gongdoc.UmlscDB) => {
           let umlscGongNodeInstance: GongNode = {
             name: "var : " + umlscDB.Name,
             type: GongNodeType.STATE_CHART_INSTANCE,
@@ -369,7 +367,7 @@ export class SidebarGongdocDiagramsComponent implements OnInit {
     if (node.structName == "Classdiagram") {
 
       this.classdiagramService.deleteClassdiagram(node.bdId).subscribe(
-        (classdiagram: ClassdiagramDB) => {
+        (classdiagram: gongdoc.ClassdiagramDB) => {
           this.classdiagramService.ClassdiagramServiceChanged.next("delete")
 
           console.log("classdiagram deleted " + classdiagram.Name)
