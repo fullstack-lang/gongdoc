@@ -10,12 +10,13 @@ import { MapOfComponents } from '../map-components'
 import { MapOfSortingComponents } from '../map-components'
 
 // insertion point for imports
+import { UmlscDB } from '../umlsc-db'
 
 import { Router, RouterState, ActivatedRoute } from '@angular/router';
 
 import { MatDialog, MAT_DIALOG_DATA, MatDialogRef, MatDialogConfig } from '@angular/material/dialog';
 
-import { NullInt64 } from '../front-repo.service'
+import { NullInt64 } from '../null-int64'
 
 // UmlStateDetailComponent is initilizaed from different routes
 // UmlStateDetailComponentState detail different cases 
@@ -36,10 +37,10 @@ export class UmlStateDetailComponent implements OnInit {
 	// insertion point for declarations
 
 	// the UmlStateDB of interest
-	umlstate: UmlStateDB;
+	umlstate: UmlStateDB = new UmlStateDB
 
 	// front repo
-	frontRepo: FrontRepo
+	frontRepo: FrontRepo = new FrontRepo
 
 	// this stores the information related to string fields
 	// if false, the field is inputed with an <input ...> form 
@@ -47,15 +48,15 @@ export class UmlStateDetailComponent implements OnInit {
 	mapFields_displayAsTextArea = new Map<string, boolean>()
 
 	// the state at initialization (CREATION, UPDATE or CREATE with one association set)
-	state: UmlStateDetailComponentState
+	state: UmlStateDetailComponentState = UmlStateDetailComponentState.CREATE_INSTANCE
 
 	// in UDPATE state, if is the id of the instance to update
 	// in CREATE state with one association set, this is the id of the associated instance
-	id: number
+	id: number = 0
 
 	// in CREATE state with one association set, this is the id of the associated instance
-	originStruct: string
-	originStructFieldName: string
+	originStruct: string = ""
+	originStructFieldName: string = ""
 
 	constructor(
 		private umlstateService: UmlStateService,
@@ -69,9 +70,9 @@ export class UmlStateDetailComponent implements OnInit {
 	ngOnInit(): void {
 
 		// compute state
-		this.id = +this.route.snapshot.paramMap.get('id');
-		this.originStruct = this.route.snapshot.paramMap.get('originStruct');
-		this.originStructFieldName = this.route.snapshot.paramMap.get('originStructFieldName');
+		this.id = +this.route.snapshot.paramMap.get('id')!;
+		this.originStruct = this.route.snapshot.paramMap.get('originStruct')!;
+		this.originStructFieldName = this.route.snapshot.paramMap.get('originStructFieldName')!;
 
 		const association = this.route.snapshot.paramMap.get('association');
 		if (this.id == 0) {
@@ -83,7 +84,7 @@ export class UmlStateDetailComponent implements OnInit {
 				switch (this.originStructFieldName) {
 					// insertion point for state computation
 					case "States":
-						console.log("UmlState" + " is instanciated with back pointer to instance " + this.id + " Umlsc association States")
+						// console.log("UmlState" + " is instanciated with back pointer to instance " + this.id + " Umlsc association States")
 						this.state = UmlStateDetailComponentState.CREATE_INSTANCE_WITH_ASSOCIATION_Umlsc_States_SET
 						break;
 					default:
@@ -117,12 +118,14 @@ export class UmlStateDetailComponent implements OnInit {
 						this.umlstate = new (UmlStateDB)
 						break;
 					case UmlStateDetailComponentState.UPDATE_INSTANCE:
-						this.umlstate = frontRepo.UmlStates.get(this.id)
+						let umlstate = frontRepo.UmlStates.get(this.id)
+						console.assert(umlstate != undefined, "missing umlstate with id:" + this.id)
+						this.umlstate = umlstate!
 						break;
 					// insertion point for init of association field
 					case UmlStateDetailComponentState.CREATE_INSTANCE_WITH_ASSOCIATION_Umlsc_States_SET:
 						this.umlstate = new (UmlStateDB)
-						this.umlstate.Umlsc_States_reverse = frontRepo.Umlscs.get(this.id)
+						this.umlstate.Umlsc_States_reverse = frontRepo.Umlscs.get(this.id)!
 						break;
 					default:
 						console.log(this.state + " is unkown state")
@@ -155,7 +158,7 @@ export class UmlStateDetailComponent implements OnInit {
 				this.umlstate.Umlsc_StatesDBID_Index = new NullInt64
 			}
 			this.umlstate.Umlsc_StatesDBID_Index.Valid = true
-			this.umlstate.Umlsc_States_reverse = undefined // very important, otherwise, circular JSON
+			this.umlstate.Umlsc_States_reverse = new UmlscDB // very important, otherwise, circular JSON
 		}
 
 		switch (this.state) {
@@ -168,7 +171,7 @@ export class UmlStateDetailComponent implements OnInit {
 			default:
 				this.umlstateService.postUmlState(this.umlstate).subscribe(umlstate => {
 					this.umlstateService.UmlStateServiceChanged.next("post")
-					this.umlstate = {} // reset fields
+					this.umlstate = new (UmlStateDB) // reset fields
 				});
 		}
 	}
@@ -177,7 +180,7 @@ export class UmlStateDetailComponent implements OnInit {
 	// ONE-MANY association
 	// It uses the MapOfComponent provided by the front repo
 	openReverseSelection(AssociatedStruct: string, reverseField: string, selectionMode: string,
-		sourceField: string, intermediateStructField: string, nextAssociatedStruct: string ) {
+		sourceField: string, intermediateStructField: string, nextAssociatedStruct: string) {
 
 		console.log("mode " + selectionMode)
 
@@ -191,7 +194,7 @@ export class UmlStateDetailComponent implements OnInit {
 		dialogConfig.height = "50%"
 		if (selectionMode == SelectionMode.ONE_MANY_ASSOCIATION_MODE) {
 
-			dialogData.ID = this.umlstate.ID
+			dialogData.ID = this.umlstate.ID!
 			dialogData.ReversePointer = reverseField
 			dialogData.OrderingMode = false
 			dialogData.SelectionMode = selectionMode
@@ -207,7 +210,7 @@ export class UmlStateDetailComponent implements OnInit {
 			});
 		}
 		if (selectionMode == SelectionMode.MANY_MANY_ASSOCIATION_MODE) {
-			dialogData.ID = this.umlstate.ID
+			dialogData.ID = this.umlstate.ID!
 			dialogData.ReversePointer = reverseField
 			dialogData.OrderingMode = false
 			dialogData.SelectionMode = selectionMode
@@ -258,7 +261,7 @@ export class UmlStateDetailComponent implements OnInit {
 		});
 	}
 
-	fillUpNameIfEmpty(event) {
+	fillUpNameIfEmpty(event: { value: { Name: string; }; }) {
 		if (this.umlstate.Name == undefined) {
 			this.umlstate.Name = event.value.Name
 		}
@@ -275,7 +278,7 @@ export class UmlStateDetailComponent implements OnInit {
 
 	isATextArea(fieldName: string): boolean {
 		if (this.mapFields_displayAsTextArea.has(fieldName)) {
-			return this.mapFields_displayAsTextArea.get(fieldName)
+			return this.mapFields_displayAsTextArea.get(fieldName)!
 		} else {
 			return false
 		}

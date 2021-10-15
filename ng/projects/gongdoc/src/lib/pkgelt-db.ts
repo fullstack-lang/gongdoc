@@ -3,16 +3,16 @@ import { ClassdiagramDB } from './classdiagram-db'
 import { UmlscDB } from './umlsc-db'
 
 // usefull for managing pointer ID values that can be nullable
-import { NullInt64 } from './front-repo.service'
+import { NullInt64 } from './null-int64'
 
 export class PkgeltDB {
-	CreatedAt?: string;
-	DeletedAt?: string;
-	ID?: number;
+	CreatedAt?: string
+	DeletedAt?: string
+	ID: number = 0
 
 	// insertion point for basic fields declarations
-	Name?: string
-	Path?: string
+	Name: string = ""
+	Path: string = ""
 
 	// insertion point for other declarations
 	Classdiagrams?: Array<ClassdiagramDB>

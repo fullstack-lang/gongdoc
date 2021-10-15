@@ -7,7 +7,8 @@ import { MatTableDataSource } from '@angular/material/table';
 import { MatButton } from '@angular/material/button'
 
 import { MatDialogRef, MAT_DIALOG_DATA, MatDialog } from '@angular/material/dialog'
-import { DialogData, FrontRepoService, FrontRepo, NullInt64, SelectionMode } from '../front-repo.service'
+import { DialogData, FrontRepoService, FrontRepo, SelectionMode } from '../front-repo.service'
+import { NullInt64 } from '../null-int64'
 import { SelectionModel } from '@angular/cdk/collections';
 
 const allowMultiSelect = true;
@@ -33,26 +34,28 @@ enum TableComponentMode {
 export class VerticesTableComponent implements OnInit {
 
   // mode at invocation
-  mode: TableComponentMode
+  mode: TableComponentMode = TableComponentMode.DISPLAY_MODE
 
   // used if the component is called as a selection component of Vertice instances
-  selection: SelectionModel<VerticeDB>;
-  initialSelection = new Array<VerticeDB>();
+  selection: SelectionModel<VerticeDB> = new (SelectionModel)
+  initialSelection = new Array<VerticeDB>()
 
   // the data source for the table
-  vertices: VerticeDB[];
-  matTableDataSource: MatTableDataSource<VerticeDB>
+  vertices: VerticeDB[] = []
+  matTableDataSource: MatTableDataSource<VerticeDB> = new (MatTableDataSource)
 
   // front repo, that will be referenced by this.vertices
-  frontRepo: FrontRepo
+  frontRepo: FrontRepo = new (FrontRepo)
 
   // displayedColumns is referenced by the MatTable component for specify what columns
   // have to be displayed and in what order
   displayedColumns: string[];
 
   // for sorting & pagination
-  @ViewChild(MatSort) sort: MatSort;
-  @ViewChild(MatPaginator) paginator: MatPaginator;
+  @ViewChild(MatSort)
+  sort: MatSort | undefined
+  @ViewChild(MatPaginator)
+  paginator: MatPaginator | undefined;
 
   ngAfterViewInit() {
 
@@ -70,7 +73,8 @@ export class VerticesTableComponent implements OnInit {
           return verticeDB.Name;
 
         default:
-          return VerticeDB[property];
+          console.assert(false, "Unknown field")
+          return "";
       }
     };
 
@@ -90,8 +94,8 @@ export class VerticesTableComponent implements OnInit {
       return isSelected
     };
 
-    this.matTableDataSource.sort = this.sort;
-    this.matTableDataSource.paginator = this.paginator;
+    this.matTableDataSource.sort = this.sort!
+    this.matTableDataSource.paginator = this.paginator!
   }
 
   applyFilter(event: Event) {
@@ -169,7 +173,7 @@ export class VerticesTableComponent implements OnInit {
           this.vertices.forEach(
             vertice => {
               let ID = this.dialogData.ID
-              let revPointer = vertice[this.dialogData.ReversePointer]
+              let revPointer = vertice[this.dialogData.ReversePointer as keyof VerticeDB] as unknown as NullInt64
               if (revPointer.Int64 == ID) {
                 this.initialSelection.push(vertice)
               }
@@ -180,15 +184,15 @@ export class VerticesTableComponent implements OnInit {
 
         if (this.mode == TableComponentMode.MANY_MANY_ASSOCIATION_MODE) {
 
-          let mapOfSourceInstances = this.frontRepo[this.dialogData.SourceStruct + "s"]
-          let sourceInstance = mapOfSourceInstances.get(this.dialogData.ID)
+          let mapOfSourceInstances = this.frontRepo[this.dialogData.SourceStruct + "s" as keyof FrontRepo] as Map<number, VerticeDB>
+          let sourceInstance = mapOfSourceInstances.get(this.dialogData.ID)!
 
-          if (sourceInstance[this.dialogData.SourceField]) {
-            for (let associationInstance of sourceInstance[this.dialogData.SourceField]) {
-              let vertice = associationInstance[this.dialogData.IntermediateStructField]
-              this.initialSelection.push(vertice)
-            }
+          let sourceField = sourceInstance[this.dialogData.SourceField as keyof typeof sourceInstance]! as unknown as VerticeDB[]
+          for (let associationInstance of sourceField) {
+            let vertice = associationInstance[this.dialogData.IntermediateStructField as keyof typeof associationInstance] as unknown as VerticeDB
+            this.initialSelection.push(vertice)
           }
+
           this.selection = new SelectionModel<VerticeDB>(allowMultiSelect, this.initialSelection);
         }
 
@@ -264,8 +268,9 @@ export class VerticesTableComponent implements OnInit {
       // reset all initial selection of vertice that belong to vertice
       this.initialSelection.forEach(
         vertice => {
-          vertice[this.dialogData.ReversePointer].Int64 = 0
-          vertice[this.dialogData.ReversePointer].Valid = true
+          let index = vertice[this.dialogData.ReversePointer as keyof VerticeDB] as unknown as NullInt64
+          index.Int64 = 0
+          index.Valid = true
           toUpdate.add(vertice)
         }
       )
@@ -273,9 +278,9 @@ export class VerticesTableComponent implements OnInit {
       // from selection, set vertice that belong to vertice
       this.selection.selected.forEach(
         vertice => {
-          let ID = +this.dialogData.ID
-          vertice[this.dialogData.ReversePointer].Int64 = ID
-          vertice[this.dialogData.ReversePointer].Valid = true
+          let ID = this.dialogData.ID as number
+          let reversePointer = vertice[this.dialogData.ReversePointer  as keyof VerticeDB] as unknown as NullInt64
+          reversePointer.Int64 = ID
           toUpdate.add(vertice)
         }
       )
@@ -293,8 +298,9 @@ export class VerticesTableComponent implements OnInit {
 
     if (this.mode == TableComponentMode.MANY_MANY_ASSOCIATION_MODE) {
 
-      let mapOfSourceInstances = this.frontRepo[this.dialogData.SourceStruct + "s"]
-      let sourceInstance = mapOfSourceInstances.get(this.dialogData.ID)
+      // get the source instance via the map of instances in the front repo
+      let mapOfSourceInstances = this.frontRepo[this.dialogData.SourceStruct + "s" as keyof FrontRepo] as Map<number, VerticeDB>
+      let sourceInstance = mapOfSourceInstances.get(this.dialogData.ID)!
 
       // First, parse all instance of the association struct and remove the instance
       // that have unselect
@@ -310,23 +316,21 @@ export class VerticesTableComponent implements OnInit {
       }
 
       // delete the association instance
-      if (sourceInstance[this.dialogData.SourceField]) {
-        for (let associationInstance of sourceInstance[this.dialogData.SourceField]) {
-          let vertice = associationInstance[this.dialogData.IntermediateStructField]
-          if (unselectedVertice.has(vertice.ID)) {
+      let associationInstance = sourceInstance[this.dialogData.SourceField as keyof typeof sourceInstance]
+      let vertice = associationInstance![this.dialogData.IntermediateStructField as keyof typeof associationInstance] as unknown as VerticeDB
+      if (unselectedVertice.has(vertice.ID)) {
+        this.frontRepoService.deleteService(this.dialogData.IntermediateStruct, associationInstance)
 
-            this.frontRepoService.deleteService( this.dialogData.IntermediateStruct, associationInstance )
-          }
-        }
+
       }
 
-      // is the source array is emptyn create it
-      if (sourceInstance[this.dialogData.SourceField] == undefined) {
-        sourceInstance[this.dialogData.SourceField] = new Array<any>()
+      // is the source array is empty create it
+      if (sourceInstance[this.dialogData.SourceField as keyof typeof sourceInstance] == undefined) {
+        (sourceInstance[this.dialogData.SourceField as keyof typeof sourceInstance] as unknown as Array<VerticeDB>) = new Array<VerticeDB>()
       }
 
       // second, parse all instance of the selected
-      if (sourceInstance[this.dialogData.SourceField]) {
+      if (sourceInstance[this.dialogData.SourceField as keyof typeof sourceInstance]) {
         this.selection.selected.forEach(
           vertice => {
             if (!this.initialSelection.includes(vertice)) {
@@ -336,13 +340,11 @@ export class VerticesTableComponent implements OnInit {
                 Name: sourceInstance["Name"] + "-" + vertice.Name,
               }
 
-              associationInstance[this.dialogData.IntermediateStructField+"ID"] = new NullInt64
-              associationInstance[this.dialogData.IntermediateStructField+"ID"].Int64 = vertice.ID
-              associationInstance[this.dialogData.IntermediateStructField+"ID"].Valid = true
+              let index = associationInstance[this.dialogData.IntermediateStructField+"ID" as keyof typeof associationInstance] as unknown as NullInt64
+              index.Int64 = vertice.ID
 
-              associationInstance[this.dialogData.SourceStruct + "_" + this.dialogData.SourceField + "DBID"] = new NullInt64
-              associationInstance[this.dialogData.SourceStruct + "_" + this.dialogData.SourceField + "DBID"].Int64 = sourceInstance["ID"]
-              associationInstance[this.dialogData.SourceStruct + "_" + this.dialogData.SourceField + "DBID"].Valid = true
+              let indexDB = associationInstance[this.dialogData.IntermediateStructField+"DBID" as keyof typeof associationInstance] as unknown as NullInt64
+              indexDB.Int64 = vertice.ID
 
               this.frontRepoService.postService( this.dialogData.IntermediateStruct, associationInstance )
 

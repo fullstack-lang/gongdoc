@@ -25,16 +25,17 @@ export class UmlscDiagramComponent implements OnInit {
   checkGongdocCommitNbTimer: Observable<number> = timer(500, 500);
   lastCommitNb = -1
   lastDiagramId = 0
-  currTime: number
+  currTime: number = 0
 
   namespace = joint.shapes
-  private paper: joint.dia.Paper
-  private graph: joint.dia.Graph
+
+  private paper?: joint.dia.Paper
+  private graph?: joint.dia.Graph
 
   public founded = false
 
   // the diagram of interest
-  public stateChartDiagram: gongdoc.UmlscDB;
+  public stateChartDiagram?: gongdoc.UmlscDB;
 
   // map states of the diagram
   mapStateDBIDStateDBs = new Map<number, gongdoc.UmlStateDB>()
@@ -47,7 +48,7 @@ export class UmlscDiagramComponent implements OnInit {
   public MapNamesStates = new Map<string, gongdoc.UmlStateDB>()
 
   // front repo, that will be used to access backend elements
-  gongdocFrontRepo: gongdoc.FrontRepo
+  gongdocFrontRepo?: gongdoc.FrontRepo
 
   constructor(
     private route: ActivatedRoute,
@@ -66,18 +67,18 @@ export class UmlscDiagramComponent implements OnInit {
   }
 
   // if true the save button will appear
-  public savebutton: boolean
+  public savebutton: boolean = false
 
   // neccessary to unsubscribe
-  subscriptionToCheckCommitTimer: Subscription
+  subscriptionToCheckCommitTimer?: Subscription
   ngOnDestroy() {
     console.log("on destroy")
-    this.subscriptionToCheckCommitTimer.unsubscribe()
+    this.subscriptionToCheckCommitTimer?.unsubscribe()
   }
 
   ngOnInit(): void {
     // wait for all fetch to combine
-    const id = +this.route.snapshot.paramMap.get('id');
+    const id = +this.route.snapshot.paramMap.get('id')!
     if (this.route.snapshot.paramMap.has('savebutton')) {
       this.savebutton = (this.route.snapshot.paramMap.get('savebutton') == "true")
     }
@@ -90,7 +91,7 @@ export class UmlscDiagramComponent implements OnInit {
         this.gongdocFrontRepo = gongdocFrontRepo
         console.log("gongdoc front repo pull returned")
 
-        const id = +this.route.snapshot.paramMap.get('id');
+        const id = +this.route.snapshot.paramMap.get('id')!
         this.stateChartDiagram = this.gongdocFrontRepo.Umlscs.get(id)
       }
     )
@@ -99,7 +100,7 @@ export class UmlscDiagramComponent implements OnInit {
       currTime => {
         this.currTime = currTime
 
-        const id = +this.route.snapshot.paramMap.get('id');
+        const id = +this.route.snapshot.paramMap.get('id')!
 
         this.gongdocCommitNbService.getCommitNb().subscribe(
           commitNb => {
@@ -124,7 +125,7 @@ export class UmlscDiagramComponent implements OnInit {
         this.gongdocFrontRepo = gongdocFrontRepo
         console.log("gongdoc front repo pull returned")
 
-        const id = +this.route.snapshot.paramMap.get('id');
+        const id = +this.route.snapshot.paramMap.get('id')!
         this.stateChartDiagram = this.gongdocFrontRepo.Umlscs.get(id)
 
         this.drawStateChartDiagram();
@@ -151,7 +152,7 @@ export class UmlscDiagramComponent implements OnInit {
 
     this.paper = new joint.dia.Paper(
       {
-        el: document.getElementById(this.stateChartDiagram.Name),
+        el: document.getElementById(this.stateChartDiagram!.Name)!,
         model: this.graph,
         width: 400,
         // height: window.innerHeight,
@@ -163,11 +164,11 @@ export class UmlscDiagramComponent implements OnInit {
     )
 
     // redraw all states
-    for (let stateDB of this.stateChartDiagram.States) {
+    for (let stateDB of this.stateChartDiagram!.States!) {
 
       var color = 'rgba(48, 208, 198, 0.1)'
 
-      if (stateDB.Name == this.stateChartDiagram.Activestate) {
+      if (stateDB.Name == this.stateChartDiagram!.Activestate) {
         color = 'rgba(248, 0, 0, 0.3)'
       }
 
@@ -207,11 +208,11 @@ export class UmlscDiagramComponent implements OnInit {
     console.log("save diagram")
 
     // parse shapes positions
-    var cells = this.graph.getCells()
+    var cells = this.graph!.getCells()
     console.log(cells.length)
 
     cells.forEach(
-      cell => {
+      (cell: joint.dia.Cell) => {
         // ugly hack because cell.id is considered a Dimension by the ts compiler
         // vive golang
         var cellId: any
@@ -221,11 +222,11 @@ export class UmlscDiagramComponent implements OnInit {
           // retrieve the shape.
           var stateDB = this.MapJointjsIdsStates.get(cellId)
 
-          stateDB.X = cell.attributes.position.x
-          stateDB.Y = cell.attributes.position.y
+          stateDB!.X = cell.attributes.position.x
+          stateDB!.Y = cell.attributes.position.y
 
           // update position to DB
-          this.UmlStateService.updateUmlState(stateDB).subscribe(
+          this.UmlStateService.updateUmlState(stateDB!).subscribe(
             state => {
               console.log("state updated")
             }
@@ -235,12 +236,12 @@ export class UmlscDiagramComponent implements OnInit {
     )
 
     // get the GongdocCommandSingloton
-    let gongdocCommandSingloton = this.gongdocFrontRepo.GongdocCommands.get(1)
-    gongdocCommandSingloton.Command = gongdoc.GongdocCommandType.MARSHALL_DIAGRAM
-    gongdocCommandSingloton.DiagramName = this.stateChartDiagram.Name
-    gongdocCommandSingloton.Date = Date.now().toString()
+    let gongdocCommandSingloton = this.gongdocFrontRepo!.GongdocCommands.get(1)
+    gongdocCommandSingloton!.Command = gongdoc.GongdocCommandType.MARSHALL_DIAGRAM
+    gongdocCommandSingloton!.DiagramName = this.stateChartDiagram!.Name
+    gongdocCommandSingloton!.Date = Date.now().toString()
 
-    this.GongdocCommandService.updateGongdocCommand(gongdocCommandSingloton).subscribe(
+    this.GongdocCommandService.updateGongdocCommand(gongdocCommandSingloton!).subscribe(
       GongdocCommand => {
         console.log("GongdocCommand updated")
       }

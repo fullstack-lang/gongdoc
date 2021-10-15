@@ -13,6 +13,10 @@ import { catchError, map, tap } from 'rxjs/operators';
 
 import { LinkDB } from './link-db';
 
+// insertion point for imports
+import { VerticeDB } from './vertice-db'
+import { ClassshapeDB } from './classshape-db'
+
 @Injectable({
   providedIn: 'root'
 })
@@ -35,14 +39,14 @@ export class LinkService {
   ) {
     // path to the service share the same origin with the path to the document
     // get the origin in the URL to the document
-	let origin = this.document.location.origin
-    
-	// if debugging with ng, replace 4200 with 8080
-	origin = origin.replace("4200", "8080")
+    let origin = this.document.location.origin
+
+    // if debugging with ng, replace 4200 with 8080
+    origin = origin.replace("4200", "8080")
 
     // compute path to the service
     this.linksUrl = origin + '/api/github.com/fullstack-lang/gongdoc/go/v1/links';
-   }
+  }
 
   /** GET links from the server */
   getLinks(): Observable<LinkDB[]> {
@@ -67,19 +71,19 @@ export class LinkService {
   /** POST: add a new link to the server */
   postLink(linkdb: LinkDB): Observable<LinkDB> {
 
-		// insertion point for reset of pointers and reverse pointers (to avoid circular JSON)
-    linkdb.Middlevertice = {}
+    // insertion point for reset of pointers and reverse pointers (to avoid circular JSON)
+    linkdb.Middlevertice = new VerticeDB
     let _Classshape_Links_reverse = linkdb.Classshape_Links_reverse
-    linkdb.Classshape_Links_reverse = {}
+    linkdb.Classshape_Links_reverse = new ClassshapeDB
 
-		return this.http.post<LinkDB>(this.linksUrl, linkdb, this.httpOptions).pipe(
-			tap(_ => {
-				// insertion point for restoration of reverse pointers
+    return this.http.post<LinkDB>(this.linksUrl, linkdb, this.httpOptions).pipe(
+      tap(_ => {
+        // insertion point for restoration of reverse pointers
         linkdb.Classshape_Links_reverse = _Classshape_Links_reverse
-				this.log(`posted linkdb id=${linkdb.ID}`)
-			}),
-			catchError(this.handleError<LinkDB>('postLink'))
-		);
+        this.log(`posted linkdb id=${linkdb.ID}`)
+      }),
+      catchError(this.handleError<LinkDB>('postLink'))
+    );
   }
 
   /** DELETE: delete the linkdb from the server */
@@ -99,11 +103,11 @@ export class LinkService {
     const url = `${this.linksUrl}/${id}`;
 
     // insertion point for reset of pointers and reverse pointers (to avoid circular JSON)
-    linkdb.Middlevertice = {}
+    linkdb.Middlevertice = new VerticeDB
     let _Classshape_Links_reverse = linkdb.Classshape_Links_reverse
-    linkdb.Classshape_Links_reverse = {}
+    linkdb.Classshape_Links_reverse = new ClassshapeDB
 
-    return this.http.put(url, linkdb, this.httpOptions).pipe(
+    return this.http.put<LinkDB>(url, linkdb, this.httpOptions).pipe(
       tap(_ => {
         // insertion point for restoration of reverse pointers
         linkdb.Classshape_Links_reverse = _Classshape_Links_reverse

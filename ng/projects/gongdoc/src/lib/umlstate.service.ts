@@ -13,6 +13,9 @@ import { catchError, map, tap } from 'rxjs/operators';
 
 import { UmlStateDB } from './umlstate-db';
 
+// insertion point for imports
+import { UmlscDB } from './umlsc-db'
+
 @Injectable({
   providedIn: 'root'
 })
@@ -35,14 +38,14 @@ export class UmlStateService {
   ) {
     // path to the service share the same origin with the path to the document
     // get the origin in the URL to the document
-	let origin = this.document.location.origin
-    
-	// if debugging with ng, replace 4200 with 8080
-	origin = origin.replace("4200", "8080")
+    let origin = this.document.location.origin
+
+    // if debugging with ng, replace 4200 with 8080
+    origin = origin.replace("4200", "8080")
 
     // compute path to the service
     this.umlstatesUrl = origin + '/api/github.com/fullstack-lang/gongdoc/go/v1/umlstates';
-   }
+  }
 
   /** GET umlstates from the server */
   getUmlStates(): Observable<UmlStateDB[]> {
@@ -67,18 +70,18 @@ export class UmlStateService {
   /** POST: add a new umlstate to the server */
   postUmlState(umlstatedb: UmlStateDB): Observable<UmlStateDB> {
 
-		// insertion point for reset of pointers and reverse pointers (to avoid circular JSON)
+    // insertion point for reset of pointers and reverse pointers (to avoid circular JSON)
     let _Umlsc_States_reverse = umlstatedb.Umlsc_States_reverse
-    umlstatedb.Umlsc_States_reverse = {}
+    umlstatedb.Umlsc_States_reverse = new UmlscDB
 
-		return this.http.post<UmlStateDB>(this.umlstatesUrl, umlstatedb, this.httpOptions).pipe(
-			tap(_ => {
-				// insertion point for restoration of reverse pointers
+    return this.http.post<UmlStateDB>(this.umlstatesUrl, umlstatedb, this.httpOptions).pipe(
+      tap(_ => {
+        // insertion point for restoration of reverse pointers
         umlstatedb.Umlsc_States_reverse = _Umlsc_States_reverse
-				this.log(`posted umlstatedb id=${umlstatedb.ID}`)
-			}),
-			catchError(this.handleError<UmlStateDB>('postUmlState'))
-		);
+        this.log(`posted umlstatedb id=${umlstatedb.ID}`)
+      }),
+      catchError(this.handleError<UmlStateDB>('postUmlState'))
+    );
   }
 
   /** DELETE: delete the umlstatedb from the server */
@@ -99,9 +102,9 @@ export class UmlStateService {
 
     // insertion point for reset of pointers and reverse pointers (to avoid circular JSON)
     let _Umlsc_States_reverse = umlstatedb.Umlsc_States_reverse
-    umlstatedb.Umlsc_States_reverse = {}
+    umlstatedb.Umlsc_States_reverse = new UmlscDB
 
-    return this.http.put(url, umlstatedb, this.httpOptions).pipe(
+    return this.http.put<UmlStateDB>(url, umlstatedb, this.httpOptions).pipe(
       tap(_ => {
         // insertion point for restoration of reverse pointers
         umlstatedb.Umlsc_States_reverse = _Umlsc_States_reverse

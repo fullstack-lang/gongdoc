@@ -13,6 +13,8 @@ import { catchError, map, tap } from 'rxjs/operators';
 
 import { VerticeDB } from './vertice-db';
 
+// insertion point for imports
+
 @Injectable({
   providedIn: 'root'
 })
@@ -35,14 +37,14 @@ export class VerticeService {
   ) {
     // path to the service share the same origin with the path to the document
     // get the origin in the URL to the document
-	let origin = this.document.location.origin
-    
-	// if debugging with ng, replace 4200 with 8080
-	origin = origin.replace("4200", "8080")
+    let origin = this.document.location.origin
+
+    // if debugging with ng, replace 4200 with 8080
+    origin = origin.replace("4200", "8080")
 
     // compute path to the service
     this.verticesUrl = origin + '/api/github.com/fullstack-lang/gongdoc/go/v1/vertices';
-   }
+  }
 
   /** GET vertices from the server */
   getVertices(): Observable<VerticeDB[]> {
@@ -67,15 +69,15 @@ export class VerticeService {
   /** POST: add a new vertice to the server */
   postVertice(verticedb: VerticeDB): Observable<VerticeDB> {
 
-		// insertion point for reset of pointers and reverse pointers (to avoid circular JSON)
+    // insertion point for reset of pointers and reverse pointers (to avoid circular JSON)
 
-		return this.http.post<VerticeDB>(this.verticesUrl, verticedb, this.httpOptions).pipe(
-			tap(_ => {
-				// insertion point for restoration of reverse pointers
-				this.log(`posted verticedb id=${verticedb.ID}`)
-			}),
-			catchError(this.handleError<VerticeDB>('postVertice'))
-		);
+    return this.http.post<VerticeDB>(this.verticesUrl, verticedb, this.httpOptions).pipe(
+      tap(_ => {
+        // insertion point for restoration of reverse pointers
+        this.log(`posted verticedb id=${verticedb.ID}`)
+      }),
+      catchError(this.handleError<VerticeDB>('postVertice'))
+    );
   }
 
   /** DELETE: delete the verticedb from the server */
@@ -96,7 +98,7 @@ export class VerticeService {
 
     // insertion point for reset of pointers and reverse pointers (to avoid circular JSON)
 
-    return this.http.put(url, verticedb, this.httpOptions).pipe(
+    return this.http.put<VerticeDB>(url, verticedb, this.httpOptions).pipe(
       tap(_ => {
         // insertion point for restoration of reverse pointers
         this.log(`updated verticedb id=${verticedb.ID}`)

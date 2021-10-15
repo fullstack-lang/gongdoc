@@ -23,13 +23,13 @@ export class FieldPresentationComponent implements OnInit {
 
 	// insertion point for declarations
 
-	displayedColumns: string[] = [];
-	dataSource = ELEMENT_DATA;
+	displayedColumns: string[] = []
+	dataSource = ELEMENT_DATA
 
-	field: FieldDB;
+	field: FieldDB = new (FieldDB)
 
 	// front repo
-	frontRepo: FrontRepo
+	frontRepo: FrontRepo = new (FrontRepo)
  
 	constructor(
 		private fieldService: FieldService,
@@ -56,12 +56,12 @@ export class FieldPresentationComponent implements OnInit {
 	}
 
 	getField(): void {
-		const id = +this.route.snapshot.paramMap.get('id');
+		const id = +this.route.snapshot.paramMap.get('id')!
 		this.frontRepoService.pull().subscribe(
 			frontRepo => {
 				this.frontRepo = frontRepo
 
-				this.field = this.frontRepo.Fields.get(id)
+				this.field = this.frontRepo.Fields.get(id)!
 
 				// insertion point for recovery of durations
 			}

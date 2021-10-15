@@ -16,8 +16,8 @@ export function newUmlClassShape(classshape: gongdoc.ClassshapeDB): joint.shapes
     return new joint.shapes.uml.Class(
         {
             position: {
-                x: classshape.Position.X,
-                y: classshape.Position.Y
+                x: classshape.Position!.X,
+                y: classshape.Position!.Y
             },
             size: { width: classshape.Width, height: classshape.Heigth },
             name: [classshape.Structname],

@@ -13,6 +13,9 @@ import { catchError, map, tap } from 'rxjs/operators';
 
 import { UmlscDB } from './umlsc-db';
 
+// insertion point for imports
+import { PkgeltDB } from './pkgelt-db'
+
 @Injectable({
   providedIn: 'root'
 })
@@ -35,14 +38,14 @@ export class UmlscService {
   ) {
     // path to the service share the same origin with the path to the document
     // get the origin in the URL to the document
-	let origin = this.document.location.origin
-    
-	// if debugging with ng, replace 4200 with 8080
-	origin = origin.replace("4200", "8080")
+    let origin = this.document.location.origin
+
+    // if debugging with ng, replace 4200 with 8080
+    origin = origin.replace("4200", "8080")
 
     // compute path to the service
     this.umlscsUrl = origin + '/api/github.com/fullstack-lang/gongdoc/go/v1/umlscs';
-   }
+  }
 
   /** GET umlscs from the server */
   getUmlscs(): Observable<UmlscDB[]> {
@@ -67,19 +70,19 @@ export class UmlscService {
   /** POST: add a new umlsc to the server */
   postUmlsc(umlscdb: UmlscDB): Observable<UmlscDB> {
 
-		// insertion point for reset of pointers and reverse pointers (to avoid circular JSON)
+    // insertion point for reset of pointers and reverse pointers (to avoid circular JSON)
     umlscdb.States = []
     let _Pkgelt_Umlscs_reverse = umlscdb.Pkgelt_Umlscs_reverse
-    umlscdb.Pkgelt_Umlscs_reverse = {}
+    umlscdb.Pkgelt_Umlscs_reverse = new PkgeltDB
 
-		return this.http.post<UmlscDB>(this.umlscsUrl, umlscdb, this.httpOptions).pipe(
-			tap(_ => {
-				// insertion point for restoration of reverse pointers
+    return this.http.post<UmlscDB>(this.umlscsUrl, umlscdb, this.httpOptions).pipe(
+      tap(_ => {
+        // insertion point for restoration of reverse pointers
         umlscdb.Pkgelt_Umlscs_reverse = _Pkgelt_Umlscs_reverse
-				this.log(`posted umlscdb id=${umlscdb.ID}`)
-			}),
-			catchError(this.handleError<UmlscDB>('postUmlsc'))
-		);
+        this.log(`posted umlscdb id=${umlscdb.ID}`)
+      }),
+      catchError(this.handleError<UmlscDB>('postUmlsc'))
+    );
   }
 
   /** DELETE: delete the umlscdb from the server */
@@ -101,9 +104,9 @@ export class UmlscService {
     // insertion point for reset of pointers and reverse pointers (to avoid circular JSON)
     umlscdb.States = []
     let _Pkgelt_Umlscs_reverse = umlscdb.Pkgelt_Umlscs_reverse
-    umlscdb.Pkgelt_Umlscs_reverse = {}
+    umlscdb.Pkgelt_Umlscs_reverse = new PkgeltDB
 
-    return this.http.put(url, umlscdb, this.httpOptions).pipe(
+    return this.http.put<UmlscDB>(url, umlscdb, this.httpOptions).pipe(
       tap(_ => {
         // insertion point for restoration of reverse pointers
         umlscdb.Pkgelt_Umlscs_reverse = _Pkgelt_Umlscs_reverse

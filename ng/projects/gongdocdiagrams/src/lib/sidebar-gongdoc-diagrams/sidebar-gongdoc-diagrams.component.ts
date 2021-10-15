@@ -9,6 +9,8 @@ import { ClassdiagramService } from 'gongdoc'
 
 import { Observable, timer } from 'rxjs';
 import { stringify } from '@angular/compiler/src/util';
+import { ClassdiagramDB } from 'projects/gongdoc/src/lib/classdiagram-db';
+import { UmlscDB } from 'projects/gongdoc/src/lib/umlsc-db';
 
 /**
  * Types of a GongNode / GongFlatNode
@@ -121,7 +123,7 @@ export class SidebarGongdocDiagramsComponent implements OnInit {
   hasChild = (_: number, node: GongFlatNode) => node.expandable;
 
   // front repo
-  frontRepo: FrontRepo
+  frontRepo?: FrontRepo
 
   // "data" tree that is constructed during NgInit and is passed to the mat-tree component
   gongNodeTree = new Array<GongNode>();
@@ -155,7 +157,7 @@ export class SidebarGongdocDiagramsComponent implements OnInit {
 
     // observable for changes in structs
     this.classdiagramService.ClassdiagramServiceChanged.subscribe(
-      message => {
+      (message:string) => {
         if (message == "post" || message == "update" || message == "delete") {
           this.refresh()
         }
@@ -164,7 +166,7 @@ export class SidebarGongdocDiagramsComponent implements OnInit {
 
   }
   refresh(): void {
-    this.frontRepoService.pull().subscribe(frontRepo => {
+    this.frontRepoService.pull().subscribe( (frontRepo: FrontRepo) => {
       this.frontRepo = frontRepo
 
       // use of a Gödel number to uniquely identfy nodes : 2 * node.id + 3 * node.level
@@ -174,9 +176,9 @@ export class SidebarGongdocDiagramsComponent implements OnInit {
         this.treeControl.dataNodes.forEach(
           node => {
             if (this.treeControl.isExpanded(node)) {
-              memoryOfExpandedNodes[node.id] = true
+              memoryOfExpandedNodes.set(node.id, true)
             } else {
-              memoryOfExpandedNodes[node.id] = false
+              memoryOfExpandedNodes.set(node.id, false)
             }
           }
         )
@@ -199,16 +201,16 @@ export class SidebarGongdocDiagramsComponent implements OnInit {
       this.gongNodeTree.push(classdiagramGongNodeStruct)
 
       this.frontRepo.Classdiagrams_array.forEach(
-        classdiagramDB => {
+        (classdiagramDB: ClassdiagramDB) => {
           let classdiagramGongNodeInstance: GongNode = {
-            name: "var : "  + classdiagramDB.Name,
+            name: "var : " + classdiagramDB.Name,
             type: GongNodeType.CLASS_DIAGRAM_INSTANCE,
             id: 3 * classdiagramDB.ID,
             structName: "Classdiagram",
             children: new Array<GongNode>(),
             bdId: classdiagramDB.ID,
           }
-          classdiagramGongNodeStruct.children.push(classdiagramGongNodeInstance)
+          classdiagramGongNodeStruct.children!.push(classdiagramGongNodeInstance)
 
           // insertion point for per field code 
           /**
@@ -222,7 +224,7 @@ export class SidebarGongdocDiagramsComponent implements OnInit {
             children: new Array<GongNode>(),
             bdId: 0,
           }
-          classdiagramGongNodeInstance.children.push(ClassshapesGongNodeAssociation)
+          classdiagramGongNodeInstance.children!.push(ClassshapesGongNodeAssociation)
 
           classdiagramDB.Classshapes?.forEach(classshapeDB => {
             let classshapeNode: GongNode = {
@@ -233,7 +235,7 @@ export class SidebarGongdocDiagramsComponent implements OnInit {
               children: new Array<GongNode>(),
               bdId: classshapeDB.ID,
             }
-            ClassshapesGongNodeAssociation.children.push(classshapeNode)
+            ClassshapesGongNodeAssociation.children!.push(classshapeNode)
           })
 
         })
@@ -252,16 +254,16 @@ export class SidebarGongdocDiagramsComponent implements OnInit {
       this.gongNodeTree.push(umlscGongNodeStruct)
 
       this.frontRepo.Umlscs_array.forEach(
-        umlscDB => {
+        (umlscDB: UmlscDB) => {
           let umlscGongNodeInstance: GongNode = {
-            name: "var : " +  umlscDB.Name,
+            name: "var : " + umlscDB.Name,
             type: GongNodeType.STATE_CHART_INSTANCE,
             id: 7 * umlscDB.ID,
             structName: "Umlsc",
             children: new Array<GongNode>(),
             bdId: umlscDB.ID
           }
-          umlscGongNodeStruct.children.push(umlscGongNodeInstance)
+          umlscGongNodeStruct.children!.push(umlscGongNodeInstance)
 
           // insertion point for per field code 
           /**
@@ -275,7 +277,7 @@ export class SidebarGongdocDiagramsComponent implements OnInit {
             children: new Array<GongNode>(),
             bdId: 0,
           }
-          umlscGongNodeInstance.children.push(StatesGongNodeAssociation)
+          umlscGongNodeInstance.children!.push(StatesGongNodeAssociation)
 
           umlscDB.States?.forEach(stateDB => {
             let stateNode: GongNode = {
@@ -286,7 +288,7 @@ export class SidebarGongdocDiagramsComponent implements OnInit {
               children: new Array<GongNode>(),
               bdId: stateDB.ID
             }
-            StatesGongNodeAssociation.children.push(stateNode)
+            StatesGongNodeAssociation.children!.push(stateNode)
           })
 
         })
@@ -297,10 +299,8 @@ export class SidebarGongdocDiagramsComponent implements OnInit {
       if (this.treeControl.dataNodes != undefined) {
         this.treeControl.dataNodes.forEach(
           node => {
-            if (memoryOfExpandedNodes[node.id] != undefined) {
-              if (memoryOfExpandedNodes[node.id]) {
-                this.treeControl.expand(node)
-              }
+            if (memoryOfExpandedNodes.get(node.id)) {
+              this.treeControl.expand(node)
             }
           }
         )
@@ -369,7 +369,7 @@ export class SidebarGongdocDiagramsComponent implements OnInit {
     if (node.structName == "Classdiagram") {
 
       this.classdiagramService.deleteClassdiagram(node.bdId).subscribe(
-        classdiagram => {
+        (classdiagram: ClassdiagramDB) => {
           this.classdiagramService.ClassdiagramServiceChanged.next("delete")
 
           console.log("classdiagram deleted " + classdiagram.Name)

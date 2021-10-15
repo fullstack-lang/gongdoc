@@ -13,6 +13,8 @@ import { catchError, map, tap } from 'rxjs/operators';
 
 import { PositionDB } from './position-db';
 
+// insertion point for imports
+
 @Injectable({
   providedIn: 'root'
 })
@@ -35,14 +37,14 @@ export class PositionService {
   ) {
     // path to the service share the same origin with the path to the document
     // get the origin in the URL to the document
-	let origin = this.document.location.origin
-    
-	// if debugging with ng, replace 4200 with 8080
-	origin = origin.replace("4200", "8080")
+    let origin = this.document.location.origin
+
+    // if debugging with ng, replace 4200 with 8080
+    origin = origin.replace("4200", "8080")
 
     // compute path to the service
     this.positionsUrl = origin + '/api/github.com/fullstack-lang/gongdoc/go/v1/positions';
-   }
+  }
 
   /** GET positions from the server */
   getPositions(): Observable<PositionDB[]> {
@@ -67,15 +69,15 @@ export class PositionService {
   /** POST: add a new position to the server */
   postPosition(positiondb: PositionDB): Observable<PositionDB> {
 
-		// insertion point for reset of pointers and reverse pointers (to avoid circular JSON)
+    // insertion point for reset of pointers and reverse pointers (to avoid circular JSON)
 
-		return this.http.post<PositionDB>(this.positionsUrl, positiondb, this.httpOptions).pipe(
-			tap(_ => {
-				// insertion point for restoration of reverse pointers
-				this.log(`posted positiondb id=${positiondb.ID}`)
-			}),
-			catchError(this.handleError<PositionDB>('postPosition'))
-		);
+    return this.http.post<PositionDB>(this.positionsUrl, positiondb, this.httpOptions).pipe(
+      tap(_ => {
+        // insertion point for restoration of reverse pointers
+        this.log(`posted positiondb id=${positiondb.ID}`)
+      }),
+      catchError(this.handleError<PositionDB>('postPosition'))
+    );
   }
 
   /** DELETE: delete the positiondb from the server */
@@ -96,7 +98,7 @@ export class PositionService {
 
     // insertion point for reset of pointers and reverse pointers (to avoid circular JSON)
 
-    return this.http.put(url, positiondb, this.httpOptions).pipe(
+    return this.http.put<PositionDB>(url, positiondb, this.httpOptions).pipe(
       tap(_ => {
         // insertion point for restoration of reverse pointers
         this.log(`updated positiondb id=${positiondb.ID}`)

@@ -23,13 +23,13 @@ export class ClassshapePresentationComponent implements OnInit {
 
 	// insertion point for declarations
 
-	displayedColumns: string[] = [];
-	dataSource = ELEMENT_DATA;
+	displayedColumns: string[] = []
+	dataSource = ELEMENT_DATA
 
-	classshape: ClassshapeDB;
+	classshape: ClassshapeDB = new (ClassshapeDB)
 
 	// front repo
-	frontRepo: FrontRepo
+	frontRepo: FrontRepo = new (FrontRepo)
  
 	constructor(
 		private classshapeService: ClassshapeService,
@@ -56,12 +56,12 @@ export class ClassshapePresentationComponent implements OnInit {
 	}
 
 	getClassshape(): void {
-		const id = +this.route.snapshot.paramMap.get('id');
+		const id = +this.route.snapshot.paramMap.get('id')!
 		this.frontRepoService.pull().subscribe(
 			frontRepo => {
 				this.frontRepo = frontRepo
 
-				this.classshape = this.frontRepo.Classshapes.get(id)
+				this.classshape = this.frontRepo.Classshapes.get(id)!
 
 				// insertion point for recovery of durations
 			}

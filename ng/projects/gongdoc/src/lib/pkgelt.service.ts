@@ -13,6 +13,8 @@ import { catchError, map, tap } from 'rxjs/operators';
 
 import { PkgeltDB } from './pkgelt-db';
 
+// insertion point for imports
+
 @Injectable({
   providedIn: 'root'
 })
@@ -35,14 +37,14 @@ export class PkgeltService {
   ) {
     // path to the service share the same origin with the path to the document
     // get the origin in the URL to the document
-	let origin = this.document.location.origin
-    
-	// if debugging with ng, replace 4200 with 8080
-	origin = origin.replace("4200", "8080")
+    let origin = this.document.location.origin
+
+    // if debugging with ng, replace 4200 with 8080
+    origin = origin.replace("4200", "8080")
 
     // compute path to the service
     this.pkgeltsUrl = origin + '/api/github.com/fullstack-lang/gongdoc/go/v1/pkgelts';
-   }
+  }
 
   /** GET pkgelts from the server */
   getPkgelts(): Observable<PkgeltDB[]> {
@@ -67,17 +69,17 @@ export class PkgeltService {
   /** POST: add a new pkgelt to the server */
   postPkgelt(pkgeltdb: PkgeltDB): Observable<PkgeltDB> {
 
-		// insertion point for reset of pointers and reverse pointers (to avoid circular JSON)
+    // insertion point for reset of pointers and reverse pointers (to avoid circular JSON)
     pkgeltdb.Classdiagrams = []
     pkgeltdb.Umlscs = []
 
-		return this.http.post<PkgeltDB>(this.pkgeltsUrl, pkgeltdb, this.httpOptions).pipe(
-			tap(_ => {
-				// insertion point for restoration of reverse pointers
-				this.log(`posted pkgeltdb id=${pkgeltdb.ID}`)
-			}),
-			catchError(this.handleError<PkgeltDB>('postPkgelt'))
-		);
+    return this.http.post<PkgeltDB>(this.pkgeltsUrl, pkgeltdb, this.httpOptions).pipe(
+      tap(_ => {
+        // insertion point for restoration of reverse pointers
+        this.log(`posted pkgeltdb id=${pkgeltdb.ID}`)
+      }),
+      catchError(this.handleError<PkgeltDB>('postPkgelt'))
+    );
   }
 
   /** DELETE: delete the pkgeltdb from the server */
@@ -100,7 +102,7 @@ export class PkgeltService {
     pkgeltdb.Classdiagrams = []
     pkgeltdb.Umlscs = []
 
-    return this.http.put(url, pkgeltdb, this.httpOptions).pipe(
+    return this.http.put<PkgeltDB>(url, pkgeltdb, this.httpOptions).pipe(
       tap(_ => {
         // insertion point for restoration of reverse pointers
         this.log(`updated pkgeltdb id=${pkgeltdb.ID}`)

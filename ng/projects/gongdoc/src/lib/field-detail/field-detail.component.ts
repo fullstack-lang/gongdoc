@@ -10,12 +10,13 @@ import { MapOfComponents } from '../map-components'
 import { MapOfSortingComponents } from '../map-components'
 
 // insertion point for imports
+import { ClassshapeDB } from '../classshape-db'
 
 import { Router, RouterState, ActivatedRoute } from '@angular/router';
 
 import { MatDialog, MAT_DIALOG_DATA, MatDialogRef, MatDialogConfig } from '@angular/material/dialog';
 
-import { NullInt64 } from '../front-repo.service'
+import { NullInt64 } from '../null-int64'
 
 // FieldDetailComponent is initilizaed from different routes
 // FieldDetailComponentState detail different cases 
@@ -36,10 +37,10 @@ export class FieldDetailComponent implements OnInit {
 	// insertion point for declarations
 
 	// the FieldDB of interest
-	field: FieldDB;
+	field: FieldDB = new FieldDB
 
 	// front repo
-	frontRepo: FrontRepo
+	frontRepo: FrontRepo = new FrontRepo
 
 	// this stores the information related to string fields
 	// if false, the field is inputed with an <input ...> form 
@@ -47,15 +48,15 @@ export class FieldDetailComponent implements OnInit {
 	mapFields_displayAsTextArea = new Map<string, boolean>()
 
 	// the state at initialization (CREATION, UPDATE or CREATE with one association set)
-	state: FieldDetailComponentState
+	state: FieldDetailComponentState = FieldDetailComponentState.CREATE_INSTANCE
 
 	// in UDPATE state, if is the id of the instance to update
 	// in CREATE state with one association set, this is the id of the associated instance
-	id: number
+	id: number = 0
 
 	// in CREATE state with one association set, this is the id of the associated instance
-	originStruct: string
-	originStructFieldName: string
+	originStruct: string = ""
+	originStructFieldName: string = ""
 
 	constructor(
 		private fieldService: FieldService,
@@ -69,9 +70,9 @@ export class FieldDetailComponent implements OnInit {
 	ngOnInit(): void {
 
 		// compute state
-		this.id = +this.route.snapshot.paramMap.get('id');
-		this.originStruct = this.route.snapshot.paramMap.get('originStruct');
-		this.originStructFieldName = this.route.snapshot.paramMap.get('originStructFieldName');
+		this.id = +this.route.snapshot.paramMap.get('id')!;
+		this.originStruct = this.route.snapshot.paramMap.get('originStruct')!;
+		this.originStructFieldName = this.route.snapshot.paramMap.get('originStructFieldName')!;
 
 		const association = this.route.snapshot.paramMap.get('association');
 		if (this.id == 0) {
@@ -83,7 +84,7 @@ export class FieldDetailComponent implements OnInit {
 				switch (this.originStructFieldName) {
 					// insertion point for state computation
 					case "Fields":
-						console.log("Field" + " is instanciated with back pointer to instance " + this.id + " Classshape association Fields")
+						// console.log("Field" + " is instanciated with back pointer to instance " + this.id + " Classshape association Fields")
 						this.state = FieldDetailComponentState.CREATE_INSTANCE_WITH_ASSOCIATION_Classshape_Fields_SET
 						break;
 					default:
@@ -117,12 +118,14 @@ export class FieldDetailComponent implements OnInit {
 						this.field = new (FieldDB)
 						break;
 					case FieldDetailComponentState.UPDATE_INSTANCE:
-						this.field = frontRepo.Fields.get(this.id)
+						let field = frontRepo.Fields.get(this.id)
+						console.assert(field != undefined, "missing field with id:" + this.id)
+						this.field = field!
 						break;
 					// insertion point for init of association field
 					case FieldDetailComponentState.CREATE_INSTANCE_WITH_ASSOCIATION_Classshape_Fields_SET:
 						this.field = new (FieldDB)
-						this.field.Classshape_Fields_reverse = frontRepo.Classshapes.get(this.id)
+						this.field.Classshape_Fields_reverse = frontRepo.Classshapes.get(this.id)!
 						break;
 					default:
 						console.log(this.state + " is unkown state")
@@ -155,7 +158,7 @@ export class FieldDetailComponent implements OnInit {
 				this.field.Classshape_FieldsDBID_Index = new NullInt64
 			}
 			this.field.Classshape_FieldsDBID_Index.Valid = true
-			this.field.Classshape_Fields_reverse = undefined // very important, otherwise, circular JSON
+			this.field.Classshape_Fields_reverse = new ClassshapeDB // very important, otherwise, circular JSON
 		}
 
 		switch (this.state) {
@@ -168,7 +171,7 @@ export class FieldDetailComponent implements OnInit {
 			default:
 				this.fieldService.postField(this.field).subscribe(field => {
 					this.fieldService.FieldServiceChanged.next("post")
-					this.field = {} // reset fields
+					this.field = new (FieldDB) // reset fields
 				});
 		}
 	}
@@ -177,7 +180,7 @@ export class FieldDetailComponent implements OnInit {
 	// ONE-MANY association
 	// It uses the MapOfComponent provided by the front repo
 	openReverseSelection(AssociatedStruct: string, reverseField: string, selectionMode: string,
-		sourceField: string, intermediateStructField: string, nextAssociatedStruct: string ) {
+		sourceField: string, intermediateStructField: string, nextAssociatedStruct: string) {
 
 		console.log("mode " + selectionMode)
 
@@ -191,7 +194,7 @@ export class FieldDetailComponent implements OnInit {
 		dialogConfig.height = "50%"
 		if (selectionMode == SelectionMode.ONE_MANY_ASSOCIATION_MODE) {
 
-			dialogData.ID = this.field.ID
+			dialogData.ID = this.field.ID!
 			dialogData.ReversePointer = reverseField
 			dialogData.OrderingMode = false
 			dialogData.SelectionMode = selectionMode
@@ -207,7 +210,7 @@ export class FieldDetailComponent implements OnInit {
 			});
 		}
 		if (selectionMode == SelectionMode.MANY_MANY_ASSOCIATION_MODE) {
-			dialogData.ID = this.field.ID
+			dialogData.ID = this.field.ID!
 			dialogData.ReversePointer = reverseField
 			dialogData.OrderingMode = false
 			dialogData.SelectionMode = selectionMode
@@ -258,7 +261,7 @@ export class FieldDetailComponent implements OnInit {
 		});
 	}
 
-	fillUpNameIfEmpty(event) {
+	fillUpNameIfEmpty(event: { value: { Name: string; }; }) {
 		if (this.field.Name == undefined) {
 			this.field.Name = event.value.Name
 		}
@@ -275,7 +278,7 @@ export class FieldDetailComponent implements OnInit {
 
 	isATextArea(fieldName: string): boolean {
 		if (this.mapFields_displayAsTextArea.has(fieldName)) {
-			return this.mapFields_displayAsTextArea.get(fieldName)
+			return this.mapFields_displayAsTextArea.get(fieldName)!
 		} else {
 			return false
 		}

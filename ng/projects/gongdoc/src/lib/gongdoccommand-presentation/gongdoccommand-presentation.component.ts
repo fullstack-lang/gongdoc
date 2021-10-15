@@ -23,13 +23,13 @@ export class GongdocCommandPresentationComponent implements OnInit {
 
 	// insertion point for declarations
 
-	displayedColumns: string[] = [];
-	dataSource = ELEMENT_DATA;
+	displayedColumns: string[] = []
+	dataSource = ELEMENT_DATA
 
-	gongdoccommand: GongdocCommandDB;
+	gongdoccommand: GongdocCommandDB = new (GongdocCommandDB)
 
 	// front repo
-	frontRepo: FrontRepo
+	frontRepo: FrontRepo = new (FrontRepo)
  
 	constructor(
 		private gongdoccommandService: GongdocCommandService,
@@ -56,12 +56,12 @@ export class GongdocCommandPresentationComponent implements OnInit {
 	}
 
 	getGongdocCommand(): void {
-		const id = +this.route.snapshot.paramMap.get('id');
+		const id = +this.route.snapshot.paramMap.get('id')!
 		this.frontRepoService.pull().subscribe(
 			frontRepo => {
 				this.frontRepo = frontRepo
 
-				this.gongdoccommand = this.frontRepo.GongdocCommands.get(id)
+				this.gongdoccommand = this.frontRepo.GongdocCommands.get(id)!
 
 				// insertion point for recovery of durations
 			}

@@ -7,7 +7,8 @@ import { MatTableDataSource } from '@angular/material/table';
 import { MatButton } from '@angular/material/button'
 
 import { MatDialogRef, MAT_DIALOG_DATA, MatDialog } from '@angular/material/dialog'
-import { DialogData, FrontRepoService, FrontRepo, NullInt64, SelectionMode } from '../front-repo.service'
+import { DialogData, FrontRepoService, FrontRepo, SelectionMode } from '../front-repo.service'
+import { NullInt64 } from '../null-int64'
 import { SelectionModel } from '@angular/cdk/collections';
 
 const allowMultiSelect = true;
@@ -33,26 +34,28 @@ enum TableComponentMode {
 export class LinksTableComponent implements OnInit {
 
   // mode at invocation
-  mode: TableComponentMode
+  mode: TableComponentMode = TableComponentMode.DISPLAY_MODE
 
   // used if the component is called as a selection component of Link instances
-  selection: SelectionModel<LinkDB>;
-  initialSelection = new Array<LinkDB>();
+  selection: SelectionModel<LinkDB> = new (SelectionModel)
+  initialSelection = new Array<LinkDB>()
 
   // the data source for the table
-  links: LinkDB[];
-  matTableDataSource: MatTableDataSource<LinkDB>
+  links: LinkDB[] = []
+  matTableDataSource: MatTableDataSource<LinkDB> = new (MatTableDataSource)
 
   // front repo, that will be referenced by this.links
-  frontRepo: FrontRepo
+  frontRepo: FrontRepo = new (FrontRepo)
 
   // displayedColumns is referenced by the MatTable component for specify what columns
   // have to be displayed and in what order
   displayedColumns: string[];
 
   // for sorting & pagination
-  @ViewChild(MatSort) sort: MatSort;
-  @ViewChild(MatPaginator) paginator: MatPaginator;
+  @ViewChild(MatSort)
+  sort: MatSort | undefined
+  @ViewChild(MatPaginator)
+  paginator: MatPaginator | undefined;
 
   ngAfterViewInit() {
 
@@ -79,10 +82,11 @@ export class LinksTableComponent implements OnInit {
           return (linkDB.Middlevertice ? linkDB.Middlevertice.Name : '');
 
         case 'Classshape_Links':
-          return this.frontRepo.Classshapes.get(linkDB.Classshape_LinksDBID.Int64)?.Name;
+          return this.frontRepo.Classshapes.get(linkDB.Classshape_LinksDBID.Int64)!.Name;
 
         default:
-          return LinkDB[property];
+          console.assert(false, "Unknown field")
+          return "";
       }
     };
 
@@ -103,7 +107,7 @@ export class LinksTableComponent implements OnInit {
         mergedContent += linkDB.Middlevertice.Name.toLowerCase()
       }
       if (linkDB.Classshape_LinksDBID.Int64 != 0) {
-        mergedContent += this.frontRepo.Classshapes.get(linkDB.Classshape_LinksDBID.Int64)?.Name.toLowerCase()
+        mergedContent += this.frontRepo.Classshapes.get(linkDB.Classshape_LinksDBID.Int64)!.Name.toLowerCase()
       }
 
 
@@ -111,8 +115,8 @@ export class LinksTableComponent implements OnInit {
       return isSelected
     };
 
-    this.matTableDataSource.sort = this.sort;
-    this.matTableDataSource.paginator = this.paginator;
+    this.matTableDataSource.sort = this.sort!
+    this.matTableDataSource.paginator = this.paginator!
   }
 
   applyFilter(event: Event) {
@@ -198,7 +202,7 @@ export class LinksTableComponent implements OnInit {
           this.links.forEach(
             link => {
               let ID = this.dialogData.ID
-              let revPointer = link[this.dialogData.ReversePointer]
+              let revPointer = link[this.dialogData.ReversePointer as keyof LinkDB] as unknown as NullInt64
               if (revPointer.Int64 == ID) {
                 this.initialSelection.push(link)
               }
@@ -209,15 +213,15 @@ export class LinksTableComponent implements OnInit {
 
         if (this.mode == TableComponentMode.MANY_MANY_ASSOCIATION_MODE) {
 
-          let mapOfSourceInstances = this.frontRepo[this.dialogData.SourceStruct + "s"]
-          let sourceInstance = mapOfSourceInstances.get(this.dialogData.ID)
+          let mapOfSourceInstances = this.frontRepo[this.dialogData.SourceStruct + "s" as keyof FrontRepo] as Map<number, LinkDB>
+          let sourceInstance = mapOfSourceInstances.get(this.dialogData.ID)!
 
-          if (sourceInstance[this.dialogData.SourceField]) {
-            for (let associationInstance of sourceInstance[this.dialogData.SourceField]) {
-              let link = associationInstance[this.dialogData.IntermediateStructField]
-              this.initialSelection.push(link)
-            }
+          let sourceField = sourceInstance[this.dialogData.SourceField as keyof typeof sourceInstance]! as unknown as LinkDB[]
+          for (let associationInstance of sourceField) {
+            let link = associationInstance[this.dialogData.IntermediateStructField as keyof typeof associationInstance] as unknown as LinkDB
+            this.initialSelection.push(link)
           }
+
           this.selection = new SelectionModel<LinkDB>(allowMultiSelect, this.initialSelection);
         }
 
@@ -293,8 +297,9 @@ export class LinksTableComponent implements OnInit {
       // reset all initial selection of link that belong to link
       this.initialSelection.forEach(
         link => {
-          link[this.dialogData.ReversePointer].Int64 = 0
-          link[this.dialogData.ReversePointer].Valid = true
+          let index = link[this.dialogData.ReversePointer as keyof LinkDB] as unknown as NullInt64
+          index.Int64 = 0
+          index.Valid = true
           toUpdate.add(link)
         }
       )
@@ -302,9 +307,9 @@ export class LinksTableComponent implements OnInit {
       // from selection, set link that belong to link
       this.selection.selected.forEach(
         link => {
-          let ID = +this.dialogData.ID
-          link[this.dialogData.ReversePointer].Int64 = ID
-          link[this.dialogData.ReversePointer].Valid = true
+          let ID = this.dialogData.ID as number
+          let reversePointer = link[this.dialogData.ReversePointer  as keyof LinkDB] as unknown as NullInt64
+          reversePointer.Int64 = ID
           toUpdate.add(link)
         }
       )
@@ -322,8 +327,9 @@ export class LinksTableComponent implements OnInit {
 
     if (this.mode == TableComponentMode.MANY_MANY_ASSOCIATION_MODE) {
 
-      let mapOfSourceInstances = this.frontRepo[this.dialogData.SourceStruct + "s"]
-      let sourceInstance = mapOfSourceInstances.get(this.dialogData.ID)
+      // get the source instance via the map of instances in the front repo
+      let mapOfSourceInstances = this.frontRepo[this.dialogData.SourceStruct + "s" as keyof FrontRepo] as Map<number, LinkDB>
+      let sourceInstance = mapOfSourceInstances.get(this.dialogData.ID)!
 
       // First, parse all instance of the association struct and remove the instance
       // that have unselect
@@ -339,23 +345,21 @@ export class LinksTableComponent implements OnInit {
       }
 
       // delete the association instance
-      if (sourceInstance[this.dialogData.SourceField]) {
-        for (let associationInstance of sourceInstance[this.dialogData.SourceField]) {
-          let link = associationInstance[this.dialogData.IntermediateStructField]
-          if (unselectedLink.has(link.ID)) {
+      let associationInstance = sourceInstance[this.dialogData.SourceField as keyof typeof sourceInstance]
+      let link = associationInstance![this.dialogData.IntermediateStructField as keyof typeof associationInstance] as unknown as LinkDB
+      if (unselectedLink.has(link.ID)) {
+        this.frontRepoService.deleteService(this.dialogData.IntermediateStruct, associationInstance)
 
-            this.frontRepoService.deleteService( this.dialogData.IntermediateStruct, associationInstance )
-          }
-        }
+
       }
 
-      // is the source array is emptyn create it
-      if (sourceInstance[this.dialogData.SourceField] == undefined) {
-        sourceInstance[this.dialogData.SourceField] = new Array<any>()
+      // is the source array is empty create it
+      if (sourceInstance[this.dialogData.SourceField as keyof typeof sourceInstance] == undefined) {
+        (sourceInstance[this.dialogData.SourceField as keyof typeof sourceInstance] as unknown as Array<LinkDB>) = new Array<LinkDB>()
       }
 
       // second, parse all instance of the selected
-      if (sourceInstance[this.dialogData.SourceField]) {
+      if (sourceInstance[this.dialogData.SourceField as keyof typeof sourceInstance]) {
         this.selection.selected.forEach(
           link => {
             if (!this.initialSelection.includes(link)) {
@@ -365,13 +369,11 @@ export class LinksTableComponent implements OnInit {
                 Name: sourceInstance["Name"] + "-" + link.Name,
               }
 
-              associationInstance[this.dialogData.IntermediateStructField+"ID"] = new NullInt64
-              associationInstance[this.dialogData.IntermediateStructField+"ID"].Int64 = link.ID
-              associationInstance[this.dialogData.IntermediateStructField+"ID"].Valid = true
+              let index = associationInstance[this.dialogData.IntermediateStructField+"ID" as keyof typeof associationInstance] as unknown as NullInt64
+              index.Int64 = link.ID
 
-              associationInstance[this.dialogData.SourceStruct + "_" + this.dialogData.SourceField + "DBID"] = new NullInt64
-              associationInstance[this.dialogData.SourceStruct + "_" + this.dialogData.SourceField + "DBID"].Int64 = sourceInstance["ID"]
-              associationInstance[this.dialogData.SourceStruct + "_" + this.dialogData.SourceField + "DBID"].Valid = true
+              let indexDB = associationInstance[this.dialogData.IntermediateStructField+"DBID" as keyof typeof associationInstance] as unknown as NullInt64
+              indexDB.Int64 = link.ID
 
               this.frontRepoService.postService( this.dialogData.IntermediateStruct, associationInstance )
 

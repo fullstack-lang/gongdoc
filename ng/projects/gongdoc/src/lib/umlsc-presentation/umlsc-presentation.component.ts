@@ -23,13 +23,13 @@ export class UmlscPresentationComponent implements OnInit {
 
 	// insertion point for declarations
 
-	displayedColumns: string[] = [];
-	dataSource = ELEMENT_DATA;
+	displayedColumns: string[] = []
+	dataSource = ELEMENT_DATA
 
-	umlsc: UmlscDB;
+	umlsc: UmlscDB = new (UmlscDB)
 
 	// front repo
-	frontRepo: FrontRepo
+	frontRepo: FrontRepo = new (FrontRepo)
  
 	constructor(
 		private umlscService: UmlscService,
@@ -56,12 +56,12 @@ export class UmlscPresentationComponent implements OnInit {
 	}
 
 	getUmlsc(): void {
-		const id = +this.route.snapshot.paramMap.get('id');
+		const id = +this.route.snapshot.paramMap.get('id')!
 		this.frontRepoService.pull().subscribe(
 			frontRepo => {
 				this.frontRepo = frontRepo
 
-				this.umlsc = this.frontRepo.Umlscs.get(id)
+				this.umlsc = this.frontRepo.Umlscs.get(id)!
 
 				// insertion point for recovery of durations
 			}

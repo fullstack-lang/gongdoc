@@ -23,13 +23,13 @@ export class UmlStatePresentationComponent implements OnInit {
 
 	// insertion point for declarations
 
-	displayedColumns: string[] = [];
-	dataSource = ELEMENT_DATA;
+	displayedColumns: string[] = []
+	dataSource = ELEMENT_DATA
 
-	umlstate: UmlStateDB;
+	umlstate: UmlStateDB = new (UmlStateDB)
 
 	// front repo
-	frontRepo: FrontRepo
+	frontRepo: FrontRepo = new (FrontRepo)
  
 	constructor(
 		private umlstateService: UmlStateService,
@@ -56,12 +56,12 @@ export class UmlStatePresentationComponent implements OnInit {
 	}
 
 	getUmlState(): void {
-		const id = +this.route.snapshot.paramMap.get('id');
+		const id = +this.route.snapshot.paramMap.get('id')!
 		this.frontRepoService.pull().subscribe(
 			frontRepo => {
 				this.frontRepo = frontRepo
 
-				this.umlstate = this.frontRepo.UmlStates.get(id)
+				this.umlstate = this.frontRepo.UmlStates.get(id)!
 
 				// insertion point for recovery of durations
 			}

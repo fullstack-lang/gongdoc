@@ -13,6 +13,9 @@ import { catchError, map, tap } from 'rxjs/operators';
 
 import { ClassdiagramDB } from './classdiagram-db';
 
+// insertion point for imports
+import { PkgeltDB } from './pkgelt-db'
+
 @Injectable({
   providedIn: 'root'
 })
@@ -35,14 +38,14 @@ export class ClassdiagramService {
   ) {
     // path to the service share the same origin with the path to the document
     // get the origin in the URL to the document
-	let origin = this.document.location.origin
-    
-	// if debugging with ng, replace 4200 with 8080
-	origin = origin.replace("4200", "8080")
+    let origin = this.document.location.origin
+
+    // if debugging with ng, replace 4200 with 8080
+    origin = origin.replace("4200", "8080")
 
     // compute path to the service
     this.classdiagramsUrl = origin + '/api/github.com/fullstack-lang/gongdoc/go/v1/classdiagrams';
-   }
+  }
 
   /** GET classdiagrams from the server */
   getClassdiagrams(): Observable<ClassdiagramDB[]> {
@@ -67,19 +70,19 @@ export class ClassdiagramService {
   /** POST: add a new classdiagram to the server */
   postClassdiagram(classdiagramdb: ClassdiagramDB): Observable<ClassdiagramDB> {
 
-		// insertion point for reset of pointers and reverse pointers (to avoid circular JSON)
+    // insertion point for reset of pointers and reverse pointers (to avoid circular JSON)
     classdiagramdb.Classshapes = []
     let _Pkgelt_Classdiagrams_reverse = classdiagramdb.Pkgelt_Classdiagrams_reverse
-    classdiagramdb.Pkgelt_Classdiagrams_reverse = {}
+    classdiagramdb.Pkgelt_Classdiagrams_reverse = new PkgeltDB
 
-		return this.http.post<ClassdiagramDB>(this.classdiagramsUrl, classdiagramdb, this.httpOptions).pipe(
-			tap(_ => {
-				// insertion point for restoration of reverse pointers
+    return this.http.post<ClassdiagramDB>(this.classdiagramsUrl, classdiagramdb, this.httpOptions).pipe(
+      tap(_ => {
+        // insertion point for restoration of reverse pointers
         classdiagramdb.Pkgelt_Classdiagrams_reverse = _Pkgelt_Classdiagrams_reverse
-				this.log(`posted classdiagramdb id=${classdiagramdb.ID}`)
-			}),
-			catchError(this.handleError<ClassdiagramDB>('postClassdiagram'))
-		);
+        this.log(`posted classdiagramdb id=${classdiagramdb.ID}`)
+      }),
+      catchError(this.handleError<ClassdiagramDB>('postClassdiagram'))
+    );
   }
 
   /** DELETE: delete the classdiagramdb from the server */
@@ -101,9 +104,9 @@ export class ClassdiagramService {
     // insertion point for reset of pointers and reverse pointers (to avoid circular JSON)
     classdiagramdb.Classshapes = []
     let _Pkgelt_Classdiagrams_reverse = classdiagramdb.Pkgelt_Classdiagrams_reverse
-    classdiagramdb.Pkgelt_Classdiagrams_reverse = {}
+    classdiagramdb.Pkgelt_Classdiagrams_reverse = new PkgeltDB
 
-    return this.http.put(url, classdiagramdb, this.httpOptions).pipe(
+    return this.http.put<ClassdiagramDB>(url, classdiagramdb, this.httpOptions).pipe(
       tap(_ => {
         // insertion point for restoration of reverse pointers
         classdiagramdb.Pkgelt_Classdiagrams_reverse = _Pkgelt_Classdiagrams_reverse
