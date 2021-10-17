@@ -21,7 +21,6 @@
                         "allowedCommonJsDependencies": [
                             "lodash"
                         ],
-                        "aot": true,
                         "assets": [
                             "src/favicon.ico",
                             "src/assets"
@@ -31,7 +30,13 @@
                             "./node_modules/jointjs/dist/joint.css",
                             "src/styles.css"
                         ],
-                        "scripts": []
+                        "scripts": [],
+                        "vendorChunk": true,
+                        "extractLicenses": false,
+                        "buildOptimizer": false,
+                        "sourceMap": true,
+                        "optimization": false,
+                        "namedChunks": true
                     },
                     "configurations": {
                         "production": {
@@ -62,7 +67,8 @@
                                 }
                             ]
                         }
-                    }
+                    },
+                    "defaultConfiguration": ""
                 },
                 "serve": {
                     "builder": "@angular-devkit/build-angular:dev-server",
@@ -141,13 +147,21 @@
                     "builder": "@angular-devkit/build-angular:browser",
                     "options": {
                         "tsConfig": "projects/gongdoc/tsconfig.lib.json",
-                        "project": "projects/gongdoc/ng-package.json"
+                        "project": "projects/gongdoc/ng-package.json",
+                        "aot": false,
+                        "vendorChunk": true,
+                        "extractLicenses": false,
+                        "buildOptimizer": false,
+                        "sourceMap": true,
+                        "optimization": false,
+                        "namedChunks": true
                     },
                     "configurations": {
                         "production": {
                             "tsConfig": "projects/gongdoc/tsconfig.lib.prod.json"
                         }
-                    }
+                    },
+                    "defaultConfiguration": ""
                 },
                 "test": {
                     "builder": "@angular-devkit/build-angular:karma",
@@ -181,13 +195,21 @@
                     "builder": "@angular-devkit/build-angular:browser",
                     "options": {
                         "tsConfig": "projects/gongdocdiagrams/tsconfig.lib.json",
-                        "project": "projects/gongdocdiagrams/ng-package.json"
+                        "project": "projects/gongdocdiagrams/ng-package.json",
+                        "aot": false,
+                        "vendorChunk": true,
+                        "extractLicenses": false,
+                        "buildOptimizer": false,
+                        "sourceMap": true,
+                        "optimization": false,
+                        "namedChunks": true
                     },
                     "configurations": {
                         "production": {
                             "tsConfig": "projects/gongdocdiagrams/tsconfig.lib.prod.json"
                         }
-                    }
+                    },
+                    "defaultConfiguration": ""
                 },
                 "test": {
                     "builder": "@angular-devkit/build-angular:karma",
