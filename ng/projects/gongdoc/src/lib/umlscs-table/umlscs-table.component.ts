@@ -173,16 +173,14 @@ export class UmlscsTableComponent implements OnInit {
 
         // in case the component is called as a selection component
         if (this.mode == TableComponentMode.ONE_MANY_ASSOCIATION_MODE) {
-          this.umlscs.forEach(
-            umlsc => {
-              let ID = this.dialogData.ID
-              let revPointer = umlsc[this.dialogData.ReversePointer as keyof UmlscDB] as unknown as NullInt64
-              if (revPointer.Int64 == ID) {
-                this.initialSelection.push(umlsc)
-              }
+          for (let umlsc of this.umlscs) {
+            let ID = this.dialogData.ID
+            let revPointer = umlsc[this.dialogData.ReversePointer as keyof UmlscDB] as unknown as NullInt64
+            if (revPointer.Int64 == ID) {
+              this.initialSelection.push(umlsc)
             }
-          )
-          this.selection = new SelectionModel<UmlscDB>(allowMultiSelect, this.initialSelection);
+            this.selection = new SelectionModel<UmlscDB>(allowMultiSelect, this.initialSelection);
+          }
         }
 
         if (this.mode == TableComponentMode.MANY_MANY_ASSOCIATION_MODE) {
@@ -269,34 +267,31 @@ export class UmlscsTableComponent implements OnInit {
       let toUpdate = new Set<UmlscDB>()
 
       // reset all initial selection of umlsc that belong to umlsc
-      this.initialSelection.forEach(
-        umlsc => {
-          let index = umlsc[this.dialogData.ReversePointer as keyof UmlscDB] as unknown as NullInt64
-          index.Int64 = 0
-          index.Valid = true
-          toUpdate.add(umlsc)
-        }
-      )
+      for (let umlsc of this.initialSelection) {
+        let index = umlsc[this.dialogData.ReversePointer as keyof UmlscDB] as unknown as NullInt64
+        index.Int64 = 0
+        index.Valid = true
+        toUpdate.add(umlsc)
+
+      }
 
       // from selection, set umlsc that belong to umlsc
-      this.selection.selected.forEach(
-        umlsc => {
-          let ID = this.dialogData.ID as number
-          let reversePointer = umlsc[this.dialogData.ReversePointer  as keyof UmlscDB] as unknown as NullInt64
-          reversePointer.Int64 = ID
-          toUpdate.add(umlsc)
-        }
-      )
+      for (let umlsc of this.selection.selected) {
+        let ID = this.dialogData.ID as number
+        let reversePointer = umlsc[this.dialogData.ReversePointer as keyof UmlscDB] as unknown as NullInt64
+        reversePointer.Int64 = ID
+        reversePointer.Valid = true
+        toUpdate.add(umlsc)
+      }
+
 
       // update all umlsc (only update selection & initial selection)
-      toUpdate.forEach(
-        umlsc => {
-          this.umlscService.updateUmlsc(umlsc)
-            .subscribe(umlsc => {
-              this.umlscService.UmlscServiceChanged.next("update")
-            });
-        }
-      )
+      for (let umlsc of toUpdate) {
+        this.umlscService.updateUmlsc(umlsc)
+          .subscribe(umlsc => {
+            this.umlscService.UmlscServiceChanged.next("update")
+          });
+      }
     }
 
     if (this.mode == TableComponentMode.MANY_MANY_ASSOCIATION_MODE) {
@@ -343,13 +338,15 @@ export class UmlscsTableComponent implements OnInit {
                 Name: sourceInstance["Name"] + "-" + umlsc.Name,
               }
 
-              let index = associationInstance[this.dialogData.IntermediateStructField+"ID" as keyof typeof associationInstance] as unknown as NullInt64
+              let index = associationInstance[this.dialogData.IntermediateStructField + "ID" as keyof typeof associationInstance] as unknown as NullInt64
               index.Int64 = umlsc.ID
+              index.Valid = true
 
-              let indexDB = associationInstance[this.dialogData.IntermediateStructField+"DBID" as keyof typeof associationInstance] as unknown as NullInt64
+              let indexDB = associationInstance[this.dialogData.IntermediateStructField + "DBID" as keyof typeof associationInstance] as unknown as NullInt64
               indexDB.Int64 = umlsc.ID
+              index.Valid = true
 
-              this.frontRepoService.postService( this.dialogData.IntermediateStruct, associationInstance )
+              this.frontRepoService.postService(this.dialogData.IntermediateStruct, associationInstance)
 
             } else {
               // console.log("umlsc " + umlsc.Name + " is still selected")

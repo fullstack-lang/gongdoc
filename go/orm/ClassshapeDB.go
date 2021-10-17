@@ -270,6 +270,7 @@ func (backRepoClassshape *BackRepoClassshapeStruct) CommitPhaseTwoInstance(backR
 		if classshape.Position != nil {
 			if PositionId, ok := (*backRepo.BackRepoPosition.Map_PositionPtr_PositionDBID)[classshape.Position]; ok {
 				classshapeDB.PositionID.Int64 = int64(PositionId)
+				classshapeDB.PositionID.Valid = true
 			}
 		}
 
@@ -677,6 +678,7 @@ func (backRepoClassshape *BackRepoClassshapeStruct) RestorePhaseTwo() {
 		// reindexing Position field
 		if classshapeDB.PositionID.Int64 != 0 {
 			classshapeDB.PositionID.Int64 = int64(BackRepoPositionid_atBckpTime_newID[uint(classshapeDB.PositionID.Int64)])
+			classshapeDB.PositionID.Valid = true
 		}
 
 		// This reindex classshape.Classshapes

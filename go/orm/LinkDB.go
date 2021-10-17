@@ -270,6 +270,7 @@ func (backRepoLink *BackRepoLinkStruct) CommitPhaseTwoInstance(backRepo *BackRep
 		if link.Middlevertice != nil {
 			if MiddleverticeId, ok := (*backRepo.BackRepoVertice.Map_VerticePtr_VerticeDBID)[link.Middlevertice]; ok {
 				linkDB.MiddleverticeID.Int64 = int64(MiddleverticeId)
+				linkDB.MiddleverticeID.Valid = true
 			}
 		}
 
@@ -585,6 +586,7 @@ func (backRepoLink *BackRepoLinkStruct) RestorePhaseTwo() {
 		// reindexing Middlevertice field
 		if linkDB.MiddleverticeID.Int64 != 0 {
 			linkDB.MiddleverticeID.Int64 = int64(BackRepoVerticeid_atBckpTime_newID[uint(linkDB.MiddleverticeID.Int64)])
+			linkDB.MiddleverticeID.Valid = true
 		}
 
 		// This reindex link.Links

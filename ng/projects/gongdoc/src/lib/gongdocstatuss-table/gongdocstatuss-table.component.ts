@@ -170,16 +170,14 @@ export class GongdocStatussTableComponent implements OnInit {
 
         // in case the component is called as a selection component
         if (this.mode == TableComponentMode.ONE_MANY_ASSOCIATION_MODE) {
-          this.gongdocstatuss.forEach(
-            gongdocstatus => {
-              let ID = this.dialogData.ID
-              let revPointer = gongdocstatus[this.dialogData.ReversePointer as keyof GongdocStatusDB] as unknown as NullInt64
-              if (revPointer.Int64 == ID) {
-                this.initialSelection.push(gongdocstatus)
-              }
+          for (let gongdocstatus of this.gongdocstatuss) {
+            let ID = this.dialogData.ID
+            let revPointer = gongdocstatus[this.dialogData.ReversePointer as keyof GongdocStatusDB] as unknown as NullInt64
+            if (revPointer.Int64 == ID) {
+              this.initialSelection.push(gongdocstatus)
             }
-          )
-          this.selection = new SelectionModel<GongdocStatusDB>(allowMultiSelect, this.initialSelection);
+            this.selection = new SelectionModel<GongdocStatusDB>(allowMultiSelect, this.initialSelection);
+          }
         }
 
         if (this.mode == TableComponentMode.MANY_MANY_ASSOCIATION_MODE) {
@@ -266,34 +264,31 @@ export class GongdocStatussTableComponent implements OnInit {
       let toUpdate = new Set<GongdocStatusDB>()
 
       // reset all initial selection of gongdocstatus that belong to gongdocstatus
-      this.initialSelection.forEach(
-        gongdocstatus => {
-          let index = gongdocstatus[this.dialogData.ReversePointer as keyof GongdocStatusDB] as unknown as NullInt64
-          index.Int64 = 0
-          index.Valid = true
-          toUpdate.add(gongdocstatus)
-        }
-      )
+      for (let gongdocstatus of this.initialSelection) {
+        let index = gongdocstatus[this.dialogData.ReversePointer as keyof GongdocStatusDB] as unknown as NullInt64
+        index.Int64 = 0
+        index.Valid = true
+        toUpdate.add(gongdocstatus)
+
+      }
 
       // from selection, set gongdocstatus that belong to gongdocstatus
-      this.selection.selected.forEach(
-        gongdocstatus => {
-          let ID = this.dialogData.ID as number
-          let reversePointer = gongdocstatus[this.dialogData.ReversePointer  as keyof GongdocStatusDB] as unknown as NullInt64
-          reversePointer.Int64 = ID
-          toUpdate.add(gongdocstatus)
-        }
-      )
+      for (let gongdocstatus of this.selection.selected) {
+        let ID = this.dialogData.ID as number
+        let reversePointer = gongdocstatus[this.dialogData.ReversePointer as keyof GongdocStatusDB] as unknown as NullInt64
+        reversePointer.Int64 = ID
+        reversePointer.Valid = true
+        toUpdate.add(gongdocstatus)
+      }
+
 
       // update all gongdocstatus (only update selection & initial selection)
-      toUpdate.forEach(
-        gongdocstatus => {
-          this.gongdocstatusService.updateGongdocStatus(gongdocstatus)
-            .subscribe(gongdocstatus => {
-              this.gongdocstatusService.GongdocStatusServiceChanged.next("update")
-            });
-        }
-      )
+      for (let gongdocstatus of toUpdate) {
+        this.gongdocstatusService.updateGongdocStatus(gongdocstatus)
+          .subscribe(gongdocstatus => {
+            this.gongdocstatusService.GongdocStatusServiceChanged.next("update")
+          });
+      }
     }
 
     if (this.mode == TableComponentMode.MANY_MANY_ASSOCIATION_MODE) {
@@ -340,13 +335,15 @@ export class GongdocStatussTableComponent implements OnInit {
                 Name: sourceInstance["Name"] + "-" + gongdocstatus.Name,
               }
 
-              let index = associationInstance[this.dialogData.IntermediateStructField+"ID" as keyof typeof associationInstance] as unknown as NullInt64
+              let index = associationInstance[this.dialogData.IntermediateStructField + "ID" as keyof typeof associationInstance] as unknown as NullInt64
               index.Int64 = gongdocstatus.ID
+              index.Valid = true
 
-              let indexDB = associationInstance[this.dialogData.IntermediateStructField+"DBID" as keyof typeof associationInstance] as unknown as NullInt64
+              let indexDB = associationInstance[this.dialogData.IntermediateStructField + "DBID" as keyof typeof associationInstance] as unknown as NullInt64
               indexDB.Int64 = gongdocstatus.ID
+              index.Valid = true
 
-              this.frontRepoService.postService( this.dialogData.IntermediateStruct, associationInstance )
+              this.frontRepoService.postService(this.dialogData.IntermediateStruct, associationInstance)
 
             } else {
               // console.log("gongdocstatus " + gongdocstatus.Name + " is still selected")

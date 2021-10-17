@@ -170,16 +170,14 @@ export class VerticesTableComponent implements OnInit {
 
         // in case the component is called as a selection component
         if (this.mode == TableComponentMode.ONE_MANY_ASSOCIATION_MODE) {
-          this.vertices.forEach(
-            vertice => {
-              let ID = this.dialogData.ID
-              let revPointer = vertice[this.dialogData.ReversePointer as keyof VerticeDB] as unknown as NullInt64
-              if (revPointer.Int64 == ID) {
-                this.initialSelection.push(vertice)
-              }
+          for (let vertice of this.vertices) {
+            let ID = this.dialogData.ID
+            let revPointer = vertice[this.dialogData.ReversePointer as keyof VerticeDB] as unknown as NullInt64
+            if (revPointer.Int64 == ID) {
+              this.initialSelection.push(vertice)
             }
-          )
-          this.selection = new SelectionModel<VerticeDB>(allowMultiSelect, this.initialSelection);
+            this.selection = new SelectionModel<VerticeDB>(allowMultiSelect, this.initialSelection);
+          }
         }
 
         if (this.mode == TableComponentMode.MANY_MANY_ASSOCIATION_MODE) {
@@ -266,34 +264,31 @@ export class VerticesTableComponent implements OnInit {
       let toUpdate = new Set<VerticeDB>()
 
       // reset all initial selection of vertice that belong to vertice
-      this.initialSelection.forEach(
-        vertice => {
-          let index = vertice[this.dialogData.ReversePointer as keyof VerticeDB] as unknown as NullInt64
-          index.Int64 = 0
-          index.Valid = true
-          toUpdate.add(vertice)
-        }
-      )
+      for (let vertice of this.initialSelection) {
+        let index = vertice[this.dialogData.ReversePointer as keyof VerticeDB] as unknown as NullInt64
+        index.Int64 = 0
+        index.Valid = true
+        toUpdate.add(vertice)
+
+      }
 
       // from selection, set vertice that belong to vertice
-      this.selection.selected.forEach(
-        vertice => {
-          let ID = this.dialogData.ID as number
-          let reversePointer = vertice[this.dialogData.ReversePointer  as keyof VerticeDB] as unknown as NullInt64
-          reversePointer.Int64 = ID
-          toUpdate.add(vertice)
-        }
-      )
+      for (let vertice of this.selection.selected) {
+        let ID = this.dialogData.ID as number
+        let reversePointer = vertice[this.dialogData.ReversePointer as keyof VerticeDB] as unknown as NullInt64
+        reversePointer.Int64 = ID
+        reversePointer.Valid = true
+        toUpdate.add(vertice)
+      }
+
 
       // update all vertice (only update selection & initial selection)
-      toUpdate.forEach(
-        vertice => {
-          this.verticeService.updateVertice(vertice)
-            .subscribe(vertice => {
-              this.verticeService.VerticeServiceChanged.next("update")
-            });
-        }
-      )
+      for (let vertice of toUpdate) {
+        this.verticeService.updateVertice(vertice)
+          .subscribe(vertice => {
+            this.verticeService.VerticeServiceChanged.next("update")
+          });
+      }
     }
 
     if (this.mode == TableComponentMode.MANY_MANY_ASSOCIATION_MODE) {
@@ -340,13 +335,15 @@ export class VerticesTableComponent implements OnInit {
                 Name: sourceInstance["Name"] + "-" + vertice.Name,
               }
 
-              let index = associationInstance[this.dialogData.IntermediateStructField+"ID" as keyof typeof associationInstance] as unknown as NullInt64
+              let index = associationInstance[this.dialogData.IntermediateStructField + "ID" as keyof typeof associationInstance] as unknown as NullInt64
               index.Int64 = vertice.ID
+              index.Valid = true
 
-              let indexDB = associationInstance[this.dialogData.IntermediateStructField+"DBID" as keyof typeof associationInstance] as unknown as NullInt64
+              let indexDB = associationInstance[this.dialogData.IntermediateStructField + "DBID" as keyof typeof associationInstance] as unknown as NullInt64
               indexDB.Int64 = vertice.ID
+              index.Valid = true
 
-              this.frontRepoService.postService( this.dialogData.IntermediateStruct, associationInstance )
+              this.frontRepoService.postService(this.dialogData.IntermediateStruct, associationInstance)
 
             } else {
               // console.log("vertice " + vertice.Name + " is still selected")

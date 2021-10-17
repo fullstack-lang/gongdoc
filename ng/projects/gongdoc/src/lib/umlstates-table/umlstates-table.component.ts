@@ -179,16 +179,14 @@ export class UmlStatesTableComponent implements OnInit {
 
         // in case the component is called as a selection component
         if (this.mode == TableComponentMode.ONE_MANY_ASSOCIATION_MODE) {
-          this.umlstates.forEach(
-            umlstate => {
-              let ID = this.dialogData.ID
-              let revPointer = umlstate[this.dialogData.ReversePointer as keyof UmlStateDB] as unknown as NullInt64
-              if (revPointer.Int64 == ID) {
-                this.initialSelection.push(umlstate)
-              }
+          for (let umlstate of this.umlstates) {
+            let ID = this.dialogData.ID
+            let revPointer = umlstate[this.dialogData.ReversePointer as keyof UmlStateDB] as unknown as NullInt64
+            if (revPointer.Int64 == ID) {
+              this.initialSelection.push(umlstate)
             }
-          )
-          this.selection = new SelectionModel<UmlStateDB>(allowMultiSelect, this.initialSelection);
+            this.selection = new SelectionModel<UmlStateDB>(allowMultiSelect, this.initialSelection);
+          }
         }
 
         if (this.mode == TableComponentMode.MANY_MANY_ASSOCIATION_MODE) {
@@ -275,34 +273,31 @@ export class UmlStatesTableComponent implements OnInit {
       let toUpdate = new Set<UmlStateDB>()
 
       // reset all initial selection of umlstate that belong to umlstate
-      this.initialSelection.forEach(
-        umlstate => {
-          let index = umlstate[this.dialogData.ReversePointer as keyof UmlStateDB] as unknown as NullInt64
-          index.Int64 = 0
-          index.Valid = true
-          toUpdate.add(umlstate)
-        }
-      )
+      for (let umlstate of this.initialSelection) {
+        let index = umlstate[this.dialogData.ReversePointer as keyof UmlStateDB] as unknown as NullInt64
+        index.Int64 = 0
+        index.Valid = true
+        toUpdate.add(umlstate)
+
+      }
 
       // from selection, set umlstate that belong to umlstate
-      this.selection.selected.forEach(
-        umlstate => {
-          let ID = this.dialogData.ID as number
-          let reversePointer = umlstate[this.dialogData.ReversePointer  as keyof UmlStateDB] as unknown as NullInt64
-          reversePointer.Int64 = ID
-          toUpdate.add(umlstate)
-        }
-      )
+      for (let umlstate of this.selection.selected) {
+        let ID = this.dialogData.ID as number
+        let reversePointer = umlstate[this.dialogData.ReversePointer as keyof UmlStateDB] as unknown as NullInt64
+        reversePointer.Int64 = ID
+        reversePointer.Valid = true
+        toUpdate.add(umlstate)
+      }
+
 
       // update all umlstate (only update selection & initial selection)
-      toUpdate.forEach(
-        umlstate => {
-          this.umlstateService.updateUmlState(umlstate)
-            .subscribe(umlstate => {
-              this.umlstateService.UmlStateServiceChanged.next("update")
-            });
-        }
-      )
+      for (let umlstate of toUpdate) {
+        this.umlstateService.updateUmlState(umlstate)
+          .subscribe(umlstate => {
+            this.umlstateService.UmlStateServiceChanged.next("update")
+          });
+      }
     }
 
     if (this.mode == TableComponentMode.MANY_MANY_ASSOCIATION_MODE) {
@@ -349,13 +344,15 @@ export class UmlStatesTableComponent implements OnInit {
                 Name: sourceInstance["Name"] + "-" + umlstate.Name,
               }
 
-              let index = associationInstance[this.dialogData.IntermediateStructField+"ID" as keyof typeof associationInstance] as unknown as NullInt64
+              let index = associationInstance[this.dialogData.IntermediateStructField + "ID" as keyof typeof associationInstance] as unknown as NullInt64
               index.Int64 = umlstate.ID
+              index.Valid = true
 
-              let indexDB = associationInstance[this.dialogData.IntermediateStructField+"DBID" as keyof typeof associationInstance] as unknown as NullInt64
+              let indexDB = associationInstance[this.dialogData.IntermediateStructField + "DBID" as keyof typeof associationInstance] as unknown as NullInt64
               indexDB.Int64 = umlstate.ID
+              index.Valid = true
 
-              this.frontRepoService.postService( this.dialogData.IntermediateStruct, associationInstance )
+              this.frontRepoService.postService(this.dialogData.IntermediateStruct, associationInstance)
 
             } else {
               // console.log("umlstate " + umlstate.Name + " is still selected")

@@ -199,16 +199,14 @@ export class LinksTableComponent implements OnInit {
 
         // in case the component is called as a selection component
         if (this.mode == TableComponentMode.ONE_MANY_ASSOCIATION_MODE) {
-          this.links.forEach(
-            link => {
-              let ID = this.dialogData.ID
-              let revPointer = link[this.dialogData.ReversePointer as keyof LinkDB] as unknown as NullInt64
-              if (revPointer.Int64 == ID) {
-                this.initialSelection.push(link)
-              }
+          for (let link of this.links) {
+            let ID = this.dialogData.ID
+            let revPointer = link[this.dialogData.ReversePointer as keyof LinkDB] as unknown as NullInt64
+            if (revPointer.Int64 == ID) {
+              this.initialSelection.push(link)
             }
-          )
-          this.selection = new SelectionModel<LinkDB>(allowMultiSelect, this.initialSelection);
+            this.selection = new SelectionModel<LinkDB>(allowMultiSelect, this.initialSelection);
+          }
         }
 
         if (this.mode == TableComponentMode.MANY_MANY_ASSOCIATION_MODE) {
@@ -295,34 +293,31 @@ export class LinksTableComponent implements OnInit {
       let toUpdate = new Set<LinkDB>()
 
       // reset all initial selection of link that belong to link
-      this.initialSelection.forEach(
-        link => {
-          let index = link[this.dialogData.ReversePointer as keyof LinkDB] as unknown as NullInt64
-          index.Int64 = 0
-          index.Valid = true
-          toUpdate.add(link)
-        }
-      )
+      for (let link of this.initialSelection) {
+        let index = link[this.dialogData.ReversePointer as keyof LinkDB] as unknown as NullInt64
+        index.Int64 = 0
+        index.Valid = true
+        toUpdate.add(link)
+
+      }
 
       // from selection, set link that belong to link
-      this.selection.selected.forEach(
-        link => {
-          let ID = this.dialogData.ID as number
-          let reversePointer = link[this.dialogData.ReversePointer  as keyof LinkDB] as unknown as NullInt64
-          reversePointer.Int64 = ID
-          toUpdate.add(link)
-        }
-      )
+      for (let link of this.selection.selected) {
+        let ID = this.dialogData.ID as number
+        let reversePointer = link[this.dialogData.ReversePointer as keyof LinkDB] as unknown as NullInt64
+        reversePointer.Int64 = ID
+        reversePointer.Valid = true
+        toUpdate.add(link)
+      }
+
 
       // update all link (only update selection & initial selection)
-      toUpdate.forEach(
-        link => {
-          this.linkService.updateLink(link)
-            .subscribe(link => {
-              this.linkService.LinkServiceChanged.next("update")
-            });
-        }
-      )
+      for (let link of toUpdate) {
+        this.linkService.updateLink(link)
+          .subscribe(link => {
+            this.linkService.LinkServiceChanged.next("update")
+          });
+      }
     }
 
     if (this.mode == TableComponentMode.MANY_MANY_ASSOCIATION_MODE) {
@@ -369,13 +364,15 @@ export class LinksTableComponent implements OnInit {
                 Name: sourceInstance["Name"] + "-" + link.Name,
               }
 
-              let index = associationInstance[this.dialogData.IntermediateStructField+"ID" as keyof typeof associationInstance] as unknown as NullInt64
+              let index = associationInstance[this.dialogData.IntermediateStructField + "ID" as keyof typeof associationInstance] as unknown as NullInt64
               index.Int64 = link.ID
+              index.Valid = true
 
-              let indexDB = associationInstance[this.dialogData.IntermediateStructField+"DBID" as keyof typeof associationInstance] as unknown as NullInt64
+              let indexDB = associationInstance[this.dialogData.IntermediateStructField + "DBID" as keyof typeof associationInstance] as unknown as NullInt64
               indexDB.Int64 = link.ID
+              index.Valid = true
 
-              this.frontRepoService.postService( this.dialogData.IntermediateStruct, associationInstance )
+              this.frontRepoService.postService(this.dialogData.IntermediateStruct, associationInstance)
 
             } else {
               // console.log("link " + link.Name + " is still selected")

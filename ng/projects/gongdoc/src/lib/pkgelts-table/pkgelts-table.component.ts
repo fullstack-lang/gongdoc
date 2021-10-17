@@ -164,16 +164,14 @@ export class PkgeltsTableComponent implements OnInit {
 
         // in case the component is called as a selection component
         if (this.mode == TableComponentMode.ONE_MANY_ASSOCIATION_MODE) {
-          this.pkgelts.forEach(
-            pkgelt => {
-              let ID = this.dialogData.ID
-              let revPointer = pkgelt[this.dialogData.ReversePointer as keyof PkgeltDB] as unknown as NullInt64
-              if (revPointer.Int64 == ID) {
-                this.initialSelection.push(pkgelt)
-              }
+          for (let pkgelt of this.pkgelts) {
+            let ID = this.dialogData.ID
+            let revPointer = pkgelt[this.dialogData.ReversePointer as keyof PkgeltDB] as unknown as NullInt64
+            if (revPointer.Int64 == ID) {
+              this.initialSelection.push(pkgelt)
             }
-          )
-          this.selection = new SelectionModel<PkgeltDB>(allowMultiSelect, this.initialSelection);
+            this.selection = new SelectionModel<PkgeltDB>(allowMultiSelect, this.initialSelection);
+          }
         }
 
         if (this.mode == TableComponentMode.MANY_MANY_ASSOCIATION_MODE) {
@@ -260,34 +258,31 @@ export class PkgeltsTableComponent implements OnInit {
       let toUpdate = new Set<PkgeltDB>()
 
       // reset all initial selection of pkgelt that belong to pkgelt
-      this.initialSelection.forEach(
-        pkgelt => {
-          let index = pkgelt[this.dialogData.ReversePointer as keyof PkgeltDB] as unknown as NullInt64
-          index.Int64 = 0
-          index.Valid = true
-          toUpdate.add(pkgelt)
-        }
-      )
+      for (let pkgelt of this.initialSelection) {
+        let index = pkgelt[this.dialogData.ReversePointer as keyof PkgeltDB] as unknown as NullInt64
+        index.Int64 = 0
+        index.Valid = true
+        toUpdate.add(pkgelt)
+
+      }
 
       // from selection, set pkgelt that belong to pkgelt
-      this.selection.selected.forEach(
-        pkgelt => {
-          let ID = this.dialogData.ID as number
-          let reversePointer = pkgelt[this.dialogData.ReversePointer  as keyof PkgeltDB] as unknown as NullInt64
-          reversePointer.Int64 = ID
-          toUpdate.add(pkgelt)
-        }
-      )
+      for (let pkgelt of this.selection.selected) {
+        let ID = this.dialogData.ID as number
+        let reversePointer = pkgelt[this.dialogData.ReversePointer as keyof PkgeltDB] as unknown as NullInt64
+        reversePointer.Int64 = ID
+        reversePointer.Valid = true
+        toUpdate.add(pkgelt)
+      }
+
 
       // update all pkgelt (only update selection & initial selection)
-      toUpdate.forEach(
-        pkgelt => {
-          this.pkgeltService.updatePkgelt(pkgelt)
-            .subscribe(pkgelt => {
-              this.pkgeltService.PkgeltServiceChanged.next("update")
-            });
-        }
-      )
+      for (let pkgelt of toUpdate) {
+        this.pkgeltService.updatePkgelt(pkgelt)
+          .subscribe(pkgelt => {
+            this.pkgeltService.PkgeltServiceChanged.next("update")
+          });
+      }
     }
 
     if (this.mode == TableComponentMode.MANY_MANY_ASSOCIATION_MODE) {
@@ -334,13 +329,15 @@ export class PkgeltsTableComponent implements OnInit {
                 Name: sourceInstance["Name"] + "-" + pkgelt.Name,
               }
 
-              let index = associationInstance[this.dialogData.IntermediateStructField+"ID" as keyof typeof associationInstance] as unknown as NullInt64
+              let index = associationInstance[this.dialogData.IntermediateStructField + "ID" as keyof typeof associationInstance] as unknown as NullInt64
               index.Int64 = pkgelt.ID
+              index.Valid = true
 
-              let indexDB = associationInstance[this.dialogData.IntermediateStructField+"DBID" as keyof typeof associationInstance] as unknown as NullInt64
+              let indexDB = associationInstance[this.dialogData.IntermediateStructField + "DBID" as keyof typeof associationInstance] as unknown as NullInt64
               indexDB.Int64 = pkgelt.ID
+              index.Valid = true
 
-              this.frontRepoService.postService( this.dialogData.IntermediateStruct, associationInstance )
+              this.frontRepoService.postService(this.dialogData.IntermediateStruct, associationInstance)
 
             } else {
               // console.log("pkgelt " + pkgelt.Name + " is still selected")

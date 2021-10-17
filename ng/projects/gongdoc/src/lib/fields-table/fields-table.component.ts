@@ -191,16 +191,14 @@ export class FieldsTableComponent implements OnInit {
 
         // in case the component is called as a selection component
         if (this.mode == TableComponentMode.ONE_MANY_ASSOCIATION_MODE) {
-          this.fields.forEach(
-            field => {
-              let ID = this.dialogData.ID
-              let revPointer = field[this.dialogData.ReversePointer as keyof FieldDB] as unknown as NullInt64
-              if (revPointer.Int64 == ID) {
-                this.initialSelection.push(field)
-              }
+          for (let field of this.fields) {
+            let ID = this.dialogData.ID
+            let revPointer = field[this.dialogData.ReversePointer as keyof FieldDB] as unknown as NullInt64
+            if (revPointer.Int64 == ID) {
+              this.initialSelection.push(field)
             }
-          )
-          this.selection = new SelectionModel<FieldDB>(allowMultiSelect, this.initialSelection);
+            this.selection = new SelectionModel<FieldDB>(allowMultiSelect, this.initialSelection);
+          }
         }
 
         if (this.mode == TableComponentMode.MANY_MANY_ASSOCIATION_MODE) {
@@ -287,34 +285,31 @@ export class FieldsTableComponent implements OnInit {
       let toUpdate = new Set<FieldDB>()
 
       // reset all initial selection of field that belong to field
-      this.initialSelection.forEach(
-        field => {
-          let index = field[this.dialogData.ReversePointer as keyof FieldDB] as unknown as NullInt64
-          index.Int64 = 0
-          index.Valid = true
-          toUpdate.add(field)
-        }
-      )
+      for (let field of this.initialSelection) {
+        let index = field[this.dialogData.ReversePointer as keyof FieldDB] as unknown as NullInt64
+        index.Int64 = 0
+        index.Valid = true
+        toUpdate.add(field)
+
+      }
 
       // from selection, set field that belong to field
-      this.selection.selected.forEach(
-        field => {
-          let ID = this.dialogData.ID as number
-          let reversePointer = field[this.dialogData.ReversePointer  as keyof FieldDB] as unknown as NullInt64
-          reversePointer.Int64 = ID
-          toUpdate.add(field)
-        }
-      )
+      for (let field of this.selection.selected) {
+        let ID = this.dialogData.ID as number
+        let reversePointer = field[this.dialogData.ReversePointer as keyof FieldDB] as unknown as NullInt64
+        reversePointer.Int64 = ID
+        reversePointer.Valid = true
+        toUpdate.add(field)
+      }
+
 
       // update all field (only update selection & initial selection)
-      toUpdate.forEach(
-        field => {
-          this.fieldService.updateField(field)
-            .subscribe(field => {
-              this.fieldService.FieldServiceChanged.next("update")
-            });
-        }
-      )
+      for (let field of toUpdate) {
+        this.fieldService.updateField(field)
+          .subscribe(field => {
+            this.fieldService.FieldServiceChanged.next("update")
+          });
+      }
     }
 
     if (this.mode == TableComponentMode.MANY_MANY_ASSOCIATION_MODE) {
@@ -361,13 +356,15 @@ export class FieldsTableComponent implements OnInit {
                 Name: sourceInstance["Name"] + "-" + field.Name,
               }
 
-              let index = associationInstance[this.dialogData.IntermediateStructField+"ID" as keyof typeof associationInstance] as unknown as NullInt64
+              let index = associationInstance[this.dialogData.IntermediateStructField + "ID" as keyof typeof associationInstance] as unknown as NullInt64
               index.Int64 = field.ID
+              index.Valid = true
 
-              let indexDB = associationInstance[this.dialogData.IntermediateStructField+"DBID" as keyof typeof associationInstance] as unknown as NullInt64
+              let indexDB = associationInstance[this.dialogData.IntermediateStructField + "DBID" as keyof typeof associationInstance] as unknown as NullInt64
               indexDB.Int64 = field.ID
+              index.Valid = true
 
-              this.frontRepoService.postService( this.dialogData.IntermediateStruct, associationInstance )
+              this.frontRepoService.postService(this.dialogData.IntermediateStruct, associationInstance)
 
             } else {
               // console.log("field " + field.Name + " is still selected")

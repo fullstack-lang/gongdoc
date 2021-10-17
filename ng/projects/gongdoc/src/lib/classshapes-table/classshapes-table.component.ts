@@ -199,16 +199,14 @@ export class ClassshapesTableComponent implements OnInit {
 
         // in case the component is called as a selection component
         if (this.mode == TableComponentMode.ONE_MANY_ASSOCIATION_MODE) {
-          this.classshapes.forEach(
-            classshape => {
-              let ID = this.dialogData.ID
-              let revPointer = classshape[this.dialogData.ReversePointer as keyof ClassshapeDB] as unknown as NullInt64
-              if (revPointer.Int64 == ID) {
-                this.initialSelection.push(classshape)
-              }
+          for (let classshape of this.classshapes) {
+            let ID = this.dialogData.ID
+            let revPointer = classshape[this.dialogData.ReversePointer as keyof ClassshapeDB] as unknown as NullInt64
+            if (revPointer.Int64 == ID) {
+              this.initialSelection.push(classshape)
             }
-          )
-          this.selection = new SelectionModel<ClassshapeDB>(allowMultiSelect, this.initialSelection);
+            this.selection = new SelectionModel<ClassshapeDB>(allowMultiSelect, this.initialSelection);
+          }
         }
 
         if (this.mode == TableComponentMode.MANY_MANY_ASSOCIATION_MODE) {
@@ -295,34 +293,31 @@ export class ClassshapesTableComponent implements OnInit {
       let toUpdate = new Set<ClassshapeDB>()
 
       // reset all initial selection of classshape that belong to classshape
-      this.initialSelection.forEach(
-        classshape => {
-          let index = classshape[this.dialogData.ReversePointer as keyof ClassshapeDB] as unknown as NullInt64
-          index.Int64 = 0
-          index.Valid = true
-          toUpdate.add(classshape)
-        }
-      )
+      for (let classshape of this.initialSelection) {
+        let index = classshape[this.dialogData.ReversePointer as keyof ClassshapeDB] as unknown as NullInt64
+        index.Int64 = 0
+        index.Valid = true
+        toUpdate.add(classshape)
+
+      }
 
       // from selection, set classshape that belong to classshape
-      this.selection.selected.forEach(
-        classshape => {
-          let ID = this.dialogData.ID as number
-          let reversePointer = classshape[this.dialogData.ReversePointer  as keyof ClassshapeDB] as unknown as NullInt64
-          reversePointer.Int64 = ID
-          toUpdate.add(classshape)
-        }
-      )
+      for (let classshape of this.selection.selected) {
+        let ID = this.dialogData.ID as number
+        let reversePointer = classshape[this.dialogData.ReversePointer as keyof ClassshapeDB] as unknown as NullInt64
+        reversePointer.Int64 = ID
+        reversePointer.Valid = true
+        toUpdate.add(classshape)
+      }
+
 
       // update all classshape (only update selection & initial selection)
-      toUpdate.forEach(
-        classshape => {
-          this.classshapeService.updateClassshape(classshape)
-            .subscribe(classshape => {
-              this.classshapeService.ClassshapeServiceChanged.next("update")
-            });
-        }
-      )
+      for (let classshape of toUpdate) {
+        this.classshapeService.updateClassshape(classshape)
+          .subscribe(classshape => {
+            this.classshapeService.ClassshapeServiceChanged.next("update")
+          });
+      }
     }
 
     if (this.mode == TableComponentMode.MANY_MANY_ASSOCIATION_MODE) {
@@ -369,13 +364,15 @@ export class ClassshapesTableComponent implements OnInit {
                 Name: sourceInstance["Name"] + "-" + classshape.Name,
               }
 
-              let index = associationInstance[this.dialogData.IntermediateStructField+"ID" as keyof typeof associationInstance] as unknown as NullInt64
+              let index = associationInstance[this.dialogData.IntermediateStructField + "ID" as keyof typeof associationInstance] as unknown as NullInt64
               index.Int64 = classshape.ID
+              index.Valid = true
 
-              let indexDB = associationInstance[this.dialogData.IntermediateStructField+"DBID" as keyof typeof associationInstance] as unknown as NullInt64
+              let indexDB = associationInstance[this.dialogData.IntermediateStructField + "DBID" as keyof typeof associationInstance] as unknown as NullInt64
               indexDB.Int64 = classshape.ID
+              index.Valid = true
 
-              this.frontRepoService.postService( this.dialogData.IntermediateStruct, associationInstance )
+              this.frontRepoService.postService(this.dialogData.IntermediateStruct, associationInstance)
 
             } else {
               // console.log("classshape " + classshape.Name + " is still selected")

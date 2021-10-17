@@ -167,16 +167,14 @@ export class ClassdiagramsTableComponent implements OnInit {
 
         // in case the component is called as a selection component
         if (this.mode == TableComponentMode.ONE_MANY_ASSOCIATION_MODE) {
-          this.classdiagrams.forEach(
-            classdiagram => {
-              let ID = this.dialogData.ID
-              let revPointer = classdiagram[this.dialogData.ReversePointer as keyof ClassdiagramDB] as unknown as NullInt64
-              if (revPointer.Int64 == ID) {
-                this.initialSelection.push(classdiagram)
-              }
+          for (let classdiagram of this.classdiagrams) {
+            let ID = this.dialogData.ID
+            let revPointer = classdiagram[this.dialogData.ReversePointer as keyof ClassdiagramDB] as unknown as NullInt64
+            if (revPointer.Int64 == ID) {
+              this.initialSelection.push(classdiagram)
             }
-          )
-          this.selection = new SelectionModel<ClassdiagramDB>(allowMultiSelect, this.initialSelection);
+            this.selection = new SelectionModel<ClassdiagramDB>(allowMultiSelect, this.initialSelection);
+          }
         }
 
         if (this.mode == TableComponentMode.MANY_MANY_ASSOCIATION_MODE) {
@@ -263,34 +261,31 @@ export class ClassdiagramsTableComponent implements OnInit {
       let toUpdate = new Set<ClassdiagramDB>()
 
       // reset all initial selection of classdiagram that belong to classdiagram
-      this.initialSelection.forEach(
-        classdiagram => {
-          let index = classdiagram[this.dialogData.ReversePointer as keyof ClassdiagramDB] as unknown as NullInt64
-          index.Int64 = 0
-          index.Valid = true
-          toUpdate.add(classdiagram)
-        }
-      )
+      for (let classdiagram of this.initialSelection) {
+        let index = classdiagram[this.dialogData.ReversePointer as keyof ClassdiagramDB] as unknown as NullInt64
+        index.Int64 = 0
+        index.Valid = true
+        toUpdate.add(classdiagram)
+
+      }
 
       // from selection, set classdiagram that belong to classdiagram
-      this.selection.selected.forEach(
-        classdiagram => {
-          let ID = this.dialogData.ID as number
-          let reversePointer = classdiagram[this.dialogData.ReversePointer  as keyof ClassdiagramDB] as unknown as NullInt64
-          reversePointer.Int64 = ID
-          toUpdate.add(classdiagram)
-        }
-      )
+      for (let classdiagram of this.selection.selected) {
+        let ID = this.dialogData.ID as number
+        let reversePointer = classdiagram[this.dialogData.ReversePointer as keyof ClassdiagramDB] as unknown as NullInt64
+        reversePointer.Int64 = ID
+        reversePointer.Valid = true
+        toUpdate.add(classdiagram)
+      }
+
 
       // update all classdiagram (only update selection & initial selection)
-      toUpdate.forEach(
-        classdiagram => {
-          this.classdiagramService.updateClassdiagram(classdiagram)
-            .subscribe(classdiagram => {
-              this.classdiagramService.ClassdiagramServiceChanged.next("update")
-            });
-        }
-      )
+      for (let classdiagram of toUpdate) {
+        this.classdiagramService.updateClassdiagram(classdiagram)
+          .subscribe(classdiagram => {
+            this.classdiagramService.ClassdiagramServiceChanged.next("update")
+          });
+      }
     }
 
     if (this.mode == TableComponentMode.MANY_MANY_ASSOCIATION_MODE) {
@@ -337,13 +332,15 @@ export class ClassdiagramsTableComponent implements OnInit {
                 Name: sourceInstance["Name"] + "-" + classdiagram.Name,
               }
 
-              let index = associationInstance[this.dialogData.IntermediateStructField+"ID" as keyof typeof associationInstance] as unknown as NullInt64
+              let index = associationInstance[this.dialogData.IntermediateStructField + "ID" as keyof typeof associationInstance] as unknown as NullInt64
               index.Int64 = classdiagram.ID
+              index.Valid = true
 
-              let indexDB = associationInstance[this.dialogData.IntermediateStructField+"DBID" as keyof typeof associationInstance] as unknown as NullInt64
+              let indexDB = associationInstance[this.dialogData.IntermediateStructField + "DBID" as keyof typeof associationInstance] as unknown as NullInt64
               indexDB.Int64 = classdiagram.ID
+              index.Valid = true
 
-              this.frontRepoService.postService( this.dialogData.IntermediateStruct, associationInstance )
+              this.frontRepoService.postService(this.dialogData.IntermediateStruct, associationInstance)
 
             } else {
               // console.log("classdiagram " + classdiagram.Name + " is still selected")
