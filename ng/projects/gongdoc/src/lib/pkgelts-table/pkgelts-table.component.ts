@@ -62,6 +62,9 @@ export class PkgeltsTableComponent implements OnInit {
     // enable sorting on all fields (including pointers and reverse pointer)
     this.matTableDataSource.sortingDataAccessor = (pkgeltDB: PkgeltDB, property: string) => {
       switch (property) {
+        case 'ID':
+          return pkgeltDB.ID
+
         // insertion point for specific sorting accessor
         case 'Name':
           return pkgeltDB.Name;

@@ -62,6 +62,9 @@ export class ClassdiagramsTableComponent implements OnInit {
     // enable sorting on all fields (including pointers and reverse pointer)
     this.matTableDataSource.sortingDataAccessor = (classdiagramDB: ClassdiagramDB, property: string) => {
       switch (property) {
+        case 'ID':
+          return classdiagramDB.ID
+
         // insertion point for specific sorting accessor
         case 'Name':
           return classdiagramDB.Name;

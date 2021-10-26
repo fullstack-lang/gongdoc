@@ -26,8 +26,8 @@
     "material-design-icons": "^3.0.1",
     "rxjs": "~6.6.3",
     "tslib": "^2.2.0",
-    "typeface-open-sans": "1.1.13",
-    "typeface-roboto": "1.1.13",
+    "typeface-open-sans": "^1.1.13",
+    "typeface-roboto": "^1.1.13",
     "zone.js": "~0.11.4"
   },
   "devDependencies": {

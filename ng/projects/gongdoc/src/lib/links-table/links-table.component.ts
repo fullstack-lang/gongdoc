@@ -62,6 +62,9 @@ export class LinksTableComponent implements OnInit {
     // enable sorting on all fields (including pointers and reverse pointer)
     this.matTableDataSource.sortingDataAccessor = (linkDB: LinkDB, property: string) => {
       switch (property) {
+        case 'ID':
+          return linkDB.ID
+
         // insertion point for specific sorting accessor
         case 'Name':
           return linkDB.Name;

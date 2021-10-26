@@ -62,6 +62,9 @@ export class VerticesTableComponent implements OnInit {
     // enable sorting on all fields (including pointers and reverse pointer)
     this.matTableDataSource.sortingDataAccessor = (verticeDB: VerticeDB, property: string) => {
       switch (property) {
+        case 'ID':
+          return verticeDB.ID
+
         // insertion point for specific sorting accessor
         case 'X':
           return verticeDB.X;

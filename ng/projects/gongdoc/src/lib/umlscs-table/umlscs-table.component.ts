@@ -62,6 +62,9 @@ export class UmlscsTableComponent implements OnInit {
     // enable sorting on all fields (including pointers and reverse pointer)
     this.matTableDataSource.sortingDataAccessor = (umlscDB: UmlscDB, property: string) => {
       switch (property) {
+        case 'ID':
+          return umlscDB.ID
+
         // insertion point for specific sorting accessor
         case 'Name':
           return umlscDB.Name;

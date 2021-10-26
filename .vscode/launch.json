@@ -49,13 +49,6 @@
             "request": "launch",
             "mode": "debug",
             "program": "${workspaceFolder}",
-            "dlvLoadConfig": {
-                "followPointers": true,
-                "maxVariableRecurse": 1,
-                "maxStringLen": 300,
-                "maxArrayValues": 64,
-                "maxStructFields": -1
-            },
             "args": [
                 "-pkgPath",
                 "go/tests/geometry/models",
@@ -68,13 +61,6 @@
             "mode": "debug",
             "program": "${workspaceFolder}",
             "cwd": "${workspaceFolder}/../gongsvg",
-            "dlvLoadConfig": {
-                "followPointers": true,
-                "maxVariableRecurse": 1,
-                "maxStringLen": 300,
-                "maxArrayValues": 64,
-                "maxStructFields": -1
-            },
             "args": [
                 "-pkgPath",
                 "go/models",
@@ -87,13 +73,6 @@
             "mode": "debug",
             "program": "${workspaceFolder}",
             "cwd": "${workspaceFolder}/../gongproject",
-            "dlvLoadConfig": {
-                "followPointers": true,
-                "maxVariableRecurse": 1,
-                "maxStringLen": 300,
-                "maxArrayValues": 64,
-                "maxStructFields": -1
-            },
             "args": [
                 "-pkgPath",
                 "go/models",
@@ -106,13 +85,6 @@
             "mode": "debug",
             "program": "${workspaceFolder}",
             "cwd": "${workspaceFolder}/../gongsvg",
-            "dlvLoadConfig": {
-                "followPointers": true,
-                "maxVariableRecurse": 1,
-                "maxStringLen": 300,
-                "maxArrayValues": 64,
-                "maxStructFields": -1
-            },
             "args": [
                 "-genDefaultDiagram",
                 "-pkgPath",
@@ -126,13 +98,6 @@
             "mode": "debug",
             "program": "${workspaceFolder}",
             "cwd": "${workspaceFolder}/../gongsvg",
-            "dlvLoadConfig": {
-                "followPointers": true,
-                "maxVariableRecurse": 1,
-                "maxStringLen": 300,
-                "maxArrayValues": 64,
-                "maxStructFields": -1
-            },
             "args": [
                 "-svg",
                 "-pkgPath",

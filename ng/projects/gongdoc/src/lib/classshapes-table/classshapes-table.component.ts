@@ -62,6 +62,9 @@ export class ClassshapesTableComponent implements OnInit {
     // enable sorting on all fields (including pointers and reverse pointer)
     this.matTableDataSource.sortingDataAccessor = (classshapeDB: ClassshapeDB, property: string) => {
       switch (property) {
+        case 'ID':
+          return classshapeDB.ID
+
         // insertion point for specific sorting accessor
         case 'Name':
           return classshapeDB.Name;
