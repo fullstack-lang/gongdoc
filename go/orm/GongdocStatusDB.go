@@ -57,6 +57,7 @@ type GongdocStatusDB struct {
 	gorm.Model
 
 	// insertion for basic fields declaration
+
 	// Declation for basic field gongdocstatusDB.Name {{BasicKind}} (to be completed)
 	Name_Data sql.NullString
 
@@ -65,7 +66,6 @@ type GongdocStatusDB struct {
 
 	// Declation for basic field gongdocstatusDB.CommandCompletionDate {{BasicKind}} (to be completed)
 	CommandCompletionDate_Data sql.NullString
-
 	// encoding of pointers
 	GongdocStatusPointersEnconding
 }
@@ -83,15 +83,15 @@ type GongdocStatusDBResponse struct {
 // GongdocStatusWOP is a GongdocStatus without pointers (WOP is an acronym for "Without Pointers")
 // it holds the same basic fields but pointers are encoded into uint
 type GongdocStatusWOP struct {
-	ID int
+	ID int `xlsx:"0"`
 
 	// insertion for WOP basic fields
 
-	Name string
+	Name string `xlsx:"1"`
 
-	Status models.GongdocCommandType
+	Status models.GongdocCommandType `xlsx:"2"`
 
-	CommandCompletionDate string
+	CommandCompletionDate string `xlsx:"3"`
 	// insertion for WOP pointer fields
 }
 
@@ -381,6 +381,7 @@ func (backRepo *BackRepoStruct) CheckoutGongdocStatus(gongdocstatus *models.Gong
 // CopyBasicFieldsFromGongdocStatus
 func (gongdocstatusDB *GongdocStatusDB) CopyBasicFieldsFromGongdocStatus(gongdocstatus *models.GongdocStatus) {
 	// insertion point for fields commit
+
 	gongdocstatusDB.Name_Data.String = gongdocstatus.Name
 	gongdocstatusDB.Name_Data.Valid = true
 
@@ -389,12 +390,12 @@ func (gongdocstatusDB *GongdocStatusDB) CopyBasicFieldsFromGongdocStatus(gongdoc
 
 	gongdocstatusDB.CommandCompletionDate_Data.String = gongdocstatus.CommandCompletionDate
 	gongdocstatusDB.CommandCompletionDate_Data.Valid = true
-
 }
 
 // CopyBasicFieldsFromGongdocStatusWOP
 func (gongdocstatusDB *GongdocStatusDB) CopyBasicFieldsFromGongdocStatusWOP(gongdocstatus *GongdocStatusWOP) {
 	// insertion point for fields commit
+
 	gongdocstatusDB.Name_Data.String = gongdocstatus.Name
 	gongdocstatusDB.Name_Data.Valid = true
 
@@ -403,7 +404,6 @@ func (gongdocstatusDB *GongdocStatusDB) CopyBasicFieldsFromGongdocStatusWOP(gong
 
 	gongdocstatusDB.CommandCompletionDate_Data.String = gongdocstatus.CommandCompletionDate
 	gongdocstatusDB.CommandCompletionDate_Data.Valid = true
-
 }
 
 // CopyBasicFieldsToGongdocStatus
@@ -481,6 +481,51 @@ func (backRepoGongdocStatus *BackRepoGongdocStatusStruct) BackupXL(file *xlsx.Fi
 		row := sh.AddRow()
 		row.WriteStruct(&gongdocstatusWOP, -1)
 	}
+}
+
+// RestoreXL from the "GongdocStatus" sheet all GongdocStatusDB instances
+func (backRepoGongdocStatus *BackRepoGongdocStatusStruct) RestoreXLPhaseOne(file *xlsx.File) {
+
+	// resets the map
+	BackRepoGongdocStatusid_atBckpTime_newID = make(map[uint]uint)
+
+	sh, ok := file.Sheet["GongdocStatus"]
+	_ = sh
+	if !ok {
+		log.Panic(errors.New("sheet not found"))
+	}
+
+	// log.Println("Max row is", sh.MaxRow)
+	err := sh.ForEachRow(backRepoGongdocStatus.rowVisitorGongdocStatus)
+	if err != nil {
+		log.Panic("Err=", err)
+	}
+}
+
+func (backRepoGongdocStatus *BackRepoGongdocStatusStruct) rowVisitorGongdocStatus(row *xlsx.Row) error {
+
+	log.Printf("row line %d\n", row.GetCoordinate())
+	log.Println(row)
+
+	// skip first line
+	if row.GetCoordinate() > 0 {
+		var gongdocstatusWOP GongdocStatusWOP
+		row.ReadStruct(&gongdocstatusWOP)
+
+		// add the unmarshalled struct to the stage
+		gongdocstatusDB := new(GongdocStatusDB)
+		gongdocstatusDB.CopyBasicFieldsFromGongdocStatusWOP(&gongdocstatusWOP)
+
+		gongdocstatusDB_ID_atBackupTime := gongdocstatusDB.ID
+		gongdocstatusDB.ID = 0
+		query := backRepoGongdocStatus.db.Create(gongdocstatusDB)
+		if query.Error != nil {
+			log.Panic(query.Error)
+		}
+		(*backRepoGongdocStatus.Map_GongdocStatusDBID_GongdocStatusDB)[gongdocstatusDB.ID] = gongdocstatusDB
+		BackRepoGongdocStatusid_atBckpTime_newID[gongdocstatusDB_ID_atBackupTime] = gongdocstatusDB.ID
+	}
+	return nil
 }
 
 // RestorePhaseOne read the file "GongdocStatusDB.json" in dirPath that stores an array

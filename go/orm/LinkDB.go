@@ -45,6 +45,7 @@ type LinkAPI struct {
 // reverse pointers of slice of poitners to Struct
 type LinkPointersEnconding struct {
 	// insertion for pointer fields encoding declaration
+
 	// field Middlevertice is a pointer to another Struct (optional or 0..1)
 	// This field is generated into another field to enable AS ONE association
 	MiddleverticeID sql.NullInt64
@@ -66,6 +67,7 @@ type LinkDB struct {
 	gorm.Model
 
 	// insertion for basic fields declaration
+
 	// Declation for basic field linkDB.Name {{BasicKind}} (to be completed)
 	Name_Data sql.NullString
 
@@ -80,7 +82,6 @@ type LinkDB struct {
 
 	// Declation for basic field linkDB.Multiplicity {{BasicKind}} (to be completed)
 	Multiplicity_Data sql.NullString
-
 	// encoding of pointers
 	LinkPointersEnconding
 }
@@ -98,19 +99,19 @@ type LinkDBResponse struct {
 // LinkWOP is a Link without pointers (WOP is an acronym for "Without Pointers")
 // it holds the same basic fields but pointers are encoded into uint
 type LinkWOP struct {
-	ID int
+	ID int `xlsx:"0"`
 
 	// insertion for WOP basic fields
 
-	Name string
+	Name string `xlsx:"1"`
 
-	Fieldname string
+	Fieldname string `xlsx:"2"`
 
-	Structname string
+	Structname string `xlsx:"3"`
 
-	Fieldtypename string
+	Fieldtypename string `xlsx:"4"`
 
-	Multiplicity models.MultiplicityType
+	Multiplicity models.MultiplicityType `xlsx:"5"`
 	// insertion for WOP pointer fields
 }
 
@@ -415,6 +416,7 @@ func (backRepo *BackRepoStruct) CheckoutLink(link *models.Link) {
 // CopyBasicFieldsFromLink
 func (linkDB *LinkDB) CopyBasicFieldsFromLink(link *models.Link) {
 	// insertion point for fields commit
+
 	linkDB.Name_Data.String = link.Name
 	linkDB.Name_Data.Valid = true
 
@@ -429,12 +431,12 @@ func (linkDB *LinkDB) CopyBasicFieldsFromLink(link *models.Link) {
 
 	linkDB.Multiplicity_Data.String = string(link.Multiplicity)
 	linkDB.Multiplicity_Data.Valid = true
-
 }
 
 // CopyBasicFieldsFromLinkWOP
 func (linkDB *LinkDB) CopyBasicFieldsFromLinkWOP(link *LinkWOP) {
 	// insertion point for fields commit
+
 	linkDB.Name_Data.String = link.Name
 	linkDB.Name_Data.Valid = true
 
@@ -449,7 +451,6 @@ func (linkDB *LinkDB) CopyBasicFieldsFromLinkWOP(link *LinkWOP) {
 
 	linkDB.Multiplicity_Data.String = string(link.Multiplicity)
 	linkDB.Multiplicity_Data.Valid = true
-
 }
 
 // CopyBasicFieldsToLink
@@ -531,6 +532,51 @@ func (backRepoLink *BackRepoLinkStruct) BackupXL(file *xlsx.File) {
 		row := sh.AddRow()
 		row.WriteStruct(&linkWOP, -1)
 	}
+}
+
+// RestoreXL from the "Link" sheet all LinkDB instances
+func (backRepoLink *BackRepoLinkStruct) RestoreXLPhaseOne(file *xlsx.File) {
+
+	// resets the map
+	BackRepoLinkid_atBckpTime_newID = make(map[uint]uint)
+
+	sh, ok := file.Sheet["Link"]
+	_ = sh
+	if !ok {
+		log.Panic(errors.New("sheet not found"))
+	}
+
+	// log.Println("Max row is", sh.MaxRow)
+	err := sh.ForEachRow(backRepoLink.rowVisitorLink)
+	if err != nil {
+		log.Panic("Err=", err)
+	}
+}
+
+func (backRepoLink *BackRepoLinkStruct) rowVisitorLink(row *xlsx.Row) error {
+
+	log.Printf("row line %d\n", row.GetCoordinate())
+	log.Println(row)
+
+	// skip first line
+	if row.GetCoordinate() > 0 {
+		var linkWOP LinkWOP
+		row.ReadStruct(&linkWOP)
+
+		// add the unmarshalled struct to the stage
+		linkDB := new(LinkDB)
+		linkDB.CopyBasicFieldsFromLinkWOP(&linkWOP)
+
+		linkDB_ID_atBackupTime := linkDB.ID
+		linkDB.ID = 0
+		query := backRepoLink.db.Create(linkDB)
+		if query.Error != nil {
+			log.Panic(query.Error)
+		}
+		(*backRepoLink.Map_LinkDBID_LinkDB)[linkDB.ID] = linkDB
+		BackRepoLinkid_atBckpTime_newID[linkDB_ID_atBackupTime] = linkDB.ID
+	}
+	return nil
 }
 
 // RestorePhaseOne read the file "LinkDB.json" in dirPath that stores an array

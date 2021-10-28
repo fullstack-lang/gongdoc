@@ -45,6 +45,7 @@ type ClassshapeAPI struct {
 // reverse pointers of slice of poitners to Struct
 type ClassshapePointersEnconding struct {
 	// insertion for pointer fields encoding declaration
+
 	// field Position is a pointer to another Struct (optional or 0..1)
 	// This field is generated into another field to enable AS ONE association
 	PositionID sql.NullInt64
@@ -66,6 +67,7 @@ type ClassshapeDB struct {
 	gorm.Model
 
 	// insertion for basic fields declaration
+
 	// Declation for basic field classshapeDB.Name {{BasicKind}} (to be completed)
 	Name_Data sql.NullString
 
@@ -80,7 +82,6 @@ type ClassshapeDB struct {
 
 	// Declation for basic field classshapeDB.ClassshapeTargetType {{BasicKind}} (to be completed)
 	ClassshapeTargetType_Data sql.NullString
-
 	// encoding of pointers
 	ClassshapePointersEnconding
 }
@@ -98,19 +99,19 @@ type ClassshapeDBResponse struct {
 // ClassshapeWOP is a Classshape without pointers (WOP is an acronym for "Without Pointers")
 // it holds the same basic fields but pointers are encoded into uint
 type ClassshapeWOP struct {
-	ID int
+	ID int `xlsx:"0"`
 
 	// insertion for WOP basic fields
 
-	Name string
+	Name string `xlsx:"1"`
 
-	Structname string
+	Structname string `xlsx:"2"`
 
-	Width float64
+	Width float64 `xlsx:"3"`
 
-	Heigth float64
+	Heigth float64 `xlsx:"4"`
 
-	ClassshapeTargetType models.ClassshapeTargetType
+	ClassshapeTargetType models.ClassshapeTargetType `xlsx:"5"`
 	// insertion for WOP pointer fields
 }
 
@@ -507,6 +508,7 @@ func (backRepo *BackRepoStruct) CheckoutClassshape(classshape *models.Classshape
 // CopyBasicFieldsFromClassshape
 func (classshapeDB *ClassshapeDB) CopyBasicFieldsFromClassshape(classshape *models.Classshape) {
 	// insertion point for fields commit
+
 	classshapeDB.Name_Data.String = classshape.Name
 	classshapeDB.Name_Data.Valid = true
 
@@ -521,12 +523,12 @@ func (classshapeDB *ClassshapeDB) CopyBasicFieldsFromClassshape(classshape *mode
 
 	classshapeDB.ClassshapeTargetType_Data.String = string(classshape.ClassshapeTargetType)
 	classshapeDB.ClassshapeTargetType_Data.Valid = true
-
 }
 
 // CopyBasicFieldsFromClassshapeWOP
 func (classshapeDB *ClassshapeDB) CopyBasicFieldsFromClassshapeWOP(classshape *ClassshapeWOP) {
 	// insertion point for fields commit
+
 	classshapeDB.Name_Data.String = classshape.Name
 	classshapeDB.Name_Data.Valid = true
 
@@ -541,7 +543,6 @@ func (classshapeDB *ClassshapeDB) CopyBasicFieldsFromClassshapeWOP(classshape *C
 
 	classshapeDB.ClassshapeTargetType_Data.String = string(classshape.ClassshapeTargetType)
 	classshapeDB.ClassshapeTargetType_Data.Valid = true
-
 }
 
 // CopyBasicFieldsToClassshape
@@ -623,6 +624,51 @@ func (backRepoClassshape *BackRepoClassshapeStruct) BackupXL(file *xlsx.File) {
 		row := sh.AddRow()
 		row.WriteStruct(&classshapeWOP, -1)
 	}
+}
+
+// RestoreXL from the "Classshape" sheet all ClassshapeDB instances
+func (backRepoClassshape *BackRepoClassshapeStruct) RestoreXLPhaseOne(file *xlsx.File) {
+
+	// resets the map
+	BackRepoClassshapeid_atBckpTime_newID = make(map[uint]uint)
+
+	sh, ok := file.Sheet["Classshape"]
+	_ = sh
+	if !ok {
+		log.Panic(errors.New("sheet not found"))
+	}
+
+	// log.Println("Max row is", sh.MaxRow)
+	err := sh.ForEachRow(backRepoClassshape.rowVisitorClassshape)
+	if err != nil {
+		log.Panic("Err=", err)
+	}
+}
+
+func (backRepoClassshape *BackRepoClassshapeStruct) rowVisitorClassshape(row *xlsx.Row) error {
+
+	log.Printf("row line %d\n", row.GetCoordinate())
+	log.Println(row)
+
+	// skip first line
+	if row.GetCoordinate() > 0 {
+		var classshapeWOP ClassshapeWOP
+		row.ReadStruct(&classshapeWOP)
+
+		// add the unmarshalled struct to the stage
+		classshapeDB := new(ClassshapeDB)
+		classshapeDB.CopyBasicFieldsFromClassshapeWOP(&classshapeWOP)
+
+		classshapeDB_ID_atBackupTime := classshapeDB.ID
+		classshapeDB.ID = 0
+		query := backRepoClassshape.db.Create(classshapeDB)
+		if query.Error != nil {
+			log.Panic(query.Error)
+		}
+		(*backRepoClassshape.Map_ClassshapeDBID_ClassshapeDB)[classshapeDB.ID] = classshapeDB
+		BackRepoClassshapeid_atBckpTime_newID[classshapeDB_ID_atBackupTime] = classshapeDB.ID
+	}
+	return nil
 }
 
 // RestorePhaseOne read the file "ClassshapeDB.json" in dirPath that stores an array

@@ -45,6 +45,7 @@ type ClassdiagramAPI struct {
 // reverse pointers of slice of poitners to Struct
 type ClassdiagramPointersEnconding struct {
 	// insertion for pointer fields encoding declaration
+
 	// Implementation of a reverse ID for field Pkgelt{}.Classdiagrams []*Classdiagram
 	Pkgelt_ClassdiagramsDBID sql.NullInt64
 
@@ -62,9 +63,9 @@ type ClassdiagramDB struct {
 	gorm.Model
 
 	// insertion for basic fields declaration
+
 	// Declation for basic field classdiagramDB.Name {{BasicKind}} (to be completed)
 	Name_Data sql.NullString
-
 	// encoding of pointers
 	ClassdiagramPointersEnconding
 }
@@ -82,11 +83,11 @@ type ClassdiagramDBResponse struct {
 // ClassdiagramWOP is a Classdiagram without pointers (WOP is an acronym for "Without Pointers")
 // it holds the same basic fields but pointers are encoded into uint
 type ClassdiagramWOP struct {
-	ID int
+	ID int `xlsx:"0"`
 
 	// insertion for WOP basic fields
 
-	Name string
+	Name string `xlsx:"1"`
 	// insertion for WOP pointer fields
 }
 
@@ -420,17 +421,17 @@ func (backRepo *BackRepoStruct) CheckoutClassdiagram(classdiagram *models.Classd
 // CopyBasicFieldsFromClassdiagram
 func (classdiagramDB *ClassdiagramDB) CopyBasicFieldsFromClassdiagram(classdiagram *models.Classdiagram) {
 	// insertion point for fields commit
+
 	classdiagramDB.Name_Data.String = classdiagram.Name
 	classdiagramDB.Name_Data.Valid = true
-
 }
 
 // CopyBasicFieldsFromClassdiagramWOP
 func (classdiagramDB *ClassdiagramDB) CopyBasicFieldsFromClassdiagramWOP(classdiagram *ClassdiagramWOP) {
 	// insertion point for fields commit
+
 	classdiagramDB.Name_Data.String = classdiagram.Name
 	classdiagramDB.Name_Data.Valid = true
-
 }
 
 // CopyBasicFieldsToClassdiagram
@@ -504,6 +505,51 @@ func (backRepoClassdiagram *BackRepoClassdiagramStruct) BackupXL(file *xlsx.File
 		row := sh.AddRow()
 		row.WriteStruct(&classdiagramWOP, -1)
 	}
+}
+
+// RestoreXL from the "Classdiagram" sheet all ClassdiagramDB instances
+func (backRepoClassdiagram *BackRepoClassdiagramStruct) RestoreXLPhaseOne(file *xlsx.File) {
+
+	// resets the map
+	BackRepoClassdiagramid_atBckpTime_newID = make(map[uint]uint)
+
+	sh, ok := file.Sheet["Classdiagram"]
+	_ = sh
+	if !ok {
+		log.Panic(errors.New("sheet not found"))
+	}
+
+	// log.Println("Max row is", sh.MaxRow)
+	err := sh.ForEachRow(backRepoClassdiagram.rowVisitorClassdiagram)
+	if err != nil {
+		log.Panic("Err=", err)
+	}
+}
+
+func (backRepoClassdiagram *BackRepoClassdiagramStruct) rowVisitorClassdiagram(row *xlsx.Row) error {
+
+	log.Printf("row line %d\n", row.GetCoordinate())
+	log.Println(row)
+
+	// skip first line
+	if row.GetCoordinate() > 0 {
+		var classdiagramWOP ClassdiagramWOP
+		row.ReadStruct(&classdiagramWOP)
+
+		// add the unmarshalled struct to the stage
+		classdiagramDB := new(ClassdiagramDB)
+		classdiagramDB.CopyBasicFieldsFromClassdiagramWOP(&classdiagramWOP)
+
+		classdiagramDB_ID_atBackupTime := classdiagramDB.ID
+		classdiagramDB.ID = 0
+		query := backRepoClassdiagram.db.Create(classdiagramDB)
+		if query.Error != nil {
+			log.Panic(query.Error)
+		}
+		(*backRepoClassdiagram.Map_ClassdiagramDBID_ClassdiagramDB)[classdiagramDB.ID] = classdiagramDB
+		BackRepoClassdiagramid_atBckpTime_newID[classdiagramDB_ID_atBackupTime] = classdiagramDB.ID
+	}
+	return nil
 }
 
 // RestorePhaseOne read the file "ClassdiagramDB.json" in dirPath that stores an array

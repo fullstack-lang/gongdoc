@@ -45,6 +45,7 @@ type FieldAPI struct {
 // reverse pointers of slice of poitners to Struct
 type FieldPointersEnconding struct {
 	// insertion for pointer fields encoding declaration
+
 	// Implementation of a reverse ID for field Classshape{}.Fields []*Field
 	Classshape_FieldsDBID sql.NullInt64
 
@@ -62,6 +63,7 @@ type FieldDB struct {
 	gorm.Model
 
 	// insertion for basic fields declaration
+
 	// Declation for basic field fieldDB.Name {{BasicKind}} (to be completed)
 	Name_Data sql.NullString
 
@@ -76,7 +78,6 @@ type FieldDB struct {
 
 	// Declation for basic field fieldDB.Fieldtypename {{BasicKind}} (to be completed)
 	Fieldtypename_Data sql.NullString
-
 	// encoding of pointers
 	FieldPointersEnconding
 }
@@ -94,19 +95,19 @@ type FieldDBResponse struct {
 // FieldWOP is a Field without pointers (WOP is an acronym for "Without Pointers")
 // it holds the same basic fields but pointers are encoded into uint
 type FieldWOP struct {
-	ID int
+	ID int `xlsx:"0"`
 
 	// insertion for WOP basic fields
 
-	Name string
+	Name string `xlsx:"1"`
 
-	Fieldname string
+	Fieldname string `xlsx:"2"`
 
-	FieldTypeAsString string
+	FieldTypeAsString string `xlsx:"3"`
 
-	Structname string
+	Structname string `xlsx:"4"`
 
-	Fieldtypename string
+	Fieldtypename string `xlsx:"5"`
 	// insertion for WOP pointer fields
 }
 
@@ -398,6 +399,7 @@ func (backRepo *BackRepoStruct) CheckoutField(field *models.Field) {
 // CopyBasicFieldsFromField
 func (fieldDB *FieldDB) CopyBasicFieldsFromField(field *models.Field) {
 	// insertion point for fields commit
+
 	fieldDB.Name_Data.String = field.Name
 	fieldDB.Name_Data.Valid = true
 
@@ -412,12 +414,12 @@ func (fieldDB *FieldDB) CopyBasicFieldsFromField(field *models.Field) {
 
 	fieldDB.Fieldtypename_Data.String = field.Fieldtypename
 	fieldDB.Fieldtypename_Data.Valid = true
-
 }
 
 // CopyBasicFieldsFromFieldWOP
 func (fieldDB *FieldDB) CopyBasicFieldsFromFieldWOP(field *FieldWOP) {
 	// insertion point for fields commit
+
 	fieldDB.Name_Data.String = field.Name
 	fieldDB.Name_Data.Valid = true
 
@@ -432,7 +434,6 @@ func (fieldDB *FieldDB) CopyBasicFieldsFromFieldWOP(field *FieldWOP) {
 
 	fieldDB.Fieldtypename_Data.String = field.Fieldtypename
 	fieldDB.Fieldtypename_Data.Valid = true
-
 }
 
 // CopyBasicFieldsToField
@@ -514,6 +515,51 @@ func (backRepoField *BackRepoFieldStruct) BackupXL(file *xlsx.File) {
 		row := sh.AddRow()
 		row.WriteStruct(&fieldWOP, -1)
 	}
+}
+
+// RestoreXL from the "Field" sheet all FieldDB instances
+func (backRepoField *BackRepoFieldStruct) RestoreXLPhaseOne(file *xlsx.File) {
+
+	// resets the map
+	BackRepoFieldid_atBckpTime_newID = make(map[uint]uint)
+
+	sh, ok := file.Sheet["Field"]
+	_ = sh
+	if !ok {
+		log.Panic(errors.New("sheet not found"))
+	}
+
+	// log.Println("Max row is", sh.MaxRow)
+	err := sh.ForEachRow(backRepoField.rowVisitorField)
+	if err != nil {
+		log.Panic("Err=", err)
+	}
+}
+
+func (backRepoField *BackRepoFieldStruct) rowVisitorField(row *xlsx.Row) error {
+
+	log.Printf("row line %d\n", row.GetCoordinate())
+	log.Println(row)
+
+	// skip first line
+	if row.GetCoordinate() > 0 {
+		var fieldWOP FieldWOP
+		row.ReadStruct(&fieldWOP)
+
+		// add the unmarshalled struct to the stage
+		fieldDB := new(FieldDB)
+		fieldDB.CopyBasicFieldsFromFieldWOP(&fieldWOP)
+
+		fieldDB_ID_atBackupTime := fieldDB.ID
+		fieldDB.ID = 0
+		query := backRepoField.db.Create(fieldDB)
+		if query.Error != nil {
+			log.Panic(query.Error)
+		}
+		(*backRepoField.Map_FieldDBID_FieldDB)[fieldDB.ID] = fieldDB
+		BackRepoFieldid_atBckpTime_newID[fieldDB_ID_atBackupTime] = fieldDB.ID
+	}
+	return nil
 }
 
 // RestorePhaseOne read the file "FieldDB.json" in dirPath that stores an array

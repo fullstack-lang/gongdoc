@@ -1895,13 +1895,11 @@ responses:
         format: uint64
         type: integer
       Name_Data:
-        description: |-
-          insertion for basic fields declaration
-          Declation for basic field classdiagramDB.Name {{BasicKind}} (to be completed)
+        description: Declation for basic field classdiagramDB.Name {{BasicKind}} (to
+          be completed)
       Pkgelt_ClassdiagramsDBID:
-        description: |-
-          insertion for pointer fields encoding declaration
-          Implementation of a reverse ID for field Pkgelt{}.Classdiagrams []*Classdiagram
+        description: Implementation of a reverse ID for field Pkgelt{}.Classdiagrams
+          []*Classdiagram
       Pkgelt_ClassdiagramsDBID_Index:
         description: implementation of the index of the withing the slice
       UpdatedAt:
@@ -1937,12 +1935,10 @@ responses:
         format: uint64
         type: integer
       Name_Data:
-        description: |-
-          insertion for basic fields declaration
-          Declation for basic field classshapeDB.Name {{BasicKind}} (to be completed)
+        description: Declation for basic field classshapeDB.Name {{BasicKind}} (to
+          be completed)
       PositionID:
         description: |-
-          insertion for pointer fields encoding declaration
           field Position is a pointer to another Struct (optional or 0..1)
           This field is generated into another field to enable AS ONE association
       Structname_Data:
@@ -1966,9 +1962,8 @@ responses:
     description: FieldDBResponse provides response
     headers:
       Classshape_FieldsDBID:
-        description: |-
-          insertion for pointer fields encoding declaration
-          Implementation of a reverse ID for field Classshape{}.Fields []*Field
+        description: Implementation of a reverse ID for field Classshape{}.Fields
+          []*Field
       Classshape_FieldsDBID_Index:
         description: implementation of the index of the withing the slice
       CreatedAt:
@@ -1988,9 +1983,7 @@ responses:
         format: uint64
         type: integer
       Name_Data:
-        description: |-
-          insertion for basic fields declaration
-          Declation for basic field fieldDB.Name {{BasicKind}} (to be completed)
+        description: Declation for basic field fieldDB.Name {{BasicKind}} (to be completed)
       Structname_Data:
         description: Declation for basic field fieldDB.Structname {{BasicKind}} (to
           be completed)
@@ -2048,9 +2041,8 @@ responses:
         format: uint64
         type: integer
       Name_Data:
-        description: |-
-          insertion for basic fields declaration
-          Declation for basic field gongdoccommandDB.Name {{BasicKind}} (to be completed)
+        description: Declation for basic field gongdoccommandDB.Name {{BasicKind}}
+          (to be completed)
       PositionX_Data:
         description: Declation for basic field gongdoccommandDB.PositionX {{BasicKind}}
           (to be completed)
@@ -2085,9 +2077,8 @@ responses:
         format: uint64
         type: integer
       Name_Data:
-        description: |-
-          insertion for basic fields declaration
-          Declation for basic field gongdocstatusDB.Name {{BasicKind}} (to be completed)
+        description: Declation for basic field gongdocstatusDB.Name {{BasicKind}}
+          (to be completed)
       Status_Data:
         description: Declation for basic field gongdocstatusDB.Status {{BasicKind}}
           (to be completed)
@@ -2124,16 +2115,13 @@ responses:
         type: integer
       MiddleverticeID:
         description: |-
-          insertion for pointer fields encoding declaration
           field Middlevertice is a pointer to another Struct (optional or 0..1)
           This field is generated into another field to enable AS ONE association
       Multiplicity_Data:
         description: Declation for basic field linkDB.Multiplicity {{BasicKind}} (to
           be completed)
       Name_Data:
-        description: |-
-          insertion for basic fields declaration
-          Declation for basic field linkDB.Name {{BasicKind}} (to be completed)
+        description: Declation for basic field linkDB.Name {{BasicKind}} (to be completed)
       Structname_Data:
         description: Declation for basic field linkDB.Structname {{BasicKind}} (to
           be completed)
@@ -2159,9 +2147,8 @@ responses:
         format: uint64
         type: integer
       Name_Data:
-        description: |-
-          insertion for basic fields declaration
-          Declation for basic field pkgeltDB.Name {{BasicKind}} (to be completed)
+        description: Declation for basic field pkgeltDB.Name {{BasicKind}} (to be
+          completed)
       Path_Data:
         description: Declation for basic field pkgeltDB.Path {{BasicKind}} (to be
           completed)
@@ -2193,9 +2180,7 @@ responses:
         format: date-time
         type: string
       X_Data:
-        description: |-
-          insertion for basic fields declaration
-          Declation for basic field positionDB.X {{BasicKind}} (to be completed)
+        description: Declation for basic field positionDB.X {{BasicKind}} (to be completed)
       Y_Data:
         description: Declation for basic field positionDB.Y {{BasicKind}} (to be completed)
     schema:
@@ -2220,13 +2205,9 @@ responses:
         format: uint64
         type: integer
       Name_Data:
-        description: |-
-          insertion for basic fields declaration
-          Declation for basic field umlscDB.Name {{BasicKind}} (to be completed)
+        description: Declation for basic field umlscDB.Name {{BasicKind}} (to be completed)
       Pkgelt_UmlscsDBID:
-        description: |-
-          insertion for pointer fields encoding declaration
-          Implementation of a reverse ID for field Pkgelt{}.Umlscs []*Umlsc
+        description: Implementation of a reverse ID for field Pkgelt{}.Umlscs []*Umlsc
       Pkgelt_UmlscsDBID_Index:
         description: implementation of the index of the withing the slice
       UpdatedAt:
@@ -2251,13 +2232,10 @@ responses:
         format: uint64
         type: integer
       Name_Data:
-        description: |-
-          insertion for basic fields declaration
-          Declation for basic field umlstateDB.Name {{BasicKind}} (to be completed)
+        description: Declation for basic field umlstateDB.Name {{BasicKind}} (to be
+          completed)
       Umlsc_StatesDBID:
-        description: |-
-          insertion for pointer fields encoding declaration
-          Implementation of a reverse ID for field Umlsc{}.States []*UmlState
+        description: Implementation of a reverse ID for field Umlsc{}.States []*UmlState
       Umlsc_StatesDBID_Index:
         description: implementation of the index of the withing the slice
       UpdatedAt:
@@ -2309,9 +2287,7 @@ responses:
         format: date-time
         type: string
       X_Data:
-        description: |-
-          insertion for basic fields declaration
-          Declation for basic field verticeDB.X {{BasicKind}} (to be completed)
+        description: Declation for basic field verticeDB.X {{BasicKind}} (to be completed)
       Y_Data:
         description: Declation for basic field verticeDB.Y {{BasicKind}} (to be completed)
     schema:

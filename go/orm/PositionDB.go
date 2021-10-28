@@ -57,6 +57,7 @@ type PositionDB struct {
 	gorm.Model
 
 	// insertion for basic fields declaration
+
 	// Declation for basic field positionDB.X {{BasicKind}} (to be completed)
 	X_Data sql.NullFloat64
 
@@ -65,7 +66,6 @@ type PositionDB struct {
 
 	// Declation for basic field positionDB.Name {{BasicKind}} (to be completed)
 	Name_Data sql.NullString
-
 	// encoding of pointers
 	PositionPointersEnconding
 }
@@ -83,15 +83,15 @@ type PositionDBResponse struct {
 // PositionWOP is a Position without pointers (WOP is an acronym for "Without Pointers")
 // it holds the same basic fields but pointers are encoded into uint
 type PositionWOP struct {
-	ID int
+	ID int `xlsx:"0"`
 
 	// insertion for WOP basic fields
 
-	X float64
+	X float64 `xlsx:"1"`
 
-	Y float64
+	Y float64 `xlsx:"2"`
 
-	Name string
+	Name string `xlsx:"3"`
 	// insertion for WOP pointer fields
 }
 
@@ -381,6 +381,7 @@ func (backRepo *BackRepoStruct) CheckoutPosition(position *models.Position) {
 // CopyBasicFieldsFromPosition
 func (positionDB *PositionDB) CopyBasicFieldsFromPosition(position *models.Position) {
 	// insertion point for fields commit
+
 	positionDB.X_Data.Float64 = position.X
 	positionDB.X_Data.Valid = true
 
@@ -389,12 +390,12 @@ func (positionDB *PositionDB) CopyBasicFieldsFromPosition(position *models.Posit
 
 	positionDB.Name_Data.String = position.Name
 	positionDB.Name_Data.Valid = true
-
 }
 
 // CopyBasicFieldsFromPositionWOP
 func (positionDB *PositionDB) CopyBasicFieldsFromPositionWOP(position *PositionWOP) {
 	// insertion point for fields commit
+
 	positionDB.X_Data.Float64 = position.X
 	positionDB.X_Data.Valid = true
 
@@ -403,7 +404,6 @@ func (positionDB *PositionDB) CopyBasicFieldsFromPositionWOP(position *PositionW
 
 	positionDB.Name_Data.String = position.Name
 	positionDB.Name_Data.Valid = true
-
 }
 
 // CopyBasicFieldsToPosition
@@ -481,6 +481,51 @@ func (backRepoPosition *BackRepoPositionStruct) BackupXL(file *xlsx.File) {
 		row := sh.AddRow()
 		row.WriteStruct(&positionWOP, -1)
 	}
+}
+
+// RestoreXL from the "Position" sheet all PositionDB instances
+func (backRepoPosition *BackRepoPositionStruct) RestoreXLPhaseOne(file *xlsx.File) {
+
+	// resets the map
+	BackRepoPositionid_atBckpTime_newID = make(map[uint]uint)
+
+	sh, ok := file.Sheet["Position"]
+	_ = sh
+	if !ok {
+		log.Panic(errors.New("sheet not found"))
+	}
+
+	// log.Println("Max row is", sh.MaxRow)
+	err := sh.ForEachRow(backRepoPosition.rowVisitorPosition)
+	if err != nil {
+		log.Panic("Err=", err)
+	}
+}
+
+func (backRepoPosition *BackRepoPositionStruct) rowVisitorPosition(row *xlsx.Row) error {
+
+	log.Printf("row line %d\n", row.GetCoordinate())
+	log.Println(row)
+
+	// skip first line
+	if row.GetCoordinate() > 0 {
+		var positionWOP PositionWOP
+		row.ReadStruct(&positionWOP)
+
+		// add the unmarshalled struct to the stage
+		positionDB := new(PositionDB)
+		positionDB.CopyBasicFieldsFromPositionWOP(&positionWOP)
+
+		positionDB_ID_atBackupTime := positionDB.ID
+		positionDB.ID = 0
+		query := backRepoPosition.db.Create(positionDB)
+		if query.Error != nil {
+			log.Panic(query.Error)
+		}
+		(*backRepoPosition.Map_PositionDBID_PositionDB)[positionDB.ID] = positionDB
+		BackRepoPositionid_atBckpTime_newID[positionDB_ID_atBackupTime] = positionDB.ID
+	}
+	return nil
 }
 
 // RestorePhaseOne read the file "PositionDB.json" in dirPath that stores an array

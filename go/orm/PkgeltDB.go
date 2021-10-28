@@ -57,12 +57,12 @@ type PkgeltDB struct {
 	gorm.Model
 
 	// insertion for basic fields declaration
+
 	// Declation for basic field pkgeltDB.Name {{BasicKind}} (to be completed)
 	Name_Data sql.NullString
 
 	// Declation for basic field pkgeltDB.Path {{BasicKind}} (to be completed)
 	Path_Data sql.NullString
-
 	// encoding of pointers
 	PkgeltPointersEnconding
 }
@@ -80,13 +80,13 @@ type PkgeltDBResponse struct {
 // PkgeltWOP is a Pkgelt without pointers (WOP is an acronym for "Without Pointers")
 // it holds the same basic fields but pointers are encoded into uint
 type PkgeltWOP struct {
-	ID int
+	ID int `xlsx:"0"`
 
 	// insertion for WOP basic fields
 
-	Name string
+	Name string `xlsx:"1"`
 
-	Path string
+	Path string `xlsx:"2"`
 	// insertion for WOP pointer fields
 }
 
@@ -467,23 +467,23 @@ func (backRepo *BackRepoStruct) CheckoutPkgelt(pkgelt *models.Pkgelt) {
 // CopyBasicFieldsFromPkgelt
 func (pkgeltDB *PkgeltDB) CopyBasicFieldsFromPkgelt(pkgelt *models.Pkgelt) {
 	// insertion point for fields commit
+
 	pkgeltDB.Name_Data.String = pkgelt.Name
 	pkgeltDB.Name_Data.Valid = true
 
 	pkgeltDB.Path_Data.String = pkgelt.Path
 	pkgeltDB.Path_Data.Valid = true
-
 }
 
 // CopyBasicFieldsFromPkgeltWOP
 func (pkgeltDB *PkgeltDB) CopyBasicFieldsFromPkgeltWOP(pkgelt *PkgeltWOP) {
 	// insertion point for fields commit
+
 	pkgeltDB.Name_Data.String = pkgelt.Name
 	pkgeltDB.Name_Data.Valid = true
 
 	pkgeltDB.Path_Data.String = pkgelt.Path
 	pkgeltDB.Path_Data.Valid = true
-
 }
 
 // CopyBasicFieldsToPkgelt
@@ -559,6 +559,51 @@ func (backRepoPkgelt *BackRepoPkgeltStruct) BackupXL(file *xlsx.File) {
 		row := sh.AddRow()
 		row.WriteStruct(&pkgeltWOP, -1)
 	}
+}
+
+// RestoreXL from the "Pkgelt" sheet all PkgeltDB instances
+func (backRepoPkgelt *BackRepoPkgeltStruct) RestoreXLPhaseOne(file *xlsx.File) {
+
+	// resets the map
+	BackRepoPkgeltid_atBckpTime_newID = make(map[uint]uint)
+
+	sh, ok := file.Sheet["Pkgelt"]
+	_ = sh
+	if !ok {
+		log.Panic(errors.New("sheet not found"))
+	}
+
+	// log.Println("Max row is", sh.MaxRow)
+	err := sh.ForEachRow(backRepoPkgelt.rowVisitorPkgelt)
+	if err != nil {
+		log.Panic("Err=", err)
+	}
+}
+
+func (backRepoPkgelt *BackRepoPkgeltStruct) rowVisitorPkgelt(row *xlsx.Row) error {
+
+	log.Printf("row line %d\n", row.GetCoordinate())
+	log.Println(row)
+
+	// skip first line
+	if row.GetCoordinate() > 0 {
+		var pkgeltWOP PkgeltWOP
+		row.ReadStruct(&pkgeltWOP)
+
+		// add the unmarshalled struct to the stage
+		pkgeltDB := new(PkgeltDB)
+		pkgeltDB.CopyBasicFieldsFromPkgeltWOP(&pkgeltWOP)
+
+		pkgeltDB_ID_atBackupTime := pkgeltDB.ID
+		pkgeltDB.ID = 0
+		query := backRepoPkgelt.db.Create(pkgeltDB)
+		if query.Error != nil {
+			log.Panic(query.Error)
+		}
+		(*backRepoPkgelt.Map_PkgeltDBID_PkgeltDB)[pkgeltDB.ID] = pkgeltDB
+		BackRepoPkgeltid_atBckpTime_newID[pkgeltDB_ID_atBackupTime] = pkgeltDB.ID
+	}
+	return nil
 }
 
 // RestorePhaseOne read the file "PkgeltDB.json" in dirPath that stores an array

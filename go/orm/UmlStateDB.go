@@ -45,6 +45,7 @@ type UmlStateAPI struct {
 // reverse pointers of slice of poitners to Struct
 type UmlStatePointersEnconding struct {
 	// insertion for pointer fields encoding declaration
+
 	// Implementation of a reverse ID for field Umlsc{}.States []*UmlState
 	Umlsc_StatesDBID sql.NullInt64
 
@@ -62,6 +63,7 @@ type UmlStateDB struct {
 	gorm.Model
 
 	// insertion for basic fields declaration
+
 	// Declation for basic field umlstateDB.Name {{BasicKind}} (to be completed)
 	Name_Data sql.NullString
 
@@ -70,7 +72,6 @@ type UmlStateDB struct {
 
 	// Declation for basic field umlstateDB.Y {{BasicKind}} (to be completed)
 	Y_Data sql.NullFloat64
-
 	// encoding of pointers
 	UmlStatePointersEnconding
 }
@@ -88,15 +89,15 @@ type UmlStateDBResponse struct {
 // UmlStateWOP is a UmlState without pointers (WOP is an acronym for "Without Pointers")
 // it holds the same basic fields but pointers are encoded into uint
 type UmlStateWOP struct {
-	ID int
+	ID int `xlsx:"0"`
 
 	// insertion for WOP basic fields
 
-	Name string
+	Name string `xlsx:"1"`
 
-	X float64
+	X float64 `xlsx:"2"`
 
-	Y float64
+	Y float64 `xlsx:"3"`
 	// insertion for WOP pointer fields
 }
 
@@ -386,6 +387,7 @@ func (backRepo *BackRepoStruct) CheckoutUmlState(umlstate *models.UmlState) {
 // CopyBasicFieldsFromUmlState
 func (umlstateDB *UmlStateDB) CopyBasicFieldsFromUmlState(umlstate *models.UmlState) {
 	// insertion point for fields commit
+
 	umlstateDB.Name_Data.String = umlstate.Name
 	umlstateDB.Name_Data.Valid = true
 
@@ -394,12 +396,12 @@ func (umlstateDB *UmlStateDB) CopyBasicFieldsFromUmlState(umlstate *models.UmlSt
 
 	umlstateDB.Y_Data.Float64 = umlstate.Y
 	umlstateDB.Y_Data.Valid = true
-
 }
 
 // CopyBasicFieldsFromUmlStateWOP
 func (umlstateDB *UmlStateDB) CopyBasicFieldsFromUmlStateWOP(umlstate *UmlStateWOP) {
 	// insertion point for fields commit
+
 	umlstateDB.Name_Data.String = umlstate.Name
 	umlstateDB.Name_Data.Valid = true
 
@@ -408,7 +410,6 @@ func (umlstateDB *UmlStateDB) CopyBasicFieldsFromUmlStateWOP(umlstate *UmlStateW
 
 	umlstateDB.Y_Data.Float64 = umlstate.Y
 	umlstateDB.Y_Data.Valid = true
-
 }
 
 // CopyBasicFieldsToUmlState
@@ -486,6 +487,51 @@ func (backRepoUmlState *BackRepoUmlStateStruct) BackupXL(file *xlsx.File) {
 		row := sh.AddRow()
 		row.WriteStruct(&umlstateWOP, -1)
 	}
+}
+
+// RestoreXL from the "UmlState" sheet all UmlStateDB instances
+func (backRepoUmlState *BackRepoUmlStateStruct) RestoreXLPhaseOne(file *xlsx.File) {
+
+	// resets the map
+	BackRepoUmlStateid_atBckpTime_newID = make(map[uint]uint)
+
+	sh, ok := file.Sheet["UmlState"]
+	_ = sh
+	if !ok {
+		log.Panic(errors.New("sheet not found"))
+	}
+
+	// log.Println("Max row is", sh.MaxRow)
+	err := sh.ForEachRow(backRepoUmlState.rowVisitorUmlState)
+	if err != nil {
+		log.Panic("Err=", err)
+	}
+}
+
+func (backRepoUmlState *BackRepoUmlStateStruct) rowVisitorUmlState(row *xlsx.Row) error {
+
+	log.Printf("row line %d\n", row.GetCoordinate())
+	log.Println(row)
+
+	// skip first line
+	if row.GetCoordinate() > 0 {
+		var umlstateWOP UmlStateWOP
+		row.ReadStruct(&umlstateWOP)
+
+		// add the unmarshalled struct to the stage
+		umlstateDB := new(UmlStateDB)
+		umlstateDB.CopyBasicFieldsFromUmlStateWOP(&umlstateWOP)
+
+		umlstateDB_ID_atBackupTime := umlstateDB.ID
+		umlstateDB.ID = 0
+		query := backRepoUmlState.db.Create(umlstateDB)
+		if query.Error != nil {
+			log.Panic(query.Error)
+		}
+		(*backRepoUmlState.Map_UmlStateDBID_UmlStateDB)[umlstateDB.ID] = umlstateDB
+		BackRepoUmlStateid_atBckpTime_newID[umlstateDB_ID_atBackupTime] = umlstateDB.ID
+	}
+	return nil
 }
 
 // RestorePhaseOne read the file "UmlStateDB.json" in dirPath that stores an array

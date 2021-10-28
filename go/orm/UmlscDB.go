@@ -45,6 +45,7 @@ type UmlscAPI struct {
 // reverse pointers of slice of poitners to Struct
 type UmlscPointersEnconding struct {
 	// insertion for pointer fields encoding declaration
+
 	// Implementation of a reverse ID for field Pkgelt{}.Umlscs []*Umlsc
 	Pkgelt_UmlscsDBID sql.NullInt64
 
@@ -62,12 +63,12 @@ type UmlscDB struct {
 	gorm.Model
 
 	// insertion for basic fields declaration
+
 	// Declation for basic field umlscDB.Name {{BasicKind}} (to be completed)
 	Name_Data sql.NullString
 
 	// Declation for basic field umlscDB.Activestate {{BasicKind}} (to be completed)
 	Activestate_Data sql.NullString
-
 	// encoding of pointers
 	UmlscPointersEnconding
 }
@@ -85,13 +86,13 @@ type UmlscDBResponse struct {
 // UmlscWOP is a Umlsc without pointers (WOP is an acronym for "Without Pointers")
 // it holds the same basic fields but pointers are encoded into uint
 type UmlscWOP struct {
-	ID int
+	ID int `xlsx:"0"`
 
 	// insertion for WOP basic fields
 
-	Name string
+	Name string `xlsx:"1"`
 
-	Activestate string
+	Activestate string `xlsx:"2"`
 	// insertion for WOP pointer fields
 }
 
@@ -426,23 +427,23 @@ func (backRepo *BackRepoStruct) CheckoutUmlsc(umlsc *models.Umlsc) {
 // CopyBasicFieldsFromUmlsc
 func (umlscDB *UmlscDB) CopyBasicFieldsFromUmlsc(umlsc *models.Umlsc) {
 	// insertion point for fields commit
+
 	umlscDB.Name_Data.String = umlsc.Name
 	umlscDB.Name_Data.Valid = true
 
 	umlscDB.Activestate_Data.String = umlsc.Activestate
 	umlscDB.Activestate_Data.Valid = true
-
 }
 
 // CopyBasicFieldsFromUmlscWOP
 func (umlscDB *UmlscDB) CopyBasicFieldsFromUmlscWOP(umlsc *UmlscWOP) {
 	// insertion point for fields commit
+
 	umlscDB.Name_Data.String = umlsc.Name
 	umlscDB.Name_Data.Valid = true
 
 	umlscDB.Activestate_Data.String = umlsc.Activestate
 	umlscDB.Activestate_Data.Valid = true
-
 }
 
 // CopyBasicFieldsToUmlsc
@@ -518,6 +519,51 @@ func (backRepoUmlsc *BackRepoUmlscStruct) BackupXL(file *xlsx.File) {
 		row := sh.AddRow()
 		row.WriteStruct(&umlscWOP, -1)
 	}
+}
+
+// RestoreXL from the "Umlsc" sheet all UmlscDB instances
+func (backRepoUmlsc *BackRepoUmlscStruct) RestoreXLPhaseOne(file *xlsx.File) {
+
+	// resets the map
+	BackRepoUmlscid_atBckpTime_newID = make(map[uint]uint)
+
+	sh, ok := file.Sheet["Umlsc"]
+	_ = sh
+	if !ok {
+		log.Panic(errors.New("sheet not found"))
+	}
+
+	// log.Println("Max row is", sh.MaxRow)
+	err := sh.ForEachRow(backRepoUmlsc.rowVisitorUmlsc)
+	if err != nil {
+		log.Panic("Err=", err)
+	}
+}
+
+func (backRepoUmlsc *BackRepoUmlscStruct) rowVisitorUmlsc(row *xlsx.Row) error {
+
+	log.Printf("row line %d\n", row.GetCoordinate())
+	log.Println(row)
+
+	// skip first line
+	if row.GetCoordinate() > 0 {
+		var umlscWOP UmlscWOP
+		row.ReadStruct(&umlscWOP)
+
+		// add the unmarshalled struct to the stage
+		umlscDB := new(UmlscDB)
+		umlscDB.CopyBasicFieldsFromUmlscWOP(&umlscWOP)
+
+		umlscDB_ID_atBackupTime := umlscDB.ID
+		umlscDB.ID = 0
+		query := backRepoUmlsc.db.Create(umlscDB)
+		if query.Error != nil {
+			log.Panic(query.Error)
+		}
+		(*backRepoUmlsc.Map_UmlscDBID_UmlscDB)[umlscDB.ID] = umlscDB
+		BackRepoUmlscid_atBckpTime_newID[umlscDB_ID_atBackupTime] = umlscDB.ID
+	}
+	return nil
 }
 
 // RestorePhaseOne read the file "UmlscDB.json" in dirPath that stores an array

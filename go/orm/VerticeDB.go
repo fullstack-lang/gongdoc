@@ -57,6 +57,7 @@ type VerticeDB struct {
 	gorm.Model
 
 	// insertion for basic fields declaration
+
 	// Declation for basic field verticeDB.X {{BasicKind}} (to be completed)
 	X_Data sql.NullFloat64
 
@@ -65,7 +66,6 @@ type VerticeDB struct {
 
 	// Declation for basic field verticeDB.Name {{BasicKind}} (to be completed)
 	Name_Data sql.NullString
-
 	// encoding of pointers
 	VerticePointersEnconding
 }
@@ -83,15 +83,15 @@ type VerticeDBResponse struct {
 // VerticeWOP is a Vertice without pointers (WOP is an acronym for "Without Pointers")
 // it holds the same basic fields but pointers are encoded into uint
 type VerticeWOP struct {
-	ID int
+	ID int `xlsx:"0"`
 
 	// insertion for WOP basic fields
 
-	X float64
+	X float64 `xlsx:"1"`
 
-	Y float64
+	Y float64 `xlsx:"2"`
 
-	Name string
+	Name string `xlsx:"3"`
 	// insertion for WOP pointer fields
 }
 
@@ -381,6 +381,7 @@ func (backRepo *BackRepoStruct) CheckoutVertice(vertice *models.Vertice) {
 // CopyBasicFieldsFromVertice
 func (verticeDB *VerticeDB) CopyBasicFieldsFromVertice(vertice *models.Vertice) {
 	// insertion point for fields commit
+
 	verticeDB.X_Data.Float64 = vertice.X
 	verticeDB.X_Data.Valid = true
 
@@ -389,12 +390,12 @@ func (verticeDB *VerticeDB) CopyBasicFieldsFromVertice(vertice *models.Vertice) 
 
 	verticeDB.Name_Data.String = vertice.Name
 	verticeDB.Name_Data.Valid = true
-
 }
 
 // CopyBasicFieldsFromVerticeWOP
 func (verticeDB *VerticeDB) CopyBasicFieldsFromVerticeWOP(vertice *VerticeWOP) {
 	// insertion point for fields commit
+
 	verticeDB.X_Data.Float64 = vertice.X
 	verticeDB.X_Data.Valid = true
 
@@ -403,7 +404,6 @@ func (verticeDB *VerticeDB) CopyBasicFieldsFromVerticeWOP(vertice *VerticeWOP) {
 
 	verticeDB.Name_Data.String = vertice.Name
 	verticeDB.Name_Data.Valid = true
-
 }
 
 // CopyBasicFieldsToVertice
@@ -481,6 +481,51 @@ func (backRepoVertice *BackRepoVerticeStruct) BackupXL(file *xlsx.File) {
 		row := sh.AddRow()
 		row.WriteStruct(&verticeWOP, -1)
 	}
+}
+
+// RestoreXL from the "Vertice" sheet all VerticeDB instances
+func (backRepoVertice *BackRepoVerticeStruct) RestoreXLPhaseOne(file *xlsx.File) {
+
+	// resets the map
+	BackRepoVerticeid_atBckpTime_newID = make(map[uint]uint)
+
+	sh, ok := file.Sheet["Vertice"]
+	_ = sh
+	if !ok {
+		log.Panic(errors.New("sheet not found"))
+	}
+
+	// log.Println("Max row is", sh.MaxRow)
+	err := sh.ForEachRow(backRepoVertice.rowVisitorVertice)
+	if err != nil {
+		log.Panic("Err=", err)
+	}
+}
+
+func (backRepoVertice *BackRepoVerticeStruct) rowVisitorVertice(row *xlsx.Row) error {
+
+	log.Printf("row line %d\n", row.GetCoordinate())
+	log.Println(row)
+
+	// skip first line
+	if row.GetCoordinate() > 0 {
+		var verticeWOP VerticeWOP
+		row.ReadStruct(&verticeWOP)
+
+		// add the unmarshalled struct to the stage
+		verticeDB := new(VerticeDB)
+		verticeDB.CopyBasicFieldsFromVerticeWOP(&verticeWOP)
+
+		verticeDB_ID_atBackupTime := verticeDB.ID
+		verticeDB.ID = 0
+		query := backRepoVertice.db.Create(verticeDB)
+		if query.Error != nil {
+			log.Panic(query.Error)
+		}
+		(*backRepoVertice.Map_VerticeDBID_VerticeDB)[verticeDB.ID] = verticeDB
+		BackRepoVerticeid_atBckpTime_newID[verticeDB_ID_atBackupTime] = verticeDB.ID
+	}
+	return nil
 }
 
 // RestorePhaseOne read the file "VerticeDB.json" in dirPath that stores an array
