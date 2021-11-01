@@ -231,10 +231,10 @@ export class ClassDiagramComponent implements OnInit, OnDestroy {
               continue;
             }
 
-            let xFrom = fromShape!.get('position').x
-            let yFrom = fromShape!.get('position').y
-            let xTo = toShape.get('position').x
-            let yTo = toShape.get('position').y
+            let xFrom = fromShape!.get('position')!.x
+            let yFrom = fromShape!.get('position')!.y
+            let xTo = toShape.get('position')!.x
+            let yTo = toShape.get('position')!.y
             var vertices = [{ x: (xFrom + yTo) / 2, y: (yFrom + yTo) / 2 }]
 
             if (linkDB.Middlevertice != undefined) {
