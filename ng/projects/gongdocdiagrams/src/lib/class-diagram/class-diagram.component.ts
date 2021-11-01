@@ -10,7 +10,6 @@ import * as gong from 'gong'
 import { newUmlClassShape } from './newUmlClassShape'
 import { ClassdiagramContextSubject, ClassdiagramContext } from '../diagram-displayed-gongstruct'
 import { ClassshapeDB, LinkDB } from 'gongdoc';
-import { Model } from 'backbone';
 
 @Component({
   selector: 'lib-class-diagram',
