@@ -119,6 +119,16 @@
 			"group": "build"
 		},
 		{
+			"label": "00 - go mod vendor",
+			"type": "shell",
+			"command": "go",
+			"args": [
+				"mod",
+				"vendor"
+			],
+			"group": "build"
+		},
+		{
 			"label": "00 - go get -d github.com/fullstack-lang/gong@HEAD",
 			"type": "shell",
 			"group": "build",
