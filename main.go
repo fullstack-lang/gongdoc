@@ -21,6 +21,8 @@ import (
 	gong_controllers "github.com/fullstack-lang/gong/go/controllers"
 	gong_models "github.com/fullstack-lang/gong/go/models"
 	gong_orm "github.com/fullstack-lang/gong/go/orm"
+
+	_ "github.com/fullstack-lang/gong/ng"
 )
 
 var (
