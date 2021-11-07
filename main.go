@@ -1,41 +1,69 @@
 package main
 
 import (
-	"embed"
 	"flag"
-	"fmt"
-	"io/fs"
 	"log"
-	"net/http"
 	"os"
-	"path/filepath"
+	"fmt"
+	"embed"
+	"io/fs"
+	"net/http"
 
 	"github.com/gin-contrib/cors"
 	"github.com/gin-contrib/static"
 	"github.com/gin-gonic/gin"
 
-	gongdoc_controllers "github.com/fullstack-lang/gongdoc/go/controllers"
-	gongdoc_models "github.com/fullstack-lang/gongdoc/go/models"
-	gongdoc_orm "github.com/fullstack-lang/gongdoc/go/orm"
-
-	gong_controllers "github.com/fullstack-lang/gong/go/controllers"
-	gong_models "github.com/fullstack-lang/gong/go/models"
-	gong_orm "github.com/fullstack-lang/gong/go/orm"
-
-	_ "github.com/fullstack-lang/gong/ng"
+	"github.com/fullstack-lang/gongdoc/go/controllers"
+	"github.com/fullstack-lang/gongdoc/go/orm"
 )
 
 var (
-	logBBFlag = flag.Bool("logDB", false, "log mode for db")
-
-	genDefaultDiagramFlag = flag.Bool("genDefaultDiagram", false, "generate default diagram")
-
-	svg = flag.Bool("svg", false, "generate svg output and exits")
-
+	logDBFlag = flag.Bool("logDB", false, "log mode for db")
 	logGINFlag = flag.Bool("logGIN", false, "log mode for gin")
-
-	pkgPath = flag.String("pkgPath", "go/models", "path to the models package in order to reveal gong elements in the package")
+	apiFlag   = flag.Bool("api", false, "it true, use api controllers instead of default controllers")
 )
+
+func main() {
+
+	
+	log.SetPrefix("gongdoc: ")
+	log.SetFlags(0)
+	
+	// parse program arguments
+	flag.Parse()
+
+	// setup controlers
+	if !*logGINFlag {
+		myfile, _ := os.Create("/tmp/server.log")
+		gin.DefaultWriter = myfile
+	}
+	r := gin.Default()
+	r.Use(cors.Default())
+
+	// setup GORM
+	db := orm.SetupModels(*logDBFlag, "./test.db")
+	dbDB, err := db.DB()
+
+	// since gongsim is a multi threaded application. It is important to set up
+	// only one open connexion at a time
+	if err != nil {
+		panic("cannot access DB of db" + err.Error())
+	}
+	dbDB.SetMaxOpenConns(1)
+
+	controllers.RegisterControllers(r)
+
+	// provide the static route for the angular pages
+	r.Use(static.Serve("/", EmbedFolder(ng, "ng/dist/ng")))
+	r.NoRoute(func(c *gin.Context) {
+		fmt.Println(c.Request.URL.Path, "doesn't exists, redirect on /")
+		c.Redirect(http.StatusMovedPermanently, "/")
+		c.Abort()
+	})
+
+	log.Printf("Server ready serve on localhost:8080")
+	r.Run()
+}
 
 //go:embed ng/dist/ng
 var ng embed.FS
@@ -57,77 +85,4 @@ func EmbedFolder(fsEmbed embed.FS, targetPath string) static.ServeFileSystem {
 	return embedFileSystem{
 		FileSystem: http.FS(fsys),
 	}
-}
-
-func main() {
-	log.SetPrefix("gongdoc: ")
-	log.SetFlags(0)
-	flag.Parse()
-	if len(flag.Args()) > 1 {
-		log.Fatal("too many non-flag arguments to the gongdoc command")
-	}
-	if len(flag.Args()) == 1 {
-		*pkgPath = flag.Arg(0)
-	}
-
-	// setup GORM
-	gongdoc_orm.SetupModels(*logBBFlag, "file:memdb1?mode=memory&cache=shared")
-	gong_orm.SetupModels(*logBBFlag, "file:memdb2?mode=memory&cache=shared")
-
-	// setup controlers
-	if !*logGINFlag {
-		myfile, _ := os.Create("/tmp/server.log")
-		gin.DefaultWriter = myfile
-	}
-
-	// setup controlers
-	r := gin.Default()
-	r.Use(cors.Default())
-
-	// load package to analyse
-	modelPkg := &gong_models.ModelPkg{}
-
-	// compute absolute path
-	absPkgPath, _ := filepath.Abs(*pkgPath)
-	*pkgPath = absPkgPath
-	diagramPkgPath := filepath.Join(*pkgPath, "../diagrams")
-
-	gong_models.Walk(*pkgPath, modelPkg)
-	modelPkg.SerializeToStage()
-	gong_models.Stage.Commit()
-
-	if *genDefaultDiagramFlag {
-		log.Printf("Generating default diagram")
-
-		// generates default UML diagrams
-		gongdoc_models.GenGoDefaultDiagram(modelPkg, *pkgPath)
-		return
-	}
-
-	gongdoc_controllers.RegisterControllers(r)
-	gong_controllers.RegisterControllers(r)
-
-	r.Use(static.Serve("/", EmbedFolder(ng, "ng/dist/ng")))
-	r.NoRoute(func(c *gin.Context) {
-		fmt.Println(c.Request.URL.Path, "doesn't exists, redirect on /")
-		c.Redirect(http.StatusMovedPermanently, "/")
-		c.Abort()
-	})
-
-	var pkgelt gongdoc_models.Pkgelt
-	// parse the diagram package
-	pkgelt.Unmarshall(diagramPkgPath)
-
-	if *svg {
-		for _, classDiagram := range pkgelt.Classdiagrams {
-			classDiagram.OutputSVG(diagramPkgPath)
-		}
-		os.Exit(0)
-	}
-	pkgelt.SerializeToStage()
-	gongdoc_models.Stage.Commit()
-	log.Printf("Parse found %d diagrams\n", len(pkgelt.Classdiagrams))
-	log.Printf("Server ready to serve on http://localhost:8080/")
-
-	r.Run(":8080")
 }

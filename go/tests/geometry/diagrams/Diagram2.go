@@ -12,7 +12,7 @@ var Diagram2 uml.Classdiagram = uml.Classdiagram{
 		{
 			Struct: &(models.Line{}),
 			Position: &uml.Position{
-				X: 10.000000,
+				X: 110.000000,
 				Y: 150.000000,
 			},
 			Width:  240.000000,
