@@ -28,3 +28,14 @@ add to dev dependencies of your package.json
         "@types/jquery": "^3.5.3",
         "@types/lodash": "^4.14.162"
 ```
+
+and add the following path in your tsconfig.json
+
+```json
+      "jointjs": [
+        "./node_modules/jointjs"
+      ],
+      "@types/jointjs": [
+        "./node_modules/@types/jointjs"
+      ],
+```
