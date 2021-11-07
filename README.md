@@ -1,3 +1,4 @@
+# Gongdoc
 A gong stack for editing UML diagrams of gong code
 
 ### compile application
@@ -13,3 +14,17 @@ at the root of the repository (requires go >= 1.16)
 launch browser on http://localhost:8080
 
 ![result](gongdoc.png)
+
+# Import this stack
+
+add to dev dependencies of your package.json
+```json
+        "backbone": "^1.4.0",
+        "jointjs": "^3.2.0",
+        "jquery": "^3.5.1",
+        "lodash": "^4.17.20",
+        "@types/backbone": "^1.4.5",
+        "@types/jointjs": "^2.0.0",
+        "@types/jquery": "^3.5.3",
+        "@types/lodash": "^4.14.162"
+```
