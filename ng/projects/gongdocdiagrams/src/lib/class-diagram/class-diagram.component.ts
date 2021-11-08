@@ -179,10 +179,11 @@ export class ClassDiagramComponent implements OnInit, OnDestroy {
     if (this.classdiagram != undefined) {
       if (this.classdiagram.Classshapes != undefined) {
         diagramWidth = (this.classdiagram.Classshapes.length + 1) * 300
+
+        this.idOfDrawnClassDiagram = this.classdiagram.ID
       }
     }
 
-    this.idOfDrawnClassDiagram = this.classdiagram.ID
 
     //
     // a jointjs diagram is a Graph instance with a Paper instance
