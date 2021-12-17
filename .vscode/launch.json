@@ -60,7 +60,7 @@
             "request": "launch",
             "mode": "debug",
             "program": "${workspaceFolder}/go/cmd/gongdoc",
-            "cwd": "${workspaceFolder}/../gongsvg",
+            "cwd": "${workspaceFolder}/../../../../gongsvg",
             "args": [
                 "-pkgPath",
                 "../../models",
