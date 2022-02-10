@@ -1,6 +1,6 @@
-__debug_bin
-gongdoc
+go/cmd/gongdoc/__debug_bin
+go/cmd/gongdoc/gongdoc
+go/cmd/gongdoc/gongdoc.exe
 go/controllers/gongdocapi.yml
-gongdoc.exe
 go/.DS_Store
 .DS_Store

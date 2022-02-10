@@ -29,7 +29,7 @@
 			"label": "02 - go run",
 			"type": "shell",
 			"options": {
-				"cwd": "."
+				"cwd": "go/cmd/gongdoc"
 			},
 			"command": "go",
 			"args": [
@@ -42,14 +42,14 @@
 			"label": "02 - go run on test/geometry",
 			"type": "shell",
 			"options": {
-				"cwd": "."
+				"cwd": "go/cmd/gongdoc"
 			},
 			"command": "go",
 			"args": [
 				"run",
 				"main.go",
 				"-pkgPath",
-				"go/tests/geometry/models",
+				"../tests/geometry/models",
 			],
 			"group": "build"
 		},
