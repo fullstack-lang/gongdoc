@@ -23,6 +23,11 @@ import (
 	gong_controllers "github.com/fullstack-lang/gong/go/controllers"
 	gong_models "github.com/fullstack-lang/gong/go/models"
 	gong_orm "github.com/fullstack-lang/gong/go/orm"
+
+	// for import of the embed ng directory of the `github.com/fullstack-lang/gong/ng/projects`
+	// directory.
+	// with vendoring, this will import the gong code of the github.com/fullstack-lang/gong/ng/projects/gong library
+	_ "github.com/fullstack-lang/gong/ng"
 )
 
 var (
