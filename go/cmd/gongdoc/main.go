@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"io/fs"
 	"log"
+	"math/rand"
 	"net/http"
 	"os"
 	"path/filepath"
@@ -31,15 +32,16 @@ import (
 )
 
 var (
-	logBBFlag = flag.Bool("logDB", false, "log mode for db")
-
-	genDefaultDiagramFlag = flag.Bool("genDefaultDiagram", false, "generate default diagram")
-
-	svg = flag.Bool("svg", false, "generate svg output and exits")
-
+	logBBFlag  = flag.Bool("logDB", false, "log mode for db")
 	logGINFlag = flag.Bool("logGIN", false, "log mode for gin")
 
+	genDefaultDiagramFlag = flag.Bool("genDefaultDiagram", false, "generate default diagram")
+	svg                   = flag.Bool("svg", false, "generate svg output and exits")
+
 	pkgPath = flag.String("pkgPath", "go/models", "path to the models package in order to reveal gong elements in the package")
+
+	setUpRandomNumberOfInstances = flag.Bool("setUpRandomNumberOfInstances", false,
+		"set up random number of instance (between 0 and 100)")
 )
 
 type embedFileSystem struct {
@@ -125,6 +127,15 @@ func main() {
 			classDiagram.OutputSVG(diagramPkgPath)
 		}
 		os.Exit(0)
+	}
+
+	if *setUpRandomNumberOfInstances {
+		for _, classDiagram := range pkgelt.Classdiagrams {
+			for _, classShape := range classDiagram.Classshapes {
+				classShape.ShowNbInstances = true
+				classShape.NbInstances = rand.Intn(100)
+			}
+		}
 	}
 	pkgelt.SerializeToStage()
 	gongdoc_models.Stage.Commit()

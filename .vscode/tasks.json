@@ -39,7 +39,7 @@
 			"group": "build"
 		},
 		{
-			"label": "02 - go run on test/geometry",
+			"label": "02 - go run on test/geometry -setUpRandomNumberOfInstances",
 			"type": "shell",
 			"options": {
 				"cwd": "go/cmd/gongdoc"
@@ -49,7 +49,8 @@
 				"run",
 				"main.go",
 				"-pkgPath",
-				"../tests/geometry/models",
+				"../../tests/geometry/models",
+				"-setUpRandomNumberOfInstances"
 			],
 			"group": "build"
 		},
