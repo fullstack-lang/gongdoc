@@ -44,7 +44,7 @@
             ],
         },
         {
-            "name": "go server on geometry",
+            "name": "go server on geometry -setUpRandomNumberOfInstances",
             "type": "go",
             "request": "launch",
             "mode": "debug",
@@ -52,6 +52,7 @@
             "args": [
                 "-pkgPath",
                 "../../tests/geometry/models",
+                "-setUpRandomNumberOfInstances"
             ]
         },
         {
@@ -111,8 +112,7 @@
             "mode": "debug",
             "program": "${workspaceFolder}/go/cmd/gongdoc",
             "cwd": "${workspaceFolder}/../ed153",
-            "args": [
-            ]
+            "args": []
         },
     ]
 }
