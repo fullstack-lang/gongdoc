@@ -77,6 +77,18 @@
 			"group": "build"
 		},
 		{
+			"label": "01 - gongc -skipGoModCommands",
+			"type": "shell",
+			"options": {
+				"cwd": "go/models"
+			},
+			"command": "gongc",
+			"args": [
+				"-skipGoModCommands"
+			],
+			"group": "build"
+		},
+		{
 			"label": "01 - gongc -backendOnly",
 			"type": "shell",
 			"options": {

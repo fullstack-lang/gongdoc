@@ -26,6 +26,9 @@ type Classshape struct {
 	Struct     interface{} `gorm:"-"` // pointer to the struct of the model that it is diagramming
 	Structname string
 
+	// the related gong struct
+	GongStruct *GongStruct
+
 	// gongdoc can be integrated in a runtime application
 	// the application can then set up the number of instances of Struct
 	ShowNbInstances bool
