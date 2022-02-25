@@ -196,6 +196,14 @@ func (classshape *Classshape) Unmarshall(expr ast.Expr, fset *token.FileSet) {
 					classshape.Structname = se.Sel.Name
 					classshape.ClassshapeTargetType = STRUCT
 
+					// attach GongStruct to classshape
+					gongStruct, ok := Stage.GongStructs_mapString[classshape.Structname]
+					if ok {
+						classshape.GongStruct = gongStruct
+						classshape.ShowNbInstances = true
+						classshape.NbInstances = gongStruct.NbInstances
+					}
+
 					if classshape.Name == "" {
 						classshape.Name = fmt.Sprintf("Classshape%04d", classshapeLastID)
 					}

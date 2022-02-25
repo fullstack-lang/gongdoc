@@ -196,7 +196,7 @@ func init() {
 						classshape.Heigth = 63
 
 						// attach GongStruct to classshape
-						gongStruct, ok := Stage.GongStructs_mapString[GongdocCommandSingloton.StructName]
+						gongStruct, ok := Stage.GongStructs_mapString[classshape.Structname]
 						if ok {
 							classshape.GongStruct = gongStruct
 							classshape.ShowNbInstances = true
