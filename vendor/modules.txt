@@ -36,7 +36,7 @@ github.com/dsnet/compress/internal/errors
 # github.com/frankban/quicktest v1.13.1
 ## explicit; go 1.13
 github.com/frankban/quicktest
-# github.com/fullstack-lang/gong v0.0.0-20220217103641-2de44f273f2f
+# github.com/fullstack-lang/gong v0.0.0-20220301160215-cce5bfa37d43
 ## explicit; go 1.17
 github.com/fullstack-lang/gong/go/controllers
 github.com/fullstack-lang/gong/go/models
@@ -128,9 +128,6 @@ github.com/leodido/go-urn
 # github.com/mattn/go-isatty v0.0.14
 ## explicit; go 1.12
 github.com/mattn/go-isatty
-# github.com/mattn/go-sqlite3 v1.14.10
-## explicit; go 1.12
-github.com/mattn/go-sqlite3
 # github.com/modern-go/concurrent v0.0.0-20180306012644-bacd9c7ef1dd
 ## explicit
 github.com/modern-go/concurrent
@@ -268,9 +265,6 @@ google.golang.org/protobuf/types/descriptorpb
 # gopkg.in/yaml.v2 v2.4.0
 ## explicit; go 1.15
 gopkg.in/yaml.v2
-# gorm.io/driver/sqlite v1.1.6
-## explicit; go 1.14
-gorm.io/driver/sqlite
 # gorm.io/gorm v1.22.5
 ## explicit; go 1.14
 gorm.io/gorm
