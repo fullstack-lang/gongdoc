@@ -16,6 +16,7 @@ import (
 	"github.com/gin-gonic/gin"
 
 	gongdoc_controllers "github.com/fullstack-lang/gongdoc/go/controllers"
+	"github.com/fullstack-lang/gongdoc/go/models"
 	gongdoc_models "github.com/fullstack-lang/gongdoc/go/models"
 	gongdoc_orm "github.com/fullstack-lang/gongdoc/go/orm"
 
@@ -119,6 +120,18 @@ func main() {
 	})
 
 	var pkgelt gongdoc_models.Pkgelt
+
+	// set up gong structs for pkgelet
+
+	if *setUpRandomNumberOfInstances {
+		for gongStruct, _ := range gong_models.Stage.GongStructs {
+
+			// let create the gong struct in the gongdoc models
+			gongStruct_ := (&models.GongStruct{Name: gongStruct.Name}).Stage()
+			gongStruct_.NbInstances = rand.Intn(100)
+		}
+	}
+
 	// parse the diagram package
 	pkgelt.Unmarshall(diagramPkgPath)
 
@@ -129,7 +142,7 @@ func main() {
 		os.Exit(0)
 	}
 
-	if *setUpRandomNumberOfInstances {
+	if false {
 		for _, classDiagram := range pkgelt.Classdiagrams {
 			for _, classShape := range classDiagram.Classshapes {
 				classShape.ShowNbInstances = true
