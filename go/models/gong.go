@@ -162,10 +162,7 @@ func (stage *StageStruct) Commit() {
 	stage.Map_GongStructName_InstancesNb["Classdiagram"] = len(stage.Classdiagrams)
 	stage.Map_GongStructName_InstancesNb["Classshape"] = len(stage.Classshapes)
 	stage.Map_GongStructName_InstancesNb["Field"] = len(stage.Fields)
-<<<<<<< HEAD
-=======
 	stage.Map_GongStructName_InstancesNb["GongStruct"] = len(stage.GongStructs)
->>>>>>> 0e5df868859cbc5ee402562f408674f4113747b2
 	stage.Map_GongStructName_InstancesNb["GongdocCommand"] = len(stage.GongdocCommands)
 	stage.Map_GongStructName_InstancesNb["GongdocStatus"] = len(stage.GongdocStatuss)
 	stage.Map_GongStructName_InstancesNb["Link"] = len(stage.Links)
