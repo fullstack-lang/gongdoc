@@ -60,9 +60,12 @@ type StageStruct struct { // insertion point for definition of arrays registerin
 	BackRepo BackRepoInterface
 
 	// if set will be called before each commit to the back repo
-	OnInitCommitCallback OnInitCommitInterface
+	OnInitCommitCallback          OnInitCommitInterface
 	OnInitCommitFromFrontCallback OnInitCommitInterface
 	OnInitCommitFromBackCallback  OnInitCommitInterface
+
+	// store the number of instance per gongstruct
+	Map_GongStructName_InstancesNb map[string]int
 }
 
 type OnInitCommitInterface interface {
@@ -139,12 +142,27 @@ var Stage StageStruct = StageStruct{ // insertion point for array initiatialisat
 	Vertices_mapString: make(map[string]*Vertice),
 
 	// end of insertion point
+	Map_GongStructName_InstancesNb: make(map[string]int),
 }
 
 func (stage *StageStruct) Commit() {
 	if stage.BackRepo != nil {
 		stage.BackRepo.Commit(stage)
 	}
+
+	// insertion point for computing the map of number of instances per gongstruct
+	stage.Map_GongStructName_InstancesNb["Classdiagram"] = len(stage.Classdiagrams)
+	stage.Map_GongStructName_InstancesNb["Classshape"] = len(stage.Classshapes)
+	stage.Map_GongStructName_InstancesNb["Field"] = len(stage.Fields)
+	stage.Map_GongStructName_InstancesNb["GongdocCommand"] = len(stage.GongdocCommands)
+	stage.Map_GongStructName_InstancesNb["GongdocStatus"] = len(stage.GongdocStatuss)
+	stage.Map_GongStructName_InstancesNb["Link"] = len(stage.Links)
+	stage.Map_GongStructName_InstancesNb["Pkgelt"] = len(stage.Pkgelts)
+	stage.Map_GongStructName_InstancesNb["Position"] = len(stage.Positions)
+	stage.Map_GongStructName_InstancesNb["UmlState"] = len(stage.UmlStates)
+	stage.Map_GongStructName_InstancesNb["Umlsc"] = len(stage.Umlscs)
+	stage.Map_GongStructName_InstancesNb["Vertice"] = len(stage.Vertices)
+
 }
 
 func (stage *StageStruct) Checkout() {
