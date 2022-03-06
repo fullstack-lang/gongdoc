@@ -10,31 +10,18 @@ import (
 var Diagram3 uml.Classdiagram = uml.Classdiagram{
 	Classshapes: []*uml.Classshape{
 		{
-			Struct: &(models.Line{}),
-			Position: &uml.Position{
-				X: 87.000000,
-				Y: 154.000000,
-			},
-			Width:  240.000000,
-			Heigth: 48.000000,
-		},
-		{
 			Struct: &(models.Point{}),
 			Position: &uml.Position{
-				X: 166.000000,
-				Y: 233.000000,
+				X: 159.000000,
+				Y: 237.000000,
 			},
 			Width:  240.000000,
-			Heigth: 48.000000,
-		},
-		{
-			Struct: &(models.PointWithName{}),
-			Position: &uml.Position{
-				X: 89.000000,
-				Y: 320.000000,
+			Heigth: 78.000000,
+			Fields: []*uml.Field{
+				{
+					Field: models.Point{}.X,
+				},
 			},
-			Width:  240.000000,
-			Heigth: 48.000000,
 		},
 	},
 }

@@ -122,14 +122,14 @@ export class ClassDiagramComponent implements OnInit, OnDestroy {
 
             // console.log("last commit nb " + this.lastCommitNb + " new: " + commitNb)
             // console.log("last diagram id " + this.lastDiagramId + " new: " + id)
-            console.log("last drawn diagram id " + this.idOfDrawnClassDiagram + " new: " + id)
+            // console.log("last drawn diagram id " + this.idOfDrawnClassDiagram + " new: " + id)
 
             // condition for refresh
             if (this.lastCommitNb < commitNb || this.lastDiagramId != id || this.idOfDrawnClassDiagram != id) {
 
-              console.log("last commit nb " + this.lastCommitNb + " new: " + commitNb)
-              console.log("last diagram id " + this.lastDiagramId + " new: " + id)
-              console.log("last drawn diagram id " + this.idOfDrawnClassDiagram + " new: " + id)
+              // console.log("last commit nb " + this.lastCommitNb + " new: " + commitNb)
+              // console.log("last diagram id " + this.lastDiagramId + " new: " + id)
+              // console.log("last drawn diagram id " + this.idOfDrawnClassDiagram + " new: " + id)
               this.pullGongdocAndDrawDiagram()
               this.lastCommitNb = commitNb
               this.lastDiagramId = id
@@ -144,11 +144,11 @@ export class ClassDiagramComponent implements OnInit, OnDestroy {
   //
   // make a jointjs umlclass from a gong Classshape object
   //
-  addClassshapeToGraph(classshape: gongdoc.ClassshapeDB) {
+  addClassshapeToGraph(classshape: gongdoc.ClassshapeDB): joint.shapes.uml.Class {
     //
-    // Fetch fields 
+    // creates the UML shape
     //
-    const umlClassShape = newUmlClassShape(classshape)
+    let umlClassShape = newUmlClassShape(classshape)
 
     // structRectangle.attributes = ['firstName: String']
     umlClassShape.addTo(this.graph!);
@@ -161,13 +161,15 @@ export class ClassDiagramComponent implements OnInit, OnDestroy {
     idstring = id;
     this.Map_CellId_ClassshapeDB.set(idstring, classshape)
     this.Map_GongStructName_JointjsUMLClassShape.set(classshape.Structname, umlClassShape)
+
+    return umlClassShape
   }
 
   //
   // turn gong instances into a jointjs diagram
   //
   drawClassdiagram(): void {
-    console.log("draw diagram")
+    // console.log("draw diagram")
 
     const namespace = joint.shapes;
 
@@ -176,10 +178,10 @@ export class ClassDiagramComponent implements OnInit, OnDestroy {
     //
     // this is a work in progress
     //
-    let diagramWidth = 300
+    let diagramWidth = 600
     if (this.classdiagram != undefined) {
       if (this.classdiagram.Classshapes != undefined) {
-        diagramWidth = (this.classdiagram.Classshapes.length + 1) * 300
+        diagramWidth = (this.classdiagram.Classshapes.length + 2) * 300
 
         this.idOfDrawnClassDiagram = this.classdiagram.ID
       }
@@ -189,6 +191,8 @@ export class ClassDiagramComponent implements OnInit, OnDestroy {
     //
     // a jointjs diagram is a Graph instance with a Paper instance
     //
+    // the graph stores the logical elements
+    // the paper stores the SVG elements
     this.graph = new joint.dia.Graph(
       {},
       { cellNamespace: this.namespace } // critical piece of code. 
@@ -208,8 +212,36 @@ export class ClassDiagramComponent implements OnInit, OnDestroy {
     // draw class shapes from the gong classshapes
     if (this.classdiagram?.Classshapes != undefined) {
       for (let classshape of this.classdiagram.Classshapes) {
-        this.addClassshapeToGraph(classshape)
+        let umlClassShape = this.addClassshapeToGraph(classshape)
+
+        var removeButton = new joint.elementTools.Remove({
+          action: function (evt, linkView, toolView) {
+
+
+            linkView.model.remove({ ui: true, tool: toolView.cid });
+
+
+          }
+        })
+
+        var toolsView = new joint.dia.ToolsView({
+          tools: [removeButton]
+        });
+
+        var elementView = umlClassShape.findView(this.paper);
+        elementView.addTools(toolsView);
+        elementView.hideTools();
+
+        this.paper.on('element:mouseenter', function (elementView) {
+          elementView.showTools();
+        });
+
+        this.paper.on('element:mouseleave', function (elementView) {
+          elementView.hideTools();
+        });
+
       }
+
 
       // draw links of the diagram shapes
       for (let classshape of this.classdiagram.Classshapes) {
@@ -319,11 +351,11 @@ export class ClassDiagramComponent implements OnInit, OnDestroy {
    * the challenge is to update the positions of classshapes and vertices
    */
   saveClassdiagram(): void {
-    console.log("save diagram")
+    // console.log("save diagram")
 
     // parse shapes positions
     var cells = this.graph!.getCells()
-    console.log(cells.length)
+    // console.log(cells.length)
 
     cells.forEach(
       (cell: joint.dia.Cell) => {
@@ -410,6 +442,10 @@ export class ClassDiagramComponent implements OnInit, OnDestroy {
         this.drawClassdiagram();
       }
     )
+  }
+
+  remove(): void {
+    console.log("toto called")
   }
 }
 
