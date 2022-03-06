@@ -78,7 +78,7 @@ export class ClassDiagramComponent implements OnInit, OnDestroy {
     private router: Router,
 
     private positionService: gongdoc.PositionService,
-    private VerticeService: gongdoc.VerticeService,
+    private verticeService: gongdoc.VerticeService,
 
     private gongdocFrontRepoService: gongdoc.FrontRepoService,
     private GongdocCommandService: gongdoc.GongdocCommandService,
@@ -143,7 +143,7 @@ export class ClassDiagramComponent implements OnInit, OnDestroy {
 
   // onMove is called each time the shape is moved
   onClassshapeMove(umlClassShape: joint.shapes.uml.Class) {
-    console.log(umlClassShape.id, ':', umlClassShape.get('position'));
+    // console.log(umlClassShape.id, ':', umlClassShape.get('position'));
 
     let classhape = umlClassShape.attributes['classshape'] as gongdoc.ClassshapeDB
     let positionService = umlClassShape.attributes['positionService'] as gongdoc.PositionService
@@ -156,7 +156,23 @@ export class ClassDiagramComponent implements OnInit, OnDestroy {
         console.log("position updated")
       }
     )
+  }
 
+  // onMove is called each time the shape is moved
+  onLinkMove(standardLink: joint.shapes.standard.Link) {
+    // console.log(standardLink.id, ':', standardLink.get('vertices'));
+
+    let middleVertice = standardLink.attributes['middleVertice'] as gongdoc.VerticeDB
+    let verticeService = standardLink.attributes['verticeService'] as gongdoc.VerticeService
+
+    middleVertice!.X = standardLink.get('vertices')[0].x
+    middleVertice!.Y = standardLink.get('vertices')[0].y
+
+    verticeService.updateVertice(middleVertice!).subscribe(
+      middleVertice => {
+        console.log("middleVertice updated")
+      }
+    )
   }
 
   //
@@ -300,7 +316,14 @@ export class ClassDiagramComponent implements OnInit, OnDestroy {
                     }
                   }
                 ],
+                // store relevant attributes for working when callback are invoked
+                middleVertice: linkDB.Middlevertice,
+                verticeService: this.verticeService,
               })
+
+              // add a backbone event handler to update the position
+              link.on('change:vertices', this.onLinkMove)
+
               link.addTo(this.graph);
 
               // later, we need to save the diagram
@@ -380,7 +403,7 @@ export class ClassDiagramComponent implements OnInit, OnDestroy {
 
           // update position to DB
           var verticeDB = linkDB.Middlevertice
-          this.VerticeService.updateVertice(verticeDB!).subscribe(
+          this.verticeService.updateVertice(verticeDB!).subscribe(
             position => {
               console.log("vertice updated")
             }

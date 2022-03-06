@@ -1,10 +1,10 @@
 package models
 
-// swagger:enum Etape
-type Etape string
+// swagger:enum Stage
+type Stage string
 
 // values for Action Type
 const (
-	AVANT_CALCUL Etape = "AVANT_CALCUL" // iota // Parse the spinosa model (temp)
-	APRES_CALCUL Etape = "APRES_CALCUL"
+	BEFORE Stage = "BEFORE" // iota // Parse the spinosa model (temp)
+	AFTER  Stage = "AFTER"
 )
