@@ -103,7 +103,7 @@ export class ClassDiagramComponent implements OnInit, OnDestroy {
 
   // neccessary to unsubscribe
   ngOnDestroy() {
-    console.log("on destroy")
+    // console.log("on destroy")
     this.checkGongdocCommitNbTimerSubscription.unsubscribe()
     this.gongdocCommitNbService_getCommitNb.unsubscribe()
   }
@@ -148,12 +148,12 @@ export class ClassDiagramComponent implements OnInit, OnDestroy {
     let classhape = umlClassShape.attributes['classshape'] as gongdoc.ClassshapeDB
     let positionService = umlClassShape.attributes['positionService'] as gongdoc.PositionService
     let position = classhape.Position
-    position!.X = umlClassShape.get('position').x
-    position!.Y = umlClassShape.get('position').y
+    position!.X = umlClassShape.get('position')!.x
+    position!.Y = umlClassShape.get('position')!.y
 
     positionService.updatePosition(position!).subscribe(
       position => {
-        console.log("position updated")
+        // console.log("position updated")
       }
     )
   }
@@ -165,12 +165,12 @@ export class ClassDiagramComponent implements OnInit, OnDestroy {
     let middleVertice = standardLink.attributes['middleVertice'] as gongdoc.VerticeDB
     let verticeService = standardLink.attributes['verticeService'] as gongdoc.VerticeService
 
-    middleVertice!.X = standardLink.get('vertices')[0].x
-    middleVertice!.Y = standardLink.get('vertices')[0].y
+    middleVertice!.X = standardLink.get('vertices')![0].x
+    middleVertice!.Y = standardLink.get('vertices')![0].y
 
     verticeService.updateVertice(middleVertice!).subscribe(
       middleVertice => {
-        console.log("middleVertice updated")
+        // console.log("middleVertice updated")
       }
     )
   }
@@ -358,60 +358,6 @@ export class ClassDiagramComponent implements OnInit, OnDestroy {
   saveClassdiagram(): void {
     // console.log("save diagram")
 
-    // parse shapes positions
-    var cells = this.graph!.getCells()
-    // console.log(cells.length)
-
-    cells.forEach(
-      (cell: joint.dia.Cell) => {
-
-
-        // update position of classshapes
-        if (this.Map_CellId_ClassshapeDB.get(cell.id.toString()) != undefined) {
-
-          // retrieve the shape.
-          let classshapeDB: ClassshapeDB = this.Map_CellId_ClassshapeDB.get(cell.id.toString()) as ClassshapeDB
-
-          if (classshapeDB.Position == undefined) {
-            console.log("link position undefined")
-          }
-
-          classshapeDB.Position!.X = cell.attributes.position.x
-          classshapeDB.Position!.Y = cell.attributes.position.y
-
-          // update position to DB
-          this.positionService.updatePosition(classshapeDB.Position!).subscribe(
-            position => {
-              console.log("position updated")
-            }
-          )
-        }
-
-        // update positions of links
-        if (this.Map_CellId_LinkDB.has(cell.id.toString())) {
-
-          // retrieve the shape.
-          var linkDB: LinkDB = this.Map_CellId_LinkDB.get(cell.id.toString()) as LinkDB
-
-          if (linkDB.Middlevertice == undefined) {
-            console.log("link middle vertice undefined")
-          }
-
-          // fetch corresponding position and update
-          linkDB.Middlevertice!.X = cell.attributes.vertices[0].x
-          linkDB.Middlevertice!.Y = cell.attributes.vertices[0].y
-
-          // update position to DB
-          var verticeDB = linkDB.Middlevertice
-          this.verticeService.updateVertice(verticeDB!).subscribe(
-            position => {
-              console.log("vertice updated")
-            }
-          )
-        }
-      }
-    )
-
     // send a marshalling command to the backend via GongdocCommandSingloton
     let gongdocCommandSingloton: gongdoc.GongdocCommandDB
     this.gongdocFrontRepo.GongdocCommands.forEach(
@@ -424,7 +370,7 @@ export class ClassDiagramComponent implements OnInit, OnDestroy {
 
         this.GongdocCommandService.updateGongdocCommand(gongdocCommandSingloton).subscribe(
           GongdocCommand => {
-            console.log("GongdocCommand updated")
+            // console.log("GongdocCommand updated")
           }
         )
       }
@@ -435,7 +381,7 @@ export class ClassDiagramComponent implements OnInit, OnDestroy {
     this.gongdocFrontRepoService.pull().subscribe(
       frontRepo => {
         this.gongdocFrontRepo = frontRepo
-        console.log("gongdoc front repo pull returned")
+        // console.log("gongdoc front repo pull returned")
 
         const id = +this.route.snapshot.paramMap.get('id')!;
         this.classdiagram = frontRepo.Classdiagrams.get(id)!
@@ -443,10 +389,6 @@ export class ClassDiagramComponent implements OnInit, OnDestroy {
         this.drawClassdiagram();
       }
     )
-  }
-
-  remove(): void {
-    console.log("toto called")
   }
 }
 
