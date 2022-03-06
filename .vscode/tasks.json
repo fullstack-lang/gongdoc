@@ -147,11 +147,5 @@
 			"group": "build",
 			"command": "go get -d github.com/fullstack-lang/gong@HEAD"
 		},
-		{
-			"label": "00 - go get -d github.com/fullstack-lang/gong@thomaspeugeot_issue106",
-			"type": "shell",
-			"group": "build",
-			"command": "go get -d github.com/fullstack-lang/gong@thomaspeugeot_issue106"
-		},
 	]
 }
