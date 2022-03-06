@@ -21,13 +21,6 @@ func TestUnmarshall(t *testing.T) {
 		}
 	}
 	{
-		got := pkgelt.Classdiagrams[0].Classshapes[0].Position.X
-		want := diagrams.Diagram1.Classshapes[0].Position.X
-		if got != want {
-			t.Errorf("got = %f; want %f", got, want)
-		}
-	}
-	{
 		got := pkgelt.Umlscs[0].States[0].X
 		want := diagrams.UmlscDiagram1.States[0].X
 		if got != want {

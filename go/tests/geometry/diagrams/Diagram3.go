@@ -45,14 +45,5 @@ var Diagram3 uml.Classdiagram = uml.Classdiagram{
 				},
 			},
 		},
-		{
-			Struct: &(models.PointWithName{}),
-			Position: &uml.Position{
-				X: 89.000000,
-				Y: 320.000000,
-			},
-			Width:  240.000000,
-			Heigth: 48.000000,
-		},
 	},
 }
