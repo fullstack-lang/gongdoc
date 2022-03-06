@@ -103,7 +103,7 @@ export class ClassDiagramComponent implements OnInit, OnDestroy {
 
   // neccessary to unsubscribe
   ngOnDestroy() {
-    console.log("on destroy")
+    // console.log("on destroy")
     this.checkGongdocCommitNbTimerSubscription.unsubscribe()
     this.gongdocCommitNbService_getCommitNb.unsubscribe()
   }
@@ -153,7 +153,7 @@ export class ClassDiagramComponent implements OnInit, OnDestroy {
 
     positionService.updatePosition(position!).subscribe(
       position => {
-        console.log("position updated")
+        // console.log("position updated")
       }
     )
   }
@@ -170,7 +170,7 @@ export class ClassDiagramComponent implements OnInit, OnDestroy {
 
     verticeService.updateVertice(middleVertice!).subscribe(
       middleVertice => {
-        console.log("middleVertice updated")
+        // console.log("middleVertice updated")
       }
     )
   }
@@ -370,7 +370,7 @@ export class ClassDiagramComponent implements OnInit, OnDestroy {
 
         this.GongdocCommandService.updateGongdocCommand(gongdocCommandSingloton).subscribe(
           GongdocCommand => {
-            console.log("GongdocCommand updated")
+            // console.log("GongdocCommand updated")
           }
         )
       }
@@ -381,7 +381,7 @@ export class ClassDiagramComponent implements OnInit, OnDestroy {
     this.gongdocFrontRepoService.pull().subscribe(
       frontRepo => {
         this.gongdocFrontRepo = frontRepo
-        console.log("gongdoc front repo pull returned")
+        // console.log("gongdoc front repo pull returned")
 
         const id = +this.route.snapshot.paramMap.get('id')!;
         this.classdiagram = frontRepo.Classdiagrams.get(id)!
@@ -389,10 +389,6 @@ export class ClassDiagramComponent implements OnInit, OnDestroy {
         this.drawClassdiagram();
       }
     )
-  }
-
-  remove(): void {
-    console.log("toto called")
   }
 }
 
