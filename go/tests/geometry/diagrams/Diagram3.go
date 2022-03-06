@@ -12,8 +12,8 @@ var Diagram3 uml.Classdiagram = uml.Classdiagram{
 		{
 			Struct: &(models.Line{}),
 			Position: &uml.Position{
-				X: 159.000000,
-				Y: 134.000000,
+				X: 30.000000,
+				Y: 130.000000,
 			},
 			Width:  240.000000,
 			Heigth: 78.000000,
@@ -21,16 +21,16 @@ var Diagram3 uml.Classdiagram = uml.Classdiagram{
 				{
 					Field: models.Line{}.End,
 					Middlevertice: &uml.Vertice{
-						X: 474.500000,
-						Y: 261.000000,
+						X: 304.500000,
+						Y: 271.000000,
 					},
 					Multiplicity: "0..1",
 				},
 				{
 					Field: models.Line{}.Start,
 					Middlevertice: &uml.Vertice{
-						X: 474.500000,
-						Y: 51.000000,
+						X: 294.500000,
+						Y: 41.000000,
 					},
 					Multiplicity: "0..1",
 				},
@@ -47,8 +47,8 @@ var Diagram3 uml.Classdiagram = uml.Classdiagram{
 		{
 			Struct: &(models.Point{}),
 			Position: &uml.Position{
-				X: 530.000000,
-				Y: 120.000000,
+				X: 420.000000,
+				Y: 130.000000,
 			},
 			Width:  240.000000,
 			Heigth: 63.000000,
