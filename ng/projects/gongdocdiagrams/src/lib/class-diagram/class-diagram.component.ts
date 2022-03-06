@@ -77,7 +77,7 @@ export class ClassDiagramComponent implements OnInit, OnDestroy {
     private route: ActivatedRoute,
     private router: Router,
 
-    private PositionService: gongdoc.PositionService,
+    private positionService: gongdoc.PositionService,
     private VerticeService: gongdoc.VerticeService,
 
     private gongdocFrontRepoService: gongdoc.FrontRepoService,
@@ -141,6 +141,24 @@ export class ClassDiagramComponent implements OnInit, OnDestroy {
     )
   }
 
+  // onMove is called each time the shape is moved
+  onClassshapeMove(umlClassShape: joint.shapes.uml.Class) {
+    console.log(umlClassShape.id, ':', umlClassShape.get('position'));
+
+    let classhape = umlClassShape.attributes['classshape'] as gongdoc.ClassshapeDB
+    let positionService = umlClassShape.attributes['positionService'] as gongdoc.PositionService
+    let position = classhape.Position
+    position!.X = umlClassShape.get('position').x
+    position!.Y = umlClassShape.get('position').y
+
+    positionService.updatePosition(position!).subscribe(
+      position => {
+        console.log("position updated")
+      }
+    )
+
+  }
+
   //
   // make a jointjs umlclass from a gong Classshape object
   //
@@ -148,18 +166,12 @@ export class ClassDiagramComponent implements OnInit, OnDestroy {
     //
     // creates the UML shape
     //
-    let umlClassShape = newUmlClassShape(classshape)
+    let umlClassShape = newUmlClassShape(classshape, this.positionService)
 
     // structRectangle.attributes = ['firstName: String']
     umlClassShape.addTo(this.graph!);
 
-    // horrible hack because the TS compiles assets that umlclasshape.id is not a string but a 
-    // an attribute of type joint.dia.Dimension
-    var id: any;
-    id = umlClassShape.id;
-    var idstring: string
-    idstring = id;
-    this.Map_CellId_ClassshapeDB.set(idstring, classshape)
+    this.Map_CellId_ClassshapeDB.set(umlClassShape.id.toString(), classshape)
     this.Map_GongStructName_JointjsUMLClassShape.set(classshape.Structname, umlClassShape)
 
     return umlClassShape
@@ -214,32 +226,8 @@ export class ClassDiagramComponent implements OnInit, OnDestroy {
       for (let classshape of this.classdiagram.Classshapes) {
         let umlClassShape = this.addClassshapeToGraph(classshape)
 
-        var removeButton = new joint.elementTools.Remove({
-          action: function (evt, linkView, toolView) {
-
-
-            linkView.model.remove({ ui: true, tool: toolView.cid });
-
-
-          }
-        })
-
-        var toolsView = new joint.dia.ToolsView({
-          tools: [removeButton]
-        });
-
-        var elementView = umlClassShape.findView(this.paper);
-        elementView.addTools(toolsView);
-        elementView.hideTools();
-
-        this.paper.on('element:mouseenter', function (elementView) {
-          elementView.showTools();
-        });
-
-        this.paper.on('element:mouseleave', function (elementView) {
-          elementView.hideTools();
-        });
-
+        // add a backbone event handler to update the position
+        umlClassShape.on('change:position', this.onClassshapeMove)
       }
 
 
@@ -323,14 +311,8 @@ export class ClassDiagramComponent implements OnInit, OnDestroy {
               //      find the original LinkDB and updates its position
               //
               // Because each cell has an unique id
-              // we create a map of cell id to LinkDB in order 
-              // horrible hack because the TS compiles assets that umlclasshape.id is not a string but a 
-              // an attribute of type joint.dia.Dimension
-              var id: any;
-              id = link.id;
-              var idstring: string
-              idstring = id;
-              this.Map_CellId_LinkDB.set(idstring, linkDB)
+              // we create a map of cell id to LinkDB
+              this.Map_CellId_LinkDB.set(link.id.toString(), linkDB)
             }
           }
         }
@@ -359,17 +341,13 @@ export class ClassDiagramComponent implements OnInit, OnDestroy {
 
     cells.forEach(
       (cell: joint.dia.Cell) => {
-        // ugly hack because cell.id is considered a Dimension by the ts compiler
-        // vive golang
-        var classshapeDB: gongdoc.ClassshapeDB;
-        var cellId: any
-        cellId = cell.id;
+
 
         // update position of classshapes
-        if (this.Map_CellId_ClassshapeDB.get(cellId) != undefined) {
+        if (this.Map_CellId_ClassshapeDB.get(cell.id.toString()) != undefined) {
 
           // retrieve the shape.
-          let classshapeDB: ClassshapeDB = this.Map_CellId_ClassshapeDB.get(cellId) as ClassshapeDB
+          let classshapeDB: ClassshapeDB = this.Map_CellId_ClassshapeDB.get(cell.id.toString()) as ClassshapeDB
 
           if (classshapeDB.Position == undefined) {
             console.log("link position undefined")
@@ -379,7 +357,7 @@ export class ClassDiagramComponent implements OnInit, OnDestroy {
           classshapeDB.Position!.Y = cell.attributes.position.y
 
           // update position to DB
-          this.PositionService.updatePosition(classshapeDB.Position!).subscribe(
+          this.positionService.updatePosition(classshapeDB.Position!).subscribe(
             position => {
               console.log("position updated")
             }
@@ -387,10 +365,10 @@ export class ClassDiagramComponent implements OnInit, OnDestroy {
         }
 
         // update positions of links
-        if (this.Map_CellId_LinkDB.has(cellId)) {
+        if (this.Map_CellId_LinkDB.has(cell.id.toString())) {
 
           // retrieve the shape.
-          var linkDB: LinkDB = this.Map_CellId_LinkDB.get(cellId) as LinkDB
+          var linkDB: LinkDB = this.Map_CellId_LinkDB.get(cell.id.toString()) as LinkDB
 
           if (linkDB.Middlevertice == undefined) {
             console.log("link middle vertice undefined")
