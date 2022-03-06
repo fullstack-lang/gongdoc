@@ -36,7 +36,7 @@ github.com/dsnet/compress/internal/errors
 # github.com/frankban/quicktest v1.13.1
 ## explicit; go 1.13
 github.com/frankban/quicktest
-# github.com/fullstack-lang/gong v0.0.0-20220301160215-cce5bfa37d43
+# github.com/fullstack-lang/gong v0.0.0-20220306205459-a0b273b32f20
 ## explicit; go 1.17
 github.com/fullstack-lang/gong/go/controllers
 github.com/fullstack-lang/gong/go/models
