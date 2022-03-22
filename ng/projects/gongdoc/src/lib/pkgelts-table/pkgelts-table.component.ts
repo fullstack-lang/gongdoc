@@ -74,6 +74,9 @@ export class PkgeltsTableComponent implements OnInit {
         case 'Path':
           return pkgeltDB.Path;
 
+        case 'GongModelPath':
+          return pkgeltDB.GongModelPath;
+
         default:
           console.assert(false, "Unknown field")
           return "";
@@ -90,6 +93,7 @@ export class PkgeltsTableComponent implements OnInit {
       // insertion point for merging of fields
       mergedContent += pkgeltDB.Name.toLowerCase()
       mergedContent += pkgeltDB.Path.toLowerCase()
+      mergedContent += pkgeltDB.GongModelPath.toLowerCase()
 
       let isSelected = mergedContent.includes(filter.toLowerCase())
       return isSelected
@@ -142,11 +146,13 @@ export class PkgeltsTableComponent implements OnInit {
       this.displayedColumns = ['ID', 'Edit', 'Delete', // insertion point for columns to display
         "Name",
         "Path",
+        "GongModelPath",
       ]
     } else {
       this.displayedColumns = ['select', 'ID', // insertion point for columns to display
         "Name",
         "Path",
+        "GongModelPath",
       ]
       this.selection = new SelectionModel<PkgeltDB>(allowMultiSelect, this.initialSelection);
     }
