@@ -123,6 +123,22 @@ func (link *Link) Unmarshall(expr ast.Expr, fset *token.FileSet) {
 			default:
 				log.Panic("Unknown multiplicity " + fset.Position(kve.Pos()).String())
 			}
+		case "SourceMultiplicity":
+			var bl *ast.BasicLit
+			if bl, ok = kve.Value.(*ast.BasicLit); !ok {
+				// TODO deal with recursive Binary Expressions "titi"+"toto"+"tata"
+				log.Panic("Expecting a basic lit " + fset.Position(kve.Value.Pos()).String())
+			}
+			switch bl.Value {
+			case "\"" + string(ZERO_ONE) + "\"":
+				link.SourceMultiplicity = ZERO_ONE
+			case "\"" + string(MANY) + "\"":
+				link.SourceMultiplicity = MANY
+			case "\"" + string(ONE) + "\"":
+				link.SourceMultiplicity = ONE
+			default:
+				log.Panic("Unknown multiplicity " + fset.Position(kve.Pos()).String())
+			}
 
 		default:
 			log.Panic("Expecting 1 Field Middlevertice " + fset.Position(ident.Pos()).String())
@@ -148,6 +164,7 @@ func (link *Link) Marshall(file *os.File, nbIndentation int) error {
 	{
 		indent(file, nbIndentation+1)
 		fmt.Fprintf(file, "TargetMultiplicity: \"%s\",\n", link.TargetMultiplicity)
+		fmt.Fprintf(file, "\t\t\t\t\tSourceMultiplicity: \"%s\",\n", link.SourceMultiplicity)
 	}
 
 	indent(file, nbIndentation)
