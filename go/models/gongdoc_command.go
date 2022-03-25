@@ -325,9 +325,9 @@ func init() {
 						link.Fieldtypename = GongdocCommandSingloton.FieldTypeName
 						switch GongdocCommandSingloton.GongdocNodeType {
 						case POINTER_TO_STRUCT:
-							link.Multiplicity = ZERO_ONE
+							link.TargetMultiplicity = ZERO_ONE
 						case SLICE_OF_POINTER_TO_STRUCT:
-							link.Multiplicity = MANY
+							link.TargetMultiplicity = MANY
 						}
 						sourceClassshape.Links = append(sourceClassshape.Links, link)
 						link.Middlevertice = new(Vertice).Stage()

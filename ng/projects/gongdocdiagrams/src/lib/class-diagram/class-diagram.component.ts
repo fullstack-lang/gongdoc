@@ -261,7 +261,7 @@ export class ClassDiagramComponent implements OnInit, OnDestroy {
             var strockWidth = 2
             let LinkEndlabel = linkDB.Fieldname
             let distanceEndLabel = 0.75
-            let LinkMuliplicity = linkDB.Multiplicity
+            let LinkMuliplicity = linkDB.TargetMultiplicity
             let distanceMultiplicity = 0.95
 
             if (toShape == undefined) {
