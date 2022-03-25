@@ -16,19 +16,48 @@ var Diagram3 uml.Classdiagram = uml.Classdiagram{
 				Y: 153.000000,
 			},
 			Width:  240.000000,
-			Heigth: 63.000000,
+			Heigth: 48.000000,
+			Links: []*uml.Link{
+				{
+					Field: models.Line{}.Start,
+					Middlevertice: &uml.Vertice{
+						X: 499.000000,
+						Y: 45.500000,
+					},
+					Multiplicity: "0..1",
+				},
+			},
 		},
 		{
 			Struct: &(models.Point{}),
 			Position: &uml.Position{
-				X: 460.000000,
-				Y: 110.000000,
+				X: 580.000000,
+				Y: 150.000000,
 			},
 			Width:  240.000000,
 			Heigth: 63.000000,
 			Fields: []*uml.Field{
 				{
 					Field: models.Point{}.X,
+				},
+			},
+		},
+		{
+			Struct: &(models.PointPartition{}),
+			Position: &uml.Position{
+				X: 447.000000,
+				Y: 352.000000,
+			},
+			Width:  240.000000,
+			Heigth: 63.000000,
+			Links: []*uml.Link{
+				{
+					Field: models.PointPartition{}.Points,
+					Middlevertice: &uml.Vertice{
+						X: 843.500000,
+						Y: 322.500000,
+					},
+					Multiplicity: "*",
 				},
 			},
 		},
