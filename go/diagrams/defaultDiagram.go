@@ -24,7 +24,7 @@ var defaultDiagram uml.Classdiagram = uml.Classdiagram{
 						X: 290.000000,
 						Y: 200.000000,
 					},
-					Multiplicity: "*",
+					TargetMultiplicity: "*",
 				},
 			},
 			Fields: []*uml.Field{
@@ -48,7 +48,7 @@ var defaultDiagram uml.Classdiagram = uml.Classdiagram{
 						X: 590.000000,
 						Y: 200.000000,
 					},
-					Multiplicity: "*",
+					TargetMultiplicity: "*",
 				},
 				{
 					Field: models.Classshape{}.Links,
@@ -56,7 +56,7 @@ var defaultDiagram uml.Classdiagram = uml.Classdiagram{
 						X: 590.000000,
 						Y: 250.000000,
 					},
-					Multiplicity: "*",
+					TargetMultiplicity: "*",
 				},
 				{
 					Field: models.Classshape{}.Position,
@@ -64,7 +64,7 @@ var defaultDiagram uml.Classdiagram = uml.Classdiagram{
 						X: 590.000000,
 						Y: 300.000000,
 					},
-					Multiplicity: "0..1",
+					TargetMultiplicity: "0..1",
 				},
 			},
 			Fields: []*uml.Field{
@@ -146,7 +146,7 @@ var defaultDiagram uml.Classdiagram = uml.Classdiagram{
 						X: 1490.000000,
 						Y: 200.000000,
 					},
-					Multiplicity: "0..1",
+					TargetMultiplicity: "0..1",
 				},
 			},
 			Fields: []*uml.Field{
@@ -160,7 +160,7 @@ var defaultDiagram uml.Classdiagram = uml.Classdiagram{
 					Field: models.Link{}.Fieldtypename,
 				},
 				{
-					Field: models.Link{}.Multiplicity,
+					Field: models.Link{}.TargetMultiplicity,
 				},
 				{
 					Field: models.Link{}.Name,
@@ -205,7 +205,7 @@ var defaultDiagram uml.Classdiagram = uml.Classdiagram{
 						X: 1790.000000,
 						Y: 200.000000,
 					},
-					Multiplicity: "*",
+					TargetMultiplicity: "*",
 				},
 				{
 					Field: models.Pkgelt{}.Umlscs,
@@ -213,7 +213,7 @@ var defaultDiagram uml.Classdiagram = uml.Classdiagram{
 						X: 1790.000000,
 						Y: 250.000000,
 					},
-					Multiplicity: "*",
+					TargetMultiplicity: "*",
 				},
 			},
 			Fields: []*uml.Field{
@@ -277,7 +277,7 @@ var defaultDiagram uml.Classdiagram = uml.Classdiagram{
 						X: 2690.000000,
 						Y: 200.000000,
 					},
-					Multiplicity: "*",
+					TargetMultiplicity: "*",
 				},
 			},
 			Fields: []*uml.Field{
