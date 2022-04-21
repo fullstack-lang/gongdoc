@@ -1,5 +1,10 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Observable, Subscription, timer } from 'rxjs';
+
+// for slider
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { ThemePalette } from '@angular/material/core';
+
 import * as joint from 'jointjs';
 
 import { ActivatedRoute, Router } from '@angular/router';
@@ -10,6 +15,7 @@ import * as gong from 'gong'
 import { newUmlClassShape } from './newUmlClassShape'
 import { ClassdiagramContextSubject, ClassdiagramContext } from '../diagram-displayed-gongstruct'
 import { ClassshapeDB, LinkDB } from 'gongdoc';
+import { MatSlideToggleChange } from '@angular/material/slide-toggle';
 
 @Component({
   selector: 'lib-class-diagram',
@@ -37,6 +43,13 @@ export class ClassDiagramComponent implements OnInit, OnDestroy {
   namespace = joint.shapes;
   private paper?: joint.dia.Paper
   private graph?: joint.dia.Graph
+
+  /**
+   * slider management
+   */
+  isChecked = true;
+  formGroup: FormGroup
+  color: ThemePalette = 'primary';
 
   // the gong diagram of interest ot be drawn
   public classdiagram: gongdoc.ClassdiagramDB = new gongdoc.ClassdiagramDB
@@ -83,12 +96,20 @@ export class ClassDiagramComponent implements OnInit, OnDestroy {
     private gongdocFrontRepoService: gongdoc.FrontRepoService,
     private GongdocCommandService: gongdoc.GongdocCommandService,
     private gongdocCommitNbService: gongdoc.CommitNbService,
+
+    formBuilder: FormBuilder,
   ) {
     // https://stackoverflow.com/questions/54627478/angular-7-routing-to-same-component-but-different-param-not-working
     // this is for routerLink on same component when only queryParameter changes
     this.router.routeReuseStrategy.shouldReuseRoute = function () {
       return false;
     };
+
+
+    this.formGroup = formBuilder.group({
+      enableWifi: '',
+      acceptTerms: ['', Validators.requiredTrue],
+    });
   }
 
   // Since this component is not reused when a new diagram is selected, there can be many
@@ -398,6 +419,17 @@ export class ClassDiagramComponent implements OnInit, OnDestroy {
         this.drawClassdiagram();
       }
     )
+  }
+
+  onFormSubmit() {
+    alert(JSON.stringify(this.formGroup.value, null, 2));
+  }
+
+  public useDefault = false;
+
+  public toggle(event: MatSlideToggleChange) {
+    console.log('toggle', event.checked);
+    this.useDefault = event.checked;
   }
 }
 
