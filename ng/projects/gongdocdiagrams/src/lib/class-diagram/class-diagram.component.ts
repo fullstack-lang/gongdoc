@@ -426,9 +426,17 @@ export class ClassDiagramComponent implements OnInit, OnDestroy {
   }
 
   public useDefault = false;
+  public modeEdition = "prod"
 
   public toggle(event: MatSlideToggleChange) {
     console.log('toggle', event.checked);
+
+    if (event.checked) {
+      this.modeEdition = "prod"
+    } else {
+      this.modeEdition = "dev"
+    }
+
     this.useDefault = event.checked;
   }
 }
