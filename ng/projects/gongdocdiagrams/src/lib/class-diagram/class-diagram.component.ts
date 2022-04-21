@@ -258,6 +258,12 @@ export class ClassDiagramComponent implements OnInit, OnDestroy {
 
     this.paper = new joint.dia.Paper(paperOptions)
 
+    this.paper.on('cell:pointerdown',
+      function (cellView, evt, x, y) {
+        alert('cell view ' + cellView.model.id + ' was clicked');
+      }
+    )
+
     // draw class shapes from the gong classshapes
     if (this.classdiagram?.Classshapes != undefined) {
       for (let classshape of this.classdiagram.Classshapes) {
@@ -433,8 +439,10 @@ export class ClassDiagramComponent implements OnInit, OnDestroy {
 
     if (event.checked) {
       this.modeEdition = "prod"
+      this.paper!.setInteractivity(false)
     } else {
       this.modeEdition = "dev"
+      this.paper!.setInteractivity(true)
     }
 
     this.useDefault = event.checked;
