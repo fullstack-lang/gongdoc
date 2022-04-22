@@ -47,8 +47,8 @@ export class ClassDiagramComponent implements OnInit, OnDestroy {
   /**
    * slider management
    */
-  isChecked = true;
-  formGroup: FormGroup
+  public EditionModeBool = true;
+  public EditionMode: EditionModeEnum = EditionModeEnum.PROD
   color: ThemePalette = 'primary';
 
   // the gong diagram of interest ot be drawn
@@ -94,7 +94,7 @@ export class ClassDiagramComponent implements OnInit, OnDestroy {
     private verticeService: gongdoc.VerticeService,
 
     private gongdocFrontRepoService: gongdoc.FrontRepoService,
-    private GongdocCommandService: gongdoc.GongdocCommandService,
+    private gongdocCommandService: gongdoc.GongdocCommandService,
     private gongdocCommitNbService: gongdoc.CommitNbService,
 
     formBuilder: FormBuilder,
@@ -104,12 +104,6 @@ export class ClassDiagramComponent implements OnInit, OnDestroy {
     this.router.routeReuseStrategy.shouldReuseRoute = function () {
       return false;
     };
-
-
-    this.formGroup = formBuilder.group({
-      enableWifi: '',
-      acceptTerms: ['', Validators.requiredTrue],
-    });
   }
 
   // Since this component is not reused when a new diagram is selected, there can be many
@@ -200,10 +194,19 @@ export class ClassDiagramComponent implements OnInit, OnDestroy {
   // make a jointjs umlclass from a gong Classshape object
   //
   addClassshapeToGraph(classshape: gongdoc.ClassshapeDB): joint.shapes.uml.Class {
+
     //
     // creates the UML shape
     //
-    let umlClassShape = newUmlClassShape(classshape, this.positionService)
+
+    // fetch the command singloton
+    let gongdocCommandSingloton: gongdoc.GongdocCommandDB
+    for (let gongdocCommand of this.gongdocFrontRepo.GongdocCommands_array) {
+      gongdocCommandSingloton = gongdocCommand
+    }
+
+    let umlClassShape = newUmlClassShape(classshape, this.positionService,
+      gongdocCommandSingloton!, this.gongdocCommandService)
 
     // structRectangle.attributes = ['firstName: String']
     umlClassShape.addTo(this.graph!);
@@ -258,9 +261,37 @@ export class ClassDiagramComponent implements OnInit, OnDestroy {
 
     this.paper = new joint.dia.Paper(paperOptions)
 
+    // intercept click on shapes when in production mode
+    this.paper.setInteractivity(false)
+    this.EditionMode = EditionModeEnum.PROD
+
     this.paper.on('cell:pointerdown',
       function (cellView, evt, x, y) {
-        alert('cell view ' + cellView.model.id + ' was clicked');
+
+        console.log(cellView)
+
+        // if paper is interactive, this means we are in dev mode
+        // and we do not have to take click on shapes into account
+        if (cellView.paper?.options.interactive) {
+          return
+        }
+
+        let umlClassShape = cellView.model
+
+        let classhape = umlClassShape.attributes['classshape'] as gongdoc.ClassshapeDB
+        let gongdocCommandSingloton = umlClassShape.attributes['gongdocCommandSingloton'] as gongdoc.GongdocCommandDB
+        let gongdocCommandService = umlClassShape.attributes['gongdocCommandService'] as gongdoc.GongdocCommandService
+
+        gongdocCommandSingloton.Command = gongdoc.GongdocCommandType.DIAGRAM_GONGSTRUCT_SELECT
+        gongdocCommandSingloton.StructName = classhape.GongStruct!.Name
+        gongdocCommandSingloton.Date = Date.now().toString()
+
+        gongdocCommandService.updateGongdocCommand(gongdocCommandSingloton).subscribe(
+          gongdocCommandSingloton => {
+            console.log("gongdocCommandSingloton updated")
+          }
+        )
+        // alert('cell view ' + cellView.model.id + ' was clicked');
       }
     )
 
@@ -404,7 +435,7 @@ export class ClassDiagramComponent implements OnInit, OnDestroy {
         gongdocCommandSingloton.DiagramName = this.classdiagram.Name
         gongdocCommandSingloton.Date = Date.now().toString()
 
-        this.GongdocCommandService.updateGongdocCommand(gongdocCommandSingloton).subscribe(
+        this.gongdocCommandService.updateGongdocCommand(gongdocCommandSingloton).subscribe(
           GongdocCommand => {
             // console.log("GongdocCommand updated")
           }
@@ -427,25 +458,23 @@ export class ClassDiagramComponent implements OnInit, OnDestroy {
     )
   }
 
-  onFormSubmit() {
-    alert(JSON.stringify(this.formGroup.value, null, 2));
-  }
-
-  public useDefault = false;
-  public modeEdition = "prod"
-
   public toggle(event: MatSlideToggleChange) {
     console.log('toggle', event.checked);
 
     if (event.checked) {
-      this.modeEdition = "prod"
+      this.EditionMode = EditionModeEnum.PROD
       this.paper!.setInteractivity(false)
     } else {
-      this.modeEdition = "dev"
+      this.EditionMode = EditionModeEnum.DEV
       this.paper!.setInteractivity(true)
     }
 
-    this.useDefault = event.checked;
+    this.EditionModeBool = event.checked;
   }
+}
+
+export enum EditionModeEnum {
+  PROD = "prod",
+  DEV = "dev",
 }
 
