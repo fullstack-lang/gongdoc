@@ -12,6 +12,7 @@ export class ClassdiagramDB {
 
 	// insertion point for basic fields declarations
 	Name: string = ""
+	EditionMode: string = ""
 
 	// insertion point for other declarations
 	Classshapes?: Array<ClassshapeDB>

@@ -326,7 +326,7 @@ func (classdiagram *Classdiagram) GetName() (res string) {
 
 func (classdiagram *Classdiagram) GetFields() (res []string) {
 	// list of fields 
-	res = []string{"Name", "Classshapes",  }
+	res = []string{"Name", "Classshapes", "EditionMode",  }
 	return
 }
 
@@ -342,6 +342,8 @@ func (classdiagram *Classdiagram) GetFieldStringValue(fieldName string) (res str
 			}
 			res += __instance__.Name
 		}
+	case "EditionMode":
+		res = classdiagram.EditionMode.ToCodeString()
 	}
 	return
 }
@@ -2020,6 +2022,14 @@ func (stage *StageStruct) Marshall(file *os.File, modelsPackageName, packageName
 		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", string(classdiagram.Name))
 		initializerStatements += setValueField
 
+		if classdiagram.EditionMode != "" {
+			setValueField = StringEnumInitStatement
+			setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
+			setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "EditionMode")
+			setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", "models."+classdiagram.EditionMode.ToCodeString())
+			initializerStatements += setValueField
+		}
+
 	}
 
 	map_Classshape_Identifiers := make(map[*Classshape]string)
@@ -2854,6 +2864,45 @@ func (classshapetargettype *ClassshapeTargetType) ToCodeString() (res string) {
 		res = "ENUM"
 	case STRUCT:
 		res = "STRUCT"
+	}
+	return
+}
+
+// Utility function for EditionMode
+// if enum values are string, it is stored with the value
+// if enum values are int, they are stored with the code of the value
+func (editionmode EditionMode) ToString() (res string) {
+
+	// migration of former implementation of enum
+	switch editionmode {
+	// insertion code per enum code
+	case DEVELOPMENT_MODE:
+		res = "DEVELOPMENT_MODE"
+	case PRODUCTION_MODE:
+		res = "PRODUCTION_MODE"
+	}
+	return
+}
+
+func (editionmode *EditionMode) FromString(input string) {
+
+	switch input {
+	// insertion code per enum code
+	case "DEVELOPMENT_MODE":
+		*editionmode = DEVELOPMENT_MODE
+	case "PRODUCTION_MODE":
+		*editionmode = PRODUCTION_MODE
+	}
+}
+
+func (editionmode *EditionMode) ToCodeString() (res string) {
+
+	switch *editionmode {
+	// insertion code per enum code
+	case DEVELOPMENT_MODE:
+		res = "DEVELOPMENT_MODE"
+	case PRODUCTION_MODE:
+		res = "PRODUCTION_MODE"
 	}
 	return
 }

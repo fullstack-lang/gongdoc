@@ -34,6 +34,16 @@
             </button>
         </mat-grid-tile>
     </mat-grid-list>
+    <!-- -->
+    <mat-form-field appearance="fill" class="detail-full-width">
+        <mat-label>EditionMode</mat-label>
+        <mat-select [(ngModel)]="classdiagram.EditionMode" [ngModelOptions]="{standalone: true}">
+            <mat-option *ngFor="let enum of EditionModeList" [value]="enum.value">
+                {{enum.viewValue}}
+            </mat-option>
+        </mat-select>
+    </mat-form-field>
+
     <mat-form-field class="detail-full-width">
         <mat-label>(Pkgelt) Classdiagrams</mat-label>
         <mat-select [compareWith]="compareObjects" [(ngModel)]="classdiagram.Pkgelt_Classdiagrams_reverse" [ngModelOptions]="{standalone: true}">
