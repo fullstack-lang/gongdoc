@@ -205,6 +205,11 @@ export class ClassDiagramComponent implements OnInit, OnDestroy {
       gongdocCommandSingloton = gongdocCommand
     }
 
+    // back pointers: 
+    // stores  as an attribute in the jointjs uml class shape :
+    // - the position service
+    // - the command singloton
+    // - the command service
     let umlClassShape = newUmlClassShape(classshape, this.positionService,
       gongdocCommandSingloton!, this.gongdocCommandService)
 
@@ -268,7 +273,7 @@ export class ClassDiagramComponent implements OnInit, OnDestroy {
     this.paper.on('cell:pointerdown',
       function (cellView, evt, x, y) {
 
-        console.log(cellView)
+        // console.log(cellView)
 
         // if paper is interactive, this means we are in dev mode
         // and we do not have to take click on shapes into account
