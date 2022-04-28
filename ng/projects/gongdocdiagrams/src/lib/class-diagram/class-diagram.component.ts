@@ -14,7 +14,7 @@ import * as gong from 'gong'
 
 import { newUmlClassShape } from './newUmlClassShape'
 import { ClassdiagramContextSubject, ClassdiagramContext } from '../diagram-displayed-gongstruct'
-import { ClassshapeDB, LinkDB } from 'gongdoc';
+import { ClassshapeDB, EditionMode, EditionModeList, LinkDB } from 'gongdoc';
 import { MatSlideToggleChange } from '@angular/material/slide-toggle';
 
 @Component({
@@ -48,7 +48,6 @@ export class ClassDiagramComponent implements OnInit, OnDestroy {
    * slider management
    */
   public EditionModeBool = true;
-  public EditionMode: EditionModeEnum = EditionModeEnum.PROD
   color: ThemePalette = 'primary';
 
   // the gong diagram of interest ot be drawn
@@ -96,6 +95,8 @@ export class ClassDiagramComponent implements OnInit, OnDestroy {
     private gongdocFrontRepoService: gongdoc.FrontRepoService,
     private gongdocCommandService: gongdoc.GongdocCommandService,
     private gongdocCommitNbService: gongdoc.CommitNbService,
+
+    private ClassdiagramService: gongdoc.ClassdiagramService,
 
     formBuilder: FormBuilder,
   ) {
@@ -267,8 +268,11 @@ export class ClassDiagramComponent implements OnInit, OnDestroy {
     this.paper = new joint.dia.Paper(paperOptions)
 
     // intercept click on shapes when in production mode
-    this.paper.setInteractivity(false)
-    this.EditionMode = EditionModeEnum.PROD
+    if (this.classdiagram.IsEditable) {
+      this.paper.setInteractivity(false)
+    } else {
+      this.paper.setInteractivity(false)
+    }
 
     this.paper.on('cell:pointerdown',
       function (cellView, evt, x, y) {
@@ -466,20 +470,25 @@ export class ClassDiagramComponent implements OnInit, OnDestroy {
   public toggle(event: MatSlideToggleChange) {
     console.log('toggle', event.checked);
 
-    if (event.checked) {
-      this.EditionMode = EditionModeEnum.PROD
+    if (!event.checked) {
       this.paper!.setInteractivity(false)
+      this.classdiagram.IsEditable = false
+      this.ClassdiagramService.updateClassdiagram(this.classdiagram).subscribe(
+        classdiagram => {
+          console.log("classdiagram edition mode set to PROD")
+        }
+      )
     } else {
-      this.EditionMode = EditionModeEnum.DEV
       this.paper!.setInteractivity(true)
+      this.classdiagram.IsEditable = true
+      this.ClassdiagramService.updateClassdiagram(this.classdiagram).subscribe(
+        classdiagram => {
+          console.log("classdiagram edition mode set to DEV")
+        }
+      )
     }
 
     this.EditionModeBool = event.checked;
   }
-}
-
-export enum EditionModeEnum {
-  PROD = "prod",
-  DEV = "dev",
 }
 

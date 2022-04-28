@@ -10,7 +10,6 @@ import { MapOfComponents } from '../map-components'
 import { MapOfSortingComponents } from '../map-components'
 
 // insertion point for imports
-import { EditionModeSelect, EditionModeList } from '../EditionMode'
 import { PkgeltDB } from '../pkgelt-db'
 
 import { Router, RouterState, ActivatedRoute } from '@angular/router';
@@ -36,7 +35,7 @@ enum ClassdiagramDetailComponentState {
 export class ClassdiagramDetailComponent implements OnInit {
 
 	// insertion point for declarations
-	EditionModeList: EditionModeSelect[] = []
+	IsEditableFormControl = new FormControl(false);
 
 	// the ClassdiagramDB of interest
 	classdiagram: ClassdiagramDB = new ClassdiagramDB
@@ -107,7 +106,6 @@ export class ClassdiagramDetailComponent implements OnInit {
 		)
 
 		// insertion point for initialisation of enums list
-		this.EditionModeList = EditionModeList
 	}
 
 	getClassdiagram(): void {
@@ -135,6 +133,7 @@ export class ClassdiagramDetailComponent implements OnInit {
 				}
 
 				// insertion point for recovery of form controls value for bool fields
+				this.IsEditableFormControl.setValue(this.classdiagram.IsEditable)
 			}
 		)
 
@@ -147,6 +146,7 @@ export class ClassdiagramDetailComponent implements OnInit {
 		// pointers fields, after the translation, are nulled in order to perform serialization
 
 		// insertion point for translation/nullation of each field
+		this.classdiagram.IsEditable = this.IsEditableFormControl.value
 
 		// save from the front pointer space to the non pointer space for serialization
 

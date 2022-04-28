@@ -28,9 +28,9 @@ type Classdiagram struct {
 	// this is the memory model (and not the "memory motel" of the Rolling Stones)
 	Classshapes []*Classshape
 
-	// EditionMode indicates the the drawing can be edited (in development mode)
+	// IsEditable indicates the the drawing can be edited (in development mode)
 	// or not (in production mode)
-	EditionMode EditionMode
+	IsEditable bool
 }
 
 const DiagramMarginX = 10.0

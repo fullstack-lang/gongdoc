@@ -326,7 +326,7 @@ func (classdiagram *Classdiagram) GetName() (res string) {
 
 func (classdiagram *Classdiagram) GetFields() (res []string) {
 	// list of fields 
-	res = []string{"Name", "Classshapes", "EditionMode",  }
+	res = []string{"Name", "Classshapes", "IsEditable",  }
 	return
 }
 
@@ -342,8 +342,8 @@ func (classdiagram *Classdiagram) GetFieldStringValue(fieldName string) (res str
 			}
 			res += __instance__.Name
 		}
-	case "EditionMode":
-		res = classdiagram.EditionMode.ToCodeString()
+	case "IsEditable":
+		res = fmt.Sprintf("%t", classdiagram.IsEditable)
 	}
 	return
 }
@@ -2022,13 +2022,11 @@ func (stage *StageStruct) Marshall(file *os.File, modelsPackageName, packageName
 		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", string(classdiagram.Name))
 		initializerStatements += setValueField
 
-		if classdiagram.EditionMode != "" {
-			setValueField = StringEnumInitStatement
-			setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
-			setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "EditionMode")
-			setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", "models."+classdiagram.EditionMode.ToCodeString())
-			initializerStatements += setValueField
-		}
+		setValueField = NumberInitStatement
+		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
+		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "IsEditable")
+		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", fmt.Sprintf("%t", classdiagram.IsEditable))
+		initializerStatements += setValueField
 
 	}
 
