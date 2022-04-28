@@ -14,7 +14,6 @@ import * as gong from 'gong'
 
 import { newUmlClassShape } from './newUmlClassShape'
 import { ClassdiagramContextSubject, ClassdiagramContext } from '../diagram-displayed-gongstruct'
-import { ClassshapeDB, EditionMode, EditionModeList, LinkDB } from 'gongdoc';
 import { MatSlideToggleChange } from '@angular/material/slide-toggle';
 
 @Component({
@@ -47,7 +46,6 @@ export class ClassDiagramComponent implements OnInit, OnDestroy {
   /**
    * slider management
    */
-  public EditionModeBool = true;
   color: ThemePalette = 'primary';
 
   // the gong diagram of interest ot be drawn
@@ -269,7 +267,7 @@ export class ClassDiagramComponent implements OnInit, OnDestroy {
 
     // intercept click on shapes when in production mode
     if (this.classdiagram.IsEditable) {
-      this.paper.setInteractivity(false)
+      this.paper.setInteractivity(true)
     } else {
       this.paper.setInteractivity(false)
     }
@@ -487,8 +485,6 @@ export class ClassDiagramComponent implements OnInit, OnDestroy {
         }
       )
     }
-
-    this.EditionModeBool = event.checked;
   }
 }
 
