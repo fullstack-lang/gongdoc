@@ -325,8 +325,8 @@ func (classdiagram *Classdiagram) GetName() (res string) {
 }
 
 func (classdiagram *Classdiagram) GetFields() (res []string) {
-	// list of fields 
-	res = []string{"Name", "Classshapes", "IsEditable",  }
+	// list of fields
+	res = []string{"Name", "Classshapes", "IsEditable"}
 	return
 }
 
@@ -456,8 +456,8 @@ func (classshape *Classshape) GetName() (res string) {
 }
 
 func (classshape *Classshape) GetFields() (res []string) {
-	// list of fields 
-	res = []string{"Name", "Position", "Structname", "GongStruct", "ShowNbInstances", "NbInstances", "Fields", "Links", "Width", "Heigth", "ClassshapeTargetType",  }
+	// list of fields
+	res = []string{"Name", "Position", "Structname", "GongStruct", "ShowNbInstances", "NbInstances", "Fields", "Links", "Width", "Heigth", "ClassshapeTargetType"}
 	return
 }
 
@@ -612,8 +612,8 @@ func (field *Field) GetName() (res string) {
 }
 
 func (field *Field) GetFields() (res []string) {
-	// list of fields 
-	res = []string{"Name", "Fieldname", "FieldTypeAsString", "Structname", "Fieldtypename",  }
+	// list of fields
+	res = []string{"Name", "Fieldname", "FieldTypeAsString", "Structname", "Fieldtypename"}
 	return
 }
 
@@ -742,8 +742,8 @@ func (gongstruct *GongStruct) GetName() (res string) {
 }
 
 func (gongstruct *GongStruct) GetFields() (res []string) {
-	// list of fields 
-	res = []string{"Name", "NbInstances",  }
+	// list of fields
+	res = []string{"Name", "NbInstances"}
 	return
 }
 
@@ -866,8 +866,8 @@ func (gongdoccommand *GongdocCommand) GetName() (res string) {
 }
 
 func (gongdoccommand *GongdocCommand) GetFields() (res []string) {
-	// list of fields 
-	res = []string{"Name", "Command", "DiagramName", "Date", "GongdocNodeType", "StructName", "FieldName", "FieldTypeName", "PositionX", "PositionY",  }
+	// list of fields
+	res = []string{"Name", "Command", "DiagramName", "Date", "GongdocNodeType", "StructName", "FieldName", "FieldTypeName", "PositionX", "PositionY"}
 	return
 }
 
@@ -1006,8 +1006,8 @@ func (gongdocstatus *GongdocStatus) GetName() (res string) {
 }
 
 func (gongdocstatus *GongdocStatus) GetFields() (res []string) {
-	// list of fields 
-	res = []string{"Name", "Status", "CommandCompletionDate",  }
+	// list of fields
+	res = []string{"Name", "Status", "CommandCompletionDate"}
 	return
 }
 
@@ -1132,8 +1132,8 @@ func (link *Link) GetName() (res string) {
 }
 
 func (link *Link) GetFields() (res []string) {
-	// list of fields 
-	res = []string{"Name", "Fieldname", "Structname", "Fieldtypename", "TargetMultiplicity", "SourceMultiplicity", "Middlevertice",  }
+	// list of fields
+	res = []string{"Name", "Fieldname", "Structname", "Fieldtypename", "TargetMultiplicity", "SourceMultiplicity", "Middlevertice"}
 	return
 }
 
@@ -1268,8 +1268,8 @@ func (pkgelt *Pkgelt) GetName() (res string) {
 }
 
 func (pkgelt *Pkgelt) GetFields() (res []string) {
-	// list of fields 
-	res = []string{"Name", "Path", "GongModelPath", "Classdiagrams", "Umlscs",  }
+	// list of fields
+	res = []string{"Name", "Path", "GongModelPath", "Classdiagrams", "Umlscs"}
 	return
 }
 
@@ -1408,8 +1408,8 @@ func (position *Position) GetName() (res string) {
 }
 
 func (position *Position) GetFields() (res []string) {
-	// list of fields 
-	res = []string{"X", "Y", "Name",  }
+	// list of fields
+	res = []string{"X", "Y", "Name"}
 	return
 }
 
@@ -1534,8 +1534,8 @@ func (umlstate *UmlState) GetName() (res string) {
 }
 
 func (umlstate *UmlState) GetFields() (res []string) {
-	// list of fields 
-	res = []string{"Name", "X", "Y",  }
+	// list of fields
+	res = []string{"Name", "X", "Y"}
 	return
 }
 
@@ -1660,8 +1660,8 @@ func (umlsc *Umlsc) GetName() (res string) {
 }
 
 func (umlsc *Umlsc) GetFields() (res []string) {
-	// list of fields 
-	res = []string{"Name", "States", "Activestate",  }
+	// list of fields
+	res = []string{"Name", "States", "Activestate"}
 	return
 }
 
@@ -1791,8 +1791,8 @@ func (vertice *Vertice) GetName() (res string) {
 }
 
 func (vertice *Vertice) GetFields() (res []string) {
-	// list of fields 
-	res = []string{"X", "Y", "Name",  }
+	// list of fields
+	res = []string{"X", "Y", "Name"}
 	return
 }
 
@@ -2825,6 +2825,155 @@ func generatesIdentifier(gongStructName string, idx int, instanceName string) (i
 
 	return
 }
+
+// insertion point of functions that provide maps for reverse associations
+// generate function for reverse association maps of Classdiagram
+func (stageStruct *StageStruct) CreateReverseMap_Classdiagram_Classshapes() (res map[*Classshape]*Classdiagram) {
+	res = make(map[*Classshape]*Classdiagram)
+
+	for classdiagram := range stageStruct.Classdiagrams {
+		for _, classshape_ := range classdiagram.Classshapes {
+			res[classshape_] = classdiagram
+		}
+	}
+
+	return
+}
+
+// generate function for reverse association maps of Classshape
+func (stageStruct *StageStruct) CreateReverseMap_Classshape_Position() (res map[*Position][]*Classshape) {
+	res = make(map[*Position][]*Classshape)
+
+	for classshape := range stageStruct.Classshapes {
+		if classshape.Position != nil {
+			position_ := classshape.Position
+			var classshapes []*Classshape
+			_, ok := res[position_]
+			if ok {
+				classshapes = res[position_]
+			} else {
+				classshapes = make([]*Classshape, 0)
+			}
+			classshapes = append(classshapes, classshape)
+			res[position_] = classshapes
+		}
+	}
+
+	return
+}
+
+func (stageStruct *StageStruct) CreateReverseMap_Classshape_GongStruct() (res map[*GongStruct][]*Classshape) {
+	res = make(map[*GongStruct][]*Classshape)
+
+	for classshape := range stageStruct.Classshapes {
+		if classshape.GongStruct != nil {
+			gongstruct_ := classshape.GongStruct
+			var classshapes []*Classshape
+			_, ok := res[gongstruct_]
+			if ok {
+				classshapes = res[gongstruct_]
+			} else {
+				classshapes = make([]*Classshape, 0)
+			}
+			classshapes = append(classshapes, classshape)
+			res[gongstruct_] = classshapes
+		}
+	}
+
+	return
+}
+
+func (stageStruct *StageStruct) CreateReverseMap_Classshape_Fields() (res map[*Field]*Classshape) {
+	res = make(map[*Field]*Classshape)
+
+	for classshape := range stageStruct.Classshapes {
+		for _, field_ := range classshape.Fields {
+			res[field_] = classshape
+		}
+	}
+
+	return
+}
+
+func (stageStruct *StageStruct) CreateReverseMap_Classshape_Links() (res map[*Link]*Classshape) {
+	res = make(map[*Link]*Classshape)
+
+	for classshape := range stageStruct.Classshapes {
+		for _, link_ := range classshape.Links {
+			res[link_] = classshape
+		}
+	}
+
+	return
+}
+
+// generate function for reverse association maps of Field
+// generate function for reverse association maps of GongStruct
+// generate function for reverse association maps of GongdocCommand
+// generate function for reverse association maps of GongdocStatus
+// generate function for reverse association maps of Link
+func (stageStruct *StageStruct) CreateReverseMap_Link_Middlevertice() (res map[*Vertice][]*Link) {
+	res = make(map[*Vertice][]*Link)
+
+	for link := range stageStruct.Links {
+		if link.Middlevertice != nil {
+			vertice_ := link.Middlevertice
+			var links []*Link
+			_, ok := res[vertice_]
+			if ok {
+				links = res[vertice_]
+			} else {
+				links = make([]*Link, 0)
+			}
+			links = append(links, link)
+			res[vertice_] = links
+		}
+	}
+
+	return
+}
+
+// generate function for reverse association maps of Pkgelt
+func (stageStruct *StageStruct) CreateReverseMap_Pkgelt_Classdiagrams() (res map[*Classdiagram]*Pkgelt) {
+	res = make(map[*Classdiagram]*Pkgelt)
+
+	for pkgelt := range stageStruct.Pkgelts {
+		for _, classdiagram_ := range pkgelt.Classdiagrams {
+			res[classdiagram_] = pkgelt
+		}
+	}
+
+	return
+}
+
+func (stageStruct *StageStruct) CreateReverseMap_Pkgelt_Umlscs() (res map[*Umlsc]*Pkgelt) {
+	res = make(map[*Umlsc]*Pkgelt)
+
+	for pkgelt := range stageStruct.Pkgelts {
+		for _, umlsc_ := range pkgelt.Umlscs {
+			res[umlsc_] = pkgelt
+		}
+	}
+
+	return
+}
+
+// generate function for reverse association maps of Position
+// generate function for reverse association maps of UmlState
+// generate function for reverse association maps of Umlsc
+func (stageStruct *StageStruct) CreateReverseMap_Umlsc_States() (res map[*UmlState]*Umlsc) {
+	res = make(map[*UmlState]*Umlsc)
+
+	for umlsc := range stageStruct.Umlscs {
+		for _, umlstate_ := range umlsc.States {
+			res[umlstate_] = umlsc
+		}
+	}
+
+	return
+}
+
+// generate function for reverse association maps of Vertice
 
 // insertion point of enum utility functions
 // Utility function for ClassshapeTargetType
