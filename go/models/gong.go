@@ -12,7 +12,7 @@ import (
 )
 
 // swagger:ignore
-type __void struct{}
+type __void any
 
 // needed for creating set of instances in the stage
 var __member __void
@@ -28,40 +28,40 @@ type GongStructInterface interface {
 // StageStruct enables storage of staged instances
 // swagger:ignore
 type StageStruct struct { // insertion point for definition of arrays registering instances
-	Classdiagrams           map[*Classdiagram]struct{}
+	Classdiagrams           map[*Classdiagram]any
 	Classdiagrams_mapString map[string]*Classdiagram
 
-	Classshapes           map[*Classshape]struct{}
+	Classshapes           map[*Classshape]any
 	Classshapes_mapString map[string]*Classshape
 
-	Fields           map[*Field]struct{}
+	Fields           map[*Field]any
 	Fields_mapString map[string]*Field
 
-	GongStructs           map[*GongStruct]struct{}
+	GongStructs           map[*GongStruct]any
 	GongStructs_mapString map[string]*GongStruct
 
-	GongdocCommands           map[*GongdocCommand]struct{}
+	GongdocCommands           map[*GongdocCommand]any
 	GongdocCommands_mapString map[string]*GongdocCommand
 
-	GongdocStatuss           map[*GongdocStatus]struct{}
+	GongdocStatuss           map[*GongdocStatus]any
 	GongdocStatuss_mapString map[string]*GongdocStatus
 
-	Links           map[*Link]struct{}
+	Links           map[*Link]any
 	Links_mapString map[string]*Link
 
-	Pkgelts           map[*Pkgelt]struct{}
+	Pkgelts           map[*Pkgelt]any
 	Pkgelts_mapString map[string]*Pkgelt
 
-	Positions           map[*Position]struct{}
+	Positions           map[*Position]any
 	Positions_mapString map[string]*Position
 
-	UmlStates           map[*UmlState]struct{}
+	UmlStates           map[*UmlState]any
 	UmlStates_mapString map[string]*UmlState
 
-	Umlscs           map[*Umlsc]struct{}
+	Umlscs           map[*Umlsc]any
 	Umlscs_mapString map[string]*Umlsc
 
-	Vertices           map[*Vertice]struct{}
+	Vertices           map[*Vertice]any
 	Vertices_mapString map[string]*Vertice
 
 	AllModelsStructCreateCallback AllModelsStructCreateInterface
@@ -121,40 +121,40 @@ type BackRepoInterface interface {
 
 // swagger:ignore instructs the gong compiler (gongc) to avoid this particular struct
 var Stage StageStruct = StageStruct{ // insertion point for array initiatialisation
-	Classdiagrams:           make(map[*Classdiagram]struct{}),
+	Classdiagrams:           make(map[*Classdiagram]any),
 	Classdiagrams_mapString: make(map[string]*Classdiagram),
 
-	Classshapes:           make(map[*Classshape]struct{}),
+	Classshapes:           make(map[*Classshape]any),
 	Classshapes_mapString: make(map[string]*Classshape),
 
-	Fields:           make(map[*Field]struct{}),
+	Fields:           make(map[*Field]any),
 	Fields_mapString: make(map[string]*Field),
 
-	GongStructs:           make(map[*GongStruct]struct{}),
+	GongStructs:           make(map[*GongStruct]any),
 	GongStructs_mapString: make(map[string]*GongStruct),
 
-	GongdocCommands:           make(map[*GongdocCommand]struct{}),
+	GongdocCommands:           make(map[*GongdocCommand]any),
 	GongdocCommands_mapString: make(map[string]*GongdocCommand),
 
-	GongdocStatuss:           make(map[*GongdocStatus]struct{}),
+	GongdocStatuss:           make(map[*GongdocStatus]any),
 	GongdocStatuss_mapString: make(map[string]*GongdocStatus),
 
-	Links:           make(map[*Link]struct{}),
+	Links:           make(map[*Link]any),
 	Links_mapString: make(map[string]*Link),
 
-	Pkgelts:           make(map[*Pkgelt]struct{}),
+	Pkgelts:           make(map[*Pkgelt]any),
 	Pkgelts_mapString: make(map[string]*Pkgelt),
 
-	Positions:           make(map[*Position]struct{}),
+	Positions:           make(map[*Position]any),
 	Positions_mapString: make(map[string]*Position),
 
-	UmlStates:           make(map[*UmlState]struct{}),
+	UmlStates:           make(map[*UmlState]any),
 	UmlStates_mapString: make(map[string]*UmlState),
 
-	Umlscs:           make(map[*Umlsc]struct{}),
+	Umlscs:           make(map[*Umlsc]any),
 	Umlscs_mapString: make(map[string]*Umlsc),
 
-	Vertices:           make(map[*Vertice]struct{}),
+	Vertices:           make(map[*Vertice]any),
 	Vertices_mapString: make(map[string]*Vertice),
 
 	// end of insertion point
@@ -1841,40 +1841,40 @@ type AllModelsStructDeleteInterface interface { // insertion point for Callbacks
 }
 
 func (stage *StageStruct) Reset() { // insertion point for array reset
-	stage.Classdiagrams = make(map[*Classdiagram]struct{})
+	stage.Classdiagrams = make(map[*Classdiagram]any)
 	stage.Classdiagrams_mapString = make(map[string]*Classdiagram)
 
-	stage.Classshapes = make(map[*Classshape]struct{})
+	stage.Classshapes = make(map[*Classshape]any)
 	stage.Classshapes_mapString = make(map[string]*Classshape)
 
-	stage.Fields = make(map[*Field]struct{})
+	stage.Fields = make(map[*Field]any)
 	stage.Fields_mapString = make(map[string]*Field)
 
-	stage.GongStructs = make(map[*GongStruct]struct{})
+	stage.GongStructs = make(map[*GongStruct]any)
 	stage.GongStructs_mapString = make(map[string]*GongStruct)
 
-	stage.GongdocCommands = make(map[*GongdocCommand]struct{})
+	stage.GongdocCommands = make(map[*GongdocCommand]any)
 	stage.GongdocCommands_mapString = make(map[string]*GongdocCommand)
 
-	stage.GongdocStatuss = make(map[*GongdocStatus]struct{})
+	stage.GongdocStatuss = make(map[*GongdocStatus]any)
 	stage.GongdocStatuss_mapString = make(map[string]*GongdocStatus)
 
-	stage.Links = make(map[*Link]struct{})
+	stage.Links = make(map[*Link]any)
 	stage.Links_mapString = make(map[string]*Link)
 
-	stage.Pkgelts = make(map[*Pkgelt]struct{})
+	stage.Pkgelts = make(map[*Pkgelt]any)
 	stage.Pkgelts_mapString = make(map[string]*Pkgelt)
 
-	stage.Positions = make(map[*Position]struct{})
+	stage.Positions = make(map[*Position]any)
 	stage.Positions_mapString = make(map[string]*Position)
 
-	stage.UmlStates = make(map[*UmlState]struct{})
+	stage.UmlStates = make(map[*UmlState]any)
 	stage.UmlStates_mapString = make(map[string]*UmlState)
 
-	stage.Umlscs = make(map[*Umlsc]struct{})
+	stage.Umlscs = make(map[*Umlsc]any)
 	stage.Umlscs_mapString = make(map[string]*Umlsc)
 
-	stage.Vertices = make(map[*Vertice]struct{})
+	stage.Vertices = make(map[*Vertice]any)
 	stage.Vertices_mapString = make(map[string]*Vertice)
 
 }
@@ -2827,6 +2827,7 @@ func generatesIdentifier(gongStructName string, idx int, instanceName string) (i
 }
 
 // insertion point of functions that provide maps for reverse associations
+
 // generate function for reverse association maps of Classdiagram
 func (stageStruct *StageStruct) CreateReverseMap_Classdiagram_Classshapes() (res map[*Classshape]*Classdiagram) {
 	res = make(map[*Classshape]*Classdiagram)
@@ -2839,6 +2840,7 @@ func (stageStruct *StageStruct) CreateReverseMap_Classdiagram_Classshapes() (res
 
 	return
 }
+
 
 // generate function for reverse association maps of Classshape
 func (stageStruct *StageStruct) CreateReverseMap_Classshape_Position() (res map[*Position][]*Classshape) {
@@ -2861,7 +2863,6 @@ func (stageStruct *StageStruct) CreateReverseMap_Classshape_Position() (res map[
 
 	return
 }
-
 func (stageStruct *StageStruct) CreateReverseMap_Classshape_GongStruct() (res map[*GongStruct][]*Classshape) {
 	res = make(map[*GongStruct][]*Classshape)
 
@@ -2882,7 +2883,6 @@ func (stageStruct *StageStruct) CreateReverseMap_Classshape_GongStruct() (res ma
 
 	return
 }
-
 func (stageStruct *StageStruct) CreateReverseMap_Classshape_Fields() (res map[*Field]*Classshape) {
 	res = make(map[*Field]*Classshape)
 
@@ -2907,10 +2907,15 @@ func (stageStruct *StageStruct) CreateReverseMap_Classshape_Links() (res map[*Li
 	return
 }
 
+
 // generate function for reverse association maps of Field
+
 // generate function for reverse association maps of GongStruct
+
 // generate function for reverse association maps of GongdocCommand
+
 // generate function for reverse association maps of GongdocStatus
+
 // generate function for reverse association maps of Link
 func (stageStruct *StageStruct) CreateReverseMap_Link_Middlevertice() (res map[*Vertice][]*Link) {
 	res = make(map[*Vertice][]*Link)
@@ -2958,8 +2963,11 @@ func (stageStruct *StageStruct) CreateReverseMap_Pkgelt_Umlscs() (res map[*Umlsc
 	return
 }
 
+
 // generate function for reverse association maps of Position
+
 // generate function for reverse association maps of UmlState
+
 // generate function for reverse association maps of Umlsc
 func (stageStruct *StageStruct) CreateReverseMap_Umlsc_States() (res map[*UmlState]*Umlsc) {
 	res = make(map[*UmlState]*Umlsc)
@@ -2973,7 +2981,116 @@ func (stageStruct *StageStruct) CreateReverseMap_Umlsc_States() (res map[*UmlSta
 	return
 }
 
+
 // generate function for reverse association maps of Vertice
+
+type GongstructSet interface {
+	map[any]any |
+		// insertion point for generic types
+		map[*Classdiagram]any |
+		map[*Classshape]any |
+		map[*Field]any |
+		map[*GongStruct]any |
+		map[*GongdocCommand]any |
+		map[*GongdocStatus]any |
+		map[*Link]any |
+		map[*Pkgelt]any |
+		map[*Position]any |
+		map[*UmlState]any |
+		map[*Umlsc]any |
+		map[*Vertice]any |
+		map[*any]any // because go does not support an extra "|" at the end of type specifications
+}
+
+type GongstructMapString interface {
+	map[any]any |
+		// insertion point for generic types
+		map[string]*Classdiagram |
+		map[string]*Classshape |
+		map[string]*Field |
+		map[string]*GongStruct |
+		map[string]*GongdocCommand |
+		map[string]*GongdocStatus |
+		map[string]*Link |
+		map[string]*Pkgelt |
+		map[string]*Position |
+		map[string]*UmlState |
+		map[string]*Umlsc |
+		map[string]*Vertice |
+		map[*any]any // because go does not support an extra "|" at the end of type specifications
+}
+
+// GongGetSet returns the set staged GongstructType instances
+// it is usefull because it allows refactoring of gong struct identifier
+func GongGetSet[Type GongstructSet]() *Type {
+	var ret Type
+
+	switch any(ret).(type) {
+	// insertion point for generic get functions
+	case map[*Classdiagram]any:
+		return any(&Stage.Classdiagrams).(*Type)
+	case map[*Classshape]any:
+		return any(&Stage.Classshapes).(*Type)
+	case map[*Field]any:
+		return any(&Stage.Fields).(*Type)
+	case map[*GongStruct]any:
+		return any(&Stage.GongStructs).(*Type)
+	case map[*GongdocCommand]any:
+		return any(&Stage.GongdocCommands).(*Type)
+	case map[*GongdocStatus]any:
+		return any(&Stage.GongdocStatuss).(*Type)
+	case map[*Link]any:
+		return any(&Stage.Links).(*Type)
+	case map[*Pkgelt]any:
+		return any(&Stage.Pkgelts).(*Type)
+	case map[*Position]any:
+		return any(&Stage.Positions).(*Type)
+	case map[*UmlState]any:
+		return any(&Stage.UmlStates).(*Type)
+	case map[*Umlsc]any:
+		return any(&Stage.Umlscs).(*Type)
+	case map[*Vertice]any:
+		return any(&Stage.Vertices).(*Type)
+	default:
+		return nil
+	}
+}
+
+// GongGetMap returns the map of staged GongstructType instances
+// it is usefull because it allows refactoring of gong struct identifier
+func GongGetMap[Type GongstructMapString]() *Type {
+	var ret Type
+
+	switch any(ret).(type) {
+	// insertion point for generic get functions
+	case map[string]*Classdiagram:
+		return any(&Stage.Classdiagrams_mapString).(*Type)
+	case map[string]*Classshape:
+		return any(&Stage.Classshapes_mapString).(*Type)
+	case map[string]*Field:
+		return any(&Stage.Fields_mapString).(*Type)
+	case map[string]*GongStruct:
+		return any(&Stage.GongStructs_mapString).(*Type)
+	case map[string]*GongdocCommand:
+		return any(&Stage.GongdocCommands_mapString).(*Type)
+	case map[string]*GongdocStatus:
+		return any(&Stage.GongdocStatuss_mapString).(*Type)
+	case map[string]*Link:
+		return any(&Stage.Links_mapString).(*Type)
+	case map[string]*Pkgelt:
+		return any(&Stage.Pkgelts_mapString).(*Type)
+	case map[string]*Position:
+		return any(&Stage.Positions_mapString).(*Type)
+	case map[string]*UmlState:
+		return any(&Stage.UmlStates_mapString).(*Type)
+	case map[string]*Umlsc:
+		return any(&Stage.Umlscs_mapString).(*Type)
+	case map[string]*Vertice:
+		return any(&Stage.Vertices_mapString).(*Type)
+	default:
+		return nil
+	}
+}
 
 // insertion point of enum utility functions
 // Utility function for ClassshapeTargetType
