@@ -2984,6 +2984,15 @@ func (stageStruct *StageStruct) CreateReverseMap_Umlsc_States() (res map[*UmlSta
 
 // generate function for reverse association maps of Vertice
 
+// Gongstruct is the type paramter for generated generic function that allows 
+// - access to staged instances
+// - navigation between staged instances by going backward association links between gongstruct
+// - full refactoring of Gongstruct identifiers / fields
+type Gongstruct interface {
+	// insertion point for generic types
+	Classdiagram | Classshape | Field | GongStruct | GongdocCommand | GongdocStatus | Link | Pkgelt | Position | UmlState | Umlsc | Vertice
+}
+
 type GongstructSet interface {
 	map[any]any |
 		// insertion point for generic types
@@ -3091,6 +3100,409 @@ func GongGetMap[Type GongstructMapString]() *Type {
 		return nil
 	}
 }
+
+// GetGongstructInstancesSet returns the set staged GongstructType instances
+// it is usefull because it allows refactoring of gongstruct identifier
+func GetGongstructInstancesSet[Type Gongstruct]() *map[*Type]any {
+	var ret Type
+
+	switch any(ret).(type) {
+	// insertion point for generic get functions
+	case Classdiagram:
+		return any(&Stage.Classdiagrams).(*map[*Type]any)
+	case Classshape:
+		return any(&Stage.Classshapes).(*map[*Type]any)
+	case Field:
+		return any(&Stage.Fields).(*map[*Type]any)
+	case GongStruct:
+		return any(&Stage.GongStructs).(*map[*Type]any)
+	case GongdocCommand:
+		return any(&Stage.GongdocCommands).(*map[*Type]any)
+	case GongdocStatus:
+		return any(&Stage.GongdocStatuss).(*map[*Type]any)
+	case Link:
+		return any(&Stage.Links).(*map[*Type]any)
+	case Pkgelt:
+		return any(&Stage.Pkgelts).(*map[*Type]any)
+	case Position:
+		return any(&Stage.Positions).(*map[*Type]any)
+	case UmlState:
+		return any(&Stage.UmlStates).(*map[*Type]any)
+	case Umlsc:
+		return any(&Stage.Umlscs).(*map[*Type]any)
+	case Vertice:
+		return any(&Stage.Vertices).(*map[*Type]any)
+	default:
+		return nil
+	}
+}
+
+// GetGongstructInstancesMap returns the map of staged GongstructType instances
+// it is usefull because it allows refactoring of gong struct identifier
+func GetGongstructInstancesMap[Type Gongstruct]() *map[string]*Type {
+	var ret Type
+
+	switch any(ret).(type) {
+	// insertion point for generic get functions
+	case Classdiagram:
+		return any(&Stage.Classdiagrams_mapString).(*map[string]*Type)
+	case Classshape:
+		return any(&Stage.Classshapes_mapString).(*map[string]*Type)
+	case Field:
+		return any(&Stage.Fields_mapString).(*map[string]*Type)
+	case GongStruct:
+		return any(&Stage.GongStructs_mapString).(*map[string]*Type)
+	case GongdocCommand:
+		return any(&Stage.GongdocCommands_mapString).(*map[string]*Type)
+	case GongdocStatus:
+		return any(&Stage.GongdocStatuss_mapString).(*map[string]*Type)
+	case Link:
+		return any(&Stage.Links_mapString).(*map[string]*Type)
+	case Pkgelt:
+		return any(&Stage.Pkgelts_mapString).(*map[string]*Type)
+	case Position:
+		return any(&Stage.Positions_mapString).(*map[string]*Type)
+	case UmlState:
+		return any(&Stage.UmlStates_mapString).(*map[string]*Type)
+	case Umlsc:
+		return any(&Stage.Umlscs_mapString).(*map[string]*Type)
+	case Vertice:
+		return any(&Stage.Vertices_mapString).(*map[string]*Type)
+	default:
+		return nil
+	}
+}
+
+// GetAssociationName is a generic function that returns an instance of Type
+// where each association is filled with an instance whose name is the name of the association
+//
+// This function can be handy for generating navigation function that are refactorable
+func GetAssociationName[Type Gongstruct]() *Type {
+	var ret Type
+
+	switch any(ret).(type) {
+	// insertion point for instance with special fields
+	case Classdiagram:
+		return any(&Classdiagram{
+			// Initialisation of associations
+			// field is initialized with an instance of Classshape with the name of the field
+			Classshapes: []*Classshape{{Name: "Classshapes"}},
+		}).(*Type)
+	case Classshape:
+		return any(&Classshape{
+			// Initialisation of associations
+			// field is initialized with an instance of Position with the name of the field
+			Position: &Position{Name: "Position"},
+			// field is initialized with an instance of GongStruct with the name of the field
+			GongStruct: &GongStruct{Name: "GongStruct"},
+			// field is initialized with an instance of Field with the name of the field
+			Fields: []*Field{{Name: "Fields"}},
+			// field is initialized with an instance of Link with the name of the field
+			Links: []*Link{{Name: "Links"}},
+		}).(*Type)
+	case Field:
+		return any(&Field{
+			// Initialisation of associations
+		}).(*Type)
+	case GongStruct:
+		return any(&GongStruct{
+			// Initialisation of associations
+		}).(*Type)
+	case GongdocCommand:
+		return any(&GongdocCommand{
+			// Initialisation of associations
+		}).(*Type)
+	case GongdocStatus:
+		return any(&GongdocStatus{
+			// Initialisation of associations
+		}).(*Type)
+	case Link:
+		return any(&Link{
+			// Initialisation of associations
+			// field is initialized with an instance of Vertice with the name of the field
+			Middlevertice: &Vertice{Name: "Middlevertice"},
+		}).(*Type)
+	case Pkgelt:
+		return any(&Pkgelt{
+			// Initialisation of associations
+			// field is initialized with an instance of Classdiagram with the name of the field
+			Classdiagrams: []*Classdiagram{{Name: "Classdiagrams"}},
+			// field is initialized with an instance of Umlsc with the name of the field
+			Umlscs: []*Umlsc{{Name: "Umlscs"}},
+		}).(*Type)
+	case Position:
+		return any(&Position{
+			// Initialisation of associations
+		}).(*Type)
+	case UmlState:
+		return any(&UmlState{
+			// Initialisation of associations
+		}).(*Type)
+	case Umlsc:
+		return any(&Umlsc{
+			// Initialisation of associations
+			// field is initialized with an instance of UmlState with the name of the field
+			States: []*UmlState{{Name: "States"}},
+		}).(*Type)
+	case Vertice:
+		return any(&Vertice{
+			// Initialisation of associations
+		}).(*Type)
+	default:
+		return nil
+	}
+}
+
+// GetPointerReverseMap allows backtrack navigation of any Start.Fieldname
+// associations (0..1) that is a pointer from one staged Gongstruct (type Start)
+// instances to another (type End)
+//
+// The function provides a map with keys as instances of End and values to arrays of *Start
+// the map is construed by iterating over all Start instances and populationg keys with End instances
+// and values with slice of Start instances
+func GetPointerReverseMap[Start, End Gongstruct](fieldname string) map[*End][]*Start {
+	var ret Start
+
+	switch any(ret).(type) {
+	// insertion point of functions that provide maps for reverse associations
+	// reverse maps of direct associations of Classdiagram
+	case Classdiagram:
+		switch fieldname {
+		// insertion point for per direct association field
+		}
+	// reverse maps of direct associations of Classshape
+	case Classshape:
+		switch fieldname {
+		// insertion point for per direct association field
+		case "Position":
+			res := make(map[*Position][]*Classshape)
+			for classshape := range Stage.Classshapes {
+				if classshape.Position != nil {
+					position_ := classshape.Position
+					var classshapes []*Classshape
+					_, ok := res[position_]
+					if ok {
+						classshapes = res[position_]
+					} else {
+						classshapes = make([]*Classshape, 0)
+					}
+					classshapes = append(classshapes, classshape)
+					res[position_] = classshapes
+				}
+			}
+			return any(res).(map[*End][]*Start)
+		case "GongStruct":
+			res := make(map[*GongStruct][]*Classshape)
+			for classshape := range Stage.Classshapes {
+				if classshape.GongStruct != nil {
+					gongstruct_ := classshape.GongStruct
+					var classshapes []*Classshape
+					_, ok := res[gongstruct_]
+					if ok {
+						classshapes = res[gongstruct_]
+					} else {
+						classshapes = make([]*Classshape, 0)
+					}
+					classshapes = append(classshapes, classshape)
+					res[gongstruct_] = classshapes
+				}
+			}
+			return any(res).(map[*End][]*Start)
+		}
+	// reverse maps of direct associations of Field
+	case Field:
+		switch fieldname {
+		// insertion point for per direct association field
+		}
+	// reverse maps of direct associations of GongStruct
+	case GongStruct:
+		switch fieldname {
+		// insertion point for per direct association field
+		}
+	// reverse maps of direct associations of GongdocCommand
+	case GongdocCommand:
+		switch fieldname {
+		// insertion point for per direct association field
+		}
+	// reverse maps of direct associations of GongdocStatus
+	case GongdocStatus:
+		switch fieldname {
+		// insertion point for per direct association field
+		}
+	// reverse maps of direct associations of Link
+	case Link:
+		switch fieldname {
+		// insertion point for per direct association field
+		case "Middlevertice":
+			res := make(map[*Vertice][]*Link)
+			for link := range Stage.Links {
+				if link.Middlevertice != nil {
+					vertice_ := link.Middlevertice
+					var links []*Link
+					_, ok := res[vertice_]
+					if ok {
+						links = res[vertice_]
+					} else {
+						links = make([]*Link, 0)
+					}
+					links = append(links, link)
+					res[vertice_] = links
+				}
+			}
+			return any(res).(map[*End][]*Start)
+		}
+	// reverse maps of direct associations of Pkgelt
+	case Pkgelt:
+		switch fieldname {
+		// insertion point for per direct association field
+		}
+	// reverse maps of direct associations of Position
+	case Position:
+		switch fieldname {
+		// insertion point for per direct association field
+		}
+	// reverse maps of direct associations of UmlState
+	case UmlState:
+		switch fieldname {
+		// insertion point for per direct association field
+		}
+	// reverse maps of direct associations of Umlsc
+	case Umlsc:
+		switch fieldname {
+		// insertion point for per direct association field
+		}
+	// reverse maps of direct associations of Vertice
+	case Vertice:
+		switch fieldname {
+		// insertion point for per direct association field
+		}
+	}
+	return nil
+}
+
+// GetSliceOfPointersReverseMap allows backtrack navigation of any Start.Fieldname
+// associations (0..N) between one staged Gongstruct instances and many others
+//
+// The function provides a map with keys as instances of End and values to *Start instances
+// the map is construed by iterating over all Start instances and populating keys with End instances
+// and values with the Start instances
+func GetSliceOfPointersReverseMap[Start, End Gongstruct](fieldname string) map[*End]*Start {
+	var ret Start
+
+	switch any(ret).(type) {
+	// insertion point of functions that provide maps for reverse associations
+	// reverse maps of direct associations of Classdiagram
+	case Classdiagram:
+		switch fieldname {
+		// insertion point for per direct association field
+		case "Classshapes":
+			res := make(map[*Classshape]*Classdiagram)
+			for classdiagram := range Stage.Classdiagrams {
+				for _, classshape_ := range classdiagram.Classshapes {
+					res[classshape_] = classdiagram
+				}
+			}
+			return any(res).(map[*End]*Start)
+		}
+	// reverse maps of direct associations of Classshape
+	case Classshape:
+		switch fieldname {
+		// insertion point for per direct association field
+		case "Fields":
+			res := make(map[*Field]*Classshape)
+			for classshape := range Stage.Classshapes {
+				for _, field_ := range classshape.Fields {
+					res[field_] = classshape
+				}
+			}
+			return any(res).(map[*End]*Start)
+		case "Links":
+			res := make(map[*Link]*Classshape)
+			for classshape := range Stage.Classshapes {
+				for _, link_ := range classshape.Links {
+					res[link_] = classshape
+				}
+			}
+			return any(res).(map[*End]*Start)
+		}
+	// reverse maps of direct associations of Field
+	case Field:
+		switch fieldname {
+		// insertion point for per direct association field
+		}
+	// reverse maps of direct associations of GongStruct
+	case GongStruct:
+		switch fieldname {
+		// insertion point for per direct association field
+		}
+	// reverse maps of direct associations of GongdocCommand
+	case GongdocCommand:
+		switch fieldname {
+		// insertion point for per direct association field
+		}
+	// reverse maps of direct associations of GongdocStatus
+	case GongdocStatus:
+		switch fieldname {
+		// insertion point for per direct association field
+		}
+	// reverse maps of direct associations of Link
+	case Link:
+		switch fieldname {
+		// insertion point for per direct association field
+		}
+	// reverse maps of direct associations of Pkgelt
+	case Pkgelt:
+		switch fieldname {
+		// insertion point for per direct association field
+		case "Classdiagrams":
+			res := make(map[*Classdiagram]*Pkgelt)
+			for pkgelt := range Stage.Pkgelts {
+				for _, classdiagram_ := range pkgelt.Classdiagrams {
+					res[classdiagram_] = pkgelt
+				}
+			}
+			return any(res).(map[*End]*Start)
+		case "Umlscs":
+			res := make(map[*Umlsc]*Pkgelt)
+			for pkgelt := range Stage.Pkgelts {
+				for _, umlsc_ := range pkgelt.Umlscs {
+					res[umlsc_] = pkgelt
+				}
+			}
+			return any(res).(map[*End]*Start)
+		}
+	// reverse maps of direct associations of Position
+	case Position:
+		switch fieldname {
+		// insertion point for per direct association field
+		}
+	// reverse maps of direct associations of UmlState
+	case UmlState:
+		switch fieldname {
+		// insertion point for per direct association field
+		}
+	// reverse maps of direct associations of Umlsc
+	case Umlsc:
+		switch fieldname {
+		// insertion point for per direct association field
+		case "States":
+			res := make(map[*UmlState]*Umlsc)
+			for umlsc := range Stage.Umlscs {
+				for _, umlstate_ := range umlsc.States {
+					res[umlstate_] = umlsc
+				}
+			}
+			return any(res).(map[*End]*Start)
+		}
+	// reverse maps of direct associations of Vertice
+	case Vertice:
+		switch fieldname {
+		// insertion point for per direct association field
+		}
+	}
+	return nil
+}
+
 
 // insertion point of enum utility functions
 // Utility function for ClassshapeTargetType
