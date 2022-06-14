@@ -4,12 +4,14 @@ type GongTimeField struct {
 	Name string
 
 	Index int
-}
 
-func (gongTimeField *GongTimeField) GetName() string {
-	return gongTimeField.Name
+	CompositeStructName string
 }
 
 func (gongTimeField *GongTimeField) GetIndex() int {
 	return gongTimeField.Index
+}
+
+func (gongTimeField *GongTimeField) GetCompositeStructName() string {
+	return gongTimeField.CompositeStructName
 }

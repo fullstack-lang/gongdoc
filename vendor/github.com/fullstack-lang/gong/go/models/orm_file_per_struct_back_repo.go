@@ -266,7 +266,7 @@ func (backRepo{{Structname}} *BackRepo{{Structname}}Struct) CheckoutPhaseOne() (
 
 	// list of instances to be removed
 	// start from the initial map on the stage and remove instances that have been checked out
-	{{structname}}InstancesToBeRemovedFromTheStage := make(map[*models.{{Structname}}]struct{})
+	{{structname}}InstancesToBeRemovedFromTheStage := make(map[*models.{{Structname}}]any)
 	for key, value := range models.Stage.{{Structname}}s {
 		{{structname}}InstancesToBeRemovedFromTheStage[key] = value
 	}
@@ -598,6 +598,7 @@ const (
 
 	BackRepoCommitBasicFieldInt
 	BackRepoCheckoutBasicFieldInt
+	BackRepoCheckoutBasicFieldIntEnum
 
 	BackRepoDeclarationBasicBooleanField
 	BackRepoCommitBasicBooleanField
@@ -661,7 +662,7 @@ var BackRepoFieldSubTemplateCode map[BackRepoPerStructSubTemplate]string = map[B
 
 	BackRepoCommitBasicFieldEnum: `
 
-	{{structname}}DB.{{FieldName}}_Data.String = string({{structname}}.{{FieldName}})
+	{{structname}}DB.{{FieldName}}_Data.String = {{structname}}.{{FieldName}}.ToString()
 	{{structname}}DB.{{FieldName}}_Data.Valid = true`,
 
 	BackRepoCommitBasicFieldInt: `
@@ -722,10 +723,13 @@ var BackRepoFieldSubTemplateCode map[BackRepoPerStructSubTemplate]string = map[B
 	{{structname}}.{{FieldName}} = {{structname}}DB.{{FieldName}}_Data.Time`,
 
 	BackRepoCheckoutBasicFieldEnum: `
-	{{structname}}.{{FieldName}} = models.{{EnumType}}({{structname}}DB.{{FieldName}}_Data.String)`,
+	{{structname}}.{{FieldName}}.FromString({{structname}}DB.{{FieldName}}_Data.String)`,
 
 	BackRepoCheckoutBasicFieldInt: `
 	{{structname}}.{{FieldName}} = {{FieldType}}({{structname}}DB.{{FieldName}}_Data.Int64)`,
+
+	BackRepoCheckoutBasicFieldIntEnum: `
+	{{structname}}.{{FieldName}} = models.{{FieldType}}({{structname}}DB.{{FieldName}}_Data.Int64)`,
 
 	BackRepoCheckoutBasicFieldBoolean: `
 	{{structname}}.{{FieldName}} = {{structname}}DB.{{FieldName}}_Data.Bool`,
@@ -898,10 +902,17 @@ func MultiCodeGeneratorBackRepo(
 							BackRepoFieldSubTemplateCode[BackRepoCommitBasicFieldInt],
 							"{{FieldName}}", field.Name)
 
-						insertions[BackRepoBasicFieldsCheckout] += Replace2(
-							BackRepoFieldSubTemplateCode[BackRepoCheckoutBasicFieldInt],
-							"{{FieldName}}", field.Name,
-							"{{FieldType}}", field.DeclaredType)
+						if field.GongEnum != nil {
+							insertions[BackRepoBasicFieldsCheckout] += Replace2(
+								BackRepoFieldSubTemplateCode[BackRepoCheckoutBasicFieldIntEnum],
+								"{{FieldName}}", field.Name,
+								"{{FieldType}}", field.GongEnum.Name)
+						} else {
+							insertions[BackRepoBasicFieldsCheckout] += Replace2(
+								BackRepoFieldSubTemplateCode[BackRepoCheckoutBasicFieldInt],
+								"{{FieldName}}", field.Name,
+								"{{FieldType}}", field.DeclaredType)
+						}
 					default:
 					}
 				}
