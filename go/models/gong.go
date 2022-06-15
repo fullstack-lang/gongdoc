@@ -324,30 +324,6 @@ func (classdiagram *Classdiagram) GetName() (res string) {
 	return classdiagram.Name
 }
 
-func (classdiagram *Classdiagram) GetFields() (res []string) {
-	// list of fields
-	res = []string{"Name", "Classshapes", "IsEditable"}
-	return
-}
-
-func (classdiagram *Classdiagram) GetFieldStringValue(fieldName string) (res string) {
-	switch fieldName {
-	// string value of fields
-	case "Name":
-		res = classdiagram.Name
-	case "Classshapes":
-		for idx, __instance__ := range classdiagram.Classshapes {
-			if idx > 0 {
-				res += "\n"
-			}
-			res += __instance__.Name
-		}
-	case "IsEditable":
-		res = fmt.Sprintf("%t", classdiagram.IsEditable)
-	}
-	return
-}
-
 func (stage *StageStruct) getClassshapeOrderedStructWithNameField() []*Classshape {
 	// have alphabetical order generation
 	classshapeOrdered := []*Classshape{}
@@ -453,55 +429,6 @@ func DeleteORMClassshape(classshape *Classshape) {
 // for satisfaction of GongStruct interface
 func (classshape *Classshape) GetName() (res string) {
 	return classshape.Name
-}
-
-func (classshape *Classshape) GetFields() (res []string) {
-	// list of fields
-	res = []string{"Name", "Position", "Structname", "GongStruct", "ShowNbInstances", "NbInstances", "Fields", "Links", "Width", "Heigth", "ClassshapeTargetType"}
-	return
-}
-
-func (classshape *Classshape) GetFieldStringValue(fieldName string) (res string) {
-	switch fieldName {
-	// string value of fields
-	case "Name":
-		res = classshape.Name
-	case "Position":
-		if classshape.Position != nil {
-			res = classshape.Position.Name
-		}
-	case "Structname":
-		res = classshape.Structname
-	case "GongStruct":
-		if classshape.GongStruct != nil {
-			res = classshape.GongStruct.Name
-		}
-	case "ShowNbInstances":
-		res = fmt.Sprintf("%t", classshape.ShowNbInstances)
-	case "NbInstances":
-		res = fmt.Sprintf("%d", classshape.NbInstances)
-	case "Fields":
-		for idx, __instance__ := range classshape.Fields {
-			if idx > 0 {
-				res += "\n"
-			}
-			res += __instance__.Name
-		}
-	case "Links":
-		for idx, __instance__ := range classshape.Links {
-			if idx > 0 {
-				res += "\n"
-			}
-			res += __instance__.Name
-		}
-	case "Width":
-		res = fmt.Sprintf("%f", classshape.Width)
-	case "Heigth":
-		res = fmt.Sprintf("%f", classshape.Heigth)
-	case "ClassshapeTargetType":
-		res = classshape.ClassshapeTargetType.ToCodeString()
-	}
-	return
 }
 
 func (stage *StageStruct) getFieldOrderedStructWithNameField() []*Field {
@@ -611,29 +538,6 @@ func (field *Field) GetName() (res string) {
 	return field.Name
 }
 
-func (field *Field) GetFields() (res []string) {
-	// list of fields
-	res = []string{"Name", "Fieldname", "FieldTypeAsString", "Structname", "Fieldtypename"}
-	return
-}
-
-func (field *Field) GetFieldStringValue(fieldName string) (res string) {
-	switch fieldName {
-	// string value of fields
-	case "Name":
-		res = field.Name
-	case "Fieldname":
-		res = field.Fieldname
-	case "FieldTypeAsString":
-		res = field.FieldTypeAsString
-	case "Structname":
-		res = field.Structname
-	case "Fieldtypename":
-		res = field.Fieldtypename
-	}
-	return
-}
-
 func (stage *StageStruct) getGongStructOrderedStructWithNameField() []*GongStruct {
 	// have alphabetical order generation
 	gongstructOrdered := []*GongStruct{}
@@ -739,23 +643,6 @@ func DeleteORMGongStruct(gongstruct *GongStruct) {
 // for satisfaction of GongStruct interface
 func (gongstruct *GongStruct) GetName() (res string) {
 	return gongstruct.Name
-}
-
-func (gongstruct *GongStruct) GetFields() (res []string) {
-	// list of fields
-	res = []string{"Name", "NbInstances"}
-	return
-}
-
-func (gongstruct *GongStruct) GetFieldStringValue(fieldName string) (res string) {
-	switch fieldName {
-	// string value of fields
-	case "Name":
-		res = gongstruct.Name
-	case "NbInstances":
-		res = fmt.Sprintf("%d", gongstruct.NbInstances)
-	}
-	return
 }
 
 func (stage *StageStruct) getGongdocCommandOrderedStructWithNameField() []*GongdocCommand {
@@ -865,39 +752,6 @@ func (gongdoccommand *GongdocCommand) GetName() (res string) {
 	return gongdoccommand.Name
 }
 
-func (gongdoccommand *GongdocCommand) GetFields() (res []string) {
-	// list of fields
-	res = []string{"Name", "Command", "DiagramName", "Date", "GongdocNodeType", "StructName", "FieldName", "FieldTypeName", "PositionX", "PositionY"}
-	return
-}
-
-func (gongdoccommand *GongdocCommand) GetFieldStringValue(fieldName string) (res string) {
-	switch fieldName {
-	// string value of fields
-	case "Name":
-		res = gongdoccommand.Name
-	case "Command":
-		res = gongdoccommand.Command.ToCodeString()
-	case "DiagramName":
-		res = gongdoccommand.DiagramName
-	case "Date":
-		res = gongdoccommand.Date
-	case "GongdocNodeType":
-		res = gongdoccommand.GongdocNodeType.ToCodeString()
-	case "StructName":
-		res = gongdoccommand.StructName
-	case "FieldName":
-		res = gongdoccommand.FieldName
-	case "FieldTypeName":
-		res = gongdoccommand.FieldTypeName
-	case "PositionX":
-		res = fmt.Sprintf("%d", gongdoccommand.PositionX)
-	case "PositionY":
-		res = fmt.Sprintf("%d", gongdoccommand.PositionY)
-	}
-	return
-}
-
 func (stage *StageStruct) getGongdocStatusOrderedStructWithNameField() []*GongdocStatus {
 	// have alphabetical order generation
 	gongdocstatusOrdered := []*GongdocStatus{}
@@ -1003,25 +857,6 @@ func DeleteORMGongdocStatus(gongdocstatus *GongdocStatus) {
 // for satisfaction of GongStruct interface
 func (gongdocstatus *GongdocStatus) GetName() (res string) {
 	return gongdocstatus.Name
-}
-
-func (gongdocstatus *GongdocStatus) GetFields() (res []string) {
-	// list of fields
-	res = []string{"Name", "Status", "CommandCompletionDate"}
-	return
-}
-
-func (gongdocstatus *GongdocStatus) GetFieldStringValue(fieldName string) (res string) {
-	switch fieldName {
-	// string value of fields
-	case "Name":
-		res = gongdocstatus.Name
-	case "Status":
-		res = gongdocstatus.Status.ToCodeString()
-	case "CommandCompletionDate":
-		res = gongdocstatus.CommandCompletionDate
-	}
-	return
 }
 
 func (stage *StageStruct) getLinkOrderedStructWithNameField() []*Link {
@@ -1131,35 +966,6 @@ func (link *Link) GetName() (res string) {
 	return link.Name
 }
 
-func (link *Link) GetFields() (res []string) {
-	// list of fields
-	res = []string{"Name", "Fieldname", "Structname", "Fieldtypename", "TargetMultiplicity", "SourceMultiplicity", "Middlevertice"}
-	return
-}
-
-func (link *Link) GetFieldStringValue(fieldName string) (res string) {
-	switch fieldName {
-	// string value of fields
-	case "Name":
-		res = link.Name
-	case "Fieldname":
-		res = link.Fieldname
-	case "Structname":
-		res = link.Structname
-	case "Fieldtypename":
-		res = link.Fieldtypename
-	case "TargetMultiplicity":
-		res = link.TargetMultiplicity.ToCodeString()
-	case "SourceMultiplicity":
-		res = link.SourceMultiplicity.ToCodeString()
-	case "Middlevertice":
-		if link.Middlevertice != nil {
-			res = link.Middlevertice.Name
-		}
-	}
-	return
-}
-
 func (stage *StageStruct) getPkgeltOrderedStructWithNameField() []*Pkgelt {
 	// have alphabetical order generation
 	pkgeltOrdered := []*Pkgelt{}
@@ -1265,39 +1071,6 @@ func DeleteORMPkgelt(pkgelt *Pkgelt) {
 // for satisfaction of GongStruct interface
 func (pkgelt *Pkgelt) GetName() (res string) {
 	return pkgelt.Name
-}
-
-func (pkgelt *Pkgelt) GetFields() (res []string) {
-	// list of fields
-	res = []string{"Name", "Path", "GongModelPath", "Classdiagrams", "Umlscs"}
-	return
-}
-
-func (pkgelt *Pkgelt) GetFieldStringValue(fieldName string) (res string) {
-	switch fieldName {
-	// string value of fields
-	case "Name":
-		res = pkgelt.Name
-	case "Path":
-		res = pkgelt.Path
-	case "GongModelPath":
-		res = pkgelt.GongModelPath
-	case "Classdiagrams":
-		for idx, __instance__ := range pkgelt.Classdiagrams {
-			if idx > 0 {
-				res += "\n"
-			}
-			res += __instance__.Name
-		}
-	case "Umlscs":
-		for idx, __instance__ := range pkgelt.Umlscs {
-			if idx > 0 {
-				res += "\n"
-			}
-			res += __instance__.Name
-		}
-	}
-	return
 }
 
 func (stage *StageStruct) getPositionOrderedStructWithNameField() []*Position {
@@ -1407,25 +1180,6 @@ func (position *Position) GetName() (res string) {
 	return position.Name
 }
 
-func (position *Position) GetFields() (res []string) {
-	// list of fields
-	res = []string{"X", "Y", "Name"}
-	return
-}
-
-func (position *Position) GetFieldStringValue(fieldName string) (res string) {
-	switch fieldName {
-	// string value of fields
-	case "X":
-		res = fmt.Sprintf("%f", position.X)
-	case "Y":
-		res = fmt.Sprintf("%f", position.Y)
-	case "Name":
-		res = position.Name
-	}
-	return
-}
-
 func (stage *StageStruct) getUmlStateOrderedStructWithNameField() []*UmlState {
 	// have alphabetical order generation
 	umlstateOrdered := []*UmlState{}
@@ -1531,25 +1285,6 @@ func DeleteORMUmlState(umlstate *UmlState) {
 // for satisfaction of GongStruct interface
 func (umlstate *UmlState) GetName() (res string) {
 	return umlstate.Name
-}
-
-func (umlstate *UmlState) GetFields() (res []string) {
-	// list of fields
-	res = []string{"Name", "X", "Y"}
-	return
-}
-
-func (umlstate *UmlState) GetFieldStringValue(fieldName string) (res string) {
-	switch fieldName {
-	// string value of fields
-	case "Name":
-		res = umlstate.Name
-	case "X":
-		res = fmt.Sprintf("%f", umlstate.X)
-	case "Y":
-		res = fmt.Sprintf("%f", umlstate.Y)
-	}
-	return
 }
 
 func (stage *StageStruct) getUmlscOrderedStructWithNameField() []*Umlsc {
@@ -1659,30 +1394,6 @@ func (umlsc *Umlsc) GetName() (res string) {
 	return umlsc.Name
 }
 
-func (umlsc *Umlsc) GetFields() (res []string) {
-	// list of fields
-	res = []string{"Name", "States", "Activestate"}
-	return
-}
-
-func (umlsc *Umlsc) GetFieldStringValue(fieldName string) (res string) {
-	switch fieldName {
-	// string value of fields
-	case "Name":
-		res = umlsc.Name
-	case "States":
-		for idx, __instance__ := range umlsc.States {
-			if idx > 0 {
-				res += "\n"
-			}
-			res += __instance__.Name
-		}
-	case "Activestate":
-		res = umlsc.Activestate
-	}
-	return
-}
-
 func (stage *StageStruct) getVerticeOrderedStructWithNameField() []*Vertice {
 	// have alphabetical order generation
 	verticeOrdered := []*Vertice{}
@@ -1788,25 +1499,6 @@ func DeleteORMVertice(vertice *Vertice) {
 // for satisfaction of GongStruct interface
 func (vertice *Vertice) GetName() (res string) {
 	return vertice.Name
-}
-
-func (vertice *Vertice) GetFields() (res []string) {
-	// list of fields
-	res = []string{"X", "Y", "Name"}
-	return
-}
-
-func (vertice *Vertice) GetFieldStringValue(fieldName string) (res string) {
-	switch fieldName {
-	// string value of fields
-	case "X":
-		res = fmt.Sprintf("%f", vertice.X)
-	case "Y":
-		res = fmt.Sprintf("%f", vertice.Y)
-	case "Name":
-		res = vertice.Name
-	}
-	return
 }
 
 // swagger:ignore
@@ -2002,7 +1694,7 @@ func (stage *StageStruct) Marshall(file *os.File, modelsPackageName, packageName
 	sort.Slice(classdiagramOrdered[:], func(i, j int) bool {
 		return classdiagramOrdered[i].Name < classdiagramOrdered[j].Name
 	})
-	identifiersDecl += fmt.Sprintf("\n\n	// Declarations of staged instances of Classdiagram")
+	identifiersDecl += "\n\n	// Declarations of staged instances of Classdiagram"
 	for idx, classdiagram := range classdiagramOrdered {
 
 		id = generatesIdentifier("Classdiagram", idx, classdiagram.Name)
@@ -2040,7 +1732,7 @@ func (stage *StageStruct) Marshall(file *os.File, modelsPackageName, packageName
 	sort.Slice(classshapeOrdered[:], func(i, j int) bool {
 		return classshapeOrdered[i].Name < classshapeOrdered[j].Name
 	})
-	identifiersDecl += fmt.Sprintf("\n\n	// Declarations of staged instances of Classshape")
+	identifiersDecl += "\n\n	// Declarations of staged instances of Classshape"
 	for idx, classshape := range classshapeOrdered {
 
 		id = generatesIdentifier("Classshape", idx, classshape.Name)
@@ -2110,7 +1802,7 @@ func (stage *StageStruct) Marshall(file *os.File, modelsPackageName, packageName
 	sort.Slice(fieldOrdered[:], func(i, j int) bool {
 		return fieldOrdered[i].Name < fieldOrdered[j].Name
 	})
-	identifiersDecl += fmt.Sprintf("\n\n	// Declarations of staged instances of Field")
+	identifiersDecl += "\n\n	// Declarations of staged instances of Field"
 	for idx, field := range fieldOrdered {
 
 		id = generatesIdentifier("Field", idx, field.Name)
@@ -2166,7 +1858,7 @@ func (stage *StageStruct) Marshall(file *os.File, modelsPackageName, packageName
 	sort.Slice(gongstructOrdered[:], func(i, j int) bool {
 		return gongstructOrdered[i].Name < gongstructOrdered[j].Name
 	})
-	identifiersDecl += fmt.Sprintf("\n\n	// Declarations of staged instances of GongStruct")
+	identifiersDecl += "\n\n	// Declarations of staged instances of GongStruct"
 	for idx, gongstruct := range gongstructOrdered {
 
 		id = generatesIdentifier("GongStruct", idx, gongstruct.Name)
@@ -2204,7 +1896,7 @@ func (stage *StageStruct) Marshall(file *os.File, modelsPackageName, packageName
 	sort.Slice(gongdoccommandOrdered[:], func(i, j int) bool {
 		return gongdoccommandOrdered[i].Name < gongdoccommandOrdered[j].Name
 	})
-	identifiersDecl += fmt.Sprintf("\n\n	// Declarations of staged instances of GongdocCommand")
+	identifiersDecl += "\n\n	// Declarations of staged instances of GongdocCommand"
 	for idx, gongdoccommand := range gongdoccommandOrdered {
 
 		id = generatesIdentifier("GongdocCommand", idx, gongdoccommand.Name)
@@ -2294,7 +1986,7 @@ func (stage *StageStruct) Marshall(file *os.File, modelsPackageName, packageName
 	sort.Slice(gongdocstatusOrdered[:], func(i, j int) bool {
 		return gongdocstatusOrdered[i].Name < gongdocstatusOrdered[j].Name
 	})
-	identifiersDecl += fmt.Sprintf("\n\n	// Declarations of staged instances of GongdocStatus")
+	identifiersDecl += "\n\n	// Declarations of staged instances of GongdocStatus"
 	for idx, gongdocstatus := range gongdocstatusOrdered {
 
 		id = generatesIdentifier("GongdocStatus", idx, gongdocstatus.Name)
@@ -2340,7 +2032,7 @@ func (stage *StageStruct) Marshall(file *os.File, modelsPackageName, packageName
 	sort.Slice(linkOrdered[:], func(i, j int) bool {
 		return linkOrdered[i].Name < linkOrdered[j].Name
 	})
-	identifiersDecl += fmt.Sprintf("\n\n	// Declarations of staged instances of Link")
+	identifiersDecl += "\n\n	// Declarations of staged instances of Link"
 	for idx, link := range linkOrdered {
 
 		id = generatesIdentifier("Link", idx, link.Name)
@@ -2406,7 +2098,7 @@ func (stage *StageStruct) Marshall(file *os.File, modelsPackageName, packageName
 	sort.Slice(pkgeltOrdered[:], func(i, j int) bool {
 		return pkgeltOrdered[i].Name < pkgeltOrdered[j].Name
 	})
-	identifiersDecl += fmt.Sprintf("\n\n	// Declarations of staged instances of Pkgelt")
+	identifiersDecl += "\n\n	// Declarations of staged instances of Pkgelt"
 	for idx, pkgelt := range pkgeltOrdered {
 
 		id = generatesIdentifier("Pkgelt", idx, pkgelt.Name)
@@ -2450,7 +2142,7 @@ func (stage *StageStruct) Marshall(file *os.File, modelsPackageName, packageName
 	sort.Slice(positionOrdered[:], func(i, j int) bool {
 		return positionOrdered[i].Name < positionOrdered[j].Name
 	})
-	identifiersDecl += fmt.Sprintf("\n\n	// Declarations of staged instances of Position")
+	identifiersDecl += "\n\n	// Declarations of staged instances of Position"
 	for idx, position := range positionOrdered {
 
 		id = generatesIdentifier("Position", idx, position.Name)
@@ -2494,7 +2186,7 @@ func (stage *StageStruct) Marshall(file *os.File, modelsPackageName, packageName
 	sort.Slice(umlstateOrdered[:], func(i, j int) bool {
 		return umlstateOrdered[i].Name < umlstateOrdered[j].Name
 	})
-	identifiersDecl += fmt.Sprintf("\n\n	// Declarations of staged instances of UmlState")
+	identifiersDecl += "\n\n	// Declarations of staged instances of UmlState"
 	for idx, umlstate := range umlstateOrdered {
 
 		id = generatesIdentifier("UmlState", idx, umlstate.Name)
@@ -2538,7 +2230,7 @@ func (stage *StageStruct) Marshall(file *os.File, modelsPackageName, packageName
 	sort.Slice(umlscOrdered[:], func(i, j int) bool {
 		return umlscOrdered[i].Name < umlscOrdered[j].Name
 	})
-	identifiersDecl += fmt.Sprintf("\n\n	// Declarations of staged instances of Umlsc")
+	identifiersDecl += "\n\n	// Declarations of staged instances of Umlsc"
 	for idx, umlsc := range umlscOrdered {
 
 		id = generatesIdentifier("Umlsc", idx, umlsc.Name)
@@ -2576,7 +2268,7 @@ func (stage *StageStruct) Marshall(file *os.File, modelsPackageName, packageName
 	sort.Slice(verticeOrdered[:], func(i, j int) bool {
 		return verticeOrdered[i].Name < verticeOrdered[j].Name
 	})
-	identifiersDecl += fmt.Sprintf("\n\n	// Declarations of staged instances of Vertice")
+	identifiersDecl += "\n\n	// Declarations of staged instances of Vertice"
 	for idx, vertice := range verticeOrdered {
 
 		id = generatesIdentifier("Vertice", idx, vertice.Name)
@@ -2984,7 +2676,7 @@ func (stageStruct *StageStruct) CreateReverseMap_Umlsc_States() (res map[*UmlSta
 
 // generate function for reverse association maps of Vertice
 
-// Gongstruct is the type paramter for generated generic function that allows 
+// Gongstruct is the type paramter for generated generic function that allows
 // - access to staged instances
 // - navigation between staged instances by going backward association links between gongstruct
 // - full refactoring of Gongstruct identifiers / fields
@@ -3503,6 +3195,291 @@ func GetSliceOfPointersReverseMap[Start, End Gongstruct](fieldname string) map[*
 	return nil
 }
 
+// GetGongstructName returns the name of the Gongstruct
+// this can be usefull if one want program robust to refactoring
+func GetGongstructName[Type Gongstruct]() (res string) {
+
+	var ret Type
+
+	switch any(ret).(type) {
+	// insertion point for generic get gongstruct name
+	case Classdiagram:
+		res = "Classdiagram"
+	case Classshape:
+		res = "Classshape"
+	case Field:
+		res = "Field"
+	case GongStruct:
+		res = "GongStruct"
+	case GongdocCommand:
+		res = "GongdocCommand"
+	case GongdocStatus:
+		res = "GongdocStatus"
+	case Link:
+		res = "Link"
+	case Pkgelt:
+		res = "Pkgelt"
+	case Position:
+		res = "Position"
+	case UmlState:
+		res = "UmlState"
+	case Umlsc:
+		res = "Umlsc"
+	case Vertice:
+		res = "Vertice"
+	}
+	return res
+}
+
+// GetFields return the array of the fields
+func GetFields[Type Gongstruct]() (res []string) {
+
+	var ret Type
+
+	switch any(ret).(type) {
+	// insertion point for generic get gongstruct name
+	case Classdiagram:
+		res = []string{"Name", "Classshapes", "IsEditable"}
+	case Classshape:
+		res = []string{"Name", "Position", "Structname", "GongStruct", "ShowNbInstances", "NbInstances", "Fields", "Links", "Width", "Heigth", "ClassshapeTargetType"}
+	case Field:
+		res = []string{"Name", "Fieldname", "FieldTypeAsString", "Structname", "Fieldtypename"}
+	case GongStruct:
+		res = []string{"Name", "NbInstances"}
+	case GongdocCommand:
+		res = []string{"Name", "Command", "DiagramName", "Date", "GongdocNodeType", "StructName", "FieldName", "FieldTypeName", "PositionX", "PositionY"}
+	case GongdocStatus:
+		res = []string{"Name", "Status", "CommandCompletionDate"}
+	case Link:
+		res = []string{"Name", "Fieldname", "Structname", "Fieldtypename", "TargetMultiplicity", "SourceMultiplicity", "Middlevertice"}
+	case Pkgelt:
+		res = []string{"Name", "Path", "GongModelPath", "Classdiagrams", "Umlscs"}
+	case Position:
+		res = []string{"X", "Y", "Name"}
+	case UmlState:
+		res = []string{"Name", "X", "Y"}
+	case Umlsc:
+		res = []string{"Name", "States", "Activestate"}
+	case Vertice:
+		res = []string{"X", "Y", "Name"}
+	}
+	return
+}
+
+func GetFieldStringValue[Type Gongstruct](instance Type, fieldName string) (res string) {
+	var ret Type
+
+	switch any(ret).(type) {
+	// insertion point for generic get gongstruct field value
+	case Classdiagram:
+		switch fieldName {
+		// string value of fields
+		case "Name":
+			res = any(instance).(Classdiagram).Name
+		case "Classshapes":
+			for idx, __instance__ := range any(instance).(Classdiagram).Classshapes {
+				if idx > 0 {
+					res += "\n"
+				}
+				res += __instance__.Name
+			}
+		case "IsEditable":
+			res = fmt.Sprintf("%t", any(instance).(Classdiagram).IsEditable)
+		}
+	case Classshape:
+		switch fieldName {
+		// string value of fields
+		case "Name":
+			res = any(instance).(Classshape).Name
+		case "Position":
+			if any(instance).(Classshape).Position != nil {
+				res = any(instance).(Classshape).Position.Name
+			}
+		case "Structname":
+			res = any(instance).(Classshape).Structname
+		case "GongStruct":
+			if any(instance).(Classshape).GongStruct != nil {
+				res = any(instance).(Classshape).GongStruct.Name
+			}
+		case "ShowNbInstances":
+			res = fmt.Sprintf("%t", any(instance).(Classshape).ShowNbInstances)
+		case "NbInstances":
+			res = fmt.Sprintf("%d", any(instance).(Classshape).NbInstances)
+		case "Fields":
+			for idx, __instance__ := range any(instance).(Classshape).Fields {
+				if idx > 0 {
+					res += "\n"
+				}
+				res += __instance__.Name
+			}
+		case "Links":
+			for idx, __instance__ := range any(instance).(Classshape).Links {
+				if idx > 0 {
+					res += "\n"
+				}
+				res += __instance__.Name
+			}
+		case "Width":
+			res = fmt.Sprintf("%f", any(instance).(Classshape).Width)
+		case "Heigth":
+			res = fmt.Sprintf("%f", any(instance).(Classshape).Heigth)
+		case "ClassshapeTargetType":
+			enum := any(instance).(Classshape).ClassshapeTargetType
+			res = enum.ToCodeString()
+		}
+	case Field:
+		switch fieldName {
+		// string value of fields
+		case "Name":
+			res = any(instance).(Field).Name
+		case "Fieldname":
+			res = any(instance).(Field).Fieldname
+		case "FieldTypeAsString":
+			res = any(instance).(Field).FieldTypeAsString
+		case "Structname":
+			res = any(instance).(Field).Structname
+		case "Fieldtypename":
+			res = any(instance).(Field).Fieldtypename
+		}
+	case GongStruct:
+		switch fieldName {
+		// string value of fields
+		case "Name":
+			res = any(instance).(GongStruct).Name
+		case "NbInstances":
+			res = fmt.Sprintf("%d", any(instance).(GongStruct).NbInstances)
+		}
+	case GongdocCommand:
+		switch fieldName {
+		// string value of fields
+		case "Name":
+			res = any(instance).(GongdocCommand).Name
+		case "Command":
+			enum := any(instance).(GongdocCommand).Command
+			res = enum.ToCodeString()
+		case "DiagramName":
+			res = any(instance).(GongdocCommand).DiagramName
+		case "Date":
+			res = any(instance).(GongdocCommand).Date
+		case "GongdocNodeType":
+			enum := any(instance).(GongdocCommand).GongdocNodeType
+			res = enum.ToCodeString()
+		case "StructName":
+			res = any(instance).(GongdocCommand).StructName
+		case "FieldName":
+			res = any(instance).(GongdocCommand).FieldName
+		case "FieldTypeName":
+			res = any(instance).(GongdocCommand).FieldTypeName
+		case "PositionX":
+			res = fmt.Sprintf("%d", any(instance).(GongdocCommand).PositionX)
+		case "PositionY":
+			res = fmt.Sprintf("%d", any(instance).(GongdocCommand).PositionY)
+		}
+	case GongdocStatus:
+		switch fieldName {
+		// string value of fields
+		case "Name":
+			res = any(instance).(GongdocStatus).Name
+		case "Status":
+			enum := any(instance).(GongdocStatus).Status
+			res = enum.ToCodeString()
+		case "CommandCompletionDate":
+			res = any(instance).(GongdocStatus).CommandCompletionDate
+		}
+	case Link:
+		switch fieldName {
+		// string value of fields
+		case "Name":
+			res = any(instance).(Link).Name
+		case "Fieldname":
+			res = any(instance).(Link).Fieldname
+		case "Structname":
+			res = any(instance).(Link).Structname
+		case "Fieldtypename":
+			res = any(instance).(Link).Fieldtypename
+		case "TargetMultiplicity":
+			enum := any(instance).(Link).TargetMultiplicity
+			res = enum.ToCodeString()
+		case "SourceMultiplicity":
+			enum := any(instance).(Link).SourceMultiplicity
+			res = enum.ToCodeString()
+		case "Middlevertice":
+			if any(instance).(Link).Middlevertice != nil {
+				res = any(instance).(Link).Middlevertice.Name
+			}
+		}
+	case Pkgelt:
+		switch fieldName {
+		// string value of fields
+		case "Name":
+			res = any(instance).(Pkgelt).Name
+		case "Path":
+			res = any(instance).(Pkgelt).Path
+		case "GongModelPath":
+			res = any(instance).(Pkgelt).GongModelPath
+		case "Classdiagrams":
+			for idx, __instance__ := range any(instance).(Pkgelt).Classdiagrams {
+				if idx > 0 {
+					res += "\n"
+				}
+				res += __instance__.Name
+			}
+		case "Umlscs":
+			for idx, __instance__ := range any(instance).(Pkgelt).Umlscs {
+				if idx > 0 {
+					res += "\n"
+				}
+				res += __instance__.Name
+			}
+		}
+	case Position:
+		switch fieldName {
+		// string value of fields
+		case "X":
+			res = fmt.Sprintf("%f", any(instance).(Position).X)
+		case "Y":
+			res = fmt.Sprintf("%f", any(instance).(Position).Y)
+		case "Name":
+			res = any(instance).(Position).Name
+		}
+	case UmlState:
+		switch fieldName {
+		// string value of fields
+		case "Name":
+			res = any(instance).(UmlState).Name
+		case "X":
+			res = fmt.Sprintf("%f", any(instance).(UmlState).X)
+		case "Y":
+			res = fmt.Sprintf("%f", any(instance).(UmlState).Y)
+		}
+	case Umlsc:
+		switch fieldName {
+		// string value of fields
+		case "Name":
+			res = any(instance).(Umlsc).Name
+		case "States":
+			for idx, __instance__ := range any(instance).(Umlsc).States {
+				if idx > 0 {
+					res += "\n"
+				}
+				res += __instance__.Name
+			}
+		case "Activestate":
+			res = any(instance).(Umlsc).Activestate
+		}
+	case Vertice:
+		switch fieldName {
+		// string value of fields
+		case "X":
+			res = fmt.Sprintf("%f", any(instance).(Vertice).X)
+		case "Y":
+			res = fmt.Sprintf("%f", any(instance).(Vertice).Y)
+		case "Name":
+			res = any(instance).(Vertice).Name
+		}
+	}
+	return
+}
 
 // insertion point of enum utility functions
 // Utility function for ClassshapeTargetType
