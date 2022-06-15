@@ -7,12 +7,14 @@ type PointerToGongStructField struct {
 	GongStruct *GongStruct
 
 	Index int
-}
 
-func (p *PointerToGongStructField) GetName() string {
-	return p.Name
+	CompositeStructName string
 }
 
 func (pointerToGongStructField *PointerToGongStructField) GetIndex() int {
 	return pointerToGongStructField.Index
+}
+
+func (pointerToGongStructField *PointerToGongStructField) GetCompositeStructName() string {
+	return pointerToGongStructField.CompositeStructName
 }
