@@ -89,12 +89,15 @@ func main() {
 	r := gin.Default()
 	r.Use(cors.Default())
 
-	// load package to analyse
-	modelPkg := &gong_models.ModelPkg{}
-
 	// compute absolute path
 	absPkgPath, _ := filepath.Abs(*pkgPath)
 	*pkgPath = absPkgPath
+
+	// load package to analyse
+	modelPkg := &gong_models.ModelPkg{}
+	pkgName, fullPkgPath := gong_models.ComputePkgPathFromGoModFile(*pkgPath)
+	modelPkg.Name = pkgName
+	modelPkg.PkgPath = fullPkgPath
 
 	gong_models.Walk(*pkgPath, modelPkg)
 	modelPkg.SerializeToStage()

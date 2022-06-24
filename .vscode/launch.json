@@ -51,7 +51,7 @@
             "program": "${workspaceFolder}/go/cmd/gongdoc",
             "args": [
                 "-pkgPath",
-                "../../tests/geometry/models",
+                "../../tests/geometry/go/models",
                 "-setUpRandomNumberOfInstances"
             ]
         },

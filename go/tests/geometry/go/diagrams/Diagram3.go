@@ -4,7 +4,7 @@ import (
 	uml "github.com/fullstack-lang/gongdoc/go/models"
 
 	// insertion points for import of the illustrated model
-	"github.com/fullstack-lang/gongdoc/go/tests/geometry/models"
+	"github.com/fullstack-lang/gongdoc/go/tests/geometry/go/models"
 )
 
 var Diagram3 uml.Classdiagram = uml.Classdiagram{
