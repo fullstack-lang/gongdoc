@@ -126,10 +126,47 @@ var PkgeltStore PkgeltMap = make(map[string]*Pkgelt, 0)
 // Unmarshall parse the diagram package to get diagrams
 // diagramPackagePath is "../diagrams" relative to the "models"
 // gongModelPackagePath is the model package path, e.g. "github.com/fullstack-lang/gongxlsx/go/models"
-func (pkgelt *Pkgelt) Unmarshall(modelPkg *gong_models.ModelPkg, diagramPackagePath string) {
+func (pkgelt *Pkgelt) Unmarshall(modelPkg *gong_models.ModelPkg, astPkg *ast.Package, fset2 *token.FileSet, diagramPackagePath string) {
 
 	pkgelt.Path = diagramPackagePath
 	pkgelt.GongModelPath = modelPkg.PkgPath
+
+	ast.Inspect(astPkg, func(n ast.Node) bool {
+		switch x := n.(type) {
+		case *ast.GenDecl:
+			if len(x.Specs) > 0 {
+				log.Println("Found declaration ")
+				switch vs := x.Specs[0].(type) {
+				case *ast.ValueSpec:
+					log.Println("Found value spec ", vs.Names[0])
+
+					switch se := vs.Type.(type) {
+					case *ast.SelectorExpr:
+						switch se.Sel.Name {
+						case "Classdiagram":
+							var classdiagram Classdiagram
+							classdiagram.Name = vs.Names[0].Name
+							_ = astPkg
+							log.Println("nb files ", len(astPkg.Files))
+							astNode := vs.Values[0]
+							classdiagram.Unmarshall(modelPkg, astNode, fset2)
+
+							// pkgelt.Classdiagrams = append(pkgelt.Classdiagrams, &classdiagram)
+						case "Umlsc":
+							var umlsc Umlsc
+							umlsc.Name = vs.Names[0].Name
+							astNode := vs.Values[0]
+							umlsc.Unmarshall(modelPkg, astNode, fset2)
+
+							// pkgelt.Umlscs = append(pkgelt.Umlscs, &umlsc)
+						}
+
+					}
+				}
+			}
+		}
+		return true
+	})
 
 	var directory string
 	var err error
@@ -233,14 +270,18 @@ func (pkgelt *Pkgelt) Unmarshall(modelPkg *gong_models.ModelPkg, diagramPackageP
 			case "Classdiagram":
 				var classdiagram Classdiagram
 				classdiagram.Name = variableName.Name
-				classdiagram.Unmarshall(modelPkg, vs.Values[0], &fset)
+				_ = astPkg
+				log.Println("nb files ", len(astPkg.Files))
+				astNode := vs.Values[0]
+				classdiagram.Unmarshall(modelPkg, astNode, &fset)
 
 				pkgelt.Classdiagrams = append(pkgelt.Classdiagrams, &classdiagram)
 
 			case "Umlsc":
 				var umlsc Umlsc
 				umlsc.Name = variableName.Name
-				umlsc.Unmarshall(modelPkg, vs.Values[0], &fset)
+				astNode := vs.Values[0]
+				umlsc.Unmarshall(modelPkg, astNode, &fset)
 
 				pkgelt.Umlscs = append(pkgelt.Umlscs, &umlsc)
 
