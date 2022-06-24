@@ -4,7 +4,7 @@ import (
 	uml "github.com/fullstack-lang/gongdoc/go/models"
 
 	// insertion points for import of the illustrated model
-	"github.com/fullstack-lang/gongdoc/go/tests/geometry/models"
+	"github.com/fullstack-lang/gongdoc/go/tests/geometry/go/models"
 )
 
 var Diagram3 uml.Classdiagram = uml.Classdiagram{
@@ -16,16 +16,30 @@ var Diagram3 uml.Classdiagram = uml.Classdiagram{
 				Y: 40.000000,
 			},
 			Width:  240.000000,
-			Heigth: 48.000000,
+			Heigth: 108.000000,
 			Links: []*uml.Link{
 				{
 					Field: models.Line{}.Start,
 					Middlevertice: &uml.Vertice{
 						X: 699.000000,
-						Y: 65.500000,
+						Y: 85.500000,
 					},
 					TargetMultiplicity: "0..1",
 					SourceMultiplicity: "*",
+				},
+			},
+			Fields: []*uml.Field{
+				{
+					Field: models.Line{}.CreationDate,
+				},
+				{
+					Field: models.Line{}.JourneyTime,
+				},
+				{
+					Field: models.Line{}.LineType,
+				},
+				{
+					Field: models.Line{}.Name,
 				},
 			},
 		},
@@ -33,11 +47,14 @@ var Diagram3 uml.Classdiagram = uml.Classdiagram{
 			Struct: &(models.Point{}),
 			Position: &uml.Position{
 				X: 580.000000,
-				Y: 160.000000,
+				Y: 180.000000,
 			},
 			Width:  240.000000,
-			Heigth: 78.000000,
+			Heigth: 93.000000,
 			Fields: []*uml.Field{
+				{
+					Field: models.Point{}.Name,
+				},
 				{
 					Field: models.Point{}.X,
 				},

@@ -1,6 +1,7 @@
 package models
 
 type PointPartition struct {
-	Name   string
+	Name string
+
 	Points []*Point
 }

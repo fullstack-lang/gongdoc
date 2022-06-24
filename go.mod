@@ -4,7 +4,7 @@ go 1.18
 
 require (
 	github.com/frankban/quicktest v1.13.1 // indirect
-	github.com/fullstack-lang/gong v0.0.0-20220613161241-1576e27213af
+	github.com/fullstack-lang/gong v0.0.0-20220624145018-3de529c06b28
 	github.com/gin-contrib/cors v1.3.1
 	github.com/gin-contrib/static v0.0.1
 	github.com/gin-gonic/gin v1.7.4
@@ -24,7 +24,7 @@ require (
 	golang.org/x/image v0.0.0-20210628002857-a66eb6448b8d // indirect
 	golang.org/x/sys v0.0.0-20211015200801-69063c4bb744 // indirect
 	golang.org/x/text v0.3.7 // indirect
-	golang.org/x/tools v0.1.7
+	golang.org/x/tools v0.1.7 // indirect
 	gorm.io/gorm v1.22.5
 )
 

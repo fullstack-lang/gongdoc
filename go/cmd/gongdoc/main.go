@@ -4,12 +4,15 @@ import (
 	"embed"
 	"flag"
 	"fmt"
+	"go/parser"
+	"go/token"
 	"io/fs"
 	"log"
 	"math/rand"
 	"net/http"
 	"os"
 	"path/filepath"
+	"time"
 
 	"github.com/gin-contrib/cors"
 	"github.com/gin-contrib/static"
@@ -89,15 +92,17 @@ func main() {
 	r := gin.Default()
 	r.Use(cors.Default())
 
-	// load package to analyse
-	modelPkg := &gong_models.ModelPkg{}
-
 	// compute absolute path
 	absPkgPath, _ := filepath.Abs(*pkgPath)
 	*pkgPath = absPkgPath
-	diagramPkgPath := filepath.Join(*pkgPath, "../diagrams")
 
-	gong_models.Walk(*pkgPath, modelPkg)
+	// load package to analyse
+	modelPkg := &gong_models.ModelPkg{}
+	pkgName, fullPkgPath := gong_models.ComputePkgPathFromGoModFile(*pkgPath)
+	modelPkg.Name = pkgName
+	modelPkg.PkgPath = fullPkgPath
+
+	gong_models.Walk(*pkgPath, modelPkg, true)
 	modelPkg.SerializeToStage()
 	gong_models.Stage.Commit()
 
@@ -133,7 +138,23 @@ func main() {
 	}
 
 	// parse the diagram package
-	pkgelt.Unmarshall(modelPkg.PkgPath, diagramPkgPath)
+	diagramPkgPath := filepath.Join(*pkgPath, "../diagrams")
+
+	if true {
+		fset := token.NewFileSet()
+		startParser := time.Now()
+		pkgsParser, errParser := parser.ParseDir(fset, diagramPkgPath, nil, parser.ParseComments)
+		log.Printf("Parser took %s", time.Since(startParser))
+
+		if errParser != nil {
+			log.Panic("Unable to parser ")
+		}
+		if len(pkgsParser) != 1 {
+			log.Panic("Unable to parser, wrong number of parsers ", len(pkgsParser))
+		}
+
+		pkgelt.Unmarshall(modelPkg, pkgsParser["diagrams"], fset, diagramPkgPath)
+	}
 
 	if *svg {
 		for _, classDiagram := range pkgelt.Classdiagrams {

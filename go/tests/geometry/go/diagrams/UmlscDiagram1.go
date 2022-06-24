@@ -2,7 +2,7 @@ package diagrams
 
 import (
 	uml "github.com/fullstack-lang/gongdoc/go/models"
-	"github.com/fullstack-lang/gongdoc/go/tests/geometry/models"
+	"github.com/fullstack-lang/gongdoc/go/tests/geometry/go/models"
 	// insertion points for import of the illustrated modelgithub.com/fullstack-lang/gongdoc/go/tests/geometry/models
 )
 
