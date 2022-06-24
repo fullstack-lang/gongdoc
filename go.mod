@@ -24,7 +24,7 @@ require (
 	golang.org/x/image v0.0.0-20210628002857-a66eb6448b8d // indirect
 	golang.org/x/sys v0.0.0-20211015200801-69063c4bb744 // indirect
 	golang.org/x/text v0.3.7 // indirect
-	golang.org/x/tools v0.1.7
+	golang.org/x/tools v0.1.7 // indirect
 	gorm.io/gorm v1.22.5
 )
 

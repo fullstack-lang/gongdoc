@@ -1,10 +1,8 @@
 package models
 
 import (
-	"bytes"
 	"fmt"
 	"go/ast"
-	"go/format"
 	"go/token"
 	"log"
 	"os"
@@ -15,7 +13,6 @@ import (
 	gong_models "github.com/fullstack-lang/gong/go/models"
 
 	"github.com/fullstack-lang/gongdoc/go/walk"
-	"golang.org/x/tools/go/packages"
 )
 
 // Pkgelt stores all diagrams related to a gong package
@@ -35,8 +32,6 @@ type Pkgelt struct {
 	// Umlscs stores UML State charts diagrams
 	Umlscs []*Umlsc
 }
-
-const pkgLoadMode = packages.NeedName | packages.NeedFiles | packages.NeedImports | packages.NeedDeps | packages.NeedTypes | packages.NeedSyntax | packages.NeedTypesInfo
 
 func closeFile(f *os.File) {
 	fmt.Println("Closing file ", f.Name())
@@ -151,14 +146,14 @@ func (pkgelt *Pkgelt) Unmarshall(modelPkg *gong_models.ModelPkg, astPkg *ast.Pac
 							astNode := vs.Values[0]
 							classdiagram.Unmarshall(modelPkg, astNode, fset2)
 
-							// pkgelt.Classdiagrams = append(pkgelt.Classdiagrams, &classdiagram)
+							pkgelt.Classdiagrams = append(pkgelt.Classdiagrams, &classdiagram)
 						case "Umlsc":
 							var umlsc Umlsc
 							umlsc.Name = vs.Names[0].Name
 							astNode := vs.Values[0]
 							umlsc.Unmarshall(modelPkg, astNode, fset2)
 
-							// pkgelt.Umlscs = append(pkgelt.Umlscs, &umlsc)
+							pkgelt.Umlscs = append(pkgelt.Umlscs, &umlsc)
 						}
 
 					}
@@ -167,136 +162,6 @@ func (pkgelt *Pkgelt) Unmarshall(modelPkg *gong_models.ModelPkg, astPkg *ast.Pac
 		}
 		return true
 	})
-
-	var directory string
-	var err error
-	if directory, err = filepath.Abs(diagramPackagePath); err != nil {
-		log.Panic("Diagram package path does not exist %s ;" + directory)
-	}
-	log.Println("Loading package " + directory)
-
-	var fset token.FileSet
-	cfg := &packages.Config{
-		Dir:   directory,
-		Mode:  pkgLoadMode,
-		Tests: false,
-
-		Fset: &fset,
-	}
-
-	// if "diagrams" directory does not exists, creates it
-	// check existance of path
-	_, err = os.Stat(diagramPackagePath)
-
-	// if directory does not exist, creates it
-	if os.IsNotExist(err) {
-		errd := os.Mkdir(diagramPackagePath, os.ModePerm)
-		if os.IsNotExist(errd) {
-			log.Println("creating directory : " + diagramPackagePath)
-		}
-	}
-
-	var pkgs []*packages.Package
-	if pkgs, err = packages.Load(cfg, "./..."); err != nil {
-		s := fmt.Sprintf("cannot process package at path %s, err %s", diagramPackagePath, err.Error())
-		log.Panic(s)
-	}
-
-	if len(pkgs) != 1 {
-		// empty package
-		return
-	}
-	pkg := pkgs[0]
-	pkgelt.Name = pkg.ID
-
-	// fetch all gd (generic declaration node)
-	for _, f := range pkg.Syntax {
-		for _, d := range f.Decls {
-			gd, ok := d.(*ast.GenDecl)
-			if !ok {
-				continue
-			}
-
-			// we are interested in gd with "var" lexical token
-			if gd.Tok != token.VAR {
-				continue
-			}
-
-			// we should find only one ValueSpec (constant or variable declaration)
-			if len(gd.Specs) != 1 {
-				log.Panicf("One variable declaration should be present instead of %d, %s",
-					len(gd.Specs), fset.Position(gd.Pos()))
-			}
-
-			// value spec is the top node for
-			// "var position Position = position{ X : 10, Y : 20 }"
-			vs, ok := gd.Specs[0].(*ast.ValueSpec)
-			if !ok {
-				log.Panicf("Expected a variable declaration at %s", fset.Position(vs.Pos()))
-			}
-
-			// analyse name
-			// produce error is vs.Names is no a single element array
-			// of type ast.Ident. We expect the name of the diagram
-			if len(vs.Names) != 1 {
-				log.Panicf("bad variable declaration: %s", fset.Position(vs.Pos()))
-			}
-			variableName := vs.Names[0]
-
-			// analyse the type of the variable declaration
-			// X   Expr   // expression
-			// Sel *Ident // field selector
-			var se *ast.SelectorExpr
-			if se, ok = vs.Type.(*ast.SelectorExpr); !ok {
-				log.Panicf("bad type variable declaration, if should something like uml.Classshape or uml.<...>: %s",
-					fset.Position(vs.Pos()))
-			}
-
-			//  fetch the X field which should an Ident node
-			// var X *ast.Ident
-			// if X, ok = se.X.(*ast.Ident); !ok {
-			// 	log.Panicf("bad type variable declaration, selector should something like uml: %s",
-			// 		fset.Position(se.Pos()))
-			// }
-			// log.Printf("expression is %s, selector is %s", X.Name, se.Sel.Name)
-
-			// produce error if vs.Values is not a single element array
-			// of type ast.Ident. We expect the value of the diagram
-			if len(vs.Values) != 1 {
-				log.Panicf("variable declaration with more than one variable at %s", fset.Position(vs.Pos()))
-			}
-
-			switch se.Sel.Name {
-			case "Classdiagram":
-				var classdiagram Classdiagram
-				classdiagram.Name = variableName.Name
-				_ = astPkg
-				log.Println("nb files ", len(astPkg.Files))
-				astNode := vs.Values[0]
-				classdiagram.Unmarshall(modelPkg, astNode, &fset)
-
-				pkgelt.Classdiagrams = append(pkgelt.Classdiagrams, &classdiagram)
-
-			case "Umlsc":
-				var umlsc Umlsc
-				umlsc.Name = variableName.Name
-				astNode := vs.Values[0]
-				umlsc.Unmarshall(modelPkg, astNode, &fset)
-
-				pkgelt.Umlscs = append(pkgelt.Umlscs, &umlsc)
-
-			case "Document":
-			default:
-				log.Panicf("Unexpected type of variable: %s at pos %s", se.Sel.Name, fset.Position(se.Pos()))
-			}
-		}
-	}
-}
-
-func exprString(fset *token.FileSet, expr ast.Expr) string {
-	var buf bytes.Buffer
-	format.Node(&buf, fset, expr)
-	return buf.String()
 }
 
 // serialize the package and its elements to the Stage
