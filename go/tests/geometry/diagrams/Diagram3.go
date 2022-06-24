@@ -53,13 +53,13 @@ var Diagram3 uml.Classdiagram = uml.Classdiagram{
 				Y: 290.000000,
 			},
 			Width:  240.000000,
-			Heigth: 78.000000,
+			Heigth: 63.000000,
 			Links: []*uml.Link{
 				{
 					Field: models.PointPartition{}.Points,
 					Middlevertice: &uml.Vertice{
 						X: 700.000000,
-						Y: 331.500000,
+						Y: 311.500000,
 					},
 					TargetMultiplicity: "*",
 					SourceMultiplicity: "0..1",

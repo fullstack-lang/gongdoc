@@ -18,7 +18,6 @@ type Classshape struct {
 	// for technical reasons
 	Name string
 
-	// swagger:ignore
 	Position *Position
 
 	// swagger:ignore, an "interface" field cannot be used by gong, therefore, one specifies

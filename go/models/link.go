@@ -17,7 +17,8 @@ type Link struct {
 	Name string
 
 	// swagger:ignore
-	Field              interface{} `gorm:"-"` // field that is diagrammed
+	Field interface{} `gorm:"-"` // field that is diagrammed
+
 	Fieldname          string
 	Structname         string
 	Fieldtypename      string
@@ -25,7 +26,6 @@ type Link struct {
 	SourceMultiplicity MultiplicityType
 
 	// Vertices at the middle
-	// swagger:ignore
 	Middlevertice *Vertice
 }
 

@@ -4,3 +4,4 @@ go/cmd/gongdoc/gongdoc.exe
 go/controllers/gongdocapi.yml
 go/.DS_Store
 .DS_Store
+go/cmd/gongdoc/__debug_bin.exe

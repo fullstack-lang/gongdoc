@@ -17,7 +17,8 @@ type Field struct {
 
 	// swagger:ignore
 	// actual go field in the models that is diagrammed, for instance "models.Point{}.X"
-	Field             interface{} `gorm:"-"`
+	Field interface{} `gorm:"-"`
+
 	Fieldname         string
 	FieldTypeAsString string
 	Structname        string
