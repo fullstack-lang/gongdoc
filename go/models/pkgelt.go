@@ -6,12 +6,13 @@ import (
 	"go/ast"
 	"go/format"
 	"go/token"
-	"go/types"
 	"log"
 	"os"
 	"path/filepath"
 	"sort"
 	"strings"
+
+	gong_models "github.com/fullstack-lang/gong/go/models"
 
 	"github.com/fullstack-lang/gongdoc/go/walk"
 	"golang.org/x/tools/go/packages"
@@ -47,9 +48,6 @@ func closeFile(f *os.File) {
 		os.Exit(1)
 	}
 }
-
-// map of types for expressions
-var MapExpToType map[string]string
 
 const preludeRef string = `package diagrams
 
@@ -128,10 +126,10 @@ var PkgeltStore PkgeltMap = make(map[string]*Pkgelt, 0)
 // Unmarshall parse the diagram package to get diagrams
 // diagramPackagePath is "../diagrams" relative to the "models"
 // gongModelPackagePath is the model package path, e.g. "github.com/fullstack-lang/gongxlsx/go/models"
-func (pkgelt *Pkgelt) Unmarshall(gongModelPackagePath string, diagramPackagePath string) {
+func (pkgelt *Pkgelt) Unmarshall(modelPkg *gong_models.ModelPkg, diagramPackagePath string) {
 
 	pkgelt.Path = diagramPackagePath
-	pkgelt.GongModelPath = gongModelPackagePath
+	pkgelt.GongModelPath = modelPkg.PkgPath
 
 	var directory string
 	var err error
@@ -141,7 +139,6 @@ func (pkgelt *Pkgelt) Unmarshall(gongModelPackagePath string, diagramPackagePath
 	log.Println("Loading package " + directory)
 
 	pkgelt.FillUpMapExprComments(diagramPackagePath)
-	MapExpToType = make(map[string]string, 0)
 
 	var fset token.FileSet
 	cfg := &packages.Config{
@@ -176,34 +173,6 @@ func (pkgelt *Pkgelt) Unmarshall(gongModelPackagePath string, diagramPackagePath
 	}
 	pkg := pkgs[0]
 	pkgelt.Name = pkg.ID
-
-	for expr, tv := range pkg.TypesInfo.Types {
-		var buf bytes.Buffer
-		posn := fset.Position(expr.Pos())
-		typeValueString := tv.Type.String()
-		if tv.Value != nil {
-			typeValueString += " = " + tv.Value.String()
-		}
-		str := exprString(&fset, expr)
-		// line:col | expr | mode : type = value
-		if str == "models.Line{}.Start" {
-			// log.Printf("trouvé %s", tvstr)
-		}
-		if str == "target_models.Line{}" {
-			// log.Printf("trouvé %s", tvstr)
-			// log.Printf("%2d:%2d | %-19s | %-7s : %s",
-			// 	posn.Line, posn.Column, exprString(fset, expr),
-			// 	mode(tv), tvstr)
-		}
-		if str == "models.Line{}" {
-			// log.Printf("trouvé %s", tvstr)
-		}
-		MapExpToType[str] = typeValueString
-
-		fmt.Fprintf(&buf, "%2d:%2d | %-19s | %-7s : %s",
-			posn.Line, posn.Column, str,
-			mode(tv), typeValueString)
-	}
 
 	// fetch all gd (generic declaration node)
 	for _, f := range pkg.Syntax {
@@ -266,14 +235,14 @@ func (pkgelt *Pkgelt) Unmarshall(gongModelPackagePath string, diagramPackagePath
 			case "Classdiagram":
 				var classdiagram Classdiagram
 				classdiagram.Name = variableName.Name
-				classdiagram.Unmarshall(vs.Values[0], &fset)
+				classdiagram.Unmarshall(modelPkg, vs.Values[0], &fset)
 
 				pkgelt.Classdiagrams = append(pkgelt.Classdiagrams, &classdiagram)
 
 			case "Umlsc":
 				var umlsc Umlsc
 				umlsc.Name = variableName.Name
-				umlsc.Unmarshall(vs.Values[0], &fset)
+				umlsc.Unmarshall(modelPkg, vs.Values[0], &fset)
 
 				pkgelt.Umlscs = append(pkgelt.Umlscs, &umlsc)
 
@@ -282,28 +251,6 @@ func (pkgelt *Pkgelt) Unmarshall(gongModelPackagePath string, diagramPackagePath
 				log.Panicf("Unexpected type of variable: %s at pos %s", se.Sel.Name, fset.Position(se.Pos()))
 			}
 		}
-	}
-}
-
-func mode(tv types.TypeAndValue) string {
-	switch {
-	case tv.IsVoid():
-		return "void"
-	case tv.IsType():
-		return "type"
-	case tv.IsBuiltin():
-		return "builtin"
-	case tv.IsNil():
-		return "nil"
-	case tv.Assignable():
-		if tv.Addressable() {
-			return "var"
-		}
-		return "mapindex"
-	case tv.IsValue():
-		return "value"
-	default:
-		return "unknown"
 	}
 }
 

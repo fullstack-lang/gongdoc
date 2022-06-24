@@ -136,7 +136,7 @@ func main() {
 
 	// parse the diagram package
 	diagramPkgPath := filepath.Join(*pkgPath, "../diagrams")
-	pkgelt.Unmarshall(modelPkg.PkgPath, diagramPkgPath)
+	pkgelt.Unmarshall(modelPkg, diagramPkgPath)
 
 	if *svg {
 		for _, classDiagram := range pkgelt.Classdiagrams {

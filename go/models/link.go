@@ -7,6 +7,8 @@ import (
 	"log"
 	"os"
 	"strings"
+
+	gong_models "github.com/fullstack-lang/gong/go/models"
 )
 
 // Link represent the UML Link in any diagram
@@ -30,7 +32,7 @@ type Link struct {
 }
 
 // Unmarshall
-func (link *Link) Unmarshall(expr ast.Expr, fset *token.FileSet) {
+func (link *Link) Unmarshall(modelPkg *gong_models.ModelPkg, expr ast.Expr, fset *token.FileSet) {
 
 	var cl *ast.CompositeLit
 	var ok bool
@@ -85,20 +87,29 @@ func (link *Link) Unmarshall(expr ast.Expr, fset *token.FileSet) {
 				log.Panic("Expecting 1 selector " + fset.Position(cl.Pos()).String())
 			}
 
-			var ident2 *ast.Ident
-			if ident2, ok = se2.X.(*ast.Ident); !ok {
-				log.Panic("Expecting 1 ident " + fset.Position(se2.Pos()).String())
-			}
-
-			structnameWithX := ident2.Name + "." + se2.Sel.Name
 			link.Structname = se2.Sel.Name
 			link.Fieldname = se.Sel.Name
 			link.Name = link.Fieldname
 
-			// now, let's find the link target !!!
-			fieldname := fmt.Sprintf("%s{}.%s", structnameWithX, link.Fieldname)
+			// try to find the type of the field
+			var typename string
+			for _, _struct := range modelPkg.GongStructs {
+				if _struct.Name == link.Structname {
+					for _, _field := range _struct.PointerToGongStructFields {
+						if _field.Name == link.Fieldname {
+							typename = _field.GongStruct.Name
+						}
+					}
+					for _, _field := range _struct.SliceOfPointerToGongStructFields {
+						if _field.Name == link.Fieldname {
+							typename = _field.GongStruct.Name
+						}
+					}
+				}
+			}
+			_ = typename
 
-			fieldtypename := MapExpToType[fieldname]
+			fieldtypename := typename
 
 			// extract only the selector
 			words := strings.Split(fieldtypename, ".")

@@ -15,6 +15,7 @@ import (
 	"github.com/tdewolff/canvas/renderers/rasterizer"
 	"github.com/tdewolff/canvas/renderers/svg"
 
+	gong_models "github.com/fullstack-lang/gong/go/models"
 	"github.com/fullstack-lang/gongdoc/go/static"
 	"github.com/fullstack-lang/gongdoc/go/walk"
 )
@@ -98,7 +99,7 @@ var ClassdiagramStore ClassdiagramMap = make(map[string]*Classdiagram, 0)
 
 // Unmarshall updates a classdiagram values from an ast.Epr
 // and appends it to the ClassdiagramStore
-func (classdiagram *Classdiagram) Unmarshall(expr ast.Expr, fset *token.FileSet) {
+func (classdiagram *Classdiagram) Unmarshall(modelPkg *gong_models.ModelPkg, expr ast.Expr, fset *token.FileSet) {
 
 	// expression should be a composite literal expression
 	// "uml.Classdiagram{
@@ -149,7 +150,7 @@ func (classdiagram *Classdiagram) Unmarshall(expr ast.Expr, fset *token.FileSet)
 								}
 							case *ast.CompositeLit: // this is a definition
 								classshape = new(Classshape)
-								classshape.Unmarshall(exp, fset)
+								classshape.Unmarshall(modelPkg, exp, fset)
 							default:
 								log.Panic("Value shoud be a composite lit or a unary" +
 									fset.Position(structvaluekeyexpr.Pos()).String())
