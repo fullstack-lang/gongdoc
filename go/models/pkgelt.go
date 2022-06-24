@@ -138,8 +138,6 @@ func (pkgelt *Pkgelt) Unmarshall(modelPkg *gong_models.ModelPkg, diagramPackageP
 	}
 	log.Println("Loading package " + directory)
 
-	pkgelt.FillUpMapExprComments(diagramPackagePath)
-
 	var fset token.FileSet
 	cfg := &packages.Config{
 		Dir:   directory,
@@ -272,57 +270,6 @@ func (pkgelt *Pkgelt) SerializeToStage() {
 
 	for _, umlsc := range pkgelt.Umlscs {
 		umlsc.SerializeToStage()
-	}
-
-}
-
-// MapExprComments provides a map of expression, comments
-var MapExprComments = make(map[string]string)
-
-// FillUpMapExprComments parse the models package, and for each expression and fill up MapExprComments
-// with comments
-func (pkgelt *Pkgelt) FillUpMapExprComments(DiagramPackagePath string) {
-
-	modelsPackagePath := filepath.Join(DiagramPackagePath, "../models")
-
-	var err error
-	var directory string
-	if directory, err = filepath.Abs(modelsPackagePath); err != nil {
-		log.Panic("Path does not exist %s ;" + directory)
-	}
-	log.Println("Loading package " + directory)
-
-	cfg := &packages.Config{
-		Dir:   directory,
-		Mode:  pkgLoadMode,
-		Tests: false,
-	}
-
-	var pkgs []*packages.Package
-	if pkgs, err = packages.Load(cfg, "./..."); err != nil {
-		s := fmt.Sprintf("cannot process package at path %s, err %s", modelsPackagePath, err.Error())
-		log.Panic(s)
-	}
-
-	if len(pkgs) != 1 {
-		log.Panicf("Expected 1 package to scope, found %d", len(pkgs))
-	}
-	pkg := pkgs[0]
-	for _, f := range pkg.Syntax {
-		for _, d := range f.Decls {
-			gd, ok := d.(*ast.GenDecl)
-			if !ok {
-				continue
-			}
-
-			for _, s := range gd.Specs {
-				if ts, ok := s.(*ast.TypeSpec); ok {
-					cg := gd.Doc
-
-					MapExprComments[ts.Name.Name] = cg.Text()
-				}
-			}
-		}
 	}
 
 }
