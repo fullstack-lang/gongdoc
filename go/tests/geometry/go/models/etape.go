@@ -1,10 +1,10 @@
 package models
 
-// swagger:enum Stage
-type Stage string
+// swagger:enum SimulationStage
+type SimulationStage string
 
 // values for Action Type
 const (
-	BEFORE Stage = "BEFORE" // iota // Parse the spinosa model (temp)
-	AFTER  Stage = "AFTER"
+	BEFORE SimulationStage = "BEFORE" // iota // Parse the spinosa model (temp)
+	AFTER  SimulationStage = "AFTER"
 )
