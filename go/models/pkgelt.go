@@ -127,7 +127,7 @@ var PkgeltStore PkgeltMap = make(map[string]*Pkgelt, 0)
 
 // Unmarshall parse the diagram package to get diagrams
 // diagramPackagePath is "../diagrams" relative to the "models"
-// gongModelPackagePath is the model package path, e.g. "fullstack-lang/gongxlsx/go/models"
+// gongModelPackagePath is the model package path, e.g. "github.com/fullstack-lang/gongxlsx/go/models"
 func (pkgelt *Pkgelt) Unmarshall(gongModelPackagePath string, diagramPackagePath string) {
 
 	pkgelt.Path = diagramPackagePath

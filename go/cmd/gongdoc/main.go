@@ -95,7 +95,6 @@ func main() {
 	// compute absolute path
 	absPkgPath, _ := filepath.Abs(*pkgPath)
 	*pkgPath = absPkgPath
-	diagramPkgPath := filepath.Join(*pkgPath, "../diagrams")
 
 	gong_models.Walk(*pkgPath, modelPkg)
 	modelPkg.SerializeToStage()
@@ -133,6 +132,7 @@ func main() {
 	}
 
 	// parse the diagram package
+	diagramPkgPath := filepath.Join(*pkgPath, "../diagrams")
 	pkgelt.Unmarshall(modelPkg.PkgPath, diagramPkgPath)
 
 	if *svg {
