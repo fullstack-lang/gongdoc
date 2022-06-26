@@ -42,7 +42,7 @@ var (
 	genDefaultDiagramFlag = flag.Bool("genDefaultDiagram", false, "generate default diagram")
 	svg                   = flag.Bool("svg", false, "generate svg output and exits")
 
-	pkgPath = flag.String("pkgPath", "go/models", "path to the models package in order to reveal gong elements in the package")
+	pkgPath = flag.String("pkgPath", ".", "path to the models package")
 
 	setUpRandomNumberOfInstances = flag.Bool("setUpRandomNumberOfInstances", false,
 		"set up random number of instance (between 0 and 100)")
@@ -140,6 +140,20 @@ func main() {
 	// parse the diagram package
 	diagramPkgPath := filepath.Join(*pkgPath, "../diagrams")
 
+	// if diagrams directory does not exist create it
+	_, errd := os.Stat(diagramPkgPath)
+	if os.IsNotExist(errd) {
+		log.Printf(diagramPkgPath, " does not exist, gongdoc creates it")
+
+		errd := os.MkdirAll(diagramPkgPath, os.ModePerm)
+		if os.IsNotExist(errd) {
+			log.Println("creating directory : " + diagramPkgPath)
+		}
+		if os.IsExist(errd) {
+			log.Println("directory " + diagramPkgPath + " allready exists")
+		}
+	}
+
 	if true {
 		fset := token.NewFileSet()
 		startParser := time.Now()
@@ -150,10 +164,10 @@ func main() {
 			log.Panic("Unable to parser ")
 		}
 		if len(pkgsParser) != 1 {
-			log.Panic("Unable to parser, wrong number of parsers ", len(pkgsParser))
+			log.Println("Unable to parser, wrong number of parsers ", len(pkgsParser))
+		} else {
+			pkgelt.Unmarshall(modelPkg, pkgsParser["diagrams"], fset, diagramPkgPath)
 		}
-
-		pkgelt.Unmarshall(modelPkg, pkgsParser["diagrams"], fset, diagramPkgPath)
 	}
 
 	if *svg {

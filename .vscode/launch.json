@@ -85,10 +85,19 @@
             "request": "launch",
             "mode": "debug",
             "program": "${workspaceFolder}/go/cmd/gongdoc",
-            "cwd": "/tmp/helloworld/go/cmd/helloworld",
+            "cwd": "/tmp/helloworld/go/models",
+            "args": []
+        },
+        {
+            "name": "go server on /tmp/helloworld from /tmp/hellowold",
+            "type": "go",
+            "request": "launch",
+            "mode": "debug",
+            "program": "${workspaceFolder}/go/cmd/gongdoc",
+            "cwd": "/tmp/helloworld",
             "args": [
                 "-pkgPath",
-                "../../models",
+                "go/models",
             ]
         },
         {
