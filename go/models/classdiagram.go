@@ -329,9 +329,8 @@ func (classdiagram *Classdiagram) OutputSVG(path string) {
 }
 
 func (classDiagram *Classdiagram) Marshall(pkgelt *Pkgelt, pkgPath string) error {
+
 	// open file
-	file, err := os.Create(filepath.Join(pkgPath, classDiagram.Name) + ".go")
-	defer closeFile(file)
 
 	log.SetFlags(log.Lshortfile)
 	filename := walk.CaptureOutput(func() { log.Printf("") })
@@ -345,10 +344,14 @@ func (classDiagram *Classdiagram) Marshall(pkgelt *Pkgelt, pkgPath string) error
 	}
 	prelude = strings.ReplaceAll(prelude, "docs", "models")
 
+	filepath := filepath.Join(pkgPath, classDiagram.Name) + ".go"
+	file, err := os.Create(filepath)
+	defer closeFile(file)
 	if err == nil {
 		fmt.Fprintf(file, prelude)
 	} else {
-		log.Fatal(err)
+		cwd, _ := os.Getwd()
+		log.Fatal("Cannot open file ", filepath, " from cwd ", cwd, ", Error is ", err)
 	}
 	if err2 := classDiagram.MarshallAsVariable(file); err != nil {
 		return err2
