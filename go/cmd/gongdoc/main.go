@@ -46,6 +46,8 @@ var (
 
 	setUpRandomNumberOfInstances = flag.Bool("setUpRandomNumberOfInstances", false,
 		"set up random number of instance (between 0 and 100)")
+
+	editable = flag.Bool("editable", true, "have the diagram editable")
 )
 
 type embedFileSystem struct {
@@ -167,6 +169,7 @@ func main() {
 			log.Println("Unable to parser, wrong number of parsers ", len(pkgsParser))
 		} else {
 			pkgelt.Unmarshall(modelPkg, pkgsParser["diagrams"], fset, diagramPkgPath)
+			pkgelt.Editable = *editable
 		}
 	}
 
