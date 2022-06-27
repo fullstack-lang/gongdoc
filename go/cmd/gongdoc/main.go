@@ -127,6 +127,7 @@ func main() {
 	})
 
 	var pkgelt gongdoc_models.Pkgelt
+	pkgelt.Editable = true
 
 	// set up gong structs for pkgelet
 
