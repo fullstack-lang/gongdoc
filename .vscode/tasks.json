@@ -49,8 +49,25 @@
 				"run",
 				"main.go",
 				"-pkgPath",
-				"../../tests/geometry/models",
+				"../../tests/geometry/go/models",
 				"-setUpRandomNumberOfInstances"
+			],
+			"group": "build"
+		},
+		{
+			"label": "02 - go run on test/geometry -setUpRandomNumberOfInstances -editable=false",
+			"type": "shell",
+			"options": {
+				"cwd": "go/cmd/gongdoc"
+			},
+			"command": "go",
+			"args": [
+				"run",
+				"main.go",
+				"-pkgPath",
+				"../../tests/geometry/go/models",
+				"-setUpRandomNumberOfInstances",
+				"-editable=false"
 			],
 			"group": "build"
 		},
