@@ -127,7 +127,7 @@ export class SidebarGongdocDiagramsComponent implements OnInit {
   gongNodeTree = new Array<GongNode>();
 
   // the package can be editable or not
-  editable?: boolean
+  editable: boolean = false
 
   constructor(
     private router: Router,
@@ -197,7 +197,7 @@ export class SidebarGongdocDiagramsComponent implements OnInit {
       * fill up the Classdiagram part of the mat tree
       */
       let classdiagramGongNodeStruct: GongNode = {
-        name: "Classdiagrams  (impl. as a go variables)",
+        name: "UML class diagrams",
         type: GongNodeType.ROOT_OF_CLASS_DIAGRAMS,
         id: 2 * nodeId++,
         structName: "Classdiagram",
@@ -250,7 +250,7 @@ export class SidebarGongdocDiagramsComponent implements OnInit {
       * fill up the Umlsc part of the mat tree
       */
       let umlscGongNodeStruct: GongNode = {
-        name: "Umlscs  (impl. as a go variables)",
+        name: "UML state chart diagrams",
         type: GongNodeType.ROOT_OF_STATE_CHARTS,
         id: 2 * nodeId++,
         structName: "Umlsc",
@@ -329,13 +329,18 @@ export class SidebarGongdocDiagramsComponent implements OnInit {
 
   setEditorRouterOutlet(path: string) {
 
-    console.log("setEditorRouterOutlet " + path)
+    console.log("sidebar gongdoc setEditorRouterOutlet " + path)
+    console.log("to lower case ", path.toLowerCase())
 
     this.router.navigate([{
       outlets: {
         elementeditor: ["github_com_fullstack_lang_gongdoc_go-" + path.toLowerCase()]
       }
-    }]);
+    }]).catch(
+      reason => {
+        console.log(reason)
+      }
+    );
   }
 
   // set editor outlet

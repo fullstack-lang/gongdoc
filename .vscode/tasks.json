@@ -72,6 +72,40 @@
 			"group": "build"
 		},
 		{
+			"label": "02 - go run on test/dummy -setUpRandomNumberOfInstances -editable=false",
+			"type": "shell",
+			"options": {
+				"cwd": "go/cmd/gongdoc"
+			},
+			"command": "go",
+			"args": [
+				"run",
+				"main.go",
+				"-pkgPath",
+				"../../tests/dummy/go/models",
+				"-setUpRandomNumberOfInstances",
+				"-editable=false"
+			],
+			"group": "build"
+		},
+		{
+			"label": "02 - go run on test/dummy -setUpRandomNumberOfInstances ",
+			"type": "shell",
+			"options": {
+				"cwd": "go/cmd/gongdoc"
+			},
+			"command": "go",
+			"args": [
+				"run",
+				"main.go",
+				"-pkgPath",
+				"../../tests/dummy/go/models",
+				"-setUpRandomNumberOfInstances",
+				""
+			],
+			"group": "build"
+		},
+		{
 			"label": "02 - go install gongdoc",
 			"type": "shell",
 			"options": {

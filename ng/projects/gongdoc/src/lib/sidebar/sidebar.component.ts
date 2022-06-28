@@ -209,7 +209,9 @@ export class SidebarComponent implements OnInit {
 
     this.SelectedStructChanged.subscribe(
       selectedStruct => {
-        this.setTableRouterOutlet(selectedStruct)
+        if (selectedStruct != "") {
+          this.setTableRouterOutlet(selectedStruct)
+        }
       }
     )
 
@@ -1189,7 +1191,11 @@ export class SidebarComponent implements OnInit {
       outlets: {
         github_com_fullstack_lang_gongdoc_go_table: ["github_com_fullstack_lang_gongdoc_go-" + path]
       }
-    }]);
+    }]).catch(
+      reason => {
+        console.log(reason)
+      }
+    );;
   }
 
   /**
@@ -1203,7 +1209,11 @@ export class SidebarComponent implements OnInit {
         outlets: {
           github_com_fullstack_lang_gongdoc_go_table: ["github_com_fullstack_lang_gongdoc_go-" + path.toLowerCase()]
         }
-      }]);
+      }]).catch(
+        reason => {
+          console.log(reason)
+        }
+      );
     }
 
     if (type == GongNodeType.INSTANCE) {
