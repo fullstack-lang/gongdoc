@@ -90,6 +90,20 @@ func (classdiagram *Classdiagram) MarshallAsVariable(file *os.File) error {
 	}
 	fmt.Fprintf(file, "\t},\n")
 
+	fmt.Fprintf(file, "\tNotes: []*uml.Note{\n")
+
+	if len(classdiagram.Notes) > 0 {
+		// sort Notes
+		sort.Slice(classdiagram.Notes[:], func(i, j int) bool {
+			return classdiagram.Notes[i].Content < classdiagram.Notes[j].Content
+		})
+		for _, note := range classdiagram.Notes {
+			note.Marshall(file, 2)
+			fmt.Fprintf(file, ",\n")
+		}
+	}
+	fmt.Fprintf(file, "\t},\n")
+
 	fmt.Fprintf(file, "}\n")
 	return nil
 }
