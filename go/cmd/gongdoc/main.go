@@ -132,7 +132,7 @@ func main() {
 	// set up gong structs for pkgelet
 
 	if *setUpRandomNumberOfInstances {
-		for gongStruct, _ := range gong_models.Stage.GongStructs {
+		for gongStruct := range *gong_models.GetGongstructInstancesSet[gong_models.GongStruct]() {
 
 			// let create the gong struct in the gongdoc models
 			gongStruct_ := (&models.GongStruct{Name: gongStruct.Name}).Stage()

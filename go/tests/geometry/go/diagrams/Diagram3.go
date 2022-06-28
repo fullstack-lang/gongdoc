@@ -89,4 +89,22 @@ var Diagram3 uml.Classdiagram = uml.Classdiagram{
 			},
 		},
 	},
+	Notes: []*uml.Note{
+		{
+			Name:    "First note",
+			Content: "This the is displayed content of the note",
+			X:       200,
+			Y:       200,
+			Width:   300,
+			Heigth:  150,
+		},
+		{
+			Name:    "Second note",
+			Content: "This the is displayed content of the note\nThe is the second line",
+			X:       400,
+			Y:       500,
+			Width:   300,
+			Heigth:  150,
+		},
+	},
 }
