@@ -3996,6 +3996,10 @@ func (gongdocnodetype GongdocNodeType) ToString() (res string) {
 		res = "ROOT_OF_SLICE_OF_POINTER_TO_GONG_STRUCT_FIELDS"
 	case SLICE_OF_POINTER_TO_STRUCT:
 		res = "SLICE_OF_POINTER_TO_STRUCT"
+	case ROOT_OF_GONG_NOTES:
+		res = "ROOT_OF_GONG_NOTES"
+	case GONG_NOTE:
+		res = "GONG_NOTE"
 	}
 	return
 }
@@ -4024,6 +4028,10 @@ func (gongdocnodetype *GongdocNodeType) FromString(input string) {
 		*gongdocnodetype = ROOT_OF_SLICE_OF_POINTER_TO_GONG_STRUCT_FIELDS
 	case "SLICE_OF_POINTER_TO_STRUCT":
 		*gongdocnodetype = SLICE_OF_POINTER_TO_STRUCT
+	case "ROOT_OF_GONG_NOTES":
+		*gongdocnodetype = ROOT_OF_GONG_NOTES
+	case "GONG_NOTE":
+		*gongdocnodetype = GONG_NOTE
 	}
 }
 
@@ -4051,6 +4059,10 @@ func (gongdocnodetype *GongdocNodeType) ToCodeString() (res string) {
 		res = "ROOT_OF_SLICE_OF_POINTER_TO_GONG_STRUCT_FIELDS"
 	case SLICE_OF_POINTER_TO_STRUCT:
 		res = "SLICE_OF_POINTER_TO_STRUCT"
+	case ROOT_OF_GONG_NOTES:
+		res = "ROOT_OF_GONG_NOTES"
+	case GONG_NOTE:
+		res = "GONG_NOTE"
 	}
 	return
 }

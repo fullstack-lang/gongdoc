@@ -271,10 +271,9 @@ export class SidebarGongDiagramsComponent implements OnInit {
       gongstructGongNodeStruct.children = new Array<GongNode>()
 
       // the root node is neither present not draggable
-      gongstructGongNodeStruct.presentInDiagram = false,
+      gongstructGongNodeStruct.presentInDiagram = false
 
-
-        this.gongNodeTree.push(gongstructGongNodeStruct)
+      this.gongNodeTree.push(gongstructGongNodeStruct)
 
       // create the set of classshapes presents in the class diagram
       // important for knowing which shapes are already displayed are 
@@ -481,6 +480,39 @@ export class SidebarGongDiagramsComponent implements OnInit {
             sliceOfPointerToGongStructFieldsGongNodeAssociation.children!.push(sliceofpointertogongstructfieldNode)
           })
         })
+
+
+      let gongnoteNode: GongNode = new GongNode
+      gongnoteNode.name = "GongNote"
+      gongnoteNode.type = gongdoc.GongdocNodeType.ROOT_OF_GONG_NOTES
+      gongnoteNode.id = 0
+      gongnoteNode.uniqueIdPerStack = 13 * nonInstanceNodeId
+      nonInstanceNodeId = nonInstanceNodeId + 1
+
+      this.gongFrontRepo.GongNotes_array.forEach(
+        gongNodeDB => {
+          let gongnoteNode: GongNode = new GongNode
+          gongnoteNode.name = gongNodeDB.Name
+          gongnoteNode.type = gongdoc.GongdocNodeType.GONG_NOTE
+          gongnoteNode.id = gongNodeDB.ID
+          gongnoteNode.uniqueIdPerStack = gong.getGongStructUniqueID(gongNodeDB.ID)
+          gongnoteNode.structName = gongNodeDB.Name
+          gongnoteNode.children = new Array<GongNode>()
+
+          // specific to gongdoc
+          gongnoteNode.presentInDiagram = arrayOfDisplayedClassshape.has(gongNodeDB.Name)
+
+          gongstructGongNodeStruct.children!.push(gongnoteNode)
+        }
+      )
+
+      gongnoteNode.structName = "GongNote"
+      gongnoteNode.children = new Array<GongNode>()
+
+      // the root node is neither present not draggable
+      gongnoteNode.presentInDiagram = false
+
+      this.gongNodeTree.push(gongnoteNode)
 
       this.dataSource.data = this.gongNodeTree
 
