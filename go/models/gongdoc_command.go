@@ -25,6 +25,8 @@ type GongdocCommand struct {
 	PositionX     int
 	PositionY     int
 
+	NoteName string // name of the note to create/delete
+
 	GongdocCommandCallback GongdocCommandCallback
 }
 
@@ -366,6 +368,8 @@ func init() {
 							GongdocCommandSingloton.GongdocCommandCallback.HasSelected(gongStruct.Name)
 						}
 					}
+				case DIAGRAM_GONGNOTE_CREATE:
+					log.Println("Note selected ", GongdocCommandSingloton.NoteName)
 				}
 			} // end of polling function
 		}

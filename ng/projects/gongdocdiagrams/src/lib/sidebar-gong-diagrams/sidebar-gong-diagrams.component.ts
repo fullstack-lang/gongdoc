@@ -11,7 +11,7 @@ import * as gongdoc from 'gongdoc'
 
 import { ClassdiagramContextSubject, ClassdiagramContext } from '../diagram-displayed-gongstruct'
 import { combineLatest, Observable, timer } from 'rxjs';
-import { ClassshapeDB, FieldDB, GongdocCommandDB, GongNodeType, LinkDB } from 'gongdoc';
+import { ClassshapeDB, FieldDB, GongdocCommandDB, GongNodeType, LinkDB, NoteDB } from 'gongdoc';
 import { NoDataRowOutlet } from '@angular/cdk/table';
 
 /**
@@ -280,6 +280,7 @@ export class SidebarGongDiagramsComponent implements OnInit {
       let arrayOfDisplayedClassshape = new Map<string, ClassshapeDB>()
       let arrayOfDisplayedBasicField = new Map<string, FieldDB>()
       let arrayOfDisplayedLink = new Map<string, LinkDB>()
+      let arrayOfDisplayedNote = new Map<string, NoteDB>()
 
       this.currentClassdiagram.Classshapes?.forEach(
         classshape => {
@@ -295,6 +296,12 @@ export class SidebarGongDiagramsComponent implements OnInit {
               arrayOfDisplayedLink.set(classshape.Structname + "." + link.Fieldname, link)
             }
           )
+        }
+      )
+
+      this.currentClassdiagram.Notes?.forEach(
+        note => {
+          arrayOfDisplayedNote.set(note.Name, note)
         }
       )
 
@@ -486,7 +493,7 @@ export class SidebarGongDiagramsComponent implements OnInit {
       rootOfGongnotesNode.name = "GongNote"
       rootOfGongnotesNode.type = gongdoc.GongdocNodeType.ROOT_OF_GONG_NOTES
       rootOfGongnotesNode.id = 0
-      rootOfGongnotesNode.uniqueIdPerStack = 13 * nonInstanceNodeId
+      rootOfGongnotesNode.uniqueIdPerStack = 21 * nonInstanceNodeId
       nonInstanceNodeId = nonInstanceNodeId + 1
 
       rootOfGongnotesNode.structName = "GongNote"
@@ -507,8 +514,12 @@ export class SidebarGongDiagramsComponent implements OnInit {
           gongnoteNode.structName = gongNodeDB.Name
           gongnoteNode.children = new Array<GongNode>()
 
-          // specific to gongdoc
-          gongnoteNode.presentInDiagram = arrayOfDisplayedClassshape.has(gongNodeDB.Name)
+          let gongNote = arrayOfDisplayedNote.get(gongNodeDB.Name)
+          if (gongNote) {
+            gongnoteNode.canBeIncluded = false
+          } else {
+            gongnoteNode.canBeIncluded = true
+          }
 
           rootOfGongnotesNode.children!.push(gongnoteNode)
         }
@@ -726,6 +737,31 @@ export class SidebarGongDiagramsComponent implements OnInit {
           this.gongdocCommandService.updateGongdocCommand(gongdocCommandSingloton).subscribe(
             GongdocCommand => {
               console.log("GongdocCommand updated")
+            }
+          )
+        }
+      }
+    )
+  }
+
+  addNoteToDiagram(gongFlatNode: GongFlatNode) {
+
+    // get the GongdocCommandSingloton
+    let gongdocCommandSingloton: GongdocCommandDB
+    this.gongdocFrontRepo.GongdocCommands.forEach(
+      gongdocCommand => {
+        gongdocCommandSingloton = gongdocCommand
+
+        if (gongdocCommandSingloton != undefined) {
+          gongdocCommandSingloton.Command = gongdoc.GongdocCommandType.DIAGRAM_GONGNOTE_CREATE
+          gongdocCommandSingloton.DiagramName = this.currentClassdiagram.Name
+          gongdocCommandSingloton.Date = Date.now().toString()
+          gongdocCommandSingloton.GongdocNodeType = gongFlatNode.type
+          gongdocCommandSingloton.NoteName = gongFlatNode.name
+
+          this.gongdocCommandService.updateGongdocCommand(gongdocCommandSingloton).subscribe(
+            GongdocCommand => {
+              console.log("GongdocCommand for creation of note updated")
             }
           )
         }
