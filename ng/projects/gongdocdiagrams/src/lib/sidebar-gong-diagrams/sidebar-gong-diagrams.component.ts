@@ -482,15 +482,23 @@ export class SidebarGongDiagramsComponent implements OnInit {
         })
 
 
-      let gongnoteNode: GongNode = new GongNode
-      gongnoteNode.name = "GongNote"
-      gongnoteNode.type = gongdoc.GongdocNodeType.ROOT_OF_GONG_NOTES
-      gongnoteNode.id = 0
-      gongnoteNode.uniqueIdPerStack = 13 * nonInstanceNodeId
+      let rootOfGongnotesNode: GongNode = new GongNode
+      rootOfGongnotesNode.name = "GongNote"
+      rootOfGongnotesNode.type = gongdoc.GongdocNodeType.ROOT_OF_GONG_NOTES
+      rootOfGongnotesNode.id = 0
+      rootOfGongnotesNode.uniqueIdPerStack = 13 * nonInstanceNodeId
       nonInstanceNodeId = nonInstanceNodeId + 1
+
+      rootOfGongnotesNode.structName = "GongNote"
+      rootOfGongnotesNode.children = new Array<GongNode>()
+      // the root node is neither present not draggable
+      rootOfGongnotesNode.presentInDiagram = false
+
+      this.gongNodeTree.push(rootOfGongnotesNode)
 
       this.gongFrontRepo.GongNotes_array.forEach(
         gongNodeDB => {
+
           let gongnoteNode: GongNode = new GongNode
           gongnoteNode.name = gongNodeDB.Name
           gongnoteNode.type = gongdoc.GongdocNodeType.GONG_NOTE
@@ -502,17 +510,10 @@ export class SidebarGongDiagramsComponent implements OnInit {
           // specific to gongdoc
           gongnoteNode.presentInDiagram = arrayOfDisplayedClassshape.has(gongNodeDB.Name)
 
-          gongstructGongNodeStruct.children!.push(gongnoteNode)
+          rootOfGongnotesNode.children!.push(gongnoteNode)
         }
       )
 
-      gongnoteNode.structName = "GongNote"
-      gongnoteNode.children = new Array<GongNode>()
-
-      // the root node is neither present not draggable
-      gongnoteNode.presentInDiagram = false
-
-      this.gongNodeTree.push(gongnoteNode)
 
       this.dataSource.data = this.gongNodeTree
 
