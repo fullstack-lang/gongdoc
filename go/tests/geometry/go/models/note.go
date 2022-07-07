@@ -5,3 +5,5 @@ package models
 //
 // It could explain one aspect of the model
 // for intance, describing relations between structs
+
+// GONGNOTE(Short note on the models): this is an of a short note
