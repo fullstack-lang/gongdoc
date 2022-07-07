@@ -91,20 +91,17 @@ var Diagram3 uml.Classdiagram = uml.Classdiagram{
 	},
 	Notes: []*uml.Note{
 		{
-			Name:   "First note",
-			Body:   "This the is displayed content of the note",
-			X:      200.000000,
-			Y:      200.000000,
-			Width:  300.000000,
-			Heigth: 150.000000,
-		},
-		{
-			Name:   "Second note",
-			Body:   "This the is displayed content of the note\nThe is the second line",
-			X:      400.000000,
-			Y:      500.000000,
-			Width:  300.000000,
-			Heigth: 150.000000,
+			Name:    "Note on the models",
+			Body: `this is an example of a note that
+could be displayed on a diagram.
+
+It could explain one aspect of the model
+for intance, describing relations between structs
+`,
+			X:       30.000000,
+			Y:       30.000000,
+			Width:   240.000000,
+			Heigth:  63.000000,
 		},
 	},
 }

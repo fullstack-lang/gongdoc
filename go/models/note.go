@@ -30,7 +30,7 @@ func (note *Note) Marshall(file *os.File, nbIndentation int) error {
 	}
 	{
 		indent(file, nbIndentation)
-		fmt.Fprintf(file, "\tBody \"%s\",\n", note.Body)
+		fmt.Fprintf(file, "\tBody: `%s`,\n", note.Body)
 	}
 	if note.X != 0.0 {
 		indent(file, nbIndentation)
