@@ -15,7 +15,7 @@ import (
 // Note is a UML note in a class diagram
 type Note struct {
 	Name          string
-	Content       string
+	Body          string
 	X, Y          float64
 	Width, Heigth float64
 }
@@ -30,7 +30,7 @@ func (note *Note) Marshall(file *os.File, nbIndentation int) error {
 	}
 	{
 		indent(file, nbIndentation)
-		fmt.Fprintf(file, "\tContent: \"%s\",\n", note.Content)
+		fmt.Fprintf(file, "\tBody \"%s\",\n", note.Body)
 	}
 	if note.X != 0.0 {
 		indent(file, nbIndentation)
@@ -83,9 +83,9 @@ func (note *Note) Unmarshall(modelPkg *gong_models.ModelPkg, expr ast.Expr, fset
 			case "Name":
 				note.Name = strings.TrimPrefix(bl.Value, "\"")
 				note.Name = strings.TrimSuffix(note.Name, "\"")
-			case "Content":
-				note.Content = strings.TrimPrefix(bl.Value, "\"")
-				note.Content = strings.TrimSuffix(note.Content, "\"")
+			case "Body":
+				note.Body = strings.TrimPrefix(bl.Value, "\"")
+				note.Body = strings.TrimSuffix(note.Body, "\"")
 			case "X":
 				var err error
 				note.X, err = strconv.ParseFloat(bl.Value, 64)

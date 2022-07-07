@@ -359,6 +359,24 @@ func init() {
 						link.Middlevertice.Y = (sourceClassshape.Position.Y+targetClassshape.Position.Y)/2.0 +
 							sourceClassshape.Heigth/2.0
 						Stage.Commit()
+					case GONG_NOTE:
+						log.Println("Note selected ", GongdocCommandSingloton.NoteName)
+						note := (&Note{Name: GongdocCommandSingloton.NoteName}).Stage()
+
+						mapOfGongNotes := *gong_models.GetGongstructInstancesMap[gong_models.GongNote]()
+
+						gongNote, ok := mapOfGongNotes[note.Name]
+						if !ok {
+							log.Fatal("Unkown note ", note.Name)
+						}
+						note.Body = gongNote.Body
+						note.X = 30
+						note.Y = 30
+						note.Width = 240
+						note.Heigth = 63
+
+						classDiagram.Notes = append(classDiagram.Notes, note)
+						Stage.Commit()
 					}
 				case DIAGRAM_GONGSTRUCT_SELECT:
 					log.Println("UML Shape selected ", GongdocCommandSingloton.StructName)
@@ -368,8 +386,7 @@ func init() {
 							GongdocCommandSingloton.GongdocCommandCallback.HasSelected(gongStruct.Name)
 						}
 					}
-				case DIAGRAM_GONGNOTE_CREATE:
-					log.Println("Note selected ", GongdocCommandSingloton.NoteName)
+
 				}
 			} // end of polling function
 		}

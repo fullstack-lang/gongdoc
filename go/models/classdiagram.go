@@ -95,7 +95,7 @@ func (classdiagram *Classdiagram) MarshallAsVariable(file *os.File) error {
 	if len(classdiagram.Notes) > 0 {
 		// sort Notes
 		sort.Slice(classdiagram.Notes[:], func(i, j int) bool {
-			return classdiagram.Notes[i].Content < classdiagram.Notes[j].Content
+			return classdiagram.Notes[i].Body < classdiagram.Notes[j].Body
 		})
 		for _, note := range classdiagram.Notes {
 			note.Marshall(file, 2)

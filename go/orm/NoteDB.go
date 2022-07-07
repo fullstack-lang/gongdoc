@@ -67,8 +67,8 @@ type NoteDB struct {
 	// Declation for basic field noteDB.Name
 	Name_Data sql.NullString
 
-	// Declation for basic field noteDB.Content
-	Content_Data sql.NullString
+	// Declation for basic field noteDB.Body
+	Body_Data sql.NullString
 
 	// Declation for basic field noteDB.X
 	X_Data sql.NullFloat64
@@ -104,7 +104,7 @@ type NoteWOP struct {
 
 	Name string `xlsx:"1"`
 
-	Content string `xlsx:"2"`
+	Body string `xlsx:"2"`
 
 	X float64 `xlsx:"3"`
 
@@ -120,7 +120,7 @@ var Note_Fields = []string{
 	// insertion for WOP basic fields
 	"ID",
 	"Name",
-	"Content",
+	"Body",
 	"X",
 	"Y",
 	"Width",
@@ -409,8 +409,8 @@ func (noteDB *NoteDB) CopyBasicFieldsFromNote(note *models.Note) {
 	noteDB.Name_Data.String = note.Name
 	noteDB.Name_Data.Valid = true
 
-	noteDB.Content_Data.String = note.Content
-	noteDB.Content_Data.Valid = true
+	noteDB.Body_Data.String = note.Body
+	noteDB.Body_Data.Valid = true
 
 	noteDB.X_Data.Float64 = note.X
 	noteDB.X_Data.Valid = true
@@ -432,8 +432,8 @@ func (noteDB *NoteDB) CopyBasicFieldsFromNoteWOP(note *NoteWOP) {
 	noteDB.Name_Data.String = note.Name
 	noteDB.Name_Data.Valid = true
 
-	noteDB.Content_Data.String = note.Content
-	noteDB.Content_Data.Valid = true
+	noteDB.Body_Data.String = note.Body
+	noteDB.Body_Data.Valid = true
 
 	noteDB.X_Data.Float64 = note.X
 	noteDB.X_Data.Valid = true
@@ -452,7 +452,7 @@ func (noteDB *NoteDB) CopyBasicFieldsFromNoteWOP(note *NoteWOP) {
 func (noteDB *NoteDB) CopyBasicFieldsToNote(note *models.Note) {
 	// insertion point for checkout of basic fields (back repo to stage)
 	note.Name = noteDB.Name_Data.String
-	note.Content = noteDB.Content_Data.String
+	note.Body = noteDB.Body_Data.String
 	note.X = noteDB.X_Data.Float64
 	note.Y = noteDB.Y_Data.Float64
 	note.Width = noteDB.Width_Data.Float64
@@ -464,7 +464,7 @@ func (noteDB *NoteDB) CopyBasicFieldsToNoteWOP(note *NoteWOP) {
 	note.ID = int(noteDB.ID)
 	// insertion point for checkout of basic fields (back repo to stage)
 	note.Name = noteDB.Name_Data.String
-	note.Content = noteDB.Content_Data.String
+	note.Body = noteDB.Body_Data.String
 	note.X = noteDB.X_Data.Float64
 	note.Y = noteDB.Y_Data.Float64
 	note.Width = noteDB.Width_Data.Float64

@@ -71,8 +71,8 @@ export class NotesTableComponent implements OnInit {
         case 'Name':
           return noteDB.Name;
 
-        case 'Content':
-          return noteDB.Content;
+        case 'Body':
+          return noteDB.Body;
 
         case 'X':
           return noteDB.X;
@@ -108,7 +108,7 @@ export class NotesTableComponent implements OnInit {
 
       // insertion point for merging of fields
       mergedContent += noteDB.Name.toLowerCase()
-      mergedContent += noteDB.Content.toLowerCase()
+      mergedContent += noteDB.Body.toLowerCase()
       mergedContent += noteDB.X.toString()
       mergedContent += noteDB.Y.toString()
       mergedContent += noteDB.Width.toString()
@@ -168,7 +168,7 @@ export class NotesTableComponent implements OnInit {
     if (this.mode == TableComponentMode.DISPLAY_MODE) {
       this.displayedColumns = ['ID', 'Edit', 'Delete', // insertion point for columns to display
         "Name",
-        "Content",
+        "Body",
         "X",
         "Y",
         "Width",
@@ -178,7 +178,7 @@ export class NotesTableComponent implements OnInit {
     } else {
       this.displayedColumns = ['select', 'ID', // insertion point for columns to display
         "Name",
-        "Content",
+        "Body",
         "X",
         "Y",
         "Width",

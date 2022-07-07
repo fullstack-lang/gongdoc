@@ -2266,8 +2266,8 @@ func (stage *StageStruct) Marshall(file *os.File, modelsPackageName, packageName
 
 		setValueField = StringInitStatement
 		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "Content")
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", string(note.Content))
+		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "Body")
+		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", string(note.Body))
 		initializerStatements += setValueField
 
 		setValueField = NumberInitStatement
@@ -3535,7 +3535,7 @@ func GetFields[Type Gongstruct]() (res []string) {
 	case Link:
 		res = []string{"Name", "Fieldname", "Structname", "Fieldtypename", "TargetMultiplicity", "SourceMultiplicity", "Middlevertice"}
 	case Note:
-		res = []string{"Name", "Content", "X", "Y", "Width", "Heigth"}
+		res = []string{"Name", "Body", "X", "Y", "Width", "Heigth"}
 	case Pkgelt:
 		res = []string{"Name", "Path", "GongModelPath", "Classdiagrams", "Umlscs", "Editable"}
 	case Position:
@@ -3706,8 +3706,8 @@ func GetFieldStringValue[Type Gongstruct](instance Type, fieldName string) (res 
 		// string value of fields
 		case "Name":
 			res = any(instance).(Note).Name
-		case "Content":
-			res = any(instance).(Note).Content
+		case "Body":
+			res = any(instance).(Note).Body
 		case "X":
 			res = fmt.Sprintf("%f", any(instance).(Note).X)
 		case "Y":
@@ -3905,10 +3905,6 @@ func (gongdoccommandtype GongdocCommandType) ToString() (res string) {
 		res = "DIAGRAM_SLICE_OF_POINTERS_TO_GONGSTRUCT_CREATE"
 	case DIAGRAM_GONGSTRUCT_SELECT:
 		res = "DIAGRAM_GONGSTRUCT_SELECT"
-	case DIAGRAM_GONGNOTE_DELETE:
-		res = "DIAGRAM_GONGNOTE_DELETE"
-	case DIAGRAM_GONGNOTE_CREATE:
-		res = "DIAGRAM_GONGNOTE_CREATE"
 	}
 	return
 }
@@ -3943,10 +3939,6 @@ func (gongdoccommandtype *GongdocCommandType) FromString(input string) {
 		*gongdoccommandtype = DIAGRAM_SLICE_OF_POINTERS_TO_GONGSTRUCT_CREATE
 	case "DIAGRAM_GONGSTRUCT_SELECT":
 		*gongdoccommandtype = DIAGRAM_GONGSTRUCT_SELECT
-	case "DIAGRAM_GONGNOTE_DELETE":
-		*gongdoccommandtype = DIAGRAM_GONGNOTE_DELETE
-	case "DIAGRAM_GONGNOTE_CREATE":
-		*gongdoccommandtype = DIAGRAM_GONGNOTE_CREATE
 	}
 }
 
@@ -3980,10 +3972,6 @@ func (gongdoccommandtype *GongdocCommandType) ToCodeString() (res string) {
 		res = "DIAGRAM_SLICE_OF_POINTERS_TO_GONGSTRUCT_CREATE"
 	case DIAGRAM_GONGSTRUCT_SELECT:
 		res = "DIAGRAM_GONGSTRUCT_SELECT"
-	case DIAGRAM_GONGNOTE_DELETE:
-		res = "DIAGRAM_GONGNOTE_DELETE"
-	case DIAGRAM_GONGNOTE_CREATE:
-		res = "DIAGRAM_GONGNOTE_CREATE"
 	}
 	return
 }

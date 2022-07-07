@@ -11,7 +11,7 @@ export class NoteDB {
 
 	// insertion point for basic fields declarations
 	Name: string = ""
-	Content: string = ""
+	Body: string = ""
 	X: number = 0
 	Y: number = 0
 	Width: number = 0

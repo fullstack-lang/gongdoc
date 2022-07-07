@@ -753,7 +753,7 @@ export class SidebarGongDiagramsComponent implements OnInit {
         gongdocCommandSingloton = gongdocCommand
 
         if (gongdocCommandSingloton != undefined) {
-          gongdocCommandSingloton.Command = gongdoc.GongdocCommandType.DIAGRAM_GONGNOTE_CREATE
+          gongdocCommandSingloton.Command = gongdoc.GongdocCommandType.DIAGRAM_ELEMENT_CREATE
           gongdocCommandSingloton.DiagramName = this.currentClassdiagram.Name
           gongdocCommandSingloton.Date = Date.now().toString()
           gongdocCommandSingloton.GongdocNodeType = gongFlatNode.type
