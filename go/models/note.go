@@ -26,27 +26,29 @@ func (note *Note) Marshall(file *os.File, nbIndentation int) error {
 	fmt.Fprintf(file, "{\n")
 	{
 		indent(file, nbIndentation)
-		fmt.Fprintf(file, "\tName:    \"%s\",\n", note.Name)
+		fieldInitStatement := "\tName: " + "`" + string(note.Name) + "`" + ",\n"
+		fmt.Fprint(file, fieldInitStatement)
 	}
 	{
 		indent(file, nbIndentation)
-		fmt.Fprintf(file, "\tBody: `%s`,\n", note.Body)
+		fieldInitStatement := "\tBody: " + "`" + string(note.Body) + "`" + ",\n"
+		fmt.Fprint(file, fieldInitStatement)
 	}
 	if note.X != 0.0 {
 		indent(file, nbIndentation)
-		fmt.Fprintf(file, "\tX:       %f,\n", note.X)
+		fmt.Fprintf(file, "\tX:      %f,\n", note.X)
 	}
 	if note.Y != 0.0 {
 		indent(file, nbIndentation)
-		fmt.Fprintf(file, "\tY:       %f,\n", note.Y)
+		fmt.Fprintf(file, "\tY:      %f,\n", note.Y)
 	}
 	if note.Width != 0.0 {
 		indent(file, nbIndentation)
-		fmt.Fprintf(file, "\tWidth:   %f,\n", note.Width)
+		fmt.Fprintf(file, "\tWidth:  %f,\n", note.Width)
 	}
 	if note.Heigth != 0.0 {
 		indent(file, nbIndentation)
-		fmt.Fprintf(file, "\tHeigth:  %f,\n", note.Heigth)
+		fmt.Fprintf(file, "\tHeigth: %f,\n", note.Heigth)
 	}
 
 	indent(file, nbIndentation)
@@ -81,11 +83,11 @@ func (note *Note) Unmarshall(modelPkg *gong_models.ModelPkg, expr ast.Expr, fset
 		case *ast.BasicLit:
 			switch ident.Name {
 			case "Name":
-				note.Name = strings.TrimPrefix(bl.Value, "\"")
-				note.Name = strings.TrimSuffix(note.Name, "\"")
+				note.Name = strings.TrimPrefix(bl.Value, "`")
+				note.Name = strings.TrimSuffix(note.Name, "`")
 			case "Body":
-				note.Body = strings.TrimPrefix(bl.Value, "\"")
-				note.Body = strings.TrimSuffix(note.Body, "\"")
+				note.Body = strings.TrimPrefix(bl.Value, "`")
+				note.Body = strings.TrimSuffix(note.Body, "`")
 			case "X":
 				var err error
 				note.X, err = strconv.ParseFloat(bl.Value, 64)

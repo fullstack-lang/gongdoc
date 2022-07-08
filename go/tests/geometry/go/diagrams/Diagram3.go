@@ -91,17 +91,17 @@ var Diagram3 uml.Classdiagram = uml.Classdiagram{
 	},
 	Notes: []*uml.Note{
 		{
-			Name:    "Note on the models",
+			Name: `Note on the models`,
 			Body: `this is an example of a note that
 could be displayed on a diagram.
 
 It could explain one aspect of the model
 for intance, describing relations between structs
 `,
-			X:       30.000000,
-			Y:       30.000000,
-			Width:   240.000000,
-			Heigth:  63.000000,
+			X:      30.000000,
+			Y:      30.000000,
+			Width:  240.000000,
+			Heigth: 63.000000,
 		},
 	},
 }
