@@ -4,7 +4,7 @@ import { GongdocCommandService } from 'gongdoc';
 import { MatLabel } from '@angular/material/form-field';
 
 export function newUmlNote(note: gongdoc.NoteDB,
-    positionService: gongdoc.PositionService,
+    noteService: gongdoc.NoteService,
     gongdocCommandSingloton: gongdoc.GongdocCommandDB,
     gongdocCommandService: gongdoc.GongdocCommandService): joint.shapes.basic.Rect {
 
@@ -26,7 +26,7 @@ export function newUmlNote(note: gongdoc.NoteDB,
             methods: [],
             // store relevant attributes for working when callback are invoked
             note: note,
-            positionService: positionService,
+            noteService: noteService,
             gongdocCommandSingloton: gongdocCommandSingloton,
             gongdocCommandService: gongdocCommandService
         }

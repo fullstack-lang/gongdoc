@@ -92,6 +92,7 @@ export class ClassDiagramComponent implements OnInit, OnDestroy {
     private router: Router,
 
     private positionService: gongdoc.PositionService,
+    private noteService: gongdoc.NoteService,
     private verticeService: gongdoc.VerticeService,
 
     private gongdocFrontRepoService: gongdoc.FrontRepoService,
@@ -177,7 +178,7 @@ export class ClassDiagramComponent implements OnInit, OnDestroy {
   }
 
   // onMove is called each time the shape is moved
-  onNoteMove(umlNote: joint.shapes.uml.Class) {
+  onNoteMove(umlNote: joint.shapes.standard.Rectangle) {
     // console.log(umlNote.id, ':', umlNote.get('position'));
 
     let note = umlNote.attributes['note'] as gongdoc.NoteDB
@@ -253,7 +254,7 @@ export class ClassDiagramComponent implements OnInit, OnDestroy {
     // - the position service
     // - the command singloton
     // - the command service
-    let umlNote = newUmlNote(note, this.positionService,
+    let umlNote = newUmlNote(note, this.noteService,
       gongdocCommandSingloton!, this.gongdocCommandService)
 
     // structRectangle.attributes = ['firstName: String']
@@ -465,7 +466,7 @@ export class ClassDiagramComponent implements OnInit, OnDestroy {
         let umlNote = this.addNoteToGraph(note)
 
         // add a backbone event handler to update the position
-        umlNote.on('change:position', this.onClassshapeMove)
+        umlNote.on('change:position', this.onNoteMove)
       }
     }
 
