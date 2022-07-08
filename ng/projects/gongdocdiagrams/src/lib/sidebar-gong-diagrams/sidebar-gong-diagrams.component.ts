@@ -209,6 +209,9 @@ export class SidebarGongDiagramsComponent implements OnInit {
               if (node.uniqueIdPerStack == 13) {
                 this.treeControl.expand(node)
               }
+              if (node.uniqueIdPerStack == 21) {
+                this.treeControl.expand(node)
+              }
             }
           )
         }
@@ -754,6 +757,31 @@ export class SidebarGongDiagramsComponent implements OnInit {
 
         if (gongdocCommandSingloton != undefined) {
           gongdocCommandSingloton.Command = gongdoc.GongdocCommandType.DIAGRAM_ELEMENT_CREATE
+          gongdocCommandSingloton.DiagramName = this.currentClassdiagram.Name
+          gongdocCommandSingloton.Date = Date.now().toString()
+          gongdocCommandSingloton.GongdocNodeType = gongFlatNode.type
+          gongdocCommandSingloton.NoteName = gongFlatNode.name
+
+          this.gongdocCommandService.updateGongdocCommand(gongdocCommandSingloton).subscribe(
+            GongdocCommand => {
+              console.log("GongdocCommand for creation of note updated")
+            }
+          )
+        }
+      }
+    )
+  }
+
+  removeNoteFromDiagram(gongFlatNode: GongFlatNode) {
+
+    // get the GongdocCommandSingloton
+    let gongdocCommandSingloton: GongdocCommandDB
+    this.gongdocFrontRepo.GongdocCommands.forEach(
+      gongdocCommand => {
+        gongdocCommandSingloton = gongdocCommand
+
+        if (gongdocCommandSingloton != undefined) {
+          gongdocCommandSingloton.Command = gongdoc.GongdocCommandType.DIAGRAM_ELEMENT_DELETE
           gongdocCommandSingloton.DiagramName = this.currentClassdiagram.Name
           gongdocCommandSingloton.Date = Date.now().toString()
           gongdocCommandSingloton.GongdocNodeType = gongFlatNode.type

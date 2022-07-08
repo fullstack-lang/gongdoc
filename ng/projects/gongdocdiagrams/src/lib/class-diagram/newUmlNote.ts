@@ -39,19 +39,22 @@ export function newUmlNote(note: gongdoc.NoteDB,
             maxLength = lines[lineNb].length
         }
     }
+    // console.log("maxLength ", maxLength)
 
     rect.resize(
-        300, noteTitle.split(/\r\n|\r|\n/).length * 18
+        maxLength*8, noteTitle.split(/\r\n|\r|\n/).length * 18
     )
     rect.attr({
         body: {
-            rx: 10, // add a corner radius
-            ry: 10,
-            fill: '#ADD8E6'
+            // rx: 10, // add a corner radius
+            // ry: 10,
+            fill: '#fe976a',
+            "stroke-width": 0.5,
         },
         text: {
             text: noteTitle
         }
+        
     })
 
     return rect
