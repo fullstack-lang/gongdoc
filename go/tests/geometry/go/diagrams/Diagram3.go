@@ -103,5 +103,14 @@ for intance, describing relations between structs
 			Width:  240.000000,
 			Heigth: 63.000000,
 		},
+		{
+			Name: `Short note on the models`,
+			Body: `this is an of a short note
+`,
+			X:      30.000000,
+			Y:      30.000000,
+			Width:  240.000000,
+			Heigth: 63.000000,
+		},
 	},
 }

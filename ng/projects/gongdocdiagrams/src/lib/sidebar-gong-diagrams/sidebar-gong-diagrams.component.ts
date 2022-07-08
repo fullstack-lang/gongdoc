@@ -519,9 +519,12 @@ export class SidebarGongDiagramsComponent implements OnInit {
 
           let gongNote = arrayOfDisplayedNote.get(gongNodeDB.Name)
           if (gongNote) {
-            gongnoteNode.canBeIncluded = false
+            gongnoteNode.canBeIncluded = true
+            gongnoteNode.presentInDiagram = true
           } else {
             gongnoteNode.canBeIncluded = true
+            gongnoteNode.presentInDiagram = false
+
           }
 
           rootOfGongnotesNode.children!.push(gongnoteNode)
