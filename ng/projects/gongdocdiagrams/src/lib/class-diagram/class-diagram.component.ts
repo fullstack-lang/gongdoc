@@ -179,10 +179,18 @@ export class ClassDiagramComponent implements OnInit, OnDestroy {
 
   // onMove is called each time the shape is moved
   onNoteMove(umlNote: joint.shapes.standard.Rectangle) {
-    // console.log(umlNote.id, ':', umlNote.get('position'));
+
 
     let note = umlNote.attributes['note'] as gongdoc.NoteDB
+    let noteService = umlNote.attributes['noteService'] as gongdoc.NoteService
+    note.X = umlNote.get('position')!.x
+    note.Y = umlNote.get('position')!.y
+    noteService.updateNote(note!).subscribe(
+      note => {
 
+      }
+    )
+    // console.log(note.Name, ':', umlNote.get('position'));
   }
 
   // onMove is called each time the shape is moved
@@ -330,6 +338,13 @@ export class ClassDiagramComponent implements OnInit, OnDestroy {
         let umlClassShape = cellView.model
 
         let classhape = umlClassShape.attributes['classshape'] as gongdoc.ClassshapeDB
+
+        // if selected object is not a classshape, move on
+        if (classhape == undefined) {
+          return
+        }
+
+
         let gongdocCommandSingloton = umlClassShape.attributes['gongdocCommandSingloton'] as gongdoc.GongdocCommandDB
         let gongdocCommandService = umlClassShape.attributes['gongdocCommandService'] as gongdoc.GongdocCommandService
 

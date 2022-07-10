@@ -98,8 +98,8 @@ could be displayed on a diagram.
 It could explain one aspect of the model
 for intance, describing relations between structs
 `,
-			X:      30.000000,
-			Y:      30.000000,
+			X:      40.000000,
+			Y:      370.000000,
 			Width:  240.000000,
 			Heigth: 63.000000,
 		},
@@ -107,8 +107,8 @@ for intance, describing relations between structs
 			Name: `Short note on the models`,
 			Body: `this is an of a short note
 `,
-			X:      30.000000,
-			Y:      30.000000,
+			X:      50.000000,
+			Y:      190.000000,
 			Width:  240.000000,
 			Heigth: 63.000000,
 		},
