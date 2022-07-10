@@ -25,6 +25,8 @@ type GongdocCommand struct {
 	PositionX     int
 	PositionY     int
 
+	NoteName string // name of the note to create/delete
+
 	GongdocCommandCallback GongdocCommandCallback
 }
 
@@ -120,7 +122,7 @@ func init() {
 							idx = _idx
 						}
 					}
-					if classshape == nil {
+					if classshape == nil && GongdocCommandSingloton.GongdocNodeType != GONG_NOTE {
 						log.Panicf("Unknown classshape  %s", GongdocCommandSingloton.StructName)
 					}
 
@@ -201,6 +203,26 @@ func init() {
 						fromClassshape.Links = newSliceOfLinks
 
 						Stage.Commit()
+					case GONG_NOTE:
+						foundNote := false
+						var note *Note
+						var idx int
+						var _note *Note
+						for idx, _note = range classDiagram.Notes {
+
+							// strange behavior when the note is remove within the loop
+							if _note.Name == GongdocCommandSingloton.NoteName && !foundNote {
+								foundNote = true
+								note = _note
+							}
+						}
+						if !foundNote {
+							log.Panicf("Note %s of field not present ", GongdocCommandSingloton.StructName)
+						}
+						classDiagram.Notes = removeNoteFromSlice(classDiagram.Notes, idx)
+						note.Unstage()
+						Stage.Commit()
+
 					}
 
 				case DIAGRAM_ELEMENT_CREATE:
@@ -357,6 +379,24 @@ func init() {
 						link.Middlevertice.Y = (sourceClassshape.Position.Y+targetClassshape.Position.Y)/2.0 +
 							sourceClassshape.Heigth/2.0
 						Stage.Commit()
+					case GONG_NOTE:
+						log.Println("Note selected ", GongdocCommandSingloton.NoteName)
+						note := (&Note{Name: GongdocCommandSingloton.NoteName}).Stage()
+
+						mapOfGongNotes := *gong_models.GetGongstructInstancesMap[gong_models.GongNote]()
+
+						gongNote, ok := mapOfGongNotes[note.Name]
+						if !ok {
+							log.Fatal("Unkown note ", note.Name)
+						}
+						note.Body = gongNote.Body
+						note.X = 30
+						note.Y = 30
+						note.Width = 240
+						note.Heigth = 63
+
+						classDiagram.Notes = append(classDiagram.Notes, note)
+						Stage.Commit()
 					}
 				case DIAGRAM_GONGSTRUCT_SELECT:
 					log.Println("UML Shape selected ", GongdocCommandSingloton.StructName)
@@ -366,6 +406,7 @@ func init() {
 							GongdocCommandSingloton.GongdocCommandCallback.HasSelected(gongStruct.Name)
 						}
 					}
+
 				}
 			} // end of polling function
 		}
@@ -373,6 +414,10 @@ func init() {
 }
 
 func removeClassshapeFromSlice(s []*Classshape, i int) []*Classshape {
+	return append(s[:i], s[i+1:]...)
+}
+
+func removeNoteFromSlice(s []*Note, i int) []*Note {
 	return append(s[:i], s[i+1:]...)
 }
 

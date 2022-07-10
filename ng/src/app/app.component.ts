@@ -10,5 +10,6 @@ export class AppComponent {
   view = 'Default view'
   default = 'Default view'
   meta = 'Meta view'
-  views: string[] = [this.default, this.meta];
+  gong = 'Gong view'
+  views: string[] = [this.default, this.meta, this.gong];
 }

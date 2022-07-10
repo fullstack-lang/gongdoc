@@ -9,6 +9,7 @@ type ModelPkg struct {
 
 	GongStructs map[string]*GongStruct `gorm:"-"` // sql3Lite does not support maps
 	GongEnums   map[string]*GongEnum   `gorm:"-"`
+	GongNotes   map[string]*GongNote   `gorm:"-"`
 }
 
 // SerializeToStage stages modelPkg and
@@ -47,6 +48,9 @@ func (modelPkg *ModelPkg) SerializeToStage() {
 		for _, gongEnumValue := range gongEnum.GongEnumValues {
 			gongEnumValue.Stage()
 		}
+	}
+	for _, gongNote := range modelPkg.GongNotes {
+		gongNote.Stage()
 	}
 	Stage.Commit()
 }
