@@ -119,6 +119,12 @@ func (note *Note) Unmarshall(modelPkg *gong_models.ModelPkg, expr ast.Expr, fset
 		default:
 			log.Fatal("Element should be a basic lit" + fset.Position(kve.Pos()).String())
 		}
+	}
 
+	// update the UML note Body from the note Body in the go code
+	for _, gongNote := range modelPkg.GongNotes {
+		if gongNote.Name == note.Name {
+			note.Body = gongNote.Body
+		}
 	}
 }

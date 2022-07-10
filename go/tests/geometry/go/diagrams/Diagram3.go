@@ -97,9 +97,12 @@ could be displayed on a diagram.
 
 It could explain one aspect of the model
 for intance, describing relations between structs
+
+The size of the note (width and heigth) is automaticaly computed from the note
+number of lines and max number of characters per line in the go code
 `,
-			X:      40.000000,
-			Y:      370.000000,
+			X:      110.000000,
+			Y:      410.000000,
 			Width:  240.000000,
 			Heigth: 63.000000,
 		},
