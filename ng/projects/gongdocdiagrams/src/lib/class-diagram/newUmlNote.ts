@@ -13,7 +13,7 @@ export function newUmlNote(note: gongdoc.NoteDB,
     var attributes = new Array<string>()
 
 
-    let noteTitle = note.Body
+    let noteBody = note.Body
 
     var rect = new joint.shapes.standard.Rectangle(
         {
@@ -22,7 +22,7 @@ export function newUmlNote(note: gongdoc.NoteDB,
                 y: note.Y
             },
             size: { width: note.Width, height: note.Heigth },
-            name: [noteTitle],
+            name: [noteBody],
             methods: [],
             // store relevant attributes for working when callback are invoked
             note: note,
@@ -31,8 +31,8 @@ export function newUmlNote(note: gongdoc.NoteDB,
             gongdocCommandService: gongdocCommandService
         }
     )
-    let width = noteTitle.length * 12
-    let lines = noteTitle.split(/\r\n|\r|\n/)
+    let width = noteBody.length * 12
+    let lines = noteBody.split(/\r\n|\r|\n/)
     let maxLength = 0
     for (let lineNb = 0; lineNb < lines.length; lineNb++) {
         if (lines[lineNb].length > maxLength)  {
@@ -42,7 +42,7 @@ export function newUmlNote(note: gongdoc.NoteDB,
     // console.log("maxLength ", maxLength)
 
     rect.resize(
-        maxLength*8, noteTitle.split(/\r\n|\r|\n/).length * 18
+        maxLength*7, noteBody.split(/\r\n|\r|\n/).length * 17
     )
     rect.attr({
         body: {
@@ -52,7 +52,7 @@ export function newUmlNote(note: gongdoc.NoteDB,
             "stroke-width": 0.5,
         },
         text: {
-            text: noteTitle
+            text: noteBody
         }
         
     })
