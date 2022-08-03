@@ -242,18 +242,6 @@ func (stage *StageStruct) RestoreXL(dirPath string) {
 }
 
 // insertion point for cumulative sub template with model space calls
-func (stage *StageStruct) getClassdiagramOrderedStructWithNameField() []*Classdiagram {
-	// have alphabetical order generation
-	classdiagramOrdered := []*Classdiagram{}
-	for classdiagram := range stage.Classdiagrams {
-		classdiagramOrdered = append(classdiagramOrdered, classdiagram)
-	}
-	sort.Slice(classdiagramOrdered[:], func(i, j int) bool {
-		return classdiagramOrdered[i].Name < classdiagramOrdered[j].Name
-	})
-	return classdiagramOrdered
-}
-
 // Stage puts classdiagram to the model stage
 func (classdiagram *Classdiagram) Stage() *Classdiagram {
 	Stage.Classdiagrams[classdiagram] = __member
@@ -347,18 +335,6 @@ func DeleteORMClassdiagram(classdiagram *Classdiagram) {
 // for satisfaction of GongStruct interface
 func (classdiagram *Classdiagram) GetName() (res string) {
 	return classdiagram.Name
-}
-
-func (stage *StageStruct) getClassshapeOrderedStructWithNameField() []*Classshape {
-	// have alphabetical order generation
-	classshapeOrdered := []*Classshape{}
-	for classshape := range stage.Classshapes {
-		classshapeOrdered = append(classshapeOrdered, classshape)
-	}
-	sort.Slice(classshapeOrdered[:], func(i, j int) bool {
-		return classshapeOrdered[i].Name < classshapeOrdered[j].Name
-	})
-	return classshapeOrdered
 }
 
 // Stage puts classshape to the model stage
@@ -456,18 +432,6 @@ func (classshape *Classshape) GetName() (res string) {
 	return classshape.Name
 }
 
-func (stage *StageStruct) getFieldOrderedStructWithNameField() []*Field {
-	// have alphabetical order generation
-	fieldOrdered := []*Field{}
-	for field := range stage.Fields {
-		fieldOrdered = append(fieldOrdered, field)
-	}
-	sort.Slice(fieldOrdered[:], func(i, j int) bool {
-		return fieldOrdered[i].Name < fieldOrdered[j].Name
-	})
-	return fieldOrdered
-}
-
 // Stage puts field to the model stage
 func (field *Field) Stage() *Field {
 	Stage.Fields[field] = __member
@@ -561,18 +525,6 @@ func DeleteORMField(field *Field) {
 // for satisfaction of GongStruct interface
 func (field *Field) GetName() (res string) {
 	return field.Name
-}
-
-func (stage *StageStruct) getGongStructOrderedStructWithNameField() []*GongStruct {
-	// have alphabetical order generation
-	gongstructOrdered := []*GongStruct{}
-	for gongstruct := range stage.GongStructs {
-		gongstructOrdered = append(gongstructOrdered, gongstruct)
-	}
-	sort.Slice(gongstructOrdered[:], func(i, j int) bool {
-		return gongstructOrdered[i].Name < gongstructOrdered[j].Name
-	})
-	return gongstructOrdered
 }
 
 // Stage puts gongstruct to the model stage
@@ -670,18 +622,6 @@ func (gongstruct *GongStruct) GetName() (res string) {
 	return gongstruct.Name
 }
 
-func (stage *StageStruct) getGongdocCommandOrderedStructWithNameField() []*GongdocCommand {
-	// have alphabetical order generation
-	gongdoccommandOrdered := []*GongdocCommand{}
-	for gongdoccommand := range stage.GongdocCommands {
-		gongdoccommandOrdered = append(gongdoccommandOrdered, gongdoccommand)
-	}
-	sort.Slice(gongdoccommandOrdered[:], func(i, j int) bool {
-		return gongdoccommandOrdered[i].Name < gongdoccommandOrdered[j].Name
-	})
-	return gongdoccommandOrdered
-}
-
 // Stage puts gongdoccommand to the model stage
 func (gongdoccommand *GongdocCommand) Stage() *GongdocCommand {
 	Stage.GongdocCommands[gongdoccommand] = __member
@@ -775,18 +715,6 @@ func DeleteORMGongdocCommand(gongdoccommand *GongdocCommand) {
 // for satisfaction of GongStruct interface
 func (gongdoccommand *GongdocCommand) GetName() (res string) {
 	return gongdoccommand.Name
-}
-
-func (stage *StageStruct) getGongdocStatusOrderedStructWithNameField() []*GongdocStatus {
-	// have alphabetical order generation
-	gongdocstatusOrdered := []*GongdocStatus{}
-	for gongdocstatus := range stage.GongdocStatuss {
-		gongdocstatusOrdered = append(gongdocstatusOrdered, gongdocstatus)
-	}
-	sort.Slice(gongdocstatusOrdered[:], func(i, j int) bool {
-		return gongdocstatusOrdered[i].Name < gongdocstatusOrdered[j].Name
-	})
-	return gongdocstatusOrdered
 }
 
 // Stage puts gongdocstatus to the model stage
@@ -884,18 +812,6 @@ func (gongdocstatus *GongdocStatus) GetName() (res string) {
 	return gongdocstatus.Name
 }
 
-func (stage *StageStruct) getLinkOrderedStructWithNameField() []*Link {
-	// have alphabetical order generation
-	linkOrdered := []*Link{}
-	for link := range stage.Links {
-		linkOrdered = append(linkOrdered, link)
-	}
-	sort.Slice(linkOrdered[:], func(i, j int) bool {
-		return linkOrdered[i].Name < linkOrdered[j].Name
-	})
-	return linkOrdered
-}
-
 // Stage puts link to the model stage
 func (link *Link) Stage() *Link {
 	Stage.Links[link] = __member
@@ -989,18 +905,6 @@ func DeleteORMLink(link *Link) {
 // for satisfaction of GongStruct interface
 func (link *Link) GetName() (res string) {
 	return link.Name
-}
-
-func (stage *StageStruct) getNoteOrderedStructWithNameField() []*Note {
-	// have alphabetical order generation
-	noteOrdered := []*Note{}
-	for note := range stage.Notes {
-		noteOrdered = append(noteOrdered, note)
-	}
-	sort.Slice(noteOrdered[:], func(i, j int) bool {
-		return noteOrdered[i].Name < noteOrdered[j].Name
-	})
-	return noteOrdered
 }
 
 // Stage puts note to the model stage
@@ -1098,18 +1002,6 @@ func (note *Note) GetName() (res string) {
 	return note.Name
 }
 
-func (stage *StageStruct) getPkgeltOrderedStructWithNameField() []*Pkgelt {
-	// have alphabetical order generation
-	pkgeltOrdered := []*Pkgelt{}
-	for pkgelt := range stage.Pkgelts {
-		pkgeltOrdered = append(pkgeltOrdered, pkgelt)
-	}
-	sort.Slice(pkgeltOrdered[:], func(i, j int) bool {
-		return pkgeltOrdered[i].Name < pkgeltOrdered[j].Name
-	})
-	return pkgeltOrdered
-}
-
 // Stage puts pkgelt to the model stage
 func (pkgelt *Pkgelt) Stage() *Pkgelt {
 	Stage.Pkgelts[pkgelt] = __member
@@ -1203,18 +1095,6 @@ func DeleteORMPkgelt(pkgelt *Pkgelt) {
 // for satisfaction of GongStruct interface
 func (pkgelt *Pkgelt) GetName() (res string) {
 	return pkgelt.Name
-}
-
-func (stage *StageStruct) getPositionOrderedStructWithNameField() []*Position {
-	// have alphabetical order generation
-	positionOrdered := []*Position{}
-	for position := range stage.Positions {
-		positionOrdered = append(positionOrdered, position)
-	}
-	sort.Slice(positionOrdered[:], func(i, j int) bool {
-		return positionOrdered[i].Name < positionOrdered[j].Name
-	})
-	return positionOrdered
 }
 
 // Stage puts position to the model stage
@@ -1312,18 +1192,6 @@ func (position *Position) GetName() (res string) {
 	return position.Name
 }
 
-func (stage *StageStruct) getUmlStateOrderedStructWithNameField() []*UmlState {
-	// have alphabetical order generation
-	umlstateOrdered := []*UmlState{}
-	for umlstate := range stage.UmlStates {
-		umlstateOrdered = append(umlstateOrdered, umlstate)
-	}
-	sort.Slice(umlstateOrdered[:], func(i, j int) bool {
-		return umlstateOrdered[i].Name < umlstateOrdered[j].Name
-	})
-	return umlstateOrdered
-}
-
 // Stage puts umlstate to the model stage
 func (umlstate *UmlState) Stage() *UmlState {
 	Stage.UmlStates[umlstate] = __member
@@ -1419,18 +1287,6 @@ func (umlstate *UmlState) GetName() (res string) {
 	return umlstate.Name
 }
 
-func (stage *StageStruct) getUmlscOrderedStructWithNameField() []*Umlsc {
-	// have alphabetical order generation
-	umlscOrdered := []*Umlsc{}
-	for umlsc := range stage.Umlscs {
-		umlscOrdered = append(umlscOrdered, umlsc)
-	}
-	sort.Slice(umlscOrdered[:], func(i, j int) bool {
-		return umlscOrdered[i].Name < umlscOrdered[j].Name
-	})
-	return umlscOrdered
-}
-
 // Stage puts umlsc to the model stage
 func (umlsc *Umlsc) Stage() *Umlsc {
 	Stage.Umlscs[umlsc] = __member
@@ -1524,18 +1380,6 @@ func DeleteORMUmlsc(umlsc *Umlsc) {
 // for satisfaction of GongStruct interface
 func (umlsc *Umlsc) GetName() (res string) {
 	return umlsc.Name
-}
-
-func (stage *StageStruct) getVerticeOrderedStructWithNameField() []*Vertice {
-	// have alphabetical order generation
-	verticeOrdered := []*Vertice{}
-	for vertice := range stage.Vertices {
-		verticeOrdered = append(verticeOrdered, vertice)
-	}
-	sort.Slice(verticeOrdered[:], func(i, j int) bool {
-		return verticeOrdered[i].Name < verticeOrdered[j].Name
-	})
-	return verticeOrdered
 }
 
 // Stage puts vertice to the model stage
@@ -2922,13 +2766,23 @@ func (stageStruct *StageStruct) CreateReverseMap_Umlsc_States() (res map[*UmlSta
 
 // generate function for reverse association maps of Vertice
 
-// Gongstruct is the type paramter for generated generic function that allows
+// Gongstruct is the type parameter for generated generic function that allows
 // - access to staged instances
 // - navigation between staged instances by going backward association links between gongstruct
 // - full refactoring of Gongstruct identifiers / fields
 type Gongstruct interface {
 	// insertion point for generic types
 	Classdiagram | Classshape | Field | GongStruct | GongdocCommand | GongdocStatus | Link | Note | Pkgelt | Position | UmlState | Umlsc | Vertice
+}
+
+// Gongstruct is the type parameter for generated generic function that allows
+// - access to staged instances
+// - navigation between staged instances by going backward association links between gongstruct
+// - full refactoring of Gongstruct identifiers / fields
+type PointerToGongstruct interface {
+	// insertion point for generic types
+	*Classdiagram | *Classshape | *Field | *GongStruct | *GongdocCommand | *GongdocStatus | *Link | *Note | *Pkgelt | *Position | *UmlState | *Umlsc | *Vertice
+	GetName() string
 }
 
 type GongstructSet interface {
@@ -4120,3 +3974,4 @@ func (multiplicitytype *MultiplicityType) ToCodeString() (res string) {
 	return
 }
 
+// Last line of the template
