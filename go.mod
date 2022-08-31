@@ -4,7 +4,7 @@ go 1.18
 
 require (
 	github.com/frankban/quicktest v1.13.1 // indirect
-	github.com/fullstack-lang/gong v0.0.0-20220702044335-15f4f5a852a2
+	github.com/fullstack-lang/gong v0.0.0-20220831132059-fcff635d5035
 	github.com/gin-contrib/cors v1.3.1
 	github.com/gin-contrib/static v0.0.1
 	github.com/gin-gonic/gin v1.7.4
@@ -14,7 +14,7 @@ require (
 	github.com/google/go-cmp v0.5.6 // indirect
 	github.com/json-iterator/go v1.1.12 // indirect
 	github.com/kr/text v0.2.0 // indirect
-	github.com/mattn/go-isatty v0.0.14 // indirect
+	github.com/mattn/go-isatty v0.0.16 // indirect
 	github.com/shabbyrobe/xmlwriter v0.0.0-20210324110748-440e98cf0c87 // indirect
 	github.com/tdewolff/canvas v0.0.0-20210926234438-920f34634583
 	github.com/tdewolff/minify/v2 v2.9.22 // indirect
@@ -22,9 +22,8 @@ require (
 	github.com/tealeg/xlsx/v3 v3.2.3
 	golang.org/x/crypto v0.0.0-20210921155107-089bfa567519 // indirect
 	golang.org/x/image v0.0.0-20210628002857-a66eb6448b8d // indirect
-	golang.org/x/sys v0.0.0-20211015200801-69063c4bb744 // indirect
+	golang.org/x/sys v0.0.0-20220811171246-fbc7d0a398ab // indirect
 	golang.org/x/text v0.3.7 // indirect
-	golang.org/x/tools v0.1.7 // indirect
 	gorm.io/gorm v1.22.5
 )
 

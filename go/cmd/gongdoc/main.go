@@ -104,7 +104,7 @@ func main() {
 	modelPkg.Name = pkgName
 	modelPkg.PkgPath = fullPkgPath
 
-	gong_models.Walk(*pkgPath, modelPkg, true)
+	gong_models.Walk(*pkgPath, modelPkg)
 	modelPkg.SerializeToStage()
 	gong_models.Stage.Commit()
 
