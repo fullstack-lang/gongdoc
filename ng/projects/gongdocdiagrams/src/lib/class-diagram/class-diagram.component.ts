@@ -286,7 +286,7 @@ export class ClassDiagramComponent implements OnInit, OnDestroy {
     //
     // this is a work in progress
     //
-    let diagramWidth = 600
+    let diagramWidth = 1000
     if (this.classdiagram != undefined) {
       if (this.classdiagram.Classshapes != undefined) {
         diagramWidth = (this.classdiagram.Classshapes.length + 2) * 300
