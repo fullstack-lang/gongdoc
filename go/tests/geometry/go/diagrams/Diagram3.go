@@ -47,7 +47,7 @@ var Diagram3 uml.Classdiagram = uml.Classdiagram{
 			Struct: &(models.Point{}),
 			Position: &uml.Position{
 				X: 580.000000,
-				Y: 190.000000,
+				Y: 170.000000,
 			},
 			Width:  240.000000,
 			Heigth: 93.000000,
@@ -92,17 +92,26 @@ var Diagram3 uml.Classdiagram = uml.Classdiagram{
 	Notes: []*uml.Note{
 		{
 			Name: `Note on the models`,
-			Body: `this is an example of a note that
+			Body: `This is an example of a note that
 could be displayed on a diagram.
 
 It could explain one aspect of the model
 for intance, describing relations between structs
 
-The size of the note (width and heigth) is automaticaly computed from the note
-number of lines and max number of characters per line in the go code
+The text of a UML note refers a comment with the GONGNOTE keyword (see example
+for details) in the go code of the models. This follows the go code convention
+https://pkg.go.dev/go/doc#Note
+
+A Note represents a marked comment starting with "MARKER(uid): note body".
+Any note with a marker of 2 or more upper case [A-Z] letters and a uid of at least one character is recognized.
+The ":" following the uid is optional. Notes are collected in the Package.Notes map indexed by the notes marker.
+
+In the UML diagram, the size of the note is automaticaly computed from the note
+number of lines (for the width) and the number of characters per line (for the height)
+in the go code
 `,
-			X:      110.000000,
-			Y:      410.000000,
+			X:      80.000000,
+			Y:      400.000000,
 			Width:  240.000000,
 			Heigth: 63.000000,
 		},
