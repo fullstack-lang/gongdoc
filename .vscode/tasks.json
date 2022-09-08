@@ -140,12 +140,12 @@
 			"group": "build"
 		},
 		{
-			"label": "01 - gongc -backendOnly",
+			"label": "01 - gongc -skipNg",
 			"type": "shell",
 			"options": {
 				"cwd": "go/models"
 			},
-			"command": "gongc -backendOnly",
+			"command": "gongc -skipNg",
 			"args": [],
 			"group": "build"
 		},
