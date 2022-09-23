@@ -21,8 +21,8 @@ var Diagram3 uml.Classdiagram = uml.Classdiagram{
 				{
 					Field: models.Line{}.Start,
 					Middlevertice: &uml.Vertice{
-						X: 699.000000,
-						Y: 95.500000,
+						X: 695.000000,
+						Y: 99.000000,
 					},
 					TargetMultiplicity: "0..1",
 					SourceMultiplicity: "*",
@@ -98,13 +98,15 @@ could be displayed on a diagram.
 It could explain one aspect of the model
 for intance, describing relations between structs
 
-The text of a UML note refers a comment with the GONGNOTE keyword (see example
-for details) in the go code of the models. This follows the go code convention
-https://pkg.go.dev/go/doc#Note
+The text of a UML note refers a comment with the GONGNOTE keyword which is
+a special case of go Note convention. See example
+for details in the go code of the models.
 
-A Note represents a marked comment starting with "MARKER(uid): note body".
+This follows the go code convention described in https://pkg.go.dev/go/doc#Note
+
+"A Note represents a marked comment starting with "MARKER(uid): note body".
 Any note with a marker of 2 or more upper case [A-Z] letters and a uid of at least one character is recognized.
-The ":" following the uid is optional. Notes are collected in the Package.Notes map indexed by the notes marker.
+The ":" following the uid is optional. Notes are collected in the Package.Notes map indexed by the notes marker."
 
 In the UML diagram, the size of the note is automaticaly computed from the note
 number of lines (for the width) and the number of characters per line (for the height)
