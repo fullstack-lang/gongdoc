@@ -311,19 +311,19 @@ export class SidebarGongDiagramsComponent implements OnInit {
       this.gongFrontRepo.GongStructs_array.forEach(
         gongstructDB => {
 
-          let gongNodeInstance: GongNode = new GongNode
-          gongNodeInstance.name = gongstructDB.Name
-          gongNodeInstance.type = gongdoc.GongdocNodeType.GONG_STRUCT
-          gongNodeInstance.id = gongstructDB.ID
-          gongNodeInstance.uniqueIdPerStack = gong.getGongStructUniqueID(gongstructDB.ID)
-          gongNodeInstance.structName = gongstructDB.Name
-          gongNodeInstance.children = new Array<GongNode>()
+          let rootNode: GongNode = new GongNode
+          rootNode.name = gongstructDB.Name
+          rootNode.type = gongdoc.GongdocNodeType.GONG_STRUCT
+          rootNode.id = gongstructDB.ID
+          rootNode.uniqueIdPerStack = gong.getGongStructUniqueID(gongstructDB.ID)
+          rootNode.structName = gongstructDB.Name
+          rootNode.children = new Array<GongNode>()
 
           // specific to gongdoc
-          gongNodeInstance.presentInDiagram = arrayOfDisplayedClassshape.has(gongstructDB.Name)
+          rootNode.presentInDiagram = arrayOfDisplayedClassshape.has(gongstructDB.Name)
 
 
-          gongstructGongNodeStruct.children!.push(gongNodeInstance)
+          gongstructGongNodeStruct.children!.push(rootNode)
 
           // insertion point for per field code 
           /**
@@ -341,7 +341,7 @@ export class SidebarGongDiagramsComponent implements OnInit {
 
 
           nonInstanceNodeId = nonInstanceNodeId + 1
-          gongNodeInstance.children.push(rootOfBasicFieldsNode)
+          rootNode.children.push(rootOfBasicFieldsNode)
 
           gongstructDB.GongBasicFields?.forEach(gongbasicfieldDB => {
 
@@ -377,7 +377,7 @@ export class SidebarGongDiagramsComponent implements OnInit {
           rootOfTimeFieldsNode.children = new Array<GongNode>()
 
           nonInstanceNodeId = nonInstanceNodeId + 1
-          gongNodeInstance.children.push(rootOfTimeFieldsNode)
+          rootNode.children.push(rootOfTimeFieldsNode)
 
           gongstructDB.GongTimeFields?.forEach(
             gongtimefieldDB => {
@@ -412,7 +412,7 @@ export class SidebarGongDiagramsComponent implements OnInit {
           rootOfPointerFieldsNode.children = new Array<GongNode>()
 
           nonInstanceNodeId = nonInstanceNodeId + 1
-          gongNodeInstance.children.push(rootOfPointerFieldsNode)
+          rootNode.children.push(rootOfPointerFieldsNode)
 
           gongstructDB.PointerToGongStructFields?.forEach(pointerToGongstructFieldDB => {
 
@@ -458,7 +458,7 @@ export class SidebarGongDiagramsComponent implements OnInit {
           rootOfSliceOfPointersNode.children = new Array<GongNode>()
 
           nonInstanceNodeId = nonInstanceNodeId + 1
-          gongNodeInstance.children.push(rootOfSliceOfPointersNode)
+          rootNode.children.push(rootOfSliceOfPointersNode)
 
           gongstructDB.SliceOfPointerToGongStructFields?.forEach(sliceofpointertogongstructfieldDB => {
 
@@ -483,6 +483,20 @@ export class SidebarGongDiagramsComponent implements OnInit {
 
             rootOfSliceOfPointersNode.children!.push(sliceOfPointerFieldNode)
           })
+
+          /**
+          * let append a node for the root of N-M associations
+          */
+          let rootOfN_M_AssocNode: GongNode = new GongNode
+          rootOfN_M_AssocNode.name = "N-M associations (* - *)"
+          rootOfN_M_AssocNode.type = gongdoc.GongdocNodeType.ROOT_OF_M_N_ASSOCIATION_FIELDS
+          rootOfN_M_AssocNode.id = 0
+          rootOfN_M_AssocNode.uniqueIdPerStack = 37 * nonInstanceNodeId
+          rootOfN_M_AssocNode.structName = gongstructDB.Name
+          rootOfN_M_AssocNode.children = new Array<GongNode>()
+
+          nonInstanceNodeId = nonInstanceNodeId + 1
+          rootNode.children.push(rootOfN_M_AssocNode)
         })
 
 
@@ -490,7 +504,7 @@ export class SidebarGongDiagramsComponent implements OnInit {
       rootOfGongNotesNode.name = "Notes"
       rootOfGongNotesNode.type = gongdoc.GongdocNodeType.ROOT_OF_GONG_NOTES
       rootOfGongNotesNode.id = 0
-      rootOfGongNotesNode.uniqueIdPerStack = 37 * nonInstanceNodeId
+      rootOfGongNotesNode.uniqueIdPerStack = 41 * nonInstanceNodeId
       nonInstanceNodeId = nonInstanceNodeId + 1
 
       rootOfGongNotesNode.structName = "GongNote"
@@ -523,6 +537,7 @@ export class SidebarGongDiagramsComponent implements OnInit {
           rootOfGongNotesNode.children!.push(gongnoteNode)
         }
       )
+
 
       this.dataSource.data = this.gongNodeTree
 
