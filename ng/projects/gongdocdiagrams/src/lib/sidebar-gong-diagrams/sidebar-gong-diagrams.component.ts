@@ -296,7 +296,8 @@ export class SidebarGongDiagramsComponent implements OnInit {
           )
           classshape?.Links?.forEach(
             link => {
-              arrayOfDisplayedLink.set(classshape.Structname + "." + link.Fieldname, link)
+              let key = classshape.Structname + "." + link.Fieldname + "-"+ link.Fieldtypename
+              arrayOfDisplayedLink.set(key, link)
             }
           )
         }
@@ -437,7 +438,10 @@ export class SidebarGongDiagramsComponent implements OnInit {
             pointerFieldNode.structName = gongstructDB.Name
             pointerFieldNode.children = new Array<GongNode>()
             pointerFieldNode.gongPointerToGongStructField = pointerToGongstructFieldDB
-            pointerFieldNode.presentInDiagram = arrayOfDisplayedLink.has(gongstructDB.Name + "." + pointerToGongstructFieldDB.Name)
+            let key = gongstructDB.Name + 
+            "." + pointerToGongstructFieldDB.Name +
+            "-" + pointerFieldNode.structName
+            pointerFieldNode.presentInDiagram = arrayOfDisplayedLink.has(key)
             pointerFieldNode.canBeIncluded = canBeIncluded
 
             // console.log("can be included ? " + pointertogongstructfieldNode.name + " " +
@@ -477,25 +481,28 @@ export class SidebarGongDiagramsComponent implements OnInit {
           gongstructDB.SliceOfPointerToGongStructFields?.forEach(sliceOfPointerField => {
 
             let sourceIsPresent = arrayOfDisplayedClassshape.has(sliceOfPointerField.GongStruct_SliceOfPointerToGongStructFields_reverse!.Name)
-            let destinationIsPresent = arrayOfDisplayedClassshape.has(sliceOfPointerField.GongStruct!.Name)
-            let canBeIncluded = sourceIsPresent && destinationIsPresent
-            let presentInDiagram = arrayOfDisplayedLink.has(gongstructDB.Name + "." + sliceOfPointerField.Name)
-
-            let sliceOfPointerFieldNode: GongNode = new GongNode
-
-            sliceOfPointerFieldNode.name = sliceOfPointerField.Name + " (" + sliceOfPointerField.GongStruct!.Name + ")"
-            sliceOfPointerFieldNode.type = gongdoc.GongdocNodeType.SLICE_OF_POINTER_TO_STRUCT
-            sliceOfPointerFieldNode.id = sliceOfPointerField.ID
-            sliceOfPointerFieldNode.uniqueIdPerStack =// godel numbering (thank you kurt)
-              7 * gong.getGongStructUniqueID(gongstructDB.ID)
-              + 11 * gong.getSliceOfPointerToGongStructFieldUniqueID(sliceOfPointerField.ID)
-            sliceOfPointerFieldNode.structName = gongstructDB.Name
-            sliceOfPointerFieldNode.children = new Array<GongNode>()
-            sliceOfPointerFieldNode.gongSliceOfPointerToGongStructField = sliceOfPointerField
-            sliceOfPointerFieldNode.presentInDiagram = presentInDiagram
-            sliceOfPointerFieldNode.canBeIncluded = canBeIncluded
-
-            rootOfSliceOfPointersNode.children!.push(sliceOfPointerFieldNode)
+            {
+              let destinationIsPresent = arrayOfDisplayedClassshape.has(sliceOfPointerField.GongStruct!.Name)
+              let canBeIncluded = sourceIsPresent && destinationIsPresent
+              let presentInDiagram = arrayOfDisplayedLink.has(gongstructDB.Name + "." + sliceOfPointerField.Name +
+              "-"+ sliceOfPointerField.GongStruct!.Name)
+  
+              let sliceOfPointerFieldNode: GongNode = new GongNode
+  
+              sliceOfPointerFieldNode.name = sliceOfPointerField.Name + " (" + sliceOfPointerField.GongStruct!.Name + ")"
+              sliceOfPointerFieldNode.type = gongdoc.GongdocNodeType.SLICE_OF_POINTER_TO_STRUCT
+              sliceOfPointerFieldNode.id = sliceOfPointerField.ID
+              sliceOfPointerFieldNode.uniqueIdPerStack =// godel numbering (thank you kurt)
+                7 * gong.getGongStructUniqueID(gongstructDB.ID)
+                + 11 * gong.getSliceOfPointerToGongStructFieldUniqueID(sliceOfPointerField.ID)
+              sliceOfPointerFieldNode.structName = gongstructDB.Name
+              sliceOfPointerFieldNode.children = new Array<GongNode>()
+              sliceOfPointerFieldNode.gongSliceOfPointerToGongStructField = sliceOfPointerField
+              sliceOfPointerFieldNode.presentInDiagram = presentInDiagram
+              sliceOfPointerFieldNode.canBeIncluded = canBeIncluded
+  
+              rootOfSliceOfPointersNode.children!.push(sliceOfPointerFieldNode)  
+            }
 
             // let append a node for the N-M associations
             // check wether the structName finish with "Use"
@@ -511,6 +518,7 @@ export class SidebarGongDiagramsComponent implements OnInit {
                 } else {
                   var pointerField = assocStruc.PointerToGongStructFields![0]
                   console.log("end part of association is " + pointerField.GongStruct!.Name)
+
                   
                   let n_m_AssocNode: GongNode = new GongNode
                   n_m_AssocNode.name = sliceOfPointerField.Name + " (" + pointerField.GongStruct!.Name + ")"
@@ -522,7 +530,11 @@ export class SidebarGongDiagramsComponent implements OnInit {
                   n_m_AssocNode.structName = assocStruc.Name
                   n_m_AssocNode.children = new Array<GongNode>()
                   n_m_AssocNode.gongSliceOfPointerToGongStructField = sliceOfPointerField
-                  n_m_AssocNode.presentInDiagram = presentInDiagram
+                  
+                  let destinationIsPresent = arrayOfDisplayedClassshape.has(pointerField.GongStruct!.Name)
+                  let canBeIncluded = sourceIsPresent && destinationIsPresent
+                  let presentInDiagram = arrayOfDisplayedLink.has(gongstructDB.Name + "." + sliceOfPointerField.Name)
+                  // n_m_AssocNode.presentInDiagram = presentInDiagram
                   n_m_AssocNode.canBeIncluded = canBeIncluded
   
                   rootOfN_M_AssocNode.children!.push(n_m_AssocNode)
