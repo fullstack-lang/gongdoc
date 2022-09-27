@@ -110,7 +110,7 @@
                         <!-- use a disabled button to provide padding for tree leaf -->
                         <button mat-icon-button disabled></button>
                         <span>{{node.name}} &nbsp;</span>
-                        <mat-icon class="node-link-icon" (click)="removeSliceOfPointerToStructFromDiagram(node)">
+                        <mat-icon class="node-link-icon" (click)="removeN_M_AssociationsFromDiagram(node)">
                             visibility_off
                         </mat-icon>
                     </ng-template>
@@ -120,7 +120,7 @@
                         <!-- use a disabled button to provide padding for tree leaf -->
                         <button mat-icon-button disabled></button>
                         <span>{{node.name}} &nbsp;</span>
-                        <mat-icon class="node-link-icon" (click)="addSliceOfPointerToStructToDiagram(node)">
+                        <mat-icon class="node-link-icon" (click)="addN_M_AssociationsToDiagram(node)">
                             visibility
                         </mat-icon>
                     </ng-template>

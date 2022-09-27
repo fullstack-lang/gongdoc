@@ -531,7 +531,7 @@ export class SidebarGongDiagramsComponent implements OnInit {
                   n_m_AssocNode.uniqueIdPerStack =// godel numbering (thank you kurt)
                     7 * gong.getGongStructUniqueID(assocStruc.ID)
                     + 11 * gong.getSliceOfPointerToGongStructFieldUniqueID(sliceOfPointerField.ID)
-                  n_m_AssocNode.structName = assocStruc.Name
+                  n_m_AssocNode.structName = gongstructDB.Name
                   n_m_AssocNode.children = new Array<GongNode>()
                   n_m_AssocNode.gongSliceOfPointerToGongStructField = sliceOfPointerField
                   
@@ -811,6 +811,67 @@ export class SidebarGongDiagramsComponent implements OnInit {
     )
   }
 
+  removeN_M_AssociationsFromDiagram(gongFlatNode: GongFlatNode) {
+
+    // get the GongdocCommandSingloton
+    let gongdocCommandSingloton: GongdocCommandDB
+    this.gongdocFrontRepo.GongdocCommands.forEach(
+      gongdocCommand => {
+        gongdocCommandSingloton = gongdocCommand
+
+        if (gongdocCommandSingloton != undefined) {
+          gongdocCommandSingloton.Command = gongdoc.GongdocCommandType.DIAGRAM_ELEMENT_DELETE
+          gongdocCommandSingloton.DiagramName = this.currentClassdiagram.Name
+          gongdocCommandSingloton.StructName = gongFlatNode.structName
+          gongdocCommandSingloton.Date = Date.now().toString()
+          gongdocCommandSingloton.GongdocNodeType = gongFlatNode.type
+          gongdocCommandSingloton.FieldName = gongFlatNode.gongSliceOfPointerToGongStructField.Name
+
+          var assocStruc = gongFlatNode.gongSliceOfPointerToGongStructField.GongStruct!
+          var pointerField = assocStruc.PointerToGongStructFields![0]
+          console.log("end part of association is " + pointerField.GongStruct!.Name)
+          gongdocCommandSingloton.FieldTypeName = pointerField.GongStruct!.Name
+
+          this.gongdocCommandService.updateGongdocCommand(gongdocCommandSingloton).subscribe(
+            GongdocCommand => {
+              console.log("GongdocCommand updated")
+            }
+          )
+        }
+      }
+    )
+  }
+
+  addN_M_AssociationsToDiagram(gongFlatNode: GongFlatNode) {
+
+    // get the GongdocCommandSingloton
+    let gongdocCommandSingloton: GongdocCommandDB
+    this.gongdocFrontRepo.GongdocCommands.forEach(
+      gongdocCommand => {
+        gongdocCommandSingloton = gongdocCommand
+
+        if (gongdocCommandSingloton != undefined) {
+          gongdocCommandSingloton.Command = gongdoc.GongdocCommandType.DIAGRAM_ELEMENT_CREATE
+          gongdocCommandSingloton.DiagramName = this.currentClassdiagram.Name
+          gongdocCommandSingloton.StructName = gongFlatNode.structName
+          gongdocCommandSingloton.Date = Date.now().toString()
+          gongdocCommandSingloton.GongdocNodeType = gongFlatNode.type
+          gongdocCommandSingloton.FieldName = gongFlatNode.gongSliceOfPointerToGongStructField?.Name
+
+          var assocStruc = gongFlatNode.gongSliceOfPointerToGongStructField.GongStruct!
+          var pointerField = assocStruc.PointerToGongStructFields![0]
+          console.log("end part of association is " + pointerField.GongStruct!.Name)
+          gongdocCommandSingloton.FieldTypeName = pointerField.GongStruct!.Name
+
+          this.gongdocCommandService.updateGongdocCommand(gongdocCommandSingloton).subscribe(
+            GongdocCommand => {
+              console.log("GongdocCommand updated")
+            }
+          )
+        }
+      }
+    )
+  }
   addNoteToDiagram(gongFlatNode: GongFlatNode) {
 
     // get the GongdocCommandSingloton
