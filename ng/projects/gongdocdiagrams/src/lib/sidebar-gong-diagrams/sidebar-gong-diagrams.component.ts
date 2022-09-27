@@ -297,6 +297,7 @@ export class SidebarGongDiagramsComponent implements OnInit {
           classshape?.Links?.forEach(
             link => {
               let key = classshape.Structname + "." + link.Fieldname + "-"+ link.Fieldtypename
+              console.log("key for set: " + key)
               arrayOfDisplayedLink.set(key, link)
             }
           )
@@ -405,7 +406,7 @@ export class SidebarGongDiagramsComponent implements OnInit {
           * let append a node for the slide of pointer PointerToGongStructFields
           */
           let rootOfPointerFieldsNode: GongNode = new GongNode
-          rootOfPointerFieldsNode.name = "Pointer fields (* - 0..1)"
+          rootOfPointerFieldsNode.name = "* - 0..1 associations (pointers)"
           rootOfPointerFieldsNode.type = gongdoc.GongdocNodeType.ROOT_OF_POINTER_TO_STRUCT_FIELDS
           rootOfPointerFieldsNode.id = 0
           rootOfPointerFieldsNode.uniqueIdPerStack = 29 * nonInstanceNodeId
@@ -440,7 +441,8 @@ export class SidebarGongDiagramsComponent implements OnInit {
             pointerFieldNode.gongPointerToGongStructField = pointerToGongstructFieldDB
             let key = gongstructDB.Name + 
             "." + pointerToGongstructFieldDB.Name +
-            "-" + pointerFieldNode.structName
+            "-" + pointerToGongstructFieldDB.GongStruct!.Name
+            console.log("key for has, pointers: " + key)
             pointerFieldNode.presentInDiagram = arrayOfDisplayedLink.has(key)
             pointerFieldNode.canBeIncluded = canBeIncluded
 
@@ -454,7 +456,7 @@ export class SidebarGongDiagramsComponent implements OnInit {
           * let append a node for the slide of pointer SliceOfPointerToGongStructFields
           */
           let rootOfSliceOfPointersNode: GongNode = new GongNode
-          rootOfSliceOfPointersNode.name = "Slice of pointers fields (0..1 - *)"
+          rootOfSliceOfPointersNode.name = "0..1 - * associations (slice of pointers)"
           rootOfSliceOfPointersNode.type = gongdoc.GongdocNodeType.ROOT_OF_SLICE_OF_POINTER_TO_GONG_STRUCT_FIELDS
           rootOfSliceOfPointersNode.id = 0
           rootOfSliceOfPointersNode.uniqueIdPerStack = 31 * nonInstanceNodeId
@@ -484,8 +486,10 @@ export class SidebarGongDiagramsComponent implements OnInit {
             {
               let destinationIsPresent = arrayOfDisplayedClassshape.has(sliceOfPointerField.GongStruct!.Name)
               let canBeIncluded = sourceIsPresent && destinationIsPresent
-              let presentInDiagram = arrayOfDisplayedLink.has(gongstructDB.Name + "." + sliceOfPointerField.Name +
-              "-"+ sliceOfPointerField.GongStruct!.Name)
+              let key = gongstructDB.Name + "." + sliceOfPointerField.Name +
+              "-"+ sliceOfPointerField.GongStruct!.Name
+              console.log("key for has, slice of pointers : " + key)
+              let presentInDiagram = arrayOfDisplayedLink.has(key)
   
               let sliceOfPointerFieldNode: GongNode = new GongNode
   
@@ -533,8 +537,12 @@ export class SidebarGongDiagramsComponent implements OnInit {
                   
                   let destinationIsPresent = arrayOfDisplayedClassshape.has(pointerField.GongStruct!.Name)
                   let canBeIncluded = sourceIsPresent && destinationIsPresent
-                  let presentInDiagram = arrayOfDisplayedLink.has(gongstructDB.Name + "." + sliceOfPointerField.Name)
-                  // n_m_AssocNode.presentInDiagram = presentInDiagram
+                  let key = gongstructDB.Name + 
+                  "." + sliceOfPointerField.Name +
+                  "-" + pointerField.GongStruct!.Name
+                  console.log("key for has, N-M associations: " + key)
+                  let presentInDiagram = arrayOfDisplayedLink.has(key)
+                  n_m_AssocNode.presentInDiagram = presentInDiagram
                   n_m_AssocNode.canBeIncluded = canBeIncluded
   
                   rootOfN_M_AssocNode.children!.push(n_m_AssocNode)
