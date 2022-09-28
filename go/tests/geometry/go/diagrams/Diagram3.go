@@ -95,7 +95,7 @@ var Diagram3 uml.Classdiagram = uml.Classdiagram{
 				Y: 420.000000,
 			},
 			Width:  240.000000,
-			Heigth: 78.000000,
+			Heigth: 63.000000,
 			Links: []*uml.Link{
 				{
 					Field: models.PointNonExclusiveSet{}.Points,
@@ -105,6 +105,15 @@ var Diagram3 uml.Classdiagram = uml.Classdiagram{
 					},
 					TargetMultiplicity: "*",
 					SourceMultiplicity: "0..1",
+				},
+				{
+					Field: models.PointNonExclusiveSet{}.Points,
+					Middlevertice: &uml.Vertice{
+						X: 670.000000,
+						Y: 356.500000,
+					},
+					TargetMultiplicity: "*",
+					SourceMultiplicity: "*",
 				},
 			},
 			Fields: []*uml.Field{
@@ -120,7 +129,7 @@ var Diagram3 uml.Classdiagram = uml.Classdiagram{
 				Y: 420.000000,
 			},
 			Width:  240.000000,
-			Heigth: 78.000000,
+			Heigth: 63.000000,
 			Links: []*uml.Link{
 				{
 					Field: models.PointUse{}.Points,

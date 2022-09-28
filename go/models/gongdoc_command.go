@@ -172,7 +172,7 @@ func init() {
 
 						basicField.Unstage()
 						Stage.Commit()
-					case POINTER_TO_STRUCT, SLICE_OF_POINTER_TO_STRUCT:
+					case POINTER_TO_STRUCT, SLICE_OF_POINTER_TO_STRUCT, M_N_ASSOCIATION_FIELD:
 						// check wether the classshape of the basic field is present
 						foundSourceClassshape := false
 						var fromClassshape *Classshape
