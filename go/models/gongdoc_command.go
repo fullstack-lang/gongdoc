@@ -189,9 +189,25 @@ func init() {
 						}
 						_ = fromClassshape
 
+						toClassshapeFound := false
+						var toClassshape *Classshape
+						for _, _classshape := range classDiagram.Classshapes {
+
+							// strange behavior when the classshape is remove within the loop
+							if _classshape.Structname == GongdocCommandSingloton.FieldTypeName && !toClassshapeFound {
+								toClassshapeFound = true
+								toClassshape = _classshape
+							}
+						}
+						if !toClassshapeFound {
+							log.Panicf("Classshape %s of field not present ", GongdocCommandSingloton.FieldTypeName)
+						}
+						_ = toClassshape
+
 						newSliceOfLinks := make([]*Link, 0)
 						for _, link := range fromClassshape.Links {
-							if link.Fieldname == GongdocCommandSingloton.FieldName {
+							if link.Fieldname == GongdocCommandSingloton.FieldName &&
+								link.Fieldtypename == GongdocCommandSingloton.FieldTypeName {
 								link.Middlevertice.Unstage()
 								link.Unstage()
 							} else {
