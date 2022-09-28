@@ -1,6 +1,6 @@
 package models
 
-type PointPartition struct {
+type PointExclusiveSet struct {
 	Name string
 
 	Points []*Point

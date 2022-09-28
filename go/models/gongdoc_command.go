@@ -40,10 +40,8 @@ var GongdocCommandSingloton = (&GongdocCommand{
 	Date:    "",
 }).Stage()
 
-//
 // init enables GongdocCommand to periodicaly watch the GongdocCommand
 // if a more recent GongdocCommand arrives, it marshall diagrams
-//
 func init() {
 
 	ticker := time.NewTicker(500 * time.Millisecond)
@@ -174,7 +172,7 @@ func init() {
 
 						basicField.Unstage()
 						Stage.Commit()
-					case POINTER_TO_STRUCT, SLICE_OF_POINTER_TO_STRUCT:
+					case POINTER_TO_STRUCT, SLICE_OF_POINTER_TO_STRUCT, M_N_ASSOCIATION_FIELD:
 						// check wether the classshape of the basic field is present
 						foundSourceClassshape := false
 						var fromClassshape *Classshape
@@ -191,9 +189,25 @@ func init() {
 						}
 						_ = fromClassshape
 
+						toClassshapeFound := false
+						var toClassshape *Classshape
+						for _, _classshape := range classDiagram.Classshapes {
+
+							// strange behavior when the classshape is remove within the loop
+							if _classshape.Structname == GongdocCommandSingloton.FieldTypeName && !toClassshapeFound {
+								toClassshapeFound = true
+								toClassshape = _classshape
+							}
+						}
+						if !toClassshapeFound {
+							log.Panicf("Classshape %s of field not present ", GongdocCommandSingloton.FieldTypeName)
+						}
+						_ = toClassshape
+
 						newSliceOfLinks := make([]*Link, 0)
 						for _, link := range fromClassshape.Links {
-							if link.Fieldname == GongdocCommandSingloton.FieldName {
+							if link.Fieldname == GongdocCommandSingloton.FieldName &&
+								link.Fieldtypename == GongdocCommandSingloton.FieldTypeName {
 								link.Middlevertice.Unstage()
 								link.Unstage()
 							} else {
@@ -325,7 +339,7 @@ func init() {
 
 						Stage.Commit()
 
-					case POINTER_TO_STRUCT, SLICE_OF_POINTER_TO_STRUCT:
+					case POINTER_TO_STRUCT, SLICE_OF_POINTER_TO_STRUCT, M_N_ASSOCIATION_FIELD:
 						// check wether the classshape of the basic field is present
 						foundSourceClassshape := false
 						var sourceClassshape *Classshape
@@ -368,6 +382,9 @@ func init() {
 							link.TargetMultiplicity = ZERO_ONE
 						case SLICE_OF_POINTER_TO_STRUCT:
 							link.SourceMultiplicity = ZERO_ONE
+							link.TargetMultiplicity = MANY
+						case M_N_ASSOCIATION_FIELD:
+							link.SourceMultiplicity = MANY
 							link.TargetMultiplicity = MANY
 						}
 						sourceClassshape.Links = append(sourceClassshape.Links, link)
