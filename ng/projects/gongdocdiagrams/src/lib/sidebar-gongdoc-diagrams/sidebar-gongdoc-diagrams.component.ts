@@ -8,7 +8,6 @@ import * as gongdoc from 'gongdoc'
 
 
 import { Observable, timer } from 'rxjs';
-import { stringify } from '@angular/compiler/src/util';
 
 /**
  * Types of a GongNode / GongFlatNode
