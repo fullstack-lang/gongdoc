@@ -15,8 +15,8 @@ var Diagram3 uml.Classdiagram = uml.Classdiagram{
 				X: 130.000000,
 				Y: 40.000000,
 			},
-			Width:  240.000000,
-			Heigth: 108.000000,
+			Width:  400.000000,
+			Heigth: 123.000000,
 			Links: []*uml.Link{
 				{
 					Field: models.Line{}.Start,
@@ -40,6 +40,9 @@ var Diagram3 uml.Classdiagram = uml.Classdiagram{
 				},
 				{
 					Field: models.Line{}.Name,
+				},
+				{
+					Field: models.Line{}.VeryLongLongLongLongLongLongField,
 				},
 			},
 		},
