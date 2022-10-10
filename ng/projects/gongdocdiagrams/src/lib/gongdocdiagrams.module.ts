@@ -35,7 +35,8 @@ import { UmlscSimpleTableComponent } from './umlsc-simple/umlsc-simple.component
 
 import { SidebarGongDiagramsComponent } from './sidebar-gong-diagrams/sidebar-gong-diagrams.component'
 import { SidebarGongdocDiagramsComponent } from './sidebar-gongdoc-diagrams/sidebar-gongdoc-diagrams.component'
-import { ClassdiagramDetailComponent } from './classdiagram-detail/classdiagram-detail.component'
+import { ClassdiagramDetailComponent } from './classdiagram-detail/classdiagram-detail.component';
+import { TreeComponent } from './tree/tree.component'
 
 @NgModule({
   declarations: [
@@ -46,7 +47,8 @@ import { ClassdiagramDetailComponent } from './classdiagram-detail/classdiagram-
     UmlscSimpleTableComponent,
     SidebarGongDiagramsComponent,
     SidebarGongdocDiagramsComponent,
-    ClassdiagramDetailComponent
+    ClassdiagramDetailComponent,
+    TreeComponent
   ],
   imports: [
 

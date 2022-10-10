@@ -1,11 +1,9 @@
 <as-split direction="horizontal" cdkDropListGroup>
     <as-split-area [size]="30" [maxSize]="100">
-        <app-sidebar-gongdoc-diagrams></app-sidebar-gongdoc-diagrams>
-        <lib-sidebar-gong-diagams></lib-sidebar-gong-diagams>
-        <mat-toolbar>
-            <span>Element editor</span>
-            <span class="example-spacer"></span>
-        </mat-toolbar>
+        <app-sidebar-gongdoc-diagrams>
+        </app-sidebar-gongdoc-diagrams>
+        <lib-sidebar-gong-diagams>
+        </lib-sidebar-gong-diagams>
         <router-outlet name="elementeditor"></router-outlet>
     </as-split-area>
     <as-split-area [size]="70" [maxSize]="100">

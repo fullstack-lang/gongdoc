@@ -49,6 +49,9 @@ type StageStruct struct { // insertion point for definition of arrays registerin
 	Links           map[*Link]any
 	Links_mapString map[string]*Link
 
+	Nodes           map[*Node]any
+	Nodes_mapString map[string]*Node
+
 	Notes           map[*Note]any
 	Notes_mapString map[string]*Note
 
@@ -57,6 +60,9 @@ type StageStruct struct { // insertion point for definition of arrays registerin
 
 	Positions           map[*Position]any
 	Positions_mapString map[string]*Position
+
+	Trees           map[*Tree]any
+	Trees_mapString map[string]*Tree
 
 	UmlStates           map[*UmlState]any
 	UmlStates_mapString map[string]*UmlState
@@ -108,12 +114,16 @@ type BackRepoInterface interface {
 	CheckoutGongdocStatus(gongdocstatus *GongdocStatus)
 	CommitLink(link *Link)
 	CheckoutLink(link *Link)
+	CommitNode(node *Node)
+	CheckoutNode(node *Node)
 	CommitNote(note *Note)
 	CheckoutNote(note *Note)
 	CommitPkgelt(pkgelt *Pkgelt)
 	CheckoutPkgelt(pkgelt *Pkgelt)
 	CommitPosition(position *Position)
 	CheckoutPosition(position *Position)
+	CommitTree(tree *Tree)
+	CheckoutTree(tree *Tree)
 	CommitUmlState(umlstate *UmlState)
 	CheckoutUmlState(umlstate *UmlState)
 	CommitUmlsc(umlsc *Umlsc)
@@ -147,6 +157,9 @@ var Stage StageStruct = StageStruct{ // insertion point for array initiatialisat
 	Links:           make(map[*Link]any),
 	Links_mapString: make(map[string]*Link),
 
+	Nodes:           make(map[*Node]any),
+	Nodes_mapString: make(map[string]*Node),
+
 	Notes:           make(map[*Note]any),
 	Notes_mapString: make(map[string]*Note),
 
@@ -155,6 +168,9 @@ var Stage StageStruct = StageStruct{ // insertion point for array initiatialisat
 
 	Positions:           make(map[*Position]any),
 	Positions_mapString: make(map[string]*Position),
+
+	Trees:           make(map[*Tree]any),
+	Trees_mapString: make(map[string]*Tree),
 
 	UmlStates:           make(map[*UmlState]any),
 	UmlStates_mapString: make(map[string]*UmlState),
@@ -182,9 +198,11 @@ func (stage *StageStruct) Commit() {
 	stage.Map_GongStructName_InstancesNb["GongdocCommand"] = len(stage.GongdocCommands)
 	stage.Map_GongStructName_InstancesNb["GongdocStatus"] = len(stage.GongdocStatuss)
 	stage.Map_GongStructName_InstancesNb["Link"] = len(stage.Links)
+	stage.Map_GongStructName_InstancesNb["Node"] = len(stage.Nodes)
 	stage.Map_GongStructName_InstancesNb["Note"] = len(stage.Notes)
 	stage.Map_GongStructName_InstancesNb["Pkgelt"] = len(stage.Pkgelts)
 	stage.Map_GongStructName_InstancesNb["Position"] = len(stage.Positions)
+	stage.Map_GongStructName_InstancesNb["Tree"] = len(stage.Trees)
 	stage.Map_GongStructName_InstancesNb["UmlState"] = len(stage.UmlStates)
 	stage.Map_GongStructName_InstancesNb["Umlsc"] = len(stage.Umlscs)
 	stage.Map_GongStructName_InstancesNb["Vertice"] = len(stage.Vertices)
@@ -204,9 +222,11 @@ func (stage *StageStruct) Checkout() {
 	stage.Map_GongStructName_InstancesNb["GongdocCommand"] = len(stage.GongdocCommands)
 	stage.Map_GongStructName_InstancesNb["GongdocStatus"] = len(stage.GongdocStatuss)
 	stage.Map_GongStructName_InstancesNb["Link"] = len(stage.Links)
+	stage.Map_GongStructName_InstancesNb["Node"] = len(stage.Nodes)
 	stage.Map_GongStructName_InstancesNb["Note"] = len(stage.Notes)
 	stage.Map_GongStructName_InstancesNb["Pkgelt"] = len(stage.Pkgelts)
 	stage.Map_GongStructName_InstancesNb["Position"] = len(stage.Positions)
+	stage.Map_GongStructName_InstancesNb["Tree"] = len(stage.Trees)
 	stage.Map_GongStructName_InstancesNb["UmlState"] = len(stage.UmlStates)
 	stage.Map_GongStructName_InstancesNb["Umlsc"] = len(stage.Umlscs)
 	stage.Map_GongStructName_InstancesNb["Vertice"] = len(stage.Vertices)
@@ -907,6 +927,101 @@ func (link *Link) GetName() (res string) {
 	return link.Name
 }
 
+// Stage puts node to the model stage
+func (node *Node) Stage() *Node {
+	Stage.Nodes[node] = __member
+	Stage.Nodes_mapString[node.Name] = node
+
+	return node
+}
+
+// Unstage removes node off the model stage
+func (node *Node) Unstage() *Node {
+	delete(Stage.Nodes, node)
+	delete(Stage.Nodes_mapString, node.Name)
+	return node
+}
+
+// commit node to the back repo (if it is already staged)
+func (node *Node) Commit() *Node {
+	if _, ok := Stage.Nodes[node]; ok {
+		if Stage.BackRepo != nil {
+			Stage.BackRepo.CommitNode(node)
+		}
+	}
+	return node
+}
+
+// Checkout node to the back repo (if it is already staged)
+func (node *Node) Checkout() *Node {
+	if _, ok := Stage.Nodes[node]; ok {
+		if Stage.BackRepo != nil {
+			Stage.BackRepo.CheckoutNode(node)
+		}
+	}
+	return node
+}
+
+//
+// Legacy, to be deleted
+//
+
+// StageCopy appends a copy of node to the model stage
+func (node *Node) StageCopy() *Node {
+	_node := new(Node)
+	*_node = *node
+	_node.Stage()
+	return _node
+}
+
+// StageAndCommit appends node to the model stage and commit to the orm repo
+func (node *Node) StageAndCommit() *Node {
+	node.Stage()
+	if Stage.AllModelsStructCreateCallback != nil {
+		Stage.AllModelsStructCreateCallback.CreateORMNode(node)
+	}
+	return node
+}
+
+// DeleteStageAndCommit appends node to the model stage and commit to the orm repo
+func (node *Node) DeleteStageAndCommit() *Node {
+	node.Unstage()
+	DeleteORMNode(node)
+	return node
+}
+
+// StageCopyAndCommit appends a copy of node to the model stage and commit to the orm repo
+func (node *Node) StageCopyAndCommit() *Node {
+	_node := new(Node)
+	*_node = *node
+	_node.Stage()
+	if Stage.AllModelsStructCreateCallback != nil {
+		Stage.AllModelsStructCreateCallback.CreateORMNode(node)
+	}
+	return _node
+}
+
+// CreateORMNode enables dynamic staging of a Node instance
+func CreateORMNode(node *Node) {
+	node.Stage()
+	if Stage.AllModelsStructCreateCallback != nil {
+		Stage.AllModelsStructCreateCallback.CreateORMNode(node)
+	}
+}
+
+// DeleteORMNode enables dynamic staging of a Node instance
+func DeleteORMNode(node *Node) {
+	node.Unstage()
+	if Stage.AllModelsStructDeleteCallback != nil {
+		Stage.AllModelsStructDeleteCallback.DeleteORMNode(node)
+	}
+}
+
+// for satisfaction of GongStruct interface
+func (node *Node) GetName() (res string) {
+	return node.Name
+}
+
 // Stage puts note to the model stage
 func (note *Note) Stage() *Note {
 	Stage.Notes[note] = __member
@@ -1190,6 +1305,101 @@ func DeleteORMPosition(position *Position) {
 // for satisfaction of GongStruct interface
 func (position *Position) GetName() (res string) {
 	return position.Name
+}
+
+// Stage puts tree to the model stage
+func (tree *Tree) Stage() *Tree {
+	Stage.Trees[tree] = __member
+	Stage.Trees_mapString[tree.Name] = tree
+
+	return tree
+}
+
+// Unstage removes tree off the model stage
+func (tree *Tree) Unstage() *Tree {
+	delete(Stage.Trees, tree)
+	delete(Stage.Trees_mapString, tree.Name)
+	return tree
+}
+
+// commit tree to the back repo (if it is already staged)
+func (tree *Tree) Commit() *Tree {
+	if _, ok := Stage.Trees[tree]; ok {
+		if Stage.BackRepo != nil {
+			Stage.BackRepo.CommitTree(tree)
+		}
+	}
+	return tree
+}
+
+// Checkout tree to the back repo (if it is already staged)
+func (tree *Tree) Checkout() *Tree {
+	if _, ok := Stage.Trees[tree]; ok {
+		if Stage.BackRepo != nil {
+			Stage.BackRepo.CheckoutTree(tree)
+		}
+	}
+	return tree
+}
+
+//
+// Legacy, to be deleted
+//
+
+// StageCopy appends a copy of tree to the model stage
+func (tree *Tree) StageCopy() *Tree {
+	_tree := new(Tree)
+	*_tree = *tree
+	_tree.Stage()
+	return _tree
+}
+
+// StageAndCommit appends tree to the model stage and commit to the orm repo
+func (tree *Tree) StageAndCommit() *Tree {
+	tree.Stage()
+	if Stage.AllModelsStructCreateCallback != nil {
+		Stage.AllModelsStructCreateCallback.CreateORMTree(tree)
+	}
+	return tree
+}
+
+// DeleteStageAndCommit appends tree to the model stage and commit to the orm repo
+func (tree *Tree) DeleteStageAndCommit() *Tree {
+	tree.Unstage()
+	DeleteORMTree(tree)
+	return tree
+}
+
+// StageCopyAndCommit appends a copy of tree to the model stage and commit to the orm repo
+func (tree *Tree) StageCopyAndCommit() *Tree {
+	_tree := new(Tree)
+	*_tree = *tree
+	_tree.Stage()
+	if Stage.AllModelsStructCreateCallback != nil {
+		Stage.AllModelsStructCreateCallback.CreateORMTree(tree)
+	}
+	return _tree
+}
+
+// CreateORMTree enables dynamic staging of a Tree instance
+func CreateORMTree(tree *Tree) {
+	tree.Stage()
+	if Stage.AllModelsStructCreateCallback != nil {
+		Stage.AllModelsStructCreateCallback.CreateORMTree(tree)
+	}
+}
+
+// DeleteORMTree enables dynamic staging of a Tree instance
+func DeleteORMTree(tree *Tree) {
+	tree.Unstage()
+	if Stage.AllModelsStructDeleteCallback != nil {
+		Stage.AllModelsStructDeleteCallback.DeleteORMTree(tree)
+	}
+}
+
+// for satisfaction of GongStruct interface
+func (tree *Tree) GetName() (res string) {
+	return tree.Name
 }
 
 // Stage puts umlstate to the model stage
@@ -1486,9 +1696,11 @@ type AllModelsStructCreateInterface interface { // insertion point for Callbacks
 	CreateORMGongdocCommand(GongdocCommand *GongdocCommand)
 	CreateORMGongdocStatus(GongdocStatus *GongdocStatus)
 	CreateORMLink(Link *Link)
+	CreateORMNode(Node *Node)
 	CreateORMNote(Note *Note)
 	CreateORMPkgelt(Pkgelt *Pkgelt)
 	CreateORMPosition(Position *Position)
+	CreateORMTree(Tree *Tree)
 	CreateORMUmlState(UmlState *UmlState)
 	CreateORMUmlsc(Umlsc *Umlsc)
 	CreateORMVertice(Vertice *Vertice)
@@ -1502,9 +1714,11 @@ type AllModelsStructDeleteInterface interface { // insertion point for Callbacks
 	DeleteORMGongdocCommand(GongdocCommand *GongdocCommand)
 	DeleteORMGongdocStatus(GongdocStatus *GongdocStatus)
 	DeleteORMLink(Link *Link)
+	DeleteORMNode(Node *Node)
 	DeleteORMNote(Note *Note)
 	DeleteORMPkgelt(Pkgelt *Pkgelt)
 	DeleteORMPosition(Position *Position)
+	DeleteORMTree(Tree *Tree)
 	DeleteORMUmlState(UmlState *UmlState)
 	DeleteORMUmlsc(Umlsc *Umlsc)
 	DeleteORMVertice(Vertice *Vertice)
@@ -1532,6 +1746,9 @@ func (stage *StageStruct) Reset() { // insertion point for array reset
 	stage.Links = make(map[*Link]any)
 	stage.Links_mapString = make(map[string]*Link)
 
+	stage.Nodes = make(map[*Node]any)
+	stage.Nodes_mapString = make(map[string]*Node)
+
 	stage.Notes = make(map[*Note]any)
 	stage.Notes_mapString = make(map[string]*Note)
 
@@ -1540,6 +1757,9 @@ func (stage *StageStruct) Reset() { // insertion point for array reset
 
 	stage.Positions = make(map[*Position]any)
 	stage.Positions_mapString = make(map[string]*Position)
+
+	stage.Trees = make(map[*Tree]any)
+	stage.Trees_mapString = make(map[string]*Tree)
 
 	stage.UmlStates = make(map[*UmlState]any)
 	stage.UmlStates_mapString = make(map[string]*UmlState)
@@ -1574,6 +1794,9 @@ func (stage *StageStruct) Nil() { // insertion point for array nil
 	stage.Links = nil
 	stage.Links_mapString = nil
 
+	stage.Nodes = nil
+	stage.Nodes_mapString = nil
+
 	stage.Notes = nil
 	stage.Notes_mapString = nil
 
@@ -1582,6 +1805,9 @@ func (stage *StageStruct) Nil() { // insertion point for array nil
 
 	stage.Positions = nil
 	stage.Positions_mapString = nil
+
+	stage.Trees = nil
+	stage.Trees_mapString = nil
 
 	stage.UmlStates = nil
 	stage.UmlStates_mapString = nil
@@ -2078,6 +2304,56 @@ func (stage *StageStruct) Marshall(file *os.File, modelsPackageName, packageName
 
 	}
 
+	map_Node_Identifiers := make(map[*Node]string)
+	_ = map_Node_Identifiers
+
+	nodeOrdered := []*Node{}
+	for node := range stage.Nodes {
+		nodeOrdered = append(nodeOrdered, node)
+	}
+	sort.Slice(nodeOrdered[:], func(i, j int) bool {
+		return nodeOrdered[i].Name < nodeOrdered[j].Name
+	})
+	identifiersDecl += "\n\n	// Declarations of staged instances of Node"
+	for idx, node := range nodeOrdered {
+
+		id = generatesIdentifier("Node", idx, node.Name)
+		map_Node_Identifiers[node] = id
+
+		decl = IdentifiersDecls
+		decl = strings.ReplaceAll(decl, "{{Identifier}}", id)
+		decl = strings.ReplaceAll(decl, "{{GeneratedStructName}}", "Node")
+		decl = strings.ReplaceAll(decl, "{{GeneratedFieldNameValue}}", node.Name)
+		identifiersDecl += decl
+
+		initializerStatements += fmt.Sprintf("\n\n	// Node %s values setup", node.Name)
+		// Initialisation of values
+		setValueField = StringInitStatement
+		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
+		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "Name")
+		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", string(node.Name))
+		initializerStatements += setValueField
+
+		setValueField = NumberInitStatement
+		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
+		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "IsExpanded")
+		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", fmt.Sprintf("%t", node.IsExpanded))
+		initializerStatements += setValueField
+
+		setValueField = NumberInitStatement
+		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
+		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "HasCheckboxButton")
+		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", fmt.Sprintf("%t", node.HasCheckboxButton))
+		initializerStatements += setValueField
+
+		setValueField = NumberInitStatement
+		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
+		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "IsChecked")
+		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", fmt.Sprintf("%t", node.IsChecked))
+		initializerStatements += setValueField
+
+	}
+
 	map_Note_Identifiers := make(map[*Note]string)
 	_ = map_Note_Identifiers
 
@@ -2236,6 +2512,38 @@ func (stage *StageStruct) Marshall(file *os.File, modelsPackageName, packageName
 		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
 		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "Name")
 		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", string(position.Name))
+		initializerStatements += setValueField
+
+	}
+
+	map_Tree_Identifiers := make(map[*Tree]string)
+	_ = map_Tree_Identifiers
+
+	treeOrdered := []*Tree{}
+	for tree := range stage.Trees {
+		treeOrdered = append(treeOrdered, tree)
+	}
+	sort.Slice(treeOrdered[:], func(i, j int) bool {
+		return treeOrdered[i].Name < treeOrdered[j].Name
+	})
+	identifiersDecl += "\n\n	// Declarations of staged instances of Tree"
+	for idx, tree := range treeOrdered {
+
+		id = generatesIdentifier("Tree", idx, tree.Name)
+		map_Tree_Identifiers[tree] = id
+
+		decl = IdentifiersDecls
+		decl = strings.ReplaceAll(decl, "{{Identifier}}", id)
+		decl = strings.ReplaceAll(decl, "{{GeneratedStructName}}", "Tree")
+		decl = strings.ReplaceAll(decl, "{{GeneratedFieldNameValue}}", tree.Name)
+		identifiersDecl += decl
+
+		initializerStatements += fmt.Sprintf("\n\n	// Tree %s values setup", tree.Name)
+		// Initialisation of values
+		setValueField = StringInitStatement
+		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
+		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "Name")
+		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", string(tree.Name))
 		initializerStatements += setValueField
 
 	}
@@ -2493,6 +2801,24 @@ func (stage *StageStruct) Marshall(file *os.File, modelsPackageName, packageName
 
 	}
 
+	for idx, node := range nodeOrdered {
+		var setPointerField string
+		_ = setPointerField
+
+		id = generatesIdentifier("Node", idx, node.Name)
+		map_Node_Identifiers[node] = id
+
+		// Initialisation of values
+		for _, _node := range node.Children {
+			setPointerField = SliceOfPointersFieldInitStatement
+			setPointerField = strings.ReplaceAll(setPointerField, "{{Identifier}}", id)
+			setPointerField = strings.ReplaceAll(setPointerField, "{{GeneratedFieldName}}", "Children")
+			setPointerField = strings.ReplaceAll(setPointerField, "{{GeneratedFieldNameValue}}", map_Node_Identifiers[_node])
+			pointersInitializesStatements += setPointerField
+		}
+
+	}
+
 	for idx, note := range noteOrdered {
 		var setPointerField string
 		_ = setPointerField
@@ -2537,6 +2863,24 @@ func (stage *StageStruct) Marshall(file *os.File, modelsPackageName, packageName
 		map_Position_Identifiers[position] = id
 
 		// Initialisation of values
+	}
+
+	for idx, tree := range treeOrdered {
+		var setPointerField string
+		_ = setPointerField
+
+		id = generatesIdentifier("Tree", idx, tree.Name)
+		map_Tree_Identifiers[tree] = id
+
+		// Initialisation of values
+		for _, _node := range tree.RootNodes {
+			setPointerField = SliceOfPointersFieldInitStatement
+			setPointerField = strings.ReplaceAll(setPointerField, "{{Identifier}}", id)
+			setPointerField = strings.ReplaceAll(setPointerField, "{{GeneratedFieldName}}", "RootNodes")
+			setPointerField = strings.ReplaceAll(setPointerField, "{{GeneratedFieldNameValue}}", map_Node_Identifiers[_node])
+			pointersInitializesStatements += setPointerField
+		}
+
 	}
 
 	for idx, umlstate := range umlstateOrdered {
@@ -2724,6 +3068,20 @@ func (stageStruct *StageStruct) CreateReverseMap_Link_Middlevertice() (res map[*
 	return
 }
 
+// generate function for reverse association maps of Node
+func (stageStruct *StageStruct) CreateReverseMap_Node_Children() (res map[*Node]*Node) {
+	res = make(map[*Node]*Node)
+
+	for node := range stageStruct.Nodes {
+		for _, node_ := range node.Children {
+			res[node_] = node
+		}
+	}
+
+	return
+}
+
+
 // generate function for reverse association maps of Note
 
 // generate function for reverse association maps of Pkgelt
@@ -2754,6 +3112,20 @@ func (stageStruct *StageStruct) CreateReverseMap_Pkgelt_Umlscs() (res map[*Umlsc
 
 // generate function for reverse association maps of Position
 
+// generate function for reverse association maps of Tree
+func (stageStruct *StageStruct) CreateReverseMap_Tree_RootNodes() (res map[*Node]*Tree) {
+	res = make(map[*Node]*Tree)
+
+	for tree := range stageStruct.Trees {
+		for _, node_ := range tree.RootNodes {
+			res[node_] = tree
+		}
+	}
+
+	return
+}
+
+
 // generate function for reverse association maps of UmlState
 
 // generate function for reverse association maps of Umlsc
@@ -2778,7 +3150,7 @@ func (stageStruct *StageStruct) CreateReverseMap_Umlsc_States() (res map[*UmlSta
 // - full refactoring of Gongstruct identifiers / fields
 type Gongstruct interface {
 	// insertion point for generic types
-	Classdiagram | Classshape | Field | GongStruct | GongdocCommand | GongdocStatus | Link | Note | Pkgelt | Position | UmlState | Umlsc | Vertice
+	Classdiagram | Classshape | Field | GongStruct | GongdocCommand | GongdocStatus | Link | Node | Note | Pkgelt | Position | Tree | UmlState | Umlsc | Vertice
 }
 
 // Gongstruct is the type parameter for generated generic function that allows
@@ -2787,7 +3159,7 @@ type Gongstruct interface {
 // - full refactoring of Gongstruct identifiers / fields
 type PointerToGongstruct interface {
 	// insertion point for generic types
-	*Classdiagram | *Classshape | *Field | *GongStruct | *GongdocCommand | *GongdocStatus | *Link | *Note | *Pkgelt | *Position | *UmlState | *Umlsc | *Vertice
+	*Classdiagram | *Classshape | *Field | *GongStruct | *GongdocCommand | *GongdocStatus | *Link | *Node | *Note | *Pkgelt | *Position | *Tree | *UmlState | *Umlsc | *Vertice
 	GetName() string
 }
 
@@ -2801,9 +3173,11 @@ type GongstructSet interface {
 		map[*GongdocCommand]any |
 		map[*GongdocStatus]any |
 		map[*Link]any |
+		map[*Node]any |
 		map[*Note]any |
 		map[*Pkgelt]any |
 		map[*Position]any |
+		map[*Tree]any |
 		map[*UmlState]any |
 		map[*Umlsc]any |
 		map[*Vertice]any |
@@ -2820,9 +3194,11 @@ type GongstructMapString interface {
 		map[string]*GongdocCommand |
 		map[string]*GongdocStatus |
 		map[string]*Link |
+		map[string]*Node |
 		map[string]*Note |
 		map[string]*Pkgelt |
 		map[string]*Position |
+		map[string]*Tree |
 		map[string]*UmlState |
 		map[string]*Umlsc |
 		map[string]*Vertice |
@@ -2850,12 +3226,16 @@ func GongGetSet[Type GongstructSet]() *Type {
 		return any(&Stage.GongdocStatuss).(*Type)
 	case map[*Link]any:
 		return any(&Stage.Links).(*Type)
+	case map[*Node]any:
+		return any(&Stage.Nodes).(*Type)
 	case map[*Note]any:
 		return any(&Stage.Notes).(*Type)
 	case map[*Pkgelt]any:
 		return any(&Stage.Pkgelts).(*Type)
 	case map[*Position]any:
 		return any(&Stage.Positions).(*Type)
+	case map[*Tree]any:
+		return any(&Stage.Trees).(*Type)
 	case map[*UmlState]any:
 		return any(&Stage.UmlStates).(*Type)
 	case map[*Umlsc]any:
@@ -2888,12 +3268,16 @@ func GongGetMap[Type GongstructMapString]() *Type {
 		return any(&Stage.GongdocStatuss_mapString).(*Type)
 	case map[string]*Link:
 		return any(&Stage.Links_mapString).(*Type)
+	case map[string]*Node:
+		return any(&Stage.Nodes_mapString).(*Type)
 	case map[string]*Note:
 		return any(&Stage.Notes_mapString).(*Type)
 	case map[string]*Pkgelt:
 		return any(&Stage.Pkgelts_mapString).(*Type)
 	case map[string]*Position:
 		return any(&Stage.Positions_mapString).(*Type)
+	case map[string]*Tree:
+		return any(&Stage.Trees_mapString).(*Type)
 	case map[string]*UmlState:
 		return any(&Stage.UmlStates_mapString).(*Type)
 	case map[string]*Umlsc:
@@ -2926,12 +3310,16 @@ func GetGongstructInstancesSet[Type Gongstruct]() *map[*Type]any {
 		return any(&Stage.GongdocStatuss).(*map[*Type]any)
 	case Link:
 		return any(&Stage.Links).(*map[*Type]any)
+	case Node:
+		return any(&Stage.Nodes).(*map[*Type]any)
 	case Note:
 		return any(&Stage.Notes).(*map[*Type]any)
 	case Pkgelt:
 		return any(&Stage.Pkgelts).(*map[*Type]any)
 	case Position:
 		return any(&Stage.Positions).(*map[*Type]any)
+	case Tree:
+		return any(&Stage.Trees).(*map[*Type]any)
 	case UmlState:
 		return any(&Stage.UmlStates).(*map[*Type]any)
 	case Umlsc:
@@ -2964,12 +3352,16 @@ func GetGongstructInstancesMap[Type Gongstruct]() *map[string]*Type {
 		return any(&Stage.GongdocStatuss_mapString).(*map[string]*Type)
 	case Link:
 		return any(&Stage.Links_mapString).(*map[string]*Type)
+	case Node:
+		return any(&Stage.Nodes_mapString).(*map[string]*Type)
 	case Note:
 		return any(&Stage.Notes_mapString).(*map[string]*Type)
 	case Pkgelt:
 		return any(&Stage.Pkgelts_mapString).(*map[string]*Type)
 	case Position:
 		return any(&Stage.Positions_mapString).(*map[string]*Type)
+	case Tree:
+		return any(&Stage.Trees_mapString).(*map[string]*Type)
 	case UmlState:
 		return any(&Stage.UmlStates_mapString).(*map[string]*Type)
 	case Umlsc:
@@ -3032,6 +3424,12 @@ func GetAssociationName[Type Gongstruct]() *Type {
 			// field is initialized with an instance of Vertice with the name of the field
 			Middlevertice: &Vertice{Name: "Middlevertice"},
 		}).(*Type)
+	case Node:
+		return any(&Node{
+			// Initialisation of associations
+			// field is initialized with an instance of Node with the name of the field
+			Children: []*Node{{Name: "Children"}},
+		}).(*Type)
 	case Note:
 		return any(&Note{
 			// Initialisation of associations
@@ -3047,6 +3445,12 @@ func GetAssociationName[Type Gongstruct]() *Type {
 	case Position:
 		return any(&Position{
 			// Initialisation of associations
+		}).(*Type)
+	case Tree:
+		return any(&Tree{
+			// Initialisation of associations
+			// field is initialized with an instance of Node with the name of the field
+			RootNodes: []*Node{{Name: "RootNodes"}},
 		}).(*Type)
 	case UmlState:
 		return any(&UmlState{
@@ -3165,6 +3569,11 @@ func GetPointerReverseMap[Start, End Gongstruct](fieldname string) map[*End][]*S
 			}
 			return any(res).(map[*End][]*Start)
 		}
+	// reverse maps of direct associations of Node
+	case Node:
+		switch fieldname {
+		// insertion point for per direct association field
+		}
 	// reverse maps of direct associations of Note
 	case Note:
 		switch fieldname {
@@ -3177,6 +3586,11 @@ func GetPointerReverseMap[Start, End Gongstruct](fieldname string) map[*End][]*S
 		}
 	// reverse maps of direct associations of Position
 	case Position:
+		switch fieldname {
+		// insertion point for per direct association field
+		}
+	// reverse maps of direct associations of Tree
+	case Tree:
 		switch fieldname {
 		// insertion point for per direct association field
 		}
@@ -3277,6 +3691,19 @@ func GetSliceOfPointersReverseMap[Start, End Gongstruct](fieldname string) map[*
 		switch fieldname {
 		// insertion point for per direct association field
 		}
+	// reverse maps of direct associations of Node
+	case Node:
+		switch fieldname {
+		// insertion point for per direct association field
+		case "Children":
+			res := make(map[*Node]*Node)
+			for node := range Stage.Nodes {
+				for _, node_ := range node.Children {
+					res[node_] = node
+				}
+			}
+			return any(res).(map[*End]*Start)
+		}
 	// reverse maps of direct associations of Note
 	case Note:
 		switch fieldname {
@@ -3307,6 +3734,19 @@ func GetSliceOfPointersReverseMap[Start, End Gongstruct](fieldname string) map[*
 	case Position:
 		switch fieldname {
 		// insertion point for per direct association field
+		}
+	// reverse maps of direct associations of Tree
+	case Tree:
+		switch fieldname {
+		// insertion point for per direct association field
+		case "RootNodes":
+			res := make(map[*Node]*Tree)
+			for tree := range Stage.Trees {
+				for _, node_ := range tree.RootNodes {
+					res[node_] = tree
+				}
+			}
+			return any(res).(map[*End]*Start)
 		}
 	// reverse maps of direct associations of UmlState
 	case UmlState:
@@ -3357,12 +3797,16 @@ func GetGongstructName[Type Gongstruct]() (res string) {
 		res = "GongdocStatus"
 	case Link:
 		res = "Link"
+	case Node:
+		res = "Node"
 	case Note:
 		res = "Note"
 	case Pkgelt:
 		res = "Pkgelt"
 	case Position:
 		res = "Position"
+	case Tree:
+		res = "Tree"
 	case UmlState:
 		res = "UmlState"
 	case Umlsc:
@@ -3394,12 +3838,16 @@ func GetFields[Type Gongstruct]() (res []string) {
 		res = []string{"Name", "Status", "CommandCompletionDate"}
 	case Link:
 		res = []string{"Name", "Fieldname", "Structname", "Fieldtypename", "TargetMultiplicity", "SourceMultiplicity", "Middlevertice"}
+	case Node:
+		res = []string{"Name", "IsExpanded", "HasCheckboxButton", "IsChecked", "Children"}
 	case Note:
 		res = []string{"Name", "Body", "X", "Y", "Width", "Heigth", "Matched"}
 	case Pkgelt:
 		res = []string{"Name", "Path", "GongModelPath", "Classdiagrams", "Umlscs", "Editable"}
 	case Position:
 		res = []string{"X", "Y", "Name"}
+	case Tree:
+		res = []string{"Name", "RootNodes"}
 	case UmlState:
 		res = []string{"Name", "X", "Y"}
 	case Umlsc:
@@ -3561,6 +4009,25 @@ func GetFieldStringValue[Type Gongstruct](instance Type, fieldName string) (res 
 				res = any(instance).(Link).Middlevertice.Name
 			}
 		}
+	case Node:
+		switch fieldName {
+		// string value of fields
+		case "Name":
+			res = any(instance).(Node).Name
+		case "IsExpanded":
+			res = fmt.Sprintf("%t", any(instance).(Node).IsExpanded)
+		case "HasCheckboxButton":
+			res = fmt.Sprintf("%t", any(instance).(Node).HasCheckboxButton)
+		case "IsChecked":
+			res = fmt.Sprintf("%t", any(instance).(Node).IsChecked)
+		case "Children":
+			for idx, __instance__ := range any(instance).(Node).Children {
+				if idx > 0 {
+					res += "\n"
+				}
+				res += __instance__.Name
+			}
+		}
 	case Note:
 		switch fieldName {
 		// string value of fields
@@ -3614,6 +4081,19 @@ func GetFieldStringValue[Type Gongstruct](instance Type, fieldName string) (res 
 			res = fmt.Sprintf("%f", any(instance).(Position).Y)
 		case "Name":
 			res = any(instance).(Position).Name
+		}
+	case Tree:
+		switch fieldName {
+		// string value of fields
+		case "Name":
+			res = any(instance).(Tree).Name
+		case "RootNodes":
+			for idx, __instance__ := range any(instance).(Tree).RootNodes {
+				if idx > 0 {
+					res += "\n"
+				}
+				res += __instance__.Name
+			}
 		}
 	case UmlState:
 		switch fieldName {

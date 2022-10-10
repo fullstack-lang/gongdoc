@@ -13,12 +13,16 @@
   import { GongdocStatusSortingComponent } from './gongdocstatus-sorting/gongdocstatus-sorting.component'
   import { LinksTableComponent } from './links-table/links-table.component'
   import { LinkSortingComponent } from './link-sorting/link-sorting.component'
+  import { NodesTableComponent } from './nodes-table/nodes-table.component'
+  import { NodeSortingComponent } from './node-sorting/node-sorting.component'
   import { NotesTableComponent } from './notes-table/notes-table.component'
   import { NoteSortingComponent } from './note-sorting/note-sorting.component'
   import { PkgeltsTableComponent } from './pkgelts-table/pkgelts-table.component'
   import { PkgeltSortingComponent } from './pkgelt-sorting/pkgelt-sorting.component'
   import { PositionsTableComponent } from './positions-table/positions-table.component'
   import { PositionSortingComponent } from './position-sorting/position-sorting.component'
+  import { TreesTableComponent } from './trees-table/trees-table.component'
+  import { TreeSortingComponent } from './tree-sorting/tree-sorting.component'
   import { UmlStatesTableComponent } from './umlstates-table/umlstates-table.component'
   import { UmlStateSortingComponent } from './umlstate-sorting/umlstate-sorting.component'
   import { UmlscsTableComponent } from './umlscs-table/umlscs-table.component'
@@ -41,12 +45,16 @@
   export const MapOfGongdocStatusSortingComponents: Map<string, any> = new Map([["GongdocStatusSortingComponent", GongdocStatusSortingComponent],])
   export const MapOfLinksComponents: Map<string, any> = new Map([["LinksTableComponent", LinksTableComponent],])
   export const MapOfLinkSortingComponents: Map<string, any> = new Map([["LinkSortingComponent", LinkSortingComponent],])
+  export const MapOfNodesComponents: Map<string, any> = new Map([["NodesTableComponent", NodesTableComponent],])
+  export const MapOfNodeSortingComponents: Map<string, any> = new Map([["NodeSortingComponent", NodeSortingComponent],])
   export const MapOfNotesComponents: Map<string, any> = new Map([["NotesTableComponent", NotesTableComponent],])
   export const MapOfNoteSortingComponents: Map<string, any> = new Map([["NoteSortingComponent", NoteSortingComponent],])
   export const MapOfPkgeltsComponents: Map<string, any> = new Map([["PkgeltsTableComponent", PkgeltsTableComponent],])
   export const MapOfPkgeltSortingComponents: Map<string, any> = new Map([["PkgeltSortingComponent", PkgeltSortingComponent],])
   export const MapOfPositionsComponents: Map<string, any> = new Map([["PositionsTableComponent", PositionsTableComponent],])
   export const MapOfPositionSortingComponents: Map<string, any> = new Map([["PositionSortingComponent", PositionSortingComponent],])
+  export const MapOfTreesComponents: Map<string, any> = new Map([["TreesTableComponent", TreesTableComponent],])
+  export const MapOfTreeSortingComponents: Map<string, any> = new Map([["TreeSortingComponent", TreeSortingComponent],])
   export const MapOfUmlStatesComponents: Map<string, any> = new Map([["UmlStatesTableComponent", UmlStatesTableComponent],])
   export const MapOfUmlStateSortingComponents: Map<string, any> = new Map([["UmlStateSortingComponent", UmlStateSortingComponent],])
   export const MapOfUmlscsComponents: Map<string, any> = new Map([["UmlscsTableComponent", UmlscsTableComponent],])
@@ -66,9 +74,11 @@ export const MapOfComponents: Map<string, any> =
       ["GongdocCommand", MapOfGongdocCommandsComponents],
       ["GongdocStatus", MapOfGongdocStatussComponents],
       ["Link", MapOfLinksComponents],
+      ["Node", MapOfNodesComponents],
       ["Note", MapOfNotesComponents],
       ["Pkgelt", MapOfPkgeltsComponents],
       ["Position", MapOfPositionsComponents],
+      ["Tree", MapOfTreesComponents],
       ["UmlState", MapOfUmlStatesComponents],
       ["Umlsc", MapOfUmlscsComponents],
       ["Vertice", MapOfVerticesComponents],
@@ -87,9 +97,11 @@ export const MapOfSortingComponents: Map<string, any> =
       ["GongdocCommand", MapOfGongdocCommandSortingComponents],
       ["GongdocStatus", MapOfGongdocStatusSortingComponents],
       ["Link", MapOfLinkSortingComponents],
+      ["Node", MapOfNodeSortingComponents],
       ["Note", MapOfNoteSortingComponents],
       ["Pkgelt", MapOfPkgeltSortingComponents],
       ["Position", MapOfPositionSortingComponents],
+      ["Tree", MapOfTreeSortingComponents],
       ["UmlState", MapOfUmlStateSortingComponents],
       ["Umlsc", MapOfUmlscSortingComponents],
       ["Vertice", MapOfVerticeSortingComponents],

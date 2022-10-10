@@ -25,6 +25,9 @@ import { GongdocStatusService } from './gongdocstatus.service'
 import { LinkDB } from './link-db'
 import { LinkService } from './link.service'
 
+import { NodeDB } from './node-db'
+import { NodeService } from './node.service'
+
 import { NoteDB } from './note-db'
 import { NoteService } from './note.service'
 
@@ -33,6 +36,9 @@ import { PkgeltService } from './pkgelt.service'
 
 import { PositionDB } from './position-db'
 import { PositionService } from './position.service'
+
+import { TreeDB } from './tree-db'
+import { TreeService } from './tree.service'
 
 import { UmlStateDB } from './umlstate-db'
 import { UmlStateService } from './umlstate.service'
@@ -67,6 +73,9 @@ export class FrontRepo { // insertion point sub template
   Links_array = new Array<LinkDB>(); // array of repo instances
   Links = new Map<number, LinkDB>(); // map of repo instances
   Links_batch = new Map<number, LinkDB>(); // same but only in last GET (for finding repo instances to delete)
+  Nodes_array = new Array<NodeDB>(); // array of repo instances
+  Nodes = new Map<number, NodeDB>(); // map of repo instances
+  Nodes_batch = new Map<number, NodeDB>(); // same but only in last GET (for finding repo instances to delete)
   Notes_array = new Array<NoteDB>(); // array of repo instances
   Notes = new Map<number, NoteDB>(); // map of repo instances
   Notes_batch = new Map<number, NoteDB>(); // same but only in last GET (for finding repo instances to delete)
@@ -76,6 +85,9 @@ export class FrontRepo { // insertion point sub template
   Positions_array = new Array<PositionDB>(); // array of repo instances
   Positions = new Map<number, PositionDB>(); // map of repo instances
   Positions_batch = new Map<number, PositionDB>(); // same but only in last GET (for finding repo instances to delete)
+  Trees_array = new Array<TreeDB>(); // array of repo instances
+  Trees = new Map<number, TreeDB>(); // map of repo instances
+  Trees_batch = new Map<number, TreeDB>(); // same but only in last GET (for finding repo instances to delete)
   UmlStates_array = new Array<UmlStateDB>(); // array of repo instances
   UmlStates = new Map<number, UmlStateDB>(); // map of repo instances
   UmlStates_batch = new Map<number, UmlStateDB>(); // same but only in last GET (for finding repo instances to delete)
@@ -150,9 +162,11 @@ export class FrontRepoService {
     private gongdoccommandService: GongdocCommandService,
     private gongdocstatusService: GongdocStatusService,
     private linkService: LinkService,
+    private nodeService: NodeService,
     private noteService: NoteService,
     private pkgeltService: PkgeltService,
     private positionService: PositionService,
+    private treeService: TreeService,
     private umlstateService: UmlStateService,
     private umlscService: UmlscService,
     private verticeService: VerticeService,
@@ -193,9 +207,11 @@ export class FrontRepoService {
     Observable<GongdocCommandDB[]>,
     Observable<GongdocStatusDB[]>,
     Observable<LinkDB[]>,
+    Observable<NodeDB[]>,
     Observable<NoteDB[]>,
     Observable<PkgeltDB[]>,
     Observable<PositionDB[]>,
+    Observable<TreeDB[]>,
     Observable<UmlStateDB[]>,
     Observable<UmlscDB[]>,
     Observable<VerticeDB[]>,
@@ -207,9 +223,11 @@ export class FrontRepoService {
       this.gongdoccommandService.getGongdocCommands(),
       this.gongdocstatusService.getGongdocStatuss(),
       this.linkService.getLinks(),
+      this.nodeService.getNodes(),
       this.noteService.getNotes(),
       this.pkgeltService.getPkgelts(),
       this.positionService.getPositions(),
+      this.treeService.getTrees(),
       this.umlstateService.getUmlStates(),
       this.umlscService.getUmlscs(),
       this.verticeService.getVertices(),
@@ -235,9 +253,11 @@ export class FrontRepoService {
             gongdoccommands_,
             gongdocstatuss_,
             links_,
+            nodes_,
             notes_,
             pkgelts_,
             positions_,
+            trees_,
             umlstates_,
             umlscs_,
             vertices_,
@@ -258,12 +278,16 @@ export class FrontRepoService {
             gongdocstatuss = gongdocstatuss_ as GongdocStatusDB[]
             var links: LinkDB[]
             links = links_ as LinkDB[]
+            var nodes: NodeDB[]
+            nodes = nodes_ as NodeDB[]
             var notes: NoteDB[]
             notes = notes_ as NoteDB[]
             var pkgelts: PkgeltDB[]
             pkgelts = pkgelts_ as PkgeltDB[]
             var positions: PositionDB[]
             positions = positions_ as PositionDB[]
+            var trees: TreeDB[]
+            trees = trees_ as TreeDB[]
             var umlstates: UmlStateDB[]
             umlstates = umlstates_ as UmlStateDB[]
             var umlscs: UmlscDB[]
@@ -506,6 +530,39 @@ export class FrontRepoService {
             });
 
             // init the array
+            FrontRepoSingloton.Nodes_array = nodes
+
+            // clear the map that counts Node in the GET
+            FrontRepoSingloton.Nodes_batch.clear()
+
+            nodes.forEach(
+              node => {
+                FrontRepoSingloton.Nodes.set(node.ID, node)
+                FrontRepoSingloton.Nodes_batch.set(node.ID, node)
+              }
+            )
+
+            // clear nodes that are absent from the batch
+            FrontRepoSingloton.Nodes.forEach(
+              node => {
+                if (FrontRepoSingloton.Nodes_batch.get(node.ID) == undefined) {
+                  FrontRepoSingloton.Nodes.delete(node.ID)
+                }
+              }
+            )
+
+            // sort Nodes_array array
+            FrontRepoSingloton.Nodes_array.sort((t1, t2) => {
+              if (t1.Name > t2.Name) {
+                return 1;
+              }
+              if (t1.Name < t2.Name) {
+                return -1;
+              }
+              return 0;
+            });
+
+            // init the array
             FrontRepoSingloton.Notes_array = notes
 
             // clear the map that counts Note in the GET
@@ -595,6 +652,39 @@ export class FrontRepoService {
 
             // sort Positions_array array
             FrontRepoSingloton.Positions_array.sort((t1, t2) => {
+              if (t1.Name > t2.Name) {
+                return 1;
+              }
+              if (t1.Name < t2.Name) {
+                return -1;
+              }
+              return 0;
+            });
+
+            // init the array
+            FrontRepoSingloton.Trees_array = trees
+
+            // clear the map that counts Tree in the GET
+            FrontRepoSingloton.Trees_batch.clear()
+
+            trees.forEach(
+              tree => {
+                FrontRepoSingloton.Trees.set(tree.ID, tree)
+                FrontRepoSingloton.Trees_batch.set(tree.ID, tree)
+              }
+            )
+
+            // clear trees that are absent from the batch
+            FrontRepoSingloton.Trees.forEach(
+              tree => {
+                if (FrontRepoSingloton.Trees_batch.get(tree.ID) == undefined) {
+                  FrontRepoSingloton.Trees.delete(tree.ID)
+                }
+              }
+            )
+
+            // sort Trees_array array
+            FrontRepoSingloton.Trees_array.sort((t1, t2) => {
               if (t1.Name > t2.Name) {
                 return 1;
               }
@@ -829,6 +919,39 @@ export class FrontRepoService {
                 }
               }
             )
+            nodes.forEach(
+              node => {
+                // insertion point sub sub template for ONE-/ZERO-ONE associations pointers redeeming
+
+                // insertion point for redeeming ONE-MANY associations
+                // insertion point for slice of pointer field Node.Children redeeming
+                {
+                  let _node = FrontRepoSingloton.Nodes.get(node.Node_ChildrenDBID.Int64)
+                  if (_node) {
+                    if (_node.Children == undefined) {
+                      _node.Children = new Array<NodeDB>()
+                    }
+                    _node.Children.push(node)
+                    if (node.Node_Children_reverse == undefined) {
+                      node.Node_Children_reverse = _node
+                    }
+                  }
+                }
+                // insertion point for slice of pointer field Tree.RootNodes redeeming
+                {
+                  let _tree = FrontRepoSingloton.Trees.get(node.Tree_RootNodesDBID.Int64)
+                  if (_tree) {
+                    if (_tree.RootNodes == undefined) {
+                      _tree.RootNodes = new Array<NodeDB>()
+                    }
+                    _tree.RootNodes.push(node)
+                    if (node.Tree_RootNodes_reverse == undefined) {
+                      node.Tree_RootNodes_reverse = _tree
+                    }
+                  }
+                }
+              }
+            )
             notes.forEach(
               note => {
                 // insertion point sub sub template for ONE-/ZERO-ONE associations pointers redeeming
@@ -858,6 +981,13 @@ export class FrontRepoService {
             )
             positions.forEach(
               position => {
+                // insertion point sub sub template for ONE-/ZERO-ONE associations pointers redeeming
+
+                // insertion point for redeeming ONE-MANY associations
+              }
+            )
+            trees.forEach(
+              tree => {
                 // insertion point sub sub template for ONE-/ZERO-ONE associations pointers redeeming
 
                 // insertion point for redeeming ONE-MANY associations
@@ -1351,6 +1481,83 @@ export class FrontRepoService {
     )
   }
 
+  // NodePull performs a GET on Node of the stack and redeem association pointers 
+  NodePull(): Observable<FrontRepo> {
+    return new Observable<FrontRepo>(
+      (observer) => {
+        combineLatest([
+          this.nodeService.getNodes()
+        ]).subscribe(
+          ([ // insertion point sub template 
+            nodes,
+          ]) => {
+            // init the array
+            FrontRepoSingloton.Nodes_array = nodes
+
+            // clear the map that counts Node in the GET
+            FrontRepoSingloton.Nodes_batch.clear()
+
+            // 
+            // First Step: init map of instances
+            // insertion point sub template 
+            nodes.forEach(
+              node => {
+                FrontRepoSingloton.Nodes.set(node.ID, node)
+                FrontRepoSingloton.Nodes_batch.set(node.ID, node)
+
+                // insertion point for redeeming ONE/ZERO-ONE associations
+
+                // insertion point for redeeming ONE-MANY associations
+                // insertion point for slice of pointer field Node.Children redeeming
+                {
+                  let _node = FrontRepoSingloton.Nodes.get(node.Node_ChildrenDBID.Int64)
+                  if (_node) {
+                    if (_node.Children == undefined) {
+                      _node.Children = new Array<NodeDB>()
+                    }
+                    _node.Children.push(node)
+                    if (node.Node_Children_reverse == undefined) {
+                      node.Node_Children_reverse = _node
+                    }
+                  }
+                }
+                // insertion point for slice of pointer field Tree.RootNodes redeeming
+                {
+                  let _tree = FrontRepoSingloton.Trees.get(node.Tree_RootNodesDBID.Int64)
+                  if (_tree) {
+                    if (_tree.RootNodes == undefined) {
+                      _tree.RootNodes = new Array<NodeDB>()
+                    }
+                    _tree.RootNodes.push(node)
+                    if (node.Tree_RootNodes_reverse == undefined) {
+                      node.Tree_RootNodes_reverse = _tree
+                    }
+                  }
+                }
+              }
+            )
+
+            // clear nodes that are absent from the GET
+            FrontRepoSingloton.Nodes.forEach(
+              node => {
+                if (FrontRepoSingloton.Nodes_batch.get(node.ID) == undefined) {
+                  FrontRepoSingloton.Nodes.delete(node.ID)
+                }
+              }
+            )
+
+            // 
+            // Second Step: redeem pointers between instances (thanks to maps in the First Step)
+            // insertion point sub template 
+
+            // hand over control flow to observer
+            observer.next(FrontRepoSingloton)
+          }
+        )
+      }
+    )
+  }
+
   // NotePull performs a GET on Note of the stack and redeem association pointers 
   NotePull(): Observable<FrontRepo> {
     return new Observable<FrontRepo>(
@@ -1501,6 +1708,57 @@ export class FrontRepoService {
               position => {
                 if (FrontRepoSingloton.Positions_batch.get(position.ID) == undefined) {
                   FrontRepoSingloton.Positions.delete(position.ID)
+                }
+              }
+            )
+
+            // 
+            // Second Step: redeem pointers between instances (thanks to maps in the First Step)
+            // insertion point sub template 
+
+            // hand over control flow to observer
+            observer.next(FrontRepoSingloton)
+          }
+        )
+      }
+    )
+  }
+
+  // TreePull performs a GET on Tree of the stack and redeem association pointers 
+  TreePull(): Observable<FrontRepo> {
+    return new Observable<FrontRepo>(
+      (observer) => {
+        combineLatest([
+          this.treeService.getTrees()
+        ]).subscribe(
+          ([ // insertion point sub template 
+            trees,
+          ]) => {
+            // init the array
+            FrontRepoSingloton.Trees_array = trees
+
+            // clear the map that counts Tree in the GET
+            FrontRepoSingloton.Trees_batch.clear()
+
+            // 
+            // First Step: init map of instances
+            // insertion point sub template 
+            trees.forEach(
+              tree => {
+                FrontRepoSingloton.Trees.set(tree.ID, tree)
+                FrontRepoSingloton.Trees_batch.set(tree.ID, tree)
+
+                // insertion point for redeeming ONE/ZERO-ONE associations
+
+                // insertion point for redeeming ONE-MANY associations
+              }
+            )
+
+            // clear trees that are absent from the GET
+            FrontRepoSingloton.Trees.forEach(
+              tree => {
+                if (FrontRepoSingloton.Trees_batch.get(tree.ID) == undefined) {
+                  FrontRepoSingloton.Trees.delete(tree.ID)
                 }
               }
             )
@@ -1719,21 +1977,27 @@ export function getGongdocStatusUniqueID(id: number): number {
 export function getLinkUniqueID(id: number): number {
   return 59 * id
 }
-export function getNoteUniqueID(id: number): number {
+export function getNodeUniqueID(id: number): number {
   return 61 * id
 }
-export function getPkgeltUniqueID(id: number): number {
+export function getNoteUniqueID(id: number): number {
   return 67 * id
 }
-export function getPositionUniqueID(id: number): number {
+export function getPkgeltUniqueID(id: number): number {
   return 71 * id
 }
-export function getUmlStateUniqueID(id: number): number {
+export function getPositionUniqueID(id: number): number {
   return 73 * id
 }
-export function getUmlscUniqueID(id: number): number {
+export function getTreeUniqueID(id: number): number {
   return 79 * id
 }
-export function getVerticeUniqueID(id: number): number {
+export function getUmlStateUniqueID(id: number): number {
   return 83 * id
+}
+export function getUmlscUniqueID(id: number): number {
+  return 89 * id
+}
+export function getVerticeUniqueID(id: number): number {
+  return 97 * id
 }

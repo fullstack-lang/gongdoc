@@ -74,6 +74,11 @@ import { LinkSortingComponent } from './link-sorting/link-sorting.component'
 import { LinkDetailComponent } from './link-detail/link-detail.component'
 import { LinkPresentationComponent } from './link-presentation/link-presentation.component'
 
+import { NodesTableComponent } from './nodes-table/nodes-table.component'
+import { NodeSortingComponent } from './node-sorting/node-sorting.component'
+import { NodeDetailComponent } from './node-detail/node-detail.component'
+import { NodePresentationComponent } from './node-presentation/node-presentation.component'
+
 import { NotesTableComponent } from './notes-table/notes-table.component'
 import { NoteSortingComponent } from './note-sorting/note-sorting.component'
 import { NoteDetailComponent } from './note-detail/note-detail.component'
@@ -88,6 +93,11 @@ import { PositionsTableComponent } from './positions-table/positions-table.compo
 import { PositionSortingComponent } from './position-sorting/position-sorting.component'
 import { PositionDetailComponent } from './position-detail/position-detail.component'
 import { PositionPresentationComponent } from './position-presentation/position-presentation.component'
+
+import { TreesTableComponent } from './trees-table/trees-table.component'
+import { TreeSortingComponent } from './tree-sorting/tree-sorting.component'
+import { TreeDetailComponent } from './tree-detail/tree-detail.component'
+import { TreePresentationComponent } from './tree-presentation/tree-presentation.component'
 
 import { UmlStatesTableComponent } from './umlstates-table/umlstates-table.component'
 import { UmlStateSortingComponent } from './umlstate-sorting/umlstate-sorting.component'
@@ -143,6 +153,11 @@ import { VerticePresentationComponent } from './vertice-presentation/vertice-pre
 		LinkDetailComponent,
 		LinkPresentationComponent,
 
+		NodesTableComponent,
+		NodeSortingComponent,
+		NodeDetailComponent,
+		NodePresentationComponent,
+
 		NotesTableComponent,
 		NoteSortingComponent,
 		NoteDetailComponent,
@@ -157,6 +172,11 @@ import { VerticePresentationComponent } from './vertice-presentation/vertice-pre
 		PositionSortingComponent,
 		PositionDetailComponent,
 		PositionPresentationComponent,
+
+		TreesTableComponent,
+		TreeSortingComponent,
+		TreeDetailComponent,
+		TreePresentationComponent,
 
 		UmlStatesTableComponent,
 		UmlStateSortingComponent,
@@ -247,6 +267,11 @@ import { VerticePresentationComponent } from './vertice-presentation/vertice-pre
 		LinkDetailComponent,
 		LinkPresentationComponent,
 
+		NodesTableComponent,
+		NodeSortingComponent,
+		NodeDetailComponent,
+		NodePresentationComponent,
+
 		NotesTableComponent,
 		NoteSortingComponent,
 		NoteDetailComponent,
@@ -261,6 +286,11 @@ import { VerticePresentationComponent } from './vertice-presentation/vertice-pre
 		PositionSortingComponent,
 		PositionDetailComponent,
 		PositionPresentationComponent,
+
+		TreesTableComponent,
+		TreeSortingComponent,
+		TreeDetailComponent,
+		TreePresentationComponent,
 
 		UmlStatesTableComponent,
 		UmlStateSortingComponent,
