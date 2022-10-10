@@ -129,9 +129,10 @@ export class TreeComponent implements OnInit {
         var treeSingloton = this.gongdocFrontRepo.Trees_array[0]
 
         var rootNodes = new Array<Node>()
-        treeSingloton.RootNodes!.forEach(root => {
-          rootNodes.push(this.gongNodeToMatTreeNode(root))
-        })
+
+        if (treeSingloton.RootNodes != undefined) {
+          rootNodes = treeSingloton.RootNodes.map(nodeDB => this.gongNodeToMatTreeNode(nodeDB))
+        }
 
         this.dataSource.data = rootNodes
 

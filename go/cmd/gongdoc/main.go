@@ -190,6 +190,23 @@ func main() {
 		}
 	}
 	pkgelt.SerializeToStage()
+
+	// set up the tree to display elements
+	tree := (&gongdoc_models.Tree{Name: "top tree"}).Stage()
+	for gongStruct := range *gong_models.GetGongstructInstancesSet[gong_models.GongStruct]() {
+
+		node := (&gongdoc_models.Node{Name: gongStruct.Name}).Stage()
+		node.HasCheckboxButton = true
+
+		for _, field := range gongStruct.Fields {
+			node2 := (&gongdoc_models.Node{Name: field.GetName()}).Stage()
+			node2.HasCheckboxButton = true
+			node.Children = append(node.Children, node2)
+		}
+
+		tree.RootNodes = append(tree.RootNodes, node)
+	}
+
 	gongdoc_models.Stage.Commit()
 	log.Printf("Parse found %d diagrams\n", len(pkgelt.Classdiagrams))
 	log.Printf("Server ready to serve on http://localhost:8080/")
