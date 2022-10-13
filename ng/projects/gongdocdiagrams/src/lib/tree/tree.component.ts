@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { Observable, timer } from 'rxjs';
 
 import { FlatTreeControl } from '@angular/cdk/tree';
@@ -32,6 +32,8 @@ interface FlatNode {
   styleUrls: ['./tree.component.css']
 })
 export class TreeComponent implements OnInit {
+
+  @Input() name: string = ""
 
   private _transformer = (node: Node, level: number) => {
     return {
@@ -122,16 +124,35 @@ export class TreeComponent implements OnInit {
         this.gongdocFrontRepo = gongdocsFrontRepo
 
 
-        if (this.gongdocFrontRepo.Trees_array.length != 1) {
-          console.log("error: there should be exactly one tree")
+        var treeSingloton: gongdoc.TreeDB = new (gongdoc.TreeDB)
+        var selected: boolean = false
+        for (var tree of this.gongdocFrontRepo.Trees_array) {
+          if (tree.Name == this.name) {
+            treeSingloton = tree
+            selected = true
+          }
+        }
+        if (!selected) {
+          console.log("no tree matching with name \"" + this.name + "\"")
           return
         }
-        var treeSingloton = this.gongdocFrontRepo.Trees_array[0]
+
+        if (treeSingloton.RootNodes == undefined) {
+          console.log("no nodes on tree " + this.name)
+          return
+        }
+
+        // sort the nodes by their index
+        treeSingloton.RootNodes.sort((a, b) =>
+          (a.Tree_RootNodesDBID_Index.Int64 >
+            b.Tree_RootNodesDBID_Index.Int64) ? 1 : -1)
 
         var rootNodes = new Array<Node>()
 
         if (treeSingloton.RootNodes != undefined) {
-          rootNodes = treeSingloton.RootNodes.map(nodeDB => this.gongNodeToMatTreeNode(nodeDB))
+          for (var nodeDB of treeSingloton.RootNodes) {
+            rootNodes.push(this.gongNodeToMatTreeNode(nodeDB))
+          }
         }
 
         this.dataSource.data = rootNodes

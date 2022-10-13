@@ -191,20 +191,56 @@ func main() {
 	}
 	pkgelt.SerializeToStage()
 
-	// set up the tree to display elements
-	tree := (&gongdoc_models.Tree{Name: "top tree"}).Stage()
+	// set up the gongTree to display elements
+	gongTree := (&gongdoc_models.Tree{Name: "gong"}).Stage()
+	gongstructRootNode := (&gongdoc_models.Node{Name: "gongstructs"}).Stage()
+	gongstructRootNode.IsExpanded = true
+	gongTree.RootNodes = append(gongTree.RootNodes, gongstructRootNode)
 	for gongStruct := range *gong_models.GetGongstructInstancesSet[gong_models.GongStruct]() {
 
 		node := (&gongdoc_models.Node{Name: gongStruct.Name}).Stage()
 		node.HasCheckboxButton = true
+		gongstructRootNode.Children = append(gongstructRootNode.Children, node)
 
 		for _, field := range gongStruct.Fields {
 			node2 := (&gongdoc_models.Node{Name: field.GetName()}).Stage()
 			node2.HasCheckboxButton = true
 			node.Children = append(node.Children, node2)
 		}
+	}
 
-		tree.RootNodes = append(tree.RootNodes, node)
+	gongenumRootNode := (&gongdoc_models.Node{Name: "gongenums"}).Stage()
+	gongenumRootNode.IsExpanded = true
+	gongTree.RootNodes = append(gongTree.RootNodes, gongenumRootNode)
+	for gongEnum := range *gong_models.GetGongstructInstancesSet[gong_models.GongEnum]() {
+
+		node := (&gongdoc_models.Node{Name: gongEnum.Name}).Stage()
+		node.HasCheckboxButton = true
+		gongenumRootNode.Children = append(gongenumRootNode.Children, node)
+
+		for _, value := range gongEnum.GongEnumValues {
+			node2 := (&gongdoc_models.Node{Name: value.GetName()}).Stage()
+			node2.HasCheckboxButton = true
+			node.Children = append(node.Children, node2)
+		}
+	}
+
+	gongdocTree := (&gongdoc_models.Tree{Name: "gongdoc"}).Stage()
+	classdiagramsRootNode := (&gongdoc_models.Node{Name: "class diagrams"}).Stage()
+	classdiagramsRootNode.IsExpanded = true
+	gongdocTree.RootNodes = append(gongdocTree.RootNodes, classdiagramsRootNode)
+	for classdiagram := range *gongdoc_models.GetGongstructInstancesSet[gongdoc_models.Classdiagram]() {
+		node := (&gongdoc_models.Node{Name: classdiagram.Name}).Stage()
+		node.HasCheckboxButton = true
+		classdiagramsRootNode.Children = append(classdiagramsRootNode.Children, node)
+	}
+	statediagramssRootNode := (&gongdoc_models.Node{Name: "state diagrams"}).Stage()
+	statediagramssRootNode.IsExpanded = true
+	gongdocTree.RootNodes = append(gongdocTree.RootNodes, statediagramssRootNode)
+	for statediagram := range *gongdoc_models.GetGongstructInstancesSet[gongdoc_models.Umlsc]() {
+		node := (&gongdoc_models.Node{Name: statediagram.Name}).Stage()
+		node.HasCheckboxButton = true
+		statediagramssRootNode.Children = append(statediagramssRootNode.Children, node)
 	}
 
 	gongdoc_models.Stage.Commit()
