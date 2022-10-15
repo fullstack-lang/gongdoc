@@ -41,11 +41,12 @@ type PkgeltInput struct {
 //
 // swagger:route GET /pkgelts pkgelts getPkgelts
 //
-// Get all pkgelts
+// # Get all pkgelts
 //
 // Responses:
-//    default: genericError
-//        200: pkgeltDBsResponse
+// default: genericError
+//
+//	200: pkgeltDBResponse
 func GetPkgelts(c *gin.Context) {
 	db := orm.BackRepo.BackRepoPkgelt.GetDB()
 
@@ -85,14 +86,15 @@ func GetPkgelts(c *gin.Context) {
 // swagger:route POST /pkgelts pkgelts postPkgelt
 //
 // Creates a pkgelt
-//     Consumes:
-//     - application/json
 //
-//     Produces:
-//     - application/json
+//	Consumes:
+//	- application/json
 //
-//     Responses:
-//       200: pkgeltDBResponse
+//	Produces:
+//	- application/json
+//
+//	Responses:
+//	  200: nodeDBResponse
 func PostPkgelt(c *gin.Context) {
 	db := orm.BackRepo.BackRepoPkgelt.GetDB()
 
@@ -124,6 +126,14 @@ func PostPkgelt(c *gin.Context) {
 		return
 	}
 
+	// get an instance (not staged) from DB instance, and call callback function
+	pkgelt := new(models.Pkgelt)
+	pkgeltDB.CopyBasicFieldsToPkgelt(pkgelt)
+
+	if pkgelt != nil {
+		models.AfterCreateFromFront(&models.Stage, pkgelt)
+	}
+
 	// a POST is equivalent to a back repo commit increase
 	// (this will be improved with implementation of unit of work design pattern)
 	orm.BackRepo.IncrementPushFromFrontNb()
@@ -138,8 +148,9 @@ func PostPkgelt(c *gin.Context) {
 // Gets the details for a pkgelt.
 //
 // Responses:
-//    default: genericError
-//        200: pkgeltDBResponse
+// default: genericError
+//
+//	200: pkgeltDBResponse
 func GetPkgelt(c *gin.Context) {
 	db := orm.BackRepo.BackRepoPkgelt.GetDB()
 
@@ -166,11 +177,12 @@ func GetPkgelt(c *gin.Context) {
 //
 // swagger:route PATCH /pkgelts/{ID} pkgelts updatePkgelt
 //
-// Update a pkgelt
+// # Update a pkgelt
 //
 // Responses:
-//    default: genericError
-//        200: pkgeltDBResponse
+// default: genericError
+//
+//	200: pkgeltDBResponse
 func UpdatePkgelt(c *gin.Context) {
 	db := orm.BackRepo.BackRepoPkgelt.GetDB()
 
@@ -211,8 +223,20 @@ func UpdatePkgelt(c *gin.Context) {
 		return
 	}
 
+	// get an instance (not staged) from DB instance, and call callback function
+	pkgeltNew := new(models.Pkgelt)
+	pkgeltDB.CopyBasicFieldsToPkgelt(pkgeltNew)
+
+	// get stage instance from DB instance, and call callback function
+	pkgeltOld := (*orm.BackRepo.BackRepoPkgelt.Map_PkgeltDBID_PkgeltPtr)[pkgeltDB.ID]
+	if pkgeltOld != nil {
+		models.AfterUpdateFromFront(&models.Stage, pkgeltOld, pkgeltNew)
+	}
+
 	// an UPDATE generates a back repo commit increase
 	// (this will be improved with implementation of unit of work design pattern)
+	// in some cases, with the marshalling of the stage, this operation might
+	// generates a checkout
 	orm.BackRepo.IncrementPushFromFrontNb()
 
 	// return status OK with the marshalling of the the pkgeltDB
@@ -223,10 +247,11 @@ func UpdatePkgelt(c *gin.Context) {
 //
 // swagger:route DELETE /pkgelts/{ID} pkgelts deletePkgelt
 //
-// Delete a pkgelt
+// # Delete a pkgelt
 //
-// Responses:
-//    default: genericError
+// default: genericError
+//
+//	200: pkgeltDBResponse
 func DeletePkgelt(c *gin.Context) {
 	db := orm.BackRepo.BackRepoPkgelt.GetDB()
 
@@ -243,6 +268,12 @@ func DeletePkgelt(c *gin.Context) {
 
 	// with gorm.Model field, default delete is a soft delete. Unscoped() force delete
 	db.Unscoped().Delete(&pkgeltDB)
+
+	// get stage instance from DB instance, and call callback function
+	pkgelt := (*orm.BackRepo.BackRepoPkgelt.Map_PkgeltDBID_PkgeltPtr)[pkgeltDB.ID]
+	if pkgelt != nil {
+		models.AfterDeleteFromFront(&models.Stage, pkgelt)
+	}
 
 	// a DELETE generates a back repo commit increase
 	// (this will be improved with implementation of unit of work design pattern)

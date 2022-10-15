@@ -2,6 +2,7 @@
 package models
 
 import (
+	"errors"
 	"fmt"
 	"log"
 	"os"
@@ -10,6 +11,9 @@ import (
 	"sort"
 	"strings"
 )
+
+// errUnkownEnum is returns when a value cannot match enum values
+var errUnkownEnum = errors.New("unkown enum")
 
 // swagger:ignore
 type __void any
@@ -31,47 +35,137 @@ type StageStruct struct { // insertion point for definition of arrays registerin
 	Classdiagrams           map[*Classdiagram]any
 	Classdiagrams_mapString map[string]*Classdiagram
 
+	OnAfterClassdiagramCreateCallback OnAfterCreateInterface[Classdiagram]
+	OnAfterClassdiagramUpdateCallback OnAfterUpdateInterface[Classdiagram]
+	OnAfterClassdiagramDeleteCallback OnAfterDeleteInterface[Classdiagram]
+	OnAfterClassdiagramReadCallback   OnAfterReadInterface[Classdiagram]
+
+
 	Classshapes           map[*Classshape]any
 	Classshapes_mapString map[string]*Classshape
+
+	OnAfterClassshapeCreateCallback OnAfterCreateInterface[Classshape]
+	OnAfterClassshapeUpdateCallback OnAfterUpdateInterface[Classshape]
+	OnAfterClassshapeDeleteCallback OnAfterDeleteInterface[Classshape]
+	OnAfterClassshapeReadCallback   OnAfterReadInterface[Classshape]
+
 
 	Fields           map[*Field]any
 	Fields_mapString map[string]*Field
 
+	OnAfterFieldCreateCallback OnAfterCreateInterface[Field]
+	OnAfterFieldUpdateCallback OnAfterUpdateInterface[Field]
+	OnAfterFieldDeleteCallback OnAfterDeleteInterface[Field]
+	OnAfterFieldReadCallback   OnAfterReadInterface[Field]
+
+
 	GongStructs           map[*GongStruct]any
 	GongStructs_mapString map[string]*GongStruct
+
+	OnAfterGongStructCreateCallback OnAfterCreateInterface[GongStruct]
+	OnAfterGongStructUpdateCallback OnAfterUpdateInterface[GongStruct]
+	OnAfterGongStructDeleteCallback OnAfterDeleteInterface[GongStruct]
+	OnAfterGongStructReadCallback   OnAfterReadInterface[GongStruct]
+
 
 	GongdocCommands           map[*GongdocCommand]any
 	GongdocCommands_mapString map[string]*GongdocCommand
 
+	OnAfterGongdocCommandCreateCallback OnAfterCreateInterface[GongdocCommand]
+	OnAfterGongdocCommandUpdateCallback OnAfterUpdateInterface[GongdocCommand]
+	OnAfterGongdocCommandDeleteCallback OnAfterDeleteInterface[GongdocCommand]
+	OnAfterGongdocCommandReadCallback   OnAfterReadInterface[GongdocCommand]
+
+
 	GongdocStatuss           map[*GongdocStatus]any
 	GongdocStatuss_mapString map[string]*GongdocStatus
+
+	OnAfterGongdocStatusCreateCallback OnAfterCreateInterface[GongdocStatus]
+	OnAfterGongdocStatusUpdateCallback OnAfterUpdateInterface[GongdocStatus]
+	OnAfterGongdocStatusDeleteCallback OnAfterDeleteInterface[GongdocStatus]
+	OnAfterGongdocStatusReadCallback   OnAfterReadInterface[GongdocStatus]
+
 
 	Links           map[*Link]any
 	Links_mapString map[string]*Link
 
+	OnAfterLinkCreateCallback OnAfterCreateInterface[Link]
+	OnAfterLinkUpdateCallback OnAfterUpdateInterface[Link]
+	OnAfterLinkDeleteCallback OnAfterDeleteInterface[Link]
+	OnAfterLinkReadCallback   OnAfterReadInterface[Link]
+
+
 	Nodes           map[*Node]any
 	Nodes_mapString map[string]*Node
+
+	OnAfterNodeCreateCallback OnAfterCreateInterface[Node]
+	OnAfterNodeUpdateCallback OnAfterUpdateInterface[Node]
+	OnAfterNodeDeleteCallback OnAfterDeleteInterface[Node]
+	OnAfterNodeReadCallback   OnAfterReadInterface[Node]
+
 
 	Notes           map[*Note]any
 	Notes_mapString map[string]*Note
 
+	OnAfterNoteCreateCallback OnAfterCreateInterface[Note]
+	OnAfterNoteUpdateCallback OnAfterUpdateInterface[Note]
+	OnAfterNoteDeleteCallback OnAfterDeleteInterface[Note]
+	OnAfterNoteReadCallback   OnAfterReadInterface[Note]
+
+
 	Pkgelts           map[*Pkgelt]any
 	Pkgelts_mapString map[string]*Pkgelt
+
+	OnAfterPkgeltCreateCallback OnAfterCreateInterface[Pkgelt]
+	OnAfterPkgeltUpdateCallback OnAfterUpdateInterface[Pkgelt]
+	OnAfterPkgeltDeleteCallback OnAfterDeleteInterface[Pkgelt]
+	OnAfterPkgeltReadCallback   OnAfterReadInterface[Pkgelt]
+
 
 	Positions           map[*Position]any
 	Positions_mapString map[string]*Position
 
+	OnAfterPositionCreateCallback OnAfterCreateInterface[Position]
+	OnAfterPositionUpdateCallback OnAfterUpdateInterface[Position]
+	OnAfterPositionDeleteCallback OnAfterDeleteInterface[Position]
+	OnAfterPositionReadCallback   OnAfterReadInterface[Position]
+
+
 	Trees           map[*Tree]any
 	Trees_mapString map[string]*Tree
+
+	OnAfterTreeCreateCallback OnAfterCreateInterface[Tree]
+	OnAfterTreeUpdateCallback OnAfterUpdateInterface[Tree]
+	OnAfterTreeDeleteCallback OnAfterDeleteInterface[Tree]
+	OnAfterTreeReadCallback   OnAfterReadInterface[Tree]
+
 
 	UmlStates           map[*UmlState]any
 	UmlStates_mapString map[string]*UmlState
 
+	OnAfterUmlStateCreateCallback OnAfterCreateInterface[UmlState]
+	OnAfterUmlStateUpdateCallback OnAfterUpdateInterface[UmlState]
+	OnAfterUmlStateDeleteCallback OnAfterDeleteInterface[UmlState]
+	OnAfterUmlStateReadCallback   OnAfterReadInterface[UmlState]
+
+
 	Umlscs           map[*Umlsc]any
 	Umlscs_mapString map[string]*Umlsc
 
+	OnAfterUmlscCreateCallback OnAfterCreateInterface[Umlsc]
+	OnAfterUmlscUpdateCallback OnAfterUpdateInterface[Umlsc]
+	OnAfterUmlscDeleteCallback OnAfterDeleteInterface[Umlsc]
+	OnAfterUmlscReadCallback   OnAfterReadInterface[Umlsc]
+
+
 	Vertices           map[*Vertice]any
 	Vertices_mapString map[string]*Vertice
+
+	OnAfterVerticeCreateCallback OnAfterCreateInterface[Vertice]
+	OnAfterVerticeUpdateCallback OnAfterUpdateInterface[Vertice]
+	OnAfterVerticeDeleteCallback OnAfterDeleteInterface[Vertice]
+	OnAfterVerticeReadCallback   OnAfterReadInterface[Vertice]
+
 
 	AllModelsStructCreateCallback AllModelsStructCreateInterface
 
@@ -90,6 +184,29 @@ type StageStruct struct { // insertion point for definition of arrays registerin
 
 type OnInitCommitInterface interface {
 	BeforeCommit(stage *StageStruct)
+}
+
+// OnAfterCreateInterface callback when an instance is updated from the front
+type OnAfterCreateInterface[Type Gongstruct] interface {
+	OnAfterCreate(stage *StageStruct,
+		instance *Type)
+}
+
+// OnAfterReadInterface callback when an instance is updated from the front
+type OnAfterReadInterface[Type Gongstruct] interface {
+	OnAfterRead(stage *StageStruct,
+		instance *Type)
+}
+
+// OnAfterUpdateInterface callback when an instance is updated from the front
+type OnAfterUpdateInterface[Type Gongstruct] interface {
+	OnAfterUpdate(stage *StageStruct, old, new *Type)
+}
+
+// OnAfterDeleteInterface callback when an instance is updated from the front
+type OnAfterDeleteInterface[Type Gongstruct] interface {
+	OnAfterDelete(stage *StageStruct,
+		instance *Type)
 }
 
 type BackRepoInterface interface {
@@ -4151,7 +4268,7 @@ func (classshapetargettype ClassshapeTargetType) ToString() (res string) {
 	return
 }
 
-func (classshapetargettype *ClassshapeTargetType) FromString(input string) {
+func (classshapetargettype *ClassshapeTargetType) FromString(input string) (err error) {
 
 	switch input {
 	// insertion code per enum code
@@ -4159,7 +4276,10 @@ func (classshapetargettype *ClassshapeTargetType) FromString(input string) {
 		*classshapetargettype = STRUCT
 	case "ENUM":
 		*classshapetargettype = ENUM
+	default:
+		return errUnkownEnum
 	}
+	return
 }
 
 func (classshapetargettype *ClassshapeTargetType) ToCodeString() (res string) {
@@ -4190,7 +4310,7 @@ func (editionmode EditionMode) ToString() (res string) {
 	return
 }
 
-func (editionmode *EditionMode) FromString(input string) {
+func (editionmode *EditionMode) FromString(input string) (err error) {
 
 	switch input {
 	// insertion code per enum code
@@ -4198,7 +4318,10 @@ func (editionmode *EditionMode) FromString(input string) {
 		*editionmode = PRODUCTION_MODE
 	case "DEVELOPMENT_MODE":
 		*editionmode = DEVELOPMENT_MODE
+	default:
+		return errUnkownEnum
 	}
+	return
 }
 
 func (editionmode *EditionMode) ToCodeString() (res string) {
@@ -4251,7 +4374,7 @@ func (gongdoccommandtype GongdocCommandType) ToString() (res string) {
 	return
 }
 
-func (gongdoccommandtype *GongdocCommandType) FromString(input string) {
+func (gongdoccommandtype *GongdocCommandType) FromString(input string) (err error) {
 
 	switch input {
 	// insertion code per enum code
@@ -4281,7 +4404,10 @@ func (gongdoccommandtype *GongdocCommandType) FromString(input string) {
 		*gongdoccommandtype = DIAGRAM_SLICE_OF_POINTERS_TO_GONGSTRUCT_CREATE
 	case "DIAGRAM_GONGSTRUCT_SELECT":
 		*gongdoccommandtype = DIAGRAM_GONGSTRUCT_SELECT
+	default:
+		return errUnkownEnum
 	}
+	return
 }
 
 func (gongdoccommandtype *GongdocCommandType) ToCodeString() (res string) {
@@ -4358,7 +4484,7 @@ func (gongdocnodetype GongdocNodeType) ToString() (res string) {
 	return
 }
 
-func (gongdocnodetype *GongdocNodeType) FromString(input string) {
+func (gongdocnodetype *GongdocNodeType) FromString(input string) (err error) {
 
 	switch input {
 	// insertion code per enum code
@@ -4390,7 +4516,10 @@ func (gongdocnodetype *GongdocNodeType) FromString(input string) {
 		*gongdocnodetype = ROOT_OF_GONG_NOTES
 	case "GONG_NOTE":
 		*gongdocnodetype = GONG_NOTE
+	default:
+		return errUnkownEnum
 	}
+	return
 }
 
 func (gongdocnodetype *GongdocNodeType) ToCodeString() (res string) {
@@ -4447,7 +4576,7 @@ func (multiplicitytype MultiplicityType) ToString() (res string) {
 	return
 }
 
-func (multiplicitytype *MultiplicityType) FromString(input string) {
+func (multiplicitytype *MultiplicityType) FromString(input string) (err error) {
 
 	switch input {
 	// insertion code per enum code
@@ -4457,7 +4586,10 @@ func (multiplicitytype *MultiplicityType) FromString(input string) {
 		*multiplicitytype = ONE
 	case "*":
 		*multiplicitytype = MANY
+	default:
+		return errUnkownEnum
 	}
+	return
 }
 
 func (multiplicitytype *MultiplicityType) ToCodeString() (res string) {

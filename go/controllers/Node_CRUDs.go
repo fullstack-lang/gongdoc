@@ -41,11 +41,12 @@ type NodeInput struct {
 //
 // swagger:route GET /nodes nodes getNodes
 //
-// Get all nodes
+// # Get all nodes
 //
 // Responses:
-//    default: genericError
-//        200: nodeDBsResponse
+// default: genericError
+//
+//	200: nodeDBResponse
 func GetNodes(c *gin.Context) {
 	db := orm.BackRepo.BackRepoNode.GetDB()
 
@@ -85,14 +86,15 @@ func GetNodes(c *gin.Context) {
 // swagger:route POST /nodes nodes postNode
 //
 // Creates a node
-//     Consumes:
-//     - application/json
 //
-//     Produces:
-//     - application/json
+//	Consumes:
+//	- application/json
 //
-//     Responses:
-//       200: nodeDBResponse
+//	Produces:
+//	- application/json
+//
+//	Responses:
+//	  200: nodeDBResponse
 func PostNode(c *gin.Context) {
 	db := orm.BackRepo.BackRepoNode.GetDB()
 
@@ -124,6 +126,14 @@ func PostNode(c *gin.Context) {
 		return
 	}
 
+	// get an instance (not staged) from DB instance, and call callback function
+	node := new(models.Node)
+	nodeDB.CopyBasicFieldsToNode(node)
+
+	if node != nil {
+		models.AfterCreateFromFront(&models.Stage, node)
+	}
+
 	// a POST is equivalent to a back repo commit increase
 	// (this will be improved with implementation of unit of work design pattern)
 	orm.BackRepo.IncrementPushFromFrontNb()
@@ -138,8 +148,9 @@ func PostNode(c *gin.Context) {
 // Gets the details for a node.
 //
 // Responses:
-//    default: genericError
-//        200: nodeDBResponse
+// default: genericError
+//
+//	200: nodeDBResponse
 func GetNode(c *gin.Context) {
 	db := orm.BackRepo.BackRepoNode.GetDB()
 
@@ -166,11 +177,12 @@ func GetNode(c *gin.Context) {
 //
 // swagger:route PATCH /nodes/{ID} nodes updateNode
 //
-// Update a node
+// # Update a node
 //
 // Responses:
-//    default: genericError
-//        200: nodeDBResponse
+// default: genericError
+//
+//	200: nodeDBResponse
 func UpdateNode(c *gin.Context) {
 	db := orm.BackRepo.BackRepoNode.GetDB()
 
@@ -211,8 +223,20 @@ func UpdateNode(c *gin.Context) {
 		return
 	}
 
+	// get an instance (not staged) from DB instance, and call callback function
+	nodeNew := new(models.Node)
+	nodeDB.CopyBasicFieldsToNode(nodeNew)
+
+	// get stage instance from DB instance, and call callback function
+	nodeOld := (*orm.BackRepo.BackRepoNode.Map_NodeDBID_NodePtr)[nodeDB.ID]
+	if nodeOld != nil {
+		models.AfterUpdateFromFront(&models.Stage, nodeOld, nodeNew)
+	}
+
 	// an UPDATE generates a back repo commit increase
 	// (this will be improved with implementation of unit of work design pattern)
+	// in some cases, with the marshalling of the stage, this operation might
+	// generates a checkout
 	orm.BackRepo.IncrementPushFromFrontNb()
 
 	// return status OK with the marshalling of the the nodeDB
@@ -223,10 +247,11 @@ func UpdateNode(c *gin.Context) {
 //
 // swagger:route DELETE /nodes/{ID} nodes deleteNode
 //
-// Delete a node
+// # Delete a node
 //
-// Responses:
-//    default: genericError
+// default: genericError
+//
+//	200: nodeDBResponse
 func DeleteNode(c *gin.Context) {
 	db := orm.BackRepo.BackRepoNode.GetDB()
 
@@ -243,6 +268,12 @@ func DeleteNode(c *gin.Context) {
 
 	// with gorm.Model field, default delete is a soft delete. Unscoped() force delete
 	db.Unscoped().Delete(&nodeDB)
+
+	// get stage instance from DB instance, and call callback function
+	node := (*orm.BackRepo.BackRepoNode.Map_NodeDBID_NodePtr)[nodeDB.ID]
+	if node != nil {
+		models.AfterDeleteFromFront(&models.Stage, node)
+	}
 
 	// a DELETE generates a back repo commit increase
 	// (this will be improved with implementation of unit of work design pattern)

@@ -41,11 +41,12 @@ type GongdocCommandInput struct {
 //
 // swagger:route GET /gongdoccommands gongdoccommands getGongdocCommands
 //
-// Get all gongdoccommands
+// # Get all gongdoccommands
 //
 // Responses:
-//    default: genericError
-//        200: gongdoccommandDBsResponse
+// default: genericError
+//
+//	200: gongdoccommandDBResponse
 func GetGongdocCommands(c *gin.Context) {
 	db := orm.BackRepo.BackRepoGongdocCommand.GetDB()
 
@@ -85,14 +86,15 @@ func GetGongdocCommands(c *gin.Context) {
 // swagger:route POST /gongdoccommands gongdoccommands postGongdocCommand
 //
 // Creates a gongdoccommand
-//     Consumes:
-//     - application/json
 //
-//     Produces:
-//     - application/json
+//	Consumes:
+//	- application/json
 //
-//     Responses:
-//       200: gongdoccommandDBResponse
+//	Produces:
+//	- application/json
+//
+//	Responses:
+//	  200: nodeDBResponse
 func PostGongdocCommand(c *gin.Context) {
 	db := orm.BackRepo.BackRepoGongdocCommand.GetDB()
 
@@ -124,6 +126,14 @@ func PostGongdocCommand(c *gin.Context) {
 		return
 	}
 
+	// get an instance (not staged) from DB instance, and call callback function
+	gongdoccommand := new(models.GongdocCommand)
+	gongdoccommandDB.CopyBasicFieldsToGongdocCommand(gongdoccommand)
+
+	if gongdoccommand != nil {
+		models.AfterCreateFromFront(&models.Stage, gongdoccommand)
+	}
+
 	// a POST is equivalent to a back repo commit increase
 	// (this will be improved with implementation of unit of work design pattern)
 	orm.BackRepo.IncrementPushFromFrontNb()
@@ -138,8 +148,9 @@ func PostGongdocCommand(c *gin.Context) {
 // Gets the details for a gongdoccommand.
 //
 // Responses:
-//    default: genericError
-//        200: gongdoccommandDBResponse
+// default: genericError
+//
+//	200: gongdoccommandDBResponse
 func GetGongdocCommand(c *gin.Context) {
 	db := orm.BackRepo.BackRepoGongdocCommand.GetDB()
 
@@ -166,11 +177,12 @@ func GetGongdocCommand(c *gin.Context) {
 //
 // swagger:route PATCH /gongdoccommands/{ID} gongdoccommands updateGongdocCommand
 //
-// Update a gongdoccommand
+// # Update a gongdoccommand
 //
 // Responses:
-//    default: genericError
-//        200: gongdoccommandDBResponse
+// default: genericError
+//
+//	200: gongdoccommandDBResponse
 func UpdateGongdocCommand(c *gin.Context) {
 	db := orm.BackRepo.BackRepoGongdocCommand.GetDB()
 
@@ -211,8 +223,20 @@ func UpdateGongdocCommand(c *gin.Context) {
 		return
 	}
 
+	// get an instance (not staged) from DB instance, and call callback function
+	gongdoccommandNew := new(models.GongdocCommand)
+	gongdoccommandDB.CopyBasicFieldsToGongdocCommand(gongdoccommandNew)
+
+	// get stage instance from DB instance, and call callback function
+	gongdoccommandOld := (*orm.BackRepo.BackRepoGongdocCommand.Map_GongdocCommandDBID_GongdocCommandPtr)[gongdoccommandDB.ID]
+	if gongdoccommandOld != nil {
+		models.AfterUpdateFromFront(&models.Stage, gongdoccommandOld, gongdoccommandNew)
+	}
+
 	// an UPDATE generates a back repo commit increase
 	// (this will be improved with implementation of unit of work design pattern)
+	// in some cases, with the marshalling of the stage, this operation might
+	// generates a checkout
 	orm.BackRepo.IncrementPushFromFrontNb()
 
 	// return status OK with the marshalling of the the gongdoccommandDB
@@ -223,10 +247,11 @@ func UpdateGongdocCommand(c *gin.Context) {
 //
 // swagger:route DELETE /gongdoccommands/{ID} gongdoccommands deleteGongdocCommand
 //
-// Delete a gongdoccommand
+// # Delete a gongdoccommand
 //
-// Responses:
-//    default: genericError
+// default: genericError
+//
+//	200: gongdoccommandDBResponse
 func DeleteGongdocCommand(c *gin.Context) {
 	db := orm.BackRepo.BackRepoGongdocCommand.GetDB()
 
@@ -243,6 +268,12 @@ func DeleteGongdocCommand(c *gin.Context) {
 
 	// with gorm.Model field, default delete is a soft delete. Unscoped() force delete
 	db.Unscoped().Delete(&gongdoccommandDB)
+
+	// get stage instance from DB instance, and call callback function
+	gongdoccommand := (*orm.BackRepo.BackRepoGongdocCommand.Map_GongdocCommandDBID_GongdocCommandPtr)[gongdoccommandDB.ID]
+	if gongdoccommand != nil {
+		models.AfterDeleteFromFront(&models.Stage, gongdoccommand)
+	}
 
 	// a DELETE generates a back repo commit increase
 	// (this will be improved with implementation of unit of work design pattern)

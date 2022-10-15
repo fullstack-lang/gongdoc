@@ -150,6 +150,33 @@
 			"group": "build"
 		},
 		{
+			"label": "01 - gongc -skipGoModCommands -compileForDebug",
+			"type": "shell",
+			"options": {
+				"cwd": "go/models"
+			},
+			"command": "gongc",
+			"args": [
+				"-skipGoModCommands",
+				"-compileForDebug"
+			],
+			"group": "build"
+		},
+		{
+			"label": "01 - gongc -skipNg -compileForDebug",
+			"type": "shell",
+			"options": {
+				"cwd": "go/models"
+			},
+			"command": "gongc",
+			"args": [
+				"-skipNg",
+				"-skipGoModCommands",
+				"-compileForDebug"
+			],
+			"group": "build"
+		},
+		{
 			"label": "01 - gongc & run",
 			"type": "shell",
 			"options": {

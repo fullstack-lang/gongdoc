@@ -41,11 +41,12 @@ type TreeInput struct {
 //
 // swagger:route GET /trees trees getTrees
 //
-// Get all trees
+// # Get all trees
 //
 // Responses:
-//    default: genericError
-//        200: treeDBsResponse
+// default: genericError
+//
+//	200: treeDBResponse
 func GetTrees(c *gin.Context) {
 	db := orm.BackRepo.BackRepoTree.GetDB()
 
@@ -85,14 +86,15 @@ func GetTrees(c *gin.Context) {
 // swagger:route POST /trees trees postTree
 //
 // Creates a tree
-//     Consumes:
-//     - application/json
 //
-//     Produces:
-//     - application/json
+//	Consumes:
+//	- application/json
 //
-//     Responses:
-//       200: treeDBResponse
+//	Produces:
+//	- application/json
+//
+//	Responses:
+//	  200: nodeDBResponse
 func PostTree(c *gin.Context) {
 	db := orm.BackRepo.BackRepoTree.GetDB()
 
@@ -124,6 +126,14 @@ func PostTree(c *gin.Context) {
 		return
 	}
 
+	// get an instance (not staged) from DB instance, and call callback function
+	tree := new(models.Tree)
+	treeDB.CopyBasicFieldsToTree(tree)
+
+	if tree != nil {
+		models.AfterCreateFromFront(&models.Stage, tree)
+	}
+
 	// a POST is equivalent to a back repo commit increase
 	// (this will be improved with implementation of unit of work design pattern)
 	orm.BackRepo.IncrementPushFromFrontNb()
@@ -138,8 +148,9 @@ func PostTree(c *gin.Context) {
 // Gets the details for a tree.
 //
 // Responses:
-//    default: genericError
-//        200: treeDBResponse
+// default: genericError
+//
+//	200: treeDBResponse
 func GetTree(c *gin.Context) {
 	db := orm.BackRepo.BackRepoTree.GetDB()
 
@@ -166,11 +177,12 @@ func GetTree(c *gin.Context) {
 //
 // swagger:route PATCH /trees/{ID} trees updateTree
 //
-// Update a tree
+// # Update a tree
 //
 // Responses:
-//    default: genericError
-//        200: treeDBResponse
+// default: genericError
+//
+//	200: treeDBResponse
 func UpdateTree(c *gin.Context) {
 	db := orm.BackRepo.BackRepoTree.GetDB()
 
@@ -211,8 +223,20 @@ func UpdateTree(c *gin.Context) {
 		return
 	}
 
+	// get an instance (not staged) from DB instance, and call callback function
+	treeNew := new(models.Tree)
+	treeDB.CopyBasicFieldsToTree(treeNew)
+
+	// get stage instance from DB instance, and call callback function
+	treeOld := (*orm.BackRepo.BackRepoTree.Map_TreeDBID_TreePtr)[treeDB.ID]
+	if treeOld != nil {
+		models.AfterUpdateFromFront(&models.Stage, treeOld, treeNew)
+	}
+
 	// an UPDATE generates a back repo commit increase
 	// (this will be improved with implementation of unit of work design pattern)
+	// in some cases, with the marshalling of the stage, this operation might
+	// generates a checkout
 	orm.BackRepo.IncrementPushFromFrontNb()
 
 	// return status OK with the marshalling of the the treeDB
@@ -223,10 +247,11 @@ func UpdateTree(c *gin.Context) {
 //
 // swagger:route DELETE /trees/{ID} trees deleteTree
 //
-// Delete a tree
+// # Delete a tree
 //
-// Responses:
-//    default: genericError
+// default: genericError
+//
+//	200: treeDBResponse
 func DeleteTree(c *gin.Context) {
 	db := orm.BackRepo.BackRepoTree.GetDB()
 
@@ -243,6 +268,12 @@ func DeleteTree(c *gin.Context) {
 
 	// with gorm.Model field, default delete is a soft delete. Unscoped() force delete
 	db.Unscoped().Delete(&treeDB)
+
+	// get stage instance from DB instance, and call callback function
+	tree := (*orm.BackRepo.BackRepoTree.Map_TreeDBID_TreePtr)[treeDB.ID]
+	if tree != nil {
+		models.AfterDeleteFromFront(&models.Stage, tree)
+	}
 
 	// a DELETE generates a back repo commit increase
 	// (this will be improved with implementation of unit of work design pattern)
