@@ -7,6 +7,7 @@ import (
 
 type CallbacksSingloton struct {
 	ClassdiagramsRootNode *Node
+	StateDiagramsRootNode *Node
 }
 
 func (callbacksSingloton CallbacksSingloton) OnAfterUpdate(
@@ -20,7 +21,11 @@ func (callbacksSingloton CallbacksSingloton) OnAfterUpdate(
 		staged.IsChecked = new.IsChecked
 
 		// parse all nodes and check wether, if checked/not checked, the is the updated node
-		for _, node := range callbacksSingloton.ClassdiagramsRootNode.Children {
+		diagramNodes := append(
+			callbacksSingloton.ClassdiagramsRootNode.Children,
+			callbacksSingloton.StateDiagramsRootNode.Children...)
+
+		for _, node := range diagramNodes {
 			if node == staged {
 				continue
 			}

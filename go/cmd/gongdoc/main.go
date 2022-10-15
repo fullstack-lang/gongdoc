@@ -234,13 +234,13 @@ func main() {
 		node.HasCheckboxButton = true
 		classdiagramsRootNode.Children = append(classdiagramsRootNode.Children, node)
 	}
-	statediagramssRootNode := (&gongdoc_models.Node{Name: "state diagrams"}).Stage()
-	statediagramssRootNode.IsExpanded = true
-	gongdocTree.RootNodes = append(gongdocTree.RootNodes, statediagramssRootNode)
+	stateDiagramssRootNode := (&gongdoc_models.Node{Name: "state diagrams"}).Stage()
+	stateDiagramssRootNode.IsExpanded = true
+	gongdocTree.RootNodes = append(gongdocTree.RootNodes, stateDiagramssRootNode)
 	for statediagram := range *gongdoc_models.GetGongstructInstancesSet[gongdoc_models.Umlsc]() {
 		node := (&gongdoc_models.Node{Name: statediagram.Name}).Stage()
 		node.HasCheckboxButton = true
-		statediagramssRootNode.Children = append(statediagramssRootNode.Children, node)
+		stateDiagramssRootNode.Children = append(stateDiagramssRootNode.Children, node)
 	}
 
 	gongdoc_models.Stage.Commit()
@@ -250,6 +250,7 @@ func main() {
 	// get callbacks on node updates
 	onNodeCallbackStruct := new(models.CallbacksSingloton)
 	onNodeCallbackStruct.ClassdiagramsRootNode = classdiagramsRootNode
+	onNodeCallbackStruct.StateDiagramsRootNode = stateDiagramssRootNode
 	models.Stage.OnAfterNodeUpdateCallback = onNodeCallbackStruct
 
 	r.Run(":8080")
