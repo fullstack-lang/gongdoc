@@ -247,5 +247,10 @@ func main() {
 	log.Printf("Parse found %d diagrams\n", len(pkgelt.Classdiagrams))
 	log.Printf("Server ready to serve on http://localhost:8080/")
 
+	// get callbacks on node updates
+	onNodeCallbackStruct := new(models.CallbacksSingloton)
+	onNodeCallbackStruct.ClassdiagramsRootNode = classdiagramsRootNode
+	models.Stage.OnAfterNodeUpdateCallback = onNodeCallbackStruct
+
 	r.Run(":8080")
 }
