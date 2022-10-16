@@ -237,7 +237,7 @@ func main() {
 		node.HasCheckboxButton = true
 		classdiagramsRootNode.Children = append(classdiagramsRootNode.Children, node)
 	}
-	stateDiagramssRootNode := (&gongdoc_models.Node{Name: "state diagrams"}).Stage()
+	stateDiagramssRootNode := (&gongdoc_models.Node{Name: "state diagrams", Type: gongdoc_models.ROOT_OF_STATE_DIAGRAMS}).Stage()
 	stateDiagramssRootNode.IsExpanded = true
 	gongdocTree.RootNodes = append(gongdocTree.RootNodes, stateDiagramssRootNode)
 	for statediagram := range *gongdoc_models.GetGongstructInstancesSet[gongdoc_models.Umlsc]() {

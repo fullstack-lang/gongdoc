@@ -39,7 +39,11 @@ export class TreeComponent implements OnInit {
 
   @Input() name: string = ""
 
-  public classdiagram: gongdoc.ClassdiagramDB | undefined = undefined
+  // the package can be editable or not
+  editable: boolean = false
+
+  public classDiagram: gongdoc.ClassdiagramDB | undefined = undefined
+  public stateDiagram: gongdoc.UmlscDB | undefined = undefined
 
   private _transformer = (node: Node, level: number) => {
     return {
@@ -132,39 +136,65 @@ export class TreeComponent implements OnInit {
       gongdocsFrontRepo => {
         this.gongdocFrontRepo = gongdocsFrontRepo
 
-        var found: boolean = false
+        this.gongdocFrontRepo.Pkgelts_array.forEach(
+          pkgElt => {
+            this.editable = pkgElt.Editable
+          }
+        )
+
         // get the diagram id from the node that is selected (if it is selected)
         for (var treeDB of this.gongdocFrontRepo.Trees_array) {
           if (treeDB.Type == gongdoc.TreeType.TREE_OF_DIAGRAMS) {
             // console.log("Tree: " + treeDB.Name)
             for (var nodeDB of treeDB.RootNodes!) {
-              if (nodeDB.Type == gongdoc.GongdocNodeType.ROOT_OF_CLASS_DIAGRAMS) {
-                if (nodeDB.Children != undefined) {
-                  for (var childNodeDB of nodeDB.Children) {
-                    if (childNodeDB.IsChecked) {
+              switch (nodeDB.Type) {
+                case gongdoc.GongdocNodeType.ROOT_OF_CLASS_DIAGRAMS:
+                  if (nodeDB.Children != undefined) {
+                    for (var childNodeDB of nodeDB.Children) {
+                      if (childNodeDB.IsChecked) {
 
-                      if (childNodeDB.Classdiagram == undefined) {
-                        console.log("Tree: classdiagram is undefined")
-                      } else {
-                        this.classdiagram = childNodeDB.Classdiagram
-                        console.log("Tree: classdiagram selected " + this.classdiagram.Name)
-                        found = true
-
-                        console.log("pkgElt setEditorRouterOutlet " + this.classdiagram.ID)
-
-                        this.router.navigate([{
-                          outlets: {
-                            diagrameditor: ["classdiagram-detail", this.classdiagram.ID]
-                          }
-                        }]).catch(
-                          reason => {
-                            console.log(reason)
-                          }
-                        );
+                        if (childNodeDB.Classdiagram == undefined) {
+                          console.log("Tree: classdiagram is undefined")
+                        } else {
+                          this.classDiagram = childNodeDB.Classdiagram
+                          this.router.navigate([{
+                            outlets: {
+                              diagrameditor: ["classdiagram-detail", this.classDiagram.ID, { editable: this.editable }]
+                            }
+                          }]).catch(
+                            reason => {
+                              console.log(reason)
+                            }
+                          );
+                        }
                       }
                     }
                   }
-                }
+                  break
+                case gongdoc.GongdocNodeType.ROOT_OF_STATE_DIAGRAMS:
+                  if (nodeDB.Children != undefined) {
+                    for (var childNodeDB of nodeDB.Children) {
+                      if (childNodeDB.IsChecked) {
+
+                        if (childNodeDB.Umlsc == undefined) {
+                          console.log("Tree: State Chart diagram is undefined")
+                        } else {
+                          this.stateDiagram = childNodeDB.Umlsc
+                          this.router.navigate([{
+                            outlets: {
+                              diagrameditor: ["umlsc-detail", this.stateDiagram.ID]
+                            }
+                          }]).catch(
+                            reason => {
+                              console.log(reason)
+                            }
+                          );
+                        }
+                      }
+                    }
+                  }
+                default:
+                  console.log("Tree: unknown node type: " + nodeDB.Type)
               }
             }
           }
