@@ -5,6 +5,8 @@ import { debounceTime } from 'rxjs/operators';
 import { FlatTreeControl } from '@angular/cdk/tree';
 import { MatTreeFlatDataSource, MatTreeFlattener } from '@angular/material/tree';
 
+import { Router, RouterState } from '@angular/router';
+
 import * as gongdoc from 'gongdoc'
 
 /**
@@ -72,7 +74,7 @@ export class TreeComponent implements OnInit {
     private gongdocCommitNbFromBackService: gongdoc.CommitNbFromBackService,
     private gongdocPushFromFrontNbService: gongdoc.PushFromFrontNbService,
     private gongdocNodeService: gongdoc.NodeService,
-
+    private router: Router,
   ) {
   }
 
@@ -82,7 +84,7 @@ export class TreeComponent implements OnInit {
   // the checkCommitNbFromBackTimer polls the commit number of the back repo
   // if the commit number has increased, it pulls the front repo and redraw the diagram
 
-  checkCommitNbFromBackTimer: Observable<number> = timer(500, 2000);
+  checkCommitNbFromBackTimer: Observable<number> = timer(500, 500);
   lastCommitNbFromBack = -1
   lastPushFromFrontNb = -1
   currTime: number = 0
@@ -134,7 +136,7 @@ export class TreeComponent implements OnInit {
         // get the diagram id from the node that is selected (if it is selected)
         for (var treeDB of this.gongdocFrontRepo.Trees_array) {
           if (treeDB.Type == gongdoc.TreeType.TREE_OF_DIAGRAMS) {
-            console.log("Tree " + treeDB.Name)
+            // console.log("Tree: " + treeDB.Name)
             for (var nodeDB of treeDB.RootNodes!) {
               if (nodeDB.Type == gongdoc.GongdocNodeType.ROOT_OF_CLASS_DIAGRAMS) {
                 if (nodeDB.Children != undefined) {
@@ -142,11 +144,23 @@ export class TreeComponent implements OnInit {
                     if (childNodeDB.IsChecked) {
 
                       if (childNodeDB.Classdiagram == undefined) {
-                        console.log("classdiagram is undefined")
+                        console.log("Tree: classdiagram is undefined")
                       } else {
                         this.classdiagram = childNodeDB.Classdiagram
-                        console.log("classdiagram selected " + this.classdiagram.Name)
+                        console.log("Tree: classdiagram selected " + this.classdiagram.Name)
                         found = true
+
+                        console.log("pkgElt setEditorRouterOutlet " + this.classdiagram.ID)
+
+                        this.router.navigate([{
+                          outlets: {
+                            diagrameditor: ["classdiagram-detail", this.classdiagram.ID]
+                          }
+                        }]).catch(
+                          reason => {
+                            console.log(reason)
+                          }
+                        );
                       }
                     }
                   }
