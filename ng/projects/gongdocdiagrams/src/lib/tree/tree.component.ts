@@ -147,51 +147,49 @@ export class TreeComponent implements OnInit {
           if (treeDB.Type == gongdoc.TreeType.TREE_OF_DIAGRAMS) {
             // console.log("Tree: " + treeDB.Name)
             for (var nodeDB of treeDB.RootNodes!) {
+              if (nodeDB.Children == undefined) {
+                continue
+              }
               switch (nodeDB.Type) {
                 case gongdoc.GongdocNodeType.ROOT_OF_CLASS_DIAGRAMS:
-                  if (nodeDB.Children != undefined) {
-                    for (var childNodeDB of nodeDB.Children) {
-                      if (childNodeDB.IsChecked) {
-
-                        if (childNodeDB.Classdiagram == undefined) {
-                          console.log("Tree: classdiagram is undefined")
-                        } else {
-                          this.classDiagram = childNodeDB.Classdiagram
-                          this.router.navigate([{
-                            outlets: {
-                              diagrameditor: ["classdiagram-detail", this.classDiagram.ID, { editable: this.editable }]
-                            }
-                          }]).catch(
-                            reason => {
-                              console.log(reason)
-                            }
-                          );
-                        }
+                  for (var childNodeDB of nodeDB.Children) {
+                    if (childNodeDB.IsChecked) {
+                      if (childNodeDB.Classdiagram == undefined) {
+                        console.log("Tree: classdiagram is undefined")
+                      } else {
+                        this.classDiagram = childNodeDB.Classdiagram
+                        this.router.navigate([{
+                          outlets: {
+                            diagrameditor: ["classdiagram-detail", this.classDiagram.ID, { editable: this.editable }]
+                          }
+                        }]).catch(
+                          reason => {
+                            console.log(reason)
+                          }
+                        );
                       }
                     }
                   }
                   break
                 case gongdoc.GongdocNodeType.ROOT_OF_STATE_DIAGRAMS:
-                  if (nodeDB.Children != undefined) {
-                    for (var childNodeDB of nodeDB.Children) {
-                      if (childNodeDB.IsChecked) {
-
-                        if (childNodeDB.Umlsc == undefined) {
-                          console.log("Tree: State Chart diagram is undefined")
-                        } else {
-                          this.stateDiagram = childNodeDB.Umlsc
-                          this.router.navigate([{
-                            outlets: {
-                              diagrameditor: ["umlsc-detail", this.stateDiagram.ID]
-                            }
-                          }]).catch(
-                            reason => {
-                              console.log(reason)
-                            }
-                          );
-                        }
+                  for (var childNodeDB of nodeDB.Children) {
+                    if (childNodeDB.IsChecked) {
+                      if (childNodeDB.Umlsc == undefined) {
+                        console.log("Tree: State Chart diagram is undefined")
+                      } else {
+                        this.stateDiagram = childNodeDB.Umlsc
+                        this.router.navigate([{
+                          outlets: {
+                            diagrameditor: ["umlsc-detail", this.stateDiagram.ID]
+                          }
+                        }]).catch(
+                          reason => {
+                            console.log(reason)
+                          }
+                        );
                       }
                     }
+
                   }
                 default:
                   console.log("Tree: unknown node type: " + nodeDB.Type)
