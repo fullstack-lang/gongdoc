@@ -234,6 +234,7 @@ func main() {
 	for classdiagram := range *gongdoc_models.GetGongstructInstancesSet[gongdoc_models.Classdiagram]() {
 		node := (&gongdoc_models.Node{Name: classdiagram.Name}).Stage()
 		node.Classdiagram = classdiagram
+		node.Type = gongdoc_models.CLASS_DIAGRAM
 		node.HasCheckboxButton = true
 		classdiagramsRootNode.Children = append(classdiagramsRootNode.Children, node)
 	}
@@ -243,6 +244,7 @@ func main() {
 	for statediagram := range *gongdoc_models.GetGongstructInstancesSet[gongdoc_models.Umlsc]() {
 		node := (&gongdoc_models.Node{Name: statediagram.Name}).Stage()
 		node.Umlsc = statediagram
+		node.Type = gongdoc_models.STATE_DIAGRAM
 		node.HasCheckboxButton = true
 		stateDiagramssRootNode.Children = append(stateDiagramssRootNode.Children, node)
 	}
