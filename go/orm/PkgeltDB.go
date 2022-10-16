@@ -457,6 +457,7 @@ func (backRepo *BackRepoStruct) CommitPkgelt(pkgelt *models.Pkgelt) {
 	if id, ok := (*backRepo.BackRepoPkgelt.Map_PkgeltPtr_PkgeltDBID)[pkgelt]; ok {
 		backRepo.BackRepoPkgelt.CommitPhaseTwoInstance(backRepo, id, pkgelt)
 	}
+	backRepo.CommitFromBackNb = backRepo.CommitFromBackNb + 1
 }
 
 // CommitPkgelt allows checkout of a single pkgelt (if already staged and with a BackRepo id)

@@ -1,5 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { Observable, timer } from 'rxjs';
+import { debounceTime } from 'rxjs/operators';
 
 import { FlatTreeControl } from '@angular/cdk/tree';
 import { MatTreeFlatDataSource, MatTreeFlattener } from '@angular/material/tree';
@@ -26,6 +27,7 @@ interface FlatNode {
   level: number;
 }
 
+// Tree component is a diagram selector
 @Component({
   selector: 'lib-tree',
   templateUrl: './tree.component.html',
@@ -34,6 +36,8 @@ interface FlatNode {
 export class TreeComponent implements OnInit {
 
   @Input() name: string = ""
+
+  public classdiagram: gongdoc.ClassdiagramDB | undefined = undefined
 
   private _transformer = (node: Node, level: number) => {
     return {
@@ -70,7 +74,6 @@ export class TreeComponent implements OnInit {
     private gongdocNodeService: gongdoc.NodeService,
 
   ) {
-    // this.dataSource.data = TREE_DATA;
   }
 
 
@@ -79,10 +82,12 @@ export class TreeComponent implements OnInit {
   // the checkCommitNbFromBackTimer polls the commit number of the back repo
   // if the commit number has increased, it pulls the front repo and redraw the diagram
 
-  checkCommitNbFromBackTimer: Observable<number> = timer(500, 500);
+  checkCommitNbFromBackTimer: Observable<number> = timer(500, 2000);
   lastCommitNbFromBack = -1
   lastPushFromFrontNb = -1
   currTime: number = 0
+
+  subscribeInProgress: boolean = false
 
   ngOnInit(): void {
 
@@ -91,28 +96,30 @@ export class TreeComponent implements OnInit {
         this.currTime = currTime
 
         // see above for the explanation
-        this.gongdocCommitNbFromBackService.getCommitNbFromBack().subscribe(
-          commitNbFromBack => {
-            if (this.lastCommitNbFromBack < commitNbFromBack) {
-
-              console.log("last commit nb " + this.lastCommitNbFromBack + " new: " + commitNbFromBack)
-              this.refresh()
-              this.lastCommitNbFromBack = commitNbFromBack
+        this.subscribeInProgress = true
+        this.gongdocCommitNbFromBackService.getCommitNbFromBack()
+          .subscribe(
+            commitNbFromBack => {
+              this.subscribeInProgress = false
+              if (this.lastCommitNbFromBack < commitNbFromBack) {
+                console.log("TreeComponent, last commit nb " + this.lastCommitNbFromBack + " new: " + commitNbFromBack)
+                this.lastCommitNbFromBack = commitNbFromBack
+                this.refresh()
+              }
             }
-          }
-        )
+          )
 
         // see above for the explanation
-        this.gongdocPushFromFrontNbService.getPushFromFrontNb().subscribe(
-          pushFromFrontNb => {
-            if (this.lastPushFromFrontNb < pushFromFrontNb) {
+        // this.gongdocPushFromFrontNbService.getPushFromFrontNb().subscribe(
+        //   pushFromFrontNb => {
+        //     if (this.lastPushFromFrontNb < pushFromFrontNb) {
 
-              console.log("last commit nb " + this.lastPushFromFrontNb + " new: " + pushFromFrontNb)
-              this.refresh()
-              this.lastPushFromFrontNb = pushFromFrontNb
-            }
-          }
-        )
+        //       console.log("last commit nb " + this.lastPushFromFrontNb + " new: " + pushFromFrontNb)
+        //       this.refresh()
+        //       this.lastPushFromFrontNb = pushFromFrontNb
+        //     }
+        //   }
+        // )
       }
     )
   }
@@ -123,7 +130,31 @@ export class TreeComponent implements OnInit {
       gongdocsFrontRepo => {
         this.gongdocFrontRepo = gongdocsFrontRepo
 
+        var found: boolean = false
+        // get the diagram id from the node that is selected (if it is selected)
+        for (var treeDB of this.gongdocFrontRepo.Trees_array) {
+          if (treeDB.Type == gongdoc.TreeType.TREE_OF_DIAGRAMS) {
+            console.log("Tree " + treeDB.Name)
+            for (var nodeDB of treeDB.RootNodes!) {
+              if (nodeDB.Type == gongdoc.GongdocNodeType.ROOT_OF_CLASS_DIAGRAMS) {
+                if (nodeDB.Children != undefined) {
+                  for (var childNodeDB of nodeDB.Children) {
+                    if (childNodeDB.IsChecked) {
 
+                      if (childNodeDB.Classdiagram == undefined) {
+                        console.log("classdiagram is undefined")
+                      } else {
+                        this.classdiagram = childNodeDB.Classdiagram
+                        console.log("classdiagram selected " + this.classdiagram.Name)
+                        found = true
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
         var treeSingloton: gongdoc.TreeDB = new (gongdoc.TreeDB)
         var selected: boolean = false
         for (var tree of this.gongdocFrontRepo.Trees_array) {

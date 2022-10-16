@@ -317,7 +317,6 @@ export class ClassDiagramComponent implements OnInit, OnDestroy {
 
     this.paper = new joint.dia.Paper(paperOptions)
 
-    // intercept click on shapes when in production mode
     if (this.classdiagram.IsEditable) {
       this.paper.setInteractivity(true)
     } else {
@@ -530,7 +529,12 @@ export class ClassDiagramComponent implements OnInit, OnDestroy {
         this.editable = this.route.snapshot.paramMap.get('editable')! == "true";
         this.classdiagram = frontRepo.Classdiagrams.get(id)!
 
-        this.drawClassdiagram();
+        // intercept click on shapes when in production mode
+        if (this.classdiagram == undefined) {
+          console.log("unkwnown classdiagram id : " + id)
+        } else {
+          this.drawClassdiagram();
+        }
       }
     )
   }

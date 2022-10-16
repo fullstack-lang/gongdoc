@@ -10,6 +10,7 @@ import { MapOfComponents } from '../map-components'
 import { MapOfSortingComponents } from '../map-components'
 
 // insertion point for imports
+import { GongdocNodeTypeSelect, GongdocNodeTypeList } from '../GongdocNodeType'
 import { TreeDB } from '../tree-db'
 
 import { Router, RouterState, ActivatedRoute } from '@angular/router';
@@ -36,6 +37,7 @@ enum NodeDetailComponentState {
 export class NodeDetailComponent implements OnInit {
 
 	// insertion point for declarations
+	GongdocNodeTypeList: GongdocNodeTypeSelect[] = []
 	IsExpandedFormControl: UntypedFormControl = new UntypedFormControl(false);
 	HasCheckboxButtonFormControl: UntypedFormControl = new UntypedFormControl(false);
 	IsCheckedFormControl: UntypedFormControl = new UntypedFormControl(false);
@@ -113,6 +115,7 @@ export class NodeDetailComponent implements OnInit {
 		)
 
 		// insertion point for initialisation of enums list
+		this.GongdocNodeTypeList = GongdocNodeTypeList
 	}
 
 	getNode(): void {
@@ -159,6 +162,26 @@ export class NodeDetailComponent implements OnInit {
 		// pointers fields, after the translation, are nulled in order to perform serialization
 
 		// insertion point for translation/nullation of each field
+		if (this.node.ClassdiagramID == undefined) {
+			this.node.ClassdiagramID = new NullInt64
+		}
+		if (this.node.Classdiagram != undefined) {
+			this.node.ClassdiagramID.Int64 = this.node.Classdiagram.ID
+			this.node.ClassdiagramID.Valid = true
+		} else {
+			this.node.ClassdiagramID.Int64 = 0
+			this.node.ClassdiagramID.Valid = true
+		}
+		if (this.node.UmlscID == undefined) {
+			this.node.UmlscID = new NullInt64
+		}
+		if (this.node.Umlsc != undefined) {
+			this.node.UmlscID.Int64 = this.node.Umlsc.ID
+			this.node.UmlscID.Valid = true
+		} else {
+			this.node.UmlscID.Int64 = 0
+			this.node.UmlscID.Valid = true
+		}
 		this.node.IsExpanded = this.IsExpandedFormControl.value
 		this.node.HasCheckboxButton = this.HasCheckboxButtonFormControl.value
 		this.node.IsChecked = this.IsCheckedFormControl.value

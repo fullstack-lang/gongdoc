@@ -515,6 +515,7 @@ func (backRepo *BackRepoStruct) CommitClassshape(classshape *models.Classshape) 
 	if id, ok := (*backRepo.BackRepoClassshape.Map_ClassshapePtr_ClassshapeDBID)[classshape]; ok {
 		backRepo.BackRepoClassshape.CommitPhaseTwoInstance(backRepo, id, classshape)
 	}
+	backRepo.CommitFromBackNb = backRepo.CommitFromBackNb + 1
 }
 
 // CommitClassshape allows checkout of a single classshape (if already staged and with a BackRepo id)

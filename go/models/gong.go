@@ -2451,6 +2451,14 @@ func (stage *StageStruct) Marshall(file *os.File, modelsPackageName, packageName
 		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", string(node.Name))
 		initializerStatements += setValueField
 
+		if node.Type != "" {
+			setValueField = StringEnumInitStatement
+			setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
+			setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "Type")
+			setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", "models."+node.Type.ToCodeString())
+			initializerStatements += setValueField
+		}
+
 		setValueField = NumberInitStatement
 		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
 		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "IsExpanded")
@@ -2662,6 +2670,14 @@ func (stage *StageStruct) Marshall(file *os.File, modelsPackageName, packageName
 		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "Name")
 		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", string(tree.Name))
 		initializerStatements += setValueField
+
+		if tree.Type != "" {
+			setValueField = StringEnumInitStatement
+			setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
+			setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "Type")
+			setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", "models."+tree.Type.ToCodeString())
+			initializerStatements += setValueField
+		}
 
 	}
 
@@ -2926,6 +2942,22 @@ func (stage *StageStruct) Marshall(file *os.File, modelsPackageName, packageName
 		map_Node_Identifiers[node] = id
 
 		// Initialisation of values
+		if node.Classdiagram != nil {
+			setPointerField = PointerFieldInitStatement
+			setPointerField = strings.ReplaceAll(setPointerField, "{{Identifier}}", id)
+			setPointerField = strings.ReplaceAll(setPointerField, "{{GeneratedFieldName}}", "Classdiagram")
+			setPointerField = strings.ReplaceAll(setPointerField, "{{GeneratedFieldNameValue}}", map_Classdiagram_Identifiers[node.Classdiagram])
+			pointersInitializesStatements += setPointerField
+		}
+
+		if node.Umlsc != nil {
+			setPointerField = PointerFieldInitStatement
+			setPointerField = strings.ReplaceAll(setPointerField, "{{Identifier}}", id)
+			setPointerField = strings.ReplaceAll(setPointerField, "{{GeneratedFieldName}}", "Umlsc")
+			setPointerField = strings.ReplaceAll(setPointerField, "{{GeneratedFieldNameValue}}", map_Umlsc_Identifiers[node.Umlsc])
+			pointersInitializesStatements += setPointerField
+		}
+
 		for _, _node := range node.Children {
 			setPointerField = SliceOfPointersFieldInitStatement
 			setPointerField = strings.ReplaceAll(setPointerField, "{{Identifier}}", id)
@@ -3186,6 +3218,46 @@ func (stageStruct *StageStruct) CreateReverseMap_Link_Middlevertice() (res map[*
 }
 
 // generate function for reverse association maps of Node
+func (stageStruct *StageStruct) CreateReverseMap_Node_Classdiagram() (res map[*Classdiagram][]*Node) {
+	res = make(map[*Classdiagram][]*Node)
+
+	for node := range stageStruct.Nodes {
+		if node.Classdiagram != nil {
+			classdiagram_ := node.Classdiagram
+			var nodes []*Node
+			_, ok := res[classdiagram_]
+			if ok {
+				nodes = res[classdiagram_]
+			} else {
+				nodes = make([]*Node, 0)
+			}
+			nodes = append(nodes, node)
+			res[classdiagram_] = nodes
+		}
+	}
+
+	return
+}
+func (stageStruct *StageStruct) CreateReverseMap_Node_Umlsc() (res map[*Umlsc][]*Node) {
+	res = make(map[*Umlsc][]*Node)
+
+	for node := range stageStruct.Nodes {
+		if node.Umlsc != nil {
+			umlsc_ := node.Umlsc
+			var nodes []*Node
+			_, ok := res[umlsc_]
+			if ok {
+				nodes = res[umlsc_]
+			} else {
+				nodes = make([]*Node, 0)
+			}
+			nodes = append(nodes, node)
+			res[umlsc_] = nodes
+		}
+	}
+
+	return
+}
 func (stageStruct *StageStruct) CreateReverseMap_Node_Children() (res map[*Node]*Node) {
 	res = make(map[*Node]*Node)
 
@@ -3544,6 +3616,10 @@ func GetAssociationName[Type Gongstruct]() *Type {
 	case Node:
 		return any(&Node{
 			// Initialisation of associations
+			// field is initialized with an instance of Classdiagram with the name of the field
+			Classdiagram: &Classdiagram{Name: "Classdiagram"},
+			// field is initialized with an instance of Umlsc with the name of the field
+			Umlsc: &Umlsc{Name: "Umlsc"},
 			// field is initialized with an instance of Node with the name of the field
 			Children: []*Node{{Name: "Children"}},
 		}).(*Type)
@@ -3690,6 +3766,40 @@ func GetPointerReverseMap[Start, End Gongstruct](fieldname string) map[*End][]*S
 	case Node:
 		switch fieldname {
 		// insertion point for per direct association field
+		case "Classdiagram":
+			res := make(map[*Classdiagram][]*Node)
+			for node := range Stage.Nodes {
+				if node.Classdiagram != nil {
+					classdiagram_ := node.Classdiagram
+					var nodes []*Node
+					_, ok := res[classdiagram_]
+					if ok {
+						nodes = res[classdiagram_]
+					} else {
+						nodes = make([]*Node, 0)
+					}
+					nodes = append(nodes, node)
+					res[classdiagram_] = nodes
+				}
+			}
+			return any(res).(map[*End][]*Start)
+		case "Umlsc":
+			res := make(map[*Umlsc][]*Node)
+			for node := range Stage.Nodes {
+				if node.Umlsc != nil {
+					umlsc_ := node.Umlsc
+					var nodes []*Node
+					_, ok := res[umlsc_]
+					if ok {
+						nodes = res[umlsc_]
+					} else {
+						nodes = make([]*Node, 0)
+					}
+					nodes = append(nodes, node)
+					res[umlsc_] = nodes
+				}
+			}
+			return any(res).(map[*End][]*Start)
 		}
 	// reverse maps of direct associations of Note
 	case Note:
@@ -3956,7 +4066,7 @@ func GetFields[Type Gongstruct]() (res []string) {
 	case Link:
 		res = []string{"Name", "Fieldname", "Structname", "Fieldtypename", "TargetMultiplicity", "SourceMultiplicity", "Middlevertice"}
 	case Node:
-		res = []string{"Name", "IsExpanded", "HasCheckboxButton", "IsChecked", "Children"}
+		res = []string{"Name", "Type", "Classdiagram", "Umlsc", "IsExpanded", "HasCheckboxButton", "IsChecked", "Children"}
 	case Note:
 		res = []string{"Name", "Body", "X", "Y", "Width", "Heigth", "Matched"}
 	case Pkgelt:
@@ -3964,7 +4074,7 @@ func GetFields[Type Gongstruct]() (res []string) {
 	case Position:
 		res = []string{"X", "Y", "Name"}
 	case Tree:
-		res = []string{"Name", "RootNodes"}
+		res = []string{"Name", "Type", "RootNodes"}
 	case UmlState:
 		res = []string{"Name", "X", "Y"}
 	case Umlsc:
@@ -4131,6 +4241,17 @@ func GetFieldStringValue[Type Gongstruct](instance Type, fieldName string) (res 
 		// string value of fields
 		case "Name":
 			res = any(instance).(Node).Name
+		case "Type":
+			enum := any(instance).(Node).Type
+			res = enum.ToCodeString()
+		case "Classdiagram":
+			if any(instance).(Node).Classdiagram != nil {
+				res = any(instance).(Node).Classdiagram.Name
+			}
+		case "Umlsc":
+			if any(instance).(Node).Umlsc != nil {
+				res = any(instance).(Node).Umlsc.Name
+			}
 		case "IsExpanded":
 			res = fmt.Sprintf("%t", any(instance).(Node).IsExpanded)
 		case "HasCheckboxButton":
@@ -4204,6 +4325,9 @@ func GetFieldStringValue[Type Gongstruct](instance Type, fieldName string) (res 
 		// string value of fields
 		case "Name":
 			res = any(instance).(Tree).Name
+		case "Type":
+			enum := any(instance).(Tree).Type
+			res = enum.ToCodeString()
 		case "RootNodes":
 			for idx, __instance__ := range any(instance).(Tree).RootNodes {
 				if idx > 0 {
@@ -4452,6 +4576,16 @@ func (gongdocnodetype GongdocNodeType) ToString() (res string) {
 	// migration of former implementation of enum
 	switch gongdocnodetype {
 	// insertion code per enum code
+	case ROOT_OF_DIAGRAMS:
+		res = "ROOT_OF_DIAGRAMS"
+	case ROOT_OF_CLASS_DIAGRAMS:
+		res = "ROOT_OF_CLASS_DIAGRAMS"
+	case ROOT_OF_STATE_DIAGRAMS:
+		res = "ROOT_OF_STATE_DIAGRAMS"
+	case CLASS_DIAGRAM:
+		res = "CLASS_DIAGRAM"
+	case STATE_DIAGRAM:
+		res = "STATE_DIAGRAM"
 	case ROOT_OF_GONG_STRUCTS:
 		res = "ROOT_OF_GONG_STRUCTS"
 	case GONG_STRUCT:
@@ -4488,6 +4622,16 @@ func (gongdocnodetype *GongdocNodeType) FromString(input string) (err error) {
 
 	switch input {
 	// insertion code per enum code
+	case "ROOT_OF_DIAGRAMS":
+		*gongdocnodetype = ROOT_OF_DIAGRAMS
+	case "ROOT_OF_CLASS_DIAGRAMS":
+		*gongdocnodetype = ROOT_OF_CLASS_DIAGRAMS
+	case "ROOT_OF_STATE_DIAGRAMS":
+		*gongdocnodetype = ROOT_OF_STATE_DIAGRAMS
+	case "CLASS_DIAGRAM":
+		*gongdocnodetype = CLASS_DIAGRAM
+	case "STATE_DIAGRAM":
+		*gongdocnodetype = STATE_DIAGRAM
 	case "ROOT_OF_GONG_STRUCTS":
 		*gongdocnodetype = ROOT_OF_GONG_STRUCTS
 	case "GONG_STRUCT":
@@ -4526,6 +4670,16 @@ func (gongdocnodetype *GongdocNodeType) ToCodeString() (res string) {
 
 	switch *gongdocnodetype {
 	// insertion code per enum code
+	case ROOT_OF_DIAGRAMS:
+		res = "ROOT_OF_DIAGRAMS"
+	case ROOT_OF_CLASS_DIAGRAMS:
+		res = "ROOT_OF_CLASS_DIAGRAMS"
+	case ROOT_OF_STATE_DIAGRAMS:
+		res = "ROOT_OF_STATE_DIAGRAMS"
+	case CLASS_DIAGRAM:
+		res = "CLASS_DIAGRAM"
+	case STATE_DIAGRAM:
+		res = "STATE_DIAGRAM"
 	case ROOT_OF_GONG_STRUCTS:
 		res = "ROOT_OF_GONG_STRUCTS"
 	case GONG_STRUCT:
@@ -4602,6 +4756,48 @@ func (multiplicitytype *MultiplicityType) ToCodeString() (res string) {
 		res = "ONE"
 	case MANY:
 		res = "MANY"
+	}
+	return
+}
+
+// Utility function for TreeType
+// if enum values are string, it is stored with the value
+// if enum values are int, they are stored with the code of the value
+func (treetype TreeType) ToString() (res string) {
+
+	// migration of former implementation of enum
+	switch treetype {
+	// insertion code per enum code
+	case TREE_OF_DIAGRAMS:
+		res = "TREE_OF_DIAGRAMS"
+	case TREE_OF_SYMBOLS:
+		res = "TREE_OF_SYMBOLS"
+	}
+	return
+}
+
+func (treetype *TreeType) FromString(input string) (err error) {
+
+	switch input {
+	// insertion code per enum code
+	case "TREE_OF_DIAGRAMS":
+		*treetype = TREE_OF_DIAGRAMS
+	case "TREE_OF_SYMBOLS":
+		*treetype = TREE_OF_SYMBOLS
+	default:
+		return errUnkownEnum
+	}
+	return
+}
+
+func (treetype *TreeType) ToCodeString() (res string) {
+
+	switch *treetype {
+	// insertion code per enum code
+	case TREE_OF_DIAGRAMS:
+		res = "TREE_OF_DIAGRAMS"
+	case TREE_OF_SYMBOLS:
+		res = "TREE_OF_SYMBOLS"
 	}
 	return
 }

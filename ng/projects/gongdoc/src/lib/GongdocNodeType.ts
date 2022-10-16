@@ -1,6 +1,11 @@
 // generated from ng_file_enum.ts.go
 export enum GongdocNodeType {
 	// insertion point	
+	ROOT_OF_DIAGRAMS = "ROOT_OF_DIAGRAMS",
+	ROOT_OF_CLASS_DIAGRAMS = "ROOT_OF_CLASS_DIAGRAMS",
+	ROOT_OF_STATE_DIAGRAMS = "ROOT_OF_STATE_DIAGRAMS",
+	CLASS_DIAGRAM = "CLASS_DIAGRAM",
+	STATE_DIAGRAM = "STATE_DIAGRAM",
 	ROOT_OF_GONG_STRUCTS = "ROOT_OF_GONG_STRUCTS",
 	GONG_STRUCT = "GONG_STRUCT",
 	ROOT_OF_BASIC_FIELDS = "ROOT_OF_BASIC_FIELDS",
@@ -23,6 +28,11 @@ export interface GongdocNodeTypeSelect {
 }
 
 export const GongdocNodeTypeList: GongdocNodeTypeSelect[] = [ // insertion point	
+	{ value: GongdocNodeType.ROOT_OF_DIAGRAMS, viewValue: "ROOT_OF_DIAGRAMS" },
+	{ value: GongdocNodeType.ROOT_OF_CLASS_DIAGRAMS, viewValue: "ROOT_OF_CLASS_DIAGRAMS" },
+	{ value: GongdocNodeType.ROOT_OF_STATE_DIAGRAMS, viewValue: "ROOT_OF_STATE_DIAGRAMS" },
+	{ value: GongdocNodeType.CLASS_DIAGRAM, viewValue: "CLASS_DIAGRAM" },
+	{ value: GongdocNodeType.STATE_DIAGRAM, viewValue: "STATE_DIAGRAM" },
 	{ value: GongdocNodeType.ROOT_OF_GONG_STRUCTS, viewValue: "ROOT_OF_GONG_STRUCTS" },
 	{ value: GongdocNodeType.GONG_STRUCT, viewValue: "GONG_STRUCT" },
 	{ value: GongdocNodeType.ROOT_OF_BASIC_FIELDS, viewValue: "ROOT_OF_BASIC_FIELDS" },

@@ -451,6 +451,7 @@ func (backRepo *BackRepoStruct) CommitClassdiagram(classdiagram *models.Classdia
 	if id, ok := (*backRepo.BackRepoClassdiagram.Map_ClassdiagramPtr_ClassdiagramDBID)[classdiagram]; ok {
 		backRepo.BackRepoClassdiagram.CommitPhaseTwoInstance(backRepo, id, classdiagram)
 	}
+	backRepo.CommitFromBackNb = backRepo.CommitFromBackNb + 1
 }
 
 // CommitClassdiagram allows checkout of a single classdiagram (if already staged and with a BackRepo id)

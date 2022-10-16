@@ -952,6 +952,76 @@ export class SidebarComponent implements OnInit {
 
           // insertion point for per field code
           /**
+          * let append a node for the association Classdiagram
+          */
+          let ClassdiagramGongNodeAssociation: GongNode = {
+            name: "(Classdiagram) Classdiagram",
+            type: GongNodeType.ONE__ZERO_ONE_ASSOCIATION,
+            id: nodeDB.ID,
+            uniqueIdPerStack: 17 * nonInstanceNodeId,
+            structName: "Node",
+            associationField: "Classdiagram",
+            associatedStructName: "Classdiagram",
+            children: new Array<GongNode>()
+          }
+          nonInstanceNodeId = nonInstanceNodeId + 1
+          nodeGongNodeInstance.children!.push(ClassdiagramGongNodeAssociation)
+
+          /**
+            * let append a node for the instance behind the asssociation Classdiagram
+            */
+          if (nodeDB.Classdiagram != undefined) {
+            let nodeGongNodeInstance_Classdiagram: GongNode = {
+              name: nodeDB.Classdiagram.Name,
+              type: GongNodeType.INSTANCE,
+              id: nodeDB.Classdiagram.ID,
+              uniqueIdPerStack: // godel numbering (thank you kurt)
+                3 * getNodeUniqueID(nodeDB.ID)
+                + 5 * getClassdiagramUniqueID(nodeDB.Classdiagram.ID),
+              structName: "Classdiagram",
+              associationField: "",
+              associatedStructName: "",
+              children: new Array<GongNode>()
+            }
+            ClassdiagramGongNodeAssociation.children.push(nodeGongNodeInstance_Classdiagram)
+          }
+
+          /**
+          * let append a node for the association Umlsc
+          */
+          let UmlscGongNodeAssociation: GongNode = {
+            name: "(Umlsc) Umlsc",
+            type: GongNodeType.ONE__ZERO_ONE_ASSOCIATION,
+            id: nodeDB.ID,
+            uniqueIdPerStack: 17 * nonInstanceNodeId,
+            structName: "Node",
+            associationField: "Umlsc",
+            associatedStructName: "Umlsc",
+            children: new Array<GongNode>()
+          }
+          nonInstanceNodeId = nonInstanceNodeId + 1
+          nodeGongNodeInstance.children!.push(UmlscGongNodeAssociation)
+
+          /**
+            * let append a node for the instance behind the asssociation Umlsc
+            */
+          if (nodeDB.Umlsc != undefined) {
+            let nodeGongNodeInstance_Umlsc: GongNode = {
+              name: nodeDB.Umlsc.Name,
+              type: GongNodeType.INSTANCE,
+              id: nodeDB.Umlsc.ID,
+              uniqueIdPerStack: // godel numbering (thank you kurt)
+                3 * getNodeUniqueID(nodeDB.ID)
+                + 5 * getUmlscUniqueID(nodeDB.Umlsc.ID),
+              structName: "Umlsc",
+              associationField: "",
+              associatedStructName: "",
+              children: new Array<GongNode>()
+            }
+            UmlscGongNodeAssociation.children.push(nodeGongNodeInstance_Umlsc)
+          }
+
+          /**
           * let append a node for the slide of pointer Children
           */
           let ChildrenGongNodeAssociation: GongNode = {

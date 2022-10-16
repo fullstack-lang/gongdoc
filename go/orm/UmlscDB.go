@@ -404,6 +404,7 @@ func (backRepo *BackRepoStruct) CommitUmlsc(umlsc *models.Umlsc) {
 	if id, ok := (*backRepo.BackRepoUmlsc.Map_UmlscPtr_UmlscDBID)[umlsc]; ok {
 		backRepo.BackRepoUmlsc.CommitPhaseTwoInstance(backRepo, id, umlsc)
 	}
+	backRepo.CommitFromBackNb = backRepo.CommitFromBackNb + 1
 }
 
 // CommitUmlsc allows checkout of a single umlsc (if already staged and with a BackRepo id)

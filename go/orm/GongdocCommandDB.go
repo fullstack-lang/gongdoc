@@ -406,6 +406,7 @@ func (backRepo *BackRepoStruct) CommitGongdocCommand(gongdoccommand *models.Gong
 	if id, ok := (*backRepo.BackRepoGongdocCommand.Map_GongdocCommandPtr_GongdocCommandDBID)[gongdoccommand]; ok {
 		backRepo.BackRepoGongdocCommand.CommitPhaseTwoInstance(backRepo, id, gongdoccommand)
 	}
+	backRepo.CommitFromBackNb = backRepo.CommitFromBackNb + 1
 }
 
 // CommitGongdocCommand allows checkout of a single gongdoccommand (if already staged and with a BackRepo id)

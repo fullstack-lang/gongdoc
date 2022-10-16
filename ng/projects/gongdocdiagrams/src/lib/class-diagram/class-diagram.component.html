@@ -1,5 +1,5 @@
 <mat-toolbar>
-    <span>Class diagram editor {{classdiagram.Name}} -
+    <span>Class diagram editor {{classdiagram?.Name}} -
         commits {{lastCommitNbFromBack}}</span>
     <span class="example-spacer"></span>
     <div *ngIf="editable">
@@ -10,7 +10,7 @@
     </div>
     <div *ngIf="editable">
         <mat-slide-toggle [(ngModel)]="classdiagram.IsEditable" [color]="color" (change)="toggle($event)">
-            {{classdiagram.IsEditable}}
+            {{classdiagram?.IsEditable}}
         </mat-slide-toggle>
     </div>
     <div>

@@ -358,6 +358,7 @@ func (backRepo *BackRepoStruct) CommitGongdocStatus(gongdocstatus *models.Gongdo
 	if id, ok := (*backRepo.BackRepoGongdocStatus.Map_GongdocStatusPtr_GongdocStatusDBID)[gongdocstatus]; ok {
 		backRepo.BackRepoGongdocStatus.CommitPhaseTwoInstance(backRepo, id, gongdocstatus)
 	}
+	backRepo.CommitFromBackNb = backRepo.CommitFromBackNb + 1
 }
 
 // CommitGongdocStatus allows checkout of a single gongdocstatus (if already staged and with a BackRepo id)

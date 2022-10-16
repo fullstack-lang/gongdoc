@@ -19,7 +19,6 @@ import (
 	"github.com/gin-gonic/gin"
 
 	gongdoc_controllers "github.com/fullstack-lang/gongdoc/go/controllers"
-	"github.com/fullstack-lang/gongdoc/go/models"
 	gongdoc_models "github.com/fullstack-lang/gongdoc/go/models"
 	gongdoc_orm "github.com/fullstack-lang/gongdoc/go/orm"
 
@@ -135,7 +134,7 @@ func main() {
 		for gongStruct := range *gong_models.GetGongstructInstancesSet[gong_models.GongStruct]() {
 
 			// let create the gong struct in the gongdoc models
-			gongStruct_ := (&models.GongStruct{Name: gongStruct.Name}).Stage()
+			gongStruct_ := (&gongdoc_models.GongStruct{Name: gongStruct.Name}).Stage()
 			gongStruct_.NbInstances = rand.Intn(100)
 		}
 	}
@@ -192,7 +191,7 @@ func main() {
 	pkgelt.SerializeToStage()
 
 	// set up the gongTree to display elements
-	gongTree := (&gongdoc_models.Tree{Name: "gong"}).Stage()
+	gongTree := (&gongdoc_models.Tree{Name: "gong", Type: gongdoc_models.TREE_OF_SYMBOLS}).Stage()
 	gongstructRootNode := (&gongdoc_models.Node{Name: "gongstructs"}).Stage()
 	gongstructRootNode.IsExpanded = true
 	gongTree.RootNodes = append(gongTree.RootNodes, gongstructRootNode)
@@ -225,12 +224,16 @@ func main() {
 		}
 	}
 
-	gongdocTree := (&gongdoc_models.Tree{Name: "gongdoc"}).Stage()
-	classdiagramsRootNode := (&gongdoc_models.Node{Name: "class diagrams"}).Stage()
+	// generate tree of diagrams
+	gongdocTree := (&gongdoc_models.Tree{Name: "gongdoc", Type: gongdoc_models.TREE_OF_DIAGRAMS}).Stage()
+
+	// add the root of class diagrams
+	classdiagramsRootNode := (&gongdoc_models.Node{Name: "class diagrams", Type: gongdoc_models.ROOT_OF_CLASS_DIAGRAMS}).Stage()
 	classdiagramsRootNode.IsExpanded = true
 	gongdocTree.RootNodes = append(gongdocTree.RootNodes, classdiagramsRootNode)
 	for classdiagram := range *gongdoc_models.GetGongstructInstancesSet[gongdoc_models.Classdiagram]() {
 		node := (&gongdoc_models.Node{Name: classdiagram.Name}).Stage()
+		node.Classdiagram = classdiagram
 		node.HasCheckboxButton = true
 		classdiagramsRootNode.Children = append(classdiagramsRootNode.Children, node)
 	}
@@ -239,6 +242,7 @@ func main() {
 	gongdocTree.RootNodes = append(gongdocTree.RootNodes, stateDiagramssRootNode)
 	for statediagram := range *gongdoc_models.GetGongstructInstancesSet[gongdoc_models.Umlsc]() {
 		node := (&gongdoc_models.Node{Name: statediagram.Name}).Stage()
+		node.Umlsc = statediagram
 		node.HasCheckboxButton = true
 		stateDiagramssRootNode.Children = append(stateDiagramssRootNode.Children, node)
 	}
@@ -248,10 +252,10 @@ func main() {
 	log.Printf("Server ready to serve on http://localhost:8080/")
 
 	// get callbacks on node updates
-	onNodeCallbackStruct := new(models.CallbacksSingloton)
+	onNodeCallbackStruct := new(gongdoc_models.CallbacksSingloton)
 	onNodeCallbackStruct.ClassdiagramsRootNode = classdiagramsRootNode
 	onNodeCallbackStruct.StateDiagramsRootNode = stateDiagramssRootNode
-	models.Stage.OnAfterNodeUpdateCallback = onNodeCallbackStruct
+	gongdoc_models.Stage.OnAfterNodeUpdateCallback = onNodeCallbackStruct
 
 	r.Run(":8080")
 }
