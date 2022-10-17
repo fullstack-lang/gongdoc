@@ -60,6 +60,21 @@
     <!-- -->
     <mat-checkbox [formControl]="IsCheckedFormControl">IsChecked</mat-checkbox>
 
+    <!-- -->
+    <mat-checkbox [formControl]="IsCheckboxDisabledFormControl">IsCheckboxDisabled</mat-checkbox>
+
+    <!-- -->
+    <mat-checkbox [formControl]="HasAddChildButtonFormControl">HasAddChildButton</mat-checkbox>
+
+    <!-- -->
+    <mat-checkbox [formControl]="HasEditButtonFormControl">HasEditButton</mat-checkbox>
+
+    <!-- -->
+    <mat-checkbox [formControl]="IsInEditModeFormControl">IsInEditMode</mat-checkbox>
+
+    <!-- -->
+    <mat-checkbox [formControl]="HasDeleteButtonFormControl">HasDeleteButton</mat-checkbox>
+
     <mat-grid-list cols="5" rowHeight="2:1">
         <mat-grid-tile [colspan]="3">
             <button mat-raised-button (click)="openReverseSelection('Node', 'Node_ChildrenDBID', 'ONE_MANY_ASSOCIATION_MODE', '', '', '')">Children</button>

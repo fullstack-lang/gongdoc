@@ -17,6 +17,11 @@ export class NodeDB {
 	IsExpanded: boolean = false
 	HasCheckboxButton: boolean = false
 	IsChecked: boolean = false
+	IsCheckboxDisabled: boolean = false
+	HasAddChildButton: boolean = false
+	HasEditButton: boolean = false
+	IsInEditMode: boolean = false
+	HasDeleteButton: boolean = false
 
 	// insertion point for other declarations
 	Classdiagram?: ClassdiagramDB

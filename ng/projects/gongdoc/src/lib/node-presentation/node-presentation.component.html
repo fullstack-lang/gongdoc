@@ -45,6 +45,41 @@
             </mat-checkbox>
         </td>
     </tr>
+    <tr class="mat-row">
+        <td class="mat-cell">IsCheckboxDisabled</td>
+        <td class="mat-cell">
+            <mat-checkbox [checked]="node.IsCheckboxDisabled" disabled=true>
+            </mat-checkbox>
+        </td>
+    </tr>
+    <tr class="mat-row">
+        <td class="mat-cell">HasAddChildButton</td>
+        <td class="mat-cell">
+            <mat-checkbox [checked]="node.HasAddChildButton" disabled=true>
+            </mat-checkbox>
+        </td>
+    </tr>
+    <tr class="mat-row">
+        <td class="mat-cell">HasEditButton</td>
+        <td class="mat-cell">
+            <mat-checkbox [checked]="node.HasEditButton" disabled=true>
+            </mat-checkbox>
+        </td>
+    </tr>
+    <tr class="mat-row">
+        <td class="mat-cell">IsInEditMode</td>
+        <td class="mat-cell">
+            <mat-checkbox [checked]="node.IsInEditMode" disabled=true>
+            </mat-checkbox>
+        </td>
+    </tr>
+    <tr class="mat-row">
+        <td class="mat-cell">HasDeleteButton</td>
+        <td class="mat-cell">
+            <mat-checkbox [checked]="node.HasDeleteButton" disabled=true>
+            </mat-checkbox>
+        </td>
+    </tr>
 </table>
 <!-- hack to force loading of mat table style an error is generated but it is a know angular issue https://github.com/angular/components/issues/10941 -->
 <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">

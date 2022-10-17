@@ -41,6 +41,11 @@ export class NodeDetailComponent implements OnInit {
 	IsExpandedFormControl: UntypedFormControl = new UntypedFormControl(false);
 	HasCheckboxButtonFormControl: UntypedFormControl = new UntypedFormControl(false);
 	IsCheckedFormControl: UntypedFormControl = new UntypedFormControl(false);
+	IsCheckboxDisabledFormControl: UntypedFormControl = new UntypedFormControl(false);
+	HasAddChildButtonFormControl: UntypedFormControl = new UntypedFormControl(false);
+	HasEditButtonFormControl: UntypedFormControl = new UntypedFormControl(false);
+	IsInEditModeFormControl: UntypedFormControl = new UntypedFormControl(false);
+	HasDeleteButtonFormControl: UntypedFormControl = new UntypedFormControl(false);
 
 	// the NodeDB of interest
 	node: NodeDB = new NodeDB
@@ -150,6 +155,11 @@ export class NodeDetailComponent implements OnInit {
 				this.IsExpandedFormControl.setValue(this.node.IsExpanded)
 				this.HasCheckboxButtonFormControl.setValue(this.node.HasCheckboxButton)
 				this.IsCheckedFormControl.setValue(this.node.IsChecked)
+				this.IsCheckboxDisabledFormControl.setValue(this.node.IsCheckboxDisabled)
+				this.HasAddChildButtonFormControl.setValue(this.node.HasAddChildButton)
+				this.HasEditButtonFormControl.setValue(this.node.HasEditButton)
+				this.IsInEditModeFormControl.setValue(this.node.IsInEditMode)
+				this.HasDeleteButtonFormControl.setValue(this.node.HasDeleteButton)
 			}
 		)
 
@@ -185,6 +195,11 @@ export class NodeDetailComponent implements OnInit {
 		this.node.IsExpanded = this.IsExpandedFormControl.value
 		this.node.HasCheckboxButton = this.HasCheckboxButtonFormControl.value
 		this.node.IsChecked = this.IsCheckedFormControl.value
+		this.node.IsCheckboxDisabled = this.IsCheckboxDisabledFormControl.value
+		this.node.HasAddChildButton = this.HasAddChildButtonFormControl.value
+		this.node.HasEditButton = this.HasEditButtonFormControl.value
+		this.node.IsInEditMode = this.IsInEditModeFormControl.value
+		this.node.HasDeleteButton = this.HasDeleteButtonFormControl.value
 
 		// save from the front pointer space to the non pointer space for serialization
 
