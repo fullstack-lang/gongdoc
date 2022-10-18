@@ -127,8 +127,8 @@ func PostNode(c *gin.Context) {
 	}
 
 	// get an instance (not staged) from DB instance, and call callback function
-	node := new(models.Node)
-	nodeDB.CopyBasicFieldsToNode(node)
+	orm.BackRepo.BackRepoNode.CheckoutPhaseOneInstance(&nodeDB)
+	node := (*orm.BackRepo.BackRepoNode.Map_NodeDBID_NodePtr)[nodeDB.ID]
 
 	if node != nil {
 		models.AfterCreateFromFront(&models.Stage, node)

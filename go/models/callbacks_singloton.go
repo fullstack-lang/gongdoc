@@ -51,3 +51,22 @@ func (callbacksSingloton CallbacksSingloton) OnAfterUpdate(
 		staged.IsExpanded = new.IsExpanded
 	}
 }
+
+func (callbacksSingloton CallbacksSingloton) OnAfterCreate(
+	stage *StageStruct,
+	newDiagramNode *Node) {
+
+	log.Println("Node " + newDiagramNode.Name + " is created")
+
+	switch newDiagramNode.Type {
+	case CLASS_DIAGRAM, STATE_DIAGRAM:
+		newDiagramNode.HasCheckboxButton = true
+		newDiagramNode.IsChecked = true
+
+		classdiagram := (&Classdiagram{Name: newDiagramNode.Name}).Stage()
+		newDiagramNode.Classdiagram = classdiagram
+
+		newDiagramNode.Commit()
+		classdiagram.Commit()
+	}
+}

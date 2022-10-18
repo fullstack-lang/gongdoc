@@ -19,7 +19,7 @@
             </mat-icon>
         </button>
 
-        <button *ngIf="node.gongNode.HasEditButton  && !node.gongNode.IsInEditMode" mat-icon-button (click)="edit(node)">
+        <button *ngIf="node.gongNode.HasEditButton  && !node.gongNode.IsInEditMode" mat-icon-button (click)="setInEditMode(node)">
             <mat-icon
                 [ngStyle]="{'color':'rgba(0,0,0,.50)'}">edit
             </mat-icon>
@@ -62,7 +62,7 @@
             </mat-icon>
         </button>
 
-        <button *ngIf="node.gongNode.HasEditButton && !node.gongNode.IsInEditMode" mat-icon-button (click)="edit(node)">
+        <button *ngIf="node.gongNode.HasEditButton && !node.gongNode.IsInEditMode" mat-icon-button (click)="setInEditMode(node)">
             <mat-icon
                 [ngStyle]="{'color':'rgba(0,0,0,.50)'}">edit
             </mat-icon>

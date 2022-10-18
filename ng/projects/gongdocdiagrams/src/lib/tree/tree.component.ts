@@ -278,27 +278,32 @@ export class TreeComponent implements OnInit {
 
   addNewItem(node: FlatNode) {
 
-    var gongNode: gongdoc.NodeDB = new (gongdoc.NodeDB)
-    gongNode.Name = "new node"
-    gongNode.HasEditButton = true
-    gongNode.IsInEditMode = true
-    gongNode.Node_ChildrenDBID.Valid = true
-    gongNode.Node_ChildrenDBID.Int64 = node.gongNode.ID
-    this.gongdocNodeService.postNode(gongNode).subscribe(
-      gongdocNode => {
-        console.log("updated created")
-      }
-    )
+    switch (node.gongNode.Type) {
+      case gongdoc.GongdocNodeType.ROOT_OF_CLASS_DIAGRAMS:
+        var gongNode: gongdoc.NodeDB = new (gongdoc.NodeDB)
+        gongNode.Name = "NewDiagram"
+        gongNode.Type = gongdoc.GongdocNodeType.CLASS_DIAGRAM
+        gongNode.HasEditButton = true
+        gongNode.IsInEditMode = true
+        gongNode.Node_ChildrenDBID.Valid = true
+        gongNode.Node_ChildrenDBID.Int64 = node.gongNode.ID
+        this.gongdocNodeService.postNode(gongNode).subscribe(
+          gongdocNode => {
+            console.log("post node")
+          }
+        )
 
-    node.gongNode.IsExpanded = true
-    this.gongdocNodeService.updateNode(node.gongNode).subscribe(
-      gongdocNode => {
-        console.log("updated node")
-      }
-    )
+        node.gongNode.IsExpanded = true
+        this.gongdocNodeService.updateNode(node.gongNode).subscribe(
+          gongdocNode => {
+            console.log("updated node")
+          }
+        )
+    }
+
   }
 
-  edit(node: FlatNode) {
+  setInEditMode(node: FlatNode) {
     node.gongNode.IsInEditMode = true
     this.gongdocNodeService.updateNode(node.gongNode).subscribe(
       gongdocNode => {
