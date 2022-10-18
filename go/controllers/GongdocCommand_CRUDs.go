@@ -127,8 +127,8 @@ func PostGongdocCommand(c *gin.Context) {
 	}
 
 	// get an instance (not staged) from DB instance, and call callback function
-	gongdoccommand := new(models.GongdocCommand)
-	gongdoccommandDB.CopyBasicFieldsToGongdocCommand(gongdoccommand)
+	orm.BackRepo.BackRepoGongdocCommand.CheckoutPhaseOneInstance(&gongdoccommandDB)
+	gongdoccommand := (*orm.BackRepo.BackRepoGongdocCommand.Map_GongdocCommandDBID_GongdocCommandPtr)[gongdoccommandDB.ID]
 
 	if gongdoccommand != nil {
 		models.AfterCreateFromFront(&models.Stage, gongdoccommand)

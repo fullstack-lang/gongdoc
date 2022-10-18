@@ -127,8 +127,8 @@ func PostLink(c *gin.Context) {
 	}
 
 	// get an instance (not staged) from DB instance, and call callback function
-	link := new(models.Link)
-	linkDB.CopyBasicFieldsToLink(link)
+	orm.BackRepo.BackRepoLink.CheckoutPhaseOneInstance(&linkDB)
+	link := (*orm.BackRepo.BackRepoLink.Map_LinkDBID_LinkPtr)[linkDB.ID]
 
 	if link != nil {
 		models.AfterCreateFromFront(&models.Stage, link)

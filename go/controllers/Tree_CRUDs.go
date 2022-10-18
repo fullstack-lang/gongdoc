@@ -127,8 +127,8 @@ func PostTree(c *gin.Context) {
 	}
 
 	// get an instance (not staged) from DB instance, and call callback function
-	tree := new(models.Tree)
-	treeDB.CopyBasicFieldsToTree(tree)
+	orm.BackRepo.BackRepoTree.CheckoutPhaseOneInstance(&treeDB)
+	tree := (*orm.BackRepo.BackRepoTree.Map_TreeDBID_TreePtr)[treeDB.ID]
 
 	if tree != nil {
 		models.AfterCreateFromFront(&models.Stage, tree)

@@ -127,8 +127,8 @@ func PostClassshape(c *gin.Context) {
 	}
 
 	// get an instance (not staged) from DB instance, and call callback function
-	classshape := new(models.Classshape)
-	classshapeDB.CopyBasicFieldsToClassshape(classshape)
+	orm.BackRepo.BackRepoClassshape.CheckoutPhaseOneInstance(&classshapeDB)
+	classshape := (*orm.BackRepo.BackRepoClassshape.Map_ClassshapeDBID_ClassshapePtr)[classshapeDB.ID]
 
 	if classshape != nil {
 		models.AfterCreateFromFront(&models.Stage, classshape)

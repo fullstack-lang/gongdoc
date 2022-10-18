@@ -127,8 +127,8 @@ func PostGongStruct(c *gin.Context) {
 	}
 
 	// get an instance (not staged) from DB instance, and call callback function
-	gongstruct := new(models.GongStruct)
-	gongstructDB.CopyBasicFieldsToGongStruct(gongstruct)
+	orm.BackRepo.BackRepoGongStruct.CheckoutPhaseOneInstance(&gongstructDB)
+	gongstruct := (*orm.BackRepo.BackRepoGongStruct.Map_GongStructDBID_GongStructPtr)[gongstructDB.ID]
 
 	if gongstruct != nil {
 		models.AfterCreateFromFront(&models.Stage, gongstruct)

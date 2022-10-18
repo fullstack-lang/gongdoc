@@ -127,8 +127,8 @@ func PostPosition(c *gin.Context) {
 	}
 
 	// get an instance (not staged) from DB instance, and call callback function
-	position := new(models.Position)
-	positionDB.CopyBasicFieldsToPosition(position)
+	orm.BackRepo.BackRepoPosition.CheckoutPhaseOneInstance(&positionDB)
+	position := (*orm.BackRepo.BackRepoPosition.Map_PositionDBID_PositionPtr)[positionDB.ID]
 
 	if position != nil {
 		models.AfterCreateFromFront(&models.Stage, position)

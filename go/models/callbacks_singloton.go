@@ -61,7 +61,6 @@ func (callbacksSingloton CallbacksSingloton) OnAfterCreate(
 	switch newDiagramNode.Type {
 	case CLASS_DIAGRAM, STATE_DIAGRAM:
 		newDiagramNode.HasCheckboxButton = true
-		newDiagramNode.IsChecked = true
 
 		classdiagram := (&Classdiagram{Name: newDiagramNode.Name}).Stage()
 		newDiagramNode.Classdiagram = classdiagram

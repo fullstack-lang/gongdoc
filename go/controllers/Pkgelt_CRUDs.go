@@ -127,8 +127,8 @@ func PostPkgelt(c *gin.Context) {
 	}
 
 	// get an instance (not staged) from DB instance, and call callback function
-	pkgelt := new(models.Pkgelt)
-	pkgeltDB.CopyBasicFieldsToPkgelt(pkgelt)
+	orm.BackRepo.BackRepoPkgelt.CheckoutPhaseOneInstance(&pkgeltDB)
+	pkgelt := (*orm.BackRepo.BackRepoPkgelt.Map_PkgeltDBID_PkgeltPtr)[pkgeltDB.ID]
 
 	if pkgelt != nil {
 		models.AfterCreateFromFront(&models.Stage, pkgelt)

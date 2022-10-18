@@ -127,8 +127,8 @@ func PostField(c *gin.Context) {
 	}
 
 	// get an instance (not staged) from DB instance, and call callback function
-	field := new(models.Field)
-	fieldDB.CopyBasicFieldsToField(field)
+	orm.BackRepo.BackRepoField.CheckoutPhaseOneInstance(&fieldDB)
+	field := (*orm.BackRepo.BackRepoField.Map_FieldDBID_FieldPtr)[fieldDB.ID]
 
 	if field != nil {
 		models.AfterCreateFromFront(&models.Stage, field)

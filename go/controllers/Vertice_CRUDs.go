@@ -127,8 +127,8 @@ func PostVertice(c *gin.Context) {
 	}
 
 	// get an instance (not staged) from DB instance, and call callback function
-	vertice := new(models.Vertice)
-	verticeDB.CopyBasicFieldsToVertice(vertice)
+	orm.BackRepo.BackRepoVertice.CheckoutPhaseOneInstance(&verticeDB)
+	vertice := (*orm.BackRepo.BackRepoVertice.Map_VerticeDBID_VerticePtr)[verticeDB.ID]
 
 	if vertice != nil {
 		models.AfterCreateFromFront(&models.Stage, vertice)

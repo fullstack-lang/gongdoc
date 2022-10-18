@@ -127,8 +127,8 @@ func PostUmlsc(c *gin.Context) {
 	}
 
 	// get an instance (not staged) from DB instance, and call callback function
-	umlsc := new(models.Umlsc)
-	umlscDB.CopyBasicFieldsToUmlsc(umlsc)
+	orm.BackRepo.BackRepoUmlsc.CheckoutPhaseOneInstance(&umlscDB)
+	umlsc := (*orm.BackRepo.BackRepoUmlsc.Map_UmlscDBID_UmlscPtr)[umlscDB.ID]
 
 	if umlsc != nil {
 		models.AfterCreateFromFront(&models.Stage, umlsc)

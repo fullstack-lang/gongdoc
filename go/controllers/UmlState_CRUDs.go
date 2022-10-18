@@ -127,8 +127,8 @@ func PostUmlState(c *gin.Context) {
 	}
 
 	// get an instance (not staged) from DB instance, and call callback function
-	umlstate := new(models.UmlState)
-	umlstateDB.CopyBasicFieldsToUmlState(umlstate)
+	orm.BackRepo.BackRepoUmlState.CheckoutPhaseOneInstance(&umlstateDB)
+	umlstate := (*orm.BackRepo.BackRepoUmlState.Map_UmlStateDBID_UmlStatePtr)[umlstateDB.ID]
 
 	if umlstate != nil {
 		models.AfterCreateFromFront(&models.Stage, umlstate)

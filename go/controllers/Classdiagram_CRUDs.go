@@ -127,8 +127,8 @@ func PostClassdiagram(c *gin.Context) {
 	}
 
 	// get an instance (not staged) from DB instance, and call callback function
-	classdiagram := new(models.Classdiagram)
-	classdiagramDB.CopyBasicFieldsToClassdiagram(classdiagram)
+	orm.BackRepo.BackRepoClassdiagram.CheckoutPhaseOneInstance(&classdiagramDB)
+	classdiagram := (*orm.BackRepo.BackRepoClassdiagram.Map_ClassdiagramDBID_ClassdiagramPtr)[classdiagramDB.ID]
 
 	if classdiagram != nil {
 		models.AfterCreateFromFront(&models.Stage, classdiagram)

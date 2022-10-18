@@ -127,8 +127,8 @@ func PostNote(c *gin.Context) {
 	}
 
 	// get an instance (not staged) from DB instance, and call callback function
-	note := new(models.Note)
-	noteDB.CopyBasicFieldsToNote(note)
+	orm.BackRepo.BackRepoNote.CheckoutPhaseOneInstance(&noteDB)
+	note := (*orm.BackRepo.BackRepoNote.Map_NoteDBID_NotePtr)[noteDB.ID]
 
 	if note != nil {
 		models.AfterCreateFromFront(&models.Stage, note)
