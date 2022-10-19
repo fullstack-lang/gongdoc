@@ -107,8 +107,10 @@ export class TreeComponent implements OnInit {
           .subscribe(
             commitNbFromBack => {
               this.subscribeInProgress = false
+              // console.log("TreeComponent, last commit nb " + this.lastCommitNbFromBack + " new: " + commitNbFromBack)
+
               if (this.lastCommitNbFromBack < commitNbFromBack) {
-                console.log("TreeComponent, last commit nb " + this.lastCommitNbFromBack + " new: " + commitNbFromBack)
+                console.log("TreeComponent, last commit increased nb " + this.lastCommitNbFromBack + " new: " + commitNbFromBack)
                 this.lastCommitNbFromBack = commitNbFromBack
                 this.refresh()
               }
@@ -191,6 +193,7 @@ export class TreeComponent implements OnInit {
                     }
 
                   }
+                  break
                 default:
                   console.log("Tree: unknown node type: " + nodeDB.Type)
               }
@@ -307,7 +310,7 @@ export class TreeComponent implements OnInit {
     node.gongNode.IsInEditMode = true
     this.gongdocNodeService.updateNode(node.gongNode).subscribe(
       gongdocNode => {
-        console.log("updated node")
+        console.log("updated node from set in edit mode")
       }
     )
   }

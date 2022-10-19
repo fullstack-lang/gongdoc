@@ -42,6 +42,30 @@ func (callbacksSingloton CallbacksSingloton) OnAfterUpdate(
 				}
 			}
 		}
+
+		// in case the front change the name of the diagram
+		// one need to indicate the change as an increase in the commit
+		// from the back, otherwise, the front wont be able to detect
+		// the change
+		// change the name of the diagram
+		if staged.Name != new.Name {
+
+			switch staged.Type {
+			case CLASS_DIAGRAM:
+				staged.Classdiagram.Name = new.Name
+				staged.Classdiagram.Commit()
+			case STATE_DIAGRAM:
+				staged.Umlsc.Name = new.Name
+				staged.Umlsc.Commit()
+			}
+			switch staged.Type {
+			case CLASS_DIAGRAM, STATE_DIAGRAM:
+				staged.Name = new.Name
+				staged.IsInEditMode = false
+				staged.Commit()
+			}
+		}
+
 	}
 
 	if staged.IsExpanded != new.IsExpanded {
@@ -62,10 +86,16 @@ func (callbacksSingloton CallbacksSingloton) OnAfterCreate(
 	case CLASS_DIAGRAM, STATE_DIAGRAM:
 		newDiagramNode.HasCheckboxButton = true
 
+		// fetch the only package
+		var pkgelt *Pkgelt
+		for _pkgelt := range *GetGongstructInstancesSet[Pkgelt]() {
+			pkgelt = _pkgelt
+		}
+
 		classdiagram := (&Classdiagram{Name: newDiagramNode.Name}).Stage()
+		pkgelt.Classdiagrams = append(pkgelt.Classdiagrams, classdiagram)
 		newDiagramNode.Classdiagram = classdiagram
 
-		newDiagramNode.Commit()
-		classdiagram.Commit()
+		stage.Commit()
 	}
 }
