@@ -18,10 +18,10 @@ func (callbacksSingloton CallbacksSingloton) OnAfterUpdate(
 	case CLASS_DIAGRAM, STATE_DIAGRAM:
 
 		// if a diagram is selected, you cannot unselect it
-		if !stagedNode.IsChecked && frontNode.IsChecked {
+		if !stagedNode.IsChecked {
 
 			// setting the value of the staged node	to the new value
-			stagedNode.IsChecked = frontNode.IsChecked
+			stagedNode.IsChecked = true
 			stagedNode.Commit()
 
 			// parse all nodes and uncheck them if necessary
@@ -41,6 +41,11 @@ func (callbacksSingloton CallbacksSingloton) OnAfterUpdate(
 					otherDiagramNode.Commit()
 				}
 			}
+		} else {
+			// node was check and user wants to uncheck it. This is not possible
+			// on need to commit the staged node for the front to reconstruct
+			// the node as checked
+			stagedNode.Commit()
 		}
 
 		// in case the front change the name of the diagram

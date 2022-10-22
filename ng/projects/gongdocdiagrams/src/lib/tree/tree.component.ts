@@ -267,11 +267,8 @@ export class TreeComponent implements OnInit {
     )
   }
 
+  // toggling behavior is controlled from the back
   toggleNodeCheckbox(node: FlatNode): void {
-    console.log(node.name)
-
-    node.gongNode.IsChecked = !node.gongNode.IsChecked
-
     this.gongdocNodeService.updateNode(node.gongNode).subscribe(
       gongdocNode => {
         console.log("updated node")
