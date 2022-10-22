@@ -269,10 +269,14 @@ func DeleteUmlState(c *gin.Context) {
 	// with gorm.Model field, default delete is a soft delete. Unscoped() force delete
 	db.Unscoped().Delete(&umlstateDB)
 
+	// get an instance (not staged) from DB instance, and call callback function
+	umlstateDeleted := new(models.UmlState)
+	umlstateDB.CopyBasicFieldsToUmlState(umlstateDeleted)
+
 	// get stage instance from DB instance, and call callback function
-	umlstate := (*orm.BackRepo.BackRepoUmlState.Map_UmlStateDBID_UmlStatePtr)[umlstateDB.ID]
-	if umlstate != nil {
-		models.AfterDeleteFromFront(&models.Stage, umlstate)
+	umlstateStaged := (*orm.BackRepo.BackRepoUmlState.Map_UmlStateDBID_UmlStatePtr)[umlstateDB.ID]
+	if umlstateStaged != nil {
+		models.AfterDeleteFromFront(&models.Stage, umlstateStaged, umlstateDeleted)
 	}
 
 	// a DELETE generates a back repo commit increase

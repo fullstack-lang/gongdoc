@@ -269,10 +269,14 @@ func DeleteGongStruct(c *gin.Context) {
 	// with gorm.Model field, default delete is a soft delete. Unscoped() force delete
 	db.Unscoped().Delete(&gongstructDB)
 
+	// get an instance (not staged) from DB instance, and call callback function
+	gongstructDeleted := new(models.GongStruct)
+	gongstructDB.CopyBasicFieldsToGongStruct(gongstructDeleted)
+
 	// get stage instance from DB instance, and call callback function
-	gongstruct := (*orm.BackRepo.BackRepoGongStruct.Map_GongStructDBID_GongStructPtr)[gongstructDB.ID]
-	if gongstruct != nil {
-		models.AfterDeleteFromFront(&models.Stage, gongstruct)
+	gongstructStaged := (*orm.BackRepo.BackRepoGongStruct.Map_GongStructDBID_GongStructPtr)[gongstructDB.ID]
+	if gongstructStaged != nil {
+		models.AfterDeleteFromFront(&models.Stage, gongstructStaged, gongstructDeleted)
 	}
 
 	// a DELETE generates a back repo commit increase

@@ -269,10 +269,14 @@ func DeleteClassshape(c *gin.Context) {
 	// with gorm.Model field, default delete is a soft delete. Unscoped() force delete
 	db.Unscoped().Delete(&classshapeDB)
 
+	// get an instance (not staged) from DB instance, and call callback function
+	classshapeDeleted := new(models.Classshape)
+	classshapeDB.CopyBasicFieldsToClassshape(classshapeDeleted)
+
 	// get stage instance from DB instance, and call callback function
-	classshape := (*orm.BackRepo.BackRepoClassshape.Map_ClassshapeDBID_ClassshapePtr)[classshapeDB.ID]
-	if classshape != nil {
-		models.AfterDeleteFromFront(&models.Stage, classshape)
+	classshapeStaged := (*orm.BackRepo.BackRepoClassshape.Map_ClassshapeDBID_ClassshapePtr)[classshapeDB.ID]
+	if classshapeStaged != nil {
+		models.AfterDeleteFromFront(&models.Stage, classshapeStaged, classshapeDeleted)
 	}
 
 	// a DELETE generates a back repo commit increase

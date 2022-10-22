@@ -269,10 +269,14 @@ func DeleteNote(c *gin.Context) {
 	// with gorm.Model field, default delete is a soft delete. Unscoped() force delete
 	db.Unscoped().Delete(&noteDB)
 
+	// get an instance (not staged) from DB instance, and call callback function
+	noteDeleted := new(models.Note)
+	noteDB.CopyBasicFieldsToNote(noteDeleted)
+
 	// get stage instance from DB instance, and call callback function
-	note := (*orm.BackRepo.BackRepoNote.Map_NoteDBID_NotePtr)[noteDB.ID]
-	if note != nil {
-		models.AfterDeleteFromFront(&models.Stage, note)
+	noteStaged := (*orm.BackRepo.BackRepoNote.Map_NoteDBID_NotePtr)[noteDB.ID]
+	if noteStaged != nil {
+		models.AfterDeleteFromFront(&models.Stage, noteStaged, noteDeleted)
 	}
 
 	// a DELETE generates a back repo commit increase

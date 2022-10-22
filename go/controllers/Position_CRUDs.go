@@ -269,10 +269,14 @@ func DeletePosition(c *gin.Context) {
 	// with gorm.Model field, default delete is a soft delete. Unscoped() force delete
 	db.Unscoped().Delete(&positionDB)
 
+	// get an instance (not staged) from DB instance, and call callback function
+	positionDeleted := new(models.Position)
+	positionDB.CopyBasicFieldsToPosition(positionDeleted)
+
 	// get stage instance from DB instance, and call callback function
-	position := (*orm.BackRepo.BackRepoPosition.Map_PositionDBID_PositionPtr)[positionDB.ID]
-	if position != nil {
-		models.AfterDeleteFromFront(&models.Stage, position)
+	positionStaged := (*orm.BackRepo.BackRepoPosition.Map_PositionDBID_PositionPtr)[positionDB.ID]
+	if positionStaged != nil {
+		models.AfterDeleteFromFront(&models.Stage, positionStaged, positionDeleted)
 	}
 
 	// a DELETE generates a back repo commit increase

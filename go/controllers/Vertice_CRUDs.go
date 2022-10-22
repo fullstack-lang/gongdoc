@@ -269,10 +269,14 @@ func DeleteVertice(c *gin.Context) {
 	// with gorm.Model field, default delete is a soft delete. Unscoped() force delete
 	db.Unscoped().Delete(&verticeDB)
 
+	// get an instance (not staged) from DB instance, and call callback function
+	verticeDeleted := new(models.Vertice)
+	verticeDB.CopyBasicFieldsToVertice(verticeDeleted)
+
 	// get stage instance from DB instance, and call callback function
-	vertice := (*orm.BackRepo.BackRepoVertice.Map_VerticeDBID_VerticePtr)[verticeDB.ID]
-	if vertice != nil {
-		models.AfterDeleteFromFront(&models.Stage, vertice)
+	verticeStaged := (*orm.BackRepo.BackRepoVertice.Map_VerticeDBID_VerticePtr)[verticeDB.ID]
+	if verticeStaged != nil {
+		models.AfterDeleteFromFront(&models.Stage, verticeStaged, verticeDeleted)
 	}
 
 	// a DELETE generates a back repo commit increase

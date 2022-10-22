@@ -152,69 +152,84 @@ func AfterUpdateFromFront[Type Gongstruct](stage *StageStruct, old, new *Type) {
 }
 
 // AfterDeleteFromFront is called after a delete from front
-func AfterDeleteFromFront[Type Gongstruct](stage *StageStruct, instance *Type) {
+func AfterDeleteFromFront[Type Gongstruct](stage *StageStruct, staged, front *Type) {
 
-	switch target := any(instance).(type) {
+	switch front := any(front).(type) {
 	// insertion point
 	case *Classdiagram:
 		if stage.OnAfterClassdiagramDeleteCallback != nil {
-			stage.OnAfterClassdiagramDeleteCallback.OnAfterDelete(stage, target)
+			staged := any(staged).(*Classdiagram)
+			stage.OnAfterClassdiagramDeleteCallback.OnAfterDelete(stage, staged, front)
 		}
 	case *Classshape:
 		if stage.OnAfterClassshapeDeleteCallback != nil {
-			stage.OnAfterClassshapeDeleteCallback.OnAfterDelete(stage, target)
+			staged := any(staged).(*Classshape)
+			stage.OnAfterClassshapeDeleteCallback.OnAfterDelete(stage, staged, front)
 		}
 	case *Field:
 		if stage.OnAfterFieldDeleteCallback != nil {
-			stage.OnAfterFieldDeleteCallback.OnAfterDelete(stage, target)
+			staged := any(staged).(*Field)
+			stage.OnAfterFieldDeleteCallback.OnAfterDelete(stage, staged, front)
 		}
 	case *GongStruct:
 		if stage.OnAfterGongStructDeleteCallback != nil {
-			stage.OnAfterGongStructDeleteCallback.OnAfterDelete(stage, target)
+			staged := any(staged).(*GongStruct)
+			stage.OnAfterGongStructDeleteCallback.OnAfterDelete(stage, staged, front)
 		}
 	case *GongdocCommand:
 		if stage.OnAfterGongdocCommandDeleteCallback != nil {
-			stage.OnAfterGongdocCommandDeleteCallback.OnAfterDelete(stage, target)
+			staged := any(staged).(*GongdocCommand)
+			stage.OnAfterGongdocCommandDeleteCallback.OnAfterDelete(stage, staged, front)
 		}
 	case *GongdocStatus:
 		if stage.OnAfterGongdocStatusDeleteCallback != nil {
-			stage.OnAfterGongdocStatusDeleteCallback.OnAfterDelete(stage, target)
+			staged := any(staged).(*GongdocStatus)
+			stage.OnAfterGongdocStatusDeleteCallback.OnAfterDelete(stage, staged, front)
 		}
 	case *Link:
 		if stage.OnAfterLinkDeleteCallback != nil {
-			stage.OnAfterLinkDeleteCallback.OnAfterDelete(stage, target)
+			staged := any(staged).(*Link)
+			stage.OnAfterLinkDeleteCallback.OnAfterDelete(stage, staged, front)
 		}
 	case *Node:
 		if stage.OnAfterNodeDeleteCallback != nil {
-			stage.OnAfterNodeDeleteCallback.OnAfterDelete(stage, target)
+			staged := any(staged).(*Node)
+			stage.OnAfterNodeDeleteCallback.OnAfterDelete(stage, staged, front)
 		}
 	case *Note:
 		if stage.OnAfterNoteDeleteCallback != nil {
-			stage.OnAfterNoteDeleteCallback.OnAfterDelete(stage, target)
+			staged := any(staged).(*Note)
+			stage.OnAfterNoteDeleteCallback.OnAfterDelete(stage, staged, front)
 		}
 	case *Pkgelt:
 		if stage.OnAfterPkgeltDeleteCallback != nil {
-			stage.OnAfterPkgeltDeleteCallback.OnAfterDelete(stage, target)
+			staged := any(staged).(*Pkgelt)
+			stage.OnAfterPkgeltDeleteCallback.OnAfterDelete(stage, staged, front)
 		}
 	case *Position:
 		if stage.OnAfterPositionDeleteCallback != nil {
-			stage.OnAfterPositionDeleteCallback.OnAfterDelete(stage, target)
+			staged := any(staged).(*Position)
+			stage.OnAfterPositionDeleteCallback.OnAfterDelete(stage, staged, front)
 		}
 	case *Tree:
 		if stage.OnAfterTreeDeleteCallback != nil {
-			stage.OnAfterTreeDeleteCallback.OnAfterDelete(stage, target)
+			staged := any(staged).(*Tree)
+			stage.OnAfterTreeDeleteCallback.OnAfterDelete(stage, staged, front)
 		}
 	case *UmlState:
 		if stage.OnAfterUmlStateDeleteCallback != nil {
-			stage.OnAfterUmlStateDeleteCallback.OnAfterDelete(stage, target)
+			staged := any(staged).(*UmlState)
+			stage.OnAfterUmlStateDeleteCallback.OnAfterDelete(stage, staged, front)
 		}
 	case *Umlsc:
 		if stage.OnAfterUmlscDeleteCallback != nil {
-			stage.OnAfterUmlscDeleteCallback.OnAfterDelete(stage, target)
+			staged := any(staged).(*Umlsc)
+			stage.OnAfterUmlscDeleteCallback.OnAfterDelete(stage, staged, front)
 		}
 	case *Vertice:
 		if stage.OnAfterVerticeDeleteCallback != nil {
-			stage.OnAfterVerticeDeleteCallback.OnAfterDelete(stage, target)
+			staged := any(staged).(*Vertice)
+			stage.OnAfterVerticeDeleteCallback.OnAfterDelete(stage, staged, front)
 		}
 	}
 }

@@ -269,10 +269,14 @@ func DeleteGongdocStatus(c *gin.Context) {
 	// with gorm.Model field, default delete is a soft delete. Unscoped() force delete
 	db.Unscoped().Delete(&gongdocstatusDB)
 
+	// get an instance (not staged) from DB instance, and call callback function
+	gongdocstatusDeleted := new(models.GongdocStatus)
+	gongdocstatusDB.CopyBasicFieldsToGongdocStatus(gongdocstatusDeleted)
+
 	// get stage instance from DB instance, and call callback function
-	gongdocstatus := (*orm.BackRepo.BackRepoGongdocStatus.Map_GongdocStatusDBID_GongdocStatusPtr)[gongdocstatusDB.ID]
-	if gongdocstatus != nil {
-		models.AfterDeleteFromFront(&models.Stage, gongdocstatus)
+	gongdocstatusStaged := (*orm.BackRepo.BackRepoGongdocStatus.Map_GongdocStatusDBID_GongdocStatusPtr)[gongdocstatusDB.ID]
+	if gongdocstatusStaged != nil {
+		models.AfterDeleteFromFront(&models.Stage, gongdocstatusStaged, gongdocstatusDeleted)
 	}
 
 	// a DELETE generates a back repo commit increase

@@ -269,10 +269,14 @@ func DeleteUmlsc(c *gin.Context) {
 	// with gorm.Model field, default delete is a soft delete. Unscoped() force delete
 	db.Unscoped().Delete(&umlscDB)
 
+	// get an instance (not staged) from DB instance, and call callback function
+	umlscDeleted := new(models.Umlsc)
+	umlscDB.CopyBasicFieldsToUmlsc(umlscDeleted)
+
 	// get stage instance from DB instance, and call callback function
-	umlsc := (*orm.BackRepo.BackRepoUmlsc.Map_UmlscDBID_UmlscPtr)[umlscDB.ID]
-	if umlsc != nil {
-		models.AfterDeleteFromFront(&models.Stage, umlsc)
+	umlscStaged := (*orm.BackRepo.BackRepoUmlsc.Map_UmlscDBID_UmlscPtr)[umlscDB.ID]
+	if umlscStaged != nil {
+		models.AfterDeleteFromFront(&models.Stage, umlscStaged, umlscDeleted)
 	}
 
 	// a DELETE generates a back repo commit increase

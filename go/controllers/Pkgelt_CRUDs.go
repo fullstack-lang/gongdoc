@@ -269,10 +269,14 @@ func DeletePkgelt(c *gin.Context) {
 	// with gorm.Model field, default delete is a soft delete. Unscoped() force delete
 	db.Unscoped().Delete(&pkgeltDB)
 
+	// get an instance (not staged) from DB instance, and call callback function
+	pkgeltDeleted := new(models.Pkgelt)
+	pkgeltDB.CopyBasicFieldsToPkgelt(pkgeltDeleted)
+
 	// get stage instance from DB instance, and call callback function
-	pkgelt := (*orm.BackRepo.BackRepoPkgelt.Map_PkgeltDBID_PkgeltPtr)[pkgeltDB.ID]
-	if pkgelt != nil {
-		models.AfterDeleteFromFront(&models.Stage, pkgelt)
+	pkgeltStaged := (*orm.BackRepo.BackRepoPkgelt.Map_PkgeltDBID_PkgeltPtr)[pkgeltDB.ID]
+	if pkgeltStaged != nil {
+		models.AfterDeleteFromFront(&models.Stage, pkgeltStaged, pkgeltDeleted)
 	}
 
 	// a DELETE generates a back repo commit increase

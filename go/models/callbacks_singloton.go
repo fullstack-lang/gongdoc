@@ -99,3 +99,13 @@ func (callbacksSingloton CallbacksSingloton) OnAfterCreate(
 		stage.Commit()
 	}
 }
+
+func (callbacksSingloton CallbacksSingloton) OnAfterDelete(
+	stage *StageStruct,
+	stagedNode, frontNode *Node) {
+
+	switch stagedNode.Type {
+	case CLASS_DIAGRAM, STATE_DIAGRAM:
+
+	}
+}

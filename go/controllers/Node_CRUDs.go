@@ -269,10 +269,14 @@ func DeleteNode(c *gin.Context) {
 	// with gorm.Model field, default delete is a soft delete. Unscoped() force delete
 	db.Unscoped().Delete(&nodeDB)
 
+	// get an instance (not staged) from DB instance, and call callback function
+	nodeDeleted := new(models.Node)
+	nodeDB.CopyBasicFieldsToNode(nodeDeleted)
+
 	// get stage instance from DB instance, and call callback function
-	node := (*orm.BackRepo.BackRepoNode.Map_NodeDBID_NodePtr)[nodeDB.ID]
-	if node != nil {
-		models.AfterDeleteFromFront(&models.Stage, node)
+	nodeStaged := (*orm.BackRepo.BackRepoNode.Map_NodeDBID_NodePtr)[nodeDB.ID]
+	if nodeStaged != nil {
+		models.AfterDeleteFromFront(&models.Stage, nodeStaged, nodeDeleted)
 	}
 
 	// a DELETE generates a back repo commit increase

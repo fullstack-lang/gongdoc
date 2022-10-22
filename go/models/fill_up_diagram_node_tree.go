@@ -42,4 +42,5 @@ func FillUpDiagramNodeTree(pkgelt *Pkgelt) {
 	// set callbacks on node updates
 	Stage.OnAfterNodeUpdateCallback = onNodeCallbackStruct
 	Stage.OnAfterNodeCreateCallback = onNodeCallbackStruct
+	Stage.OnAfterNodeDeleteCallback = onNodeCallbackStruct
 }

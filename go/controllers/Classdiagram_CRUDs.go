@@ -269,10 +269,14 @@ func DeleteClassdiagram(c *gin.Context) {
 	// with gorm.Model field, default delete is a soft delete. Unscoped() force delete
 	db.Unscoped().Delete(&classdiagramDB)
 
+	// get an instance (not staged) from DB instance, and call callback function
+	classdiagramDeleted := new(models.Classdiagram)
+	classdiagramDB.CopyBasicFieldsToClassdiagram(classdiagramDeleted)
+
 	// get stage instance from DB instance, and call callback function
-	classdiagram := (*orm.BackRepo.BackRepoClassdiagram.Map_ClassdiagramDBID_ClassdiagramPtr)[classdiagramDB.ID]
-	if classdiagram != nil {
-		models.AfterDeleteFromFront(&models.Stage, classdiagram)
+	classdiagramStaged := (*orm.BackRepo.BackRepoClassdiagram.Map_ClassdiagramDBID_ClassdiagramPtr)[classdiagramDB.ID]
+	if classdiagramStaged != nil {
+		models.AfterDeleteFromFront(&models.Stage, classdiagramStaged, classdiagramDeleted)
 	}
 
 	// a DELETE generates a back repo commit increase

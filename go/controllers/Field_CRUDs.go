@@ -269,10 +269,14 @@ func DeleteField(c *gin.Context) {
 	// with gorm.Model field, default delete is a soft delete. Unscoped() force delete
 	db.Unscoped().Delete(&fieldDB)
 
+	// get an instance (not staged) from DB instance, and call callback function
+	fieldDeleted := new(models.Field)
+	fieldDB.CopyBasicFieldsToField(fieldDeleted)
+
 	// get stage instance from DB instance, and call callback function
-	field := (*orm.BackRepo.BackRepoField.Map_FieldDBID_FieldPtr)[fieldDB.ID]
-	if field != nil {
-		models.AfterDeleteFromFront(&models.Stage, field)
+	fieldStaged := (*orm.BackRepo.BackRepoField.Map_FieldDBID_FieldPtr)[fieldDB.ID]
+	if fieldStaged != nil {
+		models.AfterDeleteFromFront(&models.Stage, fieldStaged, fieldDeleted)
 	}
 
 	// a DELETE generates a back repo commit increase

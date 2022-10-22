@@ -269,10 +269,14 @@ func DeleteLink(c *gin.Context) {
 	// with gorm.Model field, default delete is a soft delete. Unscoped() force delete
 	db.Unscoped().Delete(&linkDB)
 
+	// get an instance (not staged) from DB instance, and call callback function
+	linkDeleted := new(models.Link)
+	linkDB.CopyBasicFieldsToLink(linkDeleted)
+
 	// get stage instance from DB instance, and call callback function
-	link := (*orm.BackRepo.BackRepoLink.Map_LinkDBID_LinkPtr)[linkDB.ID]
-	if link != nil {
-		models.AfterDeleteFromFront(&models.Stage, link)
+	linkStaged := (*orm.BackRepo.BackRepoLink.Map_LinkDBID_LinkPtr)[linkDB.ID]
+	if linkStaged != nil {
+		models.AfterDeleteFromFront(&models.Stage, linkStaged, linkDeleted)
 	}
 
 	// a DELETE generates a back repo commit increase
