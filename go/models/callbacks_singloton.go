@@ -12,33 +12,33 @@ type CallbacksSingloton struct {
 
 func (callbacksSingloton CallbacksSingloton) OnAfterUpdate(
 	stage *StageStruct,
-	staged, new *Node) {
+	stagedNode, frontNode *Node) {
 
-	switch staged.Type {
+	switch stagedNode.Type {
 	case CLASS_DIAGRAM, STATE_DIAGRAM:
-		if staged.IsChecked != new.IsChecked {
+
+		// if a diagram is selected, you cannot unselect it
+		if !stagedNode.IsChecked && frontNode.IsChecked {
 
 			// setting the value of the staged node	to the new value
-			staged.IsChecked = new.IsChecked
+			stagedNode.IsChecked = frontNode.IsChecked
+			stagedNode.Commit()
 
-			// parse all nodes and check wether, if checked/not checked, the is the updated node
+			// parse all nodes and uncheck them if necessary
 			diagramNodes := append(
 				callbacksSingloton.ClassdiagramsRootNode.Children,
 				callbacksSingloton.StateDiagramsRootNode.Children...)
 
-			for _, node := range diagramNodes {
-				if node == staged {
+			for _, otherDiagramNode := range diagramNodes {
+				if otherDiagramNode == stagedNode {
 					continue
 				}
-				if new.IsChecked && node.IsChecked {
-					// log.Println("Node " + node.Name + " is checked and should unchecked")
-					node.IsChecked = false
-					node.Commit()
-				}
-				if !new.IsChecked && !node.IsChecked {
-					// log.Println("Node " + node.Name + " is checked and should unchecked")
-					node.IsChecked = true
-					node.Commit()
+
+				// uncheck the other node
+				if otherDiagramNode.IsChecked {
+					// log.Println("Node " + node.Name + " is checked and should be unchecked")
+					otherDiagramNode.IsChecked = false
+					otherDiagramNode.Commit()
 				}
 			}
 		}
@@ -48,31 +48,31 @@ func (callbacksSingloton CallbacksSingloton) OnAfterUpdate(
 		// from the back, otherwise, the front wont be able to detect
 		// the change
 		// change the name of the diagram
-		if staged.Name != new.Name {
+		if stagedNode.Name != frontNode.Name {
 
-			switch staged.Type {
+			switch stagedNode.Type {
 			case CLASS_DIAGRAM:
-				staged.Classdiagram.Name = new.Name
-				staged.Classdiagram.Commit()
+				stagedNode.Classdiagram.Name = frontNode.Name
+				stagedNode.Classdiagram.Commit()
 			case STATE_DIAGRAM:
-				staged.Umlsc.Name = new.Name
-				staged.Umlsc.Commit()
+				stagedNode.Umlsc.Name = frontNode.Name
+				stagedNode.Umlsc.Commit()
 			}
-			switch staged.Type {
+			switch stagedNode.Type {
 			case CLASS_DIAGRAM, STATE_DIAGRAM:
-				staged.Name = new.Name
-				staged.IsInEditMode = false
-				staged.Commit()
+				stagedNode.Name = frontNode.Name
+				stagedNode.IsInEditMode = false
+				stagedNode.Commit()
 			}
 		}
 
 	}
 
-	if staged.IsExpanded != new.IsExpanded {
-		log.Println("Node " + staged.Name + " is updated with value IsExpanded to " + strconv.FormatBool(new.IsExpanded))
+	if stagedNode.IsExpanded != frontNode.IsExpanded {
+		log.Println("Node " + stagedNode.Name + " is updated with value IsExpanded to " + strconv.FormatBool(frontNode.IsExpanded))
 
 		// setting the value of the staged node	to the new value
-		staged.IsExpanded = new.IsExpanded
+		stagedNode.IsExpanded = frontNode.IsExpanded
 	}
 }
 

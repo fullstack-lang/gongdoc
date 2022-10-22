@@ -158,18 +158,18 @@ export class TreeComponent implements OnInit {
                     if (childNodeDB.IsChecked) {
                       if (childNodeDB.Classdiagram == undefined) {
                         console.log("Tree: classdiagram is undefined")
-                      } else {
-                        this.classDiagram = childNodeDB.Classdiagram
-                        this.router.navigate([{
-                          outlets: {
-                            diagrameditor: ["classdiagram-detail", this.classDiagram.ID, { editable: this.editable }]
-                          }
-                        }]).catch(
-                          reason => {
-                            console.log(reason)
-                          }
-                        );
+                        continue
                       }
+                      this.classDiagram = childNodeDB.Classdiagram
+                      this.router.navigate([{
+                        outlets: {
+                          diagrameditor: ["classdiagram-detail", this.classDiagram.ID, { editable: this.editable }]
+                        }
+                      }]).catch(
+                        reason => {
+                          console.log(reason)
+                        }
+                      );
                     }
                   }
                   break
