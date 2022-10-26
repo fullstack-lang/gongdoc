@@ -17,6 +17,7 @@ func FillUpDiagramNodeTree(pkgelt *Pkgelt) {
 		node.Classdiagram = classdiagram
 		node.Type = CLASS_DIAGRAM
 		node.HasCheckboxButton = true
+		node.HasDeleteButton = true
 		classdiagramsRootNode.Children = append(classdiagramsRootNode.Children, node)
 	}
 
@@ -31,6 +32,7 @@ func FillUpDiagramNodeTree(pkgelt *Pkgelt) {
 		node.Umlsc = statediagram
 		node.Type = STATE_DIAGRAM
 		node.HasCheckboxButton = true
+		node.HasDeleteButton = true
 		stateDiagramssRootNode.Children = append(stateDiagramssRootNode.Children, node)
 	}
 
