@@ -1,10 +1,12 @@
 package models
 
 import (
+	"io/ioutil"
 	"log"
 	"os"
 	"path/filepath"
 	"strconv"
+	"strings"
 )
 
 type CallbacksSingloton struct {
@@ -62,8 +64,58 @@ func (callbacksSingloton CallbacksSingloton) OnAfterUpdate(
 
 			switch stagedNode.Type {
 			case CLASS_DIAGRAM:
-				stagedNode.Classdiagram.Name = frontNode.Name
-				stagedNode.Classdiagram.Commit()
+
+				// check that the name is a correct identifer in go
+				for _, b := range frontNode.Name {
+					if 'a' <= b && b <= 'z' || 'A' <= b && b <= 'Z' || b == '_' || '0' <= b && b <= '9' {
+						// Avoid assigning a rune for the common case of an ascii character.
+						continue
+					} else {
+						log.Println("The name of the diagram is not a correct identifier in go: " + frontNode.Name)
+						stagedNode.Commit()
+						return
+					}
+				}
+
+				// rename the diagram file if it exists
+				// remove the actual classdiagram file if it exsits
+				fieldName := GetAssociationName[Pkgelt]().Classdiagrams[0].Name
+				mapReverse := GetSliceOfPointersReverseMap[Pkgelt, Classdiagram](fieldName)
+				pkgelt := mapReverse[stagedNode.Classdiagram]
+
+				oldClassdiagramFilePath := filepath.Join(pkgelt.Path, "../diagrams", stagedNode.Classdiagram.Name) + ".go"
+				newClassdiagramFilePath := filepath.Join(pkgelt.Path, "../diagrams", frontNode.Name) + ".go"
+
+				if _, err := os.Stat(oldClassdiagramFilePath); err == nil {
+					if err := os.Rename(oldClassdiagramFilePath, newClassdiagramFilePath); err != nil {
+						log.Println("Error while renaming file " + oldClassdiagramFilePath + " : " + err.Error())
+					} else {
+						// change the name of the go variable that describes the diagram
+						// in the package
+						input, err := ioutil.ReadFile(newClassdiagramFilePath)
+						if err != nil {
+							log.Fatalln(err)
+						}
+
+						lines := strings.Split(string(input), "\n")
+
+						for i, line := range lines {
+							if strings.Contains(line, "var "+stagedNode.Classdiagram.Name) {
+								lines[i] = strings.Replace(line, stagedNode.Classdiagram.Name, frontNode.Name, 1)
+								continue
+							}
+						}
+						output := strings.Join(lines, "\n")
+						err = ioutil.WriteFile(newClassdiagramFilePath, []byte(output), 0644)
+						if err != nil {
+							log.Fatalln(err)
+						}
+
+						stagedNode.Classdiagram.Name = frontNode.Name
+						stagedNode.Classdiagram.Commit()
+					}
+				}
+
 			case STATE_DIAGRAM:
 				stagedNode.Umlsc.Name = frontNode.Name
 				stagedNode.Umlsc.Commit()
