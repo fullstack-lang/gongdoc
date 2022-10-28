@@ -2,6 +2,8 @@ package models
 
 import (
 	"log"
+	"os"
+	"path/filepath"
 	"strconv"
 )
 
@@ -130,17 +132,10 @@ func (callbacksSingloton CallbacksSingloton) OnAfterDelete(
 
 	switch stagedNode.Type {
 	case CLASS_DIAGRAM, STATE_DIAGRAM:
-
 		// checkout the stage, it shall remove the link between
 		// the parent node and the staged node because 0..1->0..N association
 		// is stored in the staged node as a reverse pointer
 		stage.Checkout()
-
-		// remove the child node from the parent node
-		// fieldName := GetAssociationName[Node]().Children[0].Name
-		// mapReverse := GetSliceOfPointersReverseMap[Node, Node](fieldName)
-		// parentNode := mapReverse[stagedNode]
-		// parentNode.Children = remove(parentNode.Children, stagedNode)
 	}
 	switch stagedNode.Type {
 	case CLASS_DIAGRAM:
@@ -150,14 +145,30 @@ func (callbacksSingloton CallbacksSingloton) OnAfterDelete(
 		pkgelt := mapReverse[stagedNode.Classdiagram]
 		pkgelt.Classdiagrams = remove(pkgelt.Classdiagrams, stagedNode.Classdiagram)
 		stagedNode.Classdiagram.Unstage()
-	case STATE_DIAGRAM:
 
+		// remove the actual classdiagram file if it exsits
+		classdiagramFilePath := filepath.Join(pkgelt.Path, "../diagrams", stagedNode.Classdiagram.Name) + ".go"
+		if _, err := os.Stat(classdiagramFilePath); err == nil {
+			if err := os.Remove(classdiagramFilePath); err != nil {
+				log.Println("Error while deleting file " + classdiagramFilePath + " : " + err.Error())
+			}
+		}
+
+	case STATE_DIAGRAM:
 		// remove the umlsc node from the pkg element node
 		fieldName := GetAssociationName[Pkgelt]().Umlscs[0].Name
 		mapReverse := GetSliceOfPointersReverseMap[Pkgelt, Umlsc](fieldName)
 		pkgelt := mapReverse[stagedNode.Umlsc]
 		pkgelt.Umlscs = remove(pkgelt.Umlscs, stagedNode.Umlsc)
 		stagedNode.Umlsc.Unstage()
+
+		// remove the actual classdiagram file if it exsits
+		statediagramFilePath := filepath.Join(pkgelt.Path, "../diagrams", stagedNode.Umlsc.Name) + ".go"
+		if _, err := os.Stat(statediagramFilePath); err == nil {
+			if err := os.Remove(statediagramFilePath); err != nil {
+				log.Println("Error while deleting file " + statediagramFilePath + " : " + err.Error())
+			}
+		}
 	}
 	switch stagedNode.Type {
 	case CLASS_DIAGRAM, STATE_DIAGRAM:
