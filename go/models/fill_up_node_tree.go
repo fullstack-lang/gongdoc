@@ -6,8 +6,9 @@ import (
 
 func FillUpNodeTree(pkgelt *Pkgelt) {
 
-	// FillUpCodeNodeTree(pkgelt)
 	FillUpDiagramNodeTree(pkgelt)
+
+	FillUpCodeNodeTree(pkgelt)
 
 	Stage.Commit()
 	log.Printf("Parse found %d diagrams\n", len(pkgelt.Classdiagrams))
