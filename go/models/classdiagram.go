@@ -6,6 +6,7 @@ import (
 	"go/token"
 	"image/color"
 	"log"
+	"math/rand"
 	"os"
 	"path/filepath"
 	"sort"
@@ -453,5 +454,34 @@ func (classdiagram *Classdiagram) RemoveClassshape(classshapeName string) {
 		field.Unstage()
 	}
 
+	Stage.Commit()
+}
+
+func (classdiagram *Classdiagram) AddClassshape(classshapeName string) {
+
+	var classshape Classshape
+	classshape.Name = classdiagram.Name + "-" + GongdocCommandSingloton.StructName
+	classshape.Structname = classshapeName
+	classshape.ClassshapeTargetType = STRUCT
+	classshape.Width = 240
+	classshape.Heigth = 63
+
+	// attach GongStruct to classshape
+	gongStruct, ok := Stage.GongStructs_mapString[classshape.Structname]
+	if ok {
+		classshape.GongStruct = gongStruct
+		classshape.ShowNbInstances = true
+		classshape.NbInstances = gongStruct.NbInstances
+	}
+	classshape.Stage()
+
+	var position Position
+	position.Name = "Pos-" + classshape.Name
+	position.X = float64(int(rand.Float32()*100) + 10)
+	position.Y = float64(int(rand.Float32()*100) + 10)
+	classshape.Position = &position
+	position.Stage()
+
+	classdiagram.Classshapes = append(classdiagram.Classshapes, &classshape)
 	Stage.Commit()
 }

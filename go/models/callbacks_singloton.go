@@ -156,6 +156,19 @@ func (callbacksSingloton CallbacksSingloton) OnAfterUpdate(
 				updateTreeOfIndentifiers(stage, &callbacksSingloton)
 			}
 		}
+
+		// if node is checked, add classshape
+		if !stagedNode.IsChecked && frontNode.IsChecked {
+			for _, classdiagramNode := range callbacksSingloton.ClassdiagramsRootNode.Children {
+				if classdiagramNode.IsChecked {
+					// get the diagram
+					classDiagram := classdiagramNode.Classdiagram
+					classDiagram.AddClassshape(frontNode.Name)
+				}
+
+				updateTreeOfIndentifiers(stage, &callbacksSingloton)
+			}
+		}
 	}
 
 	if stagedNode.IsExpanded != frontNode.IsExpanded {
