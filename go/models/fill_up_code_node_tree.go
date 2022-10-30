@@ -14,6 +14,7 @@ func FillUpCodeNodeTree(pkgelt *Pkgelt, onNodeCallbackStruct *CallbacksSingloton
 
 		node := (&Node{Name: gongStruct.Name}).Stage()
 		node.HasCheckboxButton = true
+		node.IsExpanded = true
 		gongstructRootNode.Children = append(gongstructRootNode.Children, node)
 
 		for _, field := range gongStruct.Fields {
@@ -31,6 +32,7 @@ func FillUpCodeNodeTree(pkgelt *Pkgelt, onNodeCallbackStruct *CallbacksSingloton
 
 		node := (&Node{Name: gongEnum.Name}).Stage()
 		node.HasCheckboxButton = true
+		node.IsExpanded = true
 		gongenumRootNode.Children = append(gongenumRootNode.Children, node)
 
 		for _, value := range gongEnum.GongEnumValues {
