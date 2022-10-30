@@ -2,7 +2,7 @@
 export enum TreeType {
 	// insertion point	
 	TREE_OF_DIAGRAMS = "TREE_OF_DIAGRAMS",
-	TREE_OF_SYMBOLS = "TREE_OF_SYMBOLS",
+	TREE_OF_IDENTIFIERS = "TREE_OF_IDENTIFIERS",
 }
 
 export interface TreeTypeSelect {
@@ -12,5 +12,5 @@ export interface TreeTypeSelect {
 
 export const TreeTypeList: TreeTypeSelect[] = [ // insertion point	
 	{ value: TreeType.TREE_OF_DIAGRAMS, viewValue: "TREE_OF_DIAGRAMS" },
-	{ value: TreeType.TREE_OF_SYMBOLS, viewValue: "TREE_OF_SYMBOLS" },
+	{ value: TreeType.TREE_OF_IDENTIFIERS, viewValue: "TREE_OF_IDENTIFIERS" },
 ];

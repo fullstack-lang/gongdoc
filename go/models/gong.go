@@ -4810,8 +4810,8 @@ func (treetype TreeType) ToString() (res string) {
 	// insertion code per enum code
 	case TREE_OF_DIAGRAMS:
 		res = "TREE_OF_DIAGRAMS"
-	case TREE_OF_SYMBOLS:
-		res = "TREE_OF_SYMBOLS"
+	case TREE_OF_IDENTIFIERS:
+		res = "TREE_OF_IDENTIFIERS"
 	}
 	return
 }
@@ -4822,8 +4822,8 @@ func (treetype *TreeType) FromString(input string) (err error) {
 	// insertion code per enum code
 	case "TREE_OF_DIAGRAMS":
 		*treetype = TREE_OF_DIAGRAMS
-	case "TREE_OF_SYMBOLS":
-		*treetype = TREE_OF_SYMBOLS
+	case "TREE_OF_IDENTIFIERS":
+		*treetype = TREE_OF_IDENTIFIERS
 	default:
 		return errUnkownEnum
 	}
@@ -4836,8 +4836,8 @@ func (treetype *TreeType) ToCodeString() (res string) {
 	// insertion code per enum code
 	case TREE_OF_DIAGRAMS:
 		res = "TREE_OF_DIAGRAMS"
-	case TREE_OF_SYMBOLS:
-		res = "TREE_OF_SYMBOLS"
+	case TREE_OF_IDENTIFIERS:
+		res = "TREE_OF_IDENTIFIERS"
 	}
 	return
 }

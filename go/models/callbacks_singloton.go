@@ -12,6 +12,9 @@ import (
 type CallbacksSingloton struct {
 	ClassdiagramsRootNode *Node
 	StateDiagramsRootNode *Node
+
+	GongstructsRootNode *Node
+	GongenumsRootNode   *Node
 }
 
 func (callbacksSingloton CallbacksSingloton) OnAfterUpdate(
@@ -45,6 +48,11 @@ func (callbacksSingloton CallbacksSingloton) OnAfterUpdate(
 					otherDiagramNode.Commit()
 				}
 			}
+
+			// update the tree of identifiers in order to show
+			// which identifiers are presents in the selected diagram
+			updateTreeOfIndentifiers(&callbacksSingloton)
+			stage.Commit()
 		}
 
 		// node was checked and user wants to uncheck it. This is not possible

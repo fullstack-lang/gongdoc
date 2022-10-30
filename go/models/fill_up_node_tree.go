@@ -6,9 +6,10 @@ import (
 
 func FillUpNodeTree(pkgelt *Pkgelt) {
 
-	FillUpDiagramNodeTree(pkgelt)
+	onNodeCallbackStruct := new(CallbacksSingloton)
+	FillUpDiagramNodeTree(pkgelt, onNodeCallbackStruct)
 
-	FillUpCodeNodeTree(pkgelt)
+	FillUpCodeNodeTree(pkgelt, onNodeCallbackStruct)
 
 	Stage.Commit()
 	log.Printf("Parse found %d diagrams\n", len(pkgelt.Classdiagrams))

@@ -1,6 +1,6 @@
 package models
 
-func FillUpDiagramNodeTree(pkgelt *Pkgelt) {
+func FillUpDiagramNodeTree(pkgelt *Pkgelt, onNodeCallbackStruct *CallbacksSingloton) {
 
 	// generate tree of diagrams
 	gongdocTree := (&Tree{Name: "gongdoc", Type: TREE_OF_DIAGRAMS}).Stage()
@@ -39,7 +39,6 @@ func FillUpDiagramNodeTree(pkgelt *Pkgelt) {
 	}
 
 	// set callbacks on node updates
-	onNodeCallbackStruct := new(CallbacksSingloton)
 	onNodeCallbackStruct.ClassdiagramsRootNode = classdiagramsRootNode
 	onNodeCallbackStruct.StateDiagramsRootNode = stateDiagramssRootNode
 

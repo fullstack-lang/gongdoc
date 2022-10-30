@@ -2,12 +2,14 @@ package models
 
 import gong_models "github.com/fullstack-lang/gong/go/models"
 
-func FillUpCodeNodeTree(pkgelt *Pkgelt) {
+func FillUpCodeNodeTree(pkgelt *Pkgelt, onNodeCallbackStruct *CallbacksSingloton) {
+
 	// set up the gongTree to display elements
-	gongTree := (&Tree{Name: "gong", Type: TREE_OF_SYMBOLS}).Stage()
+	gongTree := (&Tree{Name: "gong", Type: TREE_OF_IDENTIFIERS}).Stage()
 	gongstructRootNode := (&Node{Name: "gongstructs"}).Stage()
 	gongstructRootNode.IsExpanded = true
 	gongTree.RootNodes = append(gongTree.RootNodes, gongstructRootNode)
+	onNodeCallbackStruct.GongstructsRootNode = gongstructRootNode
 	for gongStruct := range *gong_models.GetGongstructInstancesSet[gong_models.GongStruct]() {
 
 		node := (&Node{Name: gongStruct.Name}).Stage()
@@ -24,6 +26,7 @@ func FillUpCodeNodeTree(pkgelt *Pkgelt) {
 	gongenumRootNode := (&Node{Name: "gongenums"}).Stage()
 	gongenumRootNode.IsExpanded = true
 	gongTree.RootNodes = append(gongTree.RootNodes, gongenumRootNode)
+	onNodeCallbackStruct.GongenumsRootNode = gongenumRootNode
 	for gongEnum := range *gong_models.GetGongstructInstancesSet[gong_models.GongEnum]() {
 
 		node := (&Node{Name: gongEnum.Name}).Stage()
