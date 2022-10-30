@@ -2,7 +2,7 @@ package models
 
 import gong_models "github.com/fullstack-lang/gong/go/models"
 
-func FillUpCodeNodeTree(pkgelt *Pkgelt, onNodeCallbackStruct *CallbacksSingloton) {
+func FillUpTreeOfIdentifiers(pkgelt *Pkgelt, onNodeCallbackStruct *CallbacksSingloton) {
 
 	// set up the gongTree to display elements
 	gongTree := (&Tree{Name: "gong", Type: TREE_OF_IDENTIFIERS}).Stage()
@@ -13,12 +13,14 @@ func FillUpCodeNodeTree(pkgelt *Pkgelt, onNodeCallbackStruct *CallbacksSingloton
 	for gongStruct := range *gong_models.GetGongstructInstancesSet[gong_models.GongStruct]() {
 
 		node := (&Node{Name: gongStruct.Name}).Stage()
+		node.Type = GONG_STRUCT
 		node.HasCheckboxButton = true
 		node.IsExpanded = true
 		gongstructRootNode.Children = append(gongstructRootNode.Children, node)
 
 		for _, field := range gongStruct.Fields {
 			node2 := (&Node{Name: field.GetName()}).Stage()
+			node2.Type = GONG_FIELD
 			node2.HasCheckboxButton = true
 			node.Children = append(node.Children, node2)
 		}
@@ -33,10 +35,12 @@ func FillUpCodeNodeTree(pkgelt *Pkgelt, onNodeCallbackStruct *CallbacksSingloton
 		node := (&Node{Name: gongEnum.Name}).Stage()
 		node.HasCheckboxButton = true
 		node.IsExpanded = true
+		node.Type = GONG_ENUM
 		gongenumRootNode.Children = append(gongenumRootNode.Children, node)
 
 		for _, value := range gongEnum.GongEnumValues {
 			node2 := (&Node{Name: value.GetName()}).Stage()
+			node2.Type = GONG_ENUM_VALUE
 			node2.HasCheckboxButton = true
 			node.Children = append(node.Children, node2)
 		}

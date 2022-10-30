@@ -14,6 +14,7 @@ const (
 
 	ROOT_OF_GONG_STRUCTS GongdocNodeType = "ROOT_OF_GONG_STRUCTS"
 	GONG_STRUCT          GongdocNodeType = "GONG_STRUCT"
+	GONG_FIELD           GongdocNodeType = "GONG_FIELD"
 
 	ROOT_OF_BASIC_FIELDS GongdocNodeType = "ROOT_OF_BASIC_FIELDS"
 	BASIC_FIELD          GongdocNodeType = "BASIC_FIELD"
@@ -29,6 +30,10 @@ const (
 
 	ROOT_OF_M_N_ASSOCIATION_FIELDS GongdocNodeType = "ROOT_OF_M_N_ASSOCIATION_FIELDS"
 	M_N_ASSOCIATION_FIELD          GongdocNodeType = "M_N_ASSOCIATION_FIELD"
+
+	ROOT_OF_GONG_ENUMS GongdocNodeType = "ROOT_OF_GONG_ENUMS"
+	GONG_ENUM          GongdocNodeType = "GONG_ENUM"
+	GONG_ENUM_VALUE    GongdocNodeType = "GONG_ENUM_VALUE"
 
 	ROOT_OF_GONG_NOTES GongdocNodeType = "ROOT_OF_GONG_NOTES"
 	GONG_NOTE          GongdocNodeType = "GONG_NOTE"

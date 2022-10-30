@@ -2,7 +2,7 @@ package models
 
 // updateTreeOfIndentifiers updates the tree of symbols
 // according to the selected diagram
-func updateTreeOfIndentifiers(callbacksSingloton *CallbacksSingloton) {
+func updateTreeOfIndentifiers(stage *StageStruct, callbacksSingloton *CallbacksSingloton) {
 
 	// map of gognstruct nodes according to their name
 	gongstructNodes := make(map[string]*Node)
@@ -39,5 +39,5 @@ func updateTreeOfIndentifiers(callbacksSingloton *CallbacksSingloton) {
 			}
 		}
 	}
-
+	stage.Commit()
 }

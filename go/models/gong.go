@@ -4630,6 +4630,8 @@ func (gongdocnodetype GongdocNodeType) ToString() (res string) {
 		res = "ROOT_OF_GONG_STRUCTS"
 	case GONG_STRUCT:
 		res = "GONG_STRUCT"
+	case GONG_FIELD:
+		res = "GONG_FIELD"
 	case ROOT_OF_BASIC_FIELDS:
 		res = "ROOT_OF_BASIC_FIELDS"
 	case BASIC_FIELD:
@@ -4650,6 +4652,12 @@ func (gongdocnodetype GongdocNodeType) ToString() (res string) {
 		res = "ROOT_OF_M_N_ASSOCIATION_FIELDS"
 	case M_N_ASSOCIATION_FIELD:
 		res = "M_N_ASSOCIATION_FIELD"
+	case ROOT_OF_GONG_ENUMS:
+		res = "ROOT_OF_GONG_ENUMS"
+	case GONG_ENUM:
+		res = "GONG_ENUM"
+	case GONG_ENUM_VALUE:
+		res = "GONG_ENUM_VALUE"
 	case ROOT_OF_GONG_NOTES:
 		res = "ROOT_OF_GONG_NOTES"
 	case GONG_NOTE:
@@ -4676,6 +4684,8 @@ func (gongdocnodetype *GongdocNodeType) FromString(input string) (err error) {
 		*gongdocnodetype = ROOT_OF_GONG_STRUCTS
 	case "GONG_STRUCT":
 		*gongdocnodetype = GONG_STRUCT
+	case "GONG_FIELD":
+		*gongdocnodetype = GONG_FIELD
 	case "ROOT_OF_BASIC_FIELDS":
 		*gongdocnodetype = ROOT_OF_BASIC_FIELDS
 	case "BASIC_FIELD":
@@ -4696,6 +4706,12 @@ func (gongdocnodetype *GongdocNodeType) FromString(input string) (err error) {
 		*gongdocnodetype = ROOT_OF_M_N_ASSOCIATION_FIELDS
 	case "M_N_ASSOCIATION_FIELD":
 		*gongdocnodetype = M_N_ASSOCIATION_FIELD
+	case "ROOT_OF_GONG_ENUMS":
+		*gongdocnodetype = ROOT_OF_GONG_ENUMS
+	case "GONG_ENUM":
+		*gongdocnodetype = GONG_ENUM
+	case "GONG_ENUM_VALUE":
+		*gongdocnodetype = GONG_ENUM_VALUE
 	case "ROOT_OF_GONG_NOTES":
 		*gongdocnodetype = ROOT_OF_GONG_NOTES
 	case "GONG_NOTE":
@@ -4724,6 +4740,8 @@ func (gongdocnodetype *GongdocNodeType) ToCodeString() (res string) {
 		res = "ROOT_OF_GONG_STRUCTS"
 	case GONG_STRUCT:
 		res = "GONG_STRUCT"
+	case GONG_FIELD:
+		res = "GONG_FIELD"
 	case ROOT_OF_BASIC_FIELDS:
 		res = "ROOT_OF_BASIC_FIELDS"
 	case BASIC_FIELD:
@@ -4744,6 +4762,12 @@ func (gongdocnodetype *GongdocNodeType) ToCodeString() (res string) {
 		res = "ROOT_OF_M_N_ASSOCIATION_FIELDS"
 	case M_N_ASSOCIATION_FIELD:
 		res = "M_N_ASSOCIATION_FIELD"
+	case ROOT_OF_GONG_ENUMS:
+		res = "ROOT_OF_GONG_ENUMS"
+	case GONG_ENUM:
+		res = "GONG_ENUM"
+	case GONG_ENUM_VALUE:
+		res = "GONG_ENUM_VALUE"
 	case ROOT_OF_GONG_NOTES:
 		res = "ROOT_OF_GONG_NOTES"
 	case GONG_NOTE:

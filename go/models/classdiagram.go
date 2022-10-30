@@ -407,3 +407,51 @@ func (classDiagram *Classdiagram) Marshall(pkgelt *Pkgelt, pkgPath string) error
 
 	return err
 }
+
+func (classdiagram *Classdiagram) RemoveClassshape(classshapeName string) {
+
+	foundClassshape := false
+	var classshape *Classshape
+	var idx int
+	for _idx, _classshape := range classdiagram.Classshapes {
+
+		// strange behavior when the classshape is remove within the loop
+		if _classshape.Structname == classshapeName && !foundClassshape {
+			classshape = _classshape
+			idx = _idx
+		}
+	}
+
+	classdiagram.Classshapes = removeClassshapeFromSlice(classdiagram.Classshapes, idx)
+	classshape.Position.Unstage()
+	classshape.Unstage()
+
+	// remove links that go from this classshape
+	for _, link := range classshape.Links {
+		link.Middlevertice.Unstage()
+		link.Unstage()
+	}
+	classshape.Links = []*Link{}
+
+	// remove links that go to this classshape
+	for _, fromClassshape := range classdiagram.Classshapes {
+
+		newSliceOfLinks := make([]*Link, 0)
+		for _, link := range fromClassshape.Links {
+			if link.Fieldtypename == classshape.Structname {
+				link.Middlevertice.Unstage()
+				link.Unstage()
+			} else {
+				newSliceOfLinks = append(newSliceOfLinks, link)
+			}
+		}
+		fromClassshape.Links = newSliceOfLinks
+	}
+
+	// remove fields of the classshape
+	for _, field := range classshape.Fields {
+		field.Unstage()
+	}
+
+	Stage.Commit()
+}

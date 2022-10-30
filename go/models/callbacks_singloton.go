@@ -24,7 +24,7 @@ func (callbacksSingloton CallbacksSingloton) OnAfterUpdate(
 	switch stagedNode.Type {
 	case CLASS_DIAGRAM, STATE_DIAGRAM:
 
-		// if a diagram is selected, you cannot unselect it
+		// if node is selected
 		if !stagedNode.IsChecked && frontNode.IsChecked {
 
 			// setting the value of the staged node	to the new value
@@ -51,8 +51,7 @@ func (callbacksSingloton CallbacksSingloton) OnAfterUpdate(
 
 			// update the tree of identifiers in order to show
 			// which identifiers are presents in the selected diagram
-			updateTreeOfIndentifiers(&callbacksSingloton)
-			stage.Commit()
+			updateTreeOfIndentifiers(stage, &callbacksSingloton)
 		}
 
 		// node was checked and user wants to uncheck it. This is not possible
@@ -135,7 +134,28 @@ func (callbacksSingloton CallbacksSingloton) OnAfterUpdate(
 				stagedNode.Commit()
 			}
 		}
+	case GONG_STRUCT:
+		// if node is unchecked
+		if stagedNode.IsChecked && !frontNode.IsChecked {
 
+			// remove the classshape from the selected diagram
+			for _, classdiagramNode := range callbacksSingloton.ClassdiagramsRootNode.Children {
+				if classdiagramNode.IsChecked {
+					// get the diagram
+					classDiagram := classdiagramNode.Classdiagram
+
+					// get the referenced gongstructs
+					for _, classshape := range classDiagram.Classshapes {
+						gongstruct := classshape.GongStruct
+						if gongstruct.Name == stagedNode.Name {
+							classDiagram.RemoveClassshape(gongstruct.Name)
+						}
+					}
+				}
+
+				updateTreeOfIndentifiers(stage, &callbacksSingloton)
+			}
+		}
 	}
 
 	if stagedNode.IsExpanded != frontNode.IsExpanded {
