@@ -51,7 +51,7 @@ func (callbacksSingloton CallbacksSingloton) OnAfterUpdate(
 
 			// update the tree of identifiers in order to show
 			// which identifiers are presents in the selected diagram
-			updateTreeOfIndentifiers(stage, &callbacksSingloton)
+			updateNodesStates(stage, &callbacksSingloton)
 		}
 
 		// node was checked and user wants to uncheck it. This is not possible
@@ -153,7 +153,7 @@ func (callbacksSingloton CallbacksSingloton) OnAfterUpdate(
 					}
 				}
 
-				updateTreeOfIndentifiers(stage, &callbacksSingloton)
+				updateNodesStates(stage, &callbacksSingloton)
 			}
 		}
 
@@ -166,7 +166,7 @@ func (callbacksSingloton CallbacksSingloton) OnAfterUpdate(
 					classDiagram.AddClassshape(frontNode.Name)
 				}
 
-				updateTreeOfIndentifiers(stage, &callbacksSingloton)
+				updateNodesStates(stage, &callbacksSingloton)
 			}
 		}
 	}

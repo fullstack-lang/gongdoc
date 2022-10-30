@@ -1,8 +1,14 @@
 package models
 
-// updateTreeOfIndentifiers updates the tree of symbols
+// updateNodesStates updates the tree of symbols
 // according to the selected diagram
-func updateTreeOfIndentifiers(stage *StageStruct, callbacksSingloton *CallbacksSingloton) {
+func updateNodesStates(stage *StageStruct, callbacksSingloton *CallbacksSingloton) {
+
+	// get the editable state of the package
+	var pkglet *Pkgelt
+	for _pkgelt := range *GetGongstructInstancesSet[Pkgelt]() {
+		pkglet = _pkgelt
+	}
 
 	// map of gognstruct nodes according to their name
 	gongstructNodes := make(map[string]*Node)
@@ -12,11 +18,15 @@ func updateTreeOfIndentifiers(stage *StageStruct, callbacksSingloton *CallbacksS
 
 	// unckeck nodes and construct the map
 	for _, gognstructNode := range callbacksSingloton.GongstructsRootNode.Children {
+
+		gognstructNode.IsCheckboxDisabled = !pkglet.Editable
+
 		gognstructNode.IsChecked = false
 		gongstructNodes[gognstructNode.Name] = gognstructNode
 
 		for _, gongfieldNode := range gognstructNode.Children {
 			gongfieldNode.IsChecked = false
+			gongfieldNode.IsCheckboxDisabled = !pkglet.Editable
 			gongfieldNodes[gognstructNode.Name+"."+gongfieldNode.Name] = gongfieldNode
 		}
 	}
@@ -24,6 +34,10 @@ func updateTreeOfIndentifiers(stage *StageStruct, callbacksSingloton *CallbacksS
 	// get the selected diagram and collect what are its referenced
 	// gongstructs
 	for _, classdiagramNode := range callbacksSingloton.ClassdiagramsRootNode.Children {
+
+		classdiagramNode.HasEditButton = pkglet.Editable
+		classdiagramNode.HasDeleteButton = pkglet.Editable
+
 		if classdiagramNode.IsChecked {
 			// get the diagram
 			classDiagram := classdiagramNode.Classdiagram
@@ -38,6 +52,11 @@ func updateTreeOfIndentifiers(stage *StageStruct, callbacksSingloton *CallbacksS
 				}
 			}
 		}
+	}
+
+	for _, stateDiagramNode := range callbacksSingloton.StateDiagramsRootNode.Children {
+		stateDiagramNode.HasEditButton = pkglet.Editable
+		stateDiagramNode.HasDeleteButton = pkglet.Editable
 	}
 	stage.Commit()
 }
