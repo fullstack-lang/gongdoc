@@ -131,8 +131,13 @@ func (callbacksSingloton CallbacksSingloton) OnAfterUpdate(
 			case CLASS_DIAGRAM, STATE_DIAGRAM:
 				stagedNode.Name = frontNode.Name
 				stagedNode.IsInEditMode = false
-				stagedNode.Commit()
+				updateNodesStates(stage, &callbacksSingloton)
 			}
+		}
+
+		if stagedNode.IsInEditMode != frontNode.IsInEditMode {
+			stagedNode.IsInEditMode = frontNode.IsInEditMode
+			updateNodesStates(stage, &callbacksSingloton)
 		}
 	case GONG_STRUCT:
 		// if node is unchecked

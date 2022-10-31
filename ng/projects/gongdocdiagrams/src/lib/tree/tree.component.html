@@ -24,17 +24,17 @@
             </mat-icon>
         </button>
 
-        <button *ngIf="node.gongNode.HasEditButton  && !node.gongNode.IsInEditMode" mat-icon-button (click)="setInEditMode(node)">
+        <button *ngIf="node.gongNode.HasEditButton" mat-icon-button (click)="setInEditMode(node)">
             <mat-icon
                 [ngStyle]="{'color':'rgba(0,0,0,.50)'}">edit
             </mat-icon>
         </button>
-        <button mat-icon-button *ngIf="node.gongNode.HasAddChildButton  && !node.gongNode.IsInEditMode" (click)="addNewItem(node)">
+        <button mat-icon-button *ngIf="node.gongNode.HasAddChildButton" (click)="addNewItem(node)">
             <mat-icon
                 [ngStyle]="{'color':'rgba(0,0,0,.50)'}">
                 add</mat-icon>
         </button>
-        <button mat-icon-button *ngIf="node.gongNode.HasDeleteButton  && !node.gongNode.IsInEditMode" (click)="deleteNode(node)">
+        <button mat-icon-button *ngIf="node.gongNode.HasDeleteButton" (click)="deleteNode(node)">
             <mat-icon
                 [ngStyle]="{'color':'rgba(0,0,0,.50)'}">
                 delete</mat-icon>
@@ -50,7 +50,7 @@
                 'expand_more' : 'chevron_right'}}
             </mat-icon>
         </button>
-        <mat-checkbox *ngIf="node.gongNode.HasCheckboxButton && !node.gongNode.IsInEditMode" [disabled]="node.gongNode.IsCheckboxDisabled" [checked]="node.gongNode.IsChecked" (change)="toggleNodeCheckbox(node)">
+        <mat-checkbox *ngIf="node.gongNode.HasCheckboxButton" [disabled]="node.gongNode.IsCheckboxDisabled" [checked]="node.gongNode.IsChecked" (change)="toggleNodeCheckbox(node)">
             {{node.name}}
         </mat-checkbox>
         <div *ngIf="!node.gongNode.HasCheckboxButton && !node.gongNode.IsInEditMode">
@@ -73,7 +73,7 @@
             </mat-icon>
         </button>
 
-        <button *ngIf="node.gongNode.HasEditButton && !node.gongNode.IsInEditMode" mat-icon-button (click)="setInEditMode(node)">
+        <button *ngIf="node.gongNode.HasEditButton" mat-icon-button (click)="setInEditMode(node)">
             <mat-icon
                 [ngStyle]="{'color':'rgba(0,0,0,.50)'}">edit
             </mat-icon>
@@ -83,7 +83,7 @@
                 [ngStyle]="{'color':'rgba(0,0,0,.50)'}">add
             </mat-icon>
         </button>
-        <button mat-icon-button *ngIf="node.gongNode.HasDeleteButton  && !node.gongNode.IsInEditMode" (click)="deleteNode(node)">
+        <button mat-icon-button *ngIf="node.gongNode.HasDeleteButton" (click)="deleteNode(node)">
             <mat-icon
                 [ngStyle]="{'color':'rgba(0,0,0,.50)'}">
                 delete</mat-icon>

@@ -533,7 +533,10 @@ export class ClassDiagramComponent implements OnInit, OnDestroy {
         if (this.classdiagram == undefined) {
           console.log("unkwnown classdiagram id : " + id)
         } else {
+
           this.drawClassdiagram();
+          this.paper!.setInteractivity(this.classdiagram.IsEditable)
+
         }
       }
     )

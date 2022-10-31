@@ -35,9 +35,9 @@ func updateNodesStates(stage *StageStruct, callbacksSingloton *CallbacksSingloto
 	// gongstructs
 	for _, classdiagramNode := range callbacksSingloton.ClassdiagramsRootNode.Children {
 
-		classdiagramNode.HasEditButton = pkglet.IsEditable
-		classdiagramNode.HasDeleteButton = pkglet.IsEditable
-		classdiagramNode.HasDrawButton = pkglet.IsEditable
+		classdiagramNode.HasEditButton = pkglet.IsEditable && classdiagramNode.IsChecked && !classdiagramNode.IsInEditMode
+		classdiagramNode.HasDeleteButton = pkglet.IsEditable && classdiagramNode.IsChecked && !classdiagramNode.IsInEditMode
+		classdiagramNode.HasDrawButton = pkglet.IsEditable && classdiagramNode.IsChecked && !classdiagramNode.IsInEditMode
 
 		if classdiagramNode.IsChecked {
 			// get the diagram
@@ -56,9 +56,9 @@ func updateNodesStates(stage *StageStruct, callbacksSingloton *CallbacksSingloto
 	}
 
 	for _, stateDiagramNode := range callbacksSingloton.StateDiagramsRootNode.Children {
-		stateDiagramNode.HasEditButton = pkglet.IsEditable
-		stateDiagramNode.HasDeleteButton = pkglet.IsEditable
-		stateDiagramNode.HasDrawButton = pkglet.IsEditable
+		stateDiagramNode.HasEditButton = pkglet.IsEditable && stateDiagramNode.IsChecked && !stateDiagramNode.IsInEditMode
+		stateDiagramNode.HasDeleteButton = pkglet.IsEditable && stateDiagramNode.IsChecked && !stateDiagramNode.IsInEditMode
+		stateDiagramNode.HasDrawButton = pkglet.IsEditable && stateDiagramNode.IsChecked && !stateDiagramNode.IsInEditMode
 	}
 
 	stage.Commit()
