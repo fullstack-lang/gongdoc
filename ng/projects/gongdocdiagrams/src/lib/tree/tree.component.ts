@@ -7,6 +7,7 @@ import { MatTreeFlatDataSource, MatTreeFlattener } from '@angular/material/tree'
 
 import { Router, RouterState } from '@angular/router';
 
+
 import * as gongdoc from 'gongdoc'
 
 /**
@@ -346,6 +347,15 @@ export class TreeComponent implements OnInit {
     this.gongdocNodeService.deleteNode(node.gongNode).subscribe(
       gongdocNode => {
         console.log("delete node")
+      }
+    )
+  }
+
+  draw(node: FlatNode) {
+    node.gongNode.IsInDrawMode = true
+    this.gongdocNodeService.updateNode(node.gongNode).subscribe(
+      gongdocNode => {
+        console.log("updated node")
       }
     )
   }
