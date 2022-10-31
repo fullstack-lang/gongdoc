@@ -323,6 +323,25 @@ export class TreeComponent implements OnInit {
     )
   }
 
+
+  cancelEditMode(node: FlatNode) {
+
+    // fetch the value from the server
+    this.gongdocNodeService.getNode(node.gongNode.ID).subscribe(
+      gongdocNode => {
+        node.gongNode.Name = gongdocNode.Name
+
+        // and set the edit mode
+        node.gongNode.IsInEditMode = false
+        this.gongdocNodeService.updateNode(node.gongNode).subscribe(
+          gongdocNode => {
+            console.log("updated node")
+          }
+        )
+      }
+    )
+  }
+
   deleteNode(node: FlatNode) {
     this.gongdocNodeService.deleteNode(node.gongNode).subscribe(
       gongdocNode => {

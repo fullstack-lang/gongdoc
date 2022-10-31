@@ -8,7 +8,6 @@
         <div *ngIf="!node.gongNode.HasCheckboxButton  && !node.gongNode.IsInEditMode">
             {{node.name}}
         </div>
-
         <mat-form-field *ngIf='node.gongNode.IsInEditMode' mat-form-field class="detail-full-width">
             <mat-label>Name</mat-label>
             <input name="" [ngModelOptions]="{standalone: true}" matInput [(ngModel)]="node.gongNode.Name">
@@ -16,6 +15,12 @@
         <button *ngIf='node.gongNode.IsInEditMode' mat-button (click)="update(node)">
             <mat-icon
                 [ngStyle]="{'color':'rgba(0,0,0,.50)'}">save
+            </mat-icon>
+        </button>
+        <button *ngIf='node.gongNode.IsInEditMode' mat-button (click)="cancelEditMode(node)">
+            <mat-icon
+                [ngStyle]="{'color':'rgba(0,0,0,.50)'}">
+                cancel
             </mat-icon>
         </button>
 
@@ -59,6 +64,12 @@
         <button *ngIf='node.gongNode.IsInEditMode' mat-button (click)="update(node)">
             <mat-icon
                 [ngStyle]="{'color':'rgba(0,0,0,.50)'}">save
+            </mat-icon>
+        </button>
+        <button *ngIf='node.gongNode.IsInEditMode' mat-button (click)="cancelEditMode(node)">
+            <mat-icon
+                [ngStyle]="{'color':'rgba(0,0,0,.50)'}">
+                edit_off
             </mat-icon>
         </button>
 

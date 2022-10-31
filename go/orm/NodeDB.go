@@ -108,9 +108,25 @@ type NodeDB struct {
 	// provide the sql storage for the boolan
 	HasEditButton_Data sql.NullBool
 
+	// Declation for basic field nodeDB.HasEditOffButton
+	// provide the sql storage for the boolan
+	HasEditOffButton_Data sql.NullBool
+
 	// Declation for basic field nodeDB.IsInEditMode
 	// provide the sql storage for the boolan
 	IsInEditMode_Data sql.NullBool
+
+	// Declation for basic field nodeDB.HasDrawButton
+	// provide the sql storage for the boolan
+	HasDrawButton_Data sql.NullBool
+
+	// Declation for basic field nodeDB.HasDrawOffButton
+	// provide the sql storage for the boolan
+	HasDrawOffButton_Data sql.NullBool
+
+	// Declation for basic field nodeDB.IsInDrawMode
+	// provide the sql storage for the boolan
+	IsInDrawMode_Data sql.NullBool
 
 	// Declation for basic field nodeDB.HasDeleteButton
 	// provide the sql storage for the boolan
@@ -152,9 +168,17 @@ type NodeWOP struct {
 
 	HasEditButton bool `xlsx:"8"`
 
-	IsInEditMode bool `xlsx:"9"`
+	HasEditOffButton bool `xlsx:"9"`
 
-	HasDeleteButton bool `xlsx:"10"`
+	IsInEditMode bool `xlsx:"10"`
+
+	HasDrawButton bool `xlsx:"11"`
+
+	HasDrawOffButton bool `xlsx:"12"`
+
+	IsInDrawMode bool `xlsx:"13"`
+
+	HasDeleteButton bool `xlsx:"14"`
 	// insertion for WOP pointer fields
 }
 
@@ -169,7 +193,11 @@ var Node_Fields = []string{
 	"IsCheckboxDisabled",
 	"HasAddChildButton",
 	"HasEditButton",
+	"HasEditOffButton",
 	"IsInEditMode",
+	"HasDrawButton",
+	"HasDrawOffButton",
+	"IsInDrawMode",
 	"HasDeleteButton",
 }
 
@@ -549,8 +577,20 @@ func (nodeDB *NodeDB) CopyBasicFieldsFromNode(node *models.Node) {
 	nodeDB.HasEditButton_Data.Bool = node.HasEditButton
 	nodeDB.HasEditButton_Data.Valid = true
 
+	nodeDB.HasEditOffButton_Data.Bool = node.HasEditOffButton
+	nodeDB.HasEditOffButton_Data.Valid = true
+
 	nodeDB.IsInEditMode_Data.Bool = node.IsInEditMode
 	nodeDB.IsInEditMode_Data.Valid = true
+
+	nodeDB.HasDrawButton_Data.Bool = node.HasDrawButton
+	nodeDB.HasDrawButton_Data.Valid = true
+
+	nodeDB.HasDrawOffButton_Data.Bool = node.HasDrawOffButton
+	nodeDB.HasDrawOffButton_Data.Valid = true
+
+	nodeDB.IsInDrawMode_Data.Bool = node.IsInDrawMode
+	nodeDB.IsInDrawMode_Data.Valid = true
 
 	nodeDB.HasDeleteButton_Data.Bool = node.HasDeleteButton
 	nodeDB.HasDeleteButton_Data.Valid = true
@@ -584,8 +624,20 @@ func (nodeDB *NodeDB) CopyBasicFieldsFromNodeWOP(node *NodeWOP) {
 	nodeDB.HasEditButton_Data.Bool = node.HasEditButton
 	nodeDB.HasEditButton_Data.Valid = true
 
+	nodeDB.HasEditOffButton_Data.Bool = node.HasEditOffButton
+	nodeDB.HasEditOffButton_Data.Valid = true
+
 	nodeDB.IsInEditMode_Data.Bool = node.IsInEditMode
 	nodeDB.IsInEditMode_Data.Valid = true
+
+	nodeDB.HasDrawButton_Data.Bool = node.HasDrawButton
+	nodeDB.HasDrawButton_Data.Valid = true
+
+	nodeDB.HasDrawOffButton_Data.Bool = node.HasDrawOffButton
+	nodeDB.HasDrawOffButton_Data.Valid = true
+
+	nodeDB.IsInDrawMode_Data.Bool = node.IsInDrawMode
+	nodeDB.IsInDrawMode_Data.Valid = true
 
 	nodeDB.HasDeleteButton_Data.Bool = node.HasDeleteButton
 	nodeDB.HasDeleteButton_Data.Valid = true
@@ -602,7 +654,11 @@ func (nodeDB *NodeDB) CopyBasicFieldsToNode(node *models.Node) {
 	node.IsCheckboxDisabled = nodeDB.IsCheckboxDisabled_Data.Bool
 	node.HasAddChildButton = nodeDB.HasAddChildButton_Data.Bool
 	node.HasEditButton = nodeDB.HasEditButton_Data.Bool
+	node.HasEditOffButton = nodeDB.HasEditOffButton_Data.Bool
 	node.IsInEditMode = nodeDB.IsInEditMode_Data.Bool
+	node.HasDrawButton = nodeDB.HasDrawButton_Data.Bool
+	node.HasDrawOffButton = nodeDB.HasDrawOffButton_Data.Bool
+	node.IsInDrawMode = nodeDB.IsInDrawMode_Data.Bool
 	node.HasDeleteButton = nodeDB.HasDeleteButton_Data.Bool
 }
 
@@ -618,7 +674,11 @@ func (nodeDB *NodeDB) CopyBasicFieldsToNodeWOP(node *NodeWOP) {
 	node.IsCheckboxDisabled = nodeDB.IsCheckboxDisabled_Data.Bool
 	node.HasAddChildButton = nodeDB.HasAddChildButton_Data.Bool
 	node.HasEditButton = nodeDB.HasEditButton_Data.Bool
+	node.HasEditOffButton = nodeDB.HasEditOffButton_Data.Bool
 	node.IsInEditMode = nodeDB.IsInEditMode_Data.Bool
+	node.HasDrawButton = nodeDB.HasDrawButton_Data.Bool
+	node.HasDrawOffButton = nodeDB.HasDrawOffButton_Data.Bool
+	node.IsInDrawMode = nodeDB.IsInDrawMode_Data.Bool
 	node.HasDeleteButton = nodeDB.HasDeleteButton_Data.Bool
 }
 

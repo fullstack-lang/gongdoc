@@ -2497,8 +2497,32 @@ func (stage *StageStruct) Marshall(file *os.File, modelsPackageName, packageName
 
 		setValueField = NumberInitStatement
 		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
+		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "HasEditOffButton")
+		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", fmt.Sprintf("%t", node.HasEditOffButton))
+		initializerStatements += setValueField
+
+		setValueField = NumberInitStatement
+		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
 		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "IsInEditMode")
 		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", fmt.Sprintf("%t", node.IsInEditMode))
+		initializerStatements += setValueField
+
+		setValueField = NumberInitStatement
+		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
+		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "HasDrawButton")
+		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", fmt.Sprintf("%t", node.HasDrawButton))
+		initializerStatements += setValueField
+
+		setValueField = NumberInitStatement
+		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
+		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "HasDrawOffButton")
+		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", fmt.Sprintf("%t", node.HasDrawOffButton))
+		initializerStatements += setValueField
+
+		setValueField = NumberInitStatement
+		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
+		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "IsInDrawMode")
+		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", fmt.Sprintf("%t", node.IsInDrawMode))
 		initializerStatements += setValueField
 
 		setValueField = NumberInitStatement
@@ -4096,7 +4120,7 @@ func GetFields[Type Gongstruct]() (res []string) {
 	case Link:
 		res = []string{"Name", "Fieldname", "Structname", "Fieldtypename", "TargetMultiplicity", "SourceMultiplicity", "Middlevertice"}
 	case Node:
-		res = []string{"Name", "Type", "Classdiagram", "Umlsc", "IsExpanded", "HasCheckboxButton", "IsChecked", "IsCheckboxDisabled", "HasAddChildButton", "HasEditButton", "IsInEditMode", "HasDeleteButton", "Children"}
+		res = []string{"Name", "Type", "Classdiagram", "Umlsc", "IsExpanded", "HasCheckboxButton", "IsChecked", "IsCheckboxDisabled", "HasAddChildButton", "HasEditButton", "HasEditOffButton", "IsInEditMode", "HasDrawButton", "HasDrawOffButton", "IsInDrawMode", "HasDeleteButton", "Children"}
 	case Note:
 		res = []string{"Name", "Body", "X", "Y", "Width", "Heigth", "Matched"}
 	case Pkgelt:
@@ -4294,8 +4318,16 @@ func GetFieldStringValue[Type Gongstruct](instance Type, fieldName string) (res 
 			res = fmt.Sprintf("%t", any(instance).(Node).HasAddChildButton)
 		case "HasEditButton":
 			res = fmt.Sprintf("%t", any(instance).(Node).HasEditButton)
+		case "HasEditOffButton":
+			res = fmt.Sprintf("%t", any(instance).(Node).HasEditOffButton)
 		case "IsInEditMode":
 			res = fmt.Sprintf("%t", any(instance).(Node).IsInEditMode)
+		case "HasDrawButton":
+			res = fmt.Sprintf("%t", any(instance).(Node).HasDrawButton)
+		case "HasDrawOffButton":
+			res = fmt.Sprintf("%t", any(instance).(Node).HasDrawOffButton)
+		case "IsInDrawMode":
+			res = fmt.Sprintf("%t", any(instance).(Node).IsInDrawMode)
 		case "HasDeleteButton":
 			res = fmt.Sprintf("%t", any(instance).(Node).HasDeleteButton)
 		case "Children":
