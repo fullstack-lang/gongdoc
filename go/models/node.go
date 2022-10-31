@@ -27,6 +27,7 @@ type Node struct {
 	HasDrawButton    bool
 	HasDrawOffButton bool
 	IsInDrawMode     bool
+	IsSaved          bool
 
 	HasDeleteButton bool
 

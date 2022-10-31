@@ -55,9 +55,11 @@ func updateNodesStates(stage *StageStruct, callbacksSingloton *CallbacksSingloto
 			for _, classshape := range classDiagram.Classshapes {
 				gongstruct := classshape.GongStruct
 				gongstructNodes[gongstruct.Name].IsChecked = true
+				gongstructNodes[gongstruct.Name].IsCheckboxDisabled = !classDiagram.IsInDrawMode
 
 				for _, field := range classshape.Fields {
 					gongfieldNodes[gongstruct.Name+"."+field.Name].IsChecked = true
+					gongfieldNodes[gongstruct.Name+"."+field.Name].IsCheckboxDisabled = !classDiagram.IsInDrawMode
 				}
 			}
 		}

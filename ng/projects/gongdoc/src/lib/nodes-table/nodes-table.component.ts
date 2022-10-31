@@ -110,6 +110,9 @@ export class NodesTableComponent implements OnInit {
         case 'IsInDrawMode':
           return nodeDB.IsInDrawMode?"true":"false";
 
+        case 'IsSaved':
+          return nodeDB.IsSaved?"true":"false";
+
         case 'HasDeleteButton':
           return nodeDB.HasDeleteButton?"true":"false";
 
@@ -221,6 +224,7 @@ export class NodesTableComponent implements OnInit {
         "HasDrawButton",
         "HasDrawOffButton",
         "IsInDrawMode",
+        "IsSaved",
         "HasDeleteButton",
         "Node_Children",
         "Tree_RootNodes",
@@ -241,6 +245,7 @@ export class NodesTableComponent implements OnInit {
         "HasDrawButton",
         "HasDrawOffButton",
         "IsInDrawMode",
+        "IsSaved",
         "HasDeleteButton",
         "Node_Children",
         "Tree_RootNodes",

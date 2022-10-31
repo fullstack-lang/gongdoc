@@ -350,6 +350,7 @@ export class TreeComponent implements OnInit {
 
     // and set the edit mode
     node.gongNode.IsInDrawMode = false
+    node.gongNode.IsSaved = false
     this.gongdocNodeService.updateNode(node.gongNode).subscribe(
       gongdocNode => {
         console.log("updated node")
@@ -360,16 +361,23 @@ export class TreeComponent implements OnInit {
 
   updateDiagram(node: FlatNode) {
 
-    // fetch the value from the server
-    // <to do>
-
-    // and set the edit mode
-    node.gongNode.IsInDrawMode = false
+    node.gongNode.IsSaved = true
     this.gongdocNodeService.updateNode(node.gongNode).subscribe(
       gongdocNode => {
         console.log("updated node")
+
+        if (gongdocNode.IsSaved) {
+          // and set the edit mode
+          node.gongNode.IsInDrawMode = false
+          this.gongdocNodeService.updateNode(node.gongNode).subscribe(
+            gongdocNode => {
+              console.log("updated node")
+            }
+          )
+        }
       }
     )
+
 
   }
 

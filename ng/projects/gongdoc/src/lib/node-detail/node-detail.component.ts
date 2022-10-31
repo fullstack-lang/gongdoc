@@ -48,6 +48,7 @@ export class NodeDetailComponent implements OnInit {
 	HasDrawButtonFormControl: UntypedFormControl = new UntypedFormControl(false);
 	HasDrawOffButtonFormControl: UntypedFormControl = new UntypedFormControl(false);
 	IsInDrawModeFormControl: UntypedFormControl = new UntypedFormControl(false);
+	IsSavedFormControl: UntypedFormControl = new UntypedFormControl(false);
 	HasDeleteButtonFormControl: UntypedFormControl = new UntypedFormControl(false);
 
 	// the NodeDB of interest
@@ -165,6 +166,7 @@ export class NodeDetailComponent implements OnInit {
 				this.HasDrawButtonFormControl.setValue(this.node.HasDrawButton)
 				this.HasDrawOffButtonFormControl.setValue(this.node.HasDrawOffButton)
 				this.IsInDrawModeFormControl.setValue(this.node.IsInDrawMode)
+				this.IsSavedFormControl.setValue(this.node.IsSaved)
 				this.HasDeleteButtonFormControl.setValue(this.node.HasDeleteButton)
 			}
 		)
@@ -208,6 +210,7 @@ export class NodeDetailComponent implements OnInit {
 		this.node.HasDrawButton = this.HasDrawButtonFormControl.value
 		this.node.HasDrawOffButton = this.HasDrawOffButtonFormControl.value
 		this.node.IsInDrawMode = this.IsInDrawModeFormControl.value
+		this.node.IsSaved = this.IsSavedFormControl.value
 		this.node.HasDeleteButton = this.HasDeleteButtonFormControl.value
 
 		// save from the front pointer space to the non pointer space for serialization

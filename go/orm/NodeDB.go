@@ -124,6 +124,10 @@ type NodeDB struct {
 	// provide the sql storage for the boolan
 	IsInDrawMode_Data sql.NullBool
 
+	// Declation for basic field nodeDB.IsSaved
+	// provide the sql storage for the boolan
+	IsSaved_Data sql.NullBool
+
 	// Declation for basic field nodeDB.HasDeleteButton
 	// provide the sql storage for the boolan
 	HasDeleteButton_Data sql.NullBool
@@ -172,7 +176,9 @@ type NodeWOP struct {
 
 	IsInDrawMode bool `xlsx:"12"`
 
-	HasDeleteButton bool `xlsx:"13"`
+	IsSaved bool `xlsx:"13"`
+
+	HasDeleteButton bool `xlsx:"14"`
 	// insertion for WOP pointer fields
 }
 
@@ -191,6 +197,7 @@ var Node_Fields = []string{
 	"HasDrawButton",
 	"HasDrawOffButton",
 	"IsInDrawMode",
+	"IsSaved",
 	"HasDeleteButton",
 }
 
@@ -582,6 +589,9 @@ func (nodeDB *NodeDB) CopyBasicFieldsFromNode(node *models.Node) {
 	nodeDB.IsInDrawMode_Data.Bool = node.IsInDrawMode
 	nodeDB.IsInDrawMode_Data.Valid = true
 
+	nodeDB.IsSaved_Data.Bool = node.IsSaved
+	nodeDB.IsSaved_Data.Valid = true
+
 	nodeDB.HasDeleteButton_Data.Bool = node.HasDeleteButton
 	nodeDB.HasDeleteButton_Data.Valid = true
 }
@@ -626,6 +636,9 @@ func (nodeDB *NodeDB) CopyBasicFieldsFromNodeWOP(node *NodeWOP) {
 	nodeDB.IsInDrawMode_Data.Bool = node.IsInDrawMode
 	nodeDB.IsInDrawMode_Data.Valid = true
 
+	nodeDB.IsSaved_Data.Bool = node.IsSaved
+	nodeDB.IsSaved_Data.Valid = true
+
 	nodeDB.HasDeleteButton_Data.Bool = node.HasDeleteButton
 	nodeDB.HasDeleteButton_Data.Valid = true
 }
@@ -645,6 +658,7 @@ func (nodeDB *NodeDB) CopyBasicFieldsToNode(node *models.Node) {
 	node.HasDrawButton = nodeDB.HasDrawButton_Data.Bool
 	node.HasDrawOffButton = nodeDB.HasDrawOffButton_Data.Bool
 	node.IsInDrawMode = nodeDB.IsInDrawMode_Data.Bool
+	node.IsSaved = nodeDB.IsSaved_Data.Bool
 	node.HasDeleteButton = nodeDB.HasDeleteButton_Data.Bool
 }
 
@@ -664,6 +678,7 @@ func (nodeDB *NodeDB) CopyBasicFieldsToNodeWOP(node *NodeWOP) {
 	node.HasDrawButton = nodeDB.HasDrawButton_Data.Bool
 	node.HasDrawOffButton = nodeDB.HasDrawOffButton_Data.Bool
 	node.IsInDrawMode = nodeDB.IsInDrawMode_Data.Bool
+	node.IsSaved = nodeDB.IsSaved_Data.Bool
 	node.HasDeleteButton = nodeDB.HasDeleteButton_Data.Bool
 }
 

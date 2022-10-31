@@ -150,9 +150,35 @@ func (callbacksSingloton CallbacksSingloton) OnAfterUpdate(
 			}
 			updateNodesStates(stage, &callbacksSingloton)
 		}
+
+		// marshall diagram to switch to saved state
+		if !stagedNode.IsSaved && frontNode.IsSaved {
+			// fetch the only package
+			var pkgelt *DiagramPackage
+			for _pkgelt := range *GetGongstructInstancesSet[DiagramPackage]() {
+				pkgelt = _pkgelt
+			}
+			switch stagedNode.Type {
+			case CLASS_DIAGRAM:
+
+				// checkout in order to get the latest version of the diagram updated
+				// by the front
+				Stage.Checkout()
+				stagedNode.Classdiagram.Marshall(pkgelt, filepath.Join(pkgelt.Path, "../diagrams"))
+				stage.Commit()
+			case STATE_DIAGRAM:
+				// stagedNode.Umlsc = stagedNode.Umlsc.Saved
+			}
+			stagedNode.IsSaved = true
+			updateNodesStates(stage, &callbacksSingloton)
+		}
 	case GONG_STRUCT:
+
 		// if node is unchecked
 		if stagedNode.IsChecked && !frontNode.IsChecked {
+
+			// get the latest version of the diagram
+			stage.Checkout()
 
 			// remove the classshape from the selected diagram
 			for _, classdiagramNode := range callbacksSingloton.ClassdiagramsRootNode.Children {
@@ -175,6 +201,10 @@ func (callbacksSingloton CallbacksSingloton) OnAfterUpdate(
 
 		// if node is checked, add classshape
 		if !stagedNode.IsChecked && frontNode.IsChecked {
+
+			// get the latest version of the diagram
+			stage.Checkout()
+
 			for _, classdiagramNode := range callbacksSingloton.ClassdiagramsRootNode.Children {
 				if classdiagramNode.IsChecked {
 					// get the diagram

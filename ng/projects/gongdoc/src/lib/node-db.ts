@@ -24,6 +24,7 @@ export class NodeDB {
 	HasDrawButton: boolean = false
 	HasDrawOffButton: boolean = false
 	IsInDrawMode: boolean = false
+	IsSaved: boolean = false
 	HasDeleteButton: boolean = false
 
 	// insertion point for other declarations
