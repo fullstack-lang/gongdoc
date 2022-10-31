@@ -13,7 +13,7 @@ import (
 func GenGoDefaultDiagram(modelPkg *gong_models.ModelPkg, pkgPath string) {
 
 	// generate diagrams for documentation
-	var pkgelt Pkgelt
+	var pkgelt DiagramPackage
 	// parse the diagram package
 	diagramPkgPath := filepath.Join(pkgPath, "../diagrams")
 
@@ -30,7 +30,7 @@ func GenGoDefaultDiagram(modelPkg *gong_models.ModelPkg, pkgPath string) {
 
 	// generates default diagram
 	{
-		var pkgelt_default Pkgelt
+		var pkgelt_default DiagramPackage
 		pkgelt_default.Name = modelPkg.PkgPath
 
 		defaultClassDiagramm := new(Classdiagram)

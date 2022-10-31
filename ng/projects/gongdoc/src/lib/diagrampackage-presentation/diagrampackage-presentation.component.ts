@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 
-import { PkgeltDB } from '../pkgelt-db'
-import { PkgeltService } from '../pkgelt.service'
+import { DiagramPackageDB } from '../diagrampackage-db'
+import { DiagramPackageService } from '../diagrampackage.service'
 
 import { FrontRepoService, FrontRepo } from '../front-repo.service'
 
@@ -10,18 +10,18 @@ import { Router, RouterState, ActivatedRoute } from '@angular/router';
 
 // insertion point for additional imports
 
-export interface pkgeltDummyElement {
+export interface diagrampackageDummyElement {
 }
 
-const ELEMENT_DATA: pkgeltDummyElement[] = [
+const ELEMENT_DATA: diagrampackageDummyElement[] = [
 ];
 
 @Component({
-	selector: 'app-pkgelt-presentation',
-	templateUrl: './pkgelt-presentation.component.html',
-	styleUrls: ['./pkgelt-presentation.component.css'],
+	selector: 'app-diagrampackage-presentation',
+	templateUrl: './diagrampackage-presentation.component.html',
+	styleUrls: ['./diagrampackage-presentation.component.css'],
 })
-export class PkgeltPresentationComponent implements OnInit {
+export class DiagramPackagePresentationComponent implements OnInit {
 
 	// insertion point for additionnal time duration declarations
 	// insertion point for additionnal enum int field declarations
@@ -29,13 +29,13 @@ export class PkgeltPresentationComponent implements OnInit {
 	displayedColumns: string[] = []
 	dataSource = ELEMENT_DATA
 
-	pkgelt: PkgeltDB = new (PkgeltDB)
+	diagrampackage: DiagramPackageDB = new (DiagramPackageDB)
 
 	// front repo
 	frontRepo: FrontRepo = new (FrontRepo)
  
 	constructor(
-		private pkgeltService: PkgeltService,
+		private diagrampackageService: DiagramPackageService,
 		private frontRepoService: FrontRepoService,
 		private route: ActivatedRoute,
 		private router: Router,
@@ -46,25 +46,25 @@ export class PkgeltPresentationComponent implements OnInit {
 	}
 
 	ngOnInit(): void {
-		this.getPkgelt();
+		this.getDiagramPackage();
 
 		// observable for changes in 
-		this.pkgeltService.PkgeltServiceChanged.subscribe(
+		this.diagrampackageService.DiagramPackageServiceChanged.subscribe(
 			message => {
 				if (message == "update") {
-					this.getPkgelt()
+					this.getDiagramPackage()
 				}
 			}
 		)
 	}
 
-	getPkgelt(): void {
+	getDiagramPackage(): void {
 		const id = +this.route.snapshot.paramMap.get('id')!
 		this.frontRepoService.pull().subscribe(
 			frontRepo => {
 				this.frontRepo = frontRepo
 
-				this.pkgelt = this.frontRepo.Pkgelts.get(id)!
+				this.diagrampackage = this.frontRepo.DiagramPackages.get(id)!
 
 				// insertion point for recovery of durations
 				// insertion point for recovery of enum tint
@@ -85,7 +85,7 @@ export class PkgeltPresentationComponent implements OnInit {
 	setEditorRouterOutlet(ID: number) {
 		this.router.navigate([{
 			outlets: {
-				github_com_fullstack_lang_gongdoc_go_editor: ["github_com_fullstack_lang_gongdoc_go-" + "pkgelt-detail", ID]
+				github_com_fullstack_lang_gongdoc_go_editor: ["github_com_fullstack_lang_gongdoc_go-" + "diagrampackage-detail", ID]
 			}
 		}]);
 	}

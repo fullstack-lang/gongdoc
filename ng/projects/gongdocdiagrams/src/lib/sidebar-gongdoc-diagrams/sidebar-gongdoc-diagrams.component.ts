@@ -169,9 +169,9 @@ export class SidebarGongdocDiagramsComponent implements OnInit {
     this.frontRepoService.pull().subscribe((frontRepo: gongdoc.FrontRepo) => {
       this.frontRepo = frontRepo
 
-      this.frontRepo.Pkgelts_array.forEach(
+      this.frontRepo.DiagramPackages_array.forEach(
         pkgElt => {
-          this.editable = pkgElt.Editable
+          this.editable = pkgElt.IsEditable
         })
 
       // use of a Gödel number to uniquely identfy nodes : 2 * node.id + 3 * node.level

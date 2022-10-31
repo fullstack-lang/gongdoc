@@ -5,7 +5,7 @@ import { UmlscDB } from './umlsc-db'
 // usefull for managing pointer ID values that can be nullable
 import { NullInt64 } from './null-int64'
 
-export class PkgeltDB {
+export class DiagramPackageDB {
 	CreatedAt?: string
 	DeletedAt?: string
 	ID: number = 0
@@ -14,7 +14,7 @@ export class PkgeltDB {
 	Name: string = ""
 	Path: string = ""
 	GongModelPath: string = ""
-	Editable: boolean = false
+	IsEditable: boolean = false
 
 	// insertion point for other declarations
 	Classdiagrams?: Array<ClassdiagramDB>

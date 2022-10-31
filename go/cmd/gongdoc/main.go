@@ -125,8 +125,8 @@ func main() {
 		c.Abort()
 	})
 
-	var pkgelt gongdoc_models.Pkgelt
-	pkgelt.Editable = true
+	var pkgelt gongdoc_models.DiagramPackage
+	pkgelt.IsEditable = true
 
 	// set up gong structs for pkgelet
 
@@ -169,7 +169,7 @@ func main() {
 			log.Println("Unable to parser, wrong number of parsers ", len(pkgsParser))
 		} else {
 			pkgelt.Unmarshall(modelPkg, pkgsParser["diagrams"], fset, diagramPkgPath)
-			pkgelt.Editable = *editable
+			pkgelt.IsEditable = *editable
 		}
 	}
 

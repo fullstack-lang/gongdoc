@@ -3,6 +3,8 @@
   import { ClassdiagramSortingComponent } from './classdiagram-sorting/classdiagram-sorting.component'
   import { ClassshapesTableComponent } from './classshapes-table/classshapes-table.component'
   import { ClassshapeSortingComponent } from './classshape-sorting/classshape-sorting.component'
+  import { DiagramPackagesTableComponent } from './diagrampackages-table/diagrampackages-table.component'
+  import { DiagramPackageSortingComponent } from './diagrampackage-sorting/diagrampackage-sorting.component'
   import { FieldsTableComponent } from './fields-table/fields-table.component'
   import { FieldSortingComponent } from './field-sorting/field-sorting.component'
   import { GongStructsTableComponent } from './gongstructs-table/gongstructs-table.component'
@@ -17,8 +19,6 @@
   import { NodeSortingComponent } from './node-sorting/node-sorting.component'
   import { NotesTableComponent } from './notes-table/notes-table.component'
   import { NoteSortingComponent } from './note-sorting/note-sorting.component'
-  import { PkgeltsTableComponent } from './pkgelts-table/pkgelts-table.component'
-  import { PkgeltSortingComponent } from './pkgelt-sorting/pkgelt-sorting.component'
   import { PositionsTableComponent } from './positions-table/positions-table.component'
   import { PositionSortingComponent } from './position-sorting/position-sorting.component'
   import { TreesTableComponent } from './trees-table/trees-table.component'
@@ -35,6 +35,8 @@
   export const MapOfClassdiagramSortingComponents: Map<string, any> = new Map([["ClassdiagramSortingComponent", ClassdiagramSortingComponent],])
   export const MapOfClassshapesComponents: Map<string, any> = new Map([["ClassshapesTableComponent", ClassshapesTableComponent],])
   export const MapOfClassshapeSortingComponents: Map<string, any> = new Map([["ClassshapeSortingComponent", ClassshapeSortingComponent],])
+  export const MapOfDiagramPackagesComponents: Map<string, any> = new Map([["DiagramPackagesTableComponent", DiagramPackagesTableComponent],])
+  export const MapOfDiagramPackageSortingComponents: Map<string, any> = new Map([["DiagramPackageSortingComponent", DiagramPackageSortingComponent],])
   export const MapOfFieldsComponents: Map<string, any> = new Map([["FieldsTableComponent", FieldsTableComponent],])
   export const MapOfFieldSortingComponents: Map<string, any> = new Map([["FieldSortingComponent", FieldSortingComponent],])
   export const MapOfGongStructsComponents: Map<string, any> = new Map([["GongStructsTableComponent", GongStructsTableComponent],])
@@ -49,8 +51,6 @@
   export const MapOfNodeSortingComponents: Map<string, any> = new Map([["NodeSortingComponent", NodeSortingComponent],])
   export const MapOfNotesComponents: Map<string, any> = new Map([["NotesTableComponent", NotesTableComponent],])
   export const MapOfNoteSortingComponents: Map<string, any> = new Map([["NoteSortingComponent", NoteSortingComponent],])
-  export const MapOfPkgeltsComponents: Map<string, any> = new Map([["PkgeltsTableComponent", PkgeltsTableComponent],])
-  export const MapOfPkgeltSortingComponents: Map<string, any> = new Map([["PkgeltSortingComponent", PkgeltSortingComponent],])
   export const MapOfPositionsComponents: Map<string, any> = new Map([["PositionsTableComponent", PositionsTableComponent],])
   export const MapOfPositionSortingComponents: Map<string, any> = new Map([["PositionSortingComponent", PositionSortingComponent],])
   export const MapOfTreesComponents: Map<string, any> = new Map([["TreesTableComponent", TreesTableComponent],])
@@ -69,6 +69,7 @@ export const MapOfComponents: Map<string, any> =
       // insertion point sub template for map of components 
       ["Classdiagram", MapOfClassdiagramsComponents],
       ["Classshape", MapOfClassshapesComponents],
+      ["DiagramPackage", MapOfDiagramPackagesComponents],
       ["Field", MapOfFieldsComponents],
       ["GongStruct", MapOfGongStructsComponents],
       ["GongdocCommand", MapOfGongdocCommandsComponents],
@@ -76,7 +77,6 @@ export const MapOfComponents: Map<string, any> =
       ["Link", MapOfLinksComponents],
       ["Node", MapOfNodesComponents],
       ["Note", MapOfNotesComponents],
-      ["Pkgelt", MapOfPkgeltsComponents],
       ["Position", MapOfPositionsComponents],
       ["Tree", MapOfTreesComponents],
       ["UmlState", MapOfUmlStatesComponents],
@@ -92,6 +92,7 @@ export const MapOfSortingComponents: Map<string, any> =
     // insertion point sub template for map of sorting components 
       ["Classdiagram", MapOfClassdiagramSortingComponents],
       ["Classshape", MapOfClassshapeSortingComponents],
+      ["DiagramPackage", MapOfDiagramPackageSortingComponents],
       ["Field", MapOfFieldSortingComponents],
       ["GongStruct", MapOfGongStructSortingComponents],
       ["GongdocCommand", MapOfGongdocCommandSortingComponents],
@@ -99,7 +100,6 @@ export const MapOfSortingComponents: Map<string, any> =
       ["Link", MapOfLinkSortingComponents],
       ["Node", MapOfNodeSortingComponents],
       ["Note", MapOfNoteSortingComponents],
-      ["Pkgelt", MapOfPkgeltSortingComponents],
       ["Position", MapOfPositionSortingComponents],
       ["Tree", MapOfTreeSortingComponents],
       ["UmlState", MapOfUmlStateSortingComponents],

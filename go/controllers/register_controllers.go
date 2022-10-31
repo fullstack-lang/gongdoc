@@ -57,6 +57,13 @@ func RegisterControllers(r *gin.Engine) {
 		v1.PUT("/v1/classshapes/:id", UpdateClassshape)
 		v1.DELETE("/v1/classshapes/:id", DeleteClassshape)
 
+		v1.GET("/v1/diagrampackages", GetDiagramPackages)
+		v1.GET("/v1/diagrampackages/:id", GetDiagramPackage)
+		v1.POST("/v1/diagrampackages", PostDiagramPackage)
+		v1.PATCH("/v1/diagrampackages/:id", UpdateDiagramPackage)
+		v1.PUT("/v1/diagrampackages/:id", UpdateDiagramPackage)
+		v1.DELETE("/v1/diagrampackages/:id", DeleteDiagramPackage)
+
 		v1.GET("/v1/fields", GetFields)
 		v1.GET("/v1/fields/:id", GetField)
 		v1.POST("/v1/fields", PostField)
@@ -105,13 +112,6 @@ func RegisterControllers(r *gin.Engine) {
 		v1.PATCH("/v1/notes/:id", UpdateNote)
 		v1.PUT("/v1/notes/:id", UpdateNote)
 		v1.DELETE("/v1/notes/:id", DeleteNote)
-
-		v1.GET("/v1/pkgelts", GetPkgelts)
-		v1.GET("/v1/pkgelts/:id", GetPkgelt)
-		v1.POST("/v1/pkgelts", PostPkgelt)
-		v1.PATCH("/v1/pkgelts/:id", UpdatePkgelt)
-		v1.PUT("/v1/pkgelts/:id", UpdatePkgelt)
-		v1.DELETE("/v1/pkgelts/:id", DeletePkgelt)
 
 		v1.GET("/v1/positions", GetPositions)
 		v1.GET("/v1/positions/:id", GetPosition)

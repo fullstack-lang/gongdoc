@@ -86,8 +86,8 @@ func (callbacksSingloton CallbacksSingloton) OnAfterUpdate(
 
 				// rename the diagram file if it exists
 				// remove the actual classdiagram file if it exsits
-				fieldName := GetAssociationName[Pkgelt]().Classdiagrams[0].Name
-				mapReverse := GetSliceOfPointersReverseMap[Pkgelt, Classdiagram](fieldName)
+				fieldName := GetAssociationName[DiagramPackage]().Classdiagrams[0].Name
+				mapReverse := GetSliceOfPointersReverseMap[DiagramPackage, Classdiagram](fieldName)
 				pkgelt := mapReverse[stagedNode.Classdiagram]
 
 				oldClassdiagramFilePath := filepath.Join(pkgelt.Path, "../diagrams", stagedNode.Classdiagram.Name) + ".go"
@@ -190,8 +190,8 @@ func (callbacksSingloton CallbacksSingloton) OnAfterCreate(
 		newDiagramNode.HasCheckboxButton = true
 
 		// fetch the only package
-		var pkgelt *Pkgelt
-		for _pkgelt := range *GetGongstructInstancesSet[Pkgelt]() {
+		var pkgelt *DiagramPackage
+		for _pkgelt := range *GetGongstructInstancesSet[DiagramPackage]() {
 			pkgelt = _pkgelt
 		}
 
@@ -233,8 +233,8 @@ func (callbacksSingloton CallbacksSingloton) OnAfterDelete(
 	switch stagedNode.Type {
 	case CLASS_DIAGRAM:
 		// remove the classdiagram node from the pkg element node
-		fieldName := GetAssociationName[Pkgelt]().Classdiagrams[0].Name
-		mapReverse := GetSliceOfPointersReverseMap[Pkgelt, Classdiagram](fieldName)
+		fieldName := GetAssociationName[DiagramPackage]().Classdiagrams[0].Name
+		mapReverse := GetSliceOfPointersReverseMap[DiagramPackage, Classdiagram](fieldName)
 		pkgelt := mapReverse[stagedNode.Classdiagram]
 		pkgelt.Classdiagrams = remove(pkgelt.Classdiagrams, stagedNode.Classdiagram)
 		stagedNode.Classdiagram.Unstage()
@@ -249,8 +249,8 @@ func (callbacksSingloton CallbacksSingloton) OnAfterDelete(
 
 	case STATE_DIAGRAM:
 		// remove the umlsc node from the pkg element node
-		fieldName := GetAssociationName[Pkgelt]().Umlscs[0].Name
-		mapReverse := GetSliceOfPointersReverseMap[Pkgelt, Umlsc](fieldName)
+		fieldName := GetAssociationName[DiagramPackage]().Umlscs[0].Name
+		mapReverse := GetSliceOfPointersReverseMap[DiagramPackage, Umlsc](fieldName)
 		pkgelt := mapReverse[stagedNode.Umlsc]
 		pkgelt.Umlscs = remove(pkgelt.Umlscs, stagedNode.Umlsc)
 		stagedNode.Umlsc.Unstage()

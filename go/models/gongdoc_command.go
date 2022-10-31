@@ -77,13 +77,14 @@ func init() {
 				// put to stage the gongdoc stack elements in the back repo
 				Stage.Checkout()
 
-				if len(Stage.Pkgelts) != 1 {
-					log.Panicf("There should be 1 package. Instead, there are %d", len(Stage.Pkgelts))
+				if len(*GetGongstructInstancesSet[DiagramPackage]()) != 1 {
+					log.Panicf("There should be 1 package. Instead, there are %d",
+						len(*GetGongstructInstancesSet[DiagramPackage]()))
 				}
 
 				// fetch the only package
-				var pkgelt *Pkgelt
-				for _pkgelt := range *GetGongstructInstancesSet[Pkgelt]() {
+				var pkgelt *DiagramPackage
+				for _pkgelt := range *GetGongstructInstancesSet[DiagramPackage]() {
 					pkgelt = _pkgelt
 				}
 

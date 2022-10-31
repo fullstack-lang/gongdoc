@@ -15,6 +15,8 @@ import { ClassdiagramService } from '../classdiagram.service'
 import { getClassdiagramUniqueID } from '../front-repo.service'
 import { ClassshapeService } from '../classshape.service'
 import { getClassshapeUniqueID } from '../front-repo.service'
+import { DiagramPackageService } from '../diagrampackage.service'
+import { getDiagramPackageUniqueID } from '../front-repo.service'
 import { FieldService } from '../field.service'
 import { getFieldUniqueID } from '../front-repo.service'
 import { GongStructService } from '../gongstruct.service'
@@ -29,8 +31,6 @@ import { NodeService } from '../node.service'
 import { getNodeUniqueID } from '../front-repo.service'
 import { NoteService } from '../note.service'
 import { getNoteUniqueID } from '../front-repo.service'
-import { PkgeltService } from '../pkgelt.service'
-import { getPkgeltUniqueID } from '../front-repo.service'
 import { PositionService } from '../position.service'
 import { getPositionUniqueID } from '../front-repo.service'
 import { TreeService } from '../tree.service'
@@ -185,6 +185,7 @@ export class SidebarComponent implements OnInit {
     // insertion point for per struct service declaration
     private classdiagramService: ClassdiagramService,
     private classshapeService: ClassshapeService,
+    private diagrampackageService: DiagramPackageService,
     private fieldService: FieldService,
     private gongstructService: GongStructService,
     private gongdoccommandService: GongdocCommandService,
@@ -192,7 +193,6 @@ export class SidebarComponent implements OnInit {
     private linkService: LinkService,
     private nodeService: NodeService,
     private noteService: NoteService,
-    private pkgeltService: PkgeltService,
     private positionService: PositionService,
     private treeService: TreeService,
     private umlstateService: UmlStateService,
@@ -235,6 +235,14 @@ export class SidebarComponent implements OnInit {
     )
     // observable for changes in structs
     this.classshapeService.ClassshapeServiceChanged.subscribe(
+      message => {
+        if (message == "post" || message == "update" || message == "delete") {
+          this.refresh()
+        }
+      }
+    )
+    // observable for changes in structs
+    this.diagrampackageService.DiagramPackageServiceChanged.subscribe(
       message => {
         if (message == "post" || message == "update" || message == "delete") {
           this.refresh()
@@ -291,14 +299,6 @@ export class SidebarComponent implements OnInit {
     )
     // observable for changes in structs
     this.noteService.NoteServiceChanged.subscribe(
-      message => {
-        if (message == "post" || message == "update" || message == "delete") {
-          this.refresh()
-        }
-      }
-    )
-    // observable for changes in structs
-    this.pkgeltService.PkgeltServiceChanged.subscribe(
       message => {
         if (message == "post" || message == "update" || message == "delete") {
           this.refresh()
@@ -650,6 +650,114 @@ export class SidebarComponent implements OnInit {
               children: new Array<GongNode>()
             }
             LinksGongNodeAssociation.children.push(linkNode)
+          })
+
+        }
+      )
+
+      /**
+      * fill up the DiagramPackage part of the mat tree
+      */
+      let diagrampackageGongNodeStruct: GongNode = {
+        name: "DiagramPackage",
+        type: GongNodeType.STRUCT,
+        id: 0,
+        uniqueIdPerStack: 13 * nonInstanceNodeId,
+        structName: "DiagramPackage",
+        associationField: "",
+        associatedStructName: "",
+        children: new Array<GongNode>()
+      }
+      nonInstanceNodeId = nonInstanceNodeId + 1
+      this.gongNodeTree.push(diagrampackageGongNodeStruct)
+
+      this.frontRepo.DiagramPackages_array.sort((t1, t2) => {
+        if (t1.Name > t2.Name) {
+          return 1;
+        }
+        if (t1.Name < t2.Name) {
+          return -1;
+        }
+        return 0;
+      });
+
+      this.frontRepo.DiagramPackages_array.forEach(
+        diagrampackageDB => {
+          let diagrampackageGongNodeInstance: GongNode = {
+            name: diagrampackageDB.Name,
+            type: GongNodeType.INSTANCE,
+            id: diagrampackageDB.ID,
+            uniqueIdPerStack: getDiagramPackageUniqueID(diagrampackageDB.ID),
+            structName: "DiagramPackage",
+            associationField: "",
+            associatedStructName: "",
+            children: new Array<GongNode>()
+          }
+          diagrampackageGongNodeStruct.children!.push(diagrampackageGongNodeInstance)
+
+          // insertion point for per field code
+          /**
+          * let append a node for the slide of pointer Classdiagrams
+          */
+          let ClassdiagramsGongNodeAssociation: GongNode = {
+            name: "(Classdiagram) Classdiagrams",
+            type: GongNodeType.ONE__ZERO_MANY_ASSOCIATION,
+            id: diagrampackageDB.ID,
+            uniqueIdPerStack: 19 * nonInstanceNodeId,
+            structName: "DiagramPackage",
+            associationField: "Classdiagrams",
+            associatedStructName: "Classdiagram",
+            children: new Array<GongNode>()
+          }
+          nonInstanceNodeId = nonInstanceNodeId + 1
+          diagrampackageGongNodeInstance.children.push(ClassdiagramsGongNodeAssociation)
+
+          diagrampackageDB.Classdiagrams?.forEach(classdiagramDB => {
+            let classdiagramNode: GongNode = {
+              name: classdiagramDB.Name,
+              type: GongNodeType.INSTANCE,
+              id: classdiagramDB.ID,
+              uniqueIdPerStack: // godel numbering (thank you kurt)
+                7 * getDiagramPackageUniqueID(diagrampackageDB.ID)
+                + 11 * getClassdiagramUniqueID(classdiagramDB.ID),
+              structName: "Classdiagram",
+              associationField: "",
+              associatedStructName: "",
+              children: new Array<GongNode>()
+            }
+            ClassdiagramsGongNodeAssociation.children.push(classdiagramNode)
+          })
+
+          /**
+          * let append a node for the slide of pointer Umlscs
+          */
+          let UmlscsGongNodeAssociation: GongNode = {
+            name: "(Umlsc) Umlscs",
+            type: GongNodeType.ONE__ZERO_MANY_ASSOCIATION,
+            id: diagrampackageDB.ID,
+            uniqueIdPerStack: 19 * nonInstanceNodeId,
+            structName: "DiagramPackage",
+            associationField: "Umlscs",
+            associatedStructName: "Umlsc",
+            children: new Array<GongNode>()
+          }
+          nonInstanceNodeId = nonInstanceNodeId + 1
+          diagrampackageGongNodeInstance.children.push(UmlscsGongNodeAssociation)
+
+          diagrampackageDB.Umlscs?.forEach(umlscDB => {
+            let umlscNode: GongNode = {
+              name: umlscDB.Name,
+              type: GongNodeType.INSTANCE,
+              id: umlscDB.ID,
+              uniqueIdPerStack: // godel numbering (thank you kurt)
+                7 * getDiagramPackageUniqueID(diagrampackageDB.ID)
+                + 11 * getUmlscUniqueID(umlscDB.ID),
+              structName: "Umlsc",
+              associationField: "",
+              associatedStructName: "",
+              children: new Array<GongNode>()
+            }
+            UmlscsGongNodeAssociation.children.push(umlscNode)
           })
 
         }
@@ -1097,114 +1205,6 @@ export class SidebarComponent implements OnInit {
           noteGongNodeStruct.children!.push(noteGongNodeInstance)
 
           // insertion point for per field code
-        }
-      )
-
-      /**
-      * fill up the Pkgelt part of the mat tree
-      */
-      let pkgeltGongNodeStruct: GongNode = {
-        name: "Pkgelt",
-        type: GongNodeType.STRUCT,
-        id: 0,
-        uniqueIdPerStack: 13 * nonInstanceNodeId,
-        structName: "Pkgelt",
-        associationField: "",
-        associatedStructName: "",
-        children: new Array<GongNode>()
-      }
-      nonInstanceNodeId = nonInstanceNodeId + 1
-      this.gongNodeTree.push(pkgeltGongNodeStruct)
-
-      this.frontRepo.Pkgelts_array.sort((t1, t2) => {
-        if (t1.Name > t2.Name) {
-          return 1;
-        }
-        if (t1.Name < t2.Name) {
-          return -1;
-        }
-        return 0;
-      });
-
-      this.frontRepo.Pkgelts_array.forEach(
-        pkgeltDB => {
-          let pkgeltGongNodeInstance: GongNode = {
-            name: pkgeltDB.Name,
-            type: GongNodeType.INSTANCE,
-            id: pkgeltDB.ID,
-            uniqueIdPerStack: getPkgeltUniqueID(pkgeltDB.ID),
-            structName: "Pkgelt",
-            associationField: "",
-            associatedStructName: "",
-            children: new Array<GongNode>()
-          }
-          pkgeltGongNodeStruct.children!.push(pkgeltGongNodeInstance)
-
-          // insertion point for per field code
-          /**
-          * let append a node for the slide of pointer Classdiagrams
-          */
-          let ClassdiagramsGongNodeAssociation: GongNode = {
-            name: "(Classdiagram) Classdiagrams",
-            type: GongNodeType.ONE__ZERO_MANY_ASSOCIATION,
-            id: pkgeltDB.ID,
-            uniqueIdPerStack: 19 * nonInstanceNodeId,
-            structName: "Pkgelt",
-            associationField: "Classdiagrams",
-            associatedStructName: "Classdiagram",
-            children: new Array<GongNode>()
-          }
-          nonInstanceNodeId = nonInstanceNodeId + 1
-          pkgeltGongNodeInstance.children.push(ClassdiagramsGongNodeAssociation)
-
-          pkgeltDB.Classdiagrams?.forEach(classdiagramDB => {
-            let classdiagramNode: GongNode = {
-              name: classdiagramDB.Name,
-              type: GongNodeType.INSTANCE,
-              id: classdiagramDB.ID,
-              uniqueIdPerStack: // godel numbering (thank you kurt)
-                7 * getPkgeltUniqueID(pkgeltDB.ID)
-                + 11 * getClassdiagramUniqueID(classdiagramDB.ID),
-              structName: "Classdiagram",
-              associationField: "",
-              associatedStructName: "",
-              children: new Array<GongNode>()
-            }
-            ClassdiagramsGongNodeAssociation.children.push(classdiagramNode)
-          })
-
-          /**
-          * let append a node for the slide of pointer Umlscs
-          */
-          let UmlscsGongNodeAssociation: GongNode = {
-            name: "(Umlsc) Umlscs",
-            type: GongNodeType.ONE__ZERO_MANY_ASSOCIATION,
-            id: pkgeltDB.ID,
-            uniqueIdPerStack: 19 * nonInstanceNodeId,
-            structName: "Pkgelt",
-            associationField: "Umlscs",
-            associatedStructName: "Umlsc",
-            children: new Array<GongNode>()
-          }
-          nonInstanceNodeId = nonInstanceNodeId + 1
-          pkgeltGongNodeInstance.children.push(UmlscsGongNodeAssociation)
-
-          pkgeltDB.Umlscs?.forEach(umlscDB => {
-            let umlscNode: GongNode = {
-              name: umlscDB.Name,
-              type: GongNodeType.INSTANCE,
-              id: umlscDB.ID,
-              uniqueIdPerStack: // godel numbering (thank you kurt)
-                7 * getPkgeltUniqueID(pkgeltDB.ID)
-                + 11 * getUmlscUniqueID(umlscDB.ID),
-              structName: "Umlsc",
-              associationField: "",
-              associatedStructName: "",
-              children: new Array<GongNode>()
-            }
-            UmlscsGongNodeAssociation.children.push(umlscNode)
-          })
-
         }
       )
 

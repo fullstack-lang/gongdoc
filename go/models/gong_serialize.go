@@ -15,6 +15,7 @@ func SerializeStage(filename string) {
 		// insertion point
 		SerializeExcelize[Classdiagram](f)
 		SerializeExcelize[Classshape](f)
+		SerializeExcelize[DiagramPackage](f)
 		SerializeExcelize[Field](f)
 		SerializeExcelize[GongStruct](f)
 		SerializeExcelize[GongdocCommand](f)
@@ -22,7 +23,6 @@ func SerializeStage(filename string) {
 		SerializeExcelize[Link](f)
 		SerializeExcelize[Node](f)
 		SerializeExcelize[Note](f)
-		SerializeExcelize[Pkgelt](f)
 		SerializeExcelize[Position](f)
 		SerializeExcelize[Tree](f)
 		SerializeExcelize[UmlState](f)

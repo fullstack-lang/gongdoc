@@ -46,11 +46,11 @@ type UmlscAPI struct {
 type UmlscPointersEnconding struct {
 	// insertion for pointer fields encoding declaration
 
-	// Implementation of a reverse ID for field Pkgelt{}.Umlscs []*Umlsc
-	Pkgelt_UmlscsDBID sql.NullInt64
+	// Implementation of a reverse ID for field DiagramPackage{}.Umlscs []*Umlsc
+	DiagramPackage_UmlscsDBID sql.NullInt64
 
 	// implementation of the index of the withing the slice
-	Pkgelt_UmlscsDBID_Index sql.NullInt64
+	DiagramPackage_UmlscsDBID_Index sql.NullInt64
 }
 
 // UmlscDB describes a umlsc in the database
@@ -618,9 +618,9 @@ func (backRepoUmlsc *BackRepoUmlscStruct) RestorePhaseTwo() {
 
 		// insertion point for reindexing pointers encoding
 		// This reindex umlsc.Umlscs
-		if umlscDB.Pkgelt_UmlscsDBID.Int64 != 0 {
-			umlscDB.Pkgelt_UmlscsDBID.Int64 =
-				int64(BackRepoPkgeltid_atBckpTime_newID[uint(umlscDB.Pkgelt_UmlscsDBID.Int64)])
+		if umlscDB.DiagramPackage_UmlscsDBID.Int64 != 0 {
+			umlscDB.DiagramPackage_UmlscsDBID.Int64 =
+				int64(BackRepoDiagramPackageid_atBckpTime_newID[uint(umlscDB.DiagramPackage_UmlscsDBID.Int64)])
 		}
 
 		// update databse with new index encoding

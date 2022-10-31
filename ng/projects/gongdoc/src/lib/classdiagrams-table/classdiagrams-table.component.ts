@@ -74,9 +74,9 @@ export class ClassdiagramsTableComponent implements OnInit {
         case 'IsEditable':
           return classdiagramDB.IsEditable?"true":"false";
 
-        case 'Pkgelt_Classdiagrams':
-          if (this.frontRepo.Pkgelts.get(classdiagramDB.Pkgelt_ClassdiagramsDBID.Int64) != undefined) {
-            return this.frontRepo.Pkgelts.get(classdiagramDB.Pkgelt_ClassdiagramsDBID.Int64)!.Name
+        case 'DiagramPackage_Classdiagrams':
+          if (this.frontRepo.DiagramPackages.get(classdiagramDB.DiagramPackage_ClassdiagramsDBID.Int64) != undefined) {
+            return this.frontRepo.DiagramPackages.get(classdiagramDB.DiagramPackage_ClassdiagramsDBID.Int64)!.Name
           } else {
             return ""
           }
@@ -96,8 +96,8 @@ export class ClassdiagramsTableComponent implements OnInit {
 
       // insertion point for merging of fields
       mergedContent += classdiagramDB.Name.toLowerCase()
-      if (classdiagramDB.Pkgelt_ClassdiagramsDBID.Int64 != 0) {
-        mergedContent += this.frontRepo.Pkgelts.get(classdiagramDB.Pkgelt_ClassdiagramsDBID.Int64)!.Name.toLowerCase()
+      if (classdiagramDB.DiagramPackage_ClassdiagramsDBID.Int64 != 0) {
+        mergedContent += this.frontRepo.DiagramPackages.get(classdiagramDB.DiagramPackage_ClassdiagramsDBID.Int64)!.Name.toLowerCase()
       }
 
 
@@ -152,13 +152,13 @@ export class ClassdiagramsTableComponent implements OnInit {
       this.displayedColumns = ['ID', 'Edit', 'Delete', // insertion point for columns to display
         "Name",
         "IsEditable",
-        "Pkgelt_Classdiagrams",
+        "DiagramPackage_Classdiagrams",
       ]
     } else {
       this.displayedColumns = ['select', 'ID', // insertion point for columns to display
         "Name",
         "IsEditable",
-        "Pkgelt_Classdiagrams",
+        "DiagramPackage_Classdiagrams",
       ]
       this.selection = new SelectionModel<ClassdiagramDB>(allowMultiSelect, this.initialSelection);
     }

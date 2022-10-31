@@ -1,11 +1,11 @@
-<form *ngIf="pkgelt" class="details">
-    <h2 class="details__title">pkgelt</h2>
+<form *ngIf="diagrampackage" class="details">
+    <h2 class="details__title">diagrampackage</h2>
     <!-- insertion point for fields specific code -->
     <mat-grid-list *ngIf='!isATextArea("Name")' cols="5" rowHeight="2:1">
         <mat-grid-tile [colspan]="3">
             <mat-form-field mat-form-field class="detail-full-width">
                 <mat-label>Name</mat-label>
-                <input name="" [ngModelOptions]="{standalone: true}" matInput [(ngModel)]="pkgelt.Name">
+                <input name="" [ngModelOptions]="{standalone: true}" matInput [(ngModel)]="diagrampackage.Name">
             </mat-form-field>
         </mat-grid-tile>
         <mat-grid-tile>
@@ -18,14 +18,14 @@
     </mat-grid-list>
     <mat-form-field *ngIf='isATextArea("Name")' mat-form-field class="detail-full-width">
         <mat-label>Name</mat-label>
-        <textarea name="" [ngModelOptions]="{standalone: true}" matInput [(ngModel)]="pkgelt.Name"></textarea>
+        <textarea name="" [ngModelOptions]="{standalone: true}" matInput [(ngModel)]="diagrampackage.Name"></textarea>
     </mat-form-field>
 
     <mat-grid-list *ngIf='!isATextArea("Path")' cols="5" rowHeight="2:1">
         <mat-grid-tile [colspan]="3">
             <mat-form-field mat-form-field class="detail-full-width">
                 <mat-label>Path</mat-label>
-                <input name="" [ngModelOptions]="{standalone: true}" matInput [(ngModel)]="pkgelt.Path">
+                <input name="" [ngModelOptions]="{standalone: true}" matInput [(ngModel)]="diagrampackage.Path">
             </mat-form-field>
         </mat-grid-tile>
         <mat-grid-tile>
@@ -38,14 +38,14 @@
     </mat-grid-list>
     <mat-form-field *ngIf='isATextArea("Path")' mat-form-field class="detail-full-width">
         <mat-label>Path</mat-label>
-        <textarea name="" [ngModelOptions]="{standalone: true}" matInput [(ngModel)]="pkgelt.Path"></textarea>
+        <textarea name="" [ngModelOptions]="{standalone: true}" matInput [(ngModel)]="diagrampackage.Path"></textarea>
     </mat-form-field>
 
     <mat-grid-list *ngIf='!isATextArea("GongModelPath")' cols="5" rowHeight="2:1">
         <mat-grid-tile [colspan]="3">
             <mat-form-field mat-form-field class="detail-full-width">
                 <mat-label>GongModelPath</mat-label>
-                <input name="" [ngModelOptions]="{standalone: true}" matInput [(ngModel)]="pkgelt.GongModelPath">
+                <input name="" [ngModelOptions]="{standalone: true}" matInput [(ngModel)]="diagrampackage.GongModelPath">
             </mat-form-field>
         </mat-grid-tile>
         <mat-grid-tile>
@@ -58,16 +58,16 @@
     </mat-grid-list>
     <mat-form-field *ngIf='isATextArea("GongModelPath")' mat-form-field class="detail-full-width">
         <mat-label>GongModelPath</mat-label>
-        <textarea name="" [ngModelOptions]="{standalone: true}" matInput [(ngModel)]="pkgelt.GongModelPath"></textarea>
+        <textarea name="" [ngModelOptions]="{standalone: true}" matInput [(ngModel)]="diagrampackage.GongModelPath"></textarea>
     </mat-form-field>
 
     <mat-grid-list cols="5" rowHeight="2:1">
         <mat-grid-tile [colspan]="3">
-            <button mat-raised-button (click)="openReverseSelection('Classdiagram', 'Pkgelt_ClassdiagramsDBID', 'ONE_MANY_ASSOCIATION_MODE', '', '', '')">Classdiagrams</button>
+            <button mat-raised-button (click)="openReverseSelection('Classdiagram', 'DiagramPackage_ClassdiagramsDBID', 'ONE_MANY_ASSOCIATION_MODE', '', '', '')">Classdiagrams</button>
         </mat-grid-tile>
         <!-- insertion point for the button of the MANY_MANY association-->
         <mat-grid-tile>
-            <button mat-raised-button (click)="openDragAndDropOrdering('Classdiagram', 'Pkgelt_ClassdiagramsDBID')">
+            <button mat-raised-button (click)="openDragAndDropOrdering('Classdiagram', 'DiagramPackage_ClassdiagramsDBID')">
                 <mat-icon>
                     shuffle
                 </mat-icon>
@@ -76,11 +76,11 @@
     </mat-grid-list>
     <mat-grid-list cols="5" rowHeight="2:1">
         <mat-grid-tile [colspan]="3">
-            <button mat-raised-button (click)="openReverseSelection('Umlsc', 'Pkgelt_UmlscsDBID', 'ONE_MANY_ASSOCIATION_MODE', '', '', '')">Umlscs</button>
+            <button mat-raised-button (click)="openReverseSelection('Umlsc', 'DiagramPackage_UmlscsDBID', 'ONE_MANY_ASSOCIATION_MODE', '', '', '')">Umlscs</button>
         </mat-grid-tile>
         <!-- insertion point for the button of the MANY_MANY association-->
         <mat-grid-tile>
-            <button mat-raised-button (click)="openDragAndDropOrdering('Umlsc', 'Pkgelt_UmlscsDBID')">
+            <button mat-raised-button (click)="openDragAndDropOrdering('Umlsc', 'DiagramPackage_UmlscsDBID')">
                 <mat-icon>
                     shuffle
                 </mat-icon>
@@ -88,11 +88,11 @@
         </mat-grid-tile>
     </mat-grid-list>
     <!-- -->
-    <mat-checkbox [formControl]="EditableFormControl">Editable</mat-checkbox>
+    <mat-checkbox [formControl]="IsEditableFormControl">IsEditable</mat-checkbox>
 
     <div class="details__save">
         <button mat-raised-button color="primary" (click)="save()">
-            Save pkgelt
+            Save diagrampackage
         </button>
     </div>
 </form>

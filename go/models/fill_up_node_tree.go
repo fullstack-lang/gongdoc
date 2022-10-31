@@ -4,7 +4,7 @@ import (
 	"log"
 )
 
-func FillUpNodeTree(pkgelt *Pkgelt) {
+func FillUpNodeTree(pkgelt *DiagramPackage) {
 
 	onNodeCallbackStruct := new(CallbacksSingloton)
 	FillUpDiagramNodeTree(pkgelt, onNodeCallbackStruct)

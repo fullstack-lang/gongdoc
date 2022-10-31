@@ -138,9 +138,9 @@ export class TreeComponent implements OnInit {
       gongdocsFrontRepo => {
         this.gongdocFrontRepo = gongdocsFrontRepo
 
-        this.gongdocFrontRepo.Pkgelts_array.forEach(
+        this.gongdocFrontRepo.DiagramPackages_array.forEach(
           pkgElt => {
-            this.editable = pkgElt.Editable
+            this.editable = pkgElt.IsEditable
           }
         )
 

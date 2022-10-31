@@ -2,7 +2,7 @@ package models
 
 import gong_models "github.com/fullstack-lang/gong/go/models"
 
-func FillUpTreeOfIdentifiers(pkgelt *Pkgelt, onNodeCallbackStruct *CallbacksSingloton) {
+func FillUpTreeOfIdentifiers(pkgelt *DiagramPackage, onNodeCallbackStruct *CallbacksSingloton) {
 
 	// set up the gongTree to display elements
 	gongTree := (&Tree{Name: "gong", Type: TREE_OF_IDENTIFIERS}).Stage()

@@ -15,9 +15,9 @@ import (
 	"github.com/fullstack-lang/gongdoc/go/walk"
 )
 
-// Pkgelt stores all diagrams related to a gong package
-// swagger:model Pkgelt
-type Pkgelt struct {
+// DiagramPackage stores all diagrams related to a gong package
+// swagger:model DiagramPackage
+type DiagramPackage struct {
 	Name string
 
 	// Path to the "diagrams" directory
@@ -32,10 +32,10 @@ type Pkgelt struct {
 	// Umlscs stores UML State charts diagrams
 	Umlscs []*Umlsc
 
-	// Editable indicates wether the end user can edit the diagram
+	// IsEditable indicates wether the end user can edit the diagram
 	// When a diagram is used in production for navigation, the
-	// model is not Editable.
-	Editable bool
+	// model is not IsEditable.
+	IsEditable bool
 }
 
 func closeFile(f *os.File) {
@@ -61,7 +61,7 @@ import (
 
 // Marshall translates all elements of a Pkgelt into a go file
 // it recusively call Marshall function into the elements
-func (pkgelt *Pkgelt) Marshall(pkgPath string) error {
+func (pkgelt *DiagramPackage) Marshall(pkgPath string) error {
 
 	// sort Classdiagrams
 	sort.Slice(pkgelt.Classdiagrams[:], func(i, j int) bool {
@@ -118,15 +118,15 @@ func (pkgelt *Pkgelt) Marshall(pkgPath string) error {
 }
 
 // PkgeltMap is a Map of all Classdiagrams via their Name
-type PkgeltMap map[string]*Pkgelt
+type PkgeltMap map[string]*DiagramPackage
 
 // PkgeltStore is a handy ClassdiagramsMap
-var PkgeltStore PkgeltMap = make(map[string]*Pkgelt, 0)
+var PkgeltStore PkgeltMap = make(map[string]*DiagramPackage, 0)
 
 // Unmarshall parse the diagram package to get diagrams
 // diagramPackagePath is "../diagrams" relative to the "models"
 // gongModelPackagePath is the model package path, e.g. "github.com/fullstack-lang/gongxlsx/go/models"
-func (pkgelt *Pkgelt) Unmarshall(modelPkg *gong_models.ModelPkg, astPkg *ast.Package, fset2 *token.FileSet, diagramPackagePath string) {
+func (pkgelt *DiagramPackage) Unmarshall(modelPkg *gong_models.ModelPkg, astPkg *ast.Package, fset2 *token.FileSet, diagramPackagePath string) {
 
 	pkgelt.Path = diagramPackagePath
 	pkgelt.GongModelPath = modelPkg.PkgPath
@@ -171,7 +171,7 @@ func (pkgelt *Pkgelt) Unmarshall(modelPkg *gong_models.ModelPkg, astPkg *ast.Pac
 
 // serialize the package and its elements to the Stage
 // this is used if one Umlsc is dynamicaly created
-func (pkgelt *Pkgelt) SerializeToStage() {
+func (pkgelt *DiagramPackage) SerializeToStage() {
 
 	pkgelt.Stage()
 

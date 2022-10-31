@@ -139,7 +139,7 @@ var DiagramUMLduUML uml.Classdiagram = uml.Classdiagram{
 			},
 		},
 		{
-			Struct: &(models.Pkgelt{}),
+			Struct: &(models.DiagramPackage{}),
 			Position: &uml.Position{
 				X: 350.000000,
 				Y: 90.000000,
@@ -148,7 +148,7 @@ var DiagramUMLduUML uml.Classdiagram = uml.Classdiagram{
 			Heigth: 78.000000,
 			Links: []*uml.Link{
 				{
-					Field: models.Pkgelt{}.Classdiagrams,
+					Field: models.DiagramPackage{}.Classdiagrams,
 					Middlevertice: &uml.Vertice{
 						X: 200.000000,
 						Y: 170.000000,
@@ -156,7 +156,7 @@ var DiagramUMLduUML uml.Classdiagram = uml.Classdiagram{
 					TargetMultiplicity: "*",
 				},
 				{
-					Field: models.Pkgelt{}.Umlscs,
+					Field: models.DiagramPackage{}.Umlscs,
 					Middlevertice: &uml.Vertice{
 						X: 700.000000,
 						Y: 180.000000,
@@ -166,10 +166,10 @@ var DiagramUMLduUML uml.Classdiagram = uml.Classdiagram{
 			},
 			Fields: []*uml.Field{
 				{
-					Field: models.Pkgelt{}.Name,
+					Field: models.DiagramPackage{}.Name,
 				},
 				{
-					Field: models.Pkgelt{}.Path,
+					Field: models.DiagramPackage{}.Path,
 				},
 			},
 		},

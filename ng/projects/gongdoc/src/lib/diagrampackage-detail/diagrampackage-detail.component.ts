@@ -2,8 +2,8 @@
 import { Component, OnInit } from '@angular/core';
 import { UntypedFormControl } from '@angular/forms';
 
-import { PkgeltDB } from '../pkgelt-db'
-import { PkgeltService } from '../pkgelt.service'
+import { DiagramPackageDB } from '../diagrampackage-db'
+import { DiagramPackageService } from '../diagrampackage.service'
 
 import { FrontRepoService, FrontRepo, SelectionMode, DialogData } from '../front-repo.service'
 import { MapOfComponents } from '../map-components'
@@ -17,26 +17,26 @@ import { MatDialog, MAT_DIALOG_DATA, MatDialogRef, MatDialogConfig } from '@angu
 
 import { NullInt64 } from '../null-int64'
 
-// PkgeltDetailComponent is initilizaed from different routes
-// PkgeltDetailComponentState detail different cases 
-enum PkgeltDetailComponentState {
+// DiagramPackageDetailComponent is initilizaed from different routes
+// DiagramPackageDetailComponentState detail different cases 
+enum DiagramPackageDetailComponentState {
 	CREATE_INSTANCE,
 	UPDATE_INSTANCE,
 	// insertion point for declarations of enum values of state
 }
 
 @Component({
-	selector: 'app-pkgelt-detail',
-	templateUrl: './pkgelt-detail.component.html',
-	styleUrls: ['./pkgelt-detail.component.css'],
+	selector: 'app-diagrampackage-detail',
+	templateUrl: './diagrampackage-detail.component.html',
+	styleUrls: ['./diagrampackage-detail.component.css'],
 })
-export class PkgeltDetailComponent implements OnInit {
+export class DiagramPackageDetailComponent implements OnInit {
 
 	// insertion point for declarations
-	EditableFormControl: UntypedFormControl = new UntypedFormControl(false);
+	IsEditableFormControl: UntypedFormControl = new UntypedFormControl(false);
 
-	// the PkgeltDB of interest
-	pkgelt: PkgeltDB = new PkgeltDB
+	// the DiagramPackageDB of interest
+	diagrampackage: DiagramPackageDB = new DiagramPackageDB
 
 	// front repo
 	frontRepo: FrontRepo = new FrontRepo
@@ -47,7 +47,7 @@ export class PkgeltDetailComponent implements OnInit {
 	mapFields_displayAsTextArea = new Map<string, boolean>()
 
 	// the state at initialization (CREATION, UPDATE or CREATE with one association set)
-	state: PkgeltDetailComponentState = PkgeltDetailComponentState.CREATE_INSTANCE
+	state: DiagramPackageDetailComponentState = DiagramPackageDetailComponentState.CREATE_INSTANCE
 
 	// in UDPATE state, if is the id of the instance to update
 	// in CREATE state with one association set, this is the id of the associated instance
@@ -58,7 +58,7 @@ export class PkgeltDetailComponent implements OnInit {
 	originStructFieldName: string = ""
 
 	constructor(
-		private pkgeltService: PkgeltService,
+		private diagrampackageService: DiagramPackageService,
 		private frontRepoService: FrontRepoService,
 		public dialog: MatDialog,
 		private route: ActivatedRoute,
@@ -75,10 +75,10 @@ export class PkgeltDetailComponent implements OnInit {
 
 		const association = this.route.snapshot.paramMap.get('association');
 		if (this.id == 0) {
-			this.state = PkgeltDetailComponentState.CREATE_INSTANCE
+			this.state = DiagramPackageDetailComponentState.CREATE_INSTANCE
 		} else {
 			if (this.originStruct == undefined) {
-				this.state = PkgeltDetailComponentState.UPDATE_INSTANCE
+				this.state = DiagramPackageDetailComponentState.UPDATE_INSTANCE
 			} else {
 				switch (this.originStructFieldName) {
 					// insertion point for state computation
@@ -88,13 +88,13 @@ export class PkgeltDetailComponent implements OnInit {
 			}
 		}
 
-		this.getPkgelt()
+		this.getDiagramPackage()
 
 		// observable for changes in structs
-		this.pkgeltService.PkgeltServiceChanged.subscribe(
+		this.diagrampackageService.DiagramPackageServiceChanged.subscribe(
 			message => {
 				if (message == "post" || message == "update" || message == "delete") {
-					this.getPkgelt()
+					this.getDiagramPackage()
 				}
 			}
 		)
@@ -102,20 +102,20 @@ export class PkgeltDetailComponent implements OnInit {
 		// insertion point for initialisation of enums list
 	}
 
-	getPkgelt(): void {
+	getDiagramPackage(): void {
 
 		this.frontRepoService.pull().subscribe(
 			frontRepo => {
 				this.frontRepo = frontRepo
 
 				switch (this.state) {
-					case PkgeltDetailComponentState.CREATE_INSTANCE:
-						this.pkgelt = new (PkgeltDB)
+					case DiagramPackageDetailComponentState.CREATE_INSTANCE:
+						this.diagrampackage = new (DiagramPackageDB)
 						break;
-					case PkgeltDetailComponentState.UPDATE_INSTANCE:
-						let pkgelt = frontRepo.Pkgelts.get(this.id)
-						console.assert(pkgelt != undefined, "missing pkgelt with id:" + this.id)
-						this.pkgelt = pkgelt!
+					case DiagramPackageDetailComponentState.UPDATE_INSTANCE:
+						let diagrampackage = frontRepo.DiagramPackages.get(this.id)
+						console.assert(diagrampackage != undefined, "missing diagrampackage with id:" + this.id)
+						this.diagrampackage = diagrampackage!
 						break;
 					// insertion point for init of association field
 					default:
@@ -123,7 +123,7 @@ export class PkgeltDetailComponent implements OnInit {
 				}
 
 				// insertion point for recovery of form controls value for bool fields
-				this.EditableFormControl.setValue(this.pkgelt.Editable)
+				this.IsEditableFormControl.setValue(this.diagrampackage.IsEditable)
 			}
 		)
 
@@ -136,23 +136,23 @@ export class PkgeltDetailComponent implements OnInit {
 		// pointers fields, after the translation, are nulled in order to perform serialization
 
 		// insertion point for translation/nullation of each field
-		this.pkgelt.Editable = this.EditableFormControl.value
+		this.diagrampackage.IsEditable = this.IsEditableFormControl.value
 
 		// save from the front pointer space to the non pointer space for serialization
 
 		// insertion point for translation/nullation of each pointers
 
 		switch (this.state) {
-			case PkgeltDetailComponentState.UPDATE_INSTANCE:
-				this.pkgeltService.updatePkgelt(this.pkgelt)
-					.subscribe(pkgelt => {
-						this.pkgeltService.PkgeltServiceChanged.next("update")
+			case DiagramPackageDetailComponentState.UPDATE_INSTANCE:
+				this.diagrampackageService.updateDiagramPackage(this.diagrampackage)
+					.subscribe(diagrampackage => {
+						this.diagrampackageService.DiagramPackageServiceChanged.next("update")
 					});
 				break;
 			default:
-				this.pkgeltService.postPkgelt(this.pkgelt).subscribe(pkgelt => {
-					this.pkgeltService.PkgeltServiceChanged.next("post")
-					this.pkgelt = new (PkgeltDB) // reset fields
+				this.diagrampackageService.postDiagramPackage(this.diagrampackage).subscribe(diagrampackage => {
+					this.diagrampackageService.DiagramPackageServiceChanged.next("post")
+					this.diagrampackage = new (DiagramPackageDB) // reset fields
 				});
 		}
 	}
@@ -175,7 +175,7 @@ export class PkgeltDetailComponent implements OnInit {
 		dialogConfig.height = "50%"
 		if (selectionMode == SelectionMode.ONE_MANY_ASSOCIATION_MODE) {
 
-			dialogData.ID = this.pkgelt.ID!
+			dialogData.ID = this.diagrampackage.ID!
 			dialogData.ReversePointer = reverseField
 			dialogData.OrderingMode = false
 			dialogData.SelectionMode = selectionMode
@@ -191,13 +191,13 @@ export class PkgeltDetailComponent implements OnInit {
 			});
 		}
 		if (selectionMode == SelectionMode.MANY_MANY_ASSOCIATION_MODE) {
-			dialogData.ID = this.pkgelt.ID!
+			dialogData.ID = this.diagrampackage.ID!
 			dialogData.ReversePointer = reverseField
 			dialogData.OrderingMode = false
 			dialogData.SelectionMode = selectionMode
 
 			// set up the source
-			dialogData.SourceStruct = "Pkgelt"
+			dialogData.SourceStruct = "DiagramPackage"
 			dialogData.SourceField = sourceField
 
 			// set up the intermediate struct
@@ -227,7 +227,7 @@ export class PkgeltDetailComponent implements OnInit {
 		// dialogConfig.disableClose = true;
 		dialogConfig.autoFocus = true;
 		dialogConfig.data = {
-			ID: this.pkgelt.ID,
+			ID: this.diagrampackage.ID,
 			ReversePointer: reverseField,
 			OrderingMode: true,
 		};
@@ -243,8 +243,8 @@ export class PkgeltDetailComponent implements OnInit {
 	}
 
 	fillUpNameIfEmpty(event: { value: { Name: string; }; }) {
-		if (this.pkgelt.Name == "") {
-			this.pkgelt.Name = event.value.Name
+		if (this.diagrampackage.Name == "") {
+			this.diagrampackage.Name = event.value.Name
 		}
 	}
 

@@ -5,8 +5,8 @@ package models
 func updateNodesStates(stage *StageStruct, callbacksSingloton *CallbacksSingloton) {
 
 	// get the editable state of the package
-	var pkglet *Pkgelt
-	for _pkgelt := range *GetGongstructInstancesSet[Pkgelt]() {
+	var pkglet *DiagramPackage
+	for _pkgelt := range *GetGongstructInstancesSet[DiagramPackage]() {
 		pkglet = _pkgelt
 	}
 
@@ -19,14 +19,14 @@ func updateNodesStates(stage *StageStruct, callbacksSingloton *CallbacksSingloto
 	// unckeck nodes and construct the map
 	for _, gognstructNode := range callbacksSingloton.GongstructsRootNode.Children {
 
-		gognstructNode.IsCheckboxDisabled = !pkglet.Editable
+		gognstructNode.IsCheckboxDisabled = !pkglet.IsEditable
 
 		gognstructNode.IsChecked = false
 		gongstructNodes[gognstructNode.Name] = gognstructNode
 
 		for _, gongfieldNode := range gognstructNode.Children {
 			gongfieldNode.IsChecked = false
-			gongfieldNode.IsCheckboxDisabled = !pkglet.Editable
+			gongfieldNode.IsCheckboxDisabled = !pkglet.IsEditable
 			gongfieldNodes[gognstructNode.Name+"."+gongfieldNode.Name] = gongfieldNode
 		}
 	}
@@ -35,8 +35,9 @@ func updateNodesStates(stage *StageStruct, callbacksSingloton *CallbacksSingloto
 	// gongstructs
 	for _, classdiagramNode := range callbacksSingloton.ClassdiagramsRootNode.Children {
 
-		classdiagramNode.HasEditButton = pkglet.Editable
-		classdiagramNode.HasDeleteButton = pkglet.Editable
+		classdiagramNode.HasEditButton = pkglet.IsEditable
+		classdiagramNode.HasDeleteButton = pkglet.IsEditable
+		classdiagramNode.HasDrawButton = pkglet.IsEditable
 
 		if classdiagramNode.IsChecked {
 			// get the diagram
@@ -55,8 +56,10 @@ func updateNodesStates(stage *StageStruct, callbacksSingloton *CallbacksSingloto
 	}
 
 	for _, stateDiagramNode := range callbacksSingloton.StateDiagramsRootNode.Children {
-		stateDiagramNode.HasEditButton = pkglet.Editable
-		stateDiagramNode.HasDeleteButton = pkglet.Editable
+		stateDiagramNode.HasEditButton = pkglet.IsEditable
+		stateDiagramNode.HasDeleteButton = pkglet.IsEditable
+		stateDiagramNode.HasDrawButton = pkglet.IsEditable
 	}
+
 	stage.Commit()
 }

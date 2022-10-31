@@ -377,7 +377,7 @@ func (classdiagram *Classdiagram) OutputSVG(path string) {
 	c.WriteFile(fmt.Sprintf(filepath.Join(path, "%s.svg"), classdiagram.Name), svg.Writer)
 }
 
-func (classDiagram *Classdiagram) Marshall(pkgelt *Pkgelt, pkgPath string) error {
+func (classDiagram *Classdiagram) Marshall(pkgelt *DiagramPackage, pkgPath string) error {
 
 	// open file
 

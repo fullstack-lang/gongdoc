@@ -8,30 +8,30 @@ import { DialogData } from '../front-repo.service'
 import { SelectionModel } from '@angular/cdk/collections';
 
 import { Router, RouterState } from '@angular/router';
-import { PkgeltDB } from '../pkgelt-db'
-import { PkgeltService } from '../pkgelt.service'
+import { DiagramPackageDB } from '../diagrampackage-db'
+import { DiagramPackageService } from '../diagrampackage.service'
 
 import { FrontRepoService, FrontRepo } from '../front-repo.service'
 import { NullInt64 } from '../null-int64'
 
 @Component({
-  selector: 'lib-pkgelt-sorting',
-  templateUrl: './pkgelt-sorting.component.html',
-  styleUrls: ['./pkgelt-sorting.component.css']
+  selector: 'lib-diagrampackage-sorting',
+  templateUrl: './diagrampackage-sorting.component.html',
+  styleUrls: ['./diagrampackage-sorting.component.css']
 })
-export class PkgeltSortingComponent implements OnInit {
+export class DiagramPackageSortingComponent implements OnInit {
 
   frontRepo: FrontRepo = new (FrontRepo)
 
-  // array of Pkgelt instances that are in the association
-  associatedPkgelts = new Array<PkgeltDB>();
+  // array of DiagramPackage instances that are in the association
+  associatedDiagramPackages = new Array<DiagramPackageDB>();
 
   constructor(
-    private pkgeltService: PkgeltService,
+    private diagrampackageService: DiagramPackageService,
     private frontRepoService: FrontRepoService,
 
-    // not null if the component is called as a selection component of pkgelt instances
-    public dialogRef: MatDialogRef<PkgeltSortingComponent>,
+    // not null if the component is called as a selection component of diagrampackage instances
+    public dialogRef: MatDialogRef<DiagramPackageSortingComponent>,
     @Optional() @Inject(MAT_DIALOG_DATA) public dialogData: DialogData,
 
     private router: Router,
@@ -42,31 +42,31 @@ export class PkgeltSortingComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.getPkgelts()
+    this.getDiagramPackages()
   }
 
-  getPkgelts(): void {
+  getDiagramPackages(): void {
     this.frontRepoService.pull().subscribe(
       frontRepo => {
         this.frontRepo = frontRepo
 
         let index = 0
-        for (let pkgelt of this.frontRepo.Pkgelts_array) {
+        for (let diagrampackage of this.frontRepo.DiagramPackages_array) {
           let ID = this.dialogData.ID
-          let revPointerID = pkgelt[this.dialogData.ReversePointer as keyof PkgeltDB] as unknown as NullInt64
-          let revPointerID_Index = pkgelt[this.dialogData.ReversePointer + "_Index" as keyof PkgeltDB] as unknown as NullInt64
+          let revPointerID = diagrampackage[this.dialogData.ReversePointer as keyof DiagramPackageDB] as unknown as NullInt64
+          let revPointerID_Index = diagrampackage[this.dialogData.ReversePointer + "_Index" as keyof DiagramPackageDB] as unknown as NullInt64
           if (revPointerID.Int64 == ID) {
             if (revPointerID_Index == undefined) {
               revPointerID_Index = new NullInt64
               revPointerID_Index.Valid = true
               revPointerID_Index.Int64 = index++
             }
-            this.associatedPkgelts.push(pkgelt)
+            this.associatedDiagramPackages.push(diagrampackage)
           }
         }
 
-        // sort associated pkgelt according to order
-        this.associatedPkgelts.sort((t1, t2) => {
+        // sort associated diagrampackage according to order
+        this.associatedDiagramPackages.sort((t1, t2) => {
           let t1_revPointerID_Index = t1[this.dialogData.ReversePointer + "_Index" as keyof typeof t1] as unknown as NullInt64
           let t2_revPointerID_Index = t2[this.dialogData.ReversePointer + "_Index" as keyof typeof t2] as unknown as NullInt64
           if (t1_revPointerID_Index && t2_revPointerID_Index) {
@@ -84,13 +84,13 @@ export class PkgeltSortingComponent implements OnInit {
   }
 
   drop(event: CdkDragDrop<string[]>) {
-    moveItemInArray(this.associatedPkgelts, event.previousIndex, event.currentIndex);
+    moveItemInArray(this.associatedDiagramPackages, event.previousIndex, event.currentIndex);
 
-    // set the order of Pkgelt instances
+    // set the order of DiagramPackage instances
     let index = 0
 
-    for (let pkgelt of this.associatedPkgelts) {
-      let revPointerID_Index = pkgelt[this.dialogData.ReversePointer + "_Index" as keyof PkgeltDB] as unknown as NullInt64
+    for (let diagrampackage of this.associatedDiagramPackages) {
+      let revPointerID_Index = diagrampackage[this.dialogData.ReversePointer + "_Index" as keyof DiagramPackageDB] as unknown as NullInt64
       revPointerID_Index.Valid = true
       revPointerID_Index.Int64 = index++
     }
@@ -98,11 +98,11 @@ export class PkgeltSortingComponent implements OnInit {
 
   save() {
 
-    this.associatedPkgelts.forEach(
-      pkgelt => {
-        this.pkgeltService.updatePkgelt(pkgelt)
-          .subscribe(pkgelt => {
-            this.pkgeltService.PkgeltServiceChanged.next("update")
+    this.associatedDiagramPackages.forEach(
+      diagrampackage => {
+        this.diagrampackageService.updateDiagramPackage(diagrampackage)
+          .subscribe(diagrampackage => {
+            this.diagrampackageService.DiagramPackageServiceChanged.next("update")
           });
       }
     )

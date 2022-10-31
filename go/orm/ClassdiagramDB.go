@@ -46,11 +46,11 @@ type ClassdiagramAPI struct {
 type ClassdiagramPointersEnconding struct {
 	// insertion for pointer fields encoding declaration
 
-	// Implementation of a reverse ID for field Pkgelt{}.Classdiagrams []*Classdiagram
-	Pkgelt_ClassdiagramsDBID sql.NullInt64
+	// Implementation of a reverse ID for field DiagramPackage{}.Classdiagrams []*Classdiagram
+	DiagramPackage_ClassdiagramsDBID sql.NullInt64
 
 	// implementation of the index of the withing the slice
-	Pkgelt_ClassdiagramsDBID_Index sql.NullInt64
+	DiagramPackage_ClassdiagramsDBID_Index sql.NullInt64
 }
 
 // ClassdiagramDB describes a classdiagram in the database
@@ -665,9 +665,9 @@ func (backRepoClassdiagram *BackRepoClassdiagramStruct) RestorePhaseTwo() {
 
 		// insertion point for reindexing pointers encoding
 		// This reindex classdiagram.Classdiagrams
-		if classdiagramDB.Pkgelt_ClassdiagramsDBID.Int64 != 0 {
-			classdiagramDB.Pkgelt_ClassdiagramsDBID.Int64 =
-				int64(BackRepoPkgeltid_atBckpTime_newID[uint(classdiagramDB.Pkgelt_ClassdiagramsDBID.Int64)])
+		if classdiagramDB.DiagramPackage_ClassdiagramsDBID.Int64 != 0 {
+			classdiagramDB.DiagramPackage_ClassdiagramsDBID.Int64 =
+				int64(BackRepoDiagramPackageid_atBckpTime_newID[uint(classdiagramDB.DiagramPackage_ClassdiagramsDBID.Int64)])
 		}
 
 		// update databse with new index encoding

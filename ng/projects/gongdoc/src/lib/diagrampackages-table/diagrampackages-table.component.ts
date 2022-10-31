@@ -14,8 +14,8 @@ import { SelectionModel } from '@angular/cdk/collections';
 const allowMultiSelect = true;
 
 import { Router, RouterState } from '@angular/router';
-import { PkgeltDB } from '../pkgelt-db'
-import { PkgeltService } from '../pkgelt.service'
+import { DiagramPackageDB } from '../diagrampackage-db'
+import { DiagramPackageService } from '../diagrampackage.service'
 
 // insertion point for additional imports
 
@@ -29,24 +29,24 @@ enum TableComponentMode {
 
 // generated table component
 @Component({
-  selector: 'app-pkgeltstable',
-  templateUrl: './pkgelts-table.component.html',
-  styleUrls: ['./pkgelts-table.component.css'],
+  selector: 'app-diagrampackagestable',
+  templateUrl: './diagrampackages-table.component.html',
+  styleUrls: ['./diagrampackages-table.component.css'],
 })
-export class PkgeltsTableComponent implements OnInit {
+export class DiagramPackagesTableComponent implements OnInit {
 
   // mode at invocation
   mode: TableComponentMode = TableComponentMode.DISPLAY_MODE
 
-  // used if the component is called as a selection component of Pkgelt instances
-  selection: SelectionModel<PkgeltDB> = new (SelectionModel)
-  initialSelection = new Array<PkgeltDB>()
+  // used if the component is called as a selection component of DiagramPackage instances
+  selection: SelectionModel<DiagramPackageDB> = new (SelectionModel)
+  initialSelection = new Array<DiagramPackageDB>()
 
   // the data source for the table
-  pkgelts: PkgeltDB[] = []
-  matTableDataSource: MatTableDataSource<PkgeltDB> = new (MatTableDataSource)
+  diagrampackages: DiagramPackageDB[] = []
+  matTableDataSource: MatTableDataSource<DiagramPackageDB> = new (MatTableDataSource)
 
-  // front repo, that will be referenced by this.pkgelts
+  // front repo, that will be referenced by this.diagrampackages
   frontRepo: FrontRepo = new (FrontRepo)
 
   // displayedColumns is referenced by the MatTable component for specify what columns
@@ -62,23 +62,23 @@ export class PkgeltsTableComponent implements OnInit {
   ngAfterViewInit() {
 
     // enable sorting on all fields (including pointers and reverse pointer)
-    this.matTableDataSource.sortingDataAccessor = (pkgeltDB: PkgeltDB, property: string) => {
+    this.matTableDataSource.sortingDataAccessor = (diagrampackageDB: DiagramPackageDB, property: string) => {
       switch (property) {
         case 'ID':
-          return pkgeltDB.ID
+          return diagrampackageDB.ID
 
         // insertion point for specific sorting accessor
         case 'Name':
-          return pkgeltDB.Name;
+          return diagrampackageDB.Name;
 
         case 'Path':
-          return pkgeltDB.Path;
+          return diagrampackageDB.Path;
 
         case 'GongModelPath':
-          return pkgeltDB.GongModelPath;
+          return diagrampackageDB.GongModelPath;
 
-        case 'Editable':
-          return pkgeltDB.Editable?"true":"false";
+        case 'IsEditable':
+          return diagrampackageDB.IsEditable?"true":"false";
 
         default:
           console.assert(false, "Unknown field")
@@ -87,16 +87,16 @@ export class PkgeltsTableComponent implements OnInit {
     };
 
     // enable filtering on all fields (including pointers and reverse pointer, which is not done by default)
-    this.matTableDataSource.filterPredicate = (pkgeltDB: PkgeltDB, filter: string) => {
+    this.matTableDataSource.filterPredicate = (diagrampackageDB: DiagramPackageDB, filter: string) => {
 
       // filtering is based on finding a lower case filter into a concatenated string
-      // the pkgeltDB properties
+      // the diagrampackageDB properties
       let mergedContent = ""
 
       // insertion point for merging of fields
-      mergedContent += pkgeltDB.Name.toLowerCase()
-      mergedContent += pkgeltDB.Path.toLowerCase()
-      mergedContent += pkgeltDB.GongModelPath.toLowerCase()
+      mergedContent += diagrampackageDB.Name.toLowerCase()
+      mergedContent += diagrampackageDB.Path.toLowerCase()
+      mergedContent += diagrampackageDB.GongModelPath.toLowerCase()
 
       let isSelected = mergedContent.includes(filter.toLowerCase())
       return isSelected
@@ -112,11 +112,11 @@ export class PkgeltsTableComponent implements OnInit {
   }
 
   constructor(
-    private pkgeltService: PkgeltService,
+    private diagrampackageService: DiagramPackageService,
     private frontRepoService: FrontRepoService,
 
-    // not null if the component is called as a selection component of pkgelt instances
-    public dialogRef: MatDialogRef<PkgeltsTableComponent>,
+    // not null if the component is called as a selection component of diagrampackage instances
+    public dialogRef: MatDialogRef<DiagramPackagesTableComponent>,
     @Optional() @Inject(MAT_DIALOG_DATA) public dialogData: DialogData,
 
     private router: Router,
@@ -138,10 +138,10 @@ export class PkgeltsTableComponent implements OnInit {
     }
 
     // observable for changes in structs
-    this.pkgeltService.PkgeltServiceChanged.subscribe(
+    this.diagrampackageService.DiagramPackageServiceChanged.subscribe(
       message => {
         if (message == "post" || message == "update" || message == "delete") {
-          this.getPkgelts()
+          this.getDiagramPackages()
         }
       }
     )
@@ -150,106 +150,106 @@ export class PkgeltsTableComponent implements OnInit {
         "Name",
         "Path",
         "GongModelPath",
-        "Editable",
+        "IsEditable",
       ]
     } else {
       this.displayedColumns = ['select', 'ID', // insertion point for columns to display
         "Name",
         "Path",
         "GongModelPath",
-        "Editable",
+        "IsEditable",
       ]
-      this.selection = new SelectionModel<PkgeltDB>(allowMultiSelect, this.initialSelection);
+      this.selection = new SelectionModel<DiagramPackageDB>(allowMultiSelect, this.initialSelection);
     }
 
   }
 
   ngOnInit(): void {
-    this.getPkgelts()
-    this.matTableDataSource = new MatTableDataSource(this.pkgelts)
+    this.getDiagramPackages()
+    this.matTableDataSource = new MatTableDataSource(this.diagrampackages)
   }
 
-  getPkgelts(): void {
+  getDiagramPackages(): void {
     this.frontRepoService.pull().subscribe(
       frontRepo => {
         this.frontRepo = frontRepo
 
-        this.pkgelts = this.frontRepo.Pkgelts_array;
+        this.diagrampackages = this.frontRepo.DiagramPackages_array;
 
         // insertion point for time duration Recoveries
         // insertion point for enum int Recoveries
         
         // in case the component is called as a selection component
         if (this.mode == TableComponentMode.ONE_MANY_ASSOCIATION_MODE) {
-          for (let pkgelt of this.pkgelts) {
+          for (let diagrampackage of this.diagrampackages) {
             let ID = this.dialogData.ID
-            let revPointer = pkgelt[this.dialogData.ReversePointer as keyof PkgeltDB] as unknown as NullInt64
+            let revPointer = diagrampackage[this.dialogData.ReversePointer as keyof DiagramPackageDB] as unknown as NullInt64
             if (revPointer.Int64 == ID) {
-              this.initialSelection.push(pkgelt)
+              this.initialSelection.push(diagrampackage)
             }
-            this.selection = new SelectionModel<PkgeltDB>(allowMultiSelect, this.initialSelection);
+            this.selection = new SelectionModel<DiagramPackageDB>(allowMultiSelect, this.initialSelection);
           }
         }
 
         if (this.mode == TableComponentMode.MANY_MANY_ASSOCIATION_MODE) {
 
-          let mapOfSourceInstances = this.frontRepo[this.dialogData.SourceStruct + "s" as keyof FrontRepo] as Map<number, PkgeltDB>
+          let mapOfSourceInstances = this.frontRepo[this.dialogData.SourceStruct + "s" as keyof FrontRepo] as Map<number, DiagramPackageDB>
           let sourceInstance = mapOfSourceInstances.get(this.dialogData.ID)!
 
-          let sourceField = sourceInstance[this.dialogData.SourceField as keyof typeof sourceInstance]! as unknown as PkgeltDB[]
+          let sourceField = sourceInstance[this.dialogData.SourceField as keyof typeof sourceInstance]! as unknown as DiagramPackageDB[]
           for (let associationInstance of sourceField) {
-            let pkgelt = associationInstance[this.dialogData.IntermediateStructField as keyof typeof associationInstance] as unknown as PkgeltDB
-            this.initialSelection.push(pkgelt)
+            let diagrampackage = associationInstance[this.dialogData.IntermediateStructField as keyof typeof associationInstance] as unknown as DiagramPackageDB
+            this.initialSelection.push(diagrampackage)
           }
 
-          this.selection = new SelectionModel<PkgeltDB>(allowMultiSelect, this.initialSelection);
+          this.selection = new SelectionModel<DiagramPackageDB>(allowMultiSelect, this.initialSelection);
         }
 
         // update the mat table data source
-        this.matTableDataSource.data = this.pkgelts
+        this.matTableDataSource.data = this.diagrampackages
       }
     )
   }
 
-  // newPkgelt initiate a new pkgelt
-  // create a new Pkgelt objet
-  newPkgelt() {
+  // newDiagramPackage initiate a new diagrampackage
+  // create a new DiagramPackage objet
+  newDiagramPackage() {
   }
 
-  deletePkgelt(pkgeltID: number, pkgelt: PkgeltDB) {
-    // list of pkgelts is truncated of pkgelt before the delete
-    this.pkgelts = this.pkgelts.filter(h => h !== pkgelt);
+  deleteDiagramPackage(diagrampackageID: number, diagrampackage: DiagramPackageDB) {
+    // list of diagrampackages is truncated of diagrampackage before the delete
+    this.diagrampackages = this.diagrampackages.filter(h => h !== diagrampackage);
 
-    this.pkgeltService.deletePkgelt(pkgeltID).subscribe(
-      pkgelt => {
-        this.pkgeltService.PkgeltServiceChanged.next("delete")
+    this.diagrampackageService.deleteDiagramPackage(diagrampackageID).subscribe(
+      diagrampackage => {
+        this.diagrampackageService.DiagramPackageServiceChanged.next("delete")
       }
     );
   }
 
-  editPkgelt(pkgeltID: number, pkgelt: PkgeltDB) {
+  editDiagramPackage(diagrampackageID: number, diagrampackage: DiagramPackageDB) {
 
   }
 
-  // display pkgelt in router
-  displayPkgeltInRouter(pkgeltID: number) {
-    this.router.navigate(["github_com_fullstack_lang_gongdoc_go-" + "pkgelt-display", pkgeltID])
+  // display diagrampackage in router
+  displayDiagramPackageInRouter(diagrampackageID: number) {
+    this.router.navigate(["github_com_fullstack_lang_gongdoc_go-" + "diagrampackage-display", diagrampackageID])
   }
 
   // set editor outlet
-  setEditorRouterOutlet(pkgeltID: number) {
+  setEditorRouterOutlet(diagrampackageID: number) {
     this.router.navigate([{
       outlets: {
-        github_com_fullstack_lang_gongdoc_go_editor: ["github_com_fullstack_lang_gongdoc_go-" + "pkgelt-detail", pkgeltID]
+        github_com_fullstack_lang_gongdoc_go_editor: ["github_com_fullstack_lang_gongdoc_go-" + "diagrampackage-detail", diagrampackageID]
       }
     }]);
   }
 
   // set presentation outlet
-  setPresentationRouterOutlet(pkgeltID: number) {
+  setPresentationRouterOutlet(diagrampackageID: number) {
     this.router.navigate([{
       outlets: {
-        github_com_fullstack_lang_gongdoc_go_presentation: ["github_com_fullstack_lang_gongdoc_go-" + "pkgelt-presentation", pkgeltID]
+        github_com_fullstack_lang_gongdoc_go_presentation: ["github_com_fullstack_lang_gongdoc_go-" + "diagrampackage-presentation", diagrampackageID]
       }
     }]);
   }
@@ -257,7 +257,7 @@ export class PkgeltsTableComponent implements OnInit {
   /** Whether the number of selected elements matches the total number of rows. */
   isAllSelected() {
     const numSelected = this.selection.selected.length;
-    const numRows = this.pkgelts.length;
+    const numRows = this.diagrampackages.length;
     return numSelected === numRows;
   }
 
@@ -265,39 +265,39 @@ export class PkgeltsTableComponent implements OnInit {
   masterToggle() {
     this.isAllSelected() ?
       this.selection.clear() :
-      this.pkgelts.forEach(row => this.selection.select(row));
+      this.diagrampackages.forEach(row => this.selection.select(row));
   }
 
   save() {
 
     if (this.mode == TableComponentMode.ONE_MANY_ASSOCIATION_MODE) {
 
-      let toUpdate = new Set<PkgeltDB>()
+      let toUpdate = new Set<DiagramPackageDB>()
 
-      // reset all initial selection of pkgelt that belong to pkgelt
-      for (let pkgelt of this.initialSelection) {
-        let index = pkgelt[this.dialogData.ReversePointer as keyof PkgeltDB] as unknown as NullInt64
+      // reset all initial selection of diagrampackage that belong to diagrampackage
+      for (let diagrampackage of this.initialSelection) {
+        let index = diagrampackage[this.dialogData.ReversePointer as keyof DiagramPackageDB] as unknown as NullInt64
         index.Int64 = 0
         index.Valid = true
-        toUpdate.add(pkgelt)
+        toUpdate.add(diagrampackage)
 
       }
 
-      // from selection, set pkgelt that belong to pkgelt
-      for (let pkgelt of this.selection.selected) {
+      // from selection, set diagrampackage that belong to diagrampackage
+      for (let diagrampackage of this.selection.selected) {
         let ID = this.dialogData.ID as number
-        let reversePointer = pkgelt[this.dialogData.ReversePointer as keyof PkgeltDB] as unknown as NullInt64
+        let reversePointer = diagrampackage[this.dialogData.ReversePointer as keyof DiagramPackageDB] as unknown as NullInt64
         reversePointer.Int64 = ID
         reversePointer.Valid = true
-        toUpdate.add(pkgelt)
+        toUpdate.add(diagrampackage)
       }
 
 
-      // update all pkgelt (only update selection & initial selection)
-      for (let pkgelt of toUpdate) {
-        this.pkgeltService.updatePkgelt(pkgelt)
-          .subscribe(pkgelt => {
-            this.pkgeltService.PkgeltServiceChanged.next("update")
+      // update all diagrampackage (only update selection & initial selection)
+      for (let diagrampackage of toUpdate) {
+        this.diagrampackageService.updateDiagramPackage(diagrampackage)
+          .subscribe(diagrampackage => {
+            this.diagrampackageService.DiagramPackageServiceChanged.next("update")
           });
       }
     }
@@ -305,26 +305,26 @@ export class PkgeltsTableComponent implements OnInit {
     if (this.mode == TableComponentMode.MANY_MANY_ASSOCIATION_MODE) {
 
       // get the source instance via the map of instances in the front repo
-      let mapOfSourceInstances = this.frontRepo[this.dialogData.SourceStruct + "s" as keyof FrontRepo] as Map<number, PkgeltDB>
+      let mapOfSourceInstances = this.frontRepo[this.dialogData.SourceStruct + "s" as keyof FrontRepo] as Map<number, DiagramPackageDB>
       let sourceInstance = mapOfSourceInstances.get(this.dialogData.ID)!
 
       // First, parse all instance of the association struct and remove the instance
       // that have unselect
-      let unselectedPkgelt = new Set<number>()
-      for (let pkgelt of this.initialSelection) {
-        if (this.selection.selected.includes(pkgelt)) {
-          // console.log("pkgelt " + pkgelt.Name + " is still selected")
+      let unselectedDiagramPackage = new Set<number>()
+      for (let diagrampackage of this.initialSelection) {
+        if (this.selection.selected.includes(diagrampackage)) {
+          // console.log("diagrampackage " + diagrampackage.Name + " is still selected")
         } else {
-          console.log("pkgelt " + pkgelt.Name + " has been unselected")
-          unselectedPkgelt.add(pkgelt.ID)
-          console.log("is unselected " + unselectedPkgelt.has(pkgelt.ID))
+          console.log("diagrampackage " + diagrampackage.Name + " has been unselected")
+          unselectedDiagramPackage.add(diagrampackage.ID)
+          console.log("is unselected " + unselectedDiagramPackage.has(diagrampackage.ID))
         }
       }
 
       // delete the association instance
       let associationInstance = sourceInstance[this.dialogData.SourceField as keyof typeof sourceInstance]
-      let pkgelt = associationInstance![this.dialogData.IntermediateStructField as keyof typeof associationInstance] as unknown as PkgeltDB
-      if (unselectedPkgelt.has(pkgelt.ID)) {
+      let diagrampackage = associationInstance![this.dialogData.IntermediateStructField as keyof typeof associationInstance] as unknown as DiagramPackageDB
+      if (unselectedDiagramPackage.has(diagrampackage.ID)) {
         this.frontRepoService.deleteService(this.dialogData.IntermediateStruct, associationInstance)
 
 
@@ -332,38 +332,38 @@ export class PkgeltsTableComponent implements OnInit {
 
       // is the source array is empty create it
       if (sourceInstance[this.dialogData.SourceField as keyof typeof sourceInstance] == undefined) {
-        (sourceInstance[this.dialogData.SourceField as keyof typeof sourceInstance] as unknown as Array<PkgeltDB>) = new Array<PkgeltDB>()
+        (sourceInstance[this.dialogData.SourceField as keyof typeof sourceInstance] as unknown as Array<DiagramPackageDB>) = new Array<DiagramPackageDB>()
       }
 
       // second, parse all instance of the selected
       if (sourceInstance[this.dialogData.SourceField as keyof typeof sourceInstance]) {
         this.selection.selected.forEach(
-          pkgelt => {
-            if (!this.initialSelection.includes(pkgelt)) {
-              // console.log("pkgelt " + pkgelt.Name + " has been added to the selection")
+          diagrampackage => {
+            if (!this.initialSelection.includes(diagrampackage)) {
+              // console.log("diagrampackage " + diagrampackage.Name + " has been added to the selection")
 
               let associationInstance = {
-                Name: sourceInstance["Name"] + "-" + pkgelt.Name,
+                Name: sourceInstance["Name"] + "-" + diagrampackage.Name,
               }
 
               let index = associationInstance[this.dialogData.IntermediateStructField + "ID" as keyof typeof associationInstance] as unknown as NullInt64
-              index.Int64 = pkgelt.ID
+              index.Int64 = diagrampackage.ID
               index.Valid = true
 
               let indexDB = associationInstance[this.dialogData.IntermediateStructField + "DBID" as keyof typeof associationInstance] as unknown as NullInt64
-              indexDB.Int64 = pkgelt.ID
+              indexDB.Int64 = diagrampackage.ID
               index.Valid = true
 
               this.frontRepoService.postService(this.dialogData.IntermediateStruct, associationInstance)
 
             } else {
-              // console.log("pkgelt " + pkgelt.Name + " is still selected")
+              // console.log("diagrampackage " + diagrampackage.Name + " is still selected")
             }
           }
         )
       }
 
-      // this.selection = new SelectionModel<PkgeltDB>(allowMultiSelect, this.initialSelection);
+      // this.selection = new SelectionModel<DiagramPackageDB>(allowMultiSelect, this.initialSelection);
     }
 
     // why pizza ?

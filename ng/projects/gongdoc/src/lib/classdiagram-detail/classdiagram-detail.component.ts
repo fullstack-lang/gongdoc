@@ -10,7 +10,7 @@ import { MapOfComponents } from '../map-components'
 import { MapOfSortingComponents } from '../map-components'
 
 // insertion point for imports
-import { PkgeltDB } from '../pkgelt-db'
+import { DiagramPackageDB } from '../diagrampackage-db'
 
 import { Router, RouterState, ActivatedRoute } from '@angular/router';
 
@@ -24,7 +24,7 @@ enum ClassdiagramDetailComponentState {
 	CREATE_INSTANCE,
 	UPDATE_INSTANCE,
 	// insertion point for declarations of enum values of state
-	CREATE_INSTANCE_WITH_ASSOCIATION_Pkgelt_Classdiagrams_SET,
+	CREATE_INSTANCE_WITH_ASSOCIATION_DiagramPackage_Classdiagrams_SET,
 }
 
 @Component({
@@ -85,8 +85,8 @@ export class ClassdiagramDetailComponent implements OnInit {
 				switch (this.originStructFieldName) {
 					// insertion point for state computation
 					case "Classdiagrams":
-						// console.log("Classdiagram" + " is instanciated with back pointer to instance " + this.id + " Pkgelt association Classdiagrams")
-						this.state = ClassdiagramDetailComponentState.CREATE_INSTANCE_WITH_ASSOCIATION_Pkgelt_Classdiagrams_SET
+						// console.log("Classdiagram" + " is instanciated with back pointer to instance " + this.id + " DiagramPackage association Classdiagrams")
+						this.state = ClassdiagramDetailComponentState.CREATE_INSTANCE_WITH_ASSOCIATION_DiagramPackage_Classdiagrams_SET
 						break;
 					default:
 						console.log(this.originStructFieldName + " is unkown association")
@@ -124,9 +124,9 @@ export class ClassdiagramDetailComponent implements OnInit {
 						this.classdiagram = classdiagram!
 						break;
 					// insertion point for init of association field
-					case ClassdiagramDetailComponentState.CREATE_INSTANCE_WITH_ASSOCIATION_Pkgelt_Classdiagrams_SET:
+					case ClassdiagramDetailComponentState.CREATE_INSTANCE_WITH_ASSOCIATION_DiagramPackage_Classdiagrams_SET:
 						this.classdiagram = new (ClassdiagramDB)
-						this.classdiagram.Pkgelt_Classdiagrams_reverse = frontRepo.Pkgelts.get(this.id)!
+						this.classdiagram.DiagramPackage_Classdiagrams_reverse = frontRepo.DiagramPackages.get(this.id)!
 						break;
 					default:
 						console.log(this.state + " is unkown state")
@@ -151,17 +151,17 @@ export class ClassdiagramDetailComponent implements OnInit {
 		// save from the front pointer space to the non pointer space for serialization
 
 		// insertion point for translation/nullation of each pointers
-		if (this.classdiagram.Pkgelt_Classdiagrams_reverse != undefined) {
-			if (this.classdiagram.Pkgelt_ClassdiagramsDBID == undefined) {
-				this.classdiagram.Pkgelt_ClassdiagramsDBID = new NullInt64
+		if (this.classdiagram.DiagramPackage_Classdiagrams_reverse != undefined) {
+			if (this.classdiagram.DiagramPackage_ClassdiagramsDBID == undefined) {
+				this.classdiagram.DiagramPackage_ClassdiagramsDBID = new NullInt64
 			}
-			this.classdiagram.Pkgelt_ClassdiagramsDBID.Int64 = this.classdiagram.Pkgelt_Classdiagrams_reverse.ID
-			this.classdiagram.Pkgelt_ClassdiagramsDBID.Valid = true
-			if (this.classdiagram.Pkgelt_ClassdiagramsDBID_Index == undefined) {
-				this.classdiagram.Pkgelt_ClassdiagramsDBID_Index = new NullInt64
+			this.classdiagram.DiagramPackage_ClassdiagramsDBID.Int64 = this.classdiagram.DiagramPackage_Classdiagrams_reverse.ID
+			this.classdiagram.DiagramPackage_ClassdiagramsDBID.Valid = true
+			if (this.classdiagram.DiagramPackage_ClassdiagramsDBID_Index == undefined) {
+				this.classdiagram.DiagramPackage_ClassdiagramsDBID_Index = new NullInt64
 			}
-			this.classdiagram.Pkgelt_ClassdiagramsDBID_Index.Valid = true
-			this.classdiagram.Pkgelt_Classdiagrams_reverse = new PkgeltDB // very important, otherwise, circular JSON
+			this.classdiagram.DiagramPackage_ClassdiagramsDBID_Index.Valid = true
+			this.classdiagram.DiagramPackage_Classdiagrams_reverse = new DiagramPackageDB // very important, otherwise, circular JSON
 		}
 
 		switch (this.state) {

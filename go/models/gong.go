@@ -50,6 +50,15 @@ type StageStruct struct { // insertion point for definition of arrays registerin
 	OnAfterClassshapeReadCallback   OnAfterReadInterface[Classshape]
 
 
+	DiagramPackages           map[*DiagramPackage]any
+	DiagramPackages_mapString map[string]*DiagramPackage
+
+	OnAfterDiagramPackageCreateCallback OnAfterCreateInterface[DiagramPackage]
+	OnAfterDiagramPackageUpdateCallback OnAfterUpdateInterface[DiagramPackage]
+	OnAfterDiagramPackageDeleteCallback OnAfterDeleteInterface[DiagramPackage]
+	OnAfterDiagramPackageReadCallback   OnAfterReadInterface[DiagramPackage]
+
+
 	Fields           map[*Field]any
 	Fields_mapString map[string]*Field
 
@@ -111,15 +120,6 @@ type StageStruct struct { // insertion point for definition of arrays registerin
 	OnAfterNoteUpdateCallback OnAfterUpdateInterface[Note]
 	OnAfterNoteDeleteCallback OnAfterDeleteInterface[Note]
 	OnAfterNoteReadCallback   OnAfterReadInterface[Note]
-
-
-	Pkgelts           map[*Pkgelt]any
-	Pkgelts_mapString map[string]*Pkgelt
-
-	OnAfterPkgeltCreateCallback OnAfterCreateInterface[Pkgelt]
-	OnAfterPkgeltUpdateCallback OnAfterUpdateInterface[Pkgelt]
-	OnAfterPkgeltDeleteCallback OnAfterDeleteInterface[Pkgelt]
-	OnAfterPkgeltReadCallback   OnAfterReadInterface[Pkgelt]
 
 
 	Positions           map[*Position]any
@@ -221,6 +221,8 @@ type BackRepoInterface interface {
 	CheckoutClassdiagram(classdiagram *Classdiagram)
 	CommitClassshape(classshape *Classshape)
 	CheckoutClassshape(classshape *Classshape)
+	CommitDiagramPackage(diagrampackage *DiagramPackage)
+	CheckoutDiagramPackage(diagrampackage *DiagramPackage)
 	CommitField(field *Field)
 	CheckoutField(field *Field)
 	CommitGongStruct(gongstruct *GongStruct)
@@ -235,8 +237,6 @@ type BackRepoInterface interface {
 	CheckoutNode(node *Node)
 	CommitNote(note *Note)
 	CheckoutNote(note *Note)
-	CommitPkgelt(pkgelt *Pkgelt)
-	CheckoutPkgelt(pkgelt *Pkgelt)
 	CommitPosition(position *Position)
 	CheckoutPosition(position *Position)
 	CommitTree(tree *Tree)
@@ -259,6 +259,9 @@ var Stage StageStruct = StageStruct{ // insertion point for array initiatialisat
 	Classshapes:           make(map[*Classshape]any),
 	Classshapes_mapString: make(map[string]*Classshape),
 
+	DiagramPackages:           make(map[*DiagramPackage]any),
+	DiagramPackages_mapString: make(map[string]*DiagramPackage),
+
 	Fields:           make(map[*Field]any),
 	Fields_mapString: make(map[string]*Field),
 
@@ -279,9 +282,6 @@ var Stage StageStruct = StageStruct{ // insertion point for array initiatialisat
 
 	Notes:           make(map[*Note]any),
 	Notes_mapString: make(map[string]*Note),
-
-	Pkgelts:           make(map[*Pkgelt]any),
-	Pkgelts_mapString: make(map[string]*Pkgelt),
 
 	Positions:           make(map[*Position]any),
 	Positions_mapString: make(map[string]*Position),
@@ -310,6 +310,7 @@ func (stage *StageStruct) Commit() {
 	// insertion point for computing the map of number of instances per gongstruct
 	stage.Map_GongStructName_InstancesNb["Classdiagram"] = len(stage.Classdiagrams)
 	stage.Map_GongStructName_InstancesNb["Classshape"] = len(stage.Classshapes)
+	stage.Map_GongStructName_InstancesNb["DiagramPackage"] = len(stage.DiagramPackages)
 	stage.Map_GongStructName_InstancesNb["Field"] = len(stage.Fields)
 	stage.Map_GongStructName_InstancesNb["GongStruct"] = len(stage.GongStructs)
 	stage.Map_GongStructName_InstancesNb["GongdocCommand"] = len(stage.GongdocCommands)
@@ -317,7 +318,6 @@ func (stage *StageStruct) Commit() {
 	stage.Map_GongStructName_InstancesNb["Link"] = len(stage.Links)
 	stage.Map_GongStructName_InstancesNb["Node"] = len(stage.Nodes)
 	stage.Map_GongStructName_InstancesNb["Note"] = len(stage.Notes)
-	stage.Map_GongStructName_InstancesNb["Pkgelt"] = len(stage.Pkgelts)
 	stage.Map_GongStructName_InstancesNb["Position"] = len(stage.Positions)
 	stage.Map_GongStructName_InstancesNb["Tree"] = len(stage.Trees)
 	stage.Map_GongStructName_InstancesNb["UmlState"] = len(stage.UmlStates)
@@ -334,6 +334,7 @@ func (stage *StageStruct) Checkout() {
 	// insertion point for computing the map of number of instances per gongstruct
 	stage.Map_GongStructName_InstancesNb["Classdiagram"] = len(stage.Classdiagrams)
 	stage.Map_GongStructName_InstancesNb["Classshape"] = len(stage.Classshapes)
+	stage.Map_GongStructName_InstancesNb["DiagramPackage"] = len(stage.DiagramPackages)
 	stage.Map_GongStructName_InstancesNb["Field"] = len(stage.Fields)
 	stage.Map_GongStructName_InstancesNb["GongStruct"] = len(stage.GongStructs)
 	stage.Map_GongStructName_InstancesNb["GongdocCommand"] = len(stage.GongdocCommands)
@@ -341,7 +342,6 @@ func (stage *StageStruct) Checkout() {
 	stage.Map_GongStructName_InstancesNb["Link"] = len(stage.Links)
 	stage.Map_GongStructName_InstancesNb["Node"] = len(stage.Nodes)
 	stage.Map_GongStructName_InstancesNb["Note"] = len(stage.Notes)
-	stage.Map_GongStructName_InstancesNb["Pkgelt"] = len(stage.Pkgelts)
 	stage.Map_GongStructName_InstancesNb["Position"] = len(stage.Positions)
 	stage.Map_GongStructName_InstancesNb["Tree"] = len(stage.Trees)
 	stage.Map_GongStructName_InstancesNb["UmlState"] = len(stage.UmlStates)
@@ -567,6 +567,101 @@ func DeleteORMClassshape(classshape *Classshape) {
 // for satisfaction of GongStruct interface
 func (classshape *Classshape) GetName() (res string) {
 	return classshape.Name
+}
+
+// Stage puts diagrampackage to the model stage
+func (diagrampackage *DiagramPackage) Stage() *DiagramPackage {
+	Stage.DiagramPackages[diagrampackage] = __member
+	Stage.DiagramPackages_mapString[diagrampackage.Name] = diagrampackage
+
+	return diagrampackage
+}
+
+// Unstage removes diagrampackage off the model stage
+func (diagrampackage *DiagramPackage) Unstage() *DiagramPackage {
+	delete(Stage.DiagramPackages, diagrampackage)
+	delete(Stage.DiagramPackages_mapString, diagrampackage.Name)
+	return diagrampackage
+}
+
+// commit diagrampackage to the back repo (if it is already staged)
+func (diagrampackage *DiagramPackage) Commit() *DiagramPackage {
+	if _, ok := Stage.DiagramPackages[diagrampackage]; ok {
+		if Stage.BackRepo != nil {
+			Stage.BackRepo.CommitDiagramPackage(diagrampackage)
+		}
+	}
+	return diagrampackage
+}
+
+// Checkout diagrampackage to the back repo (if it is already staged)
+func (diagrampackage *DiagramPackage) Checkout() *DiagramPackage {
+	if _, ok := Stage.DiagramPackages[diagrampackage]; ok {
+		if Stage.BackRepo != nil {
+			Stage.BackRepo.CheckoutDiagramPackage(diagrampackage)
+		}
+	}
+	return diagrampackage
+}
+
+//
+// Legacy, to be deleted
+//
+
+// StageCopy appends a copy of diagrampackage to the model stage
+func (diagrampackage *DiagramPackage) StageCopy() *DiagramPackage {
+	_diagrampackage := new(DiagramPackage)
+	*_diagrampackage = *diagrampackage
+	_diagrampackage.Stage()
+	return _diagrampackage
+}
+
+// StageAndCommit appends diagrampackage to the model stage and commit to the orm repo
+func (diagrampackage *DiagramPackage) StageAndCommit() *DiagramPackage {
+	diagrampackage.Stage()
+	if Stage.AllModelsStructCreateCallback != nil {
+		Stage.AllModelsStructCreateCallback.CreateORMDiagramPackage(diagrampackage)
+	}
+	return diagrampackage
+}
+
+// DeleteStageAndCommit appends diagrampackage to the model stage and commit to the orm repo
+func (diagrampackage *DiagramPackage) DeleteStageAndCommit() *DiagramPackage {
+	diagrampackage.Unstage()
+	DeleteORMDiagramPackage(diagrampackage)
+	return diagrampackage
+}
+
+// StageCopyAndCommit appends a copy of diagrampackage to the model stage and commit to the orm repo
+func (diagrampackage *DiagramPackage) StageCopyAndCommit() *DiagramPackage {
+	_diagrampackage := new(DiagramPackage)
+	*_diagrampackage = *diagrampackage
+	_diagrampackage.Stage()
+	if Stage.AllModelsStructCreateCallback != nil {
+		Stage.AllModelsStructCreateCallback.CreateORMDiagramPackage(diagrampackage)
+	}
+	return _diagrampackage
+}
+
+// CreateORMDiagramPackage enables dynamic staging of a DiagramPackage instance
+func CreateORMDiagramPackage(diagrampackage *DiagramPackage) {
+	diagrampackage.Stage()
+	if Stage.AllModelsStructCreateCallback != nil {
+		Stage.AllModelsStructCreateCallback.CreateORMDiagramPackage(diagrampackage)
+	}
+}
+
+// DeleteORMDiagramPackage enables dynamic staging of a DiagramPackage instance
+func DeleteORMDiagramPackage(diagrampackage *DiagramPackage) {
+	diagrampackage.Unstage()
+	if Stage.AllModelsStructDeleteCallback != nil {
+		Stage.AllModelsStructDeleteCallback.DeleteORMDiagramPackage(diagrampackage)
+	}
+}
+
+// for satisfaction of GongStruct interface
+func (diagrampackage *DiagramPackage) GetName() (res string) {
+	return diagrampackage.Name
 }
 
 // Stage puts field to the model stage
@@ -1234,101 +1329,6 @@ func (note *Note) GetName() (res string) {
 	return note.Name
 }
 
-// Stage puts pkgelt to the model stage
-func (pkgelt *Pkgelt) Stage() *Pkgelt {
-	Stage.Pkgelts[pkgelt] = __member
-	Stage.Pkgelts_mapString[pkgelt.Name] = pkgelt
-
-	return pkgelt
-}
-
-// Unstage removes pkgelt off the model stage
-func (pkgelt *Pkgelt) Unstage() *Pkgelt {
-	delete(Stage.Pkgelts, pkgelt)
-	delete(Stage.Pkgelts_mapString, pkgelt.Name)
-	return pkgelt
-}
-
-// commit pkgelt to the back repo (if it is already staged)
-func (pkgelt *Pkgelt) Commit() *Pkgelt {
-	if _, ok := Stage.Pkgelts[pkgelt]; ok {
-		if Stage.BackRepo != nil {
-			Stage.BackRepo.CommitPkgelt(pkgelt)
-		}
-	}
-	return pkgelt
-}
-
-// Checkout pkgelt to the back repo (if it is already staged)
-func (pkgelt *Pkgelt) Checkout() *Pkgelt {
-	if _, ok := Stage.Pkgelts[pkgelt]; ok {
-		if Stage.BackRepo != nil {
-			Stage.BackRepo.CheckoutPkgelt(pkgelt)
-		}
-	}
-	return pkgelt
-}
-
-//
-// Legacy, to be deleted
-//
-
-// StageCopy appends a copy of pkgelt to the model stage
-func (pkgelt *Pkgelt) StageCopy() *Pkgelt {
-	_pkgelt := new(Pkgelt)
-	*_pkgelt = *pkgelt
-	_pkgelt.Stage()
-	return _pkgelt
-}
-
-// StageAndCommit appends pkgelt to the model stage and commit to the orm repo
-func (pkgelt *Pkgelt) StageAndCommit() *Pkgelt {
-	pkgelt.Stage()
-	if Stage.AllModelsStructCreateCallback != nil {
-		Stage.AllModelsStructCreateCallback.CreateORMPkgelt(pkgelt)
-	}
-	return pkgelt
-}
-
-// DeleteStageAndCommit appends pkgelt to the model stage and commit to the orm repo
-func (pkgelt *Pkgelt) DeleteStageAndCommit() *Pkgelt {
-	pkgelt.Unstage()
-	DeleteORMPkgelt(pkgelt)
-	return pkgelt
-}
-
-// StageCopyAndCommit appends a copy of pkgelt to the model stage and commit to the orm repo
-func (pkgelt *Pkgelt) StageCopyAndCommit() *Pkgelt {
-	_pkgelt := new(Pkgelt)
-	*_pkgelt = *pkgelt
-	_pkgelt.Stage()
-	if Stage.AllModelsStructCreateCallback != nil {
-		Stage.AllModelsStructCreateCallback.CreateORMPkgelt(pkgelt)
-	}
-	return _pkgelt
-}
-
-// CreateORMPkgelt enables dynamic staging of a Pkgelt instance
-func CreateORMPkgelt(pkgelt *Pkgelt) {
-	pkgelt.Stage()
-	if Stage.AllModelsStructCreateCallback != nil {
-		Stage.AllModelsStructCreateCallback.CreateORMPkgelt(pkgelt)
-	}
-}
-
-// DeleteORMPkgelt enables dynamic staging of a Pkgelt instance
-func DeleteORMPkgelt(pkgelt *Pkgelt) {
-	pkgelt.Unstage()
-	if Stage.AllModelsStructDeleteCallback != nil {
-		Stage.AllModelsStructDeleteCallback.DeleteORMPkgelt(pkgelt)
-	}
-}
-
-// for satisfaction of GongStruct interface
-func (pkgelt *Pkgelt) GetName() (res string) {
-	return pkgelt.Name
-}
-
 // Stage puts position to the model stage
 func (position *Position) Stage() *Position {
 	Stage.Positions[position] = __member
@@ -1808,6 +1808,7 @@ func (vertice *Vertice) GetName() (res string) {
 type AllModelsStructCreateInterface interface { // insertion point for Callbacks on creation
 	CreateORMClassdiagram(Classdiagram *Classdiagram)
 	CreateORMClassshape(Classshape *Classshape)
+	CreateORMDiagramPackage(DiagramPackage *DiagramPackage)
 	CreateORMField(Field *Field)
 	CreateORMGongStruct(GongStruct *GongStruct)
 	CreateORMGongdocCommand(GongdocCommand *GongdocCommand)
@@ -1815,7 +1816,6 @@ type AllModelsStructCreateInterface interface { // insertion point for Callbacks
 	CreateORMLink(Link *Link)
 	CreateORMNode(Node *Node)
 	CreateORMNote(Note *Note)
-	CreateORMPkgelt(Pkgelt *Pkgelt)
 	CreateORMPosition(Position *Position)
 	CreateORMTree(Tree *Tree)
 	CreateORMUmlState(UmlState *UmlState)
@@ -1826,6 +1826,7 @@ type AllModelsStructCreateInterface interface { // insertion point for Callbacks
 type AllModelsStructDeleteInterface interface { // insertion point for Callbacks on deletion
 	DeleteORMClassdiagram(Classdiagram *Classdiagram)
 	DeleteORMClassshape(Classshape *Classshape)
+	DeleteORMDiagramPackage(DiagramPackage *DiagramPackage)
 	DeleteORMField(Field *Field)
 	DeleteORMGongStruct(GongStruct *GongStruct)
 	DeleteORMGongdocCommand(GongdocCommand *GongdocCommand)
@@ -1833,7 +1834,6 @@ type AllModelsStructDeleteInterface interface { // insertion point for Callbacks
 	DeleteORMLink(Link *Link)
 	DeleteORMNode(Node *Node)
 	DeleteORMNote(Note *Note)
-	DeleteORMPkgelt(Pkgelt *Pkgelt)
 	DeleteORMPosition(Position *Position)
 	DeleteORMTree(Tree *Tree)
 	DeleteORMUmlState(UmlState *UmlState)
@@ -1847,6 +1847,9 @@ func (stage *StageStruct) Reset() { // insertion point for array reset
 
 	stage.Classshapes = make(map[*Classshape]any)
 	stage.Classshapes_mapString = make(map[string]*Classshape)
+
+	stage.DiagramPackages = make(map[*DiagramPackage]any)
+	stage.DiagramPackages_mapString = make(map[string]*DiagramPackage)
 
 	stage.Fields = make(map[*Field]any)
 	stage.Fields_mapString = make(map[string]*Field)
@@ -1868,9 +1871,6 @@ func (stage *StageStruct) Reset() { // insertion point for array reset
 
 	stage.Notes = make(map[*Note]any)
 	stage.Notes_mapString = make(map[string]*Note)
-
-	stage.Pkgelts = make(map[*Pkgelt]any)
-	stage.Pkgelts_mapString = make(map[string]*Pkgelt)
 
 	stage.Positions = make(map[*Position]any)
 	stage.Positions_mapString = make(map[string]*Position)
@@ -1896,6 +1896,9 @@ func (stage *StageStruct) Nil() { // insertion point for array nil
 	stage.Classshapes = nil
 	stage.Classshapes_mapString = nil
 
+	stage.DiagramPackages = nil
+	stage.DiagramPackages_mapString = nil
+
 	stage.Fields = nil
 	stage.Fields_mapString = nil
 
@@ -1916,9 +1919,6 @@ func (stage *StageStruct) Nil() { // insertion point for array nil
 
 	stage.Notes = nil
 	stage.Notes_mapString = nil
-
-	stage.Pkgelts = nil
-	stage.Pkgelts_mapString = nil
 
 	stage.Positions = nil
 	stage.Positions_mapString = nil
@@ -2116,6 +2116,56 @@ func (stage *StageStruct) Marshall(file *os.File, modelsPackageName, packageName
 			setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", "models."+classshape.ClassshapeTargetType.ToCodeString())
 			initializerStatements += setValueField
 		}
+
+	}
+
+	map_DiagramPackage_Identifiers := make(map[*DiagramPackage]string)
+	_ = map_DiagramPackage_Identifiers
+
+	diagrampackageOrdered := []*DiagramPackage{}
+	for diagrampackage := range stage.DiagramPackages {
+		diagrampackageOrdered = append(diagrampackageOrdered, diagrampackage)
+	}
+	sort.Slice(diagrampackageOrdered[:], func(i, j int) bool {
+		return diagrampackageOrdered[i].Name < diagrampackageOrdered[j].Name
+	})
+	identifiersDecl += "\n\n	// Declarations of staged instances of DiagramPackage"
+	for idx, diagrampackage := range diagrampackageOrdered {
+
+		id = generatesIdentifier("DiagramPackage", idx, diagrampackage.Name)
+		map_DiagramPackage_Identifiers[diagrampackage] = id
+
+		decl = IdentifiersDecls
+		decl = strings.ReplaceAll(decl, "{{Identifier}}", id)
+		decl = strings.ReplaceAll(decl, "{{GeneratedStructName}}", "DiagramPackage")
+		decl = strings.ReplaceAll(decl, "{{GeneratedFieldNameValue}}", diagrampackage.Name)
+		identifiersDecl += decl
+
+		initializerStatements += fmt.Sprintf("\n\n	// DiagramPackage %s values setup", diagrampackage.Name)
+		// Initialisation of values
+		setValueField = StringInitStatement
+		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
+		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "Name")
+		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", string(diagrampackage.Name))
+		initializerStatements += setValueField
+
+		setValueField = StringInitStatement
+		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
+		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "Path")
+		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", string(diagrampackage.Path))
+		initializerStatements += setValueField
+
+		setValueField = StringInitStatement
+		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
+		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "GongModelPath")
+		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", string(diagrampackage.GongModelPath))
+		initializerStatements += setValueField
+
+		setValueField = NumberInitStatement
+		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
+		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "IsEditable")
+		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", fmt.Sprintf("%t", diagrampackage.IsEditable))
+		initializerStatements += setValueField
 
 	}
 
@@ -2601,56 +2651,6 @@ func (stage *StageStruct) Marshall(file *os.File, modelsPackageName, packageName
 
 	}
 
-	map_Pkgelt_Identifiers := make(map[*Pkgelt]string)
-	_ = map_Pkgelt_Identifiers
-
-	pkgeltOrdered := []*Pkgelt{}
-	for pkgelt := range stage.Pkgelts {
-		pkgeltOrdered = append(pkgeltOrdered, pkgelt)
-	}
-	sort.Slice(pkgeltOrdered[:], func(i, j int) bool {
-		return pkgeltOrdered[i].Name < pkgeltOrdered[j].Name
-	})
-	identifiersDecl += "\n\n	// Declarations of staged instances of Pkgelt"
-	for idx, pkgelt := range pkgeltOrdered {
-
-		id = generatesIdentifier("Pkgelt", idx, pkgelt.Name)
-		map_Pkgelt_Identifiers[pkgelt] = id
-
-		decl = IdentifiersDecls
-		decl = strings.ReplaceAll(decl, "{{Identifier}}", id)
-		decl = strings.ReplaceAll(decl, "{{GeneratedStructName}}", "Pkgelt")
-		decl = strings.ReplaceAll(decl, "{{GeneratedFieldNameValue}}", pkgelt.Name)
-		identifiersDecl += decl
-
-		initializerStatements += fmt.Sprintf("\n\n	// Pkgelt %s values setup", pkgelt.Name)
-		// Initialisation of values
-		setValueField = StringInitStatement
-		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "Name")
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", string(pkgelt.Name))
-		initializerStatements += setValueField
-
-		setValueField = StringInitStatement
-		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "Path")
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", string(pkgelt.Path))
-		initializerStatements += setValueField
-
-		setValueField = StringInitStatement
-		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "GongModelPath")
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", string(pkgelt.GongModelPath))
-		initializerStatements += setValueField
-
-		setValueField = NumberInitStatement
-		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "Editable")
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", fmt.Sprintf("%t", pkgelt.Editable))
-		initializerStatements += setValueField
-
-	}
-
 	map_Position_Identifiers := make(map[*Position]string)
 	_ = map_Position_Identifiers
 
@@ -2930,6 +2930,32 @@ func (stage *StageStruct) Marshall(file *os.File, modelsPackageName, packageName
 
 	}
 
+	for idx, diagrampackage := range diagrampackageOrdered {
+		var setPointerField string
+		_ = setPointerField
+
+		id = generatesIdentifier("DiagramPackage", idx, diagrampackage.Name)
+		map_DiagramPackage_Identifiers[diagrampackage] = id
+
+		// Initialisation of values
+		for _, _classdiagram := range diagrampackage.Classdiagrams {
+			setPointerField = SliceOfPointersFieldInitStatement
+			setPointerField = strings.ReplaceAll(setPointerField, "{{Identifier}}", id)
+			setPointerField = strings.ReplaceAll(setPointerField, "{{GeneratedFieldName}}", "Classdiagrams")
+			setPointerField = strings.ReplaceAll(setPointerField, "{{GeneratedFieldNameValue}}", map_Classdiagram_Identifiers[_classdiagram])
+			pointersInitializesStatements += setPointerField
+		}
+
+		for _, _umlsc := range diagrampackage.Umlscs {
+			setPointerField = SliceOfPointersFieldInitStatement
+			setPointerField = strings.ReplaceAll(setPointerField, "{{Identifier}}", id)
+			setPointerField = strings.ReplaceAll(setPointerField, "{{GeneratedFieldName}}", "Umlscs")
+			setPointerField = strings.ReplaceAll(setPointerField, "{{GeneratedFieldNameValue}}", map_Umlsc_Identifiers[_umlsc])
+			pointersInitializesStatements += setPointerField
+		}
+
+	}
+
 	for idx, field := range fieldOrdered {
 		var setPointerField string
 		_ = setPointerField
@@ -3030,32 +3056,6 @@ func (stage *StageStruct) Marshall(file *os.File, modelsPackageName, packageName
 		map_Note_Identifiers[note] = id
 
 		// Initialisation of values
-	}
-
-	for idx, pkgelt := range pkgeltOrdered {
-		var setPointerField string
-		_ = setPointerField
-
-		id = generatesIdentifier("Pkgelt", idx, pkgelt.Name)
-		map_Pkgelt_Identifiers[pkgelt] = id
-
-		// Initialisation of values
-		for _, _classdiagram := range pkgelt.Classdiagrams {
-			setPointerField = SliceOfPointersFieldInitStatement
-			setPointerField = strings.ReplaceAll(setPointerField, "{{Identifier}}", id)
-			setPointerField = strings.ReplaceAll(setPointerField, "{{GeneratedFieldName}}", "Classdiagrams")
-			setPointerField = strings.ReplaceAll(setPointerField, "{{GeneratedFieldNameValue}}", map_Classdiagram_Identifiers[_classdiagram])
-			pointersInitializesStatements += setPointerField
-		}
-
-		for _, _umlsc := range pkgelt.Umlscs {
-			setPointerField = SliceOfPointersFieldInitStatement
-			setPointerField = strings.ReplaceAll(setPointerField, "{{Identifier}}", id)
-			setPointerField = strings.ReplaceAll(setPointerField, "{{GeneratedFieldName}}", "Umlscs")
-			setPointerField = strings.ReplaceAll(setPointerField, "{{GeneratedFieldNameValue}}", map_Umlsc_Identifiers[_umlsc])
-			pointersInitializesStatements += setPointerField
-		}
-
 	}
 
 	for idx, position := range positionOrdered {
@@ -3241,6 +3241,32 @@ func (stageStruct *StageStruct) CreateReverseMap_Classshape_Links() (res map[*Li
 }
 
 
+// generate function for reverse association maps of DiagramPackage
+func (stageStruct *StageStruct) CreateReverseMap_DiagramPackage_Classdiagrams() (res map[*Classdiagram]*DiagramPackage) {
+	res = make(map[*Classdiagram]*DiagramPackage)
+
+	for diagrampackage := range stageStruct.DiagramPackages {
+		for _, classdiagram_ := range diagrampackage.Classdiagrams {
+			res[classdiagram_] = diagrampackage
+		}
+	}
+
+	return
+}
+
+func (stageStruct *StageStruct) CreateReverseMap_DiagramPackage_Umlscs() (res map[*Umlsc]*DiagramPackage) {
+	res = make(map[*Umlsc]*DiagramPackage)
+
+	for diagrampackage := range stageStruct.DiagramPackages {
+		for _, umlsc_ := range diagrampackage.Umlscs {
+			res[umlsc_] = diagrampackage
+		}
+	}
+
+	return
+}
+
+
 // generate function for reverse association maps of Field
 
 // generate function for reverse association maps of GongStruct
@@ -3327,32 +3353,6 @@ func (stageStruct *StageStruct) CreateReverseMap_Node_Children() (res map[*Node]
 
 // generate function for reverse association maps of Note
 
-// generate function for reverse association maps of Pkgelt
-func (stageStruct *StageStruct) CreateReverseMap_Pkgelt_Classdiagrams() (res map[*Classdiagram]*Pkgelt) {
-	res = make(map[*Classdiagram]*Pkgelt)
-
-	for pkgelt := range stageStruct.Pkgelts {
-		for _, classdiagram_ := range pkgelt.Classdiagrams {
-			res[classdiagram_] = pkgelt
-		}
-	}
-
-	return
-}
-
-func (stageStruct *StageStruct) CreateReverseMap_Pkgelt_Umlscs() (res map[*Umlsc]*Pkgelt) {
-	res = make(map[*Umlsc]*Pkgelt)
-
-	for pkgelt := range stageStruct.Pkgelts {
-		for _, umlsc_ := range pkgelt.Umlscs {
-			res[umlsc_] = pkgelt
-		}
-	}
-
-	return
-}
-
-
 // generate function for reverse association maps of Position
 
 // generate function for reverse association maps of Tree
@@ -3393,7 +3393,7 @@ func (stageStruct *StageStruct) CreateReverseMap_Umlsc_States() (res map[*UmlSta
 // - full refactoring of Gongstruct identifiers / fields
 type Gongstruct interface {
 	// insertion point for generic types
-	Classdiagram | Classshape | Field | GongStruct | GongdocCommand | GongdocStatus | Link | Node | Note | Pkgelt | Position | Tree | UmlState | Umlsc | Vertice
+	Classdiagram | Classshape | DiagramPackage | Field | GongStruct | GongdocCommand | GongdocStatus | Link | Node | Note | Position | Tree | UmlState | Umlsc | Vertice
 }
 
 // Gongstruct is the type parameter for generated generic function that allows
@@ -3402,7 +3402,7 @@ type Gongstruct interface {
 // - full refactoring of Gongstruct identifiers / fields
 type PointerToGongstruct interface {
 	// insertion point for generic types
-	*Classdiagram | *Classshape | *Field | *GongStruct | *GongdocCommand | *GongdocStatus | *Link | *Node | *Note | *Pkgelt | *Position | *Tree | *UmlState | *Umlsc | *Vertice
+	*Classdiagram | *Classshape | *DiagramPackage | *Field | *GongStruct | *GongdocCommand | *GongdocStatus | *Link | *Node | *Note | *Position | *Tree | *UmlState | *Umlsc | *Vertice
 	GetName() string
 }
 
@@ -3411,6 +3411,7 @@ type GongstructSet interface {
 		// insertion point for generic types
 		map[*Classdiagram]any |
 		map[*Classshape]any |
+		map[*DiagramPackage]any |
 		map[*Field]any |
 		map[*GongStruct]any |
 		map[*GongdocCommand]any |
@@ -3418,7 +3419,6 @@ type GongstructSet interface {
 		map[*Link]any |
 		map[*Node]any |
 		map[*Note]any |
-		map[*Pkgelt]any |
 		map[*Position]any |
 		map[*Tree]any |
 		map[*UmlState]any |
@@ -3432,6 +3432,7 @@ type GongstructMapString interface {
 		// insertion point for generic types
 		map[string]*Classdiagram |
 		map[string]*Classshape |
+		map[string]*DiagramPackage |
 		map[string]*Field |
 		map[string]*GongStruct |
 		map[string]*GongdocCommand |
@@ -3439,7 +3440,6 @@ type GongstructMapString interface {
 		map[string]*Link |
 		map[string]*Node |
 		map[string]*Note |
-		map[string]*Pkgelt |
 		map[string]*Position |
 		map[string]*Tree |
 		map[string]*UmlState |
@@ -3459,6 +3459,8 @@ func GongGetSet[Type GongstructSet]() *Type {
 		return any(&Stage.Classdiagrams).(*Type)
 	case map[*Classshape]any:
 		return any(&Stage.Classshapes).(*Type)
+	case map[*DiagramPackage]any:
+		return any(&Stage.DiagramPackages).(*Type)
 	case map[*Field]any:
 		return any(&Stage.Fields).(*Type)
 	case map[*GongStruct]any:
@@ -3473,8 +3475,6 @@ func GongGetSet[Type GongstructSet]() *Type {
 		return any(&Stage.Nodes).(*Type)
 	case map[*Note]any:
 		return any(&Stage.Notes).(*Type)
-	case map[*Pkgelt]any:
-		return any(&Stage.Pkgelts).(*Type)
 	case map[*Position]any:
 		return any(&Stage.Positions).(*Type)
 	case map[*Tree]any:
@@ -3501,6 +3501,8 @@ func GongGetMap[Type GongstructMapString]() *Type {
 		return any(&Stage.Classdiagrams_mapString).(*Type)
 	case map[string]*Classshape:
 		return any(&Stage.Classshapes_mapString).(*Type)
+	case map[string]*DiagramPackage:
+		return any(&Stage.DiagramPackages_mapString).(*Type)
 	case map[string]*Field:
 		return any(&Stage.Fields_mapString).(*Type)
 	case map[string]*GongStruct:
@@ -3515,8 +3517,6 @@ func GongGetMap[Type GongstructMapString]() *Type {
 		return any(&Stage.Nodes_mapString).(*Type)
 	case map[string]*Note:
 		return any(&Stage.Notes_mapString).(*Type)
-	case map[string]*Pkgelt:
-		return any(&Stage.Pkgelts_mapString).(*Type)
 	case map[string]*Position:
 		return any(&Stage.Positions_mapString).(*Type)
 	case map[string]*Tree:
@@ -3543,6 +3543,8 @@ func GetGongstructInstancesSet[Type Gongstruct]() *map[*Type]any {
 		return any(&Stage.Classdiagrams).(*map[*Type]any)
 	case Classshape:
 		return any(&Stage.Classshapes).(*map[*Type]any)
+	case DiagramPackage:
+		return any(&Stage.DiagramPackages).(*map[*Type]any)
 	case Field:
 		return any(&Stage.Fields).(*map[*Type]any)
 	case GongStruct:
@@ -3557,8 +3559,6 @@ func GetGongstructInstancesSet[Type Gongstruct]() *map[*Type]any {
 		return any(&Stage.Nodes).(*map[*Type]any)
 	case Note:
 		return any(&Stage.Notes).(*map[*Type]any)
-	case Pkgelt:
-		return any(&Stage.Pkgelts).(*map[*Type]any)
 	case Position:
 		return any(&Stage.Positions).(*map[*Type]any)
 	case Tree:
@@ -3585,6 +3585,8 @@ func GetGongstructInstancesMap[Type Gongstruct]() *map[string]*Type {
 		return any(&Stage.Classdiagrams_mapString).(*map[string]*Type)
 	case Classshape:
 		return any(&Stage.Classshapes_mapString).(*map[string]*Type)
+	case DiagramPackage:
+		return any(&Stage.DiagramPackages_mapString).(*map[string]*Type)
 	case Field:
 		return any(&Stage.Fields_mapString).(*map[string]*Type)
 	case GongStruct:
@@ -3599,8 +3601,6 @@ func GetGongstructInstancesMap[Type Gongstruct]() *map[string]*Type {
 		return any(&Stage.Nodes_mapString).(*map[string]*Type)
 	case Note:
 		return any(&Stage.Notes_mapString).(*map[string]*Type)
-	case Pkgelt:
-		return any(&Stage.Pkgelts_mapString).(*map[string]*Type)
 	case Position:
 		return any(&Stage.Positions_mapString).(*map[string]*Type)
 	case Tree:
@@ -3645,6 +3645,14 @@ func GetAssociationName[Type Gongstruct]() *Type {
 			// field is initialized with an instance of Link with the name of the field
 			Links: []*Link{{Name: "Links"}},
 		}).(*Type)
+	case DiagramPackage:
+		return any(&DiagramPackage{
+			// Initialisation of associations
+			// field is initialized with an instance of Classdiagram with the name of the field
+			Classdiagrams: []*Classdiagram{{Name: "Classdiagrams"}},
+			// field is initialized with an instance of Umlsc with the name of the field
+			Umlscs: []*Umlsc{{Name: "Umlscs"}},
+		}).(*Type)
 	case Field:
 		return any(&Field{
 			// Initialisation of associations
@@ -3680,14 +3688,6 @@ func GetAssociationName[Type Gongstruct]() *Type {
 	case Note:
 		return any(&Note{
 			// Initialisation of associations
-		}).(*Type)
-	case Pkgelt:
-		return any(&Pkgelt{
-			// Initialisation of associations
-			// field is initialized with an instance of Classdiagram with the name of the field
-			Classdiagrams: []*Classdiagram{{Name: "Classdiagrams"}},
-			// field is initialized with an instance of Umlsc with the name of the field
-			Umlscs: []*Umlsc{{Name: "Umlscs"}},
 		}).(*Type)
 	case Position:
 		return any(&Position{
@@ -3773,6 +3773,11 @@ func GetPointerReverseMap[Start, End Gongstruct](fieldname string) map[*End][]*S
 				}
 			}
 			return any(res).(map[*End][]*Start)
+		}
+	// reverse maps of direct associations of DiagramPackage
+	case DiagramPackage:
+		switch fieldname {
+		// insertion point for per direct association field
 		}
 	// reverse maps of direct associations of Field
 	case Field:
@@ -3860,11 +3865,6 @@ func GetPointerReverseMap[Start, End Gongstruct](fieldname string) map[*End][]*S
 		switch fieldname {
 		// insertion point for per direct association field
 		}
-	// reverse maps of direct associations of Pkgelt
-	case Pkgelt:
-		switch fieldname {
-		// insertion point for per direct association field
-		}
 	// reverse maps of direct associations of Position
 	case Position:
 		switch fieldname {
@@ -3947,6 +3947,27 @@ func GetSliceOfPointersReverseMap[Start, End Gongstruct](fieldname string) map[*
 			}
 			return any(res).(map[*End]*Start)
 		}
+	// reverse maps of direct associations of DiagramPackage
+	case DiagramPackage:
+		switch fieldname {
+		// insertion point for per direct association field
+		case "Classdiagrams":
+			res := make(map[*Classdiagram]*DiagramPackage)
+			for diagrampackage := range Stage.DiagramPackages {
+				for _, classdiagram_ := range diagrampackage.Classdiagrams {
+					res[classdiagram_] = diagrampackage
+				}
+			}
+			return any(res).(map[*End]*Start)
+		case "Umlscs":
+			res := make(map[*Umlsc]*DiagramPackage)
+			for diagrampackage := range Stage.DiagramPackages {
+				for _, umlsc_ := range diagrampackage.Umlscs {
+					res[umlsc_] = diagrampackage
+				}
+			}
+			return any(res).(map[*End]*Start)
+		}
 	// reverse maps of direct associations of Field
 	case Field:
 		switch fieldname {
@@ -3989,27 +4010,6 @@ func GetSliceOfPointersReverseMap[Start, End Gongstruct](fieldname string) map[*
 	case Note:
 		switch fieldname {
 		// insertion point for per direct association field
-		}
-	// reverse maps of direct associations of Pkgelt
-	case Pkgelt:
-		switch fieldname {
-		// insertion point for per direct association field
-		case "Classdiagrams":
-			res := make(map[*Classdiagram]*Pkgelt)
-			for pkgelt := range Stage.Pkgelts {
-				for _, classdiagram_ := range pkgelt.Classdiagrams {
-					res[classdiagram_] = pkgelt
-				}
-			}
-			return any(res).(map[*End]*Start)
-		case "Umlscs":
-			res := make(map[*Umlsc]*Pkgelt)
-			for pkgelt := range Stage.Pkgelts {
-				for _, umlsc_ := range pkgelt.Umlscs {
-					res[umlsc_] = pkgelt
-				}
-			}
-			return any(res).(map[*End]*Start)
 		}
 	// reverse maps of direct associations of Position
 	case Position:
@@ -4068,6 +4068,8 @@ func GetGongstructName[Type Gongstruct]() (res string) {
 		res = "Classdiagram"
 	case Classshape:
 		res = "Classshape"
+	case DiagramPackage:
+		res = "DiagramPackage"
 	case Field:
 		res = "Field"
 	case GongStruct:
@@ -4082,8 +4084,6 @@ func GetGongstructName[Type Gongstruct]() (res string) {
 		res = "Node"
 	case Note:
 		res = "Note"
-	case Pkgelt:
-		res = "Pkgelt"
 	case Position:
 		res = "Position"
 	case Tree:
@@ -4109,6 +4109,8 @@ func GetFields[Type Gongstruct]() (res []string) {
 		res = []string{"Name", "Classshapes", "Notes", "IsEditable"}
 	case Classshape:
 		res = []string{"Name", "Position", "Structname", "GongStruct", "ShowNbInstances", "NbInstances", "Fields", "Links", "Width", "Heigth", "ClassshapeTargetType"}
+	case DiagramPackage:
+		res = []string{"Name", "Path", "GongModelPath", "Classdiagrams", "Umlscs", "IsEditable"}
 	case Field:
 		res = []string{"Name", "Fieldname", "FieldTypeAsString", "Structname", "Fieldtypename"}
 	case GongStruct:
@@ -4123,8 +4125,6 @@ func GetFields[Type Gongstruct]() (res []string) {
 		res = []string{"Name", "Type", "Classdiagram", "Umlsc", "IsExpanded", "HasCheckboxButton", "IsChecked", "IsCheckboxDisabled", "HasAddChildButton", "HasEditButton", "HasEditOffButton", "IsInEditMode", "HasDrawButton", "HasDrawOffButton", "IsInDrawMode", "HasDeleteButton", "Children"}
 	case Note:
 		res = []string{"Name", "Body", "X", "Y", "Width", "Heigth", "Matched"}
-	case Pkgelt:
-		res = []string{"Name", "Path", "GongModelPath", "Classdiagrams", "Umlscs", "Editable"}
 	case Position:
 		res = []string{"X", "Y", "Name"}
 	case Tree:
@@ -4206,6 +4206,32 @@ func GetFieldStringValue[Type Gongstruct](instance Type, fieldName string) (res 
 		case "ClassshapeTargetType":
 			enum := any(instance).(Classshape).ClassshapeTargetType
 			res = enum.ToCodeString()
+		}
+	case DiagramPackage:
+		switch fieldName {
+		// string value of fields
+		case "Name":
+			res = any(instance).(DiagramPackage).Name
+		case "Path":
+			res = any(instance).(DiagramPackage).Path
+		case "GongModelPath":
+			res = any(instance).(DiagramPackage).GongModelPath
+		case "Classdiagrams":
+			for idx, __instance__ := range any(instance).(DiagramPackage).Classdiagrams {
+				if idx > 0 {
+					res += "\n"
+				}
+				res += __instance__.Name
+			}
+		case "Umlscs":
+			for idx, __instance__ := range any(instance).(DiagramPackage).Umlscs {
+				if idx > 0 {
+					res += "\n"
+				}
+				res += __instance__.Name
+			}
+		case "IsEditable":
+			res = fmt.Sprintf("%t", any(instance).(DiagramPackage).IsEditable)
 		}
 	case Field:
 		switch fieldName {
@@ -4355,32 +4381,6 @@ func GetFieldStringValue[Type Gongstruct](instance Type, fieldName string) (res 
 			res = fmt.Sprintf("%f", any(instance).(Note).Heigth)
 		case "Matched":
 			res = fmt.Sprintf("%t", any(instance).(Note).Matched)
-		}
-	case Pkgelt:
-		switch fieldName {
-		// string value of fields
-		case "Name":
-			res = any(instance).(Pkgelt).Name
-		case "Path":
-			res = any(instance).(Pkgelt).Path
-		case "GongModelPath":
-			res = any(instance).(Pkgelt).GongModelPath
-		case "Classdiagrams":
-			for idx, __instance__ := range any(instance).(Pkgelt).Classdiagrams {
-				if idx > 0 {
-					res += "\n"
-				}
-				res += __instance__.Name
-			}
-		case "Umlscs":
-			for idx, __instance__ := range any(instance).(Pkgelt).Umlscs {
-				if idx > 0 {
-					res += "\n"
-				}
-				res += __instance__.Name
-			}
-		case "Editable":
-			res = fmt.Sprintf("%t", any(instance).(Pkgelt).Editable)
 		}
 	case Position:
 		switch fieldName {

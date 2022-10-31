@@ -49,6 +49,11 @@ import { ClassshapeSortingComponent } from './classshape-sorting/classshape-sort
 import { ClassshapeDetailComponent } from './classshape-detail/classshape-detail.component'
 import { ClassshapePresentationComponent } from './classshape-presentation/classshape-presentation.component'
 
+import { DiagramPackagesTableComponent } from './diagrampackages-table/diagrampackages-table.component'
+import { DiagramPackageSortingComponent } from './diagrampackage-sorting/diagrampackage-sorting.component'
+import { DiagramPackageDetailComponent } from './diagrampackage-detail/diagrampackage-detail.component'
+import { DiagramPackagePresentationComponent } from './diagrampackage-presentation/diagrampackage-presentation.component'
+
 import { FieldsTableComponent } from './fields-table/fields-table.component'
 import { FieldSortingComponent } from './field-sorting/field-sorting.component'
 import { FieldDetailComponent } from './field-detail/field-detail.component'
@@ -83,11 +88,6 @@ import { NotesTableComponent } from './notes-table/notes-table.component'
 import { NoteSortingComponent } from './note-sorting/note-sorting.component'
 import { NoteDetailComponent } from './note-detail/note-detail.component'
 import { NotePresentationComponent } from './note-presentation/note-presentation.component'
-
-import { PkgeltsTableComponent } from './pkgelts-table/pkgelts-table.component'
-import { PkgeltSortingComponent } from './pkgelt-sorting/pkgelt-sorting.component'
-import { PkgeltDetailComponent } from './pkgelt-detail/pkgelt-detail.component'
-import { PkgeltPresentationComponent } from './pkgelt-presentation/pkgelt-presentation.component'
 
 import { PositionsTableComponent } from './positions-table/positions-table.component'
 import { PositionSortingComponent } from './position-sorting/position-sorting.component'
@@ -128,6 +128,11 @@ import { VerticePresentationComponent } from './vertice-presentation/vertice-pre
 		ClassshapeDetailComponent,
 		ClassshapePresentationComponent,
 
+		DiagramPackagesTableComponent,
+		DiagramPackageSortingComponent,
+		DiagramPackageDetailComponent,
+		DiagramPackagePresentationComponent,
+
 		FieldsTableComponent,
 		FieldSortingComponent,
 		FieldDetailComponent,
@@ -162,11 +167,6 @@ import { VerticePresentationComponent } from './vertice-presentation/vertice-pre
 		NoteSortingComponent,
 		NoteDetailComponent,
 		NotePresentationComponent,
-
-		PkgeltsTableComponent,
-		PkgeltSortingComponent,
-		PkgeltDetailComponent,
-		PkgeltPresentationComponent,
 
 		PositionsTableComponent,
 		PositionSortingComponent,
@@ -242,6 +242,11 @@ import { VerticePresentationComponent } from './vertice-presentation/vertice-pre
 		ClassshapeDetailComponent,
 		ClassshapePresentationComponent,
 
+		DiagramPackagesTableComponent,
+		DiagramPackageSortingComponent,
+		DiagramPackageDetailComponent,
+		DiagramPackagePresentationComponent,
+
 		FieldsTableComponent,
 		FieldSortingComponent,
 		FieldDetailComponent,
@@ -276,11 +281,6 @@ import { VerticePresentationComponent } from './vertice-presentation/vertice-pre
 		NoteSortingComponent,
 		NoteDetailComponent,
 		NotePresentationComponent,
-
-		PkgeltsTableComponent,
-		PkgeltSortingComponent,
-		PkgeltDetailComponent,
-		PkgeltPresentationComponent,
 
 		PositionsTableComponent,
 		PositionSortingComponent,
