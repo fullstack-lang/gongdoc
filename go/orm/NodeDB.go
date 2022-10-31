@@ -108,10 +108,6 @@ type NodeDB struct {
 	// provide the sql storage for the boolan
 	HasEditButton_Data sql.NullBool
 
-	// Declation for basic field nodeDB.HasEditOffButton
-	// provide the sql storage for the boolan
-	HasEditOffButton_Data sql.NullBool
-
 	// Declation for basic field nodeDB.IsInEditMode
 	// provide the sql storage for the boolan
 	IsInEditMode_Data sql.NullBool
@@ -168,17 +164,15 @@ type NodeWOP struct {
 
 	HasEditButton bool `xlsx:"8"`
 
-	HasEditOffButton bool `xlsx:"9"`
+	IsInEditMode bool `xlsx:"9"`
 
-	IsInEditMode bool `xlsx:"10"`
+	HasDrawButton bool `xlsx:"10"`
 
-	HasDrawButton bool `xlsx:"11"`
+	HasDrawOffButton bool `xlsx:"11"`
 
-	HasDrawOffButton bool `xlsx:"12"`
+	IsInDrawMode bool `xlsx:"12"`
 
-	IsInDrawMode bool `xlsx:"13"`
-
-	HasDeleteButton bool `xlsx:"14"`
+	HasDeleteButton bool `xlsx:"13"`
 	// insertion for WOP pointer fields
 }
 
@@ -193,7 +187,6 @@ var Node_Fields = []string{
 	"IsCheckboxDisabled",
 	"HasAddChildButton",
 	"HasEditButton",
-	"HasEditOffButton",
 	"IsInEditMode",
 	"HasDrawButton",
 	"HasDrawOffButton",
@@ -577,9 +570,6 @@ func (nodeDB *NodeDB) CopyBasicFieldsFromNode(node *models.Node) {
 	nodeDB.HasEditButton_Data.Bool = node.HasEditButton
 	nodeDB.HasEditButton_Data.Valid = true
 
-	nodeDB.HasEditOffButton_Data.Bool = node.HasEditOffButton
-	nodeDB.HasEditOffButton_Data.Valid = true
-
 	nodeDB.IsInEditMode_Data.Bool = node.IsInEditMode
 	nodeDB.IsInEditMode_Data.Valid = true
 
@@ -624,9 +614,6 @@ func (nodeDB *NodeDB) CopyBasicFieldsFromNodeWOP(node *NodeWOP) {
 	nodeDB.HasEditButton_Data.Bool = node.HasEditButton
 	nodeDB.HasEditButton_Data.Valid = true
 
-	nodeDB.HasEditOffButton_Data.Bool = node.HasEditOffButton
-	nodeDB.HasEditOffButton_Data.Valid = true
-
 	nodeDB.IsInEditMode_Data.Bool = node.IsInEditMode
 	nodeDB.IsInEditMode_Data.Valid = true
 
@@ -654,7 +641,6 @@ func (nodeDB *NodeDB) CopyBasicFieldsToNode(node *models.Node) {
 	node.IsCheckboxDisabled = nodeDB.IsCheckboxDisabled_Data.Bool
 	node.HasAddChildButton = nodeDB.HasAddChildButton_Data.Bool
 	node.HasEditButton = nodeDB.HasEditButton_Data.Bool
-	node.HasEditOffButton = nodeDB.HasEditOffButton_Data.Bool
 	node.IsInEditMode = nodeDB.IsInEditMode_Data.Bool
 	node.HasDrawButton = nodeDB.HasDrawButton_Data.Bool
 	node.HasDrawOffButton = nodeDB.HasDrawOffButton_Data.Bool
@@ -674,7 +660,6 @@ func (nodeDB *NodeDB) CopyBasicFieldsToNodeWOP(node *NodeWOP) {
 	node.IsCheckboxDisabled = nodeDB.IsCheckboxDisabled_Data.Bool
 	node.HasAddChildButton = nodeDB.HasAddChildButton_Data.Bool
 	node.HasEditButton = nodeDB.HasEditButton_Data.Bool
-	node.HasEditOffButton = nodeDB.HasEditOffButton_Data.Bool
 	node.IsInEditMode = nodeDB.IsInEditMode_Data.Bool
 	node.HasDrawButton = nodeDB.HasDrawButton_Data.Bool
 	node.HasDrawOffButton = nodeDB.HasDrawOffButton_Data.Bool

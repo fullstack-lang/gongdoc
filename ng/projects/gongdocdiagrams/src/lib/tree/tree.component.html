@@ -23,6 +23,17 @@
                 edit_off
             </mat-icon>
         </button>
+        <button *ngIf='node.gongNode.IsInDrawMode' mat-button (click)="cancelDrawMode(node)">
+            <mat-icon
+                [ngStyle]="{'color':'rgba(0,0,0,.50)'}">
+                edit_off
+            </mat-icon>
+        </button>
+        <button *ngIf='node.gongNode.IsInDrawMode' mat-button (click)="updateDiagram(node)">
+            <mat-icon
+                [ngStyle]="{'color':'rgba(0,0,0,.50)'}">save
+            </mat-icon>
+        </button>
         <button *ngIf="node.gongNode.HasEditButton" mat-icon-button (click)="setInEditMode(node)">
             <mat-icon
                 [ngStyle]="{'color':'rgba(0,0,0,.50)'}">edit

@@ -20,9 +20,8 @@ type Node struct {
 	HasAddChildButton bool
 
 	// to edit the name
-	HasEditButton    bool
-	HasEditOffButton bool
-	IsInEditMode     bool
+	HasEditButton bool
+	IsInEditMode  bool
 
 	// to edit the diagram
 	HasDrawButton    bool

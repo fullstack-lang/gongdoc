@@ -20,7 +20,6 @@ export class NodeDB {
 	IsCheckboxDisabled: boolean = false
 	HasAddChildButton: boolean = false
 	HasEditButton: boolean = false
-	HasEditOffButton: boolean = false
 	IsInEditMode: boolean = false
 	HasDrawButton: boolean = false
 	HasDrawOffButton: boolean = false

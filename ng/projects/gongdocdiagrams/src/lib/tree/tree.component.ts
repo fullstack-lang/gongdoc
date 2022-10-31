@@ -343,6 +343,36 @@ export class TreeComponent implements OnInit {
     )
   }
 
+  cancelDrawMode(node: FlatNode) {
+
+    // fetch the value from the server
+    // <to do>
+
+    // and set the edit mode
+    node.gongNode.IsInDrawMode = false
+    this.gongdocNodeService.updateNode(node.gongNode).subscribe(
+      gongdocNode => {
+        console.log("updated node")
+      }
+    )
+
+  }
+
+  updateDiagram(node: FlatNode) {
+
+    // fetch the value from the server
+    // <to do>
+
+    // and set the edit mode
+    node.gongNode.IsInDrawMode = false
+    this.gongdocNodeService.updateNode(node.gongNode).subscribe(
+      gongdocNode => {
+        console.log("updated node")
+      }
+    )
+
+  }
+
   deleteNode(node: FlatNode) {
     this.gongdocNodeService.deleteNode(node.gongNode).subscribe(
       gongdocNode => {

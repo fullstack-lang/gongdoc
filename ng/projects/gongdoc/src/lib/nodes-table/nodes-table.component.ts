@@ -98,9 +98,6 @@ export class NodesTableComponent implements OnInit {
         case 'HasEditButton':
           return nodeDB.HasEditButton?"true":"false";
 
-        case 'HasEditOffButton':
-          return nodeDB.HasEditOffButton?"true":"false";
-
         case 'IsInEditMode':
           return nodeDB.IsInEditMode?"true":"false";
 
@@ -220,7 +217,6 @@ export class NodesTableComponent implements OnInit {
         "IsCheckboxDisabled",
         "HasAddChildButton",
         "HasEditButton",
-        "HasEditOffButton",
         "IsInEditMode",
         "HasDrawButton",
         "HasDrawOffButton",
@@ -241,7 +237,6 @@ export class NodesTableComponent implements OnInit {
         "IsCheckboxDisabled",
         "HasAddChildButton",
         "HasEditButton",
-        "HasEditOffButton",
         "IsInEditMode",
         "HasDrawButton",
         "HasDrawOffButton",

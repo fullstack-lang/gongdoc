@@ -44,7 +44,6 @@ export class NodeDetailComponent implements OnInit {
 	IsCheckboxDisabledFormControl: UntypedFormControl = new UntypedFormControl(false);
 	HasAddChildButtonFormControl: UntypedFormControl = new UntypedFormControl(false);
 	HasEditButtonFormControl: UntypedFormControl = new UntypedFormControl(false);
-	HasEditOffButtonFormControl: UntypedFormControl = new UntypedFormControl(false);
 	IsInEditModeFormControl: UntypedFormControl = new UntypedFormControl(false);
 	HasDrawButtonFormControl: UntypedFormControl = new UntypedFormControl(false);
 	HasDrawOffButtonFormControl: UntypedFormControl = new UntypedFormControl(false);
@@ -162,7 +161,6 @@ export class NodeDetailComponent implements OnInit {
 				this.IsCheckboxDisabledFormControl.setValue(this.node.IsCheckboxDisabled)
 				this.HasAddChildButtonFormControl.setValue(this.node.HasAddChildButton)
 				this.HasEditButtonFormControl.setValue(this.node.HasEditButton)
-				this.HasEditOffButtonFormControl.setValue(this.node.HasEditOffButton)
 				this.IsInEditModeFormControl.setValue(this.node.IsInEditMode)
 				this.HasDrawButtonFormControl.setValue(this.node.HasDrawButton)
 				this.HasDrawOffButtonFormControl.setValue(this.node.HasDrawOffButton)
@@ -206,7 +204,6 @@ export class NodeDetailComponent implements OnInit {
 		this.node.IsCheckboxDisabled = this.IsCheckboxDisabledFormControl.value
 		this.node.HasAddChildButton = this.HasAddChildButtonFormControl.value
 		this.node.HasEditButton = this.HasEditButtonFormControl.value
-		this.node.HasEditOffButton = this.HasEditOffButtonFormControl.value
 		this.node.IsInEditMode = this.IsInEditModeFormControl.value
 		this.node.HasDrawButton = this.HasDrawButtonFormControl.value
 		this.node.HasDrawOffButton = this.HasDrawOffButtonFormControl.value
