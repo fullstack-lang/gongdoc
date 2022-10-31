@@ -33,9 +33,9 @@ type Classdiagram struct {
 	// list of notes in the diagram
 	Notes []*Note
 
-	// IsEditable indicates the the drawing can be edited (in development mode)
+	// IsInDrawMode indicates the the drawing can be edited (in development mode)
 	// or not (in production mode)
-	IsEditable bool
+	IsInDrawMode bool
 }
 
 const DiagramMarginX = 10.0

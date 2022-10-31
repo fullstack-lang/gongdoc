@@ -13,6 +13,7 @@ export class UmlscDB {
 	// insertion point for basic fields declarations
 	Name: string = ""
 	Activestate: string = ""
+	IsInDrawMode: boolean = false
 
 	// insertion point for other declarations
 	States?: Array<UmlStateDB>

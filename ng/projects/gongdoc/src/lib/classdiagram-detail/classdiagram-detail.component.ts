@@ -35,7 +35,7 @@ enum ClassdiagramDetailComponentState {
 export class ClassdiagramDetailComponent implements OnInit {
 
 	// insertion point for declarations
-	IsEditableFormControl: UntypedFormControl = new UntypedFormControl(false);
+	IsInDrawModeFormControl: UntypedFormControl = new UntypedFormControl(false);
 
 	// the ClassdiagramDB of interest
 	classdiagram: ClassdiagramDB = new ClassdiagramDB
@@ -133,7 +133,7 @@ export class ClassdiagramDetailComponent implements OnInit {
 				}
 
 				// insertion point for recovery of form controls value for bool fields
-				this.IsEditableFormControl.setValue(this.classdiagram.IsEditable)
+				this.IsInDrawModeFormControl.setValue(this.classdiagram.IsInDrawMode)
 			}
 		)
 
@@ -146,7 +146,7 @@ export class ClassdiagramDetailComponent implements OnInit {
 		// pointers fields, after the translation, are nulled in order to perform serialization
 
 		// insertion point for translation/nullation of each field
-		this.classdiagram.IsEditable = this.IsEditableFormControl.value
+		this.classdiagram.IsInDrawMode = this.IsInDrawModeFormControl.value
 
 		// save from the front pointer space to the non pointer space for serialization
 

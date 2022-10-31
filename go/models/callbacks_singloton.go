@@ -139,6 +139,17 @@ func (callbacksSingloton CallbacksSingloton) OnAfterUpdate(
 			stagedNode.IsInEditMode = frontNode.IsInEditMode
 			updateNodesStates(stage, &callbacksSingloton)
 		}
+
+		if stagedNode.IsInDrawMode != frontNode.IsInDrawMode {
+			stagedNode.IsInDrawMode = frontNode.IsInDrawMode
+			switch stagedNode.Type {
+			case CLASS_DIAGRAM:
+				stagedNode.Classdiagram.IsInDrawMode = frontNode.IsInDrawMode
+			case STATE_DIAGRAM:
+				stagedNode.Umlsc.IsInDrawMode = frontNode.IsInDrawMode
+			}
+			updateNodesStates(stage, &callbacksSingloton)
+		}
 	case GONG_STRUCT:
 		// if node is unchecked
 		if stagedNode.IsChecked && !frontNode.IsChecked {

@@ -317,7 +317,7 @@ export class ClassDiagramComponent implements OnInit, OnDestroy {
 
     this.paper = new joint.dia.Paper(paperOptions)
 
-    if (this.classdiagram.IsEditable) {
+    if (this.classdiagram.IsInDrawMode) {
       this.paper.setInteractivity(true)
     } else {
       this.paper.setInteractivity(false)
@@ -535,7 +535,7 @@ export class ClassDiagramComponent implements OnInit, OnDestroy {
         } else {
 
           this.drawClassdiagram();
-          this.paper!.setInteractivity(this.classdiagram.IsEditable)
+          this.paper!.setInteractivity(this.classdiagram.IsInDrawMode)
 
         }
       }
@@ -547,7 +547,7 @@ export class ClassDiagramComponent implements OnInit, OnDestroy {
 
     if (!event.checked) {
       this.paper!.setInteractivity(false)
-      this.classdiagram.IsEditable = false
+      this.classdiagram.IsInDrawMode = false
       this.ClassdiagramService.updateClassdiagram(this.classdiagram).subscribe(
         classdiagram => {
           console.log("classdiagram edition mode set to PROD")
@@ -555,7 +555,7 @@ export class ClassDiagramComponent implements OnInit, OnDestroy {
       )
     } else {
       this.paper!.setInteractivity(true)
-      this.classdiagram.IsEditable = true
+      this.classdiagram.IsInDrawMode = true
       this.ClassdiagramService.updateClassdiagram(this.classdiagram).subscribe(
         classdiagram => {
           console.log("classdiagram edition mode set to DEV")

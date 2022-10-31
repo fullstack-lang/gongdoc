@@ -71,8 +71,8 @@ export class ClassdiagramsTableComponent implements OnInit {
         case 'Name':
           return classdiagramDB.Name;
 
-        case 'IsEditable':
-          return classdiagramDB.IsEditable?"true":"false";
+        case 'IsInDrawMode':
+          return classdiagramDB.IsInDrawMode?"true":"false";
 
         case 'DiagramPackage_Classdiagrams':
           if (this.frontRepo.DiagramPackages.get(classdiagramDB.DiagramPackage_ClassdiagramsDBID.Int64) != undefined) {
@@ -151,13 +151,13 @@ export class ClassdiagramsTableComponent implements OnInit {
     if (this.mode == TableComponentMode.DISPLAY_MODE) {
       this.displayedColumns = ['ID', 'Edit', 'Delete', // insertion point for columns to display
         "Name",
-        "IsEditable",
+        "IsInDrawMode",
         "DiagramPackage_Classdiagrams",
       ]
     } else {
       this.displayedColumns = ['select', 'ID', // insertion point for columns to display
         "Name",
-        "IsEditable",
+        "IsInDrawMode",
         "DiagramPackage_Classdiagrams",
       ]
       this.selection = new SelectionModel<ClassdiagramDB>(allowMultiSelect, this.initialSelection);

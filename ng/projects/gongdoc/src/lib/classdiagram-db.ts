@@ -13,7 +13,7 @@ export class ClassdiagramDB {
 
 	// insertion point for basic fields declarations
 	Name: string = ""
-	IsEditable: boolean = false
+	IsInDrawMode: boolean = false
 
 	// insertion point for other declarations
 	Classshapes?: Array<ClassshapeDB>

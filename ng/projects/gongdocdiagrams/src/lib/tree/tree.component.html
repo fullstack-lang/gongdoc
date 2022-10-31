@@ -38,7 +38,7 @@
                 [ngStyle]="{'color':'rgba(0,0,0,.50)'}">
                 delete</mat-icon>
         </button>
-        <button mat-icon-button *ngIf="node.gongNode.HasDrawButton" (click)="draw(node)">
+        <button mat-icon-button *ngIf="node.gongNode.HasDrawButton" (click)="setInDrawMode(node)">
             <mat-icon
                 [ngStyle]="{'color':'rgba(0,0,0,.50)'}">
                 draw</mat-icon>
@@ -92,7 +92,7 @@
                 [ngStyle]="{'color':'rgba(0,0,0,.50)'}">
                 delete</mat-icon>
         </button>
-        <button mat-icon-button *ngIf="node.gongNode. HasDrawButton        " (click)="draw(node)">
+        <button mat-icon-button *ngIf="node.gongNode. HasDrawButton        " (click)="setInDrawMode(node)">
             <mat-icon
                 [ngStyle]="{'color':'rgba(0,0,0,.50)'}">
                 draw</mat-icon>

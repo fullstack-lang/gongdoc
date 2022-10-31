@@ -351,7 +351,7 @@ export class TreeComponent implements OnInit {
     )
   }
 
-  draw(node: FlatNode) {
+  setInDrawMode(node: FlatNode) {
     node.gongNode.IsInDrawMode = true
     this.gongdocNodeService.updateNode(node.gongNode).subscribe(
       gongdocNode => {

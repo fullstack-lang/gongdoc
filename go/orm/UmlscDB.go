@@ -69,6 +69,10 @@ type UmlscDB struct {
 
 	// Declation for basic field umlscDB.Activestate
 	Activestate_Data sql.NullString
+
+	// Declation for basic field umlscDB.IsInDrawMode
+	// provide the sql storage for the boolan
+	IsInDrawMode_Data sql.NullBool
 	// encoding of pointers
 	UmlscPointersEnconding
 }
@@ -93,6 +97,8 @@ type UmlscWOP struct {
 	Name string `xlsx:"1"`
 
 	Activestate string `xlsx:"2"`
+
+	IsInDrawMode bool `xlsx:"3"`
 	// insertion for WOP pointer fields
 }
 
@@ -101,6 +107,7 @@ var Umlsc_Fields = []string{
 	"ID",
 	"Name",
 	"Activestate",
+	"IsInDrawMode",
 }
 
 type BackRepoUmlscStruct struct {
@@ -434,6 +441,9 @@ func (umlscDB *UmlscDB) CopyBasicFieldsFromUmlsc(umlsc *models.Umlsc) {
 
 	umlscDB.Activestate_Data.String = umlsc.Activestate
 	umlscDB.Activestate_Data.Valid = true
+
+	umlscDB.IsInDrawMode_Data.Bool = umlsc.IsInDrawMode
+	umlscDB.IsInDrawMode_Data.Valid = true
 }
 
 // CopyBasicFieldsFromUmlscWOP
@@ -445,6 +455,9 @@ func (umlscDB *UmlscDB) CopyBasicFieldsFromUmlscWOP(umlsc *UmlscWOP) {
 
 	umlscDB.Activestate_Data.String = umlsc.Activestate
 	umlscDB.Activestate_Data.Valid = true
+
+	umlscDB.IsInDrawMode_Data.Bool = umlsc.IsInDrawMode
+	umlscDB.IsInDrawMode_Data.Valid = true
 }
 
 // CopyBasicFieldsToUmlsc
@@ -452,6 +465,7 @@ func (umlscDB *UmlscDB) CopyBasicFieldsToUmlsc(umlsc *models.Umlsc) {
 	// insertion point for checkout of basic fields (back repo to stage)
 	umlsc.Name = umlscDB.Name_Data.String
 	umlsc.Activestate = umlscDB.Activestate_Data.String
+	umlsc.IsInDrawMode = umlscDB.IsInDrawMode_Data.Bool
 }
 
 // CopyBasicFieldsToUmlscWOP
@@ -460,6 +474,7 @@ func (umlscDB *UmlscDB) CopyBasicFieldsToUmlscWOP(umlsc *UmlscWOP) {
 	// insertion point for checkout of basic fields (back repo to stage)
 	umlsc.Name = umlscDB.Name_Data.String
 	umlsc.Activestate = umlscDB.Activestate_Data.String
+	umlsc.IsInDrawMode = umlscDB.IsInDrawMode_Data.Bool
 }
 
 // Backup generates a json file from a slice of all UmlscDB instances in the backrepo

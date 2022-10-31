@@ -54,6 +54,9 @@
         <textarea name="" [ngModelOptions]="{standalone: true}" matInput [(ngModel)]="umlsc.Activestate"></textarea>
     </mat-form-field>
 
+    <!-- -->
+    <mat-checkbox [formControl]="IsInDrawModeFormControl">IsInDrawMode</mat-checkbox>
+
     <mat-form-field class="detail-full-width">
         <mat-label>(DiagramPackage) Umlscs</mat-label>
         <mat-select [compareWith]="compareObjects" [(ngModel)]="umlsc.DiagramPackage_Umlscs_reverse" [ngModelOptions]="{standalone: true}">

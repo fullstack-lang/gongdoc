@@ -74,6 +74,9 @@ export class UmlscsTableComponent implements OnInit {
         case 'Activestate':
           return umlscDB.Activestate;
 
+        case 'IsInDrawMode':
+          return umlscDB.IsInDrawMode?"true":"false";
+
         case 'DiagramPackage_Umlscs':
           if (this.frontRepo.DiagramPackages.get(umlscDB.DiagramPackage_UmlscsDBID.Int64) != undefined) {
             return this.frontRepo.DiagramPackages.get(umlscDB.DiagramPackage_UmlscsDBID.Int64)!.Name
@@ -153,12 +156,14 @@ export class UmlscsTableComponent implements OnInit {
       this.displayedColumns = ['ID', 'Edit', 'Delete', // insertion point for columns to display
         "Name",
         "Activestate",
+        "IsInDrawMode",
         "DiagramPackage_Umlscs",
       ]
     } else {
       this.displayedColumns = ['select', 'ID', // insertion point for columns to display
         "Name",
         "Activestate",
+        "IsInDrawMode",
         "DiagramPackage_Umlscs",
       ]
       this.selection = new SelectionModel<UmlscDB>(allowMultiSelect, this.initialSelection);

@@ -2043,8 +2043,8 @@ func (stage *StageStruct) Marshall(file *os.File, modelsPackageName, packageName
 
 		setValueField = NumberInitStatement
 		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "IsEditable")
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", fmt.Sprintf("%t", classdiagram.IsEditable))
+		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "IsInDrawMode")
+		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", fmt.Sprintf("%t", classdiagram.IsInDrawMode))
 		initializerStatements += setValueField
 
 	}
@@ -2813,6 +2813,12 @@ func (stage *StageStruct) Marshall(file *os.File, modelsPackageName, packageName
 		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
 		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "Activestate")
 		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", string(umlsc.Activestate))
+		initializerStatements += setValueField
+
+		setValueField = NumberInitStatement
+		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
+		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "IsInDrawMode")
+		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", fmt.Sprintf("%t", umlsc.IsInDrawMode))
 		initializerStatements += setValueField
 
 	}
@@ -4106,7 +4112,7 @@ func GetFields[Type Gongstruct]() (res []string) {
 	switch any(ret).(type) {
 	// insertion point for generic get gongstruct name
 	case Classdiagram:
-		res = []string{"Name", "Classshapes", "Notes", "IsEditable"}
+		res = []string{"Name", "Classshapes", "Notes", "IsInDrawMode"}
 	case Classshape:
 		res = []string{"Name", "Position", "Structname", "GongStruct", "ShowNbInstances", "NbInstances", "Fields", "Links", "Width", "Heigth", "ClassshapeTargetType"}
 	case DiagramPackage:
@@ -4132,7 +4138,7 @@ func GetFields[Type Gongstruct]() (res []string) {
 	case UmlState:
 		res = []string{"Name", "X", "Y"}
 	case Umlsc:
-		res = []string{"Name", "States", "Activestate"}
+		res = []string{"Name", "States", "Activestate", "IsInDrawMode"}
 	case Vertice:
 		res = []string{"X", "Y", "Name"}
 	}
@@ -4163,8 +4169,8 @@ func GetFieldStringValue[Type Gongstruct](instance Type, fieldName string) (res 
 				}
 				res += __instance__.Name
 			}
-		case "IsEditable":
-			res = fmt.Sprintf("%t", any(instance).(Classdiagram).IsEditable)
+		case "IsInDrawMode":
+			res = fmt.Sprintf("%t", any(instance).(Classdiagram).IsInDrawMode)
 		}
 	case Classshape:
 		switch fieldName {
@@ -4432,6 +4438,8 @@ func GetFieldStringValue[Type Gongstruct](instance Type, fieldName string) (res 
 			}
 		case "Activestate":
 			res = any(instance).(Umlsc).Activestate
+		case "IsInDrawMode":
+			res = fmt.Sprintf("%t", any(instance).(Umlsc).IsInDrawMode)
 		}
 	case Vertice:
 		switch fieldName {

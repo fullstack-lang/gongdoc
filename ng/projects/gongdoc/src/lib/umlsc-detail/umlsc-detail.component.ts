@@ -35,6 +35,7 @@ enum UmlscDetailComponentState {
 export class UmlscDetailComponent implements OnInit {
 
 	// insertion point for declarations
+	IsInDrawModeFormControl: UntypedFormControl = new UntypedFormControl(false);
 
 	// the UmlscDB of interest
 	umlsc: UmlscDB = new UmlscDB
@@ -132,6 +133,7 @@ export class UmlscDetailComponent implements OnInit {
 				}
 
 				// insertion point for recovery of form controls value for bool fields
+				this.IsInDrawModeFormControl.setValue(this.umlsc.IsInDrawMode)
 			}
 		)
 
@@ -144,6 +146,7 @@ export class UmlscDetailComponent implements OnInit {
 		// pointers fields, after the translation, are nulled in order to perform serialization
 
 		// insertion point for translation/nullation of each field
+		this.umlsc.IsInDrawMode = this.IsInDrawModeFormControl.value
 
 		// save from the front pointer space to the non pointer space for serialization
 
