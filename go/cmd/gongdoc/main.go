@@ -191,6 +191,8 @@ func main() {
 	pkgelt.SerializeToStage()
 
 	gongdoc_models.FillUpNodeTree(&pkgelt)
+	classshapeCallbackSingloton := new(gongdoc_models.ClassshapeCallbacksSingloton)
+	gongdoc_models.Stage.OnAfterClassshapeUpdateCallback = classshapeCallbackSingloton
 
 	r.Run(":8080")
 }
