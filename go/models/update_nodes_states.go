@@ -38,36 +38,41 @@ func updateNodesStates(stage *StageStruct, callbacksSingloton *CallbacksSingloto
 		classdiagramNode.HasEditButton = false
 		classdiagramNode.HasDeleteButton = false
 		classdiagramNode.HasDrawButton = false
+		classdiagramNode.HasDrawOffButton = false
 
-		if classdiagramNode.IsChecked {
+		if !classdiagramNode.IsChecked {
+			classdiagramNode.IsInEditMode = false
+			classdiagramNode.IsInDrawMode = false
+			continue
+		}
 
-			classdiagramNode.HasEditButton =
-				pkglet.IsEditable && !classdiagramNode.IsInEditMode && !classdiagramNode.IsInDrawMode
-			classdiagramNode.HasDeleteButton =
-				pkglet.IsEditable && !classdiagramNode.IsInEditMode && !classdiagramNode.IsInDrawMode
-			classdiagramNode.HasDrawButton =
-				pkglet.IsEditable && !classdiagramNode.IsInEditMode && !classdiagramNode.IsInDrawMode
+		classdiagramNode.HasEditButton =
+			pkglet.IsEditable && !classdiagramNode.IsInEditMode && !classdiagramNode.IsInDrawMode
+		classdiagramNode.HasDeleteButton =
+			pkglet.IsEditable && !classdiagramNode.IsInEditMode && !classdiagramNode.IsInDrawMode
+		classdiagramNode.HasDrawButton =
+			pkglet.IsEditable && !classdiagramNode.IsInEditMode && !classdiagramNode.IsInDrawMode
 
-			// get the diagram
-			classDiagram := classdiagramNode.Classdiagram
+		// get the diagram
+		classDiagram := classdiagramNode.Classdiagram
 
-			// get the referenced gongstructs
-			for _, classshape := range classDiagram.Classshapes {
-				gongstruct := classshape.GongStruct
-				gongstructNodes[gongstruct.Name].IsChecked = true
-				gongstructNodes[gongstruct.Name].IsCheckboxDisabled = !classDiagram.IsInDrawMode
+		// get the referenced gongstructs
+		for _, classshape := range classDiagram.Classshapes {
+			gongstruct := classshape.GongStruct
+			gongstructNodes[gongstruct.Name].IsChecked = true
+			gongstructNodes[gongstruct.Name].IsCheckboxDisabled = !classDiagram.IsInDrawMode
 
-				for _, field := range classshape.Fields {
-					gongfieldNodes[gongstruct.Name+"."+field.Name].IsChecked = true
-					gongfieldNodes[gongstruct.Name+"."+field.Name].IsCheckboxDisabled = !classDiagram.IsInDrawMode
-				}
+			for _, field := range classshape.Fields {
+				gongfieldNodes[gongstruct.Name+"."+field.Name].IsChecked = true
+				gongfieldNodes[gongstruct.Name+"."+field.Name].IsCheckboxDisabled = !classDiagram.IsInDrawMode
+			}
 
-				for _, link := range classshape.Links {
-					gongfieldNodes[gongstruct.Name+"."+link.Name].IsChecked = true
-					gongfieldNodes[gongstruct.Name+"."+link.Name].IsCheckboxDisabled = !classDiagram.IsInDrawMode
-				}
+			for _, link := range classshape.Links {
+				gongfieldNodes[gongstruct.Name+"."+link.Name].IsChecked = true
+				gongfieldNodes[gongstruct.Name+"."+link.Name].IsCheckboxDisabled = !classDiagram.IsInDrawMode
 			}
 		}
+
 	}
 
 	for _, stateDiagramNode := range callbacksSingloton.StateDiagramsRootNode.Children {
