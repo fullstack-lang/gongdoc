@@ -36,7 +36,7 @@ var Diagram3 uml.Classdiagram = uml.Classdiagram{
 					Field: models.Line{}.JourneyTime,
 				},
 				{
-					Field: models.Line{}.LineType,
+					Field: models.Line{}.Type,
 				},
 				{
 					Field: models.Line{}.Name,
