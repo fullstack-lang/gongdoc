@@ -1,5 +1,7 @@
 package models
 
+import gong_models "github.com/fullstack-lang/gong/go/models"
+
 // Node is a node in the tree for selecting items to display
 type Node struct {
 	Name string
@@ -9,6 +11,8 @@ type Node struct {
 	// pointer to the related instance (depends on type)
 	Classdiagram *Classdiagram
 	Umlsc        *Umlsc
+	Gongstruct   *gong_models.GongStruct
+	Gongfield    gong_models.FieldInterface
 
 	IsExpanded bool
 

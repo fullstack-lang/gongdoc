@@ -161,7 +161,7 @@ func (callbacksSingloton CallbacksSingloton) OnAfterUpdate(
 			switch stagedNode.Type {
 			case CLASS_DIAGRAM:
 
-				// checkout in order to get the latest version of the diagram updated
+				// checkout in order to get the latest version of the diagram before modifying it updated
 				// by the front
 				Stage.Checkout()
 				stagedNode.Classdiagram.Marshall(pkgelt, filepath.Join(pkgelt.Path, "../diagrams"))
@@ -177,7 +177,7 @@ func (callbacksSingloton CallbacksSingloton) OnAfterUpdate(
 		// if node is unchecked
 		if stagedNode.IsChecked && !frontNode.IsChecked {
 
-			// get the latest version of the diagram
+			// get the latest version of the diagram before modifying it
 			stage.Checkout()
 
 			// remove the classshape from the selected diagram
@@ -202,7 +202,7 @@ func (callbacksSingloton CallbacksSingloton) OnAfterUpdate(
 		// if node is checked, add classshape
 		if !stagedNode.IsChecked && frontNode.IsChecked {
 
-			// get the latest version of the diagram
+			// get the latest version of the diagram before modifying it
 			stage.Checkout()
 
 			for _, classdiagramNode := range callbacksSingloton.ClassdiagramsRootNode.Children {
@@ -214,6 +214,60 @@ func (callbacksSingloton CallbacksSingloton) OnAfterUpdate(
 
 				updateNodesStates(stage, &callbacksSingloton)
 			}
+		}
+
+	case GONG_FIELD:
+
+		// find classdiagram
+		var classdiagram *Classdiagram
+		for _, classdiagramNode := range callbacksSingloton.ClassdiagramsRootNode.Children {
+			if classdiagramNode.IsChecked {
+				// get the diagram
+				classdiagram = classdiagramNode.Classdiagram
+			}
+		}
+
+		// find the parent node to find the gongstruct to find the classshape
+		// the node is field, one needs to find the gongstruct that contains it
+		// get the parent node
+		fieldName := GetAssociationName[Node]().Children[0].Name
+		map_ReverseNodeParentNodeChildrend := GetSliceOfPointersReverseMap[Node, Node](fieldName)
+		parentNode := map_ReverseNodeParentNodeChildrend[stagedNode]
+		gongStruct := parentNode.Gongstruct
+
+		// find the classhape in the classdiagram
+		foundClassshape := false
+		var classshape *Classshape
+		for _, _classshape := range classdiagram.Classshapes {
+			// strange behavior when the classshape is remove within the loop
+			if _classshape.Structname == gongStruct.Name && !foundClassshape {
+				classshape = _classshape
+			}
+		}
+
+		if stagedNode.IsChecked && !frontNode.IsChecked {
+
+			// get the latest version of the diagram before modifying it
+			stage.Checkout()
+
+			var field *Field
+			var idx int
+			for _idx, _field := range classshape.Fields {
+				if _field.Fieldname == stagedNode.Name {
+					idx = _idx
+					field = _field
+				}
+			}
+			classshape.Fields = removeFieldFromSlice(classshape.Fields, idx)
+			classshape.Heigth = classshape.Heigth - 15
+
+			field.Unstage()
+			Stage.Commit()
+		}
+		if !stagedNode.IsChecked && frontNode.IsChecked {
+
+			// get the latest version of the diagram before modifying it
+			stage.Checkout()
 		}
 	}
 
