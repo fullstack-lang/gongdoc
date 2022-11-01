@@ -33,8 +33,6 @@ import { ClassDiagramComponent } from './class-diagram/class-diagram.component';
 import { PkgeltDocsComponent } from './pkgelt-docs/pkgelt-docs.component';
 import { UmlscSimpleTableComponent } from './umlsc-simple/umlsc-simple.component';
 
-import { SidebarGongDiagramsComponent } from './sidebar-gong-diagrams/sidebar-gong-diagrams.component'
-import { SidebarGongdocDiagramsComponent } from './sidebar-gongdoc-diagrams/sidebar-gongdoc-diagrams.component'
 import { ClassdiagramDetailComponent } from './classdiagram-detail/classdiagram-detail.component';
 import { TreeComponent } from './tree/tree.component'
 
@@ -45,8 +43,6 @@ import { TreeComponent } from './tree/tree.component'
     ClassDiagramComponent,
     PkgeltDocsComponent,
     UmlscSimpleTableComponent,
-    SidebarGongDiagramsComponent,
-    SidebarGongdocDiagramsComponent,
     ClassdiagramDetailComponent,
     TreeComponent
   ],
