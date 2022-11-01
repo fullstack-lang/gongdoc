@@ -434,7 +434,14 @@ func (callbacksSingloton CallbacksSingloton) OnAfterCreate(
 		classdiagram := (&Classdiagram{Name: newDiagramNode.Name}).Stage()
 		pkgelt.Classdiagrams = append(pkgelt.Classdiagrams, classdiagram)
 		newDiagramNode.Classdiagram = classdiagram
+		newDiagramNode.IsInEditMode = true
+		newDiagramNode.IsInDrawMode = false
+		newDiagramNode.HasEditButton = false
 
+		callbacksSingloton.ClassdiagramsRootNode.Children =
+			append(callbacksSingloton.ClassdiagramsRootNode.Children, newDiagramNode)
+
+		updateNodesStates(stage, &callbacksSingloton)
 		stage.Commit()
 	}
 }
