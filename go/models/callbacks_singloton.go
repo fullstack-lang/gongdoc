@@ -250,18 +250,36 @@ func (callbacksSingloton CallbacksSingloton) OnAfterUpdate(
 			// get the latest version of the diagram before modifying it
 			stage.Checkout()
 
-			var field *Field
-			var idx int
-			for _idx, _field := range classshape.Fields {
-				if _field.Fieldname == stagedNode.Name {
-					idx = _idx
-					field = _field
+			{
+				var field *Field
+				var idx int
+				for _idx, _field := range classshape.Fields {
+					if _field.Fieldname == stagedNode.Name {
+						idx = _idx
+						field = _field
+					}
+				}
+				if field != nil {
+					classshape.Fields = removeFieldFromSlice(classshape.Fields, idx)
+					classshape.Heigth = classshape.Heigth - 15
+					field.Unstage()
 				}
 			}
-			classshape.Fields = removeFieldFromSlice(classshape.Fields, idx)
-			classshape.Heigth = classshape.Heigth - 15
+			{
+				var link *Link
+				var idx int
+				for _idx, _field := range classshape.Links {
+					if _field.Fieldname == stagedNode.Name {
+						idx = _idx
+						link = _field
+					}
+				}
+				if link != nil {
+					classshape.Links = removeLinkFromSlice(classshape.Links, idx)
+					link.Unstage()
+				}
+			}
 
-			field.Unstage()
 			Stage.Commit()
 		}
 		if !stagedNode.IsChecked && frontNode.IsChecked {

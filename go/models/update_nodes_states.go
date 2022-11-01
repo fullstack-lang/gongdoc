@@ -13,7 +13,7 @@ func updateNodesStates(stage *StageStruct, callbacksSingloton *CallbacksSingloto
 	// map of gognstruct nodes according to their name
 	gongstructNodes := make(map[string]*Node)
 
-	// map of gong fileds according to their name
+	// map of gong fields according to their name
 	gongfieldNodes := make(map[string]*Node)
 
 	// unckeck nodes and construct the map
@@ -60,6 +60,11 @@ func updateNodesStates(stage *StageStruct, callbacksSingloton *CallbacksSingloto
 				for _, field := range classshape.Fields {
 					gongfieldNodes[gongstruct.Name+"."+field.Name].IsChecked = true
 					gongfieldNodes[gongstruct.Name+"."+field.Name].IsCheckboxDisabled = !classDiagram.IsInDrawMode
+				}
+
+				for _, link := range classshape.Links {
+					gongfieldNodes[gongstruct.Name+"."+link.Name].IsChecked = true
+					gongfieldNodes[gongstruct.Name+"."+link.Name].IsCheckboxDisabled = !classDiagram.IsInDrawMode
 				}
 			}
 		}
