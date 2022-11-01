@@ -118,6 +118,9 @@
         </mat-select>
     </mat-form-field>
 
+    <!-- -->
+    <mat-checkbox [formControl]="IsSelectedFormControl">IsSelected</mat-checkbox>
+
     <mat-form-field class="detail-full-width">
         <mat-label>(Classdiagram) Classshapes</mat-label>
         <mat-select [compareWith]="compareObjects" [(ngModel)]="classshape.Classdiagram_Classshapes_reverse" [ngModelOptions]="{standalone: true}">

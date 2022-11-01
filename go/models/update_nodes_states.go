@@ -2,7 +2,7 @@ package models
 
 // updateNodesStates updates the tree of symbols
 // according to the selected diagram
-func updateNodesStates(stage *StageStruct, callbacksSingloton *CallbacksSingloton) {
+func updateNodesStates(stage *StageStruct, callbacksSingloton *NodeCallbacksSingloton) {
 
 	// get the editable state of the package
 	var pkglet *DiagramPackage

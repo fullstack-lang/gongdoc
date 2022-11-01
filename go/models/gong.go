@@ -2117,6 +2117,12 @@ func (stage *StageStruct) Marshall(file *os.File, modelsPackageName, packageName
 			initializerStatements += setValueField
 		}
 
+		setValueField = NumberInitStatement
+		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
+		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "IsSelected")
+		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", fmt.Sprintf("%t", classshape.IsSelected))
+		initializerStatements += setValueField
+
 	}
 
 	map_DiagramPackage_Identifiers := make(map[*DiagramPackage]string)
@@ -4114,7 +4120,7 @@ func GetFields[Type Gongstruct]() (res []string) {
 	case Classdiagram:
 		res = []string{"Name", "Classshapes", "Notes", "IsInDrawMode"}
 	case Classshape:
-		res = []string{"Name", "Position", "Structname", "GongStruct", "ShowNbInstances", "NbInstances", "Fields", "Links", "Width", "Heigth", "ClassshapeTargetType"}
+		res = []string{"Name", "Position", "Structname", "GongStruct", "ShowNbInstances", "NbInstances", "Fields", "Links", "Width", "Heigth", "ClassshapeTargetType", "IsSelected"}
 	case DiagramPackage:
 		res = []string{"Name", "Path", "GongModelPath", "Classdiagrams", "Umlscs", "IsEditable"}
 	case Field:
@@ -4212,6 +4218,8 @@ func GetFieldStringValue[Type Gongstruct](instance Type, fieldName string) (res 
 		case "ClassshapeTargetType":
 			enum := any(instance).(Classshape).ClassshapeTargetType
 			res = enum.ToCodeString()
+		case "IsSelected":
+			res = fmt.Sprintf("%t", any(instance).(Classshape).IsSelected)
 		}
 	case DiagramPackage:
 		switch fieldName {

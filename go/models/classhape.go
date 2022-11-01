@@ -47,6 +47,10 @@ type Classshape struct {
 	Width, Heigth float64
 
 	ClassshapeTargetType ClassshapeTargetType
+
+	// this is always false in the backend, but it can be set to true by the front end
+	// this means it is selected by the user
+	IsSelected bool
 }
 
 type ClassshapeTargetType string

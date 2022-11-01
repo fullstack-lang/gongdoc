@@ -92,6 +92,7 @@ export class ClassDiagramComponent implements OnInit, OnDestroy {
     private positionService: gongdoc.PositionService,
     private noteService: gongdoc.NoteService,
     private verticeService: gongdoc.VerticeService,
+    private classshapeService: gongdoc.ClassshapeService, // for selection of the classshape
 
     private gongdocFrontRepoService: gongdoc.FrontRepoService,
     private gongdocCommitNbFromBackService: gongdoc.CommitNbFromBackService,
@@ -225,7 +226,7 @@ export class ClassDiagramComponent implements OnInit, OnDestroy {
     // - the position service
     // - the command singloton
     // - the command service
-    let umlClassShape = newUmlClassShape(classshape, this.positionService)
+    let umlClassShape = newUmlClassShape(classshape, this.positionService, this.classshapeService)
 
     // structRectangle.attributes = ['firstName: String']
     umlClassShape.addTo(this.graph!);
@@ -330,11 +331,21 @@ export class ClassDiagramComponent implements OnInit, OnDestroy {
         let umlClassShape = cellView.model
 
         let classhape = umlClassShape.attributes['classshape'] as gongdoc.ClassshapeDB
+        let classshapeService = umlClassShape.attributes['classshapeService'] as gongdoc.ClassshapeService
 
         // if selected object is not a classshape, move on
         if (classhape == undefined) {
           return
         }
+
+        classhape.IsSelected = true
+        classshapeService.updateClassshape(classhape).subscribe(
+          classhape => {
+            console.log("classhape updated")
+          }
+        )
+
+        // update classshape with nothing changed. This will trigger a select event in the backend
 
 
         let gongdocCommandSingloton = umlClassShape.attributes['gongdocCommandSingloton'] as gongdoc.GongdocCommandDB

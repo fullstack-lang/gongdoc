@@ -3,7 +3,8 @@ import * as gongdoc from 'gongdoc'
 import { GongdocCommandService } from 'gongdoc';
 
 export function newUmlClassShape(classshape: gongdoc.ClassshapeDB,
-    positionService: gongdoc.PositionService): joint.shapes.uml.Class {
+    positionService: gongdoc.PositionService,
+    classshapeService: gongdoc.ClassshapeService): joint.shapes.uml.Class {
 
     // fetch the fields, it must belong to the current diagram
     // and the type must match the classshape type
@@ -71,6 +72,7 @@ export function newUmlClassShape(classshape: gongdoc.ClassshapeDB,
             // store relevant attributes for working when callback are invoked
             classshape: classshape,
             positionService: positionService,
+            classshapeService: classshapeService
         }
     )
 

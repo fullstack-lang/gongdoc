@@ -11,7 +11,7 @@ import (
 	gong_models "github.com/fullstack-lang/gong/go/models"
 )
 
-type CallbacksSingloton struct {
+type NodeCallbacksSingloton struct {
 	ClassdiagramsRootNode *Node
 	StateDiagramsRootNode *Node
 
@@ -19,7 +19,7 @@ type CallbacksSingloton struct {
 	GongenumsRootNode   *Node
 }
 
-func (callbacksSingloton CallbacksSingloton) OnAfterUpdate(
+func (nodeCallbacksSingloton NodeCallbacksSingloton) OnAfterUpdate(
 	stage *StageStruct,
 	stagedNode, frontNode *Node) {
 
@@ -35,8 +35,8 @@ func (callbacksSingloton CallbacksSingloton) OnAfterUpdate(
 
 			// parse all nodes and uncheck them if necessary
 			diagramNodes := append(
-				callbacksSingloton.ClassdiagramsRootNode.Children,
-				callbacksSingloton.StateDiagramsRootNode.Children...)
+				nodeCallbacksSingloton.ClassdiagramsRootNode.Children,
+				nodeCallbacksSingloton.StateDiagramsRootNode.Children...)
 
 			for _, otherDiagramNode := range diagramNodes {
 				if otherDiagramNode == stagedNode {
@@ -53,7 +53,7 @@ func (callbacksSingloton CallbacksSingloton) OnAfterUpdate(
 
 			// update the tree of identifiers in order to show
 			// which identifiers are presents in the selected diagram
-			updateNodesStates(stage, &callbacksSingloton)
+			updateNodesStates(stage, &nodeCallbacksSingloton)
 		}
 
 		// node was checked and user wants to uncheck it. This is not possible
@@ -133,13 +133,13 @@ func (callbacksSingloton CallbacksSingloton) OnAfterUpdate(
 			case CLASS_DIAGRAM, STATE_DIAGRAM:
 				stagedNode.Name = frontNode.Name
 				stagedNode.IsInEditMode = false
-				updateNodesStates(stage, &callbacksSingloton)
+				updateNodesStates(stage, &nodeCallbacksSingloton)
 			}
 		}
 
 		if stagedNode.IsInEditMode != frontNode.IsInEditMode {
 			stagedNode.IsInEditMode = frontNode.IsInEditMode
-			updateNodesStates(stage, &callbacksSingloton)
+			updateNodesStates(stage, &nodeCallbacksSingloton)
 		}
 
 		if stagedNode.IsInDrawMode != frontNode.IsInDrawMode {
@@ -150,7 +150,7 @@ func (callbacksSingloton CallbacksSingloton) OnAfterUpdate(
 			case STATE_DIAGRAM:
 				stagedNode.Umlsc.IsInDrawMode = frontNode.IsInDrawMode
 			}
-			updateNodesStates(stage, &callbacksSingloton)
+			updateNodesStates(stage, &nodeCallbacksSingloton)
 		}
 
 		// marshall diagram to switch to saved state
@@ -173,7 +173,7 @@ func (callbacksSingloton CallbacksSingloton) OnAfterUpdate(
 				// stagedNode.Umlsc = stagedNode.Umlsc.Saved
 			}
 
-			updateNodesStates(stage, &callbacksSingloton)
+			updateNodesStates(stage, &nodeCallbacksSingloton)
 		}
 	case GONG_STRUCT:
 
@@ -184,7 +184,7 @@ func (callbacksSingloton CallbacksSingloton) OnAfterUpdate(
 			stage.Checkout()
 
 			// remove the classshape from the selected diagram
-			for _, classdiagramNode := range callbacksSingloton.ClassdiagramsRootNode.Children {
+			for _, classdiagramNode := range nodeCallbacksSingloton.ClassdiagramsRootNode.Children {
 				if classdiagramNode.IsChecked {
 					// get the diagram
 					classDiagram := classdiagramNode.Classdiagram
@@ -198,7 +198,7 @@ func (callbacksSingloton CallbacksSingloton) OnAfterUpdate(
 					}
 				}
 
-				updateNodesStates(stage, &callbacksSingloton)
+				updateNodesStates(stage, &nodeCallbacksSingloton)
 			}
 		}
 
@@ -208,14 +208,14 @@ func (callbacksSingloton CallbacksSingloton) OnAfterUpdate(
 			// get the latest version of the diagram before modifying it
 			stage.Checkout()
 
-			for _, classdiagramNode := range callbacksSingloton.ClassdiagramsRootNode.Children {
+			for _, classdiagramNode := range nodeCallbacksSingloton.ClassdiagramsRootNode.Children {
 				if classdiagramNode.IsChecked {
 					// get the diagram
 					classDiagram := classdiagramNode.Classdiagram
 					classDiagram.AddClassshape(frontNode.Name)
 				}
 
-				updateNodesStates(stage, &callbacksSingloton)
+				updateNodesStates(stage, &nodeCallbacksSingloton)
 			}
 		}
 
@@ -223,7 +223,7 @@ func (callbacksSingloton CallbacksSingloton) OnAfterUpdate(
 
 		// find classdiagram
 		var classdiagram *Classdiagram
-		for _, classdiagramNode := range callbacksSingloton.ClassdiagramsRootNode.Children {
+		for _, classdiagramNode := range nodeCallbacksSingloton.ClassdiagramsRootNode.Children {
 			if classdiagramNode.IsChecked {
 				// get the diagram
 				classdiagram = classdiagramNode.Classdiagram
@@ -416,7 +416,7 @@ func (callbacksSingloton CallbacksSingloton) OnAfterUpdate(
 	}
 }
 
-func (callbacksSingloton CallbacksSingloton) OnAfterCreate(
+func (callbacksSingloton NodeCallbacksSingloton) OnAfterCreate(
 	stage *StageStruct,
 	newDiagramNode *Node) {
 
@@ -463,7 +463,7 @@ func remove[T Gongstruct](slice []*T, t *T) []*T {
 // OnAfterDelete is called after a node is deleted
 // notice that the fontNode only have its basic fields updated
 // its pointers are not ok
-func (callbacksSingloton CallbacksSingloton) OnAfterDelete(
+func (callbacksSingloton NodeCallbacksSingloton) OnAfterDelete(
 	stage *StageStruct,
 	stagedNode, frontNode *Node) {
 

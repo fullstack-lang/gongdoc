@@ -95,6 +95,9 @@ export class ClassshapesTableComponent implements OnInit {
         case 'ClassshapeTargetType':
           return classshapeDB.ClassshapeTargetType;
 
+        case 'IsSelected':
+          return classshapeDB.IsSelected?"true":"false";
+
         case 'Classdiagram_Classshapes':
           if (this.frontRepo.Classdiagrams.get(classshapeDB.Classdiagram_ClassshapesDBID.Int64) != undefined) {
             return this.frontRepo.Classdiagrams.get(classshapeDB.Classdiagram_ClassshapesDBID.Int64)!.Name
@@ -191,6 +194,7 @@ export class ClassshapesTableComponent implements OnInit {
         "Width",
         "Heigth",
         "ClassshapeTargetType",
+        "IsSelected",
         "Classdiagram_Classshapes",
       ]
     } else {
@@ -204,6 +208,7 @@ export class ClassshapesTableComponent implements OnInit {
         "Width",
         "Heigth",
         "ClassshapeTargetType",
+        "IsSelected",
         "Classdiagram_Classshapes",
       ]
       this.selection = new SelectionModel<ClassshapeDB>(allowMultiSelect, this.initialSelection);

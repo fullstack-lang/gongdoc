@@ -6,7 +6,7 @@ import (
 
 func FillUpNodeTree(pkgelt *DiagramPackage) {
 
-	onNodeCallbackStruct := new(CallbacksSingloton)
+	onNodeCallbackStruct := new(NodeCallbacksSingloton)
 	FillUpDiagramNodeTree(pkgelt, onNodeCallbackStruct)
 	FillUpTreeOfIdentifiers(pkgelt, onNodeCallbackStruct)
 	updateNodesStates(&Stage, onNodeCallbackStruct)

@@ -93,6 +93,10 @@ type ClassshapeDB struct {
 
 	// Declation for basic field classshapeDB.ClassshapeTargetType
 	ClassshapeTargetType_Data sql.NullString
+
+	// Declation for basic field classshapeDB.IsSelected
+	// provide the sql storage for the boolan
+	IsSelected_Data sql.NullBool
 	// encoding of pointers
 	ClassshapePointersEnconding
 }
@@ -127,6 +131,8 @@ type ClassshapeWOP struct {
 	Heigth float64 `xlsx:"6"`
 
 	ClassshapeTargetType models.ClassshapeTargetType `xlsx:"7"`
+
+	IsSelected bool `xlsx:"8"`
 	// insertion for WOP pointer fields
 }
 
@@ -140,6 +146,7 @@ var Classshape_Fields = []string{
 	"Width",
 	"Heigth",
 	"ClassshapeTargetType",
+	"IsSelected",
 }
 
 type BackRepoClassshapeStruct struct {
@@ -560,6 +567,9 @@ func (classshapeDB *ClassshapeDB) CopyBasicFieldsFromClassshape(classshape *mode
 
 	classshapeDB.ClassshapeTargetType_Data.String = classshape.ClassshapeTargetType.ToString()
 	classshapeDB.ClassshapeTargetType_Data.Valid = true
+
+	classshapeDB.IsSelected_Data.Bool = classshape.IsSelected
+	classshapeDB.IsSelected_Data.Valid = true
 }
 
 // CopyBasicFieldsFromClassshapeWOP
@@ -586,6 +596,9 @@ func (classshapeDB *ClassshapeDB) CopyBasicFieldsFromClassshapeWOP(classshape *C
 
 	classshapeDB.ClassshapeTargetType_Data.String = classshape.ClassshapeTargetType.ToString()
 	classshapeDB.ClassshapeTargetType_Data.Valid = true
+
+	classshapeDB.IsSelected_Data.Bool = classshape.IsSelected
+	classshapeDB.IsSelected_Data.Valid = true
 }
 
 // CopyBasicFieldsToClassshape
@@ -598,6 +611,7 @@ func (classshapeDB *ClassshapeDB) CopyBasicFieldsToClassshape(classshape *models
 	classshape.Width = classshapeDB.Width_Data.Float64
 	classshape.Heigth = classshapeDB.Heigth_Data.Float64
 	classshape.ClassshapeTargetType.FromString(classshapeDB.ClassshapeTargetType_Data.String)
+	classshape.IsSelected = classshapeDB.IsSelected_Data.Bool
 }
 
 // CopyBasicFieldsToClassshapeWOP
@@ -611,6 +625,7 @@ func (classshapeDB *ClassshapeDB) CopyBasicFieldsToClassshapeWOP(classshape *Cla
 	classshape.Width = classshapeDB.Width_Data.Float64
 	classshape.Heigth = classshapeDB.Heigth_Data.Float64
 	classshape.ClassshapeTargetType.FromString(classshapeDB.ClassshapeTargetType_Data.String)
+	classshape.IsSelected = classshapeDB.IsSelected_Data.Bool
 }
 
 // Backup generates a json file from a slice of all ClassshapeDB instances in the backrepo

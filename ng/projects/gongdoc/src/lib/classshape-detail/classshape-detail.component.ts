@@ -38,6 +38,7 @@ export class ClassshapeDetailComponent implements OnInit {
 	// insertion point for declarations
 	ShowNbInstancesFormControl: UntypedFormControl = new UntypedFormControl(false);
 	ClassshapeTargetTypeList: ClassshapeTargetTypeSelect[] = []
+	IsSelectedFormControl: UntypedFormControl = new UntypedFormControl(false);
 
 	// the ClassshapeDB of interest
 	classshape: ClassshapeDB = new ClassshapeDB
@@ -137,6 +138,7 @@ export class ClassshapeDetailComponent implements OnInit {
 
 				// insertion point for recovery of form controls value for bool fields
 				this.ShowNbInstancesFormControl.setValue(this.classshape.ShowNbInstances)
+				this.IsSelectedFormControl.setValue(this.classshape.IsSelected)
 			}
 		)
 
@@ -170,6 +172,7 @@ export class ClassshapeDetailComponent implements OnInit {
 			this.classshape.GongStructID.Valid = true
 		}
 		this.classshape.ShowNbInstances = this.ShowNbInstancesFormControl.value
+		this.classshape.IsSelected = this.IsSelectedFormControl.value
 
 		// save from the front pointer space to the non pointer space for serialization
 

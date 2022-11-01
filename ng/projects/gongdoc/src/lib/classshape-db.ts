@@ -21,6 +21,7 @@ export class ClassshapeDB {
 	Width: number = 0
 	Heigth: number = 0
 	ClassshapeTargetType: string = ""
+	IsSelected: boolean = false
 
 	// insertion point for other declarations
 	Position?: PositionDB
