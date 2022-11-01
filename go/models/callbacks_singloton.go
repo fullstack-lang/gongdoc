@@ -166,12 +166,13 @@ func (callbacksSingloton CallbacksSingloton) OnAfterUpdate(
 				// checkout in order to get the latest version of the diagram before modifying it updated
 				// by the front
 				Stage.Checkout()
+				stagedNode.IsSaved = false
 				stagedNode.Classdiagram.Marshall(pkgelt, filepath.Join(pkgelt.Path, "../diagrams"))
 				stage.Commit()
 			case STATE_DIAGRAM:
 				// stagedNode.Umlsc = stagedNode.Umlsc.Saved
 			}
-			stagedNode.IsSaved = true
+
 			updateNodesStates(stage, &callbacksSingloton)
 		}
 	case GONG_STRUCT:
