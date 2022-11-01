@@ -262,8 +262,7 @@ export class ClassDiagramComponent implements OnInit, OnDestroy {
     // - the position service
     // - the command singloton
     // - the command service
-    let umlNote = newUmlNote(note, this.noteService,
-      gongdocCommandSingloton!, this.gongdocCommandService)
+    let umlNote = newUmlNote(note, this.noteService)
 
     // structRectangle.attributes = ['firstName: String']
     umlNote.addTo(this.graph!);

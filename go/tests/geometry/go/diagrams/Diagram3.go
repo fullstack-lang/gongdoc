@@ -36,10 +36,10 @@ var Diagram3 uml.Classdiagram = uml.Classdiagram{
 					Field: models.Line{}.JourneyTime,
 				},
 				{
-					Field: models.Line{}.Type,
+					Field: models.Line{}.Name,
 				},
 				{
-					Field: models.Line{}.Name,
+					Field: models.Line{}.Type,
 				},
 				{
 					Field: models.Line{}.VeryLongLongLongLongLongLongField,
@@ -183,8 +183,8 @@ in the go code
 			Name: `Short note on the models`,
 			Body: `this is an of a short note
 `,
-			X:      50.000000,
-			Y:      190.000000,
+			X:      90.000000,
+			Y:      220.000000,
 			Width:  240.000000,
 			Heigth: 63.000000,
 		},
