@@ -12,8 +12,8 @@ var NewDiagram uml.Classdiagram = uml.Classdiagram{
 		{
 			Struct: &(models.Point{}),
 			Position: &uml.Position{
-				X: 70.000000,
-				Y: 50.000000,
+				X: 40.000000,
+				Y: 170.000000,
 			},
 			Width:  240.000000,
 			Heigth: 63.000000,
@@ -21,8 +21,8 @@ var NewDiagram uml.Classdiagram = uml.Classdiagram{
 		{
 			Struct: &(models.PointExclusiveSet{}),
 			Position: &uml.Position{
-				X: 420.000000,
-				Y: 80.000000,
+				X: 640.000000,
+				Y: 220.000000,
 			},
 			Width:  240.000000,
 			Heigth: 63.000000,

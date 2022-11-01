@@ -1,8 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Observable, Subscription, timer } from 'rxjs';
 
-// for slider
-import { UntypedFormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ThemePalette } from '@angular/material/core';
 
 import * as joint from 'jointjs';
@@ -96,12 +94,9 @@ export class ClassDiagramComponent implements OnInit, OnDestroy {
     private verticeService: gongdoc.VerticeService,
 
     private gongdocFrontRepoService: gongdoc.FrontRepoService,
-    private gongdocCommandService: gongdoc.GongdocCommandService,
     private gongdocCommitNbFromBackService: gongdoc.CommitNbFromBackService,
 
     private ClassdiagramService: gongdoc.ClassdiagramService,
-
-    formBuilder: UntypedFormBuilder,
   ) {
     // https://stackoverflow.com/questions/54627478/angular-7-routing-to-same-component-but-different-param-not-working
     // this is for routerLink on same component when only queryParameter changes
@@ -230,8 +225,7 @@ export class ClassDiagramComponent implements OnInit, OnDestroy {
     // - the position service
     // - the command singloton
     // - the command service
-    let umlClassShape = newUmlClassShape(classshape, this.positionService,
-      gongdocCommandSingloton!, this.gongdocCommandService)
+    let umlClassShape = newUmlClassShape(classshape, this.positionService)
 
     // structRectangle.attributes = ['firstName: String']
     umlClassShape.addTo(this.graph!);
@@ -496,27 +490,6 @@ export class ClassDiagramComponent implements OnInit, OnDestroy {
    * 
    * the challenge is to update the positions of classshapes and vertices
    */
-  saveClassdiagram(): void {
-    // console.log("save diagram")
-
-    // send a marshalling command to the backend via GongdocCommandSingloton
-    let gongdocCommandSingloton: gongdoc.GongdocCommandDB
-    this.gongdocFrontRepo.GongdocCommands.forEach(
-      gongdocCommand => {
-        gongdocCommandSingloton = gongdocCommand
-
-        gongdocCommandSingloton.Command = gongdoc.GongdocCommandType.MARSHALL_DIAGRAM
-        gongdocCommandSingloton.DiagramName = this.classdiagram.Name
-        gongdocCommandSingloton.Date = Date.now().toString()
-
-        this.gongdocCommandService.updateGongdocCommand(gongdocCommandSingloton).subscribe(
-          GongdocCommand => {
-            // console.log("GongdocCommand updated")
-          }
-        )
-      }
-    )
-  }
 
   pullGongdocAndDrawDiagram() {
     this.gongdocFrontRepoService.pull().subscribe(
