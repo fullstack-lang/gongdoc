@@ -289,65 +289,118 @@ func (callbacksSingloton CallbacksSingloton) OnAfterUpdate(
 			// get the latest version of the diagram before modifying it
 			stage.Checkout()
 
-			var field Field
-			field.Name = stagedNode.Name
-			field.Fieldname = stagedNode.Name
+			switch stagedNode.Gongfield.(type) {
+			case *gong_models.GongBasicField, *gong_models.GongTimeField:
 
-			switch realField := stagedNode.Gongfield.(type) {
-			case *gong_models.GongBasicField:
+				var field Field
+				field.Name = stagedNode.Name
+				field.Fieldname = stagedNode.Name
 
-				// get the type after the "."
-				names := strings.Split(realField.DeclaredType, ".")
-				fieldTypeName := names[len(names)-1]
+				switch realField := stagedNode.Gongfield.(type) {
+				case *gong_models.GongBasicField:
 
-				field.Fieldtypename = fieldTypeName
-			case *gong_models.GongTimeField:
-				field.Fieldtypename = "Time"
-			case *gong_models.PointerToGongStructField:
-			case *gong_models.SliceOfPointerToGongStructField:
-			}
+					// get the type after the "."
+					names := strings.Split(realField.DeclaredType, ".")
+					fieldTypeName := names[len(names)-1]
 
-			field.Structname = classshape.Structname
-			field.Stage()
-
-			classshape.Heigth = classshape.Heigth + 15
-
-			// construct ordered slice of fields
-			rankOfFieldsInTheOriginalGongStruct := make(map[gong_models.FieldInterface]int, 0)
-			nameOfFields := make(map[string]gong_models.FieldInterface, 0)
-
-			// what is the index of the field to insert in the gong struct ?
-			indexOfFieldToInsertInTheOriginalGongStruct := 0
-
-			// let's compute it by parsing the field of the gongstruct
-			gongStruct_ := gong_models.Stage.GongStructs_mapString[gongStruct.Name]
-			for idx, gongField := range gongStruct_.Fields {
-
-				rankOfFieldsInTheOriginalGongStruct[gongField] = idx
-				nameOfFields[gongField.GetName()] = gongField
-
-				if gongField.GetName() == field.Name {
-					indexOfFieldToInsertInTheOriginalGongStruct = idx
+					field.Fieldtypename = fieldTypeName
+				case *gong_models.GongTimeField:
+					field.Fieldtypename = "Time"
+				case *gong_models.PointerToGongStructField:
+				case *gong_models.SliceOfPointerToGongStructField:
 				}
-			}
 
-			// compute indexOfFieldToInsertInTheGongStructToDisplay (index where to insert the field to display)
-			indexOfFieldToInsertInTheGongStructToDisplay := 0
-			for idx, field := range classshape.Fields {
-				gongField := nameOfFields[field.Fieldname]
-				rankInTheOriginalGoncStructOfField := rankOfFieldsInTheOriginalGongStruct[gongField]
-				if indexOfFieldToInsertInTheOriginalGongStruct > rankInTheOriginalGoncStructOfField {
-					indexOfFieldToInsertInTheGongStructToDisplay = idx + 1
+				field.Structname = classshape.Structname
+				field.Stage()
+
+				classshape.Heigth = classshape.Heigth + 15
+
+				// construct ordered slice of fields
+				rankOfFieldsInTheOriginalGongStruct := make(map[gong_models.FieldInterface]int, 0)
+				nameOfFields := make(map[string]gong_models.FieldInterface, 0)
+
+				// what is the index of the field to insert in the gong struct ?
+				indexOfFieldToInsertInTheOriginalGongStruct := 0
+
+				// let's compute it by parsing the field of the gongstruct
+				gongStruct_ := gong_models.Stage.GongStructs_mapString[gongStruct.Name]
+				for idx, gongField := range gongStruct_.Fields {
+
+					rankOfFieldsInTheOriginalGongStruct[gongField] = idx
+					nameOfFields[gongField.GetName()] = gongField
+
+					if gongField.GetName() == field.Name {
+						indexOfFieldToInsertInTheOriginalGongStruct = idx
+					}
 				}
-			}
 
-			// append the filed to display in the right index
-			if indexOfFieldToInsertInTheGongStructToDisplay == len(classshape.Fields) {
-				classshape.Fields = append(classshape.Fields, &field)
-			} else {
-				classshape.Fields = append(classshape.Fields[:indexOfFieldToInsertInTheGongStructToDisplay+1],
-					classshape.Fields[indexOfFieldToInsertInTheGongStructToDisplay:]...)
-				classshape.Fields[indexOfFieldToInsertInTheGongStructToDisplay] = &field
+				// compute indexOfFieldToInsertInTheGongStructToDisplay (index where to insert the field to display)
+				indexOfFieldToInsertInTheGongStructToDisplay := 0
+				for idx, field := range classshape.Fields {
+					gongField := nameOfFields[field.Fieldname]
+					rankInTheOriginalGoncStructOfField := rankOfFieldsInTheOriginalGongStruct[gongField]
+					if indexOfFieldToInsertInTheOriginalGongStruct > rankInTheOriginalGoncStructOfField {
+						indexOfFieldToInsertInTheGongStructToDisplay = idx + 1
+					}
+				}
+
+				// append the filed to display in the right index
+				if indexOfFieldToInsertInTheGongStructToDisplay == len(classshape.Fields) {
+					classshape.Fields = append(classshape.Fields, &field)
+				} else {
+					classshape.Fields = append(classshape.Fields[:indexOfFieldToInsertInTheGongStructToDisplay+1],
+						classshape.Fields[indexOfFieldToInsertInTheGongStructToDisplay:]...)
+					classshape.Fields[indexOfFieldToInsertInTheGongStructToDisplay] = &field
+				}
+
+			case *gong_models.PointerToGongStructField, *gong_models.SliceOfPointerToGongStructField:
+
+				var targetStructName string
+				var sourceMultiplicity MultiplicityType
+				var targetMultiplicity MultiplicityType
+
+				switch realField := stagedNode.Gongfield.(type) {
+				case *gong_models.PointerToGongStructField:
+					targetStructName = realField.GongStruct.Name
+					sourceMultiplicity = MANY
+					targetMultiplicity = ZERO_ONE
+				case *gong_models.SliceOfPointerToGongStructField:
+					targetStructName = realField.GongStruct.Name
+					sourceMultiplicity = ZERO_ONE
+					targetMultiplicity = MANY
+				}
+				targetSourceClassshape := false
+				var targetClassshape *Classshape
+				for _, _classshape := range classdiagram.Classshapes {
+
+					// strange behavior when the classshape is remove within the loop
+					if _classshape.Structname == targetStructName && !targetSourceClassshape {
+						targetSourceClassshape = true
+						targetClassshape = _classshape
+					}
+				}
+				if !targetSourceClassshape {
+					log.Panicf("Classshape %s of field not present ", targetStructName)
+				}
+				_ = targetClassshape
+
+				link := new(Link).Stage()
+				link.Name = stagedNode.Name
+				link.SourceMultiplicity = sourceMultiplicity
+				link.TargetMultiplicity = targetMultiplicity
+				link.Fieldname = stagedNode.Name
+				link.Structname = gongStruct.Name
+				link.Fieldtypename = targetStructName
+
+				classshape.Links = append(classshape.Links, link)
+				link.Middlevertice = new(Vertice).Stage()
+				link.Middlevertice.Name = "Verticle in class diagram " + classdiagram.Name +
+					" in middle between " + classshape.Name + " and " + targetClassshape.Name
+				link.Middlevertice.X = (classshape.Position.X+targetClassshape.Position.X)/2.0 +
+					classshape.Width*1.5
+				link.Middlevertice.Y = (classshape.Position.Y+targetClassshape.Position.Y)/2.0 +
+					classshape.Heigth/2.0
+				Stage.Commit()
 			}
 
 			Stage.Commit()
