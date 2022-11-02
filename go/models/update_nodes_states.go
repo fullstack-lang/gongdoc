@@ -11,24 +11,46 @@ func updateNodesStates(stage *StageStruct, callbacksSingloton *NodeCallbacksSing
 	}
 
 	// map of gognstruct nodes according to their name
-	gongstructNodes := make(map[string]*Node)
+	mapIdentifiersNodes := make(map[string]*Node)
 
 	// map of gong fields according to their name
-	gongfieldNodes := make(map[string]*Node)
+	gongFieldIdentifiersdNodes := make(map[string]*Node)
 
 	// unckeck nodes and construct the map
 	for _, gognstructNode := range callbacksSingloton.GongstructsRootNode.Children {
 
-		gognstructNode.IsCheckboxDisabled = !pkglet.IsEditable
+		gognstructNode.IsCheckboxDisabled = true
 
 		gognstructNode.IsChecked = false
-		gongstructNodes[gognstructNode.Name] = gognstructNode
+		mapIdentifiersNodes[gognstructNode.Name] = gognstructNode
 
 		for _, gongfieldNode := range gognstructNode.Children {
 			gongfieldNode.IsChecked = false
 			gongfieldNode.IsCheckboxDisabled = !pkglet.IsEditable
-			gongfieldNodes[gognstructNode.Name+"."+gongfieldNode.Name] = gongfieldNode
+			gongFieldIdentifiersdNodes[gognstructNode.Name+"."+gongfieldNode.Name] = gongfieldNode
 		}
+	}
+
+	for _, gognenumNode := range callbacksSingloton.GongenumsRootNode.Children {
+
+		gognenumNode.IsCheckboxDisabled = true
+
+		gognenumNode.IsChecked = false
+		mapIdentifiersNodes[gognenumNode.Name] = gognenumNode
+
+		for _, gongfieldNode := range gognenumNode.Children {
+			gongfieldNode.IsChecked = false
+			gongfieldNode.IsCheckboxDisabled = !pkglet.IsEditable
+			gongFieldIdentifiersdNodes[gognenumNode.Name+"."+gongfieldNode.Name] = gongfieldNode
+		}
+	}
+
+	for _, gongnoteNode := range callbacksSingloton.GongnotesRootNode.Children {
+
+		gongnoteNode.IsCheckboxDisabled = true
+
+		gongnoteNode.IsChecked = false
+		mapIdentifiersNodes[gongnoteNode.Name] = gongnoteNode
 	}
 
 	// get the selected diagram and collect what are its referenced
@@ -59,20 +81,27 @@ func updateNodesStates(stage *StageStruct, callbacksSingloton *NodeCallbacksSing
 		// get the referenced gongstructs
 		for _, classshape := range classDiagram.Classshapes {
 			gongstruct := classshape.GongStruct
-			gongstructNodes[gongstruct.Name].IsChecked = true
-			gongstructNodes[gongstruct.Name].IsCheckboxDisabled = !classDiagram.IsInDrawMode
+			mapIdentifiersNodes[gongstruct.Name].IsChecked = true
+			mapIdentifiersNodes[gongstruct.Name].IsCheckboxDisabled = !classDiagram.IsInDrawMode
 
 			for _, field := range classshape.Fields {
-				gongfieldNodes[gongstruct.Name+"."+field.Name].IsChecked = true
-				gongfieldNodes[gongstruct.Name+"."+field.Name].IsCheckboxDisabled = !classDiagram.IsInDrawMode
+				gongFieldIdentifiersdNodes[gongstruct.Name+"."+field.Name].IsChecked = true
+				gongFieldIdentifiersdNodes[gongstruct.Name+"."+field.Name].IsCheckboxDisabled = !classDiagram.IsInDrawMode
 			}
 
 			for _, link := range classshape.Links {
-				gongfieldNodes[gongstruct.Name+"."+link.Name].IsChecked = true
-				gongfieldNodes[gongstruct.Name+"."+link.Name].IsCheckboxDisabled = !classDiagram.IsInDrawMode
+				gongFieldIdentifiersdNodes[gongstruct.Name+"."+link.Name].IsChecked = true
+				gongFieldIdentifiersdNodes[gongstruct.Name+"."+link.Name].IsCheckboxDisabled = !classDiagram.IsInDrawMode
 			}
 		}
 
+		for note := range *GetGongstructInstancesSet[Note]() {
+			mapIdentifiersNodes[note.Name].IsCheckboxDisabled = !classDiagram.IsInDrawMode
+		}
+		for _, note := range classDiagram.Notes {
+			mapIdentifiersNodes[note.Name].IsChecked = true
+			mapIdentifiersNodes[note.Name].IsCheckboxDisabled = !classDiagram.IsInDrawMode
+		}
 	}
 
 	for _, stateDiagramNode := range callbacksSingloton.StateDiagramsRootNode.Children {

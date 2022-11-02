@@ -19,9 +19,6 @@ import { FieldService } from './field.service'
 import { GongStructDB } from './gongstruct-db'
 import { GongStructService } from './gongstruct.service'
 
-import { GongdocCommandDB } from './gongdoccommand-db'
-import { GongdocCommandService } from './gongdoccommand.service'
-
 import { GongdocStatusDB } from './gongdocstatus-db'
 import { GongdocStatusService } from './gongdocstatus.service'
 
@@ -67,9 +64,6 @@ export class FrontRepo { // insertion point sub template
   GongStructs_array = new Array<GongStructDB>(); // array of repo instances
   GongStructs = new Map<number, GongStructDB>(); // map of repo instances
   GongStructs_batch = new Map<number, GongStructDB>(); // same but only in last GET (for finding repo instances to delete)
-  GongdocCommands_array = new Array<GongdocCommandDB>(); // array of repo instances
-  GongdocCommands = new Map<number, GongdocCommandDB>(); // map of repo instances
-  GongdocCommands_batch = new Map<number, GongdocCommandDB>(); // same but only in last GET (for finding repo instances to delete)
   GongdocStatuss_array = new Array<GongdocStatusDB>(); // array of repo instances
   GongdocStatuss = new Map<number, GongdocStatusDB>(); // map of repo instances
   GongdocStatuss_batch = new Map<number, GongdocStatusDB>(); // same but only in last GET (for finding repo instances to delete)
@@ -160,7 +154,6 @@ export class FrontRepoService {
     private diagrampackageService: DiagramPackageService,
     private fieldService: FieldService,
     private gongstructService: GongStructService,
-    private gongdoccommandService: GongdocCommandService,
     private gongdocstatusService: GongdocStatusService,
     private linkService: LinkService,
     private nodeService: NodeService,
@@ -205,7 +198,6 @@ export class FrontRepoService {
     Observable<DiagramPackageDB[]>,
     Observable<FieldDB[]>,
     Observable<GongStructDB[]>,
-    Observable<GongdocCommandDB[]>,
     Observable<GongdocStatusDB[]>,
     Observable<LinkDB[]>,
     Observable<NodeDB[]>,
@@ -221,7 +213,6 @@ export class FrontRepoService {
       this.diagrampackageService.getDiagramPackages(),
       this.fieldService.getFields(),
       this.gongstructService.getGongStructs(),
-      this.gongdoccommandService.getGongdocCommands(),
       this.gongdocstatusService.getGongdocStatuss(),
       this.linkService.getLinks(),
       this.nodeService.getNodes(),
@@ -251,7 +242,6 @@ export class FrontRepoService {
             diagrampackages_,
             fields_,
             gongstructs_,
-            gongdoccommands_,
             gongdocstatuss_,
             links_,
             nodes_,
@@ -274,8 +264,6 @@ export class FrontRepoService {
             fields = fields_ as FieldDB[]
             var gongstructs: GongStructDB[]
             gongstructs = gongstructs_ as GongStructDB[]
-            var gongdoccommands: GongdocCommandDB[]
-            gongdoccommands = gongdoccommands_ as GongdocCommandDB[]
             var gongdocstatuss: GongdocStatusDB[]
             gongdocstatuss = gongdocstatuss_ as GongdocStatusDB[]
             var links: LinkDB[]
@@ -454,39 +442,6 @@ export class FrontRepoService {
 
             // sort GongStructs_array array
             FrontRepoSingloton.GongStructs_array.sort((t1, t2) => {
-              if (t1.Name > t2.Name) {
-                return 1;
-              }
-              if (t1.Name < t2.Name) {
-                return -1;
-              }
-              return 0;
-            });
-
-            // init the array
-            FrontRepoSingloton.GongdocCommands_array = gongdoccommands
-
-            // clear the map that counts GongdocCommand in the GET
-            FrontRepoSingloton.GongdocCommands_batch.clear()
-
-            gongdoccommands.forEach(
-              gongdoccommand => {
-                FrontRepoSingloton.GongdocCommands.set(gongdoccommand.ID, gongdoccommand)
-                FrontRepoSingloton.GongdocCommands_batch.set(gongdoccommand.ID, gongdoccommand)
-              }
-            )
-
-            // clear gongdoccommands that are absent from the batch
-            FrontRepoSingloton.GongdocCommands.forEach(
-              gongdoccommand => {
-                if (FrontRepoSingloton.GongdocCommands_batch.get(gongdoccommand.ID) == undefined) {
-                  FrontRepoSingloton.GongdocCommands.delete(gongdoccommand.ID)
-                }
-              }
-            )
-
-            // sort GongdocCommands_array array
-            FrontRepoSingloton.GongdocCommands_array.sort((t1, t2) => {
               if (t1.Name > t2.Name) {
                 return 1;
               }
@@ -880,13 +835,6 @@ export class FrontRepoService {
             )
             gongstructs.forEach(
               gongstruct => {
-                // insertion point sub sub template for ONE-/ZERO-ONE associations pointers redeeming
-
-                // insertion point for redeeming ONE-MANY associations
-              }
-            )
-            gongdoccommands.forEach(
-              gongdoccommand => {
                 // insertion point sub sub template for ONE-/ZERO-ONE associations pointers redeeming
 
                 // insertion point for redeeming ONE-MANY associations
@@ -1357,57 +1305,6 @@ export class FrontRepoService {
               gongstruct => {
                 if (FrontRepoSingloton.GongStructs_batch.get(gongstruct.ID) == undefined) {
                   FrontRepoSingloton.GongStructs.delete(gongstruct.ID)
-                }
-              }
-            )
-
-            // 
-            // Second Step: redeem pointers between instances (thanks to maps in the First Step)
-            // insertion point sub template 
-
-            // hand over control flow to observer
-            observer.next(FrontRepoSingloton)
-          }
-        )
-      }
-    )
-  }
-
-  // GongdocCommandPull performs a GET on GongdocCommand of the stack and redeem association pointers 
-  GongdocCommandPull(): Observable<FrontRepo> {
-    return new Observable<FrontRepo>(
-      (observer) => {
-        combineLatest([
-          this.gongdoccommandService.getGongdocCommands()
-        ]).subscribe(
-          ([ // insertion point sub template 
-            gongdoccommands,
-          ]) => {
-            // init the array
-            FrontRepoSingloton.GongdocCommands_array = gongdoccommands
-
-            // clear the map that counts GongdocCommand in the GET
-            FrontRepoSingloton.GongdocCommands_batch.clear()
-
-            // 
-            // First Step: init map of instances
-            // insertion point sub template 
-            gongdoccommands.forEach(
-              gongdoccommand => {
-                FrontRepoSingloton.GongdocCommands.set(gongdoccommand.ID, gongdoccommand)
-                FrontRepoSingloton.GongdocCommands_batch.set(gongdoccommand.ID, gongdoccommand)
-
-                // insertion point for redeeming ONE/ZERO-ONE associations
-
-                // insertion point for redeeming ONE-MANY associations
-              }
-            )
-
-            // clear gongdoccommands that are absent from the GET
-            FrontRepoSingloton.GongdocCommands.forEach(
-              gongdoccommand => {
-                if (FrontRepoSingloton.GongdocCommands_batch.get(gongdoccommand.ID) == undefined) {
-                  FrontRepoSingloton.GongdocCommands.delete(gongdoccommand.ID)
                 }
               }
             )
@@ -1999,33 +1896,30 @@ export function getFieldUniqueID(id: number): number {
 export function getGongStructUniqueID(id: number): number {
   return 47 * id
 }
-export function getGongdocCommandUniqueID(id: number): number {
+export function getGongdocStatusUniqueID(id: number): number {
   return 53 * id
 }
-export function getGongdocStatusUniqueID(id: number): number {
+export function getLinkUniqueID(id: number): number {
   return 59 * id
 }
-export function getLinkUniqueID(id: number): number {
+export function getNodeUniqueID(id: number): number {
   return 61 * id
 }
-export function getNodeUniqueID(id: number): number {
+export function getNoteUniqueID(id: number): number {
   return 67 * id
 }
-export function getNoteUniqueID(id: number): number {
+export function getPositionUniqueID(id: number): number {
   return 71 * id
 }
-export function getPositionUniqueID(id: number): number {
+export function getTreeUniqueID(id: number): number {
   return 73 * id
 }
-export function getTreeUniqueID(id: number): number {
+export function getUmlStateUniqueID(id: number): number {
   return 79 * id
 }
-export function getUmlStateUniqueID(id: number): number {
+export function getUmlscUniqueID(id: number): number {
   return 83 * id
 }
-export function getUmlscUniqueID(id: number): number {
-  return 89 * id
-}
 export function getVerticeUniqueID(id: number): number {
-  return 97 * id
+  return 89 * id
 }

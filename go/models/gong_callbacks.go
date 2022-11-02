@@ -25,10 +25,6 @@ func AfterCreateFromFront[Type Gongstruct](stage *StageStruct, instance *Type) {
 		if stage.OnAfterGongStructCreateCallback != nil {
 			stage.OnAfterGongStructCreateCallback.OnAfterCreate(stage, target)
 		}
-	case *GongdocCommand:
-		if stage.OnAfterGongdocCommandCreateCallback != nil {
-			stage.OnAfterGongdocCommandCreateCallback.OnAfterCreate(stage, target)
-		}
 	case *GongdocStatus:
 		if stage.OnAfterGongdocStatusCreateCallback != nil {
 			stage.OnAfterGongdocStatusCreateCallback.OnAfterCreate(stage, target)
@@ -97,11 +93,6 @@ func AfterUpdateFromFront[Type Gongstruct](stage *StageStruct, old, new *Type) {
 		newTarget := any(new).(*GongStruct)
 		if stage.OnAfterGongStructUpdateCallback != nil {
 			stage.OnAfterGongStructUpdateCallback.OnAfterUpdate(stage, oldTarget, newTarget)
-		}
-	case *GongdocCommand:
-		newTarget := any(new).(*GongdocCommand)
-		if stage.OnAfterGongdocCommandUpdateCallback != nil {
-			stage.OnAfterGongdocCommandUpdateCallback.OnAfterUpdate(stage, oldTarget, newTarget)
 		}
 	case *GongdocStatus:
 		newTarget := any(new).(*GongdocStatus)
@@ -181,11 +172,6 @@ func AfterDeleteFromFront[Type Gongstruct](stage *StageStruct, staged, front *Ty
 			staged := any(staged).(*GongStruct)
 			stage.OnAfterGongStructDeleteCallback.OnAfterDelete(stage, staged, front)
 		}
-	case *GongdocCommand:
-		if stage.OnAfterGongdocCommandDeleteCallback != nil {
-			staged := any(staged).(*GongdocCommand)
-			stage.OnAfterGongdocCommandDeleteCallback.OnAfterDelete(stage, staged, front)
-		}
 	case *GongdocStatus:
 		if stage.OnAfterGongdocStatusDeleteCallback != nil {
 			staged := any(staged).(*GongdocStatus)
@@ -259,10 +245,6 @@ func AfterReadFromFront[Type Gongstruct](stage *StageStruct, instance *Type) {
 		if stage.OnAfterGongStructReadCallback != nil {
 			stage.OnAfterGongStructReadCallback.OnAfterRead(stage, target)
 		}
-	case *GongdocCommand:
-		if stage.OnAfterGongdocCommandReadCallback != nil {
-			stage.OnAfterGongdocCommandReadCallback.OnAfterRead(stage, target)
-		}
 	case *GongdocStatus:
 		if stage.OnAfterGongdocStatusReadCallback != nil {
 			stage.OnAfterGongdocStatusReadCallback.OnAfterRead(stage, target)
@@ -323,9 +305,6 @@ func SetCallbackAfterUpdateFromFront[Type Gongstruct](stage *StageStruct, callba
 	case *GongStruct:
 		stage.OnAfterGongStructUpdateCallback = any(callback).(OnAfterUpdateInterface[GongStruct])
 	
-	case *GongdocCommand:
-		stage.OnAfterGongdocCommandUpdateCallback = any(callback).(OnAfterUpdateInterface[GongdocCommand])
-	
 	case *GongdocStatus:
 		stage.OnAfterGongdocStatusUpdateCallback = any(callback).(OnAfterUpdateInterface[GongdocStatus])
 	
@@ -374,9 +353,6 @@ func SetCallbackAfterCreateFromFront[Type Gongstruct](stage *StageStruct, callba
 	
 	case *GongStruct:
 		stage.OnAfterGongStructCreateCallback = any(callback).(OnAfterCreateInterface[GongStruct])
-	
-	case *GongdocCommand:
-		stage.OnAfterGongdocCommandCreateCallback = any(callback).(OnAfterCreateInterface[GongdocCommand])
 	
 	case *GongdocStatus:
 		stage.OnAfterGongdocStatusCreateCallback = any(callback).(OnAfterCreateInterface[GongdocStatus])
@@ -427,9 +403,6 @@ func SetCallbackAfterDeleteFromFront[Type Gongstruct](stage *StageStruct, callba
 	case *GongStruct:
 		stage.OnAfterGongStructDeleteCallback = any(callback).(OnAfterDeleteInterface[GongStruct])
 	
-	case *GongdocCommand:
-		stage.OnAfterGongdocCommandDeleteCallback = any(callback).(OnAfterDeleteInterface[GongdocCommand])
-	
 	case *GongdocStatus:
 		stage.OnAfterGongdocStatusDeleteCallback = any(callback).(OnAfterDeleteInterface[GongdocStatus])
 	
@@ -478,9 +451,6 @@ func SetCallbackAfterReadFromFront[Type Gongstruct](stage *StageStruct, callback
 	
 	case *GongStruct:
 		stage.OnAfterGongStructReadCallback = any(callback).(OnAfterReadInterface[GongStruct])
-	
-	case *GongdocCommand:
-		stage.OnAfterGongdocCommandReadCallback = any(callback).(OnAfterReadInterface[GongdocCommand])
 	
 	case *GongdocStatus:
 		stage.OnAfterGongdocStatusReadCallback = any(callback).(OnAfterReadInterface[GongdocStatus])

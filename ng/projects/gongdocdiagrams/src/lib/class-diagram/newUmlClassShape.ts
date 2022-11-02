@@ -1,6 +1,5 @@
 import * as joint from 'jointjs';
 import * as gongdoc from 'gongdoc'
-import { GongdocCommandService } from 'gongdoc';
 
 export function newUmlClassShape(classshape: gongdoc.ClassshapeDB,
     positionService: gongdoc.PositionService,

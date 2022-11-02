@@ -211,21 +211,10 @@ export class ClassDiagramComponent implements OnInit, OnDestroy {
   //
   addClassshapeToGraph(classshape: gongdoc.ClassshapeDB): joint.shapes.uml.Class {
 
-    //
-    // creates the UML shape
-    //
-
-    // fetch the command singloton
-    let gongdocCommandSingloton: gongdoc.GongdocCommandDB
-    for (let gongdocCommand of this.gongdocFrontRepo.GongdocCommands_array) {
-      gongdocCommandSingloton = gongdocCommand
-    }
 
     // back pointers: 
     // stores  as an attribute in the jointjs uml class shape :
-    // - the position service
-    // - the command singloton
-    // - the command service
+    // - the position service to be able to update the position
     let umlClassShape = newUmlClassShape(classshape, this.positionService, this.classshapeService)
 
     // structRectangle.attributes = ['firstName: String']
@@ -246,17 +235,9 @@ export class ClassDiagramComponent implements OnInit, OnDestroy {
     // creates the UML shape
     //
 
-    // fetch the command singloton
-    let gongdocCommandSingloton: gongdoc.GongdocCommandDB
-    for (let gongdocCommand of this.gongdocFrontRepo.GongdocCommands_array) {
-      gongdocCommandSingloton = gongdocCommand
-    }
-
     // back pointers: 
     // stores  as an attribute in the jointjs uml class shape :
     // - the position service
-    // - the command singloton
-    // - the command service
     let umlNote = newUmlNote(note, this.noteService)
 
     // structRectangle.attributes = ['firstName: String']
@@ -344,23 +325,6 @@ export class ClassDiagramComponent implements OnInit, OnDestroy {
             console.log("classhape updated")
           }
         )
-
-        // update classshape with nothing changed. This will trigger a select event in the backend
-
-
-        let gongdocCommandSingloton = umlClassShape.attributes['gongdocCommandSingloton'] as gongdoc.GongdocCommandDB
-        let gongdocCommandService = umlClassShape.attributes['gongdocCommandService'] as gongdoc.GongdocCommandService
-
-        gongdocCommandSingloton.Command = gongdoc.GongdocCommandType.DIAGRAM_GONGSTRUCT_SELECT
-        gongdocCommandSingloton.StructName = classhape.Structname
-        gongdocCommandSingloton.Date = Date.now().toString()
-
-        gongdocCommandService.updateGongdocCommand(gongdocCommandSingloton).subscribe(
-          gongdocCommandSingloton => {
-            console.log("gongdocCommandSingloton updated")
-          }
-        )
-        // alert('cell view ' + cellView.model.id + ' was clicked');
       }
     )
 

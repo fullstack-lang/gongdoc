@@ -413,17 +413,15 @@ func (classdiagram *Classdiagram) RemoveClassshape(classshapeName string) {
 
 	foundClassshape := false
 	var classshape *Classshape
-	var idx int
-	for _idx, _classshape := range classdiagram.Classshapes {
+	for _, _classshape := range classdiagram.Classshapes {
 
 		// strange behavior when the classshape is remove within the loop
 		if _classshape.Structname == classshapeName && !foundClassshape {
 			classshape = _classshape
-			idx = _idx
 		}
 	}
 
-	classdiagram.Classshapes = removeClassshapeFromSlice(classdiagram.Classshapes, idx)
+	classdiagram.Classshapes = remove(classdiagram.Classshapes, classshape)
 	classshape.Position.Unstage()
 	classshape.Unstage()
 
@@ -460,7 +458,7 @@ func (classdiagram *Classdiagram) RemoveClassshape(classshapeName string) {
 func (classdiagram *Classdiagram) AddClassshape(classshapeName string) {
 
 	var classshape Classshape
-	classshape.Name = classdiagram.Name + "-" + GongdocCommandSingloton.StructName
+	classshape.Name = classdiagram.Name + "-" + classshapeName
 	classshape.Structname = classshapeName
 	classshape.ClassshapeTargetType = STRUCT
 	classshape.Width = 240

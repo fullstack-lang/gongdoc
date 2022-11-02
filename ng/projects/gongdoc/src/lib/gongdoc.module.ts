@@ -64,11 +64,6 @@ import { GongStructSortingComponent } from './gongstruct-sorting/gongstruct-sort
 import { GongStructDetailComponent } from './gongstruct-detail/gongstruct-detail.component'
 import { GongStructPresentationComponent } from './gongstruct-presentation/gongstruct-presentation.component'
 
-import { GongdocCommandsTableComponent } from './gongdoccommands-table/gongdoccommands-table.component'
-import { GongdocCommandSortingComponent } from './gongdoccommand-sorting/gongdoccommand-sorting.component'
-import { GongdocCommandDetailComponent } from './gongdoccommand-detail/gongdoccommand-detail.component'
-import { GongdocCommandPresentationComponent } from './gongdoccommand-presentation/gongdoccommand-presentation.component'
-
 import { GongdocStatussTableComponent } from './gongdocstatuss-table/gongdocstatuss-table.component'
 import { GongdocStatusSortingComponent } from './gongdocstatus-sorting/gongdocstatus-sorting.component'
 import { GongdocStatusDetailComponent } from './gongdocstatus-detail/gongdocstatus-detail.component'
@@ -142,11 +137,6 @@ import { VerticePresentationComponent } from './vertice-presentation/vertice-pre
 		GongStructSortingComponent,
 		GongStructDetailComponent,
 		GongStructPresentationComponent,
-
-		GongdocCommandsTableComponent,
-		GongdocCommandSortingComponent,
-		GongdocCommandDetailComponent,
-		GongdocCommandPresentationComponent,
 
 		GongdocStatussTableComponent,
 		GongdocStatusSortingComponent,
@@ -256,11 +246,6 @@ import { VerticePresentationComponent } from './vertice-presentation/vertice-pre
 		GongStructSortingComponent,
 		GongStructDetailComponent,
 		GongStructPresentationComponent,
-
-		GongdocCommandsTableComponent,
-		GongdocCommandSortingComponent,
-		GongdocCommandDetailComponent,
-		GongdocCommandPresentationComponent,
 
 		GongdocStatussTableComponent,
 		GongdocStatusSortingComponent,

@@ -56,7 +56,6 @@ export class UmlscDiagramComponent implements OnInit {
     private UmlscService: gongdoc.UmlscService,
     private UmlStateService: gongdoc.UmlStateService,
     private gongdocFrontRepoService: gongdoc.FrontRepoService,
-    private GongdocCommandService: gongdoc.GongdocCommandService,
     private gongdocCommitNbFromBackService: gongdoc.CommitNbFromBackService,
   ) {
     // https://stackoverflow.com/questions/54627478/angular-7-routing-to-same-component-but-different-param-not-working
@@ -234,18 +233,6 @@ export class UmlscDiagramComponent implements OnInit {
             }
           )
         }
-      }
-    )
-
-    // get the GongdocCommandSingloton
-    let gongdocCommandSingloton = this.gongdocFrontRepo!.GongdocCommands.get(1)
-    gongdocCommandSingloton!.Command = gongdoc.GongdocCommandType.MARSHALL_DIAGRAM
-    gongdocCommandSingloton!.DiagramName = this.stateChartDiagram!.Name
-    gongdocCommandSingloton!.Date = Date.now().toString()
-
-    this.GongdocCommandService.updateGongdocCommand(gongdocCommandSingloton!).subscribe(
-      GongdocCommand => {
-        console.log("GongdocCommand updated")
       }
     )
   }

@@ -50,13 +50,6 @@ export * from './lib/gongstructs-table/gongstructs-table.component'
 export * from './lib/gongstruct-db'
 export * from './lib/gongstruct.service'
 
-export * from './lib/gongdoccommand-detail/gongdoccommand-detail.component'
-export * from './lib/gongdoccommand-presentation/gongdoccommand-presentation.component'
-export * from './lib/gongdoccommand-sorting/gongdoccommand-sorting.component'
-export * from './lib/gongdoccommands-table/gongdoccommands-table.component'
-export * from './lib/gongdoccommand-db'
-export * from './lib/gongdoccommand.service'
-
 export * from './lib/gongdocstatus-detail/gongdocstatus-detail.component'
 export * from './lib/gongdocstatus-presentation/gongdocstatus-presentation.component'
 export * from './lib/gongdocstatus-sorting/gongdocstatus-sorting.component'

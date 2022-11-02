@@ -47,4 +47,17 @@ func FillUpTreeOfIdentifiers(pkgelt *DiagramPackage, onNodeCallbackStruct *NodeC
 			node.Children = append(node.Children, node2)
 		}
 	}
+
+	gongNotesRootNode := (&Node{Name: "notes"}).Stage()
+	gongNotesRootNode.IsExpanded = true
+	gongTree.RootNodes = append(gongTree.RootNodes, gongNotesRootNode)
+	onNodeCallbackStruct.GongnotesRootNode = gongNotesRootNode
+	for gongNote := range *gong_models.GetGongstructInstancesSet[gong_models.GongNote]() {
+
+		node := (&Node{Name: gongNote.Name}).Stage()
+		node.HasCheckboxButton = true
+		node.IsExpanded = true
+		node.Type = GONG_NOTE
+		gongNotesRootNode.Children = append(gongNotesRootNode.Children, node)
+	}
 }

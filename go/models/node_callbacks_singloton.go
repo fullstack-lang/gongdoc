@@ -17,6 +17,7 @@ type NodeCallbacksSingloton struct {
 
 	GongstructsRootNode *Node
 	GongenumsRootNode   *Node
+	GongnotesRootNode   *Node
 }
 
 func (nodeCallbacksSingloton NodeCallbacksSingloton) OnAfterUpdate(
@@ -255,30 +256,28 @@ func (nodeCallbacksSingloton NodeCallbacksSingloton) OnAfterUpdate(
 
 			{
 				var field *Field
-				var idx int
-				for _idx, _field := range classshape.Fields {
+
+				for _, _field := range classshape.Fields {
 					if _field.Fieldname == stagedNode.Name {
-						idx = _idx
 						field = _field
 					}
 				}
 				if field != nil {
-					classshape.Fields = removeFieldFromSlice(classshape.Fields, idx)
+					classshape.Fields = remove(classshape.Fields, field)
 					classshape.Heigth = classshape.Heigth - 15
 					field.Unstage()
 				}
 			}
 			{
 				var link *Link
-				var idx int
-				for _idx, _field := range classshape.Links {
+
+				for _, _field := range classshape.Links {
 					if _field.Fieldname == stagedNode.Name {
-						idx = _idx
 						link = _field
 					}
 				}
 				if link != nil {
-					classshape.Links = removeLinkFromSlice(classshape.Links, idx)
+					classshape.Links = remove(classshape.Links, link)
 					link.Unstage()
 				}
 			}
@@ -406,6 +405,57 @@ func (nodeCallbacksSingloton NodeCallbacksSingloton) OnAfterUpdate(
 
 			Stage.Commit()
 		}
+
+	case GONG_NOTE:
+		var classdiagram *Classdiagram
+		for _, classdiagramNode := range nodeCallbacksSingloton.ClassdiagramsRootNode.Children {
+			if classdiagramNode.IsChecked {
+				// get the diagram
+				classdiagram = classdiagramNode.Classdiagram
+			}
+		}
+
+		if !stagedNode.IsChecked && frontNode.IsChecked {
+			stage.Checkout()
+
+			note := (&Note{Name: stagedNode.Name}).Stage()
+
+			mapOfGongNotes := *gong_models.GetGongstructInstancesMap[gong_models.GongNote]()
+
+			gongNote, ok := mapOfGongNotes[note.Name]
+			if !ok {
+				log.Fatal("Unkown note ", note.Name)
+			}
+			note.Body = gongNote.Body
+			note.X = 30
+			note.Y = 30
+			note.Width = 240
+			note.Heigth = 63
+
+			classdiagram.Notes = append(classdiagram.Notes, note)
+			Stage.Commit()
+
+		}
+		if stagedNode.IsChecked && !frontNode.IsChecked {
+			stage.Checkout()
+			foundNote := false
+			var note *Note
+			var _note *Note
+			for _, _note = range classdiagram.Notes {
+
+				// strange behavior when the note is removed within the loop
+				if _note.Name == stagedNode.Name && !foundNote {
+					foundNote = true
+					note = _note
+				}
+			}
+			if !foundNote {
+				log.Panicf("Note %s of field not present ", stagedNode.Name)
+			}
+			classdiagram.Notes = remove(classdiagram.Notes, note)
+			note.Unstage()
+			Stage.Commit()
+		}
 	}
 
 	if stagedNode.IsExpanded != frontNode.IsExpanded {
@@ -445,19 +495,6 @@ func (callbacksSingloton NodeCallbacksSingloton) OnAfterCreate(
 		updateNodesStates(stage, &callbacksSingloton)
 		stage.Commit()
 	}
-}
-
-// remove node from slice
-func remove[T Gongstruct](slice []*T, t *T) []*T {
-
-	// get the index of the t
-	rank := -1
-	for i, t_ := range slice {
-		if t_ == t {
-			rank = i
-		}
-	}
-	return append(slice[:rank], slice[rank+1:]...)
 }
 
 // OnAfterDelete is called after a node is deleted

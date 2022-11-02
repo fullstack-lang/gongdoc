@@ -1,6 +1,5 @@
 import * as joint from 'jointjs';
 import * as gongdoc from 'gongdoc'
-import { GongdocCommandService } from 'gongdoc';
 import { MatLabel } from '@angular/material/form-field';
 
 export function newUmlNote(note: gongdoc.NoteDB,
