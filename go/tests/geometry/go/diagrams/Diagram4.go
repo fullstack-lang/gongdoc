@@ -63,6 +63,15 @@ var Diagram4 uml.Classdiagram = uml.Classdiagram{
 				},
 			},
 		},
+		{
+			Struct: &(models.PointExclusiveSet{}),
+			Position: &uml.Position{
+				X: 360.000000,
+				Y: 400.000000,
+			},
+			Width:  240.000000,
+			Heigth: 63.000000,
+		},
 	},
 	Notes: []*uml.Note{
 	},

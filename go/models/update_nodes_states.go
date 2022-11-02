@@ -1,5 +1,7 @@
 package models
 
+import gong_models "github.com/fullstack-lang/gong/go/models"
+
 // updateNodesStates updates the tree of symbols
 // according to the selected diagram
 func updateNodesStates(stage *StageStruct, callbacksSingloton *NodeCallbacksSingloton) {
@@ -105,6 +107,10 @@ func updateNodesStates(stage *StageStruct, callbacksSingloton *NodeCallbacksSing
 		for _, note := range classDiagram.Notes {
 			mapIdentifiersNodes[note.Name].IsChecked = true
 			mapIdentifiersNodes[note.Name].IsCheckboxDisabled = !classDiagram.IsInDrawMode
+		}
+
+		for gongEnum := range *gong_models.GetGongstructInstancesSet[gong_models.GongEnum]() {
+			mapIdentifiersNodes[gongEnum.Name].IsCheckboxDisabled = !classDiagram.IsInDrawMode
 		}
 	}
 

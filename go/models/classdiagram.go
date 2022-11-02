@@ -483,3 +483,7 @@ func (classdiagram *Classdiagram) AddClassshape(classshapeName string) {
 	classdiagram.Classshapes = append(classdiagram.Classshapes, &classshape)
 	Stage.Commit()
 }
+
+func (classdiagram *Classdiagram) NodeUpdate() {
+
+}

@@ -20,7 +20,7 @@ type NodeCallbacksSingloton struct {
 	GongnotesRootNode   *Node
 }
 
-func (nodeCallbacksSingloton NodeCallbacksSingloton) OnAfterUpdate(
+func (nodeCallbacksSingloton *NodeCallbacksSingloton) OnAfterUpdate(
 	stage *StageStruct,
 	stagedNode, frontNode *Node) {
 
@@ -54,7 +54,7 @@ func (nodeCallbacksSingloton NodeCallbacksSingloton) OnAfterUpdate(
 
 			// update the tree of identifiers in order to show
 			// which identifiers are presents in the selected diagram
-			updateNodesStates(stage, &nodeCallbacksSingloton)
+			updateNodesStates(stage, nodeCallbacksSingloton)
 		}
 
 		// node was checked and user wants to uncheck it. This is not possible
@@ -134,13 +134,13 @@ func (nodeCallbacksSingloton NodeCallbacksSingloton) OnAfterUpdate(
 			case CLASS_DIAGRAM, STATE_DIAGRAM:
 				stagedNode.Name = frontNode.Name
 				stagedNode.IsInEditMode = false
-				updateNodesStates(stage, &nodeCallbacksSingloton)
+				updateNodesStates(stage, nodeCallbacksSingloton)
 			}
 		}
 
 		if stagedNode.IsInEditMode != frontNode.IsInEditMode {
 			stagedNode.IsInEditMode = frontNode.IsInEditMode
-			updateNodesStates(stage, &nodeCallbacksSingloton)
+			updateNodesStates(stage, nodeCallbacksSingloton)
 		}
 
 		if stagedNode.IsInDrawMode != frontNode.IsInDrawMode {
@@ -151,7 +151,7 @@ func (nodeCallbacksSingloton NodeCallbacksSingloton) OnAfterUpdate(
 			case STATE_DIAGRAM:
 				stagedNode.Umlsc.IsInDrawMode = frontNode.IsInDrawMode
 			}
-			updateNodesStates(stage, &nodeCallbacksSingloton)
+			updateNodesStates(stage, nodeCallbacksSingloton)
 		}
 
 		// marshall diagram to switch to saved state
@@ -174,7 +174,7 @@ func (nodeCallbacksSingloton NodeCallbacksSingloton) OnAfterUpdate(
 				// stagedNode.Umlsc = stagedNode.Umlsc.Saved
 			}
 
-			updateNodesStates(stage, &nodeCallbacksSingloton)
+			updateNodesStates(stage, nodeCallbacksSingloton)
 		}
 	case GONG_STRUCT:
 
@@ -199,7 +199,7 @@ func (nodeCallbacksSingloton NodeCallbacksSingloton) OnAfterUpdate(
 					}
 				}
 
-				updateNodesStates(stage, &nodeCallbacksSingloton)
+				updateNodesStates(stage, nodeCallbacksSingloton)
 			}
 		}
 
@@ -216,7 +216,7 @@ func (nodeCallbacksSingloton NodeCallbacksSingloton) OnAfterUpdate(
 					classDiagram.AddClassshape(frontNode.Name)
 				}
 
-				updateNodesStates(stage, &nodeCallbacksSingloton)
+				updateNodesStates(stage, nodeCallbacksSingloton)
 			}
 		}
 
@@ -466,7 +466,7 @@ func (nodeCallbacksSingloton NodeCallbacksSingloton) OnAfterUpdate(
 	}
 }
 
-func (callbacksSingloton NodeCallbacksSingloton) OnAfterCreate(
+func (callbacksSingloton *NodeCallbacksSingloton) OnAfterCreate(
 	stage *StageStruct,
 	newDiagramNode *Node) {
 
@@ -492,7 +492,7 @@ func (callbacksSingloton NodeCallbacksSingloton) OnAfterCreate(
 		callbacksSingloton.ClassdiagramsRootNode.Children =
 			append(callbacksSingloton.ClassdiagramsRootNode.Children, newDiagramNode)
 
-		updateNodesStates(stage, &callbacksSingloton)
+		updateNodesStates(stage, callbacksSingloton)
 		stage.Commit()
 	}
 }
@@ -500,7 +500,7 @@ func (callbacksSingloton NodeCallbacksSingloton) OnAfterCreate(
 // OnAfterDelete is called after a node is deleted
 // notice that the fontNode only have its basic fields updated
 // its pointers are not ok
-func (callbacksSingloton NodeCallbacksSingloton) OnAfterDelete(
+func (callbacksSingloton *NodeCallbacksSingloton) OnAfterDelete(
 	stage *StageStruct,
 	stagedNode, frontNode *Node) {
 
