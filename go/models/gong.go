@@ -4397,26 +4397,6 @@ func (gongdocnodetype GongdocNodeType) ToString() (res string) {
 		res = "GONG_STRUCT"
 	case GONG_FIELD:
 		res = "GONG_FIELD"
-	case ROOT_OF_BASIC_FIELDS:
-		res = "ROOT_OF_BASIC_FIELDS"
-	case BASIC_FIELD:
-		res = "BASIC_FIELD"
-	case ROOT_OF_TIME_FIELDS:
-		res = "ROOT_OF_TIME_FIELDS"
-	case TIME_FIELD:
-		res = "TIME_FIELD"
-	case ROOT_OF_POINTER_TO_STRUCT_FIELDS:
-		res = "ROOT_OF_POINTER_TO_STRUCT_FIELDS"
-	case POINTER_TO_STRUCT:
-		res = "POINTER_TO_STRUCT"
-	case ROOT_OF_SLICE_OF_POINTER_TO_GONG_STRUCT_FIELDS:
-		res = "ROOT_OF_SLICE_OF_POINTER_TO_GONG_STRUCT_FIELDS"
-	case SLICE_OF_POINTER_TO_STRUCT:
-		res = "SLICE_OF_POINTER_TO_STRUCT"
-	case ROOT_OF_M_N_ASSOCIATION_FIELDS:
-		res = "ROOT_OF_M_N_ASSOCIATION_FIELDS"
-	case M_N_ASSOCIATION_FIELD:
-		res = "M_N_ASSOCIATION_FIELD"
 	case ROOT_OF_GONG_ENUMS:
 		res = "ROOT_OF_GONG_ENUMS"
 	case GONG_ENUM:
@@ -4451,26 +4431,6 @@ func (gongdocnodetype *GongdocNodeType) FromString(input string) (err error) {
 		*gongdocnodetype = GONG_STRUCT
 	case "GONG_FIELD":
 		*gongdocnodetype = GONG_FIELD
-	case "ROOT_OF_BASIC_FIELDS":
-		*gongdocnodetype = ROOT_OF_BASIC_FIELDS
-	case "BASIC_FIELD":
-		*gongdocnodetype = BASIC_FIELD
-	case "ROOT_OF_TIME_FIELDS":
-		*gongdocnodetype = ROOT_OF_TIME_FIELDS
-	case "TIME_FIELD":
-		*gongdocnodetype = TIME_FIELD
-	case "ROOT_OF_POINTER_TO_STRUCT_FIELDS":
-		*gongdocnodetype = ROOT_OF_POINTER_TO_STRUCT_FIELDS
-	case "POINTER_TO_STRUCT":
-		*gongdocnodetype = POINTER_TO_STRUCT
-	case "ROOT_OF_SLICE_OF_POINTER_TO_GONG_STRUCT_FIELDS":
-		*gongdocnodetype = ROOT_OF_SLICE_OF_POINTER_TO_GONG_STRUCT_FIELDS
-	case "SLICE_OF_POINTER_TO_STRUCT":
-		*gongdocnodetype = SLICE_OF_POINTER_TO_STRUCT
-	case "ROOT_OF_M_N_ASSOCIATION_FIELDS":
-		*gongdocnodetype = ROOT_OF_M_N_ASSOCIATION_FIELDS
-	case "M_N_ASSOCIATION_FIELD":
-		*gongdocnodetype = M_N_ASSOCIATION_FIELD
 	case "ROOT_OF_GONG_ENUMS":
 		*gongdocnodetype = ROOT_OF_GONG_ENUMS
 	case "GONG_ENUM":
@@ -4507,26 +4467,6 @@ func (gongdocnodetype *GongdocNodeType) ToCodeString() (res string) {
 		res = "GONG_STRUCT"
 	case GONG_FIELD:
 		res = "GONG_FIELD"
-	case ROOT_OF_BASIC_FIELDS:
-		res = "ROOT_OF_BASIC_FIELDS"
-	case BASIC_FIELD:
-		res = "BASIC_FIELD"
-	case ROOT_OF_TIME_FIELDS:
-		res = "ROOT_OF_TIME_FIELDS"
-	case TIME_FIELD:
-		res = "TIME_FIELD"
-	case ROOT_OF_POINTER_TO_STRUCT_FIELDS:
-		res = "ROOT_OF_POINTER_TO_STRUCT_FIELDS"
-	case POINTER_TO_STRUCT:
-		res = "POINTER_TO_STRUCT"
-	case ROOT_OF_SLICE_OF_POINTER_TO_GONG_STRUCT_FIELDS:
-		res = "ROOT_OF_SLICE_OF_POINTER_TO_GONG_STRUCT_FIELDS"
-	case SLICE_OF_POINTER_TO_STRUCT:
-		res = "SLICE_OF_POINTER_TO_STRUCT"
-	case ROOT_OF_M_N_ASSOCIATION_FIELDS:
-		res = "ROOT_OF_M_N_ASSOCIATION_FIELDS"
-	case M_N_ASSOCIATION_FIELD:
-		res = "M_N_ASSOCIATION_FIELD"
 	case ROOT_OF_GONG_ENUMS:
 		res = "ROOT_OF_GONG_ENUMS"
 	case GONG_ENUM:

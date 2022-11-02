@@ -16,7 +16,7 @@ var Diagram4 uml.Classdiagram = uml.Classdiagram{
 				Y: 150.000000,
 			},
 			Width:  240.000000,
-			Heigth: 78.000000,
+			Heigth: 108.000000,
 			Links: []*uml.Link{
 				{
 					Field: models.Line{}.End,
@@ -39,7 +39,13 @@ var Diagram4 uml.Classdiagram = uml.Classdiagram{
 			},
 			Fields: []*uml.Field{
 				{
+					Field: models.Line{}.JourneyTime,
+				},
+				{
 					Field: models.Line{}.Name,
+				},
+				{
+					Field: models.Line{}.Type,
 				},
 			},
 		},

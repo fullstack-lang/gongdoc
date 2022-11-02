@@ -26,29 +26,24 @@ func updateNodesStates(stage *StageStruct, callbacksSingloton *NodeCallbacksSing
 
 		for _, gongfieldNode := range gognstructNode.Children {
 			gongfieldNode.IsChecked = false
-			gongfieldNode.IsCheckboxDisabled = !pkglet.IsEditable
+			gongfieldNode.IsCheckboxDisabled = true
 			gongFieldIdentifiersdNodes[gognstructNode.Name+"."+gongfieldNode.Name] = gongfieldNode
 		}
 	}
-
 	for _, gognenumNode := range callbacksSingloton.GongenumsRootNode.Children {
 
 		gognenumNode.IsCheckboxDisabled = true
-
 		gognenumNode.IsChecked = false
 		mapIdentifiersNodes[gognenumNode.Name] = gognenumNode
 
 		for _, gongfieldNode := range gognenumNode.Children {
 			gongfieldNode.IsChecked = false
-			gongfieldNode.IsCheckboxDisabled = !pkglet.IsEditable
+			gongfieldNode.IsCheckboxDisabled = true
 			gongFieldIdentifiersdNodes[gognenumNode.Name+"."+gongfieldNode.Name] = gongfieldNode
 		}
 	}
-
 	for _, gongnoteNode := range callbacksSingloton.GongnotesRootNode.Children {
-
 		gongnoteNode.IsCheckboxDisabled = true
-
 		gongnoteNode.IsChecked = false
 		mapIdentifiersNodes[gongnoteNode.Name] = gongnoteNode
 	}
@@ -78,11 +73,20 @@ func updateNodesStates(stage *StageStruct, callbacksSingloton *NodeCallbacksSing
 		// get the diagram
 		classDiagram := classdiagramNode.Classdiagram
 
+		// allow all gongstructs to be checked/unckecked
+		for _, gognstructNode := range callbacksSingloton.GongstructsRootNode.Children {
+			gognstructNode.IsCheckboxDisabled = !classDiagram.IsInDrawMode
+		}
+
 		// get the referenced gongstructs
 		for _, classshape := range classDiagram.Classshapes {
 			gongstruct := classshape.GongStruct
 			mapIdentifiersNodes[gongstruct.Name].IsChecked = true
-			mapIdentifiersNodes[gongstruct.Name].IsCheckboxDisabled = !classDiagram.IsInDrawMode
+
+			// disable checkbox of all children of the gongstruct
+			for _, gongfieldNode := range mapIdentifiersNodes[gongstruct.Name].Children {
+				gongfieldNode.IsCheckboxDisabled = !classDiagram.IsInDrawMode
+			}
 
 			for _, field := range classshape.Fields {
 				gongFieldIdentifiersdNodes[gongstruct.Name+"."+field.Name].IsChecked = true
