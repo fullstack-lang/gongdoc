@@ -18,10 +18,6 @@ import { FieldsTableComponent } from './fields-table/fields-table.component'
 import { FieldDetailComponent } from './field-detail/field-detail.component'
 import { FieldPresentationComponent } from './field-presentation/field-presentation.component'
 
-import { GongdocStatussTableComponent } from './gongdocstatuss-table/gongdocstatuss-table.component'
-import { GongdocStatusDetailComponent } from './gongdocstatus-detail/gongdocstatus-detail.component'
-import { GongdocStatusPresentationComponent } from './gongdocstatus-presentation/gongdocstatus-presentation.component'
-
 import { LinksTableComponent } from './links-table/links-table.component'
 import { LinkDetailComponent } from './link-detail/link-detail.component'
 import { LinkPresentationComponent } from './link-presentation/link-presentation.component'
@@ -87,13 +83,6 @@ const routes: Routes = [ // insertion point for routes declarations
 	{ path: 'github_com_fullstack_lang_gongdoc_go-field-detail/:id', component: FieldDetailComponent, outlet: 'github_com_fullstack_lang_gongdoc_go_editor' },
 	{ path: 'github_com_fullstack_lang_gongdoc_go-field-presentation/:id', component: FieldPresentationComponent, outlet: 'github_com_fullstack_lang_gongdoc_go_presentation' },
 	{ path: 'github_com_fullstack_lang_gongdoc_go-field-presentation-special/:id', component: FieldPresentationComponent, outlet: 'github_com_fullstack_lang_gongdoc_gofieldpres' },
-
-	{ path: 'github_com_fullstack_lang_gongdoc_go-gongdocstatuss', component: GongdocStatussTableComponent, outlet: 'github_com_fullstack_lang_gongdoc_go_table' },
-	{ path: 'github_com_fullstack_lang_gongdoc_go-gongdocstatus-adder', component: GongdocStatusDetailComponent, outlet: 'github_com_fullstack_lang_gongdoc_go_editor' },
-	{ path: 'github_com_fullstack_lang_gongdoc_go-gongdocstatus-adder/:id/:originStruct/:originStructFieldName', component: GongdocStatusDetailComponent, outlet: 'github_com_fullstack_lang_gongdoc_go_editor' },
-	{ path: 'github_com_fullstack_lang_gongdoc_go-gongdocstatus-detail/:id', component: GongdocStatusDetailComponent, outlet: 'github_com_fullstack_lang_gongdoc_go_editor' },
-	{ path: 'github_com_fullstack_lang_gongdoc_go-gongdocstatus-presentation/:id', component: GongdocStatusPresentationComponent, outlet: 'github_com_fullstack_lang_gongdoc_go_presentation' },
-	{ path: 'github_com_fullstack_lang_gongdoc_go-gongdocstatus-presentation-special/:id', component: GongdocStatusPresentationComponent, outlet: 'github_com_fullstack_lang_gongdoc_gogongdocstatuspres' },
 
 	{ path: 'github_com_fullstack_lang_gongdoc_go-links', component: LinksTableComponent, outlet: 'github_com_fullstack_lang_gongdoc_go_table' },
 	{ path: 'github_com_fullstack_lang_gongdoc_go-link-adder', component: LinkDetailComponent, outlet: 'github_com_fullstack_lang_gongdoc_go_editor' },

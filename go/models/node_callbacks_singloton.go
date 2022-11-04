@@ -220,7 +220,7 @@ func (nodeCallbacksSingloton *NodeCallbacksSingloton) OnAfterUpdate(
 			}
 		}
 
-	case GONG_FIELD:
+	case GONG_STRUCT_FIELD:
 
 		// find classdiagram
 		var classdiagram *Classdiagram
@@ -497,6 +497,88 @@ func (nodeCallbacksSingloton *NodeCallbacksSingloton) OnAfterUpdate(
 
 				updateNodesStates(stage, nodeCallbacksSingloton)
 			}
+		}
+	case GONG_ENUM_VALUE:
+		// find classdiagram
+		var classdiagram *Classdiagram
+		for _, classdiagramNode := range nodeCallbacksSingloton.ClassdiagramsRootNode.Children {
+			if classdiagramNode.IsChecked {
+				// get the diagram
+				classdiagram = classdiagramNode.Classdiagram
+			}
+		}
+
+		// find the parent node to find the gongstruct to find the classshape
+		// the node is field, one needs to find the gongstruct that contains it
+		// get the parent node
+		fieldName := GetAssociationName[Node]().Children[0].Name
+		map_ReverseNodeParentNodeChildrend := GetSliceOfPointersReverseMap[Node, Node](fieldName)
+		parentNode := map_ReverseNodeParentNodeChildrend[stagedNode]
+		gongEnum := parentNode.GongEnum
+
+		// find the classhape in the classdiagram
+		foundClassshape := false
+		var classshape *Classshape
+		for _, _classshape := range classdiagram.Classshapes {
+			// strange behavior when the classshape is remove within the loop
+			if _classshape.ReferenceName == gongEnum.Name && !foundClassshape {
+				classshape = _classshape
+			}
+		}
+		_ = classshape
+
+		rankOfValuesInTheOriginalGongEnum := make(map[gong_models.GongEnumValue]int, 0)
+		nameOfFields := make(map[string]gong_models.GongEnumValue, 0)
+
+		// what is the index of the field to insert in the gong struct ?
+		indexOfValueToInsertInTheOriginalGongEnum := 0
+
+		if !stagedNode.IsChecked && frontNode.IsChecked {
+
+			// get the latest version of the diagram before modifying it
+			stage.Checkout()
+
+			var field Field
+			field.Name = stagedNode.Name
+			field.Fieldname = stagedNode.Name
+
+			for idx, gongEnum := range gongEnum.GongEnumValues {
+
+				rankOfValuesInTheOriginalGongEnum[*gongEnum] = idx
+				nameOfFields[gongEnum.GetName()] = *gongEnum
+
+				if gongEnum.GetName() == field.Name {
+					indexOfValueToInsertInTheOriginalGongEnum = idx
+				}
+			}
+
+			// compute indexOfValueToInsertInTheGongEnumToDisplay (index where to insert the field to display)
+			indexOfValueToInsertInTheGongEnumToDisplay := 0
+			for idx, field := range classshape.Fields {
+				gongField := nameOfFields[field.Fieldname]
+				rankInTheOriginalGoncStructOfField := rankOfValuesInTheOriginalGongEnum[gongField]
+				if indexOfValueToInsertInTheOriginalGongEnum > rankInTheOriginalGoncStructOfField {
+					indexOfValueToInsertInTheGongEnumToDisplay = idx + 1
+				}
+			}
+
+			// append the filed to display in the right index
+			if indexOfValueToInsertInTheGongEnumToDisplay == len(classshape.Fields) {
+				classshape.Fields = append(classshape.Fields, &field)
+			} else {
+				classshape.Fields = append(classshape.Fields[:indexOfValueToInsertInTheGongEnumToDisplay+1],
+					classshape.Fields[indexOfValueToInsertInTheGongEnumToDisplay:]...)
+				classshape.Fields[indexOfValueToInsertInTheGongEnumToDisplay] = &field
+			}
+			field.Stage()
+			Stage.Commit()
+
+		}
+		if stagedNode.IsChecked && !frontNode.IsChecked {
+
+			// get the latest version of the diagram before modifying it
+			stage.Checkout()
+			Stage.Commit()
 		}
 	}
 

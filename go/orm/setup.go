@@ -45,7 +45,6 @@ func AutoMigrate(db *gorm.DB) {
 		&ClassshapeDB{},
 		&DiagramPackageDB{},
 		&FieldDB{},
-		&GongdocStatusDB{},
 		&LinkDB{},
 		&NodeDB{},
 		&NoteDB{},
@@ -71,7 +70,6 @@ func ResetDB(db *gorm.DB) { // insertion point for reference to structs
 	db.Delete(&ClassshapeDB{})
 	db.Delete(&DiagramPackageDB{})
 	db.Delete(&FieldDB{})
-	db.Delete(&GongdocStatusDB{})
 	db.Delete(&LinkDB{})
 	db.Delete(&NodeDB{})
 	db.Delete(&NoteDB{})

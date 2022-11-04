@@ -10,7 +10,7 @@ import (
 var Diagram3 uml.Classdiagram = uml.Classdiagram{
 	Classshapes: []*uml.Classshape{
 		{
-			Struct: &(models.Line{}),
+			ReferencedGong: &(models.Line{}),
 			Position: &uml.Position{
 				X: 110.000000,
 				Y: 40.000000,
@@ -47,7 +47,7 @@ var Diagram3 uml.Classdiagram = uml.Classdiagram{
 			},
 		},
 		{
-			Struct: &(models.Point{}),
+			ReferencedGong: &(models.Point{}),
 			Position: &uml.Position{
 				X: 580.000000,
 				Y: 170.000000,
@@ -67,7 +67,7 @@ var Diagram3 uml.Classdiagram = uml.Classdiagram{
 			},
 		},
 		{
-			Struct: &(models.PointExclusiveSet{}),
+			ReferencedGong: &(models.PointExclusiveSet{}),
 			Position: &uml.Position{
 				X: 140.000000,
 				Y: 290.000000,
@@ -92,7 +92,7 @@ var Diagram3 uml.Classdiagram = uml.Classdiagram{
 			},
 		},
 		{
-			Struct: &(models.PointNonExclusiveSet{}),
+			ReferencedGong: &(models.PointNonExclusiveSet{}),
 			Position: &uml.Position{
 				X: 140.000000,
 				Y: 420.000000,
@@ -126,7 +126,7 @@ var Diagram3 uml.Classdiagram = uml.Classdiagram{
 			},
 		},
 		{
-			Struct: &(models.PointUse{}),
+			ReferencedGong: &(models.PointUse{}),
 			Position: &uml.Position{
 				X: 580.000000,
 				Y: 420.000000,

@@ -68,15 +68,6 @@ type StageStruct struct { // insertion point for definition of arrays registerin
 	OnAfterFieldReadCallback   OnAfterReadInterface[Field]
 
 
-	GongdocStatuss           map[*GongdocStatus]any
-	GongdocStatuss_mapString map[string]*GongdocStatus
-
-	OnAfterGongdocStatusCreateCallback OnAfterCreateInterface[GongdocStatus]
-	OnAfterGongdocStatusUpdateCallback OnAfterUpdateInterface[GongdocStatus]
-	OnAfterGongdocStatusDeleteCallback OnAfterDeleteInterface[GongdocStatus]
-	OnAfterGongdocStatusReadCallback   OnAfterReadInterface[GongdocStatus]
-
-
 	Links           map[*Link]any
 	Links_mapString map[string]*Link
 
@@ -216,8 +207,6 @@ type BackRepoInterface interface {
 	CheckoutDiagramPackage(diagrampackage *DiagramPackage)
 	CommitField(field *Field)
 	CheckoutField(field *Field)
-	CommitGongdocStatus(gongdocstatus *GongdocStatus)
-	CheckoutGongdocStatus(gongdocstatus *GongdocStatus)
 	CommitLink(link *Link)
 	CheckoutLink(link *Link)
 	CommitNode(node *Node)
@@ -253,9 +242,6 @@ var Stage StageStruct = StageStruct{ // insertion point for array initiatialisat
 
 	Fields:           make(map[*Field]any),
 	Fields_mapString: make(map[string]*Field),
-
-	GongdocStatuss:           make(map[*GongdocStatus]any),
-	GongdocStatuss_mapString: make(map[string]*GongdocStatus),
 
 	Links:           make(map[*Link]any),
 	Links_mapString: make(map[string]*Link),
@@ -298,7 +284,6 @@ func (stage *StageStruct) Commit() {
 	stage.Map_GongStructName_InstancesNb["Classshape"] = len(stage.Classshapes)
 	stage.Map_GongStructName_InstancesNb["DiagramPackage"] = len(stage.DiagramPackages)
 	stage.Map_GongStructName_InstancesNb["Field"] = len(stage.Fields)
-	stage.Map_GongStructName_InstancesNb["GongdocStatus"] = len(stage.GongdocStatuss)
 	stage.Map_GongStructName_InstancesNb["Link"] = len(stage.Links)
 	stage.Map_GongStructName_InstancesNb["Node"] = len(stage.Nodes)
 	stage.Map_GongStructName_InstancesNb["Note"] = len(stage.Notes)
@@ -321,7 +306,6 @@ func (stage *StageStruct) Checkout() {
 	stage.Map_GongStructName_InstancesNb["Classshape"] = len(stage.Classshapes)
 	stage.Map_GongStructName_InstancesNb["DiagramPackage"] = len(stage.DiagramPackages)
 	stage.Map_GongStructName_InstancesNb["Field"] = len(stage.Fields)
-	stage.Map_GongStructName_InstancesNb["GongdocStatus"] = len(stage.GongdocStatuss)
 	stage.Map_GongStructName_InstancesNb["Link"] = len(stage.Links)
 	stage.Map_GongStructName_InstancesNb["Node"] = len(stage.Nodes)
 	stage.Map_GongStructName_InstancesNb["Note"] = len(stage.Notes)
@@ -741,101 +725,6 @@ func DeleteORMField(field *Field) {
 // for satisfaction of GongStruct interface
 func (field *Field) GetName() (res string) {
 	return field.Name
-}
-
-// Stage puts gongdocstatus to the model stage
-func (gongdocstatus *GongdocStatus) Stage() *GongdocStatus {
-	Stage.GongdocStatuss[gongdocstatus] = __member
-	Stage.GongdocStatuss_mapString[gongdocstatus.Name] = gongdocstatus
-
-	return gongdocstatus
-}
-
-// Unstage removes gongdocstatus off the model stage
-func (gongdocstatus *GongdocStatus) Unstage() *GongdocStatus {
-	delete(Stage.GongdocStatuss, gongdocstatus)
-	delete(Stage.GongdocStatuss_mapString, gongdocstatus.Name)
-	return gongdocstatus
-}
-
-// commit gongdocstatus to the back repo (if it is already staged)
-func (gongdocstatus *GongdocStatus) Commit() *GongdocStatus {
-	if _, ok := Stage.GongdocStatuss[gongdocstatus]; ok {
-		if Stage.BackRepo != nil {
-			Stage.BackRepo.CommitGongdocStatus(gongdocstatus)
-		}
-	}
-	return gongdocstatus
-}
-
-// Checkout gongdocstatus to the back repo (if it is already staged)
-func (gongdocstatus *GongdocStatus) Checkout() *GongdocStatus {
-	if _, ok := Stage.GongdocStatuss[gongdocstatus]; ok {
-		if Stage.BackRepo != nil {
-			Stage.BackRepo.CheckoutGongdocStatus(gongdocstatus)
-		}
-	}
-	return gongdocstatus
-}
-
-//
-// Legacy, to be deleted
-//
-
-// StageCopy appends a copy of gongdocstatus to the model stage
-func (gongdocstatus *GongdocStatus) StageCopy() *GongdocStatus {
-	_gongdocstatus := new(GongdocStatus)
-	*_gongdocstatus = *gongdocstatus
-	_gongdocstatus.Stage()
-	return _gongdocstatus
-}
-
-// StageAndCommit appends gongdocstatus to the model stage and commit to the orm repo
-func (gongdocstatus *GongdocStatus) StageAndCommit() *GongdocStatus {
-	gongdocstatus.Stage()
-	if Stage.AllModelsStructCreateCallback != nil {
-		Stage.AllModelsStructCreateCallback.CreateORMGongdocStatus(gongdocstatus)
-	}
-	return gongdocstatus
-}
-
-// DeleteStageAndCommit appends gongdocstatus to the model stage and commit to the orm repo
-func (gongdocstatus *GongdocStatus) DeleteStageAndCommit() *GongdocStatus {
-	gongdocstatus.Unstage()
-	DeleteORMGongdocStatus(gongdocstatus)
-	return gongdocstatus
-}
-
-// StageCopyAndCommit appends a copy of gongdocstatus to the model stage and commit to the orm repo
-func (gongdocstatus *GongdocStatus) StageCopyAndCommit() *GongdocStatus {
-	_gongdocstatus := new(GongdocStatus)
-	*_gongdocstatus = *gongdocstatus
-	_gongdocstatus.Stage()
-	if Stage.AllModelsStructCreateCallback != nil {
-		Stage.AllModelsStructCreateCallback.CreateORMGongdocStatus(gongdocstatus)
-	}
-	return _gongdocstatus
-}
-
-// CreateORMGongdocStatus enables dynamic staging of a GongdocStatus instance
-func CreateORMGongdocStatus(gongdocstatus *GongdocStatus) {
-	gongdocstatus.Stage()
-	if Stage.AllModelsStructCreateCallback != nil {
-		Stage.AllModelsStructCreateCallback.CreateORMGongdocStatus(gongdocstatus)
-	}
-}
-
-// DeleteORMGongdocStatus enables dynamic staging of a GongdocStatus instance
-func DeleteORMGongdocStatus(gongdocstatus *GongdocStatus) {
-	gongdocstatus.Unstage()
-	if Stage.AllModelsStructDeleteCallback != nil {
-		Stage.AllModelsStructDeleteCallback.DeleteORMGongdocStatus(gongdocstatus)
-	}
-}
-
-// for satisfaction of GongStruct interface
-func (gongdocstatus *GongdocStatus) GetName() (res string) {
-	return gongdocstatus.Name
 }
 
 // Stage puts link to the model stage
@@ -1699,7 +1588,6 @@ type AllModelsStructCreateInterface interface { // insertion point for Callbacks
 	CreateORMClassshape(Classshape *Classshape)
 	CreateORMDiagramPackage(DiagramPackage *DiagramPackage)
 	CreateORMField(Field *Field)
-	CreateORMGongdocStatus(GongdocStatus *GongdocStatus)
 	CreateORMLink(Link *Link)
 	CreateORMNode(Node *Node)
 	CreateORMNote(Note *Note)
@@ -1716,7 +1604,6 @@ type AllModelsStructDeleteInterface interface { // insertion point for Callbacks
 	DeleteORMClassshape(Classshape *Classshape)
 	DeleteORMDiagramPackage(DiagramPackage *DiagramPackage)
 	DeleteORMField(Field *Field)
-	DeleteORMGongdocStatus(GongdocStatus *GongdocStatus)
 	DeleteORMLink(Link *Link)
 	DeleteORMNode(Node *Node)
 	DeleteORMNote(Note *Note)
@@ -1740,9 +1627,6 @@ func (stage *StageStruct) Reset() { // insertion point for array reset
 
 	stage.Fields = make(map[*Field]any)
 	stage.Fields_mapString = make(map[string]*Field)
-
-	stage.GongdocStatuss = make(map[*GongdocStatus]any)
-	stage.GongdocStatuss_mapString = make(map[string]*GongdocStatus)
 
 	stage.Links = make(map[*Link]any)
 	stage.Links_mapString = make(map[string]*Link)
@@ -1785,9 +1669,6 @@ func (stage *StageStruct) Nil() { // insertion point for array nil
 
 	stage.Fields = nil
 	stage.Fields_mapString = nil
-
-	stage.GongdocStatuss = nil
-	stage.GongdocStatuss_mapString = nil
 
 	stage.Links = nil
 	stage.Links_mapString = nil
@@ -2100,52 +1981,6 @@ func (stage *StageStruct) Marshall(file *os.File, modelsPackageName, packageName
 		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
 		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "Fieldtypename")
 		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", string(field.Fieldtypename))
-		initializerStatements += setValueField
-
-	}
-
-	map_GongdocStatus_Identifiers := make(map[*GongdocStatus]string)
-	_ = map_GongdocStatus_Identifiers
-
-	gongdocstatusOrdered := []*GongdocStatus{}
-	for gongdocstatus := range stage.GongdocStatuss {
-		gongdocstatusOrdered = append(gongdocstatusOrdered, gongdocstatus)
-	}
-	sort.Slice(gongdocstatusOrdered[:], func(i, j int) bool {
-		return gongdocstatusOrdered[i].Name < gongdocstatusOrdered[j].Name
-	})
-	identifiersDecl += "\n\n	// Declarations of staged instances of GongdocStatus"
-	for idx, gongdocstatus := range gongdocstatusOrdered {
-
-		id = generatesIdentifier("GongdocStatus", idx, gongdocstatus.Name)
-		map_GongdocStatus_Identifiers[gongdocstatus] = id
-
-		decl = IdentifiersDecls
-		decl = strings.ReplaceAll(decl, "{{Identifier}}", id)
-		decl = strings.ReplaceAll(decl, "{{GeneratedStructName}}", "GongdocStatus")
-		decl = strings.ReplaceAll(decl, "{{GeneratedFieldNameValue}}", gongdocstatus.Name)
-		identifiersDecl += decl
-
-		initializerStatements += fmt.Sprintf("\n\n	// GongdocStatus %s values setup", gongdocstatus.Name)
-		// Initialisation of values
-		setValueField = StringInitStatement
-		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "Name")
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", string(gongdocstatus.Name))
-		initializerStatements += setValueField
-
-		if gongdocstatus.Status != "" {
-			setValueField = StringEnumInitStatement
-			setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
-			setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "Status")
-			setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", "models."+gongdocstatus.Status.ToCodeString())
-			initializerStatements += setValueField
-		}
-
-		setValueField = StringInitStatement
-		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "CommandCompletionDate")
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", string(gongdocstatus.CommandCompletionDate))
 		initializerStatements += setValueField
 
 	}
@@ -2763,16 +2598,6 @@ func (stage *StageStruct) Marshall(file *os.File, modelsPackageName, packageName
 		// Initialisation of values
 	}
 
-	for idx, gongdocstatus := range gongdocstatusOrdered {
-		var setPointerField string
-		_ = setPointerField
-
-		id = generatesIdentifier("GongdocStatus", idx, gongdocstatus.Name)
-		map_GongdocStatus_Identifiers[gongdocstatus] = id
-
-		// Initialisation of values
-	}
-
 	for idx, link := range linkOrdered {
 		var setPointerField string
 		_ = setPointerField
@@ -3056,8 +2881,6 @@ func (stageStruct *StageStruct) CreateReverseMap_DiagramPackage_Umlscs() (res ma
 
 // generate function for reverse association maps of Field
 
-// generate function for reverse association maps of GongdocStatus
-
 // generate function for reverse association maps of Link
 func (stageStruct *StageStruct) CreateReverseMap_Link_Middlevertice() (res map[*Vertice][]*Link) {
 	res = make(map[*Vertice][]*Link)
@@ -3178,7 +3001,7 @@ func (stageStruct *StageStruct) CreateReverseMap_Umlsc_States() (res map[*UmlSta
 // - full refactoring of Gongstruct identifiers / fields
 type Gongstruct interface {
 	// insertion point for generic types
-	Classdiagram | Classshape | DiagramPackage | Field | GongdocStatus | Link | Node | Note | Position | Reference | Tree | UmlState | Umlsc | Vertice
+	Classdiagram | Classshape | DiagramPackage | Field | Link | Node | Note | Position | Reference | Tree | UmlState | Umlsc | Vertice
 }
 
 // Gongstruct is the type parameter for generated generic function that allows
@@ -3187,7 +3010,7 @@ type Gongstruct interface {
 // - full refactoring of Gongstruct identifiers / fields
 type PointerToGongstruct interface {
 	// insertion point for generic types
-	*Classdiagram | *Classshape | *DiagramPackage | *Field | *GongdocStatus | *Link | *Node | *Note | *Position | *Reference | *Tree | *UmlState | *Umlsc | *Vertice
+	*Classdiagram | *Classshape | *DiagramPackage | *Field | *Link | *Node | *Note | *Position | *Reference | *Tree | *UmlState | *Umlsc | *Vertice
 	GetName() string
 }
 
@@ -3198,7 +3021,6 @@ type GongstructSet interface {
 		map[*Classshape]any |
 		map[*DiagramPackage]any |
 		map[*Field]any |
-		map[*GongdocStatus]any |
 		map[*Link]any |
 		map[*Node]any |
 		map[*Note]any |
@@ -3218,7 +3040,6 @@ type GongstructMapString interface {
 		map[string]*Classshape |
 		map[string]*DiagramPackage |
 		map[string]*Field |
-		map[string]*GongdocStatus |
 		map[string]*Link |
 		map[string]*Node |
 		map[string]*Note |
@@ -3246,8 +3067,6 @@ func GongGetSet[Type GongstructSet]() *Type {
 		return any(&Stage.DiagramPackages).(*Type)
 	case map[*Field]any:
 		return any(&Stage.Fields).(*Type)
-	case map[*GongdocStatus]any:
-		return any(&Stage.GongdocStatuss).(*Type)
 	case map[*Link]any:
 		return any(&Stage.Links).(*Type)
 	case map[*Node]any:
@@ -3286,8 +3105,6 @@ func GongGetMap[Type GongstructMapString]() *Type {
 		return any(&Stage.DiagramPackages_mapString).(*Type)
 	case map[string]*Field:
 		return any(&Stage.Fields_mapString).(*Type)
-	case map[string]*GongdocStatus:
-		return any(&Stage.GongdocStatuss_mapString).(*Type)
 	case map[string]*Link:
 		return any(&Stage.Links_mapString).(*Type)
 	case map[string]*Node:
@@ -3326,8 +3143,6 @@ func GetGongstructInstancesSet[Type Gongstruct]() *map[*Type]any {
 		return any(&Stage.DiagramPackages).(*map[*Type]any)
 	case Field:
 		return any(&Stage.Fields).(*map[*Type]any)
-	case GongdocStatus:
-		return any(&Stage.GongdocStatuss).(*map[*Type]any)
 	case Link:
 		return any(&Stage.Links).(*map[*Type]any)
 	case Node:
@@ -3366,8 +3181,6 @@ func GetGongstructInstancesMap[Type Gongstruct]() *map[string]*Type {
 		return any(&Stage.DiagramPackages_mapString).(*map[string]*Type)
 	case Field:
 		return any(&Stage.Fields_mapString).(*map[string]*Type)
-	case GongdocStatus:
-		return any(&Stage.GongdocStatuss_mapString).(*map[string]*Type)
 	case Link:
 		return any(&Stage.Links_mapString).(*map[string]*Type)
 	case Node:
@@ -3430,10 +3243,6 @@ func GetAssociationName[Type Gongstruct]() *Type {
 		}).(*Type)
 	case Field:
 		return any(&Field{
-			// Initialisation of associations
-		}).(*Type)
-	case GongdocStatus:
-		return any(&GongdocStatus{
 			// Initialisation of associations
 		}).(*Type)
 	case Link:
@@ -3552,11 +3361,6 @@ func GetPointerReverseMap[Start, End Gongstruct](fieldname string) map[*End][]*S
 		}
 	// reverse maps of direct associations of Field
 	case Field:
-		switch fieldname {
-		// insertion point for per direct association field
-		}
-	// reverse maps of direct associations of GongdocStatus
-	case GongdocStatus:
 		switch fieldname {
 		// insertion point for per direct association field
 		}
@@ -3739,11 +3543,6 @@ func GetSliceOfPointersReverseMap[Start, End Gongstruct](fieldname string) map[*
 		switch fieldname {
 		// insertion point for per direct association field
 		}
-	// reverse maps of direct associations of GongdocStatus
-	case GongdocStatus:
-		switch fieldname {
-		// insertion point for per direct association field
-		}
 	// reverse maps of direct associations of Link
 	case Link:
 		switch fieldname {
@@ -3833,8 +3632,6 @@ func GetGongstructName[Type Gongstruct]() (res string) {
 		res = "DiagramPackage"
 	case Field:
 		res = "Field"
-	case GongdocStatus:
-		res = "GongdocStatus"
 	case Link:
 		res = "Link"
 	case Node:
@@ -3872,8 +3669,6 @@ func GetFields[Type Gongstruct]() (res []string) {
 		res = []string{"Name", "Path", "GongModelPath", "Classdiagrams", "Umlscs", "IsEditable"}
 	case Field:
 		res = []string{"Name", "Fieldname", "FieldTypeAsString", "Structname", "Fieldtypename"}
-	case GongdocStatus:
-		res = []string{"Name", "Status", "CommandCompletionDate"}
 	case Link:
 		res = []string{"Name", "Fieldname", "Structname", "Fieldtypename", "TargetMultiplicity", "SourceMultiplicity", "Middlevertice"}
 	case Node:
@@ -4002,17 +3797,6 @@ func GetFieldStringValue[Type Gongstruct](instance Type, fieldName string) (res 
 			res = any(instance).(Field).Structname
 		case "Fieldtypename":
 			res = any(instance).(Field).Fieldtypename
-		}
-	case GongdocStatus:
-		switch fieldName {
-		// string value of fields
-		case "Name":
-			res = any(instance).(GongdocStatus).Name
-		case "Status":
-			enum := any(instance).(GongdocStatus).Status
-			res = enum.ToCodeString()
-		case "CommandCompletionDate":
-			res = any(instance).(GongdocStatus).CommandCompletionDate
 		}
 	case Link:
 		switch fieldName {
@@ -4181,156 +3965,6 @@ func GetFieldStringValue[Type Gongstruct](instance Type, fieldName string) (res 
 }
 
 // insertion point of enum utility functions
-// Utility function for EditionMode
-// if enum values are string, it is stored with the value
-// if enum values are int, they are stored with the code of the value
-func (editionmode EditionMode) ToString() (res string) {
-
-	// migration of former implementation of enum
-	switch editionmode {
-	// insertion code per enum code
-	case PRODUCTION_MODE:
-		res = "PRODUCTION_MODE"
-	case DEVELOPMENT_MODE:
-		res = "DEVELOPMENT_MODE"
-	}
-	return
-}
-
-func (editionmode *EditionMode) FromString(input string) (err error) {
-
-	switch input {
-	// insertion code per enum code
-	case "PRODUCTION_MODE":
-		*editionmode = PRODUCTION_MODE
-	case "DEVELOPMENT_MODE":
-		*editionmode = DEVELOPMENT_MODE
-	default:
-		return errUnkownEnum
-	}
-	return
-}
-
-func (editionmode *EditionMode) ToCodeString() (res string) {
-
-	switch *editionmode {
-	// insertion code per enum code
-	case PRODUCTION_MODE:
-		res = "PRODUCTION_MODE"
-	case DEVELOPMENT_MODE:
-		res = "DEVELOPMENT_MODE"
-	}
-	return
-}
-
-// Utility function for GongdocCommandType
-// if enum values are string, it is stored with the value
-// if enum values are int, they are stored with the code of the value
-func (gongdoccommandtype GongdocCommandType) ToString() (res string) {
-
-	// migration of former implementation of enum
-	switch gongdoccommandtype {
-	// insertion code per enum code
-	case MARSHALL_DIAGRAM:
-		res = "MARSHALL_ALL_DIAGRAMS"
-	case PRINT_ALL_DOCUMENTS:
-		res = "PRINT_ALL_DOCUMENTS"
-	case DIAGRAM_ELEMENT_DELETE:
-		res = "DIAGRAM_ELEMENT_DELETE"
-	case DIAGRAM_ELEMENT_CREATE:
-		res = "DIAGRAM_ELEMENT_CREATE"
-	case DIAGRAM_GONGSTRUCT_DELETE:
-		res = "DIAGRAM_GONGSTRUCT_DELETE"
-	case DIAGRAM_GONGSTRUCT_CREATE:
-		res = "DIAGRAM_GONGSTRUCT_CREATE"
-	case DIAGRAM_BASICFIELD_DELETE:
-		res = "DIAGRAM_BASICFIELD_DELETE"
-	case DIAGRAM_BASICFIELD_CREATE:
-		res = "DIAGRAM_BASICFIELD_CREATE"
-	case DIAGRAM_POINTER_TO_GONGSTRUCT_DELETE:
-		res = "DIAGRAM_POINTER_TO_GONGSTRUCT_DELETE"
-	case DIAGRAM_POINTER_TO_GONGSTRUCT_CREATE:
-		res = "DIAGRAM_POINTER_TO_GONGSTRUCT_CREATE"
-	case DIAGRAM_SLICE_OF_POINTERS_TO_GONGSTRUCT_DELETE:
-		res = "DIAGRAM_SLICE_OF_POINTERS_TO_GONGSTRUCT_DELETE"
-	case DIAGRAM_SLICE_OF_POINTERS_TO_GONGSTRUCT_CREATE:
-		res = "DIAGRAM_SLICE_OF_POINTERS_TO_GONGSTRUCT_CREATE"
-	case DIAGRAM_GONGSTRUCT_SELECT:
-		res = "DIAGRAM_GONGSTRUCT_SELECT"
-	}
-	return
-}
-
-func (gongdoccommandtype *GongdocCommandType) FromString(input string) (err error) {
-
-	switch input {
-	// insertion code per enum code
-	case "MARSHALL_ALL_DIAGRAMS":
-		*gongdoccommandtype = MARSHALL_DIAGRAM
-	case "PRINT_ALL_DOCUMENTS":
-		*gongdoccommandtype = PRINT_ALL_DOCUMENTS
-	case "DIAGRAM_ELEMENT_DELETE":
-		*gongdoccommandtype = DIAGRAM_ELEMENT_DELETE
-	case "DIAGRAM_ELEMENT_CREATE":
-		*gongdoccommandtype = DIAGRAM_ELEMENT_CREATE
-	case "DIAGRAM_GONGSTRUCT_DELETE":
-		*gongdoccommandtype = DIAGRAM_GONGSTRUCT_DELETE
-	case "DIAGRAM_GONGSTRUCT_CREATE":
-		*gongdoccommandtype = DIAGRAM_GONGSTRUCT_CREATE
-	case "DIAGRAM_BASICFIELD_DELETE":
-		*gongdoccommandtype = DIAGRAM_BASICFIELD_DELETE
-	case "DIAGRAM_BASICFIELD_CREATE":
-		*gongdoccommandtype = DIAGRAM_BASICFIELD_CREATE
-	case "DIAGRAM_POINTER_TO_GONGSTRUCT_DELETE":
-		*gongdoccommandtype = DIAGRAM_POINTER_TO_GONGSTRUCT_DELETE
-	case "DIAGRAM_POINTER_TO_GONGSTRUCT_CREATE":
-		*gongdoccommandtype = DIAGRAM_POINTER_TO_GONGSTRUCT_CREATE
-	case "DIAGRAM_SLICE_OF_POINTERS_TO_GONGSTRUCT_DELETE":
-		*gongdoccommandtype = DIAGRAM_SLICE_OF_POINTERS_TO_GONGSTRUCT_DELETE
-	case "DIAGRAM_SLICE_OF_POINTERS_TO_GONGSTRUCT_CREATE":
-		*gongdoccommandtype = DIAGRAM_SLICE_OF_POINTERS_TO_GONGSTRUCT_CREATE
-	case "DIAGRAM_GONGSTRUCT_SELECT":
-		*gongdoccommandtype = DIAGRAM_GONGSTRUCT_SELECT
-	default:
-		return errUnkownEnum
-	}
-	return
-}
-
-func (gongdoccommandtype *GongdocCommandType) ToCodeString() (res string) {
-
-	switch *gongdoccommandtype {
-	// insertion code per enum code
-	case MARSHALL_DIAGRAM:
-		res = "MARSHALL_DIAGRAM"
-	case PRINT_ALL_DOCUMENTS:
-		res = "PRINT_ALL_DOCUMENTS"
-	case DIAGRAM_ELEMENT_DELETE:
-		res = "DIAGRAM_ELEMENT_DELETE"
-	case DIAGRAM_ELEMENT_CREATE:
-		res = "DIAGRAM_ELEMENT_CREATE"
-	case DIAGRAM_GONGSTRUCT_DELETE:
-		res = "DIAGRAM_GONGSTRUCT_DELETE"
-	case DIAGRAM_GONGSTRUCT_CREATE:
-		res = "DIAGRAM_GONGSTRUCT_CREATE"
-	case DIAGRAM_BASICFIELD_DELETE:
-		res = "DIAGRAM_BASICFIELD_DELETE"
-	case DIAGRAM_BASICFIELD_CREATE:
-		res = "DIAGRAM_BASICFIELD_CREATE"
-	case DIAGRAM_POINTER_TO_GONGSTRUCT_DELETE:
-		res = "DIAGRAM_POINTER_TO_GONGSTRUCT_DELETE"
-	case DIAGRAM_POINTER_TO_GONGSTRUCT_CREATE:
-		res = "DIAGRAM_POINTER_TO_GONGSTRUCT_CREATE"
-	case DIAGRAM_SLICE_OF_POINTERS_TO_GONGSTRUCT_DELETE:
-		res = "DIAGRAM_SLICE_OF_POINTERS_TO_GONGSTRUCT_DELETE"
-	case DIAGRAM_SLICE_OF_POINTERS_TO_GONGSTRUCT_CREATE:
-		res = "DIAGRAM_SLICE_OF_POINTERS_TO_GONGSTRUCT_CREATE"
-	case DIAGRAM_GONGSTRUCT_SELECT:
-		res = "DIAGRAM_GONGSTRUCT_SELECT"
-	}
-	return
-}
-
 // Utility function for GongdocNodeType
 // if enum values are string, it is stored with the value
 // if enum values are int, they are stored with the code of the value
@@ -4353,8 +3987,8 @@ func (gongdocnodetype GongdocNodeType) ToString() (res string) {
 		res = "ROOT_OF_GONG_STRUCTS"
 	case GONG_STRUCT:
 		res = "GONG_STRUCT"
-	case GONG_FIELD:
-		res = "GONG_FIELD"
+	case GONG_STRUCT_FIELD:
+		res = "GONG_STRUCT_FIELD"
 	case ROOT_OF_GONG_ENUMS:
 		res = "ROOT_OF_GONG_ENUMS"
 	case GONG_ENUM:
@@ -4387,8 +4021,8 @@ func (gongdocnodetype *GongdocNodeType) FromString(input string) (err error) {
 		*gongdocnodetype = ROOT_OF_GONG_STRUCTS
 	case "GONG_STRUCT":
 		*gongdocnodetype = GONG_STRUCT
-	case "GONG_FIELD":
-		*gongdocnodetype = GONG_FIELD
+	case "GONG_STRUCT_FIELD":
+		*gongdocnodetype = GONG_STRUCT_FIELD
 	case "ROOT_OF_GONG_ENUMS":
 		*gongdocnodetype = ROOT_OF_GONG_ENUMS
 	case "GONG_ENUM":
@@ -4423,8 +4057,8 @@ func (gongdocnodetype *GongdocNodeType) ToCodeString() (res string) {
 		res = "ROOT_OF_GONG_STRUCTS"
 	case GONG_STRUCT:
 		res = "GONG_STRUCT"
-	case GONG_FIELD:
-		res = "GONG_FIELD"
+	case GONG_STRUCT_FIELD:
+		res = "GONG_STRUCT_FIELD"
 	case ROOT_OF_GONG_ENUMS:
 		res = "ROOT_OF_GONG_ENUMS"
 	case GONG_ENUM:

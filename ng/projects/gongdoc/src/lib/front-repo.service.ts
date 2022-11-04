@@ -16,9 +16,6 @@ import { DiagramPackageService } from './diagrampackage.service'
 import { FieldDB } from './field-db'
 import { FieldService } from './field.service'
 
-import { GongdocStatusDB } from './gongdocstatus-db'
-import { GongdocStatusService } from './gongdocstatus.service'
-
 import { LinkDB } from './link-db'
 import { LinkService } from './link.service'
 
@@ -61,9 +58,6 @@ export class FrontRepo { // insertion point sub template
   Fields_array = new Array<FieldDB>(); // array of repo instances
   Fields = new Map<number, FieldDB>(); // map of repo instances
   Fields_batch = new Map<number, FieldDB>(); // same but only in last GET (for finding repo instances to delete)
-  GongdocStatuss_array = new Array<GongdocStatusDB>(); // array of repo instances
-  GongdocStatuss = new Map<number, GongdocStatusDB>(); // map of repo instances
-  GongdocStatuss_batch = new Map<number, GongdocStatusDB>(); // same but only in last GET (for finding repo instances to delete)
   Links_array = new Array<LinkDB>(); // array of repo instances
   Links = new Map<number, LinkDB>(); // map of repo instances
   Links_batch = new Map<number, LinkDB>(); // same but only in last GET (for finding repo instances to delete)
@@ -153,7 +147,6 @@ export class FrontRepoService {
     private classshapeService: ClassshapeService,
     private diagrampackageService: DiagramPackageService,
     private fieldService: FieldService,
-    private gongdocstatusService: GongdocStatusService,
     private linkService: LinkService,
     private nodeService: NodeService,
     private noteService: NoteService,
@@ -197,7 +190,6 @@ export class FrontRepoService {
     Observable<ClassshapeDB[]>,
     Observable<DiagramPackageDB[]>,
     Observable<FieldDB[]>,
-    Observable<GongdocStatusDB[]>,
     Observable<LinkDB[]>,
     Observable<NodeDB[]>,
     Observable<NoteDB[]>,
@@ -212,7 +204,6 @@ export class FrontRepoService {
       this.classshapeService.getClassshapes(),
       this.diagrampackageService.getDiagramPackages(),
       this.fieldService.getFields(),
-      this.gongdocstatusService.getGongdocStatuss(),
       this.linkService.getLinks(),
       this.nodeService.getNodes(),
       this.noteService.getNotes(),
@@ -241,7 +232,6 @@ export class FrontRepoService {
             classshapes_,
             diagrampackages_,
             fields_,
-            gongdocstatuss_,
             links_,
             nodes_,
             notes_,
@@ -262,8 +252,6 @@ export class FrontRepoService {
             diagrampackages = diagrampackages_ as DiagramPackageDB[]
             var fields: FieldDB[]
             fields = fields_ as FieldDB[]
-            var gongdocstatuss: GongdocStatusDB[]
-            gongdocstatuss = gongdocstatuss_ as GongdocStatusDB[]
             var links: LinkDB[]
             links = links_ as LinkDB[]
             var nodes: NodeDB[]
@@ -409,39 +397,6 @@ export class FrontRepoService {
 
             // sort Fields_array array
             FrontRepoSingloton.Fields_array.sort((t1, t2) => {
-              if (t1.Name > t2.Name) {
-                return 1;
-              }
-              if (t1.Name < t2.Name) {
-                return -1;
-              }
-              return 0;
-            });
-
-            // init the array
-            FrontRepoSingloton.GongdocStatuss_array = gongdocstatuss
-
-            // clear the map that counts GongdocStatus in the GET
-            FrontRepoSingloton.GongdocStatuss_batch.clear()
-
-            gongdocstatuss.forEach(
-              gongdocstatus => {
-                FrontRepoSingloton.GongdocStatuss.set(gongdocstatus.ID, gongdocstatus)
-                FrontRepoSingloton.GongdocStatuss_batch.set(gongdocstatus.ID, gongdocstatus)
-              }
-            )
-
-            // clear gongdocstatuss that are absent from the batch
-            FrontRepoSingloton.GongdocStatuss.forEach(
-              gongdocstatus => {
-                if (FrontRepoSingloton.GongdocStatuss_batch.get(gongdocstatus.ID) == undefined) {
-                  FrontRepoSingloton.GongdocStatuss.delete(gongdocstatus.ID)
-                }
-              }
-            )
-
-            // sort GongdocStatuss_array array
-            FrontRepoSingloton.GongdocStatuss_array.sort((t1, t2) => {
               if (t1.Name > t2.Name) {
                 return 1;
               }
@@ -831,13 +786,6 @@ export class FrontRepoService {
                     }
                   }
                 }
-              }
-            )
-            gongdocstatuss.forEach(
-              gongdocstatus => {
-                // insertion point sub sub template for ONE-/ZERO-ONE associations pointers redeeming
-
-                // insertion point for redeeming ONE-MANY associations
               }
             )
             links.forEach(
@@ -1254,57 +1202,6 @@ export class FrontRepoService {
               field => {
                 if (FrontRepoSingloton.Fields_batch.get(field.ID) == undefined) {
                   FrontRepoSingloton.Fields.delete(field.ID)
-                }
-              }
-            )
-
-            // 
-            // Second Step: redeem pointers between instances (thanks to maps in the First Step)
-            // insertion point sub template 
-
-            // hand over control flow to observer
-            observer.next(FrontRepoSingloton)
-          }
-        )
-      }
-    )
-  }
-
-  // GongdocStatusPull performs a GET on GongdocStatus of the stack and redeem association pointers 
-  GongdocStatusPull(): Observable<FrontRepo> {
-    return new Observable<FrontRepo>(
-      (observer) => {
-        combineLatest([
-          this.gongdocstatusService.getGongdocStatuss()
-        ]).subscribe(
-          ([ // insertion point sub template 
-            gongdocstatuss,
-          ]) => {
-            // init the array
-            FrontRepoSingloton.GongdocStatuss_array = gongdocstatuss
-
-            // clear the map that counts GongdocStatus in the GET
-            FrontRepoSingloton.GongdocStatuss_batch.clear()
-
-            // 
-            // First Step: init map of instances
-            // insertion point sub template 
-            gongdocstatuss.forEach(
-              gongdocstatus => {
-                FrontRepoSingloton.GongdocStatuss.set(gongdocstatus.ID, gongdocstatus)
-                FrontRepoSingloton.GongdocStatuss_batch.set(gongdocstatus.ID, gongdocstatus)
-
-                // insertion point for redeeming ONE/ZERO-ONE associations
-
-                // insertion point for redeeming ONE-MANY associations
-              }
-            )
-
-            // clear gongdocstatuss that are absent from the GET
-            FrontRepoSingloton.GongdocStatuss.forEach(
-              gongdocstatus => {
-                if (FrontRepoSingloton.GongdocStatuss_batch.get(gongdocstatus.ID) == undefined) {
-                  FrontRepoSingloton.GongdocStatuss.delete(gongdocstatus.ID)
                 }
               }
             )
@@ -1893,33 +1790,30 @@ export function getDiagramPackageUniqueID(id: number): number {
 export function getFieldUniqueID(id: number): number {
   return 43 * id
 }
-export function getGongdocStatusUniqueID(id: number): number {
+export function getLinkUniqueID(id: number): number {
   return 47 * id
 }
-export function getLinkUniqueID(id: number): number {
+export function getNodeUniqueID(id: number): number {
   return 53 * id
 }
-export function getNodeUniqueID(id: number): number {
+export function getNoteUniqueID(id: number): number {
   return 59 * id
 }
-export function getNoteUniqueID(id: number): number {
+export function getPositionUniqueID(id: number): number {
   return 61 * id
 }
-export function getPositionUniqueID(id: number): number {
+export function getReferenceUniqueID(id: number): number {
   return 67 * id
 }
-export function getReferenceUniqueID(id: number): number {
+export function getTreeUniqueID(id: number): number {
   return 71 * id
 }
-export function getTreeUniqueID(id: number): number {
+export function getUmlStateUniqueID(id: number): number {
   return 73 * id
 }
-export function getUmlStateUniqueID(id: number): number {
+export function getUmlscUniqueID(id: number): number {
   return 79 * id
 }
-export function getUmlscUniqueID(id: number): number {
-  return 83 * id
-}
 export function getVerticeUniqueID(id: number): number {
-  return 89 * id
+  return 83 * id
 }

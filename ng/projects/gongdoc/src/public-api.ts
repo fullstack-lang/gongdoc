@@ -43,13 +43,6 @@ export * from './lib/fields-table/fields-table.component'
 export * from './lib/field-db'
 export * from './lib/field.service'
 
-export * from './lib/gongdocstatus-detail/gongdocstatus-detail.component'
-export * from './lib/gongdocstatus-presentation/gongdocstatus-presentation.component'
-export * from './lib/gongdocstatus-sorting/gongdocstatus-sorting.component'
-export * from './lib/gongdocstatuss-table/gongdocstatuss-table.component'
-export * from './lib/gongdocstatus-db'
-export * from './lib/gongdocstatus.service'
-
 export * from './lib/link-detail/link-detail.component'
 export * from './lib/link-presentation/link-presentation.component'
 export * from './lib/link-sorting/link-sorting.component'
@@ -114,8 +107,6 @@ export * from './lib/vertice-db'
 export * from './lib/vertice.service'
 
 
-export * from './lib/EditionMode'
-export * from './lib/GongdocCommandType'
 export * from './lib/GongdocNodeType'
 export * from './lib/MultiplicityType'
 export * from './lib/ReferenceType'

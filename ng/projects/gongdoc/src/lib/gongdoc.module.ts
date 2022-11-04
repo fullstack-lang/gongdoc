@@ -59,11 +59,6 @@ import { FieldSortingComponent } from './field-sorting/field-sorting.component'
 import { FieldDetailComponent } from './field-detail/field-detail.component'
 import { FieldPresentationComponent } from './field-presentation/field-presentation.component'
 
-import { GongdocStatussTableComponent } from './gongdocstatuss-table/gongdocstatuss-table.component'
-import { GongdocStatusSortingComponent } from './gongdocstatus-sorting/gongdocstatus-sorting.component'
-import { GongdocStatusDetailComponent } from './gongdocstatus-detail/gongdocstatus-detail.component'
-import { GongdocStatusPresentationComponent } from './gongdocstatus-presentation/gongdocstatus-presentation.component'
-
 import { LinksTableComponent } from './links-table/links-table.component'
 import { LinkSortingComponent } from './link-sorting/link-sorting.component'
 import { LinkDetailComponent } from './link-detail/link-detail.component'
@@ -132,11 +127,6 @@ import { VerticePresentationComponent } from './vertice-presentation/vertice-pre
 		FieldSortingComponent,
 		FieldDetailComponent,
 		FieldPresentationComponent,
-
-		GongdocStatussTableComponent,
-		GongdocStatusSortingComponent,
-		GongdocStatusDetailComponent,
-		GongdocStatusPresentationComponent,
 
 		LinksTableComponent,
 		LinkSortingComponent,
@@ -241,11 +231,6 @@ import { VerticePresentationComponent } from './vertice-presentation/vertice-pre
 		FieldSortingComponent,
 		FieldDetailComponent,
 		FieldPresentationComponent,
-
-		GongdocStatussTableComponent,
-		GongdocStatusSortingComponent,
-		GongdocStatusDetailComponent,
-		GongdocStatusPresentationComponent,
 
 		LinksTableComponent,
 		LinkSortingComponent,

@@ -71,13 +71,6 @@ func RegisterControllers(r *gin.Engine) {
 		v1.PUT("/v1/fields/:id", UpdateField)
 		v1.DELETE("/v1/fields/:id", DeleteField)
 
-		v1.GET("/v1/gongdocstatuss", GetGongdocStatuss)
-		v1.GET("/v1/gongdocstatuss/:id", GetGongdocStatus)
-		v1.POST("/v1/gongdocstatuss", PostGongdocStatus)
-		v1.PATCH("/v1/gongdocstatuss/:id", UpdateGongdocStatus)
-		v1.PUT("/v1/gongdocstatuss/:id", UpdateGongdocStatus)
-		v1.DELETE("/v1/gongdocstatuss/:id", DeleteGongdocStatus)
-
 		v1.GET("/v1/links", GetLinks)
 		v1.GET("/v1/links/:id", GetLink)
 		v1.POST("/v1/links", PostLink)

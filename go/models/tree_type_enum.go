@@ -14,7 +14,7 @@ const (
 
 	ROOT_OF_GONG_STRUCTS GongdocNodeType = "ROOT_OF_GONG_STRUCTS"
 	GONG_STRUCT          GongdocNodeType = "GONG_STRUCT"
-	GONG_FIELD           GongdocNodeType = "GONG_FIELD"
+	GONG_STRUCT_FIELD    GongdocNodeType = "GONG_STRUCT_FIELD"
 
 	ROOT_OF_GONG_ENUMS GongdocNodeType = "ROOT_OF_GONG_ENUMS"
 	GONG_ENUM          GongdocNodeType = "GONG_ENUM"

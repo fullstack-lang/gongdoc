@@ -19,8 +19,6 @@ import { DiagramPackageService } from '../diagrampackage.service'
 import { getDiagramPackageUniqueID } from '../front-repo.service'
 import { FieldService } from '../field.service'
 import { getFieldUniqueID } from '../front-repo.service'
-import { GongdocStatusService } from '../gongdocstatus.service'
-import { getGongdocStatusUniqueID } from '../front-repo.service'
 import { LinkService } from '../link.service'
 import { getLinkUniqueID } from '../front-repo.service'
 import { NodeService } from '../node.service'
@@ -185,7 +183,6 @@ export class SidebarComponent implements OnInit {
     private classshapeService: ClassshapeService,
     private diagrampackageService: DiagramPackageService,
     private fieldService: FieldService,
-    private gongdocstatusService: GongdocStatusService,
     private linkService: LinkService,
     private nodeService: NodeService,
     private noteService: NoteService,
@@ -248,14 +245,6 @@ export class SidebarComponent implements OnInit {
     )
     // observable for changes in structs
     this.fieldService.FieldServiceChanged.subscribe(
-      message => {
-        if (message == "post" || message == "update" || message == "delete") {
-          this.refresh()
-        }
-      }
-    )
-    // observable for changes in structs
-    this.gongdocstatusService.GongdocStatusServiceChanged.subscribe(
       message => {
         if (message == "post" || message == "update" || message == "delete") {
           this.refresh()
@@ -791,50 +780,6 @@ export class SidebarComponent implements OnInit {
             children: new Array<GongNode>()
           }
           fieldGongNodeStruct.children!.push(fieldGongNodeInstance)
-
-          // insertion point for per field code
-        }
-      )
-
-      /**
-      * fill up the GongdocStatus part of the mat tree
-      */
-      let gongdocstatusGongNodeStruct: GongNode = {
-        name: "GongdocStatus",
-        type: GongNodeType.STRUCT,
-        id: 0,
-        uniqueIdPerStack: 13 * nonInstanceNodeId,
-        structName: "GongdocStatus",
-        associationField: "",
-        associatedStructName: "",
-        children: new Array<GongNode>()
-      }
-      nonInstanceNodeId = nonInstanceNodeId + 1
-      this.gongNodeTree.push(gongdocstatusGongNodeStruct)
-
-      this.frontRepo.GongdocStatuss_array.sort((t1, t2) => {
-        if (t1.Name > t2.Name) {
-          return 1;
-        }
-        if (t1.Name < t2.Name) {
-          return -1;
-        }
-        return 0;
-      });
-
-      this.frontRepo.GongdocStatuss_array.forEach(
-        gongdocstatusDB => {
-          let gongdocstatusGongNodeInstance: GongNode = {
-            name: gongdocstatusDB.Name,
-            type: GongNodeType.INSTANCE,
-            id: gongdocstatusDB.ID,
-            uniqueIdPerStack: getGongdocStatusUniqueID(gongdocstatusDB.ID),
-            structName: "GongdocStatus",
-            associationField: "",
-            associatedStructName: "",
-            children: new Array<GongNode>()
-          }
-          gongdocstatusGongNodeStruct.children!.push(gongdocstatusGongNodeInstance)
 
           // insertion point for per field code
         }

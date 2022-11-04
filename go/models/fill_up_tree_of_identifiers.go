@@ -21,7 +21,7 @@ func FillUpTreeOfIdentifiers(pkgelt *DiagramPackage, onNodeCallbackStruct *NodeC
 
 		for _, field := range gongStruct.Fields {
 			node2 := (&Node{Name: field.GetName()}).Stage()
-			node2.Type = GONG_FIELD
+			node2.Type = GONG_STRUCT_FIELD
 			node2.Gongfield = field
 			node2.HasCheckboxButton = true
 			node.Children = append(node.Children, node2)
@@ -38,6 +38,7 @@ func FillUpTreeOfIdentifiers(pkgelt *DiagramPackage, onNodeCallbackStruct *NodeC
 		node.HasCheckboxButton = true
 		node.IsExpanded = true
 		node.Type = GONG_ENUM
+		node.GongEnum = gongEnum
 		gongenumRootNode.Children = append(gongenumRootNode.Children, node)
 
 		for _, value := range gongEnum.GongEnumValues {

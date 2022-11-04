@@ -137,7 +137,7 @@ var ClassshapeStore ClassshapeMap = make(map[string]*Classshape, 0)
 func (classshape *Classshape) Unmarshall(modelPkg *gong_models.ModelPkg, expr ast.Expr, fset *token.FileSet) {
 
 	// expression should be a composite literal expression
-	// models.Classshape{Position: uml.Position{X: 10, Y: 12}, Struct: &(models.Point{})}
+	// models.Classshape{Position: uml.Position{X: 10, Y: 12}, ReferencedGong: &(models.Point{})}
 	if cl, ok := expr.(*ast.CompositeLit); !ok {
 		log.Fatal("Expecting a composite litteral " +
 			fset.Position(expr.Pos()).String())

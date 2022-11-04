@@ -13,6 +13,7 @@ type Node struct {
 	Umlsc        *Umlsc
 	Gongstruct   *gong_models.GongStruct
 	Gongfield    gong_models.FieldInterface
+	GongEnum     *gong_models.GongEnum
 
 	IsExpanded bool
 
