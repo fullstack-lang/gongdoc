@@ -538,6 +538,8 @@ func (nodeCallbacksSingloton *NodeCallbacksSingloton) OnAfterUpdate(
 			// get the latest version of the diagram before modifying it
 			stage.Checkout()
 
+			classshape.Heigth = classshape.Heigth + 15
+
 			var field Field
 			field.Name = stagedNode.Name
 			field.Fieldname = stagedNode.Name
@@ -578,6 +580,22 @@ func (nodeCallbacksSingloton *NodeCallbacksSingloton) OnAfterUpdate(
 
 			// get the latest version of the diagram before modifying it
 			stage.Checkout()
+
+			{
+				var field *Field
+
+				for _, _field := range classshape.Fields {
+					if _field.Fieldname == stagedNode.Name {
+						field = _field
+					}
+				}
+				if field != nil {
+					classshape.Fields = remove(classshape.Fields, field)
+					classshape.Heigth = classshape.Heigth - 15
+					field.Unstage()
+				}
+			}
+
 			Stage.Commit()
 		}
 	}
