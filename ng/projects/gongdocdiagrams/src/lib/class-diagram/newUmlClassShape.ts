@@ -22,7 +22,7 @@ export function newUmlClassShape(classshape: gongdoc.ClassshapeDB,
         }
     }
 
-    let classShapeTitle = classshape.Structname
+    let classShapeTitle = classshape.ReferenceName
 
     // show nb of instances if necessary
     if (classshape.ShowNbInstances) {

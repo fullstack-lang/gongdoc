@@ -10,6 +10,15 @@ import (
 var NewDiagram uml.Classdiagram = uml.Classdiagram{
 	Classshapes: []*uml.Classshape{
 		{
+			Struct: &(models.LineType{}),
+			Position: &uml.Position{
+				X: 130.000000,
+				Y: 410.000000,
+			},
+			Width:  240.000000,
+			Heigth: 63.000000,
+		},
+		{
 			Struct: &(models.Point{}),
 			Position: &uml.Position{
 				X: 40.000000,

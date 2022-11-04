@@ -82,7 +82,7 @@ func (classdiagram *Classdiagram) MarshallAsVariable(file *os.File) error {
 	if len(classdiagram.Classshapes) > 0 {
 		// sort Classshapes
 		sort.Slice(classdiagram.Classshapes[:], func(i, j int) bool {
-			return classdiagram.Classshapes[i].Structname < classdiagram.Classshapes[j].Structname
+			return classdiagram.Classshapes[i].ReferenceName < classdiagram.Classshapes[j].ReferenceName
 		})
 		for _, classshape := range classdiagram.Classshapes {
 			classshape.Marshall(file, 2)
@@ -268,7 +268,7 @@ func (classdiagram *Classdiagram) OutputSVG(path string) {
 
 	mapStringClassshape := make(map[string]*Classshape)
 	for _, classshape := range classdiagram.Classshapes {
-		mapStringClassshape[classshape.Structname] = classshape
+		mapStringClassshape[classshape.ReferenceName] = classshape
 	}
 
 	dejaVuSerif := canvas.NewFontFamily("dejavu-serif")
@@ -354,7 +354,7 @@ func (classdiagram *Classdiagram) OutputSVG(path string) {
 		bottomLeftX := classshape.Position.X
 		bottomLeftY := ModelToSVGRectangleYOrigin(classshape.Position.Y, classshape.Heigth)
 
-		text := canvas.NewTextLine(ff, classshape.Structname, canvas.TextAlign(canvas.Left)) // simple text line
+		text := canvas.NewTextLine(ff, classshape.ReferenceName, canvas.TextAlign(canvas.Left)) // simple text line
 		p := canvas.Rectangle(classshape.Width, classshape.Heigth)
 
 		// draw the line below the name of the class
@@ -416,7 +416,7 @@ func (classdiagram *Classdiagram) RemoveClassshape(classshapeName string) {
 	for _, _classshape := range classdiagram.Classshapes {
 
 		// strange behavior when the classshape is remove within the loop
-		if _classshape.Structname == classshapeName && !foundClassshape {
+		if _classshape.ReferenceName == classshapeName && !foundClassshape {
 			classshape = _classshape
 		}
 	}
@@ -437,7 +437,7 @@ func (classdiagram *Classdiagram) RemoveClassshape(classshapeName string) {
 
 		newSliceOfLinks := make([]*Link, 0)
 		for _, link := range fromClassshape.Links {
-			if link.Fieldtypename == classshape.Structname {
+			if link.Fieldtypename == classshape.ReferenceName {
 				link.Middlevertice.Unstage()
 				link.Unstage()
 			} else {
@@ -459,18 +459,22 @@ func (classdiagram *Classdiagram) AddClassshape(classshapeName string) {
 
 	var classshape Classshape
 	classshape.Name = classdiagram.Name + "-" + classshapeName
-	classshape.Structname = classshapeName
+	classshape.ReferenceName = classshapeName
 	classshape.ClassshapeTargetType = STRUCT
 	classshape.Width = 240
 	classshape.Heigth = 63
 
 	// attach GongStruct to classshape
-	gongStruct, ok := (*GetGongstructInstancesMap[ReferenceIdentifier]())[classshape.Structname]
+	var referenceIdentifier *ReferenceIdentifier
+	var ok bool
+	referenceIdentifier, ok = (*GetGongstructInstancesMap[ReferenceIdentifier]())[classshape.ReferenceName]
 	if ok {
-		classshape.Reference = gongStruct
 		classshape.ShowNbInstances = true
-		classshape.NbInstances = gongStruct.NbInstances
+		classshape.NbInstances = referenceIdentifier.NbInstances
+	} else {
+		referenceIdentifier = (&ReferenceIdentifier{Name: classshape.ReferenceName}).Stage()
 	}
+	classshape.Reference = referenceIdentifier
 	classshape.Stage()
 
 	var position Position

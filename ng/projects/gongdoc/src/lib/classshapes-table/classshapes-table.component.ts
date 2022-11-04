@@ -74,8 +74,8 @@ export class ClassshapesTableComponent implements OnInit {
         case 'Position':
           return (classshapeDB.Position ? classshapeDB.Position.Name : '');
 
-        case 'Structname':
-          return classshapeDB.Structname;
+        case 'ReferenceName':
+          return classshapeDB.ReferenceName;
 
         case 'Reference':
           return (classshapeDB.Reference ? classshapeDB.Reference.Name : '');
@@ -123,7 +123,7 @@ export class ClassshapesTableComponent implements OnInit {
       if (classshapeDB.Position) {
         mergedContent += classshapeDB.Position.Name.toLowerCase()
       }
-      mergedContent += classshapeDB.Structname.toLowerCase()
+      mergedContent += classshapeDB.ReferenceName.toLowerCase()
       if (classshapeDB.Reference) {
         mergedContent += classshapeDB.Reference.Name.toLowerCase()
       }
@@ -187,7 +187,7 @@ export class ClassshapesTableComponent implements OnInit {
       this.displayedColumns = ['ID', 'Edit', 'Delete', // insertion point for columns to display
         "Name",
         "Position",
-        "Structname",
+        "ReferenceName",
         "Reference",
         "ShowNbInstances",
         "NbInstances",
@@ -201,7 +201,7 @@ export class ClassshapesTableComponent implements OnInit {
       this.displayedColumns = ['select', 'ID', // insertion point for columns to display
         "Name",
         "Position",
-        "Structname",
+        "ReferenceName",
         "Reference",
         "ShowNbInstances",
         "NbInstances",

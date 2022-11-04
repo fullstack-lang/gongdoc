@@ -221,7 +221,7 @@ export class ClassDiagramComponent implements OnInit, OnDestroy {
     umlClassShape.addTo(this.graph!);
 
     this.Map_CellId_ClassshapeDB.set(umlClassShape.id.toString(), classshape)
-    this.Map_GongStructName_JointjsUMLClassShape.set(classshape.Structname, umlClassShape)
+    this.Map_GongStructName_JointjsUMLClassShape.set(classshape.ReferenceName, umlClassShape)
 
     return umlClassShape
   }

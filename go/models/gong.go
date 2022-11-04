@@ -1962,8 +1962,8 @@ func (stage *StageStruct) Marshall(file *os.File, modelsPackageName, packageName
 
 		setValueField = StringInitStatement
 		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "Structname")
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", string(classshape.Structname))
+		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "ReferenceName")
+		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", string(classshape.ReferenceName))
 		initializerStatements += setValueField
 
 		setValueField = NumberInitStatement
@@ -3867,7 +3867,7 @@ func GetFields[Type Gongstruct]() (res []string) {
 	case Classdiagram:
 		res = []string{"Name", "Classshapes", "Notes", "IsInDrawMode"}
 	case Classshape:
-		res = []string{"Name", "Position", "Structname", "Reference", "ShowNbInstances", "NbInstances", "Fields", "Links", "Width", "Heigth", "ClassshapeTargetType", "IsSelected"}
+		res = []string{"Name", "Position", "ReferenceName", "Reference", "ShowNbInstances", "NbInstances", "Fields", "Links", "Width", "Heigth", "ClassshapeTargetType", "IsSelected"}
 	case DiagramPackage:
 		res = []string{"Name", "Path", "GongModelPath", "Classdiagrams", "Umlscs", "IsEditable"}
 	case Field:
@@ -3932,8 +3932,8 @@ func GetFieldStringValue[Type Gongstruct](instance Type, fieldName string) (res 
 			if any(instance).(Classshape).Position != nil {
 				res = any(instance).(Classshape).Position.Name
 			}
-		case "Structname":
-			res = any(instance).(Classshape).Structname
+		case "ReferenceName":
+			res = any(instance).(Classshape).ReferenceName
 		case "Reference":
 			if any(instance).(Classshape).Reference != nil {
 				res = any(instance).(Classshape).Reference.Name

@@ -75,8 +75,8 @@ type ClassshapeDB struct {
 	// Declation for basic field classshapeDB.Name
 	Name_Data sql.NullString
 
-	// Declation for basic field classshapeDB.Structname
-	Structname_Data sql.NullString
+	// Declation for basic field classshapeDB.ReferenceName
+	ReferenceName_Data sql.NullString
 
 	// Declation for basic field classshapeDB.ShowNbInstances
 	// provide the sql storage for the boolan
@@ -120,7 +120,7 @@ type ClassshapeWOP struct {
 
 	Name string `xlsx:"1"`
 
-	Structname string `xlsx:"2"`
+	ReferenceName string `xlsx:"2"`
 
 	ShowNbInstances bool `xlsx:"3"`
 
@@ -140,7 +140,7 @@ var Classshape_Fields = []string{
 	// insertion for WOP basic fields
 	"ID",
 	"Name",
-	"Structname",
+	"ReferenceName",
 	"ShowNbInstances",
 	"NbInstances",
 	"Width",
@@ -550,8 +550,8 @@ func (classshapeDB *ClassshapeDB) CopyBasicFieldsFromClassshape(classshape *mode
 	classshapeDB.Name_Data.String = classshape.Name
 	classshapeDB.Name_Data.Valid = true
 
-	classshapeDB.Structname_Data.String = classshape.Structname
-	classshapeDB.Structname_Data.Valid = true
+	classshapeDB.ReferenceName_Data.String = classshape.ReferenceName
+	classshapeDB.ReferenceName_Data.Valid = true
 
 	classshapeDB.ShowNbInstances_Data.Bool = classshape.ShowNbInstances
 	classshapeDB.ShowNbInstances_Data.Valid = true
@@ -579,8 +579,8 @@ func (classshapeDB *ClassshapeDB) CopyBasicFieldsFromClassshapeWOP(classshape *C
 	classshapeDB.Name_Data.String = classshape.Name
 	classshapeDB.Name_Data.Valid = true
 
-	classshapeDB.Structname_Data.String = classshape.Structname
-	classshapeDB.Structname_Data.Valid = true
+	classshapeDB.ReferenceName_Data.String = classshape.ReferenceName
+	classshapeDB.ReferenceName_Data.Valid = true
 
 	classshapeDB.ShowNbInstances_Data.Bool = classshape.ShowNbInstances
 	classshapeDB.ShowNbInstances_Data.Valid = true
@@ -605,7 +605,7 @@ func (classshapeDB *ClassshapeDB) CopyBasicFieldsFromClassshapeWOP(classshape *C
 func (classshapeDB *ClassshapeDB) CopyBasicFieldsToClassshape(classshape *models.Classshape) {
 	// insertion point for checkout of basic fields (back repo to stage)
 	classshape.Name = classshapeDB.Name_Data.String
-	classshape.Structname = classshapeDB.Structname_Data.String
+	classshape.ReferenceName = classshapeDB.ReferenceName_Data.String
 	classshape.ShowNbInstances = classshapeDB.ShowNbInstances_Data.Bool
 	classshape.NbInstances = int(classshapeDB.NbInstances_Data.Int64)
 	classshape.Width = classshapeDB.Width_Data.Float64
@@ -619,7 +619,7 @@ func (classshapeDB *ClassshapeDB) CopyBasicFieldsToClassshapeWOP(classshape *Cla
 	classshape.ID = int(classshapeDB.ID)
 	// insertion point for checkout of basic fields (back repo to stage)
 	classshape.Name = classshapeDB.Name_Data.String
-	classshape.Structname = classshapeDB.Structname_Data.String
+	classshape.ReferenceName = classshapeDB.ReferenceName_Data.String
 	classshape.ShowNbInstances = classshapeDB.ShowNbInstances_Data.Bool
 	classshape.NbInstances = int(classshapeDB.NbInstances_Data.Int64)
 	classshape.Width = classshapeDB.Width_Data.Float64

@@ -81,7 +81,7 @@ var defaultDiagram uml.Classdiagram = uml.Classdiagram{
 					Field: models.Classshape{}.Struct,
 				},
 				{
-					Field: models.Classshape{}.Structname,
+					Field: models.Classshape{}.ReferenceName,
 				},
 				{
 					Field: models.Classshape{}.Width,

@@ -25,8 +25,8 @@ type Classshape struct {
 
 	// swagger:ignore, an "interface" field cannot be used by gong, therefore, one specifies
 	// both swagger and gorm ignore magic code
-	Struct     interface{} `gorm:"-"` // pointer to the struct of the model that it is diagramming
-	Structname string
+	Struct        interface{} `gorm:"-"` // pointer to the struct of the model that it is diagramming
+	ReferenceName string
 
 	// the related gong struct or gong enum
 	Reference *ReferenceIdentifier
@@ -68,10 +68,10 @@ func (classshape *Classshape) Marshall(file *os.File, nbIndentation int) error {
 
 	indent(file, nbIndentation)
 	if classshape.ClassshapeTargetType == STRUCT {
-		fmt.Fprintf(file, "\tStruct: &(models.%s{}),\n", classshape.Structname)
+		fmt.Fprintf(file, "\tStruct: &(models.%s{}),\n", classshape.ReferenceName)
 	}
 	if classshape.ClassshapeTargetType == ENUM {
-		fmt.Fprintf(file, "\tStruct: new(models.%s),\n", classshape.Structname)
+		fmt.Fprintf(file, "\tStruct: new(models.%s),\n", classshape.ReferenceName)
 	}
 
 	if err := classshape.Position.Marshall(file, nbIndentation+1); err != nil {
@@ -201,11 +201,11 @@ func (classshape *Classshape) Unmarshall(modelPkg *gong_models.ModelPkg, expr as
 
 					// assign Strut
 					classshape.Struct = se.Sel.Name
-					classshape.Structname = se.Sel.Name
+					classshape.ReferenceName = se.Sel.Name
 					classshape.ClassshapeTargetType = STRUCT
 
 					// attach GongStruct to classshape
-					gongStruct, ok := (*GetGongstructInstancesMap[ReferenceIdentifier]())[classshape.Structname]
+					gongStruct, ok := (*GetGongstructInstancesMap[ReferenceIdentifier]())[classshape.ReferenceName]
 					if ok {
 						classshape.Reference = gongStruct
 						classshape.ShowNbInstances = true
@@ -234,7 +234,7 @@ func (classshape *Classshape) Unmarshall(modelPkg *gong_models.ModelPkg, expr as
 					}
 
 					classshape.Struct = se.Sel.Name
-					classshape.Structname = se.Sel.Name
+					classshape.ReferenceName = se.Sel.Name
 					classshape.ClassshapeTargetType = ENUM
 
 					if classshape.Name == "" {

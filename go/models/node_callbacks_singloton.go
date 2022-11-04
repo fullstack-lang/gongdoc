@@ -244,7 +244,7 @@ func (nodeCallbacksSingloton *NodeCallbacksSingloton) OnAfterUpdate(
 		var classshape *Classshape
 		for _, _classshape := range classdiagram.Classshapes {
 			// strange behavior when the classshape is remove within the loop
-			if _classshape.Structname == gongStruct.Name && !foundClassshape {
+			if _classshape.ReferenceName == gongStruct.Name && !foundClassshape {
 				classshape = _classshape
 			}
 		}
@@ -310,7 +310,7 @@ func (nodeCallbacksSingloton *NodeCallbacksSingloton) OnAfterUpdate(
 				case *gong_models.SliceOfPointerToGongStructField:
 				}
 
-				field.Structname = classshape.Structname
+				field.Structname = classshape.ReferenceName
 				field.Stage()
 
 				classshape.Heigth = classshape.Heigth + 15
@@ -374,7 +374,7 @@ func (nodeCallbacksSingloton *NodeCallbacksSingloton) OnAfterUpdate(
 				for _, _classshape := range classdiagram.Classshapes {
 
 					// strange behavior when the classshape is remove within the loop
-					if _classshape.Structname == targetStructName && !targetSourceClassshape {
+					if _classshape.ReferenceName == targetStructName && !targetSourceClassshape {
 						targetSourceClassshape = true
 						targetClassshape = _classshape
 					}
@@ -455,6 +455,48 @@ func (nodeCallbacksSingloton *NodeCallbacksSingloton) OnAfterUpdate(
 			classdiagram.Notes = remove(classdiagram.Notes, note)
 			note.Unstage()
 			Stage.Commit()
+		}
+	case GONG_ENUM:
+		// if node is unchecked
+		if stagedNode.IsChecked && !frontNode.IsChecked {
+
+			// get the latest version of the diagram before modifying it
+			stage.Checkout()
+
+			// remove the classshape from the selected diagram
+			for _, classdiagramNode := range nodeCallbacksSingloton.ClassdiagramsRootNode.Children {
+				if classdiagramNode.IsChecked {
+					// get the diagram
+					classDiagram := classdiagramNode.Classdiagram
+
+					// get the referenced gongstructs
+					for _, classshape := range classDiagram.Classshapes {
+						reference := classshape.Reference
+						if reference.Name == stagedNode.Name {
+							classDiagram.RemoveClassshape(reference.Name)
+						}
+					}
+				}
+
+				updateNodesStates(stage, nodeCallbacksSingloton)
+			}
+		}
+
+		// if node is checked, add classshape
+		if !stagedNode.IsChecked && frontNode.IsChecked {
+
+			// get the latest version of the diagram before modifying it
+			stage.Checkout()
+
+			for _, classdiagramNode := range nodeCallbacksSingloton.ClassdiagramsRootNode.Children {
+				if classdiagramNode.IsChecked {
+					// get the diagram
+					classDiagram := classdiagramNode.Classdiagram
+					classDiagram.AddClassshape(frontNode.Name)
+				}
+
+				updateNodesStates(stage, nodeCallbacksSingloton)
+			}
 		}
 	}
 
