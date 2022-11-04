@@ -10,9 +10,9 @@ import (
 var Diagram3 uml.Classdiagram = uml.Classdiagram{
 	Classshapes: []*uml.Classshape{
 		{
-			Struct: &(models.Line{}),
+			ReferencedGong: &(models.Line{}),
 			Position: &uml.Position{
-				X: 130.000000,
+				X: 110.000000,
 				Y: 40.000000,
 			},
 			Width:  400.000000,
@@ -36,10 +36,10 @@ var Diagram3 uml.Classdiagram = uml.Classdiagram{
 					Field: models.Line{}.JourneyTime,
 				},
 				{
-					Field: models.Line{}.LineType,
+					Field: models.Line{}.Name,
 				},
 				{
-					Field: models.Line{}.Name,
+					Field: models.Line{}.Type,
 				},
 				{
 					Field: models.Line{}.VeryLongLongLongLongLongLongField,
@@ -47,7 +47,7 @@ var Diagram3 uml.Classdiagram = uml.Classdiagram{
 			},
 		},
 		{
-			Struct: &(models.Point{}),
+			ReferencedGong: &(models.Point{}),
 			Position: &uml.Position{
 				X: 580.000000,
 				Y: 170.000000,
@@ -67,7 +67,7 @@ var Diagram3 uml.Classdiagram = uml.Classdiagram{
 			},
 		},
 		{
-			Struct: &(models.PointExclusiveSet{}),
+			ReferencedGong: &(models.PointExclusiveSet{}),
 			Position: &uml.Position{
 				X: 140.000000,
 				Y: 290.000000,
@@ -92,7 +92,7 @@ var Diagram3 uml.Classdiagram = uml.Classdiagram{
 			},
 		},
 		{
-			Struct: &(models.PointNonExclusiveSet{}),
+			ReferencedGong: &(models.PointNonExclusiveSet{}),
 			Position: &uml.Position{
 				X: 140.000000,
 				Y: 420.000000,
@@ -126,7 +126,7 @@ var Diagram3 uml.Classdiagram = uml.Classdiagram{
 			},
 		},
 		{
-			Struct: &(models.PointUse{}),
+			ReferencedGong: &(models.PointUse{}),
 			Position: &uml.Position{
 				X: 580.000000,
 				Y: 420.000000,
@@ -151,7 +151,7 @@ var Diagram3 uml.Classdiagram = uml.Classdiagram{
 			},
 		},
 	},
-	Notes: []*uml.Note{
+	Notes: []*uml.NoteShape{
 		{
 			Name: `Note on the models`,
 			Body: `This is an example of a note that
@@ -183,8 +183,8 @@ in the go code
 			Name: `Short note on the models`,
 			Body: `this is an of a short note
 `,
-			X:      50.000000,
-			Y:      190.000000,
+			X:      90.000000,
+			Y:      220.000000,
 			Width:  240.000000,
 			Heigth: 63.000000,
 		},

@@ -19,7 +19,6 @@ import (
 	"github.com/gin-gonic/gin"
 
 	gongdoc_controllers "github.com/fullstack-lang/gongdoc/go/controllers"
-	"github.com/fullstack-lang/gongdoc/go/models"
 	gongdoc_models "github.com/fullstack-lang/gongdoc/go/models"
 	gongdoc_orm "github.com/fullstack-lang/gongdoc/go/orm"
 
@@ -126,17 +125,22 @@ func main() {
 		c.Abort()
 	})
 
-	var pkgelt gongdoc_models.Pkgelt
-	pkgelt.Editable = true
+	var diagramPackage gongdoc_models.DiagramPackage
+	diagramPackage.IsEditable = true
 
-	// set up gong structs for pkgelet
-
+	// set up gong structs for diagram package
 	if *setUpRandomNumberOfInstances {
 		for gongStruct := range *gong_models.GetGongstructInstancesSet[gong_models.GongStruct]() {
 
 			// let create the gong struct in the gongdoc models
-			gongStruct_ := (&models.GongStruct{Name: gongStruct.Name}).Stage()
-			gongStruct_.NbInstances = rand.Intn(100)
+			var reference *gongdoc_models.Reference
+			var ok bool
+			reference, ok = (*gongdoc_models.GetGongstructInstancesMap[gongdoc_models.Reference]())[gongStruct.Name]
+			if !ok {
+				reference = (&gongdoc_models.Reference{Name: gongStruct.Name}).Stage()
+				reference.Type = gongdoc_models.REFERENCE_GONG_STRUCT
+			}
+			reference.NbInstances = rand.Intn(100)
 		}
 	}
 
@@ -169,30 +173,31 @@ func main() {
 		if len(pkgsParser) != 1 {
 			log.Println("Unable to parser, wrong number of parsers ", len(pkgsParser))
 		} else {
-			pkgelt.Unmarshall(modelPkg, pkgsParser["diagrams"], fset, diagramPkgPath)
-			pkgelt.Editable = *editable
+			diagramPackage.Unmarshall(modelPkg, pkgsParser["diagrams"], fset, diagramPkgPath)
+			diagramPackage.IsEditable = *editable
 		}
 	}
 
 	if *svg {
-		for _, classDiagram := range pkgelt.Classdiagrams {
+		for _, classDiagram := range diagramPackage.Classdiagrams {
 			classDiagram.OutputSVG(diagramPkgPath)
 		}
 		os.Exit(0)
 	}
 
 	if false {
-		for _, classDiagram := range pkgelt.Classdiagrams {
+		for _, classDiagram := range diagramPackage.Classdiagrams {
 			for _, classShape := range classDiagram.Classshapes {
 				classShape.ShowNbInstances = true
 				classShape.NbInstances = rand.Intn(100)
 			}
 		}
 	}
-	pkgelt.SerializeToStage()
-	gongdoc_models.Stage.Commit()
-	log.Printf("Parse found %d diagrams\n", len(pkgelt.Classdiagrams))
-	log.Printf("Server ready to serve on http://localhost:8080/")
+	diagramPackage.SerializeToStage()
+
+	gongdoc_models.FillUpNodeTree(&diagramPackage)
+	classshapeCallbackSingloton := new(gongdoc_models.ClassshapeCallbacksSingloton)
+	gongdoc_models.Stage.OnAfterClassshapeUpdateCallback = classshapeCallbackSingloton
 
 	r.Run(":8080")
 }

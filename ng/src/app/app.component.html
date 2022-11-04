@@ -1,5 +1,5 @@
 <as-split *ngIf="view==default" direction="vertical">
-    <as-split-area [size]=05>
+    <as-split-area [size]=03>
         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
         <mat-radio-group aria-label="Select an option" [(ngModel)]="view">
             <mat-radio-button *ngFor="let view of views" [value]="view">
@@ -7,13 +7,13 @@
             </mat-radio-button>
         </mat-radio-group>
     </as-split-area>
-    <as-split-area [size]=95>
+    <as-split-area [size]=97>
         <lib-pkgelt-docs></lib-pkgelt-docs>
     </as-split-area>
 </as-split>
 
 <as-split *ngIf="view==meta" direction="vertical">
-    <as-split-area [size]=05>
+    <as-split-area [size]=03>
         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
         <mat-radio-group aria-label="Select an option" [(ngModel)]="view">
             <mat-radio-button *ngFor="let view of views" [value]="view">
@@ -21,14 +21,14 @@
             </mat-radio-button>
         </mat-radio-group>
     </as-split-area>
-    <as-split-area [size]=95>
+    <as-split-area [size]=97>
         <app-gongdoc-splitter></app-gongdoc-splitter>
     </as-split-area>
 </as-split>
 
 
 <as-split *ngIf="view==gong" direction="vertical">
-    <as-split-area [size]=05>
+    <as-split-area [size]=03>
         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
         <mat-radio-group aria-label="Select an option" [(ngModel)]="view">
             <mat-radio-button *ngFor="let view of views" [value]="view">
@@ -36,7 +36,7 @@
             </mat-radio-button>
         </mat-radio-group>
     </as-split-area>
-    <as-split-area [size]=95>
+    <as-split-area [size]=97>
         <app-gong-splitter></app-gong-splitter>
     </as-split-area>
 </as-split>
