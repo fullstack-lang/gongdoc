@@ -24,6 +24,5 @@ var DiagramEnums uml.Classdiagram = uml.Classdiagram{
 			},
 		},
 	},
-	Notes: []*uml.Note{
-	},
+	Notes: []*uml.NoteShape{},
 }

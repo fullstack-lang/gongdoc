@@ -17,16 +17,37 @@ var Diagram2 uml.Classdiagram = uml.Classdiagram{
 			},
 			Width:  240.000000,
 			Heigth: 63.000000,
+			Links: []*uml.Link{
+				{
+					Field: models.Line{}.End,
+					Middlevertice: &uml.Vertice{
+						X: 452.500000,
+						Y: 346.000000,
+					},
+					TargetMultiplicity: "0..1",
+					SourceMultiplicity: "*",
+				},
+			},
 		},
 		{
 			ReferencedGong: &(models.Point{}),
 			Position: &uml.Position{
-				X: 450.000000,
-				Y: 170.000000,
+				X: 680.000000,
+				Y: 220.000000,
 			},
 			Width:  240.000000,
 			Heigth: 63.000000,
 		},
 	},
-	Notes: []*uml.NoteShape{},
+	Notes: []*uml.NoteShape{
+		{
+			Name: `Short note on the models`,
+			Body: `this is an of a short note
+`,
+			X:      430.000000,
+			Y:      100.000000,
+			Width:  240.000000,
+			Heigth: 63.000000,
+		},
+	},
 }
