@@ -151,7 +151,7 @@ var Diagram3 uml.Classdiagram = uml.Classdiagram{
 			},
 		},
 	},
-	Notes: []*uml.Note{
+	Notes: []*uml.NoteShape{
 		{
 			Name: `Note on the models`,
 			Body: `This is an example of a note that

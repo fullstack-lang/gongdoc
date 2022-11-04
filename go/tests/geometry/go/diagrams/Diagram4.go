@@ -73,5 +73,5 @@ var Diagram4 uml.Classdiagram = uml.Classdiagram{
 			Heigth: 63.000000,
 		},
 	},
-	Notes: []*uml.Note{},
+	Notes: []*uml.NoteShape{},
 }
