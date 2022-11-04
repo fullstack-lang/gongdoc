@@ -71,13 +71,6 @@ func RegisterControllers(r *gin.Engine) {
 		v1.PUT("/v1/fields/:id", UpdateField)
 		v1.DELETE("/v1/fields/:id", DeleteField)
 
-		v1.GET("/v1/gongstructs", GetGongStructs)
-		v1.GET("/v1/gongstructs/:id", GetGongStruct)
-		v1.POST("/v1/gongstructs", PostGongStruct)
-		v1.PATCH("/v1/gongstructs/:id", UpdateGongStruct)
-		v1.PUT("/v1/gongstructs/:id", UpdateGongStruct)
-		v1.DELETE("/v1/gongstructs/:id", DeleteGongStruct)
-
 		v1.GET("/v1/gongdocstatuss", GetGongdocStatuss)
 		v1.GET("/v1/gongdocstatuss/:id", GetGongdocStatus)
 		v1.POST("/v1/gongdocstatuss", PostGongdocStatus)
@@ -112,6 +105,13 @@ func RegisterControllers(r *gin.Engine) {
 		v1.PATCH("/v1/positions/:id", UpdatePosition)
 		v1.PUT("/v1/positions/:id", UpdatePosition)
 		v1.DELETE("/v1/positions/:id", DeletePosition)
+
+		v1.GET("/v1/referenceidentifiers", GetReferenceIdentifiers)
+		v1.GET("/v1/referenceidentifiers/:id", GetReferenceIdentifier)
+		v1.POST("/v1/referenceidentifiers", PostReferenceIdentifier)
+		v1.PATCH("/v1/referenceidentifiers/:id", UpdateReferenceIdentifier)
+		v1.PUT("/v1/referenceidentifiers/:id", UpdateReferenceIdentifier)
+		v1.DELETE("/v1/referenceidentifiers/:id", DeleteReferenceIdentifier)
 
 		v1.GET("/v1/trees", GetTrees)
 		v1.GET("/v1/trees/:id", GetTree)

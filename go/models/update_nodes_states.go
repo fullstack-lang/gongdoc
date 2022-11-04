@@ -82,7 +82,7 @@ func updateNodesStates(stage *StageStruct, callbacksSingloton *NodeCallbacksSing
 
 		// get the referenced gongstructs
 		for _, classshape := range classDiagram.Classshapes {
-			gongstruct := classshape.GongStruct
+			gongstruct := classshape.Reference
 			mapIdentifiersNodes[gongstruct.Name].IsChecked = true
 
 			// disable checkbox of all children of the gongstruct

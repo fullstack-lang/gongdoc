@@ -7,8 +7,6 @@
   import { DiagramPackageSortingComponent } from './diagrampackage-sorting/diagrampackage-sorting.component'
   import { FieldsTableComponent } from './fields-table/fields-table.component'
   import { FieldSortingComponent } from './field-sorting/field-sorting.component'
-  import { GongStructsTableComponent } from './gongstructs-table/gongstructs-table.component'
-  import { GongStructSortingComponent } from './gongstruct-sorting/gongstruct-sorting.component'
   import { GongdocStatussTableComponent } from './gongdocstatuss-table/gongdocstatuss-table.component'
   import { GongdocStatusSortingComponent } from './gongdocstatus-sorting/gongdocstatus-sorting.component'
   import { LinksTableComponent } from './links-table/links-table.component'
@@ -19,6 +17,8 @@
   import { NoteSortingComponent } from './note-sorting/note-sorting.component'
   import { PositionsTableComponent } from './positions-table/positions-table.component'
   import { PositionSortingComponent } from './position-sorting/position-sorting.component'
+  import { ReferenceIdentifiersTableComponent } from './referenceidentifiers-table/referenceidentifiers-table.component'
+  import { ReferenceIdentifierSortingComponent } from './referenceidentifier-sorting/referenceidentifier-sorting.component'
   import { TreesTableComponent } from './trees-table/trees-table.component'
   import { TreeSortingComponent } from './tree-sorting/tree-sorting.component'
   import { UmlStatesTableComponent } from './umlstates-table/umlstates-table.component'
@@ -37,8 +37,6 @@
   export const MapOfDiagramPackageSortingComponents: Map<string, any> = new Map([["DiagramPackageSortingComponent", DiagramPackageSortingComponent],])
   export const MapOfFieldsComponents: Map<string, any> = new Map([["FieldsTableComponent", FieldsTableComponent],])
   export const MapOfFieldSortingComponents: Map<string, any> = new Map([["FieldSortingComponent", FieldSortingComponent],])
-  export const MapOfGongStructsComponents: Map<string, any> = new Map([["GongStructsTableComponent", GongStructsTableComponent],])
-  export const MapOfGongStructSortingComponents: Map<string, any> = new Map([["GongStructSortingComponent", GongStructSortingComponent],])
   export const MapOfGongdocStatussComponents: Map<string, any> = new Map([["GongdocStatussTableComponent", GongdocStatussTableComponent],])
   export const MapOfGongdocStatusSortingComponents: Map<string, any> = new Map([["GongdocStatusSortingComponent", GongdocStatusSortingComponent],])
   export const MapOfLinksComponents: Map<string, any> = new Map([["LinksTableComponent", LinksTableComponent],])
@@ -49,6 +47,8 @@
   export const MapOfNoteSortingComponents: Map<string, any> = new Map([["NoteSortingComponent", NoteSortingComponent],])
   export const MapOfPositionsComponents: Map<string, any> = new Map([["PositionsTableComponent", PositionsTableComponent],])
   export const MapOfPositionSortingComponents: Map<string, any> = new Map([["PositionSortingComponent", PositionSortingComponent],])
+  export const MapOfReferenceIdentifiersComponents: Map<string, any> = new Map([["ReferenceIdentifiersTableComponent", ReferenceIdentifiersTableComponent],])
+  export const MapOfReferenceIdentifierSortingComponents: Map<string, any> = new Map([["ReferenceIdentifierSortingComponent", ReferenceIdentifierSortingComponent],])
   export const MapOfTreesComponents: Map<string, any> = new Map([["TreesTableComponent", TreesTableComponent],])
   export const MapOfTreeSortingComponents: Map<string, any> = new Map([["TreeSortingComponent", TreeSortingComponent],])
   export const MapOfUmlStatesComponents: Map<string, any> = new Map([["UmlStatesTableComponent", UmlStatesTableComponent],])
@@ -67,12 +67,12 @@ export const MapOfComponents: Map<string, any> =
       ["Classshape", MapOfClassshapesComponents],
       ["DiagramPackage", MapOfDiagramPackagesComponents],
       ["Field", MapOfFieldsComponents],
-      ["GongStruct", MapOfGongStructsComponents],
       ["GongdocStatus", MapOfGongdocStatussComponents],
       ["Link", MapOfLinksComponents],
       ["Node", MapOfNodesComponents],
       ["Note", MapOfNotesComponents],
       ["Position", MapOfPositionsComponents],
+      ["ReferenceIdentifier", MapOfReferenceIdentifiersComponents],
       ["Tree", MapOfTreesComponents],
       ["UmlState", MapOfUmlStatesComponents],
       ["Umlsc", MapOfUmlscsComponents],
@@ -89,12 +89,12 @@ export const MapOfSortingComponents: Map<string, any> =
       ["Classshape", MapOfClassshapeSortingComponents],
       ["DiagramPackage", MapOfDiagramPackageSortingComponents],
       ["Field", MapOfFieldSortingComponents],
-      ["GongStruct", MapOfGongStructSortingComponents],
       ["GongdocStatus", MapOfGongdocStatusSortingComponents],
       ["Link", MapOfLinkSortingComponents],
       ["Node", MapOfNodeSortingComponents],
       ["Note", MapOfNoteSortingComponents],
       ["Position", MapOfPositionSortingComponents],
+      ["ReferenceIdentifier", MapOfReferenceIdentifierSortingComponents],
       ["Tree", MapOfTreeSortingComponents],
       ["UmlState", MapOfUmlStateSortingComponents],
       ["Umlsc", MapOfUmlscSortingComponents],

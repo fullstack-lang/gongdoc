@@ -134,7 +134,7 @@ func main() {
 		for gongStruct := range *gong_models.GetGongstructInstancesSet[gong_models.GongStruct]() {
 
 			// let create the gong struct in the gongdoc models
-			gongStruct_ := (&gongdoc_models.GongStruct{Name: gongStruct.Name}).Stage()
+			gongStruct_ := (&gongdoc_models.ReferenceIdentifier{Name: gongStruct.Name}).Stage()
 			gongStruct_.NbInstances = rand.Intn(100)
 		}
 	}

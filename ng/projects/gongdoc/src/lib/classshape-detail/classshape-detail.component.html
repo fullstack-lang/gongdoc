@@ -52,11 +52,11 @@
     </mat-form-field>
 
     <mat-form-field class="detail-full-width">
-        <mat-label>GongStruct</mat-label>
-        <mat-select [compareWith]="compareObjects" [(value)]="classshape.GongStruct" (selectionChange)="fillUpNameIfEmpty($event)">
+        <mat-label>Reference</mat-label>
+        <mat-select [compareWith]="compareObjects" [(value)]="classshape.Reference" (selectionChange)="fillUpNameIfEmpty($event)">
             <mat-option>None</mat-option>
-            <mat-option *ngFor="let gongstruct of frontRepo.GongStructs_array" [value]="gongstruct">
-                {{gongstruct.Name}}
+            <mat-option *ngFor="let referenceidentifier of frontRepo.ReferenceIdentifiers_array" [value]="referenceidentifier">
+                {{referenceidentifier.Name}}
             </mat-option>
         </mat-select>
     </mat-form-field>

@@ -50,9 +50,9 @@ type ClassshapePointersEnconding struct {
 	// This field is generated into another field to enable AS ONE association
 	PositionID sql.NullInt64
 
-	// field GongStruct is a pointer to another Struct (optional or 0..1)
+	// field Reference is a pointer to another Struct (optional or 0..1)
 	// This field is generated into another field to enable AS ONE association
-	GongStructID sql.NullInt64
+	ReferenceID sql.NullInt64
 
 	// Implementation of a reverse ID for field Classdiagram{}.Classshapes []*Classshape
 	Classdiagram_ClassshapesDBID sql.NullInt64
@@ -299,12 +299,12 @@ func (backRepoClassshape *BackRepoClassshapeStruct) CommitPhaseTwoInstance(backR
 			}
 		}
 
-		// commit pointer value classshape.GongStruct translates to updating the classshape.GongStructID
-		classshapeDB.GongStructID.Valid = true // allow for a 0 value (nil association)
-		if classshape.GongStruct != nil {
-			if GongStructId, ok := (*backRepo.BackRepoGongStruct.Map_GongStructPtr_GongStructDBID)[classshape.GongStruct]; ok {
-				classshapeDB.GongStructID.Int64 = int64(GongStructId)
-				classshapeDB.GongStructID.Valid = true
+		// commit pointer value classshape.Reference translates to updating the classshape.ReferenceID
+		classshapeDB.ReferenceID.Valid = true // allow for a 0 value (nil association)
+		if classshape.Reference != nil {
+			if ReferenceId, ok := (*backRepo.BackRepoReferenceIdentifier.Map_ReferenceIdentifierPtr_ReferenceIdentifierDBID)[classshape.Reference]; ok {
+				classshapeDB.ReferenceID.Int64 = int64(ReferenceId)
+				classshapeDB.ReferenceID.Valid = true
 			}
 		}
 
@@ -455,9 +455,9 @@ func (backRepoClassshape *BackRepoClassshapeStruct) CheckoutPhaseTwoInstance(bac
 	if classshapeDB.PositionID.Int64 != 0 {
 		classshape.Position = (*backRepo.BackRepoPosition.Map_PositionDBID_PositionPtr)[uint(classshapeDB.PositionID.Int64)]
 	}
-	// GongStruct field
-	if classshapeDB.GongStructID.Int64 != 0 {
-		classshape.GongStruct = (*backRepo.BackRepoGongStruct.Map_GongStructDBID_GongStructPtr)[uint(classshapeDB.GongStructID.Int64)]
+	// Reference field
+	if classshapeDB.ReferenceID.Int64 != 0 {
+		classshape.Reference = (*backRepo.BackRepoReferenceIdentifier.Map_ReferenceIdentifierDBID_ReferenceIdentifierPtr)[uint(classshapeDB.ReferenceID.Int64)]
 	}
 	// This loop redeem classshape.Fields in the stage from the encode in the back repo
 	// It parses all FieldDB in the back repo and if the reverse pointer encoding matches the back repo ID
@@ -789,10 +789,10 @@ func (backRepoClassshape *BackRepoClassshapeStruct) RestorePhaseTwo() {
 			classshapeDB.PositionID.Valid = true
 		}
 
-		// reindexing GongStruct field
-		if classshapeDB.GongStructID.Int64 != 0 {
-			classshapeDB.GongStructID.Int64 = int64(BackRepoGongStructid_atBckpTime_newID[uint(classshapeDB.GongStructID.Int64)])
-			classshapeDB.GongStructID.Valid = true
+		// reindexing Reference field
+		if classshapeDB.ReferenceID.Int64 != 0 {
+			classshapeDB.ReferenceID.Int64 = int64(BackRepoReferenceIdentifierid_atBckpTime_newID[uint(classshapeDB.ReferenceID.Int64)])
+			classshapeDB.ReferenceID.Valid = true
 		}
 
 		// This reindex classshape.Classshapes

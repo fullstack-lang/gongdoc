@@ -2,8 +2,8 @@
 import { Component, OnInit } from '@angular/core';
 import { UntypedFormControl } from '@angular/forms';
 
-import { GongStructDB } from '../gongstruct-db'
-import { GongStructService } from '../gongstruct.service'
+import { ReferenceIdentifierDB } from '../referenceidentifier-db'
+import { ReferenceIdentifierService } from '../referenceidentifier.service'
 
 import { FrontRepoService, FrontRepo, SelectionMode, DialogData } from '../front-repo.service'
 import { MapOfComponents } from '../map-components'
@@ -17,25 +17,25 @@ import { MatDialog, MAT_DIALOG_DATA, MatDialogRef, MatDialogConfig } from '@angu
 
 import { NullInt64 } from '../null-int64'
 
-// GongStructDetailComponent is initilizaed from different routes
-// GongStructDetailComponentState detail different cases 
-enum GongStructDetailComponentState {
+// ReferenceIdentifierDetailComponent is initilizaed from different routes
+// ReferenceIdentifierDetailComponentState detail different cases 
+enum ReferenceIdentifierDetailComponentState {
 	CREATE_INSTANCE,
 	UPDATE_INSTANCE,
 	// insertion point for declarations of enum values of state
 }
 
 @Component({
-	selector: 'app-gongstruct-detail',
-	templateUrl: './gongstruct-detail.component.html',
-	styleUrls: ['./gongstruct-detail.component.css'],
+	selector: 'app-referenceidentifier-detail',
+	templateUrl: './referenceidentifier-detail.component.html',
+	styleUrls: ['./referenceidentifier-detail.component.css'],
 })
-export class GongStructDetailComponent implements OnInit {
+export class ReferenceIdentifierDetailComponent implements OnInit {
 
 	// insertion point for declarations
 
-	// the GongStructDB of interest
-	gongstruct: GongStructDB = new GongStructDB
+	// the ReferenceIdentifierDB of interest
+	referenceidentifier: ReferenceIdentifierDB = new ReferenceIdentifierDB
 
 	// front repo
 	frontRepo: FrontRepo = new FrontRepo
@@ -46,7 +46,7 @@ export class GongStructDetailComponent implements OnInit {
 	mapFields_displayAsTextArea = new Map<string, boolean>()
 
 	// the state at initialization (CREATION, UPDATE or CREATE with one association set)
-	state: GongStructDetailComponentState = GongStructDetailComponentState.CREATE_INSTANCE
+	state: ReferenceIdentifierDetailComponentState = ReferenceIdentifierDetailComponentState.CREATE_INSTANCE
 
 	// in UDPATE state, if is the id of the instance to update
 	// in CREATE state with one association set, this is the id of the associated instance
@@ -57,7 +57,7 @@ export class GongStructDetailComponent implements OnInit {
 	originStructFieldName: string = ""
 
 	constructor(
-		private gongstructService: GongStructService,
+		private referenceidentifierService: ReferenceIdentifierService,
 		private frontRepoService: FrontRepoService,
 		public dialog: MatDialog,
 		private route: ActivatedRoute,
@@ -74,10 +74,10 @@ export class GongStructDetailComponent implements OnInit {
 
 		const association = this.route.snapshot.paramMap.get('association');
 		if (this.id == 0) {
-			this.state = GongStructDetailComponentState.CREATE_INSTANCE
+			this.state = ReferenceIdentifierDetailComponentState.CREATE_INSTANCE
 		} else {
 			if (this.originStruct == undefined) {
-				this.state = GongStructDetailComponentState.UPDATE_INSTANCE
+				this.state = ReferenceIdentifierDetailComponentState.UPDATE_INSTANCE
 			} else {
 				switch (this.originStructFieldName) {
 					// insertion point for state computation
@@ -87,13 +87,13 @@ export class GongStructDetailComponent implements OnInit {
 			}
 		}
 
-		this.getGongStruct()
+		this.getReferenceIdentifier()
 
 		// observable for changes in structs
-		this.gongstructService.GongStructServiceChanged.subscribe(
+		this.referenceidentifierService.ReferenceIdentifierServiceChanged.subscribe(
 			message => {
 				if (message == "post" || message == "update" || message == "delete") {
-					this.getGongStruct()
+					this.getReferenceIdentifier()
 				}
 			}
 		)
@@ -101,20 +101,20 @@ export class GongStructDetailComponent implements OnInit {
 		// insertion point for initialisation of enums list
 	}
 
-	getGongStruct(): void {
+	getReferenceIdentifier(): void {
 
 		this.frontRepoService.pull().subscribe(
 			frontRepo => {
 				this.frontRepo = frontRepo
 
 				switch (this.state) {
-					case GongStructDetailComponentState.CREATE_INSTANCE:
-						this.gongstruct = new (GongStructDB)
+					case ReferenceIdentifierDetailComponentState.CREATE_INSTANCE:
+						this.referenceidentifier = new (ReferenceIdentifierDB)
 						break;
-					case GongStructDetailComponentState.UPDATE_INSTANCE:
-						let gongstruct = frontRepo.GongStructs.get(this.id)
-						console.assert(gongstruct != undefined, "missing gongstruct with id:" + this.id)
-						this.gongstruct = gongstruct!
+					case ReferenceIdentifierDetailComponentState.UPDATE_INSTANCE:
+						let referenceidentifier = frontRepo.ReferenceIdentifiers.get(this.id)
+						console.assert(referenceidentifier != undefined, "missing referenceidentifier with id:" + this.id)
+						this.referenceidentifier = referenceidentifier!
 						break;
 					// insertion point for init of association field
 					default:
@@ -140,16 +140,16 @@ export class GongStructDetailComponent implements OnInit {
 		// insertion point for translation/nullation of each pointers
 
 		switch (this.state) {
-			case GongStructDetailComponentState.UPDATE_INSTANCE:
-				this.gongstructService.updateGongStruct(this.gongstruct)
-					.subscribe(gongstruct => {
-						this.gongstructService.GongStructServiceChanged.next("update")
+			case ReferenceIdentifierDetailComponentState.UPDATE_INSTANCE:
+				this.referenceidentifierService.updateReferenceIdentifier(this.referenceidentifier)
+					.subscribe(referenceidentifier => {
+						this.referenceidentifierService.ReferenceIdentifierServiceChanged.next("update")
 					});
 				break;
 			default:
-				this.gongstructService.postGongStruct(this.gongstruct).subscribe(gongstruct => {
-					this.gongstructService.GongStructServiceChanged.next("post")
-					this.gongstruct = new (GongStructDB) // reset fields
+				this.referenceidentifierService.postReferenceIdentifier(this.referenceidentifier).subscribe(referenceidentifier => {
+					this.referenceidentifierService.ReferenceIdentifierServiceChanged.next("post")
+					this.referenceidentifier = new (ReferenceIdentifierDB) // reset fields
 				});
 		}
 	}
@@ -172,7 +172,7 @@ export class GongStructDetailComponent implements OnInit {
 		dialogConfig.height = "50%"
 		if (selectionMode == SelectionMode.ONE_MANY_ASSOCIATION_MODE) {
 
-			dialogData.ID = this.gongstruct.ID!
+			dialogData.ID = this.referenceidentifier.ID!
 			dialogData.ReversePointer = reverseField
 			dialogData.OrderingMode = false
 			dialogData.SelectionMode = selectionMode
@@ -188,13 +188,13 @@ export class GongStructDetailComponent implements OnInit {
 			});
 		}
 		if (selectionMode == SelectionMode.MANY_MANY_ASSOCIATION_MODE) {
-			dialogData.ID = this.gongstruct.ID!
+			dialogData.ID = this.referenceidentifier.ID!
 			dialogData.ReversePointer = reverseField
 			dialogData.OrderingMode = false
 			dialogData.SelectionMode = selectionMode
 
 			// set up the source
-			dialogData.SourceStruct = "GongStruct"
+			dialogData.SourceStruct = "ReferenceIdentifier"
 			dialogData.SourceField = sourceField
 
 			// set up the intermediate struct
@@ -224,7 +224,7 @@ export class GongStructDetailComponent implements OnInit {
 		// dialogConfig.disableClose = true;
 		dialogConfig.autoFocus = true;
 		dialogConfig.data = {
-			ID: this.gongstruct.ID,
+			ID: this.referenceidentifier.ID,
 			ReversePointer: reverseField,
 			OrderingMode: true,
 		};
@@ -240,8 +240,8 @@ export class GongStructDetailComponent implements OnInit {
 	}
 
 	fillUpNameIfEmpty(event: { value: { Name: string; }; }) {
-		if (this.gongstruct.Name == "") {
-			this.gongstruct.Name = event.value.Name
+		if (this.referenceidentifier.Name == "") {
+			this.referenceidentifier.Name = event.value.Name
 		}
 	}
 

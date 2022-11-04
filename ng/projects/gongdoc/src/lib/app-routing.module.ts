@@ -18,10 +18,6 @@ import { FieldsTableComponent } from './fields-table/fields-table.component'
 import { FieldDetailComponent } from './field-detail/field-detail.component'
 import { FieldPresentationComponent } from './field-presentation/field-presentation.component'
 
-import { GongStructsTableComponent } from './gongstructs-table/gongstructs-table.component'
-import { GongStructDetailComponent } from './gongstruct-detail/gongstruct-detail.component'
-import { GongStructPresentationComponent } from './gongstruct-presentation/gongstruct-presentation.component'
-
 import { GongdocStatussTableComponent } from './gongdocstatuss-table/gongdocstatuss-table.component'
 import { GongdocStatusDetailComponent } from './gongdocstatus-detail/gongdocstatus-detail.component'
 import { GongdocStatusPresentationComponent } from './gongdocstatus-presentation/gongdocstatus-presentation.component'
@@ -41,6 +37,10 @@ import { NotePresentationComponent } from './note-presentation/note-presentation
 import { PositionsTableComponent } from './positions-table/positions-table.component'
 import { PositionDetailComponent } from './position-detail/position-detail.component'
 import { PositionPresentationComponent } from './position-presentation/position-presentation.component'
+
+import { ReferenceIdentifiersTableComponent } from './referenceidentifiers-table/referenceidentifiers-table.component'
+import { ReferenceIdentifierDetailComponent } from './referenceidentifier-detail/referenceidentifier-detail.component'
+import { ReferenceIdentifierPresentationComponent } from './referenceidentifier-presentation/referenceidentifier-presentation.component'
 
 import { TreesTableComponent } from './trees-table/trees-table.component'
 import { TreeDetailComponent } from './tree-detail/tree-detail.component'
@@ -88,13 +88,6 @@ const routes: Routes = [ // insertion point for routes declarations
 	{ path: 'github_com_fullstack_lang_gongdoc_go-field-presentation/:id', component: FieldPresentationComponent, outlet: 'github_com_fullstack_lang_gongdoc_go_presentation' },
 	{ path: 'github_com_fullstack_lang_gongdoc_go-field-presentation-special/:id', component: FieldPresentationComponent, outlet: 'github_com_fullstack_lang_gongdoc_gofieldpres' },
 
-	{ path: 'github_com_fullstack_lang_gongdoc_go-gongstructs', component: GongStructsTableComponent, outlet: 'github_com_fullstack_lang_gongdoc_go_table' },
-	{ path: 'github_com_fullstack_lang_gongdoc_go-gongstruct-adder', component: GongStructDetailComponent, outlet: 'github_com_fullstack_lang_gongdoc_go_editor' },
-	{ path: 'github_com_fullstack_lang_gongdoc_go-gongstruct-adder/:id/:originStruct/:originStructFieldName', component: GongStructDetailComponent, outlet: 'github_com_fullstack_lang_gongdoc_go_editor' },
-	{ path: 'github_com_fullstack_lang_gongdoc_go-gongstruct-detail/:id', component: GongStructDetailComponent, outlet: 'github_com_fullstack_lang_gongdoc_go_editor' },
-	{ path: 'github_com_fullstack_lang_gongdoc_go-gongstruct-presentation/:id', component: GongStructPresentationComponent, outlet: 'github_com_fullstack_lang_gongdoc_go_presentation' },
-	{ path: 'github_com_fullstack_lang_gongdoc_go-gongstruct-presentation-special/:id', component: GongStructPresentationComponent, outlet: 'github_com_fullstack_lang_gongdoc_gogongstructpres' },
-
 	{ path: 'github_com_fullstack_lang_gongdoc_go-gongdocstatuss', component: GongdocStatussTableComponent, outlet: 'github_com_fullstack_lang_gongdoc_go_table' },
 	{ path: 'github_com_fullstack_lang_gongdoc_go-gongdocstatus-adder', component: GongdocStatusDetailComponent, outlet: 'github_com_fullstack_lang_gongdoc_go_editor' },
 	{ path: 'github_com_fullstack_lang_gongdoc_go-gongdocstatus-adder/:id/:originStruct/:originStructFieldName', component: GongdocStatusDetailComponent, outlet: 'github_com_fullstack_lang_gongdoc_go_editor' },
@@ -129,6 +122,13 @@ const routes: Routes = [ // insertion point for routes declarations
 	{ path: 'github_com_fullstack_lang_gongdoc_go-position-detail/:id', component: PositionDetailComponent, outlet: 'github_com_fullstack_lang_gongdoc_go_editor' },
 	{ path: 'github_com_fullstack_lang_gongdoc_go-position-presentation/:id', component: PositionPresentationComponent, outlet: 'github_com_fullstack_lang_gongdoc_go_presentation' },
 	{ path: 'github_com_fullstack_lang_gongdoc_go-position-presentation-special/:id', component: PositionPresentationComponent, outlet: 'github_com_fullstack_lang_gongdoc_gopositionpres' },
+
+	{ path: 'github_com_fullstack_lang_gongdoc_go-referenceidentifiers', component: ReferenceIdentifiersTableComponent, outlet: 'github_com_fullstack_lang_gongdoc_go_table' },
+	{ path: 'github_com_fullstack_lang_gongdoc_go-referenceidentifier-adder', component: ReferenceIdentifierDetailComponent, outlet: 'github_com_fullstack_lang_gongdoc_go_editor' },
+	{ path: 'github_com_fullstack_lang_gongdoc_go-referenceidentifier-adder/:id/:originStruct/:originStructFieldName', component: ReferenceIdentifierDetailComponent, outlet: 'github_com_fullstack_lang_gongdoc_go_editor' },
+	{ path: 'github_com_fullstack_lang_gongdoc_go-referenceidentifier-detail/:id', component: ReferenceIdentifierDetailComponent, outlet: 'github_com_fullstack_lang_gongdoc_go_editor' },
+	{ path: 'github_com_fullstack_lang_gongdoc_go-referenceidentifier-presentation/:id', component: ReferenceIdentifierPresentationComponent, outlet: 'github_com_fullstack_lang_gongdoc_go_presentation' },
+	{ path: 'github_com_fullstack_lang_gongdoc_go-referenceidentifier-presentation-special/:id', component: ReferenceIdentifierPresentationComponent, outlet: 'github_com_fullstack_lang_gongdoc_goreferenceidentifierpres' },
 
 	{ path: 'github_com_fullstack_lang_gongdoc_go-trees', component: TreesTableComponent, outlet: 'github_com_fullstack_lang_gongdoc_go_table' },
 	{ path: 'github_com_fullstack_lang_gongdoc_go-tree-adder', component: TreeDetailComponent, outlet: 'github_com_fullstack_lang_gongdoc_go_editor' },

@@ -465,9 +465,9 @@ func (classdiagram *Classdiagram) AddClassshape(classshapeName string) {
 	classshape.Heigth = 63
 
 	// attach GongStruct to classshape
-	gongStruct, ok := Stage.GongStructs_mapString[classshape.Structname]
+	gongStruct, ok := (*GetGongstructInstancesMap[ReferenceIdentifier]())[classshape.Structname]
 	if ok {
-		classshape.GongStruct = gongStruct
+		classshape.Reference = gongStruct
 		classshape.ShowNbInstances = true
 		classshape.NbInstances = gongStruct.NbInstances
 	}

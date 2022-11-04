@@ -192,7 +192,7 @@ func (nodeCallbacksSingloton *NodeCallbacksSingloton) OnAfterUpdate(
 
 					// get the referenced gongstructs
 					for _, classshape := range classDiagram.Classshapes {
-						gongstruct := classshape.GongStruct
+						gongstruct := classshape.Reference
 						if gongstruct.Name == stagedNode.Name {
 							classDiagram.RemoveClassshape(gongstruct.Name)
 						}
@@ -323,7 +323,7 @@ func (nodeCallbacksSingloton *NodeCallbacksSingloton) OnAfterUpdate(
 				indexOfFieldToInsertInTheOriginalGongStruct := 0
 
 				// let's compute it by parsing the field of the gongstruct
-				gongStruct_ := gong_models.Stage.GongStructs_mapString[gongStruct.Name]
+				gongStruct_ := (*gong_models.GetGongstructInstancesMap[gong_models.GongStruct]())[gongStruct.Name]
 				for idx, gongField := range gongStruct_.Fields {
 
 					rankOfFieldsInTheOriginalGongStruct[gongField] = idx

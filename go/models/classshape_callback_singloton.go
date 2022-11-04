@@ -17,8 +17,8 @@ func (classshapeCallbacksSingloton *ClassshapeCallbacksSingloton) OnAfterUpdate(
 		stagedClassshape.IsSelected = false
 		stagedClassshape.Commit()
 
-		log.Println("UML Shape selected ", stagedClassshape.GongStruct.Name)
-		gongStruct, ok := Stage.GongStructs_mapString[stagedClassshape.GongStruct.Name]
+		log.Println("UML Shape selected ", stagedClassshape.Reference.Name)
+		gongStruct, ok := (*GetGongstructInstancesMap[ReferenceIdentifier]())[stagedClassshape.Reference.Name]
 		if ok {
 			if classshapeCallbacksSingloton.ClassshapeCallback != nil {
 				classshapeCallbacksSingloton.ClassshapeCallback.HasSelected(gongStruct.Name)

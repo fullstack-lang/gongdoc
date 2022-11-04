@@ -28,8 +28,8 @@ type Classshape struct {
 	Struct     interface{} `gorm:"-"` // pointer to the struct of the model that it is diagramming
 	Structname string
 
-	// the related gong struct
-	GongStruct *GongStruct
+	// the related gong struct or gong enum
+	Reference *ReferenceIdentifier
 
 	// gongdoc can be integrated in a runtime application
 	// the application can then set up the number of instances of Struct
@@ -205,9 +205,9 @@ func (classshape *Classshape) Unmarshall(modelPkg *gong_models.ModelPkg, expr as
 					classshape.ClassshapeTargetType = STRUCT
 
 					// attach GongStruct to classshape
-					gongStruct, ok := Stage.GongStructs_mapString[classshape.Structname]
+					gongStruct, ok := (*GetGongstructInstancesMap[ReferenceIdentifier]())[classshape.Structname]
 					if ok {
-						classshape.GongStruct = gongStruct
+						classshape.Reference = gongStruct
 						classshape.ShowNbInstances = true
 						classshape.NbInstances = gongStruct.NbInstances
 					}

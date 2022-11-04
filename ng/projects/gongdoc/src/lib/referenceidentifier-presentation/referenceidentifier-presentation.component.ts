@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 
-import { GongStructDB } from '../gongstruct-db'
-import { GongStructService } from '../gongstruct.service'
+import { ReferenceIdentifierDB } from '../referenceidentifier-db'
+import { ReferenceIdentifierService } from '../referenceidentifier.service'
 
 import { FrontRepoService, FrontRepo } from '../front-repo.service'
 
@@ -10,18 +10,18 @@ import { Router, RouterState, ActivatedRoute } from '@angular/router';
 
 // insertion point for additional imports
 
-export interface gongstructDummyElement {
+export interface referenceidentifierDummyElement {
 }
 
-const ELEMENT_DATA: gongstructDummyElement[] = [
+const ELEMENT_DATA: referenceidentifierDummyElement[] = [
 ];
 
 @Component({
-	selector: 'app-gongstruct-presentation',
-	templateUrl: './gongstruct-presentation.component.html',
-	styleUrls: ['./gongstruct-presentation.component.css'],
+	selector: 'app-referenceidentifier-presentation',
+	templateUrl: './referenceidentifier-presentation.component.html',
+	styleUrls: ['./referenceidentifier-presentation.component.css'],
 })
-export class GongStructPresentationComponent implements OnInit {
+export class ReferenceIdentifierPresentationComponent implements OnInit {
 
 	// insertion point for additionnal time duration declarations
 	// insertion point for additionnal enum int field declarations
@@ -29,13 +29,13 @@ export class GongStructPresentationComponent implements OnInit {
 	displayedColumns: string[] = []
 	dataSource = ELEMENT_DATA
 
-	gongstruct: GongStructDB = new (GongStructDB)
+	referenceidentifier: ReferenceIdentifierDB = new (ReferenceIdentifierDB)
 
 	// front repo
 	frontRepo: FrontRepo = new (FrontRepo)
  
 	constructor(
-		private gongstructService: GongStructService,
+		private referenceidentifierService: ReferenceIdentifierService,
 		private frontRepoService: FrontRepoService,
 		private route: ActivatedRoute,
 		private router: Router,
@@ -46,25 +46,25 @@ export class GongStructPresentationComponent implements OnInit {
 	}
 
 	ngOnInit(): void {
-		this.getGongStruct();
+		this.getReferenceIdentifier();
 
 		// observable for changes in 
-		this.gongstructService.GongStructServiceChanged.subscribe(
+		this.referenceidentifierService.ReferenceIdentifierServiceChanged.subscribe(
 			message => {
 				if (message == "update") {
-					this.getGongStruct()
+					this.getReferenceIdentifier()
 				}
 			}
 		)
 	}
 
-	getGongStruct(): void {
+	getReferenceIdentifier(): void {
 		const id = +this.route.snapshot.paramMap.get('id')!
 		this.frontRepoService.pull().subscribe(
 			frontRepo => {
 				this.frontRepo = frontRepo
 
-				this.gongstruct = this.frontRepo.GongStructs.get(id)!
+				this.referenceidentifier = this.frontRepo.ReferenceIdentifiers.get(id)!
 
 				// insertion point for recovery of durations
 				// insertion point for recovery of enum tint
@@ -85,7 +85,7 @@ export class GongStructPresentationComponent implements OnInit {
 	setEditorRouterOutlet(ID: number) {
 		this.router.navigate([{
 			outlets: {
-				github_com_fullstack_lang_gongdoc_go_editor: ["github_com_fullstack_lang_gongdoc_go-" + "gongstruct-detail", ID]
+				github_com_fullstack_lang_gongdoc_go_editor: ["github_com_fullstack_lang_gongdoc_go-" + "referenceidentifier-detail", ID]
 			}
 		}]);
 	}

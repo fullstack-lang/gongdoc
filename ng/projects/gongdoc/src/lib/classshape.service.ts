@@ -15,7 +15,7 @@ import { ClassshapeDB } from './classshape-db';
 
 // insertion point for imports
 import { PositionDB } from './position-db'
-import { GongStructDB } from './gongstruct-db'
+import { ReferenceIdentifierDB } from './referenceidentifier-db'
 import { ClassdiagramDB } from './classdiagram-db'
 
 @Injectable({
@@ -74,7 +74,7 @@ export class ClassshapeService {
 
     // insertion point for reset of pointers and reverse pointers (to avoid circular JSON)
     classshapedb.Position = new PositionDB
-    classshapedb.GongStruct = new GongStructDB
+    classshapedb.Reference = new ReferenceIdentifierDB
     classshapedb.Fields = []
     classshapedb.Links = []
     let _Classdiagram_Classshapes_reverse = classshapedb.Classdiagram_Classshapes_reverse
@@ -108,7 +108,7 @@ export class ClassshapeService {
 
     // insertion point for reset of pointers and reverse pointers (to avoid circular JSON)
     classshapedb.Position = new PositionDB
-    classshapedb.GongStruct = new GongStructDB
+    classshapedb.Reference = new ReferenceIdentifierDB
     classshapedb.Fields = []
     classshapedb.Links = []
     let _Classdiagram_Classshapes_reverse = classshapedb.Classdiagram_Classshapes_reverse

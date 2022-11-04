@@ -59,11 +59,6 @@ import { FieldSortingComponent } from './field-sorting/field-sorting.component'
 import { FieldDetailComponent } from './field-detail/field-detail.component'
 import { FieldPresentationComponent } from './field-presentation/field-presentation.component'
 
-import { GongStructsTableComponent } from './gongstructs-table/gongstructs-table.component'
-import { GongStructSortingComponent } from './gongstruct-sorting/gongstruct-sorting.component'
-import { GongStructDetailComponent } from './gongstruct-detail/gongstruct-detail.component'
-import { GongStructPresentationComponent } from './gongstruct-presentation/gongstruct-presentation.component'
-
 import { GongdocStatussTableComponent } from './gongdocstatuss-table/gongdocstatuss-table.component'
 import { GongdocStatusSortingComponent } from './gongdocstatus-sorting/gongdocstatus-sorting.component'
 import { GongdocStatusDetailComponent } from './gongdocstatus-detail/gongdocstatus-detail.component'
@@ -88,6 +83,11 @@ import { PositionsTableComponent } from './positions-table/positions-table.compo
 import { PositionSortingComponent } from './position-sorting/position-sorting.component'
 import { PositionDetailComponent } from './position-detail/position-detail.component'
 import { PositionPresentationComponent } from './position-presentation/position-presentation.component'
+
+import { ReferenceIdentifiersTableComponent } from './referenceidentifiers-table/referenceidentifiers-table.component'
+import { ReferenceIdentifierSortingComponent } from './referenceidentifier-sorting/referenceidentifier-sorting.component'
+import { ReferenceIdentifierDetailComponent } from './referenceidentifier-detail/referenceidentifier-detail.component'
+import { ReferenceIdentifierPresentationComponent } from './referenceidentifier-presentation/referenceidentifier-presentation.component'
 
 import { TreesTableComponent } from './trees-table/trees-table.component'
 import { TreeSortingComponent } from './tree-sorting/tree-sorting.component'
@@ -133,11 +133,6 @@ import { VerticePresentationComponent } from './vertice-presentation/vertice-pre
 		FieldDetailComponent,
 		FieldPresentationComponent,
 
-		GongStructsTableComponent,
-		GongStructSortingComponent,
-		GongStructDetailComponent,
-		GongStructPresentationComponent,
-
 		GongdocStatussTableComponent,
 		GongdocStatusSortingComponent,
 		GongdocStatusDetailComponent,
@@ -162,6 +157,11 @@ import { VerticePresentationComponent } from './vertice-presentation/vertice-pre
 		PositionSortingComponent,
 		PositionDetailComponent,
 		PositionPresentationComponent,
+
+		ReferenceIdentifiersTableComponent,
+		ReferenceIdentifierSortingComponent,
+		ReferenceIdentifierDetailComponent,
+		ReferenceIdentifierPresentationComponent,
 
 		TreesTableComponent,
 		TreeSortingComponent,
@@ -242,11 +242,6 @@ import { VerticePresentationComponent } from './vertice-presentation/vertice-pre
 		FieldDetailComponent,
 		FieldPresentationComponent,
 
-		GongStructsTableComponent,
-		GongStructSortingComponent,
-		GongStructDetailComponent,
-		GongStructPresentationComponent,
-
 		GongdocStatussTableComponent,
 		GongdocStatusSortingComponent,
 		GongdocStatusDetailComponent,
@@ -271,6 +266,11 @@ import { VerticePresentationComponent } from './vertice-presentation/vertice-pre
 		PositionSortingComponent,
 		PositionDetailComponent,
 		PositionPresentationComponent,
+
+		ReferenceIdentifiersTableComponent,
+		ReferenceIdentifierSortingComponent,
+		ReferenceIdentifierDetailComponent,
+		ReferenceIdentifierPresentationComponent,
 
 		TreesTableComponent,
 		TreeSortingComponent,
