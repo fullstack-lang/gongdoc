@@ -38,9 +38,9 @@ import { PositionsTableComponent } from './positions-table/positions-table.compo
 import { PositionDetailComponent } from './position-detail/position-detail.component'
 import { PositionPresentationComponent } from './position-presentation/position-presentation.component'
 
-import { ReferenceIdentifiersTableComponent } from './referenceidentifiers-table/referenceidentifiers-table.component'
-import { ReferenceIdentifierDetailComponent } from './referenceidentifier-detail/referenceidentifier-detail.component'
-import { ReferenceIdentifierPresentationComponent } from './referenceidentifier-presentation/referenceidentifier-presentation.component'
+import { ReferencesTableComponent } from './references-table/references-table.component'
+import { ReferenceDetailComponent } from './reference-detail/reference-detail.component'
+import { ReferencePresentationComponent } from './reference-presentation/reference-presentation.component'
 
 import { TreesTableComponent } from './trees-table/trees-table.component'
 import { TreeDetailComponent } from './tree-detail/tree-detail.component'
@@ -123,12 +123,12 @@ const routes: Routes = [ // insertion point for routes declarations
 	{ path: 'github_com_fullstack_lang_gongdoc_go-position-presentation/:id', component: PositionPresentationComponent, outlet: 'github_com_fullstack_lang_gongdoc_go_presentation' },
 	{ path: 'github_com_fullstack_lang_gongdoc_go-position-presentation-special/:id', component: PositionPresentationComponent, outlet: 'github_com_fullstack_lang_gongdoc_gopositionpres' },
 
-	{ path: 'github_com_fullstack_lang_gongdoc_go-referenceidentifiers', component: ReferenceIdentifiersTableComponent, outlet: 'github_com_fullstack_lang_gongdoc_go_table' },
-	{ path: 'github_com_fullstack_lang_gongdoc_go-referenceidentifier-adder', component: ReferenceIdentifierDetailComponent, outlet: 'github_com_fullstack_lang_gongdoc_go_editor' },
-	{ path: 'github_com_fullstack_lang_gongdoc_go-referenceidentifier-adder/:id/:originStruct/:originStructFieldName', component: ReferenceIdentifierDetailComponent, outlet: 'github_com_fullstack_lang_gongdoc_go_editor' },
-	{ path: 'github_com_fullstack_lang_gongdoc_go-referenceidentifier-detail/:id', component: ReferenceIdentifierDetailComponent, outlet: 'github_com_fullstack_lang_gongdoc_go_editor' },
-	{ path: 'github_com_fullstack_lang_gongdoc_go-referenceidentifier-presentation/:id', component: ReferenceIdentifierPresentationComponent, outlet: 'github_com_fullstack_lang_gongdoc_go_presentation' },
-	{ path: 'github_com_fullstack_lang_gongdoc_go-referenceidentifier-presentation-special/:id', component: ReferenceIdentifierPresentationComponent, outlet: 'github_com_fullstack_lang_gongdoc_goreferenceidentifierpres' },
+	{ path: 'github_com_fullstack_lang_gongdoc_go-references', component: ReferencesTableComponent, outlet: 'github_com_fullstack_lang_gongdoc_go_table' },
+	{ path: 'github_com_fullstack_lang_gongdoc_go-reference-adder', component: ReferenceDetailComponent, outlet: 'github_com_fullstack_lang_gongdoc_go_editor' },
+	{ path: 'github_com_fullstack_lang_gongdoc_go-reference-adder/:id/:originStruct/:originStructFieldName', component: ReferenceDetailComponent, outlet: 'github_com_fullstack_lang_gongdoc_go_editor' },
+	{ path: 'github_com_fullstack_lang_gongdoc_go-reference-detail/:id', component: ReferenceDetailComponent, outlet: 'github_com_fullstack_lang_gongdoc_go_editor' },
+	{ path: 'github_com_fullstack_lang_gongdoc_go-reference-presentation/:id', component: ReferencePresentationComponent, outlet: 'github_com_fullstack_lang_gongdoc_go_presentation' },
+	{ path: 'github_com_fullstack_lang_gongdoc_go-reference-presentation-special/:id', component: ReferencePresentationComponent, outlet: 'github_com_fullstack_lang_gongdoc_goreferencepres' },
 
 	{ path: 'github_com_fullstack_lang_gongdoc_go-trees', component: TreesTableComponent, outlet: 'github_com_fullstack_lang_gongdoc_go_table' },
 	{ path: 'github_com_fullstack_lang_gongdoc_go-tree-adder', component: TreeDetailComponent, outlet: 'github_com_fullstack_lang_gongdoc_go_editor' },

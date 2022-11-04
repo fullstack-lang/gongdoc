@@ -213,7 +213,7 @@ func (nodeCallbacksSingloton *NodeCallbacksSingloton) OnAfterUpdate(
 				if classdiagramNode.IsChecked {
 					// get the diagram
 					classDiagram := classdiagramNode.Classdiagram
-					classDiagram.AddClassshape(frontNode.Name)
+					classDiagram.AddClassshape(frontNode.Name, REFERENCE_GONG_STRUCT)
 				}
 
 				updateNodesStates(stage, nodeCallbacksSingloton)
@@ -492,7 +492,7 @@ func (nodeCallbacksSingloton *NodeCallbacksSingloton) OnAfterUpdate(
 				if classdiagramNode.IsChecked {
 					// get the diagram
 					classDiagram := classdiagramNode.Classdiagram
-					classDiagram.AddClassshape(frontNode.Name)
+					classDiagram.AddClassshape(frontNode.Name, REFERENCE_GONG_ENUM)
 				}
 
 				updateNodesStates(stage, nodeCallbacksSingloton)

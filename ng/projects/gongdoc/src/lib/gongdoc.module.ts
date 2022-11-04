@@ -84,10 +84,10 @@ import { PositionSortingComponent } from './position-sorting/position-sorting.co
 import { PositionDetailComponent } from './position-detail/position-detail.component'
 import { PositionPresentationComponent } from './position-presentation/position-presentation.component'
 
-import { ReferenceIdentifiersTableComponent } from './referenceidentifiers-table/referenceidentifiers-table.component'
-import { ReferenceIdentifierSortingComponent } from './referenceidentifier-sorting/referenceidentifier-sorting.component'
-import { ReferenceIdentifierDetailComponent } from './referenceidentifier-detail/referenceidentifier-detail.component'
-import { ReferenceIdentifierPresentationComponent } from './referenceidentifier-presentation/referenceidentifier-presentation.component'
+import { ReferencesTableComponent } from './references-table/references-table.component'
+import { ReferenceSortingComponent } from './reference-sorting/reference-sorting.component'
+import { ReferenceDetailComponent } from './reference-detail/reference-detail.component'
+import { ReferencePresentationComponent } from './reference-presentation/reference-presentation.component'
 
 import { TreesTableComponent } from './trees-table/trees-table.component'
 import { TreeSortingComponent } from './tree-sorting/tree-sorting.component'
@@ -158,10 +158,10 @@ import { VerticePresentationComponent } from './vertice-presentation/vertice-pre
 		PositionDetailComponent,
 		PositionPresentationComponent,
 
-		ReferenceIdentifiersTableComponent,
-		ReferenceIdentifierSortingComponent,
-		ReferenceIdentifierDetailComponent,
-		ReferenceIdentifierPresentationComponent,
+		ReferencesTableComponent,
+		ReferenceSortingComponent,
+		ReferenceDetailComponent,
+		ReferencePresentationComponent,
 
 		TreesTableComponent,
 		TreeSortingComponent,
@@ -267,10 +267,10 @@ import { VerticePresentationComponent } from './vertice-presentation/vertice-pre
 		PositionDetailComponent,
 		PositionPresentationComponent,
 
-		ReferenceIdentifiersTableComponent,
-		ReferenceIdentifierSortingComponent,
-		ReferenceIdentifierDetailComponent,
-		ReferenceIdentifierPresentationComponent,
+		ReferencesTableComponent,
+		ReferenceSortingComponent,
+		ReferenceDetailComponent,
+		ReferencePresentationComponent,
 
 		TreesTableComponent,
 		TreeSortingComponent,

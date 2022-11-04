@@ -37,7 +37,7 @@ type BackRepoStruct struct {
 
 	BackRepoPosition BackRepoPositionStruct
 
-	BackRepoReferenceIdentifier BackRepoReferenceIdentifierStruct
+	BackRepoReference BackRepoReferenceStruct
 
 	BackRepoTree BackRepoTreeStruct
 
@@ -94,7 +94,7 @@ func (backRepo *BackRepoStruct) init(db *gorm.DB) {
 	backRepo.BackRepoNode.Init(db)
 	backRepo.BackRepoNote.Init(db)
 	backRepo.BackRepoPosition.Init(db)
-	backRepo.BackRepoReferenceIdentifier.Init(db)
+	backRepo.BackRepoReference.Init(db)
 	backRepo.BackRepoTree.Init(db)
 	backRepo.BackRepoUmlState.Init(db)
 	backRepo.BackRepoUmlsc.Init(db)
@@ -115,7 +115,7 @@ func (backRepo *BackRepoStruct) Commit(stage *models.StageStruct) {
 	backRepo.BackRepoNode.CommitPhaseOne(stage)
 	backRepo.BackRepoNote.CommitPhaseOne(stage)
 	backRepo.BackRepoPosition.CommitPhaseOne(stage)
-	backRepo.BackRepoReferenceIdentifier.CommitPhaseOne(stage)
+	backRepo.BackRepoReference.CommitPhaseOne(stage)
 	backRepo.BackRepoTree.CommitPhaseOne(stage)
 	backRepo.BackRepoUmlState.CommitPhaseOne(stage)
 	backRepo.BackRepoUmlsc.CommitPhaseOne(stage)
@@ -131,7 +131,7 @@ func (backRepo *BackRepoStruct) Commit(stage *models.StageStruct) {
 	backRepo.BackRepoNode.CommitPhaseTwo(backRepo)
 	backRepo.BackRepoNote.CommitPhaseTwo(backRepo)
 	backRepo.BackRepoPosition.CommitPhaseTwo(backRepo)
-	backRepo.BackRepoReferenceIdentifier.CommitPhaseTwo(backRepo)
+	backRepo.BackRepoReference.CommitPhaseTwo(backRepo)
 	backRepo.BackRepoTree.CommitPhaseTwo(backRepo)
 	backRepo.BackRepoUmlState.CommitPhaseTwo(backRepo)
 	backRepo.BackRepoUmlsc.CommitPhaseTwo(backRepo)
@@ -152,7 +152,7 @@ func (backRepo *BackRepoStruct) Checkout(stage *models.StageStruct) {
 	backRepo.BackRepoNode.CheckoutPhaseOne()
 	backRepo.BackRepoNote.CheckoutPhaseOne()
 	backRepo.BackRepoPosition.CheckoutPhaseOne()
-	backRepo.BackRepoReferenceIdentifier.CheckoutPhaseOne()
+	backRepo.BackRepoReference.CheckoutPhaseOne()
 	backRepo.BackRepoTree.CheckoutPhaseOne()
 	backRepo.BackRepoUmlState.CheckoutPhaseOne()
 	backRepo.BackRepoUmlsc.CheckoutPhaseOne()
@@ -168,7 +168,7 @@ func (backRepo *BackRepoStruct) Checkout(stage *models.StageStruct) {
 	backRepo.BackRepoNode.CheckoutPhaseTwo(backRepo)
 	backRepo.BackRepoNote.CheckoutPhaseTwo(backRepo)
 	backRepo.BackRepoPosition.CheckoutPhaseTwo(backRepo)
-	backRepo.BackRepoReferenceIdentifier.CheckoutPhaseTwo(backRepo)
+	backRepo.BackRepoReference.CheckoutPhaseTwo(backRepo)
 	backRepo.BackRepoTree.CheckoutPhaseTwo(backRepo)
 	backRepo.BackRepoUmlState.CheckoutPhaseTwo(backRepo)
 	backRepo.BackRepoUmlsc.CheckoutPhaseTwo(backRepo)
@@ -199,7 +199,7 @@ func (backRepo *BackRepoStruct) Backup(stage *models.StageStruct, dirPath string
 	backRepo.BackRepoNode.Backup(dirPath)
 	backRepo.BackRepoNote.Backup(dirPath)
 	backRepo.BackRepoPosition.Backup(dirPath)
-	backRepo.BackRepoReferenceIdentifier.Backup(dirPath)
+	backRepo.BackRepoReference.Backup(dirPath)
 	backRepo.BackRepoTree.Backup(dirPath)
 	backRepo.BackRepoUmlState.Backup(dirPath)
 	backRepo.BackRepoUmlsc.Backup(dirPath)
@@ -223,7 +223,7 @@ func (backRepo *BackRepoStruct) BackupXL(stage *models.StageStruct, dirPath stri
 	backRepo.BackRepoNode.BackupXL(file)
 	backRepo.BackRepoNote.BackupXL(file)
 	backRepo.BackRepoPosition.BackupXL(file)
-	backRepo.BackRepoReferenceIdentifier.BackupXL(file)
+	backRepo.BackRepoReference.BackupXL(file)
 	backRepo.BackRepoTree.BackupXL(file)
 	backRepo.BackRepoUmlState.BackupXL(file)
 	backRepo.BackRepoUmlsc.BackupXL(file)
@@ -261,7 +261,7 @@ func (backRepo *BackRepoStruct) Restore(stage *models.StageStruct, dirPath strin
 	backRepo.BackRepoNode.RestorePhaseOne(dirPath)
 	backRepo.BackRepoNote.RestorePhaseOne(dirPath)
 	backRepo.BackRepoPosition.RestorePhaseOne(dirPath)
-	backRepo.BackRepoReferenceIdentifier.RestorePhaseOne(dirPath)
+	backRepo.BackRepoReference.RestorePhaseOne(dirPath)
 	backRepo.BackRepoTree.RestorePhaseOne(dirPath)
 	backRepo.BackRepoUmlState.RestorePhaseOne(dirPath)
 	backRepo.BackRepoUmlsc.RestorePhaseOne(dirPath)
@@ -281,7 +281,7 @@ func (backRepo *BackRepoStruct) Restore(stage *models.StageStruct, dirPath strin
 	backRepo.BackRepoNode.RestorePhaseTwo()
 	backRepo.BackRepoNote.RestorePhaseTwo()
 	backRepo.BackRepoPosition.RestorePhaseTwo()
-	backRepo.BackRepoReferenceIdentifier.RestorePhaseTwo()
+	backRepo.BackRepoReference.RestorePhaseTwo()
 	backRepo.BackRepoTree.RestorePhaseTwo()
 	backRepo.BackRepoUmlState.RestorePhaseTwo()
 	backRepo.BackRepoUmlsc.RestorePhaseTwo()
@@ -321,7 +321,7 @@ func (backRepo *BackRepoStruct) RestoreXL(stage *models.StageStruct, dirPath str
 	backRepo.BackRepoNode.RestoreXLPhaseOne(file)
 	backRepo.BackRepoNote.RestoreXLPhaseOne(file)
 	backRepo.BackRepoPosition.RestoreXLPhaseOne(file)
-	backRepo.BackRepoReferenceIdentifier.RestoreXLPhaseOne(file)
+	backRepo.BackRepoReference.RestoreXLPhaseOne(file)
 	backRepo.BackRepoTree.RestoreXLPhaseOne(file)
 	backRepo.BackRepoUmlState.RestoreXLPhaseOne(file)
 	backRepo.BackRepoUmlsc.RestoreXLPhaseOne(file)

@@ -41,9 +41,9 @@ func AfterCreateFromFront[Type Gongstruct](stage *StageStruct, instance *Type) {
 		if stage.OnAfterPositionCreateCallback != nil {
 			stage.OnAfterPositionCreateCallback.OnAfterCreate(stage, target)
 		}
-	case *ReferenceIdentifier:
-		if stage.OnAfterReferenceIdentifierCreateCallback != nil {
-			stage.OnAfterReferenceIdentifierCreateCallback.OnAfterCreate(stage, target)
+	case *Reference:
+		if stage.OnAfterReferenceCreateCallback != nil {
+			stage.OnAfterReferenceCreateCallback.OnAfterCreate(stage, target)
 		}
 	case *Tree:
 		if stage.OnAfterTreeCreateCallback != nil {
@@ -114,10 +114,10 @@ func AfterUpdateFromFront[Type Gongstruct](stage *StageStruct, old, new *Type) {
 		if stage.OnAfterPositionUpdateCallback != nil {
 			stage.OnAfterPositionUpdateCallback.OnAfterUpdate(stage, oldTarget, newTarget)
 		}
-	case *ReferenceIdentifier:
-		newTarget := any(new).(*ReferenceIdentifier)
-		if stage.OnAfterReferenceIdentifierUpdateCallback != nil {
-			stage.OnAfterReferenceIdentifierUpdateCallback.OnAfterUpdate(stage, oldTarget, newTarget)
+	case *Reference:
+		newTarget := any(new).(*Reference)
+		if stage.OnAfterReferenceUpdateCallback != nil {
+			stage.OnAfterReferenceUpdateCallback.OnAfterUpdate(stage, oldTarget, newTarget)
 		}
 	case *Tree:
 		newTarget := any(new).(*Tree)
@@ -192,10 +192,10 @@ func AfterDeleteFromFront[Type Gongstruct](stage *StageStruct, staged, front *Ty
 			staged := any(staged).(*Position)
 			stage.OnAfterPositionDeleteCallback.OnAfterDelete(stage, staged, front)
 		}
-	case *ReferenceIdentifier:
-		if stage.OnAfterReferenceIdentifierDeleteCallback != nil {
-			staged := any(staged).(*ReferenceIdentifier)
-			stage.OnAfterReferenceIdentifierDeleteCallback.OnAfterDelete(stage, staged, front)
+	case *Reference:
+		if stage.OnAfterReferenceDeleteCallback != nil {
+			staged := any(staged).(*Reference)
+			stage.OnAfterReferenceDeleteCallback.OnAfterDelete(stage, staged, front)
 		}
 	case *Tree:
 		if stage.OnAfterTreeDeleteCallback != nil {
@@ -261,9 +261,9 @@ func AfterReadFromFront[Type Gongstruct](stage *StageStruct, instance *Type) {
 		if stage.OnAfterPositionReadCallback != nil {
 			stage.OnAfterPositionReadCallback.OnAfterRead(stage, target)
 		}
-	case *ReferenceIdentifier:
-		if stage.OnAfterReferenceIdentifierReadCallback != nil {
-			stage.OnAfterReferenceIdentifierReadCallback.OnAfterRead(stage, target)
+	case *Reference:
+		if stage.OnAfterReferenceReadCallback != nil {
+			stage.OnAfterReferenceReadCallback.OnAfterRead(stage, target)
 		}
 	case *Tree:
 		if stage.OnAfterTreeReadCallback != nil {
@@ -317,8 +317,8 @@ func SetCallbackAfterUpdateFromFront[Type Gongstruct](stage *StageStruct, callba
 	case *Position:
 		stage.OnAfterPositionUpdateCallback = any(callback).(OnAfterUpdateInterface[Position])
 	
-	case *ReferenceIdentifier:
-		stage.OnAfterReferenceIdentifierUpdateCallback = any(callback).(OnAfterUpdateInterface[ReferenceIdentifier])
+	case *Reference:
+		stage.OnAfterReferenceUpdateCallback = any(callback).(OnAfterUpdateInterface[Reference])
 	
 	case *Tree:
 		stage.OnAfterTreeUpdateCallback = any(callback).(OnAfterUpdateInterface[Tree])
@@ -366,8 +366,8 @@ func SetCallbackAfterCreateFromFront[Type Gongstruct](stage *StageStruct, callba
 	case *Position:
 		stage.OnAfterPositionCreateCallback = any(callback).(OnAfterCreateInterface[Position])
 	
-	case *ReferenceIdentifier:
-		stage.OnAfterReferenceIdentifierCreateCallback = any(callback).(OnAfterCreateInterface[ReferenceIdentifier])
+	case *Reference:
+		stage.OnAfterReferenceCreateCallback = any(callback).(OnAfterCreateInterface[Reference])
 	
 	case *Tree:
 		stage.OnAfterTreeCreateCallback = any(callback).(OnAfterCreateInterface[Tree])
@@ -415,8 +415,8 @@ func SetCallbackAfterDeleteFromFront[Type Gongstruct](stage *StageStruct, callba
 	case *Position:
 		stage.OnAfterPositionDeleteCallback = any(callback).(OnAfterDeleteInterface[Position])
 	
-	case *ReferenceIdentifier:
-		stage.OnAfterReferenceIdentifierDeleteCallback = any(callback).(OnAfterDeleteInterface[ReferenceIdentifier])
+	case *Reference:
+		stage.OnAfterReferenceDeleteCallback = any(callback).(OnAfterDeleteInterface[Reference])
 	
 	case *Tree:
 		stage.OnAfterTreeDeleteCallback = any(callback).(OnAfterDeleteInterface[Tree])
@@ -464,8 +464,8 @@ func SetCallbackAfterReadFromFront[Type Gongstruct](stage *StageStruct, callback
 	case *Position:
 		stage.OnAfterPositionReadCallback = any(callback).(OnAfterReadInterface[Position])
 	
-	case *ReferenceIdentifier:
-		stage.OnAfterReferenceIdentifierReadCallback = any(callback).(OnAfterReadInterface[ReferenceIdentifier])
+	case *Reference:
+		stage.OnAfterReferenceReadCallback = any(callback).(OnAfterReadInterface[Reference])
 	
 	case *Tree:
 		stage.OnAfterTreeReadCallback = any(callback).(OnAfterReadInterface[Tree])

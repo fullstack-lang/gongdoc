@@ -2,14 +2,15 @@
 import { Component, OnInit } from '@angular/core';
 import { UntypedFormControl } from '@angular/forms';
 
-import { ReferenceIdentifierDB } from '../referenceidentifier-db'
-import { ReferenceIdentifierService } from '../referenceidentifier.service'
+import { ReferenceDB } from '../reference-db'
+import { ReferenceService } from '../reference.service'
 
 import { FrontRepoService, FrontRepo, SelectionMode, DialogData } from '../front-repo.service'
 import { MapOfComponents } from '../map-components'
 import { MapOfSortingComponents } from '../map-components'
 
 // insertion point for imports
+import { ReferenceTypeSelect, ReferenceTypeList } from '../ReferenceType'
 
 import { Router, RouterState, ActivatedRoute } from '@angular/router';
 
@@ -17,25 +18,26 @@ import { MatDialog, MAT_DIALOG_DATA, MatDialogRef, MatDialogConfig } from '@angu
 
 import { NullInt64 } from '../null-int64'
 
-// ReferenceIdentifierDetailComponent is initilizaed from different routes
-// ReferenceIdentifierDetailComponentState detail different cases 
-enum ReferenceIdentifierDetailComponentState {
+// ReferenceDetailComponent is initilizaed from different routes
+// ReferenceDetailComponentState detail different cases 
+enum ReferenceDetailComponentState {
 	CREATE_INSTANCE,
 	UPDATE_INSTANCE,
 	// insertion point for declarations of enum values of state
 }
 
 @Component({
-	selector: 'app-referenceidentifier-detail',
-	templateUrl: './referenceidentifier-detail.component.html',
-	styleUrls: ['./referenceidentifier-detail.component.css'],
+	selector: 'app-reference-detail',
+	templateUrl: './reference-detail.component.html',
+	styleUrls: ['./reference-detail.component.css'],
 })
-export class ReferenceIdentifierDetailComponent implements OnInit {
+export class ReferenceDetailComponent implements OnInit {
 
 	// insertion point for declarations
+	ReferenceTypeList: ReferenceTypeSelect[] = []
 
-	// the ReferenceIdentifierDB of interest
-	referenceidentifier: ReferenceIdentifierDB = new ReferenceIdentifierDB
+	// the ReferenceDB of interest
+	reference: ReferenceDB = new ReferenceDB
 
 	// front repo
 	frontRepo: FrontRepo = new FrontRepo
@@ -46,7 +48,7 @@ export class ReferenceIdentifierDetailComponent implements OnInit {
 	mapFields_displayAsTextArea = new Map<string, boolean>()
 
 	// the state at initialization (CREATION, UPDATE or CREATE with one association set)
-	state: ReferenceIdentifierDetailComponentState = ReferenceIdentifierDetailComponentState.CREATE_INSTANCE
+	state: ReferenceDetailComponentState = ReferenceDetailComponentState.CREATE_INSTANCE
 
 	// in UDPATE state, if is the id of the instance to update
 	// in CREATE state with one association set, this is the id of the associated instance
@@ -57,7 +59,7 @@ export class ReferenceIdentifierDetailComponent implements OnInit {
 	originStructFieldName: string = ""
 
 	constructor(
-		private referenceidentifierService: ReferenceIdentifierService,
+		private referenceService: ReferenceService,
 		private frontRepoService: FrontRepoService,
 		public dialog: MatDialog,
 		private route: ActivatedRoute,
@@ -74,10 +76,10 @@ export class ReferenceIdentifierDetailComponent implements OnInit {
 
 		const association = this.route.snapshot.paramMap.get('association');
 		if (this.id == 0) {
-			this.state = ReferenceIdentifierDetailComponentState.CREATE_INSTANCE
+			this.state = ReferenceDetailComponentState.CREATE_INSTANCE
 		} else {
 			if (this.originStruct == undefined) {
-				this.state = ReferenceIdentifierDetailComponentState.UPDATE_INSTANCE
+				this.state = ReferenceDetailComponentState.UPDATE_INSTANCE
 			} else {
 				switch (this.originStructFieldName) {
 					// insertion point for state computation
@@ -87,34 +89,35 @@ export class ReferenceIdentifierDetailComponent implements OnInit {
 			}
 		}
 
-		this.getReferenceIdentifier()
+		this.getReference()
 
 		// observable for changes in structs
-		this.referenceidentifierService.ReferenceIdentifierServiceChanged.subscribe(
+		this.referenceService.ReferenceServiceChanged.subscribe(
 			message => {
 				if (message == "post" || message == "update" || message == "delete") {
-					this.getReferenceIdentifier()
+					this.getReference()
 				}
 			}
 		)
 
 		// insertion point for initialisation of enums list
+		this.ReferenceTypeList = ReferenceTypeList
 	}
 
-	getReferenceIdentifier(): void {
+	getReference(): void {
 
 		this.frontRepoService.pull().subscribe(
 			frontRepo => {
 				this.frontRepo = frontRepo
 
 				switch (this.state) {
-					case ReferenceIdentifierDetailComponentState.CREATE_INSTANCE:
-						this.referenceidentifier = new (ReferenceIdentifierDB)
+					case ReferenceDetailComponentState.CREATE_INSTANCE:
+						this.reference = new (ReferenceDB)
 						break;
-					case ReferenceIdentifierDetailComponentState.UPDATE_INSTANCE:
-						let referenceidentifier = frontRepo.ReferenceIdentifiers.get(this.id)
-						console.assert(referenceidentifier != undefined, "missing referenceidentifier with id:" + this.id)
-						this.referenceidentifier = referenceidentifier!
+					case ReferenceDetailComponentState.UPDATE_INSTANCE:
+						let reference = frontRepo.References.get(this.id)
+						console.assert(reference != undefined, "missing reference with id:" + this.id)
+						this.reference = reference!
 						break;
 					// insertion point for init of association field
 					default:
@@ -140,16 +143,16 @@ export class ReferenceIdentifierDetailComponent implements OnInit {
 		// insertion point for translation/nullation of each pointers
 
 		switch (this.state) {
-			case ReferenceIdentifierDetailComponentState.UPDATE_INSTANCE:
-				this.referenceidentifierService.updateReferenceIdentifier(this.referenceidentifier)
-					.subscribe(referenceidentifier => {
-						this.referenceidentifierService.ReferenceIdentifierServiceChanged.next("update")
+			case ReferenceDetailComponentState.UPDATE_INSTANCE:
+				this.referenceService.updateReference(this.reference)
+					.subscribe(reference => {
+						this.referenceService.ReferenceServiceChanged.next("update")
 					});
 				break;
 			default:
-				this.referenceidentifierService.postReferenceIdentifier(this.referenceidentifier).subscribe(referenceidentifier => {
-					this.referenceidentifierService.ReferenceIdentifierServiceChanged.next("post")
-					this.referenceidentifier = new (ReferenceIdentifierDB) // reset fields
+				this.referenceService.postReference(this.reference).subscribe(reference => {
+					this.referenceService.ReferenceServiceChanged.next("post")
+					this.reference = new (ReferenceDB) // reset fields
 				});
 		}
 	}
@@ -172,7 +175,7 @@ export class ReferenceIdentifierDetailComponent implements OnInit {
 		dialogConfig.height = "50%"
 		if (selectionMode == SelectionMode.ONE_MANY_ASSOCIATION_MODE) {
 
-			dialogData.ID = this.referenceidentifier.ID!
+			dialogData.ID = this.reference.ID!
 			dialogData.ReversePointer = reverseField
 			dialogData.OrderingMode = false
 			dialogData.SelectionMode = selectionMode
@@ -188,13 +191,13 @@ export class ReferenceIdentifierDetailComponent implements OnInit {
 			});
 		}
 		if (selectionMode == SelectionMode.MANY_MANY_ASSOCIATION_MODE) {
-			dialogData.ID = this.referenceidentifier.ID!
+			dialogData.ID = this.reference.ID!
 			dialogData.ReversePointer = reverseField
 			dialogData.OrderingMode = false
 			dialogData.SelectionMode = selectionMode
 
 			// set up the source
-			dialogData.SourceStruct = "ReferenceIdentifier"
+			dialogData.SourceStruct = "Reference"
 			dialogData.SourceField = sourceField
 
 			// set up the intermediate struct
@@ -224,7 +227,7 @@ export class ReferenceIdentifierDetailComponent implements OnInit {
 		// dialogConfig.disableClose = true;
 		dialogConfig.autoFocus = true;
 		dialogConfig.data = {
-			ID: this.referenceidentifier.ID,
+			ID: this.reference.ID,
 			ReversePointer: reverseField,
 			OrderingMode: true,
 		};
@@ -240,8 +243,8 @@ export class ReferenceIdentifierDetailComponent implements OnInit {
 	}
 
 	fillUpNameIfEmpty(event: { value: { Name: string; }; }) {
-		if (this.referenceidentifier.Name == "") {
-			this.referenceidentifier.Name = event.value.Name
+		if (this.reference.Name == "") {
+			this.reference.Name = event.value.Name
 		}
 	}
 

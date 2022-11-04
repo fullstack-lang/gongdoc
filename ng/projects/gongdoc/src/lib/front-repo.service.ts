@@ -31,8 +31,8 @@ import { NoteService } from './note.service'
 import { PositionDB } from './position-db'
 import { PositionService } from './position.service'
 
-import { ReferenceIdentifierDB } from './referenceidentifier-db'
-import { ReferenceIdentifierService } from './referenceidentifier.service'
+import { ReferenceDB } from './reference-db'
+import { ReferenceService } from './reference.service'
 
 import { TreeDB } from './tree-db'
 import { TreeService } from './tree.service'
@@ -76,9 +76,9 @@ export class FrontRepo { // insertion point sub template
   Positions_array = new Array<PositionDB>(); // array of repo instances
   Positions = new Map<number, PositionDB>(); // map of repo instances
   Positions_batch = new Map<number, PositionDB>(); // same but only in last GET (for finding repo instances to delete)
-  ReferenceIdentifiers_array = new Array<ReferenceIdentifierDB>(); // array of repo instances
-  ReferenceIdentifiers = new Map<number, ReferenceIdentifierDB>(); // map of repo instances
-  ReferenceIdentifiers_batch = new Map<number, ReferenceIdentifierDB>(); // same but only in last GET (for finding repo instances to delete)
+  References_array = new Array<ReferenceDB>(); // array of repo instances
+  References = new Map<number, ReferenceDB>(); // map of repo instances
+  References_batch = new Map<number, ReferenceDB>(); // same but only in last GET (for finding repo instances to delete)
   Trees_array = new Array<TreeDB>(); // array of repo instances
   Trees = new Map<number, TreeDB>(); // map of repo instances
   Trees_batch = new Map<number, TreeDB>(); // same but only in last GET (for finding repo instances to delete)
@@ -158,7 +158,7 @@ export class FrontRepoService {
     private nodeService: NodeService,
     private noteService: NoteService,
     private positionService: PositionService,
-    private referenceidentifierService: ReferenceIdentifierService,
+    private referenceService: ReferenceService,
     private treeService: TreeService,
     private umlstateService: UmlStateService,
     private umlscService: UmlscService,
@@ -202,7 +202,7 @@ export class FrontRepoService {
     Observable<NodeDB[]>,
     Observable<NoteDB[]>,
     Observable<PositionDB[]>,
-    Observable<ReferenceIdentifierDB[]>,
+    Observable<ReferenceDB[]>,
     Observable<TreeDB[]>,
     Observable<UmlStateDB[]>,
     Observable<UmlscDB[]>,
@@ -217,7 +217,7 @@ export class FrontRepoService {
       this.nodeService.getNodes(),
       this.noteService.getNotes(),
       this.positionService.getPositions(),
-      this.referenceidentifierService.getReferenceIdentifiers(),
+      this.referenceService.getReferences(),
       this.treeService.getTrees(),
       this.umlstateService.getUmlStates(),
       this.umlscService.getUmlscs(),
@@ -246,7 +246,7 @@ export class FrontRepoService {
             nodes_,
             notes_,
             positions_,
-            referenceidentifiers_,
+            references_,
             trees_,
             umlstates_,
             umlscs_,
@@ -272,8 +272,8 @@ export class FrontRepoService {
             notes = notes_ as NoteDB[]
             var positions: PositionDB[]
             positions = positions_ as PositionDB[]
-            var referenceidentifiers: ReferenceIdentifierDB[]
-            referenceidentifiers = referenceidentifiers_ as ReferenceIdentifierDB[]
+            var references: ReferenceDB[]
+            references = references_ as ReferenceDB[]
             var trees: TreeDB[]
             trees = trees_ as TreeDB[]
             var umlstates: UmlStateDB[]
@@ -584,29 +584,29 @@ export class FrontRepoService {
             });
 
             // init the array
-            FrontRepoSingloton.ReferenceIdentifiers_array = referenceidentifiers
+            FrontRepoSingloton.References_array = references
 
-            // clear the map that counts ReferenceIdentifier in the GET
-            FrontRepoSingloton.ReferenceIdentifiers_batch.clear()
+            // clear the map that counts Reference in the GET
+            FrontRepoSingloton.References_batch.clear()
 
-            referenceidentifiers.forEach(
-              referenceidentifier => {
-                FrontRepoSingloton.ReferenceIdentifiers.set(referenceidentifier.ID, referenceidentifier)
-                FrontRepoSingloton.ReferenceIdentifiers_batch.set(referenceidentifier.ID, referenceidentifier)
+            references.forEach(
+              reference => {
+                FrontRepoSingloton.References.set(reference.ID, reference)
+                FrontRepoSingloton.References_batch.set(reference.ID, reference)
               }
             )
 
-            // clear referenceidentifiers that are absent from the batch
-            FrontRepoSingloton.ReferenceIdentifiers.forEach(
-              referenceidentifier => {
-                if (FrontRepoSingloton.ReferenceIdentifiers_batch.get(referenceidentifier.ID) == undefined) {
-                  FrontRepoSingloton.ReferenceIdentifiers.delete(referenceidentifier.ID)
+            // clear references that are absent from the batch
+            FrontRepoSingloton.References.forEach(
+              reference => {
+                if (FrontRepoSingloton.References_batch.get(reference.ID) == undefined) {
+                  FrontRepoSingloton.References.delete(reference.ID)
                 }
               }
             )
 
-            // sort ReferenceIdentifiers_array array
-            FrontRepoSingloton.ReferenceIdentifiers_array.sort((t1, t2) => {
+            // sort References_array array
+            FrontRepoSingloton.References_array.sort((t1, t2) => {
               if (t1.Name > t2.Name) {
                 return 1;
               }
@@ -784,9 +784,9 @@ export class FrontRepoService {
                 }
                 // insertion point for pointer field Reference redeeming
                 {
-                  let _referenceidentifier = FrontRepoSingloton.ReferenceIdentifiers.get(classshape.ReferenceID.Int64)
-                  if (_referenceidentifier) {
-                    classshape.Reference = _referenceidentifier
+                  let _reference = FrontRepoSingloton.References.get(classshape.ReferenceID.Int64)
+                  if (_reference) {
+                    classshape.Reference = _reference
                   }
                 }
 
@@ -941,8 +941,8 @@ export class FrontRepoService {
                 // insertion point for redeeming ONE-MANY associations
               }
             )
-            referenceidentifiers.forEach(
-              referenceidentifier => {
+            references.forEach(
+              reference => {
                 // insertion point sub sub template for ONE-/ZERO-ONE associations pointers redeeming
 
                 // insertion point for redeeming ONE-MANY associations
@@ -1111,9 +1111,9 @@ export class FrontRepoService {
                 }
                 // insertion point for pointer field Reference redeeming
                 {
-                  let _referenceidentifier = FrontRepoSingloton.ReferenceIdentifiers.get(classshape.ReferenceID.Int64)
-                  if (_referenceidentifier) {
-                    classshape.Reference = _referenceidentifier
+                  let _reference = FrontRepoSingloton.References.get(classshape.ReferenceID.Int64)
+                  if (_reference) {
+                    classshape.Reference = _reference
                   }
                 }
 
@@ -1598,29 +1598,29 @@ export class FrontRepoService {
     )
   }
 
-  // ReferenceIdentifierPull performs a GET on ReferenceIdentifier of the stack and redeem association pointers 
-  ReferenceIdentifierPull(): Observable<FrontRepo> {
+  // ReferencePull performs a GET on Reference of the stack and redeem association pointers 
+  ReferencePull(): Observable<FrontRepo> {
     return new Observable<FrontRepo>(
       (observer) => {
         combineLatest([
-          this.referenceidentifierService.getReferenceIdentifiers()
+          this.referenceService.getReferences()
         ]).subscribe(
           ([ // insertion point sub template 
-            referenceidentifiers,
+            references,
           ]) => {
             // init the array
-            FrontRepoSingloton.ReferenceIdentifiers_array = referenceidentifiers
+            FrontRepoSingloton.References_array = references
 
-            // clear the map that counts ReferenceIdentifier in the GET
-            FrontRepoSingloton.ReferenceIdentifiers_batch.clear()
+            // clear the map that counts Reference in the GET
+            FrontRepoSingloton.References_batch.clear()
 
             // 
             // First Step: init map of instances
             // insertion point sub template 
-            referenceidentifiers.forEach(
-              referenceidentifier => {
-                FrontRepoSingloton.ReferenceIdentifiers.set(referenceidentifier.ID, referenceidentifier)
-                FrontRepoSingloton.ReferenceIdentifiers_batch.set(referenceidentifier.ID, referenceidentifier)
+            references.forEach(
+              reference => {
+                FrontRepoSingloton.References.set(reference.ID, reference)
+                FrontRepoSingloton.References_batch.set(reference.ID, reference)
 
                 // insertion point for redeeming ONE/ZERO-ONE associations
 
@@ -1628,11 +1628,11 @@ export class FrontRepoService {
               }
             )
 
-            // clear referenceidentifiers that are absent from the GET
-            FrontRepoSingloton.ReferenceIdentifiers.forEach(
-              referenceidentifier => {
-                if (FrontRepoSingloton.ReferenceIdentifiers_batch.get(referenceidentifier.ID) == undefined) {
-                  FrontRepoSingloton.ReferenceIdentifiers.delete(referenceidentifier.ID)
+            // clear references that are absent from the GET
+            FrontRepoSingloton.References.forEach(
+              reference => {
+                if (FrontRepoSingloton.References_batch.get(reference.ID) == undefined) {
+                  FrontRepoSingloton.References.delete(reference.ID)
                 }
               }
             )
@@ -1908,7 +1908,7 @@ export function getNoteUniqueID(id: number): number {
 export function getPositionUniqueID(id: number): number {
   return 67 * id
 }
-export function getReferenceIdentifierUniqueID(id: number): number {
+export function getReferenceUniqueID(id: number): number {
   return 71 * id
 }
 export function getTreeUniqueID(id: number): number {

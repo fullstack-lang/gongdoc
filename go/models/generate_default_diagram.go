@@ -40,7 +40,6 @@ func GenGoDefaultDiagram(modelPkg *gong_models.ModelPkg, pkgPath string) {
 		idx := 0.0
 		for _, _enum := range modelPkg.GongEnums {
 			classshape := new(Classshape)
-			classshape.ClassshapeTargetType = ENUM
 			classshape.Name = _enum.Name
 
 			classshape.Position = new(Position)
@@ -64,7 +63,6 @@ func GenGoDefaultDiagram(modelPkg *gong_models.ModelPkg, pkgPath string) {
 		idx = 0.0
 		for _, _struct := range modelPkg.GongStructs {
 			classshape := new(Classshape)
-			classshape.ClassshapeTargetType = STRUCT
 
 			classshape.Name = _struct.Name
 

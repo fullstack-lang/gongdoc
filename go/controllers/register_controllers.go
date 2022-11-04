@@ -106,12 +106,12 @@ func RegisterControllers(r *gin.Engine) {
 		v1.PUT("/v1/positions/:id", UpdatePosition)
 		v1.DELETE("/v1/positions/:id", DeletePosition)
 
-		v1.GET("/v1/referenceidentifiers", GetReferenceIdentifiers)
-		v1.GET("/v1/referenceidentifiers/:id", GetReferenceIdentifier)
-		v1.POST("/v1/referenceidentifiers", PostReferenceIdentifier)
-		v1.PATCH("/v1/referenceidentifiers/:id", UpdateReferenceIdentifier)
-		v1.PUT("/v1/referenceidentifiers/:id", UpdateReferenceIdentifier)
-		v1.DELETE("/v1/referenceidentifiers/:id", DeleteReferenceIdentifier)
+		v1.GET("/v1/references", GetReferences)
+		v1.GET("/v1/references/:id", GetReference)
+		v1.POST("/v1/references", PostReference)
+		v1.PATCH("/v1/references/:id", UpdateReference)
+		v1.PUT("/v1/references/:id", UpdateReference)
+		v1.DELETE("/v1/references/:id", DeleteReference)
 
 		v1.GET("/v1/trees", GetTrees)
 		v1.GET("/v1/trees/:id", GetTree)

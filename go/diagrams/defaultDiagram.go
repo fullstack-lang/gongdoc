@@ -10,7 +10,7 @@ import (
 var defaultDiagram uml.Classdiagram = uml.Classdiagram{
 	Classshapes: []*uml.Classshape{
 		{
-			Struct: &(models.Classdiagram{}),
+			ReferencedGong: &(models.Classdiagram{}),
 			Position: &uml.Position{
 				X: 40.000000,
 				Y: 40.000000,
@@ -34,7 +34,7 @@ var defaultDiagram uml.Classdiagram = uml.Classdiagram{
 			},
 		},
 		{
-			Struct: &(models.Classshape{}),
+			ReferencedGong: &(models.Classshape{}),
 			Position: &uml.Position{
 				X: 340.000000,
 				Y: 40.000000,
@@ -69,16 +69,13 @@ var defaultDiagram uml.Classdiagram = uml.Classdiagram{
 			},
 			Fields: []*uml.Field{
 				{
-					Field: models.Classshape{}.ClassshapeTargetType,
-				},
-				{
 					Field: models.Classshape{}.Heigth,
 				},
 				{
 					Field: models.Classshape{}.Name,
 				},
 				{
-					Field: models.Classshape{}.Struct,
+					Field: models.Classshape{}.ReferencedGong,
 				},
 				{
 					Field: models.Classshape{}.ReferenceName,
@@ -89,24 +86,7 @@ var defaultDiagram uml.Classdiagram = uml.Classdiagram{
 			},
 		},
 		{
-			Struct: new(models.ClassshapeTargetType),
-			Position: &uml.Position{
-				X: 40.000000,
-				Y: 500.000000,
-			},
-			Width:  240.000000,
-			Heigth: 78.000000,
-			Fields: []*uml.Field{
-				{
-					Field: models.ENUM,
-				},
-				{
-					Field: models.STRUCT,
-				},
-			},
-		},
-		{
-			Struct: &(models.Field{}),
+			ReferencedGong: &(models.Field{}),
 			Position: &uml.Position{
 				X: 640.000000,
 				Y: 40.000000,
@@ -132,7 +112,7 @@ var defaultDiagram uml.Classdiagram = uml.Classdiagram{
 			},
 		},
 		{
-			Struct: &(models.Link{}),
+			ReferencedGong: &(models.Link{}),
 			Position: &uml.Position{
 				X: 1240.000000,
 				Y: 40.000000,
@@ -171,7 +151,7 @@ var defaultDiagram uml.Classdiagram = uml.Classdiagram{
 			},
 		},
 		{
-			Struct: new(models.MultiplicityType),
+			ReferencedGong: new(models.MultiplicityType),
 			Position: &uml.Position{
 				X: 340.000000,
 				Y: 500.000000,
@@ -191,7 +171,7 @@ var defaultDiagram uml.Classdiagram = uml.Classdiagram{
 			},
 		},
 		{
-			Struct: &(models.DiagramPackage{}),
+			ReferencedGong: &(models.DiagramPackage{}),
 			Position: &uml.Position{
 				X: 1540.000000,
 				Y: 40.000000,
@@ -223,7 +203,7 @@ var defaultDiagram uml.Classdiagram = uml.Classdiagram{
 			},
 		},
 		{
-			Struct: &(models.Position{}),
+			ReferencedGong: &(models.Position{}),
 			Position: &uml.Position{
 				X: 1840.000000,
 				Y: 40.000000,
@@ -243,7 +223,7 @@ var defaultDiagram uml.Classdiagram = uml.Classdiagram{
 			},
 		},
 		{
-			Struct: &(models.UmlState{}),
+			ReferencedGong: &(models.UmlState{}),
 			Position: &uml.Position{
 				X: 2140.000000,
 				Y: 40.000000,
@@ -263,7 +243,7 @@ var defaultDiagram uml.Classdiagram = uml.Classdiagram{
 			},
 		},
 		{
-			Struct: &(models.Umlsc{}),
+			ReferencedGong: &(models.Umlsc{}),
 			Position: &uml.Position{
 				X: 2440.000000,
 				Y: 40.000000,
@@ -290,7 +270,7 @@ var defaultDiagram uml.Classdiagram = uml.Classdiagram{
 			},
 		},
 		{
-			Struct: &(models.Vertice{}),
+			ReferencedGong: &(models.Vertice{}),
 			Position: &uml.Position{
 				X: 2740.000000,
 				Y: 40.000000,

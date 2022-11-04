@@ -455,26 +455,26 @@ func (classdiagram *Classdiagram) RemoveClassshape(classshapeName string) {
 	Stage.Commit()
 }
 
-func (classdiagram *Classdiagram) AddClassshape(classshapeName string) {
+func (classdiagram *Classdiagram) AddClassshape(classshapeName string, referenceType ReferenceType) {
 
 	var classshape Classshape
 	classshape.Name = classdiagram.Name + "-" + classshapeName
 	classshape.ReferenceName = classshapeName
-	classshape.ClassshapeTargetType = STRUCT
 	classshape.Width = 240
 	classshape.Heigth = 63
 
 	// attach GongStruct to classshape
-	var referenceIdentifier *ReferenceIdentifier
+	var reference *Reference
 	var ok bool
-	referenceIdentifier, ok = (*GetGongstructInstancesMap[ReferenceIdentifier]())[classshape.ReferenceName]
+	reference, ok = (*GetGongstructInstancesMap[Reference]())[classshape.ReferenceName]
 	if ok {
 		classshape.ShowNbInstances = true
-		classshape.NbInstances = referenceIdentifier.NbInstances
+		classshape.NbInstances = reference.NbInstances
 	} else {
-		referenceIdentifier = (&ReferenceIdentifier{Name: classshape.ReferenceName}).Stage()
+		reference = (&Reference{Name: classshape.ReferenceName}).Stage()
+		reference.Type = referenceType
 	}
-	classshape.Reference = referenceIdentifier
+	classshape.Reference = reference
 	classshape.Stage()
 
 	var position Position

@@ -91,9 +91,6 @@ type ClassshapeDB struct {
 	// Declation for basic field classshapeDB.Heigth
 	Heigth_Data sql.NullFloat64
 
-	// Declation for basic field classshapeDB.ClassshapeTargetType
-	ClassshapeTargetType_Data sql.NullString
-
 	// Declation for basic field classshapeDB.IsSelected
 	// provide the sql storage for the boolan
 	IsSelected_Data sql.NullBool
@@ -130,9 +127,7 @@ type ClassshapeWOP struct {
 
 	Heigth float64 `xlsx:"6"`
 
-	ClassshapeTargetType models.ClassshapeTargetType `xlsx:"7"`
-
-	IsSelected bool `xlsx:"8"`
+	IsSelected bool `xlsx:"7"`
 	// insertion for WOP pointer fields
 }
 
@@ -145,7 +140,6 @@ var Classshape_Fields = []string{
 	"NbInstances",
 	"Width",
 	"Heigth",
-	"ClassshapeTargetType",
 	"IsSelected",
 }
 
@@ -302,7 +296,7 @@ func (backRepoClassshape *BackRepoClassshapeStruct) CommitPhaseTwoInstance(backR
 		// commit pointer value classshape.Reference translates to updating the classshape.ReferenceID
 		classshapeDB.ReferenceID.Valid = true // allow for a 0 value (nil association)
 		if classshape.Reference != nil {
-			if ReferenceId, ok := (*backRepo.BackRepoReferenceIdentifier.Map_ReferenceIdentifierPtr_ReferenceIdentifierDBID)[classshape.Reference]; ok {
+			if ReferenceId, ok := (*backRepo.BackRepoReference.Map_ReferencePtr_ReferenceDBID)[classshape.Reference]; ok {
 				classshapeDB.ReferenceID.Int64 = int64(ReferenceId)
 				classshapeDB.ReferenceID.Valid = true
 			}
@@ -457,7 +451,7 @@ func (backRepoClassshape *BackRepoClassshapeStruct) CheckoutPhaseTwoInstance(bac
 	}
 	// Reference field
 	if classshapeDB.ReferenceID.Int64 != 0 {
-		classshape.Reference = (*backRepo.BackRepoReferenceIdentifier.Map_ReferenceIdentifierDBID_ReferenceIdentifierPtr)[uint(classshapeDB.ReferenceID.Int64)]
+		classshape.Reference = (*backRepo.BackRepoReference.Map_ReferenceDBID_ReferencePtr)[uint(classshapeDB.ReferenceID.Int64)]
 	}
 	// This loop redeem classshape.Fields in the stage from the encode in the back repo
 	// It parses all FieldDB in the back repo and if the reverse pointer encoding matches the back repo ID
@@ -565,9 +559,6 @@ func (classshapeDB *ClassshapeDB) CopyBasicFieldsFromClassshape(classshape *mode
 	classshapeDB.Heigth_Data.Float64 = classshape.Heigth
 	classshapeDB.Heigth_Data.Valid = true
 
-	classshapeDB.ClassshapeTargetType_Data.String = classshape.ClassshapeTargetType.ToString()
-	classshapeDB.ClassshapeTargetType_Data.Valid = true
-
 	classshapeDB.IsSelected_Data.Bool = classshape.IsSelected
 	classshapeDB.IsSelected_Data.Valid = true
 }
@@ -594,9 +585,6 @@ func (classshapeDB *ClassshapeDB) CopyBasicFieldsFromClassshapeWOP(classshape *C
 	classshapeDB.Heigth_Data.Float64 = classshape.Heigth
 	classshapeDB.Heigth_Data.Valid = true
 
-	classshapeDB.ClassshapeTargetType_Data.String = classshape.ClassshapeTargetType.ToString()
-	classshapeDB.ClassshapeTargetType_Data.Valid = true
-
 	classshapeDB.IsSelected_Data.Bool = classshape.IsSelected
 	classshapeDB.IsSelected_Data.Valid = true
 }
@@ -610,7 +598,6 @@ func (classshapeDB *ClassshapeDB) CopyBasicFieldsToClassshape(classshape *models
 	classshape.NbInstances = int(classshapeDB.NbInstances_Data.Int64)
 	classshape.Width = classshapeDB.Width_Data.Float64
 	classshape.Heigth = classshapeDB.Heigth_Data.Float64
-	classshape.ClassshapeTargetType.FromString(classshapeDB.ClassshapeTargetType_Data.String)
 	classshape.IsSelected = classshapeDB.IsSelected_Data.Bool
 }
 
@@ -624,7 +611,6 @@ func (classshapeDB *ClassshapeDB) CopyBasicFieldsToClassshapeWOP(classshape *Cla
 	classshape.NbInstances = int(classshapeDB.NbInstances_Data.Int64)
 	classshape.Width = classshapeDB.Width_Data.Float64
 	classshape.Heigth = classshapeDB.Heigth_Data.Float64
-	classshape.ClassshapeTargetType.FromString(classshapeDB.ClassshapeTargetType_Data.String)
 	classshape.IsSelected = classshapeDB.IsSelected_Data.Bool
 }
 
@@ -791,7 +777,7 @@ func (backRepoClassshape *BackRepoClassshapeStruct) RestorePhaseTwo() {
 
 		// reindexing Reference field
 		if classshapeDB.ReferenceID.Int64 != 0 {
-			classshapeDB.ReferenceID.Int64 = int64(BackRepoReferenceIdentifierid_atBckpTime_newID[uint(classshapeDB.ReferenceID.Int64)])
+			classshapeDB.ReferenceID.Int64 = int64(BackRepoReferenceid_atBckpTime_newID[uint(classshapeDB.ReferenceID.Int64)])
 			classshapeDB.ReferenceID.Valid = true
 		}
 

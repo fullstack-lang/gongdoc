@@ -82,22 +82,22 @@ func updateNodesStates(stage *StageStruct, callbacksSingloton *NodeCallbacksSing
 
 		// get the referenced gongstructs
 		for _, classshape := range classDiagram.Classshapes {
-			gongstruct := classshape.Reference
-			mapIdentifiersNodes[gongstruct.Name].IsChecked = true
+			reference := classshape.Reference
+			mapIdentifiersNodes[reference.Name].IsChecked = true
 
 			// disable checkbox of all children of the gongstruct
-			for _, gongfieldNode := range mapIdentifiersNodes[gongstruct.Name].Children {
+			for _, gongfieldNode := range mapIdentifiersNodes[reference.Name].Children {
 				gongfieldNode.IsCheckboxDisabled = !classDiagram.IsInDrawMode
 			}
 
 			for _, field := range classshape.Fields {
-				gongFieldIdentifiersdNodes[gongstruct.Name+"."+field.Name].IsChecked = true
-				gongFieldIdentifiersdNodes[gongstruct.Name+"."+field.Name].IsCheckboxDisabled = !classDiagram.IsInDrawMode
+				gongFieldIdentifiersdNodes[reference.Name+"."+field.Name].IsChecked = true
+				gongFieldIdentifiersdNodes[reference.Name+"."+field.Name].IsCheckboxDisabled = !classDiagram.IsInDrawMode
 			}
 
 			for _, link := range classshape.Links {
-				gongFieldIdentifiersdNodes[gongstruct.Name+"."+link.Name].IsChecked = true
-				gongFieldIdentifiersdNodes[gongstruct.Name+"."+link.Name].IsCheckboxDisabled = !classDiagram.IsInDrawMode
+				gongFieldIdentifiersdNodes[reference.Name+"."+link.Name].IsChecked = true
+				gongFieldIdentifiersdNodes[reference.Name+"."+link.Name].IsCheckboxDisabled = !classDiagram.IsInDrawMode
 			}
 		}
 

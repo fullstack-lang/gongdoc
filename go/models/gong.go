@@ -113,13 +113,13 @@ type StageStruct struct { // insertion point for definition of arrays registerin
 	OnAfterPositionReadCallback   OnAfterReadInterface[Position]
 
 
-	ReferenceIdentifiers           map[*ReferenceIdentifier]any
-	ReferenceIdentifiers_mapString map[string]*ReferenceIdentifier
+	References           map[*Reference]any
+	References_mapString map[string]*Reference
 
-	OnAfterReferenceIdentifierCreateCallback OnAfterCreateInterface[ReferenceIdentifier]
-	OnAfterReferenceIdentifierUpdateCallback OnAfterUpdateInterface[ReferenceIdentifier]
-	OnAfterReferenceIdentifierDeleteCallback OnAfterDeleteInterface[ReferenceIdentifier]
-	OnAfterReferenceIdentifierReadCallback   OnAfterReadInterface[ReferenceIdentifier]
+	OnAfterReferenceCreateCallback OnAfterCreateInterface[Reference]
+	OnAfterReferenceUpdateCallback OnAfterUpdateInterface[Reference]
+	OnAfterReferenceDeleteCallback OnAfterDeleteInterface[Reference]
+	OnAfterReferenceReadCallback   OnAfterReadInterface[Reference]
 
 
 	Trees           map[*Tree]any
@@ -226,8 +226,8 @@ type BackRepoInterface interface {
 	CheckoutNote(note *Note)
 	CommitPosition(position *Position)
 	CheckoutPosition(position *Position)
-	CommitReferenceIdentifier(referenceidentifier *ReferenceIdentifier)
-	CheckoutReferenceIdentifier(referenceidentifier *ReferenceIdentifier)
+	CommitReference(reference *Reference)
+	CheckoutReference(reference *Reference)
 	CommitTree(tree *Tree)
 	CheckoutTree(tree *Tree)
 	CommitUmlState(umlstate *UmlState)
@@ -269,8 +269,8 @@ var Stage StageStruct = StageStruct{ // insertion point for array initiatialisat
 	Positions:           make(map[*Position]any),
 	Positions_mapString: make(map[string]*Position),
 
-	ReferenceIdentifiers:           make(map[*ReferenceIdentifier]any),
-	ReferenceIdentifiers_mapString: make(map[string]*ReferenceIdentifier),
+	References:           make(map[*Reference]any),
+	References_mapString: make(map[string]*Reference),
 
 	Trees:           make(map[*Tree]any),
 	Trees_mapString: make(map[string]*Tree),
@@ -303,7 +303,7 @@ func (stage *StageStruct) Commit() {
 	stage.Map_GongStructName_InstancesNb["Node"] = len(stage.Nodes)
 	stage.Map_GongStructName_InstancesNb["Note"] = len(stage.Notes)
 	stage.Map_GongStructName_InstancesNb["Position"] = len(stage.Positions)
-	stage.Map_GongStructName_InstancesNb["ReferenceIdentifier"] = len(stage.ReferenceIdentifiers)
+	stage.Map_GongStructName_InstancesNb["Reference"] = len(stage.References)
 	stage.Map_GongStructName_InstancesNb["Tree"] = len(stage.Trees)
 	stage.Map_GongStructName_InstancesNb["UmlState"] = len(stage.UmlStates)
 	stage.Map_GongStructName_InstancesNb["Umlsc"] = len(stage.Umlscs)
@@ -326,7 +326,7 @@ func (stage *StageStruct) Checkout() {
 	stage.Map_GongStructName_InstancesNb["Node"] = len(stage.Nodes)
 	stage.Map_GongStructName_InstancesNb["Note"] = len(stage.Notes)
 	stage.Map_GongStructName_InstancesNb["Position"] = len(stage.Positions)
-	stage.Map_GongStructName_InstancesNb["ReferenceIdentifier"] = len(stage.ReferenceIdentifiers)
+	stage.Map_GongStructName_InstancesNb["Reference"] = len(stage.References)
 	stage.Map_GongStructName_InstancesNb["Tree"] = len(stage.Trees)
 	stage.Map_GongStructName_InstancesNb["UmlState"] = len(stage.UmlStates)
 	stage.Map_GongStructName_InstancesNb["Umlsc"] = len(stage.Umlscs)
@@ -1218,99 +1218,99 @@ func (position *Position) GetName() (res string) {
 	return position.Name
 }
 
-// Stage puts referenceidentifier to the model stage
-func (referenceidentifier *ReferenceIdentifier) Stage() *ReferenceIdentifier {
-	Stage.ReferenceIdentifiers[referenceidentifier] = __member
-	Stage.ReferenceIdentifiers_mapString[referenceidentifier.Name] = referenceidentifier
+// Stage puts reference to the model stage
+func (reference *Reference) Stage() *Reference {
+	Stage.References[reference] = __member
+	Stage.References_mapString[reference.Name] = reference
 
-	return referenceidentifier
+	return reference
 }
 
-// Unstage removes referenceidentifier off the model stage
-func (referenceidentifier *ReferenceIdentifier) Unstage() *ReferenceIdentifier {
-	delete(Stage.ReferenceIdentifiers, referenceidentifier)
-	delete(Stage.ReferenceIdentifiers_mapString, referenceidentifier.Name)
-	return referenceidentifier
+// Unstage removes reference off the model stage
+func (reference *Reference) Unstage() *Reference {
+	delete(Stage.References, reference)
+	delete(Stage.References_mapString, reference.Name)
+	return reference
 }
 
-// commit referenceidentifier to the back repo (if it is already staged)
-func (referenceidentifier *ReferenceIdentifier) Commit() *ReferenceIdentifier {
-	if _, ok := Stage.ReferenceIdentifiers[referenceidentifier]; ok {
+// commit reference to the back repo (if it is already staged)
+func (reference *Reference) Commit() *Reference {
+	if _, ok := Stage.References[reference]; ok {
 		if Stage.BackRepo != nil {
-			Stage.BackRepo.CommitReferenceIdentifier(referenceidentifier)
+			Stage.BackRepo.CommitReference(reference)
 		}
 	}
-	return referenceidentifier
+	return reference
 }
 
-// Checkout referenceidentifier to the back repo (if it is already staged)
-func (referenceidentifier *ReferenceIdentifier) Checkout() *ReferenceIdentifier {
-	if _, ok := Stage.ReferenceIdentifiers[referenceidentifier]; ok {
+// Checkout reference to the back repo (if it is already staged)
+func (reference *Reference) Checkout() *Reference {
+	if _, ok := Stage.References[reference]; ok {
 		if Stage.BackRepo != nil {
-			Stage.BackRepo.CheckoutReferenceIdentifier(referenceidentifier)
+			Stage.BackRepo.CheckoutReference(reference)
 		}
 	}
-	return referenceidentifier
+	return reference
 }
 
 //
 // Legacy, to be deleted
 //
 
-// StageCopy appends a copy of referenceidentifier to the model stage
-func (referenceidentifier *ReferenceIdentifier) StageCopy() *ReferenceIdentifier {
-	_referenceidentifier := new(ReferenceIdentifier)
-	*_referenceidentifier = *referenceidentifier
-	_referenceidentifier.Stage()
-	return _referenceidentifier
+// StageCopy appends a copy of reference to the model stage
+func (reference *Reference) StageCopy() *Reference {
+	_reference := new(Reference)
+	*_reference = *reference
+	_reference.Stage()
+	return _reference
 }
 
-// StageAndCommit appends referenceidentifier to the model stage and commit to the orm repo
-func (referenceidentifier *ReferenceIdentifier) StageAndCommit() *ReferenceIdentifier {
-	referenceidentifier.Stage()
+// StageAndCommit appends reference to the model stage and commit to the orm repo
+func (reference *Reference) StageAndCommit() *Reference {
+	reference.Stage()
 	if Stage.AllModelsStructCreateCallback != nil {
-		Stage.AllModelsStructCreateCallback.CreateORMReferenceIdentifier(referenceidentifier)
+		Stage.AllModelsStructCreateCallback.CreateORMReference(reference)
 	}
-	return referenceidentifier
+	return reference
 }
 
-// DeleteStageAndCommit appends referenceidentifier to the model stage and commit to the orm repo
-func (referenceidentifier *ReferenceIdentifier) DeleteStageAndCommit() *ReferenceIdentifier {
-	referenceidentifier.Unstage()
-	DeleteORMReferenceIdentifier(referenceidentifier)
-	return referenceidentifier
+// DeleteStageAndCommit appends reference to the model stage and commit to the orm repo
+func (reference *Reference) DeleteStageAndCommit() *Reference {
+	reference.Unstage()
+	DeleteORMReference(reference)
+	return reference
 }
 
-// StageCopyAndCommit appends a copy of referenceidentifier to the model stage and commit to the orm repo
-func (referenceidentifier *ReferenceIdentifier) StageCopyAndCommit() *ReferenceIdentifier {
-	_referenceidentifier := new(ReferenceIdentifier)
-	*_referenceidentifier = *referenceidentifier
-	_referenceidentifier.Stage()
+// StageCopyAndCommit appends a copy of reference to the model stage and commit to the orm repo
+func (reference *Reference) StageCopyAndCommit() *Reference {
+	_reference := new(Reference)
+	*_reference = *reference
+	_reference.Stage()
 	if Stage.AllModelsStructCreateCallback != nil {
-		Stage.AllModelsStructCreateCallback.CreateORMReferenceIdentifier(referenceidentifier)
+		Stage.AllModelsStructCreateCallback.CreateORMReference(reference)
 	}
-	return _referenceidentifier
+	return _reference
 }
 
-// CreateORMReferenceIdentifier enables dynamic staging of a ReferenceIdentifier instance
-func CreateORMReferenceIdentifier(referenceidentifier *ReferenceIdentifier) {
-	referenceidentifier.Stage()
+// CreateORMReference enables dynamic staging of a Reference instance
+func CreateORMReference(reference *Reference) {
+	reference.Stage()
 	if Stage.AllModelsStructCreateCallback != nil {
-		Stage.AllModelsStructCreateCallback.CreateORMReferenceIdentifier(referenceidentifier)
+		Stage.AllModelsStructCreateCallback.CreateORMReference(reference)
 	}
 }
 
-// DeleteORMReferenceIdentifier enables dynamic staging of a ReferenceIdentifier instance
-func DeleteORMReferenceIdentifier(referenceidentifier *ReferenceIdentifier) {
-	referenceidentifier.Unstage()
+// DeleteORMReference enables dynamic staging of a Reference instance
+func DeleteORMReference(reference *Reference) {
+	reference.Unstage()
 	if Stage.AllModelsStructDeleteCallback != nil {
-		Stage.AllModelsStructDeleteCallback.DeleteORMReferenceIdentifier(referenceidentifier)
+		Stage.AllModelsStructDeleteCallback.DeleteORMReference(reference)
 	}
 }
 
 // for satisfaction of GongStruct interface
-func (referenceidentifier *ReferenceIdentifier) GetName() (res string) {
-	return referenceidentifier.Name
+func (reference *Reference) GetName() (res string) {
+	return reference.Name
 }
 
 // Stage puts tree to the model stage
@@ -1704,7 +1704,7 @@ type AllModelsStructCreateInterface interface { // insertion point for Callbacks
 	CreateORMNode(Node *Node)
 	CreateORMNote(Note *Note)
 	CreateORMPosition(Position *Position)
-	CreateORMReferenceIdentifier(ReferenceIdentifier *ReferenceIdentifier)
+	CreateORMReference(Reference *Reference)
 	CreateORMTree(Tree *Tree)
 	CreateORMUmlState(UmlState *UmlState)
 	CreateORMUmlsc(Umlsc *Umlsc)
@@ -1721,7 +1721,7 @@ type AllModelsStructDeleteInterface interface { // insertion point for Callbacks
 	DeleteORMNode(Node *Node)
 	DeleteORMNote(Note *Note)
 	DeleteORMPosition(Position *Position)
-	DeleteORMReferenceIdentifier(ReferenceIdentifier *ReferenceIdentifier)
+	DeleteORMReference(Reference *Reference)
 	DeleteORMTree(Tree *Tree)
 	DeleteORMUmlState(UmlState *UmlState)
 	DeleteORMUmlsc(Umlsc *Umlsc)
@@ -1756,8 +1756,8 @@ func (stage *StageStruct) Reset() { // insertion point for array reset
 	stage.Positions = make(map[*Position]any)
 	stage.Positions_mapString = make(map[string]*Position)
 
-	stage.ReferenceIdentifiers = make(map[*ReferenceIdentifier]any)
-	stage.ReferenceIdentifiers_mapString = make(map[string]*ReferenceIdentifier)
+	stage.References = make(map[*Reference]any)
+	stage.References_mapString = make(map[string]*Reference)
 
 	stage.Trees = make(map[*Tree]any)
 	stage.Trees_mapString = make(map[string]*Tree)
@@ -1801,8 +1801,8 @@ func (stage *StageStruct) Nil() { // insertion point for array nil
 	stage.Positions = nil
 	stage.Positions_mapString = nil
 
-	stage.ReferenceIdentifiers = nil
-	stage.ReferenceIdentifiers_mapString = nil
+	stage.References = nil
+	stage.References_mapString = nil
 
 	stage.Trees = nil
 	stage.Trees_mapString = nil
@@ -1989,14 +1989,6 @@ func (stage *StageStruct) Marshall(file *os.File, modelsPackageName, packageName
 		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "Heigth")
 		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", fmt.Sprintf("%f", classshape.Heigth))
 		initializerStatements += setValueField
-
-		if classshape.ClassshapeTargetType != "" {
-			setValueField = StringEnumInitStatement
-			setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
-			setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "ClassshapeTargetType")
-			setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", "models."+classshape.ClassshapeTargetType.ToCodeString())
-			initializerStatements += setValueField
-		}
 
 		setValueField = NumberInitStatement
 		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
@@ -2448,41 +2440,49 @@ func (stage *StageStruct) Marshall(file *os.File, modelsPackageName, packageName
 
 	}
 
-	map_ReferenceIdentifier_Identifiers := make(map[*ReferenceIdentifier]string)
-	_ = map_ReferenceIdentifier_Identifiers
+	map_Reference_Identifiers := make(map[*Reference]string)
+	_ = map_Reference_Identifiers
 
-	referenceidentifierOrdered := []*ReferenceIdentifier{}
-	for referenceidentifier := range stage.ReferenceIdentifiers {
-		referenceidentifierOrdered = append(referenceidentifierOrdered, referenceidentifier)
+	referenceOrdered := []*Reference{}
+	for reference := range stage.References {
+		referenceOrdered = append(referenceOrdered, reference)
 	}
-	sort.Slice(referenceidentifierOrdered[:], func(i, j int) bool {
-		return referenceidentifierOrdered[i].Name < referenceidentifierOrdered[j].Name
+	sort.Slice(referenceOrdered[:], func(i, j int) bool {
+		return referenceOrdered[i].Name < referenceOrdered[j].Name
 	})
-	identifiersDecl += "\n\n	// Declarations of staged instances of ReferenceIdentifier"
-	for idx, referenceidentifier := range referenceidentifierOrdered {
+	identifiersDecl += "\n\n	// Declarations of staged instances of Reference"
+	for idx, reference := range referenceOrdered {
 
-		id = generatesIdentifier("ReferenceIdentifier", idx, referenceidentifier.Name)
-		map_ReferenceIdentifier_Identifiers[referenceidentifier] = id
+		id = generatesIdentifier("Reference", idx, reference.Name)
+		map_Reference_Identifiers[reference] = id
 
 		decl = IdentifiersDecls
 		decl = strings.ReplaceAll(decl, "{{Identifier}}", id)
-		decl = strings.ReplaceAll(decl, "{{GeneratedStructName}}", "ReferenceIdentifier")
-		decl = strings.ReplaceAll(decl, "{{GeneratedFieldNameValue}}", referenceidentifier.Name)
+		decl = strings.ReplaceAll(decl, "{{GeneratedStructName}}", "Reference")
+		decl = strings.ReplaceAll(decl, "{{GeneratedFieldNameValue}}", reference.Name)
 		identifiersDecl += decl
 
-		initializerStatements += fmt.Sprintf("\n\n	// ReferenceIdentifier %s values setup", referenceidentifier.Name)
+		initializerStatements += fmt.Sprintf("\n\n	// Reference %s values setup", reference.Name)
 		// Initialisation of values
 		setValueField = StringInitStatement
 		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
 		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "Name")
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", string(referenceidentifier.Name))
+		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", string(reference.Name))
 		initializerStatements += setValueField
 
 		setValueField = NumberInitStatement
 		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
 		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "NbInstances")
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", fmt.Sprintf("%d", referenceidentifier.NbInstances))
+		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", fmt.Sprintf("%d", reference.NbInstances))
 		initializerStatements += setValueField
+
+		if reference.Type != "" {
+			setValueField = StringEnumInitStatement
+			setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
+			setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "Type")
+			setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", "models."+reference.Type.ToCodeString())
+			initializerStatements += setValueField
+		}
 
 	}
 
@@ -2705,7 +2705,7 @@ func (stage *StageStruct) Marshall(file *os.File, modelsPackageName, packageName
 			setPointerField = PointerFieldInitStatement
 			setPointerField = strings.ReplaceAll(setPointerField, "{{Identifier}}", id)
 			setPointerField = strings.ReplaceAll(setPointerField, "{{GeneratedFieldName}}", "Reference")
-			setPointerField = strings.ReplaceAll(setPointerField, "{{GeneratedFieldNameValue}}", map_ReferenceIdentifier_Identifiers[classshape.Reference])
+			setPointerField = strings.ReplaceAll(setPointerField, "{{GeneratedFieldNameValue}}", map_Reference_Identifiers[classshape.Reference])
 			pointersInitializesStatements += setPointerField
 		}
 
@@ -2845,12 +2845,12 @@ func (stage *StageStruct) Marshall(file *os.File, modelsPackageName, packageName
 		// Initialisation of values
 	}
 
-	for idx, referenceidentifier := range referenceidentifierOrdered {
+	for idx, reference := range referenceOrdered {
 		var setPointerField string
 		_ = setPointerField
 
-		id = generatesIdentifier("ReferenceIdentifier", idx, referenceidentifier.Name)
-		map_ReferenceIdentifier_Identifiers[referenceidentifier] = id
+		id = generatesIdentifier("Reference", idx, reference.Name)
+		map_Reference_Identifiers[reference] = id
 
 		// Initialisation of values
 	}
@@ -2983,21 +2983,21 @@ func (stageStruct *StageStruct) CreateReverseMap_Classshape_Position() (res map[
 
 	return
 }
-func (stageStruct *StageStruct) CreateReverseMap_Classshape_Reference() (res map[*ReferenceIdentifier][]*Classshape) {
-	res = make(map[*ReferenceIdentifier][]*Classshape)
+func (stageStruct *StageStruct) CreateReverseMap_Classshape_Reference() (res map[*Reference][]*Classshape) {
+	res = make(map[*Reference][]*Classshape)
 
 	for classshape := range stageStruct.Classshapes {
 		if classshape.Reference != nil {
-			referenceidentifier_ := classshape.Reference
+			reference_ := classshape.Reference
 			var classshapes []*Classshape
-			_, ok := res[referenceidentifier_]
+			_, ok := res[reference_]
 			if ok {
-				classshapes = res[referenceidentifier_]
+				classshapes = res[reference_]
 			} else {
 				classshapes = make([]*Classshape, 0)
 			}
 			classshapes = append(classshapes, classshape)
-			res[referenceidentifier_] = classshapes
+			res[reference_] = classshapes
 		}
 	}
 
@@ -3138,7 +3138,7 @@ func (stageStruct *StageStruct) CreateReverseMap_Node_Children() (res map[*Node]
 
 // generate function for reverse association maps of Position
 
-// generate function for reverse association maps of ReferenceIdentifier
+// generate function for reverse association maps of Reference
 
 // generate function for reverse association maps of Tree
 func (stageStruct *StageStruct) CreateReverseMap_Tree_RootNodes() (res map[*Node]*Tree) {
@@ -3178,7 +3178,7 @@ func (stageStruct *StageStruct) CreateReverseMap_Umlsc_States() (res map[*UmlSta
 // - full refactoring of Gongstruct identifiers / fields
 type Gongstruct interface {
 	// insertion point for generic types
-	Classdiagram | Classshape | DiagramPackage | Field | GongdocStatus | Link | Node | Note | Position | ReferenceIdentifier | Tree | UmlState | Umlsc | Vertice
+	Classdiagram | Classshape | DiagramPackage | Field | GongdocStatus | Link | Node | Note | Position | Reference | Tree | UmlState | Umlsc | Vertice
 }
 
 // Gongstruct is the type parameter for generated generic function that allows
@@ -3187,7 +3187,7 @@ type Gongstruct interface {
 // - full refactoring of Gongstruct identifiers / fields
 type PointerToGongstruct interface {
 	// insertion point for generic types
-	*Classdiagram | *Classshape | *DiagramPackage | *Field | *GongdocStatus | *Link | *Node | *Note | *Position | *ReferenceIdentifier | *Tree | *UmlState | *Umlsc | *Vertice
+	*Classdiagram | *Classshape | *DiagramPackage | *Field | *GongdocStatus | *Link | *Node | *Note | *Position | *Reference | *Tree | *UmlState | *Umlsc | *Vertice
 	GetName() string
 }
 
@@ -3203,7 +3203,7 @@ type GongstructSet interface {
 		map[*Node]any |
 		map[*Note]any |
 		map[*Position]any |
-		map[*ReferenceIdentifier]any |
+		map[*Reference]any |
 		map[*Tree]any |
 		map[*UmlState]any |
 		map[*Umlsc]any |
@@ -3223,7 +3223,7 @@ type GongstructMapString interface {
 		map[string]*Node |
 		map[string]*Note |
 		map[string]*Position |
-		map[string]*ReferenceIdentifier |
+		map[string]*Reference |
 		map[string]*Tree |
 		map[string]*UmlState |
 		map[string]*Umlsc |
@@ -3256,8 +3256,8 @@ func GongGetSet[Type GongstructSet]() *Type {
 		return any(&Stage.Notes).(*Type)
 	case map[*Position]any:
 		return any(&Stage.Positions).(*Type)
-	case map[*ReferenceIdentifier]any:
-		return any(&Stage.ReferenceIdentifiers).(*Type)
+	case map[*Reference]any:
+		return any(&Stage.References).(*Type)
 	case map[*Tree]any:
 		return any(&Stage.Trees).(*Type)
 	case map[*UmlState]any:
@@ -3296,8 +3296,8 @@ func GongGetMap[Type GongstructMapString]() *Type {
 		return any(&Stage.Notes_mapString).(*Type)
 	case map[string]*Position:
 		return any(&Stage.Positions_mapString).(*Type)
-	case map[string]*ReferenceIdentifier:
-		return any(&Stage.ReferenceIdentifiers_mapString).(*Type)
+	case map[string]*Reference:
+		return any(&Stage.References_mapString).(*Type)
 	case map[string]*Tree:
 		return any(&Stage.Trees_mapString).(*Type)
 	case map[string]*UmlState:
@@ -3336,8 +3336,8 @@ func GetGongstructInstancesSet[Type Gongstruct]() *map[*Type]any {
 		return any(&Stage.Notes).(*map[*Type]any)
 	case Position:
 		return any(&Stage.Positions).(*map[*Type]any)
-	case ReferenceIdentifier:
-		return any(&Stage.ReferenceIdentifiers).(*map[*Type]any)
+	case Reference:
+		return any(&Stage.References).(*map[*Type]any)
 	case Tree:
 		return any(&Stage.Trees).(*map[*Type]any)
 	case UmlState:
@@ -3376,8 +3376,8 @@ func GetGongstructInstancesMap[Type Gongstruct]() *map[string]*Type {
 		return any(&Stage.Notes_mapString).(*map[string]*Type)
 	case Position:
 		return any(&Stage.Positions_mapString).(*map[string]*Type)
-	case ReferenceIdentifier:
-		return any(&Stage.ReferenceIdentifiers_mapString).(*map[string]*Type)
+	case Reference:
+		return any(&Stage.References_mapString).(*map[string]*Type)
 	case Tree:
 		return any(&Stage.Trees_mapString).(*map[string]*Type)
 	case UmlState:
@@ -3413,8 +3413,8 @@ func GetAssociationName[Type Gongstruct]() *Type {
 			// Initialisation of associations
 			// field is initialized with an instance of Position with the name of the field
 			Position: &Position{Name: "Position"},
-			// field is initialized with an instance of ReferenceIdentifier with the name of the field
-			Reference: &ReferenceIdentifier{Name: "Reference"},
+			// field is initialized with an instance of Reference with the name of the field
+			Reference: &Reference{Name: "Reference"},
 			// field is initialized with an instance of Field with the name of the field
 			Fields: []*Field{{Name: "Fields"}},
 			// field is initialized with an instance of Link with the name of the field
@@ -3460,8 +3460,8 @@ func GetAssociationName[Type Gongstruct]() *Type {
 		return any(&Position{
 			// Initialisation of associations
 		}).(*Type)
-	case ReferenceIdentifier:
-		return any(&ReferenceIdentifier{
+	case Reference:
+		return any(&Reference{
 			// Initialisation of associations
 		}).(*Type)
 	case Tree:
@@ -3528,19 +3528,19 @@ func GetPointerReverseMap[Start, End Gongstruct](fieldname string) map[*End][]*S
 			}
 			return any(res).(map[*End][]*Start)
 		case "Reference":
-			res := make(map[*ReferenceIdentifier][]*Classshape)
+			res := make(map[*Reference][]*Classshape)
 			for classshape := range Stage.Classshapes {
 				if classshape.Reference != nil {
-					referenceidentifier_ := classshape.Reference
+					reference_ := classshape.Reference
 					var classshapes []*Classshape
-					_, ok := res[referenceidentifier_]
+					_, ok := res[reference_]
 					if ok {
-						classshapes = res[referenceidentifier_]
+						classshapes = res[reference_]
 					} else {
 						classshapes = make([]*Classshape, 0)
 					}
 					classshapes = append(classshapes, classshape)
-					res[referenceidentifier_] = classshapes
+					res[reference_] = classshapes
 				}
 			}
 			return any(res).(map[*End][]*Start)
@@ -3631,8 +3631,8 @@ func GetPointerReverseMap[Start, End Gongstruct](fieldname string) map[*End][]*S
 		switch fieldname {
 		// insertion point for per direct association field
 		}
-	// reverse maps of direct associations of ReferenceIdentifier
-	case ReferenceIdentifier:
+	// reverse maps of direct associations of Reference
+	case Reference:
 		switch fieldname {
 		// insertion point for per direct association field
 		}
@@ -3772,8 +3772,8 @@ func GetSliceOfPointersReverseMap[Start, End Gongstruct](fieldname string) map[*
 		switch fieldname {
 		// insertion point for per direct association field
 		}
-	// reverse maps of direct associations of ReferenceIdentifier
-	case ReferenceIdentifier:
+	// reverse maps of direct associations of Reference
+	case Reference:
 		switch fieldname {
 		// insertion point for per direct association field
 		}
@@ -3843,8 +3843,8 @@ func GetGongstructName[Type Gongstruct]() (res string) {
 		res = "Note"
 	case Position:
 		res = "Position"
-	case ReferenceIdentifier:
-		res = "ReferenceIdentifier"
+	case Reference:
+		res = "Reference"
 	case Tree:
 		res = "Tree"
 	case UmlState:
@@ -3867,7 +3867,7 @@ func GetFields[Type Gongstruct]() (res []string) {
 	case Classdiagram:
 		res = []string{"Name", "Classshapes", "Notes", "IsInDrawMode"}
 	case Classshape:
-		res = []string{"Name", "Position", "ReferenceName", "Reference", "ShowNbInstances", "NbInstances", "Fields", "Links", "Width", "Heigth", "ClassshapeTargetType", "IsSelected"}
+		res = []string{"Name", "Position", "ReferenceName", "Reference", "ShowNbInstances", "NbInstances", "Fields", "Links", "Width", "Heigth", "IsSelected"}
 	case DiagramPackage:
 		res = []string{"Name", "Path", "GongModelPath", "Classdiagrams", "Umlscs", "IsEditable"}
 	case Field:
@@ -3882,8 +3882,8 @@ func GetFields[Type Gongstruct]() (res []string) {
 		res = []string{"Name", "Body", "X", "Y", "Width", "Heigth", "Matched"}
 	case Position:
 		res = []string{"X", "Y", "Name"}
-	case ReferenceIdentifier:
-		res = []string{"Name", "NbInstances"}
+	case Reference:
+		res = []string{"Name", "NbInstances", "Type"}
 	case Tree:
 		res = []string{"Name", "Type", "RootNodes"}
 	case UmlState:
@@ -3960,9 +3960,6 @@ func GetFieldStringValue[Type Gongstruct](instance Type, fieldName string) (res 
 			res = fmt.Sprintf("%f", any(instance).(Classshape).Width)
 		case "Heigth":
 			res = fmt.Sprintf("%f", any(instance).(Classshape).Heigth)
-		case "ClassshapeTargetType":
-			enum := any(instance).(Classshape).ClassshapeTargetType
-			res = enum.ToCodeString()
 		case "IsSelected":
 			res = fmt.Sprintf("%t", any(instance).(Classshape).IsSelected)
 		}
@@ -4115,13 +4112,16 @@ func GetFieldStringValue[Type Gongstruct](instance Type, fieldName string) (res 
 		case "Name":
 			res = any(instance).(Position).Name
 		}
-	case ReferenceIdentifier:
+	case Reference:
 		switch fieldName {
 		// string value of fields
 		case "Name":
-			res = any(instance).(ReferenceIdentifier).Name
+			res = any(instance).(Reference).Name
 		case "NbInstances":
-			res = fmt.Sprintf("%d", any(instance).(ReferenceIdentifier).NbInstances)
+			res = fmt.Sprintf("%d", any(instance).(Reference).NbInstances)
+		case "Type":
+			enum := any(instance).(Reference).Type
+			res = enum.ToCodeString()
 		}
 	case Tree:
 		switch fieldName {
@@ -4181,48 +4181,6 @@ func GetFieldStringValue[Type Gongstruct](instance Type, fieldName string) (res 
 }
 
 // insertion point of enum utility functions
-// Utility function for ClassshapeTargetType
-// if enum values are string, it is stored with the value
-// if enum values are int, they are stored with the code of the value
-func (classshapetargettype ClassshapeTargetType) ToString() (res string) {
-
-	// migration of former implementation of enum
-	switch classshapetargettype {
-	// insertion code per enum code
-	case STRUCT:
-		res = "STRUCT"
-	case ENUM:
-		res = "ENUM"
-	}
-	return
-}
-
-func (classshapetargettype *ClassshapeTargetType) FromString(input string) (err error) {
-
-	switch input {
-	// insertion code per enum code
-	case "STRUCT":
-		*classshapetargettype = STRUCT
-	case "ENUM":
-		*classshapetargettype = ENUM
-	default:
-		return errUnkownEnum
-	}
-	return
-}
-
-func (classshapetargettype *ClassshapeTargetType) ToCodeString() (res string) {
-
-	switch *classshapetargettype {
-	// insertion code per enum code
-	case STRUCT:
-		res = "STRUCT"
-	case ENUM:
-		res = "ENUM"
-	}
-	return
-}
-
 // Utility function for EditionMode
 // if enum values are string, it is stored with the value
 // if enum values are int, they are stored with the code of the value
@@ -4525,6 +4483,48 @@ func (multiplicitytype *MultiplicityType) ToCodeString() (res string) {
 		res = "ONE"
 	case MANY:
 		res = "MANY"
+	}
+	return
+}
+
+// Utility function for ReferenceType
+// if enum values are string, it is stored with the value
+// if enum values are int, they are stored with the code of the value
+func (referencetype ReferenceType) ToString() (res string) {
+
+	// migration of former implementation of enum
+	switch referencetype {
+	// insertion code per enum code
+	case REFERENCE_GONG_STRUCT:
+		res = "REFERENCE_GONG_STRUCT"
+	case REFERENCE_GONG_ENUM:
+		res = "REFERENCE_GONG_ENUM"
+	}
+	return
+}
+
+func (referencetype *ReferenceType) FromString(input string) (err error) {
+
+	switch input {
+	// insertion code per enum code
+	case "REFERENCE_GONG_STRUCT":
+		*referencetype = REFERENCE_GONG_STRUCT
+	case "REFERENCE_GONG_ENUM":
+		*referencetype = REFERENCE_GONG_ENUM
+	default:
+		return errUnkownEnum
+	}
+	return
+}
+
+func (referencetype *ReferenceType) ToCodeString() (res string) {
+
+	switch *referencetype {
+	// insertion code per enum code
+	case REFERENCE_GONG_STRUCT:
+		res = "REFERENCE_GONG_STRUCT"
+	case REFERENCE_GONG_ENUM:
+		res = "REFERENCE_GONG_ENUM"
 	}
 	return
 }

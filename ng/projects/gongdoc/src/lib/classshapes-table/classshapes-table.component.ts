@@ -92,9 +92,6 @@ export class ClassshapesTableComponent implements OnInit {
         case 'Heigth':
           return classshapeDB.Heigth;
 
-        case 'ClassshapeTargetType':
-          return classshapeDB.ClassshapeTargetType;
-
         case 'IsSelected':
           return classshapeDB.IsSelected?"true":"false";
 
@@ -130,7 +127,6 @@ export class ClassshapesTableComponent implements OnInit {
       mergedContent += classshapeDB.NbInstances.toString()
       mergedContent += classshapeDB.Width.toString()
       mergedContent += classshapeDB.Heigth.toString()
-      mergedContent += classshapeDB.ClassshapeTargetType.toLowerCase()
       if (classshapeDB.Classdiagram_ClassshapesDBID.Int64 != 0) {
         mergedContent += this.frontRepo.Classdiagrams.get(classshapeDB.Classdiagram_ClassshapesDBID.Int64)!.Name.toLowerCase()
       }
@@ -193,7 +189,6 @@ export class ClassshapesTableComponent implements OnInit {
         "NbInstances",
         "Width",
         "Heigth",
-        "ClassshapeTargetType",
         "IsSelected",
         "Classdiagram_Classshapes",
       ]
@@ -207,7 +202,6 @@ export class ClassshapesTableComponent implements OnInit {
         "NbInstances",
         "Width",
         "Heigth",
-        "ClassshapeTargetType",
         "IsSelected",
         "Classdiagram_Classshapes",
       ]

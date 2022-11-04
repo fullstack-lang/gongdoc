@@ -3,7 +3,7 @@
 // usefull for managing pointer ID values that can be nullable
 import { NullInt64 } from './null-int64'
 
-export class ReferenceIdentifierDB {
+export class ReferenceDB {
 	CreatedAt?: string
 	DeletedAt?: string
 	ID: number = 0
@@ -11,6 +11,7 @@ export class ReferenceIdentifierDB {
 	// insertion point for basic fields declarations
 	Name: string = ""
 	NbInstances: number = 0
+	Type: string = ""
 
 	// insertion point for other declarations
 }

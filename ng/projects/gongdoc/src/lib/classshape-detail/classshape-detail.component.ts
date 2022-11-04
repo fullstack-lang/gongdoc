@@ -10,7 +10,6 @@ import { MapOfComponents } from '../map-components'
 import { MapOfSortingComponents } from '../map-components'
 
 // insertion point for imports
-import { ClassshapeTargetTypeSelect, ClassshapeTargetTypeList } from '../ClassshapeTargetType'
 import { ClassdiagramDB } from '../classdiagram-db'
 
 import { Router, RouterState, ActivatedRoute } from '@angular/router';
@@ -37,7 +36,6 @@ export class ClassshapeDetailComponent implements OnInit {
 
 	// insertion point for declarations
 	ShowNbInstancesFormControl: UntypedFormControl = new UntypedFormControl(false);
-	ClassshapeTargetTypeList: ClassshapeTargetTypeSelect[] = []
 	IsSelectedFormControl: UntypedFormControl = new UntypedFormControl(false);
 
 	// the ClassshapeDB of interest
@@ -109,7 +107,6 @@ export class ClassshapeDetailComponent implements OnInit {
 		)
 
 		// insertion point for initialisation of enums list
-		this.ClassshapeTargetTypeList = ClassshapeTargetTypeList
 	}
 
 	getClassshape(): void {

@@ -1,6 +1,6 @@
 // insertion point for imports
 import { PositionDB } from './position-db'
-import { ReferenceIdentifierDB } from './referenceidentifier-db'
+import { ReferenceDB } from './reference-db'
 import { FieldDB } from './field-db'
 import { LinkDB } from './link-db'
 import { ClassdiagramDB } from './classdiagram-db'
@@ -20,14 +20,13 @@ export class ClassshapeDB {
 	NbInstances: number = 0
 	Width: number = 0
 	Heigth: number = 0
-	ClassshapeTargetType: string = ""
 	IsSelected: boolean = false
 
 	// insertion point for other declarations
 	Position?: PositionDB
 	PositionID: NullInt64 = new NullInt64 // if pointer is null, Position.ID = 0
 
-	Reference?: ReferenceIdentifierDB
+	Reference?: ReferenceDB
 	ReferenceID: NullInt64 = new NullInt64 // if pointer is null, Reference.ID = 0
 
 	Fields?: Array<FieldDB>

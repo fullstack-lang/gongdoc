@@ -55,8 +55,8 @@
         <mat-label>Reference</mat-label>
         <mat-select [compareWith]="compareObjects" [(value)]="classshape.Reference" (selectionChange)="fillUpNameIfEmpty($event)">
             <mat-option>None</mat-option>
-            <mat-option *ngFor="let referenceidentifier of frontRepo.ReferenceIdentifiers_array" [value]="referenceidentifier">
-                {{referenceidentifier.Name}}
+            <mat-option *ngFor="let reference of frontRepo.References_array" [value]="reference">
+                {{reference.Name}}
             </mat-option>
         </mat-select>
     </mat-form-field>
@@ -106,16 +106,6 @@
     <mat-form-field class="detail-full-width">
         <mat-label>Heigth</mat-label>
         <input type="number" [ngModelOptions]="{standalone: true}" matInput [(ngModel)]="classshape.Heigth" [ngModelOptions]="{standalone: true}">
-    </mat-form-field>
-
-    <!-- -->
-    <mat-form-field appearance="fill" class="detail-full-width">
-        <mat-label>ClassshapeTargetType</mat-label>
-        <mat-select [(ngModel)]="classshape.ClassshapeTargetType" [ngModelOptions]="{standalone: true}">
-            <mat-option *ngFor="let enum of ClassshapeTargetTypeList" [value]="enum.value">
-                {{enum.viewValue}}
-            </mat-option>
-        </mat-select>
     </mat-form-field>
 
     <!-- -->

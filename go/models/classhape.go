@@ -18,18 +18,17 @@ const ClassshapeDefaultHeigth = 48.0
 // Classshape mirrors joint.shapes.uml.Class
 // swagger:model Classshape
 type Classshape struct {
-	// for technical reasons
 	Name string
 
 	Position *Position
 
 	// swagger:ignore, an "interface" field cannot be used by gong, therefore, one specifies
 	// both swagger and gorm ignore magic code
-	Struct        interface{} `gorm:"-"` // pointer to the struct of the model that it is diagramming
-	ReferenceName string
+	ReferencedGong interface{} `gorm:"-"` // pointer to the struct/enum of the model that it is diagramming
+	ReferenceName  string
 
 	// the related gong struct or gong enum
-	Reference *ReferenceIdentifier
+	Reference *Reference
 
 	// gongdoc can be integrated in a runtime application
 	// the application can then set up the number of instances of Struct
@@ -46,20 +45,10 @@ type Classshape struct {
 	// They are optional fields. they can be computed when empty
 	Width, Heigth float64
 
-	ClassshapeTargetType ClassshapeTargetType
-
 	// this is always false in the backend, but it can be set to true by the front end
 	// this means it is selected by the user
 	IsSelected bool
 }
-
-type ClassshapeTargetType string
-
-// values for EnumType
-const (
-	STRUCT ClassshapeTargetType = "STRUCT"
-	ENUM   ClassshapeTargetType = "ENUM"
-)
 
 // Marshall provides the element of classshape as declaration
 func (classshape *Classshape) Marshall(file *os.File, nbIndentation int) error {
@@ -67,11 +56,11 @@ func (classshape *Classshape) Marshall(file *os.File, nbIndentation int) error {
 	fmt.Fprintf(file, "{\n")
 
 	indent(file, nbIndentation)
-	if classshape.ClassshapeTargetType == STRUCT {
-		fmt.Fprintf(file, "\tStruct: &(models.%s{}),\n", classshape.ReferenceName)
+	if classshape.Reference.Type == REFERENCE_GONG_STRUCT {
+		fmt.Fprintf(file, "\tReferencedGong: &(models.%s{}),\n", classshape.ReferenceName)
 	}
-	if classshape.ClassshapeTargetType == ENUM {
-		fmt.Fprintf(file, "\tStruct: new(models.%s),\n", classshape.ReferenceName)
+	if classshape.Reference.Type == REFERENCE_GONG_ENUM {
+		fmt.Fprintf(file, "\tReferencedGong: new(models.%s),\n", classshape.ReferenceName)
 	}
 
 	if err := classshape.Position.Marshall(file, nbIndentation+1); err != nil {
@@ -111,7 +100,7 @@ func (classshape *Classshape) Marshall(file *os.File, nbIndentation int) error {
 		indent(file, nbIndentation+1)
 		fmt.Fprintf(file, "Fields: []*uml.Field{\n")
 		for _, field := range classshape.Fields {
-			field.Marshall(file, nbIndentation+2, classshape.ClassshapeTargetType)
+			field.Marshall(file, nbIndentation+2, classshape.Reference.Type)
 			fmt.Fprintf(file, ",\n")
 		}
 		indent(file, nbIndentation+1)
@@ -137,8 +126,6 @@ func (classshape *Classshape) MarshallAsVariable(file *os.File) error {
 // this id is used to create a unique name for each shape
 // this unique name is used in different algorithm of metabaron
 var classshapeLastID uint
-
-var noteLastID uint
 
 // ClassshapeMap is a Map of all Classshape via their Name
 type ClassshapeMap map[string]*Classshape
@@ -173,7 +160,7 @@ func (classshape *Classshape) Unmarshall(modelPkg *gong_models.ModelPkg, expr as
 				var position Position
 				classshape.Position = &position
 				classshape.Position.Unmarshall(kve.Value, fset)
-			case "Struct":
+			case "ReferencedGong":
 				// expect an Unary Expression if it is a struct
 				var ok bool
 				var valuekey *ast.UnaryExpr
@@ -200,17 +187,20 @@ func (classshape *Classshape) Unmarshall(modelPkg *gong_models.ModelPkg, expr as
 					}
 
 					// assign Strut
-					classshape.Struct = se.Sel.Name
+					classshape.ReferencedGong = se.Sel.Name
 					classshape.ReferenceName = se.Sel.Name
-					classshape.ClassshapeTargetType = STRUCT
 
-					// attach GongStruct to classshape
-					gongStruct, ok := (*GetGongstructInstancesMap[ReferenceIdentifier]())[classshape.ReferenceName]
-					if ok {
-						classshape.Reference = gongStruct
-						classshape.ShowNbInstances = true
-						classshape.NbInstances = gongStruct.NbInstances
+					// attach reference to classshape
+					var ok bool
+					var reference *Reference
+					reference, ok = (*GetGongstructInstancesMap[Reference]())[classshape.ReferenceName]
+					if !ok {
+						reference = (&Reference{Name: classshape.ReferenceName}).Stage()
+						reference.Type = REFERENCE_GONG_STRUCT
 					}
+					classshape.Reference = reference
+					classshape.ShowNbInstances = true
+					classshape.NbInstances = reference.NbInstances
 
 					if classshape.Name == "" {
 						classshape.Name = fmt.Sprintf("Classshape%04d", classshapeLastID)
@@ -233,9 +223,17 @@ func (classshape *Classshape) Unmarshall(modelPkg *gong_models.ModelPkg, expr as
 							fset.Position(cl.Pos()).String())
 					}
 
-					classshape.Struct = se.Sel.Name
+					classshape.ReferencedGong = se.Sel.Name
 					classshape.ReferenceName = se.Sel.Name
-					classshape.ClassshapeTargetType = ENUM
+
+					var ok bool
+					var reference *Reference
+					reference, ok = (*GetGongstructInstancesMap[Reference]())[se.Sel.Name]
+					if !ok {
+						reference = (&Reference{Name: se.Sel.Name}).Stage()
+						reference.Type = REFERENCE_GONG_ENUM
+					}
+					classshape.Reference = reference
 
 					if classshape.Name == "" {
 						classshape.Name = fmt.Sprintf("Classshape%04d", classshapeLastID)

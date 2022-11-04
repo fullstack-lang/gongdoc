@@ -8,30 +8,30 @@ import { DialogData } from '../front-repo.service'
 import { SelectionModel } from '@angular/cdk/collections';
 
 import { Router, RouterState } from '@angular/router';
-import { ReferenceIdentifierDB } from '../referenceidentifier-db'
-import { ReferenceIdentifierService } from '../referenceidentifier.service'
+import { ReferenceDB } from '../reference-db'
+import { ReferenceService } from '../reference.service'
 
 import { FrontRepoService, FrontRepo } from '../front-repo.service'
 import { NullInt64 } from '../null-int64'
 
 @Component({
-  selector: 'lib-referenceidentifier-sorting',
-  templateUrl: './referenceidentifier-sorting.component.html',
-  styleUrls: ['./referenceidentifier-sorting.component.css']
+  selector: 'lib-reference-sorting',
+  templateUrl: './reference-sorting.component.html',
+  styleUrls: ['./reference-sorting.component.css']
 })
-export class ReferenceIdentifierSortingComponent implements OnInit {
+export class ReferenceSortingComponent implements OnInit {
 
   frontRepo: FrontRepo = new (FrontRepo)
 
-  // array of ReferenceIdentifier instances that are in the association
-  associatedReferenceIdentifiers = new Array<ReferenceIdentifierDB>();
+  // array of Reference instances that are in the association
+  associatedReferences = new Array<ReferenceDB>();
 
   constructor(
-    private referenceidentifierService: ReferenceIdentifierService,
+    private referenceService: ReferenceService,
     private frontRepoService: FrontRepoService,
 
-    // not null if the component is called as a selection component of referenceidentifier instances
-    public dialogRef: MatDialogRef<ReferenceIdentifierSortingComponent>,
+    // not null if the component is called as a selection component of reference instances
+    public dialogRef: MatDialogRef<ReferenceSortingComponent>,
     @Optional() @Inject(MAT_DIALOG_DATA) public dialogData: DialogData,
 
     private router: Router,
@@ -42,31 +42,31 @@ export class ReferenceIdentifierSortingComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.getReferenceIdentifiers()
+    this.getReferences()
   }
 
-  getReferenceIdentifiers(): void {
+  getReferences(): void {
     this.frontRepoService.pull().subscribe(
       frontRepo => {
         this.frontRepo = frontRepo
 
         let index = 0
-        for (let referenceidentifier of this.frontRepo.ReferenceIdentifiers_array) {
+        for (let reference of this.frontRepo.References_array) {
           let ID = this.dialogData.ID
-          let revPointerID = referenceidentifier[this.dialogData.ReversePointer as keyof ReferenceIdentifierDB] as unknown as NullInt64
-          let revPointerID_Index = referenceidentifier[this.dialogData.ReversePointer + "_Index" as keyof ReferenceIdentifierDB] as unknown as NullInt64
+          let revPointerID = reference[this.dialogData.ReversePointer as keyof ReferenceDB] as unknown as NullInt64
+          let revPointerID_Index = reference[this.dialogData.ReversePointer + "_Index" as keyof ReferenceDB] as unknown as NullInt64
           if (revPointerID.Int64 == ID) {
             if (revPointerID_Index == undefined) {
               revPointerID_Index = new NullInt64
               revPointerID_Index.Valid = true
               revPointerID_Index.Int64 = index++
             }
-            this.associatedReferenceIdentifiers.push(referenceidentifier)
+            this.associatedReferences.push(reference)
           }
         }
 
-        // sort associated referenceidentifier according to order
-        this.associatedReferenceIdentifiers.sort((t1, t2) => {
+        // sort associated reference according to order
+        this.associatedReferences.sort((t1, t2) => {
           let t1_revPointerID_Index = t1[this.dialogData.ReversePointer + "_Index" as keyof typeof t1] as unknown as NullInt64
           let t2_revPointerID_Index = t2[this.dialogData.ReversePointer + "_Index" as keyof typeof t2] as unknown as NullInt64
           if (t1_revPointerID_Index && t2_revPointerID_Index) {
@@ -84,13 +84,13 @@ export class ReferenceIdentifierSortingComponent implements OnInit {
   }
 
   drop(event: CdkDragDrop<string[]>) {
-    moveItemInArray(this.associatedReferenceIdentifiers, event.previousIndex, event.currentIndex);
+    moveItemInArray(this.associatedReferences, event.previousIndex, event.currentIndex);
 
-    // set the order of ReferenceIdentifier instances
+    // set the order of Reference instances
     let index = 0
 
-    for (let referenceidentifier of this.associatedReferenceIdentifiers) {
-      let revPointerID_Index = referenceidentifier[this.dialogData.ReversePointer + "_Index" as keyof ReferenceIdentifierDB] as unknown as NullInt64
+    for (let reference of this.associatedReferences) {
+      let revPointerID_Index = reference[this.dialogData.ReversePointer + "_Index" as keyof ReferenceDB] as unknown as NullInt64
       revPointerID_Index.Valid = true
       revPointerID_Index.Int64 = index++
     }
@@ -98,11 +98,11 @@ export class ReferenceIdentifierSortingComponent implements OnInit {
 
   save() {
 
-    this.associatedReferenceIdentifiers.forEach(
-      referenceidentifier => {
-        this.referenceidentifierService.updateReferenceIdentifier(referenceidentifier)
-          .subscribe(referenceidentifier => {
-            this.referenceidentifierService.ReferenceIdentifierServiceChanged.next("update")
+    this.associatedReferences.forEach(
+      reference => {
+        this.referenceService.updateReference(reference)
+          .subscribe(reference => {
+            this.referenceService.ReferenceServiceChanged.next("update")
           });
       }
     )
