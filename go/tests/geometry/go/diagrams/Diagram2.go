@@ -12,8 +12,8 @@ var Diagram2 uml.Classdiagram = uml.Classdiagram{
 		{
 			ReferencedGong: &(models.Line{}),
 			Position: &uml.Position{
-				X: 120.000000,
-				Y: 190.000000,
+				X: 100.000000,
+				Y: 90.000000,
 			},
 			Width:  240.000000,
 			Heigth: 63.000000,
