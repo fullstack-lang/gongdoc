@@ -18,15 +18,13 @@ import (
 	"github.com/gin-contrib/static"
 	"github.com/gin-gonic/gin"
 
-	gongdoc_controllers "github.com/fullstack-lang/gongdoc/go/controllers"
+	gongdoc_fullstack "github.com/fullstack-lang/gongdoc/go/fullstack"
 	gongdoc_models "github.com/fullstack-lang/gongdoc/go/models"
-	gongdoc_orm "github.com/fullstack-lang/gongdoc/go/orm"
 
 	gongdoc "github.com/fullstack-lang/gongdoc"
 
-	gong_controllers "github.com/fullstack-lang/gong/go/controllers"
+	gong_fullstack "github.com/fullstack-lang/gong/go/fullstack"
 	gong_models "github.com/fullstack-lang/gong/go/models"
-	gong_orm "github.com/fullstack-lang/gong/go/orm"
 
 	// for import of the embed ng directory of the `github.com/fullstack-lang/gong/ng/projects`
 	// directory.
@@ -79,10 +77,6 @@ func main() {
 		*pkgPath = flag.Arg(0)
 	}
 
-	// setup GORM
-	gongdoc_orm.SetupModels(*logBBFlag, "file:memdb1?mode=memory&cache=shared")
-	gong_orm.SetupModels(*logBBFlag, "file:memdb2?mode=memory&cache=shared")
-
 	// setup controlers
 	if !*logGINFlag {
 		myfile, _ := os.Create("/tmp/server.log")
@@ -92,6 +86,10 @@ func main() {
 	// setup controlers
 	r := gin.Default()
 	r.Use(cors.Default())
+
+	// setup stacks
+	gongdoc_fullstack.Init(r)
+	gong_fullstack.Init(r)
 
 	// compute absolute path
 	absPkgPath, _ := filepath.Abs(*pkgPath)
@@ -114,9 +112,6 @@ func main() {
 		gongdoc_models.GenGoDefaultDiagram(modelPkg, *pkgPath)
 		return
 	}
-
-	gongdoc_controllers.RegisterControllers(r)
-	gong_controllers.RegisterControllers(r)
 
 	r.Use(static.Serve("/", EmbedFolder(gongdoc.NgDistNg, "ng/dist/ng")))
 	r.NoRoute(func(c *gin.Context) {
