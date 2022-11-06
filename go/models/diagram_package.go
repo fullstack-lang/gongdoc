@@ -36,6 +36,13 @@ type DiagramPackage struct {
 	// When a diagram is used in production for navigation, the
 	// model is not IsEditable.
 	IsEditable bool
+
+	// IsReload indicates if a reload of the go definition of the diagram is rrequested
+	// from the end user.
+	// on the back stage, this value is allways false
+	// on the front stage, this value is set to true when the end user requests a reload
+	// after the checkout from the front, the value is set back to false
+	IsReloaded bool
 }
 
 func closeFile(f *os.File) {

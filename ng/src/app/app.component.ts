@@ -29,8 +29,9 @@ export class AppComponent {
 
   refresh() {
     // refresh the view
+    this.diagramPackage.IsReloaded = true
     this.diagramPackageService.updateDiagramPackage(this.diagramPackage).subscribe(diagramPackage => {
-      console.log('diagram package refreshed');
+      console.log('diagram package refreshed')
     })
   }
 }
