@@ -96,14 +96,7 @@ func main() {
 	*pkgPath = absPkgPath
 
 	// load package to analyse
-	modelPkg := &gong_models.ModelPkg{}
-	pkgName, fullPkgPath := gong_models.ComputePkgPathFromGoModFile(*pkgPath)
-	modelPkg.Name = pkgName
-	modelPkg.PkgPath = fullPkgPath
-
-	gong_models.Walk(*pkgPath, modelPkg)
-	modelPkg.SerializeToStage()
-	gong_models.Stage.Commit()
+	modelPkg, _ := gong_models.LoadSource(*pkgPath)
 
 	if *genDefaultDiagramFlag {
 		log.Printf("Generating default diagram")
