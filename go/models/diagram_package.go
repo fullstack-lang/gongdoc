@@ -94,12 +94,20 @@ func Load(pkgPath string, modelPkg *gong_models.ModelPkg, editable bool) (diagra
 }
 
 func (diagramPackage *DiagramPackage) Reload() {
+
+	gong_models.Stage.Checkout()
+	gong_models.Stage.Reset()
+	modelPkg, _ := gong_models.LoadSource(
+		filepath.Join(diagramPackage.AbsolutePathToDiagramPackage, "../models"))
+	gong_models.Stage.Commit()
+
 	Stage.Checkout()
 	Stage.Reset()
 	Stage.Commit()
 
 	diagramPackage.Classdiagrams = nil
 	diagramPackage.Umlscs = nil
+	diagramPackage.ModelPkg = modelPkg
 
 	fset := token.NewFileSet()
 	startParser := time.Now()

@@ -21,4 +21,4 @@ package models
 // in the go code
 //
 
-// GONGNOTE(Short note on the models): this is an of a short note
+// GONGNOTE(Short note on the models): this is an example of a short note
