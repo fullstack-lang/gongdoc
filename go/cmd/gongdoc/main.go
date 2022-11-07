@@ -10,6 +10,7 @@ import (
 	"net/http"
 	"os"
 	"path/filepath"
+	"strconv"
 
 	"github.com/gin-contrib/cors"
 	"github.com/gin-contrib/static"
@@ -42,6 +43,8 @@ var (
 		"set up random number of instance (between 0 and 100)")
 
 	editable = flag.Bool("editable", true, "have the diagram editable")
+
+	port = flag.Int("port", 8080, "port server")
 )
 
 type embedFileSystem struct {
@@ -149,5 +152,9 @@ func main() {
 	diagramPackageCallbackSingloton := new(gongdoc_models.DiagramPackageCallbacksSingloton)
 	gongdoc_models.Stage.OnAfterDiagramPackageUpdateCallback = diagramPackageCallbackSingloton
 
-	r.Run(":8080")
+	log.Printf("Server ready to serve on http://localhost:" + strconv.Itoa(*port) + "/")
+	err := r.Run(":" + strconv.Itoa(*port))
+	if err != nil {
+		log.Fatalln(err.Error())
+	}
 }
