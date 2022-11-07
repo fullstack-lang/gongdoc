@@ -65,6 +65,8 @@ func LoadEmbedded(fs embed.FS, modelPkg *gong_models.ModelPkg) (diagramPackage *
 		diagramPackage.Unmarshall(modelPkg, pkgParser, fset, "go/diagrams")
 	}
 
+	diagramPackage.SerializeToStage()
+	FillUpNodeTree(diagramPackage)
 	return diagramPackage, nil
 }
 
