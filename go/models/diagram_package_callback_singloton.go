@@ -19,7 +19,7 @@ func (classshapeCallbacksSingloton *DiagramPackageCallbacksSingloton) OnAfterUpd
 
 		log.Println("Reload requested")
 		if stagedDiagramPackage.IsEditable {
-			
+			stagedDiagramPackage.Reload()
 		}
 	}
 }

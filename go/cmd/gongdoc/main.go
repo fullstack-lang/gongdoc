@@ -4,15 +4,12 @@ import (
 	"embed"
 	"flag"
 	"fmt"
-	"go/parser"
-	"go/token"
 	"io/fs"
 	"log"
 	"math/rand"
 	"net/http"
 	"os"
 	"path/filepath"
-	"time"
 
 	"github.com/gin-contrib/cors"
 	"github.com/gin-contrib/static"
@@ -113,9 +110,6 @@ func main() {
 		c.Abort()
 	})
 
-	var diagramPackage gongdoc_models.DiagramPackage
-	diagramPackage.IsEditable = true
-
 	// set up gong structs for diagram package
 	if *setUpRandomNumberOfInstances {
 		for gongStruct := range *gong_models.GetGongstructInstancesSet[gong_models.GongStruct]() {
@@ -132,43 +126,11 @@ func main() {
 		}
 	}
 
-	// parse the diagram package
-	diagramPkgPath := filepath.Join(*pkgPath, "../diagrams")
-
-	// if diagrams directory does not exist create it
-	_, errd := os.Stat(diagramPkgPath)
-	if os.IsNotExist(errd) {
-		log.Printf(diagramPkgPath, " does not exist, gongdoc creates it")
-
-		errd := os.MkdirAll(diagramPkgPath, os.ModePerm)
-		if os.IsNotExist(errd) {
-			log.Println("creating directory : " + diagramPkgPath)
-		}
-		if os.IsExist(errd) {
-			log.Println("directory " + diagramPkgPath + " allready exists")
-		}
-	}
-
-	if true {
-		fset := token.NewFileSet()
-		startParser := time.Now()
-		pkgsParser, errParser := parser.ParseDir(fset, diagramPkgPath, nil, parser.ParseComments)
-		log.Printf("Parser took %s", time.Since(startParser))
-
-		if errParser != nil {
-			log.Panic("Unable to parser ")
-		}
-		if len(pkgsParser) != 1 {
-			log.Println("Unable to parser, wrong number of parsers ", len(pkgsParser))
-		} else {
-			diagramPackage.Unmarshall(modelPkg, pkgsParser["diagrams"], fset, diagramPkgPath)
-			diagramPackage.IsEditable = *editable
-		}
-	}
+	diagramPackage, _ := gongdoc_models.Load(*pkgPath, modelPkg, *editable)
 
 	if *svg {
 		for _, classDiagram := range diagramPackage.Classdiagrams {
-			classDiagram.OutputSVG(diagramPkgPath)
+			classDiagram.OutputSVG(filepath.Join(*pkgPath, "../diagrams"))
 		}
 		os.Exit(0)
 	}
@@ -181,11 +143,11 @@ func main() {
 			}
 		}
 	}
-	diagramPackage.SerializeToStage()
-
-	gongdoc_models.FillUpNodeTree(&diagramPackage)
 	classshapeCallbackSingloton := new(gongdoc_models.ClassshapeCallbacksSingloton)
 	gongdoc_models.Stage.OnAfterClassshapeUpdateCallback = classshapeCallbackSingloton
+
+	diagramPackageCallbackSingloton := new(gongdoc_models.DiagramPackageCallbacksSingloton)
+	gongdoc_models.Stage.OnAfterDiagramPackageUpdateCallback = diagramPackageCallbackSingloton
 
 	r.Run(":8080")
 }
