@@ -109,15 +109,6 @@ var Diagram3 uml.Classdiagram = uml.Classdiagram{
 					TargetMultiplicity: "*",
 					SourceMultiplicity: "0..1",
 				},
-				{
-					Field: models.PointNonExclusiveSet{}.Points,
-					Middlevertice: &uml.Vertice{
-						X: 670.000000,
-						Y: 356.500000,
-					},
-					TargetMultiplicity: "*",
-					SourceMultiplicity: "*",
-				},
 			},
 			Fields: []*uml.Field{
 				{

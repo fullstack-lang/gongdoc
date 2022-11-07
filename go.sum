@@ -52,8 +52,8 @@ github.com/frankban/quicktest v1.13.1/go.mod h1:NeW+ay9A/U67EYXNFA1nPE8e/tnQv/09
 github.com/fredbi/uri v0.0.0-20181227131451-3dcfdacbaaf3/go.mod h1:CzM2G82Q9BDUvMTGHnXf/6OExw/Dz2ivDj48nVg7Lg8=
 github.com/fsnotify/fsnotify v1.4.9/go.mod h1:znqG4EE+3YCdAaPaxE2ZRY/06pZUdp0tY4IgpuI1SZQ=
 github.com/fsnotify/fsnotify v1.5.1/go.mod h1:T3375wBYaZdLLcVNkcVbzGHY7f1l/uK5T5Ai1i3InKU=
-github.com/fullstack-lang/gong v0.0.0-20221006193725-941aa8b9e762 h1:6SwCIOXbGcbGuH2cGEji2iCzm1XwOMeE0/VbkoK6Wro=
-github.com/fullstack-lang/gong v0.0.0-20221006193725-941aa8b9e762/go.mod h1:8XhkipwDupSXGZJY1teDqFcuYyWeg+EiGLO3VOReshg=
+github.com/fullstack-lang/gong v0.0.0-20221106181945-c478b1030c40 h1:TKdxpigyodPWbQueXwEG4kMA7ebBpvvgQWmruPdHyNU=
+github.com/fullstack-lang/gong v0.0.0-20221106181945-c478b1030c40/go.mod h1:3PqdKdLOpzl2Agi04Nj1GByr21SJOJxuCKzYwr5Kshw=
 github.com/gin-contrib/cors v1.4.0 h1:oJ6gwtUl3lqV0WEIwM/LxPF1QZ5qe2lGWdY2+bz7y0g=
 github.com/gin-contrib/cors v1.4.0/go.mod h1:bs9pNM0x/UsmHPBWT2xZz9ROh8xYjYkiURUfmBoMlcs=
 github.com/gin-contrib/sse v0.1.0 h1:Y/yl/+YNO8GZSjAhjMsSuLt29uWRFHdHYUb5lYOV9qE=

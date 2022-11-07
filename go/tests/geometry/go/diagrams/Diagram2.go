@@ -12,8 +12,8 @@ var Diagram2 uml.Classdiagram = uml.Classdiagram{
 		{
 			ReferencedGong: &(models.Line{}),
 			Position: &uml.Position{
-				X: 120.000000,
-				Y: 190.000000,
+				X: 50.000000,
+				Y: 220.000000,
 			},
 			Width:  240.000000,
 			Heigth: 63.000000,
@@ -37,6 +37,26 @@ var Diagram2 uml.Classdiagram = uml.Classdiagram{
 			},
 			Width:  240.000000,
 			Heigth: 63.000000,
+		},
+		{
+			ReferencedGong: &(models.PointExclusiveSet{}),
+			Position: &uml.Position{
+				X: 78.000000,
+				Y: 16.000000,
+			},
+			Width:  240.000000,
+			Heigth: 63.000000,
+			Links: []*uml.Link{
+				{
+					Field: models.PointExclusiveSet{}.Points,
+					Middlevertice: &uml.Vertice{
+						X: 469.000000,
+						Y: 169.500000,
+					},
+					TargetMultiplicity: "*",
+					SourceMultiplicity: "0..1",
+				},
+			},
 		},
 	},
 	Notes: []*uml.NoteShape{
