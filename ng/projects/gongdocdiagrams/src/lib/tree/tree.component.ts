@@ -89,7 +89,7 @@ export class TreeComponent implements OnInit {
   // the checkCommitNbFromBackTimer polls the commit number of the back repo
   // if the commit number has increased, it pulls the front repo and redraw the diagram
 
-  checkCommitNbFromBackTimer: Observable<number> = timer(500, 500);
+  checkCommitNbFromBackTimer: Observable<number> = timer(150, 150);
   lastCommitNbFromBack = -1
   lastPushFromFrontNb = -1
   currTime: number = 0
