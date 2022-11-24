@@ -3,10 +3,8 @@
 @import '~typeface-roboto/index.css';
 @import '~typeface-open-sans/index.css';
 
-/* the following line makes trouble for fonts */
-
-
-/* @import '~material-design-icons/iconfont/material-icons.css'; */
+/* allows for offline material icons */
+@import 'material-icons/iconfont/material-icons.css';
 
 html,
 body {
