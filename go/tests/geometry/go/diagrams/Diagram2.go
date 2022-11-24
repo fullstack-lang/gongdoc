@@ -41,8 +41,8 @@ var Diagram2 uml.Classdiagram = uml.Classdiagram{
 		{
 			ReferencedGong: &(models.PointExclusiveSet{}),
 			Position: &uml.Position{
-				X: 78.000000,
-				Y: 16.000000,
+				X: 30.000000,
+				Y: 350.000000,
 			},
 			Width:  240.000000,
 			Heigth: 63.000000,
@@ -50,8 +50,8 @@ var Diagram2 uml.Classdiagram = uml.Classdiagram{
 				{
 					Field: models.PointExclusiveSet{}.Points,
 					Middlevertice: &uml.Vertice{
-						X: 469.000000,
-						Y: 169.500000,
+						X: 699.000000,
+						Y: 389.500000,
 					},
 					TargetMultiplicity: "*",
 					SourceMultiplicity: "0..1",
@@ -62,7 +62,7 @@ var Diagram2 uml.Classdiagram = uml.Classdiagram{
 	Notes: []*uml.NoteShape{
 		{
 			Name: `Short note on the models`,
-			Body: `this is an of a short note
+			Body: `this is an example of a short note
 `,
 			X:      430.000000,
 			Y:      100.000000,
