@@ -55,6 +55,23 @@
 			"group": "build"
 		},
 		{
+			"label": "02 - go run on tdb -setUpRandomNumberOfInstances",
+			"type": "shell",
+			"options": {
+				"cwd": "go/cmd/gongdoc"
+			},
+			"command": "go",
+			"args": [
+				"run",
+				"main.go",
+				"-pkgPath",
+				"D:/MOSS-Users/peugeot/go/src/r/DEV_COHERENCE/ppstdb/go/models",
+				"-setUpRandomNumberOfInstances"
+			],
+			"group": "build"
+		},
+
+		{
 			"label": "02 - go run on test/geometry -setUpRandomNumberOfInstances -editable=false",
 			"type": "shell",
 			"options": {
