@@ -30,7 +30,7 @@ export class ClassDiagramComponent implements OnInit, OnDestroy {
    * the checkCommitNbFromBackTimer polls the commit number of the back repo
    * if the commit number has increased, it pulls the front repo and redraw the diagram
    */
-  checkGongdocCommitNbFromBackTimer: Observable<number> = timer(150, 150);
+  checkGongdocCommitNbFromBackTimer: Observable<number> = timer(500, 500);
   lastCommitNbFromBack = -1
   lastDiagramId = 0
   currTime: number = 0

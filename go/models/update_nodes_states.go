@@ -1,6 +1,8 @@
 package models
 
-import gong_models "github.com/fullstack-lang/gong/go/models"
+import (
+	gong_models "github.com/fullstack-lang/gong/go/models"
+)
 
 // updateNodesStates updates the tree of symbols
 // according to the selected diagram
@@ -149,5 +151,8 @@ func updateNodesStates(stage *StageStruct, callbacksSingloton *NodeCallbacksSing
 		stateDiagramNode.HasDrawButton = pkglet.IsEditable && stateDiagramNode.IsChecked && !stateDiagramNode.IsInEditMode
 	}
 
+	// log.Println("UpdateNodeStates, before commit, nb ", stage.BackRepo.GetLastCommitFromBackNb())
 	stage.Commit()
+	// log.Println("UpdateNodeStates, after  commit, nb ", stage.BackRepo.GetLastCommitFromBackNb())
+
 }
