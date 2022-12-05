@@ -1,6 +1,8 @@
 package models
 
 import (
+	"log"
+
 	gong_models "github.com/fullstack-lang/gong/go/models"
 )
 
@@ -85,7 +87,14 @@ func updateNodesStates(stage *StageStruct, callbacksSingloton *NodeCallbacksSing
 		// get the referenced gongstructs
 		for _, classshape := range classDiagram.Classshapes {
 			reference := classshape.Reference
-			mapIdentifiersNodes[reference.Name].IsChecked = true
+
+			node, ok := mapIdentifiersNodes[reference.Name]
+
+			if !ok {
+				log.Println("Unknown node ", reference.Name)
+				continue
+			}
+			node.IsChecked = true
 
 			// disable checkbox of all children of the gongstruct
 			for _, gongfieldNode := range mapIdentifiersNodes[reference.Name].Children {
