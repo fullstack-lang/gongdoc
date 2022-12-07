@@ -53,6 +53,13 @@
                 <mat-checkbox [checked]="DiagramPackage.IsReloaded" disabled=true></mat-checkbox>
             </td>
         </ng-container>
+        <!-- -->
+        <ng-container matColumnDef="AbsolutePathToDiagramPackage">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header> AbsolutePathToDiagramPackage </th>
+            <td mat-cell *matCellDef="let DiagramPackage">
+                {{DiagramPackage.AbsolutePathToDiagramPackage}}
+            </td>
+        </ng-container>
 
         <ng-container matColumnDef="ID">
             <th mat-header-cell *matHeaderCellDef mat-sort-header> ID. </th>
