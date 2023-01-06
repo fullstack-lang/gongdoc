@@ -1,6 +1,7 @@
 package models
 
 import (
+	"errors"
 	"go/ast"
 	"go/parser"
 	"go/token"
@@ -15,11 +16,11 @@ var dummy_strconv_import strconv.NumError
 
 // ParseAstFile Parse pathToFile and stages all instances
 // declared in the file
-func ParseAstFile(pathToFile string) {
+func ParseAstFile(pathToFile string) error {
 
 	fileOfInterest, err := filepath.Abs(pathToFile)
 	if err != nil {
-		log.Panic("Path does not exist %s ;" + fileOfInterest)
+		return errors.New("Path does not exist %s ;" + fileOfInterest)
 	}
 
 	fset := token.NewFileSet()
@@ -28,7 +29,7 @@ func ParseAstFile(pathToFile string) {
 	log.Printf("Parser took %s", time.Since(startParser))
 
 	if errParser != nil {
-		log.Panic("Unable to parser ", errParser.Error())
+		return errors.New("Unable to parser " + errParser.Error())
 	}
 
 	// astCoordinate := "File "
@@ -105,6 +106,7 @@ func ParseAstFile(pathToFile string) {
 		}
 
 	}
+	return nil
 }
 
 var __gong__map_Indentifiers_gongstructName = make(map[string]string)
@@ -113,9 +115,12 @@ var __gong__map_Indentifiers_gongstructName = make(map[string]string)
 var __gong__map_GongBasicField = make(map[string]*GongBasicField)
 var __gong__map_GongEnum = make(map[string]*GongEnum)
 var __gong__map_GongEnumValue = make(map[string]*GongEnumValue)
+var __gong__map_GongLink = make(map[string]*GongLink)
 var __gong__map_GongNote = make(map[string]*GongNote)
 var __gong__map_GongStruct = make(map[string]*GongStruct)
 var __gong__map_GongTimeField = make(map[string]*GongTimeField)
+var __gong__map_Meta = make(map[string]*Meta)
+var __gong__map_MetaReference = make(map[string]*MetaReference)
 var __gong__map_ModelPkg = make(map[string]*ModelPkg)
 var __gong__map_PointerToGongStructField = make(map[string]*PointerToGongStructField)
 var __gong__map_SliceOfPointerToGongStructField = make(map[string]*SliceOfPointerToGongStructField)
@@ -235,6 +240,10 @@ func UnmarshallGongstructStaging(assignStmt *ast.AssignStmt, astCoordinate_ stri
 										instanceGongEnumValue := (&GongEnumValue{Name: instanceName}).Stage()
 										instance = any(instanceGongEnumValue)
 										__gong__map_GongEnumValue[identifier] = instanceGongEnumValue
+									case "GongLink":
+										instanceGongLink := (&GongLink{Name: instanceName}).Stage()
+										instance = any(instanceGongLink)
+										__gong__map_GongLink[identifier] = instanceGongLink
 									case "GongNote":
 										instanceGongNote := (&GongNote{Name: instanceName}).Stage()
 										instance = any(instanceGongNote)
@@ -247,6 +256,14 @@ func UnmarshallGongstructStaging(assignStmt *ast.AssignStmt, astCoordinate_ stri
 										instanceGongTimeField := (&GongTimeField{Name: instanceName}).Stage()
 										instance = any(instanceGongTimeField)
 										__gong__map_GongTimeField[identifier] = instanceGongTimeField
+									case "Meta":
+										instanceMeta := (&Meta{Name: instanceName}).Stage()
+										instance = any(instanceMeta)
+										__gong__map_Meta[identifier] = instanceMeta
+									case "MetaReference":
+										instanceMetaReference := (&MetaReference{Name: instanceName}).Stage()
+										instance = any(instanceMetaReference)
+										__gong__map_MetaReference[identifier] = instanceMetaReference
 									case "ModelPkg":
 										instanceModelPkg := (&ModelPkg{Name: instanceName}).Stage()
 										instance = any(instanceModelPkg)
@@ -307,6 +324,10 @@ func UnmarshallGongstructStaging(assignStmt *ast.AssignStmt, astCoordinate_ stri
 							switch fieldName {
 							// insertion point for date assign code
 							}
+						case "GongLink":
+							switch fieldName {
+							// insertion point for date assign code
+							}
 						case "GongNote":
 							switch fieldName {
 							// insertion point for date assign code
@@ -316,6 +337,14 @@ func UnmarshallGongstructStaging(assignStmt *ast.AssignStmt, astCoordinate_ stri
 							// insertion point for date assign code
 							}
 						case "GongTimeField":
+							switch fieldName {
+							// insertion point for date assign code
+							}
+						case "Meta":
+							switch fieldName {
+							// insertion point for date assign code
+							}
+						case "MetaReference":
 							switch fieldName {
 							// insertion point for date assign code
 							}
@@ -374,9 +403,19 @@ func UnmarshallGongstructStaging(assignStmt *ast.AssignStmt, astCoordinate_ stri
 						switch fieldName {
 						// insertion point for slice of pointers assign code
 						}
+					case "GongLink":
+						switch fieldName {
+						// insertion point for slice of pointers assign code
+						}
 					case "GongNote":
 						switch fieldName {
 						// insertion point for slice of pointers assign code
+						case "Links":
+							// remove first and last char
+							targetIdentifier := ident.Name
+							target := __gong__map_GongLink[targetIdentifier]
+							__gong__map_GongNote[identifier].Links =
+								append(__gong__map_GongNote[identifier].Links, target)
 						}
 					case "GongStruct":
 						switch fieldName {
@@ -407,6 +446,20 @@ func UnmarshallGongstructStaging(assignStmt *ast.AssignStmt, astCoordinate_ stri
 								append(__gong__map_GongStruct[identifier].SliceOfPointerToGongStructFields, target)
 						}
 					case "GongTimeField":
+						switch fieldName {
+						// insertion point for slice of pointers assign code
+						}
+					case "Meta":
+						switch fieldName {
+						// insertion point for slice of pointers assign code
+						case "MetaReferences":
+							// remove first and last char
+							targetIdentifier := ident.Name
+							target := __gong__map_MetaReference[targetIdentifier]
+							__gong__map_Meta[identifier].MetaReferences =
+								append(__gong__map_Meta[identifier].MetaReferences, target)
+						}
+					case "MetaReference":
 						switch fieldName {
 						// insertion point for slice of pointers assign code
 						}
@@ -500,6 +553,18 @@ func UnmarshallGongstructStaging(assignStmt *ast.AssignStmt, astCoordinate_ stri
 					fielValue := basicLit.Value[1 : len(basicLit.Value)-1]
 					__gong__map_GongEnumValue[identifier].Value = fielValue
 				}
+			case "GongLink":
+				switch fieldName {
+				// insertion point for field dependant code
+				case "Name":
+					// remove first and last char
+					fielValue := basicLit.Value[1 : len(basicLit.Value)-1]
+					__gong__map_GongLink[identifier].Name = fielValue
+				case "ImportPath":
+					// remove first and last char
+					fielValue := basicLit.Value[1 : len(basicLit.Value)-1]
+					__gong__map_GongLink[identifier].ImportPath = fielValue
+				}
 			case "GongNote":
 				switch fieldName {
 				// insertion point for field dependant code
@@ -538,6 +603,26 @@ func UnmarshallGongstructStaging(assignStmt *ast.AssignStmt, astCoordinate_ stri
 					// remove first and last char
 					fielValue := basicLit.Value[1 : len(basicLit.Value)-1]
 					__gong__map_GongTimeField[identifier].CompositeStructName = fielValue
+				}
+			case "Meta":
+				switch fieldName {
+				// insertion point for field dependant code
+				case "Name":
+					// remove first and last char
+					fielValue := basicLit.Value[1 : len(basicLit.Value)-1]
+					__gong__map_Meta[identifier].Name = fielValue
+				case "Text":
+					// remove first and last char
+					fielValue := basicLit.Value[1 : len(basicLit.Value)-1]
+					__gong__map_Meta[identifier].Text = fielValue
+				}
+			case "MetaReference":
+				switch fieldName {
+				// insertion point for field dependant code
+				case "Name":
+					// remove first and last char
+					fielValue := basicLit.Value[1 : len(basicLit.Value)-1]
+					__gong__map_MetaReference[identifier].Name = fielValue
 				}
 			case "ModelPkg":
 				switch fieldName {
@@ -618,6 +703,10 @@ func UnmarshallGongstructStaging(assignStmt *ast.AssignStmt, astCoordinate_ stri
 				switch fieldName {
 				// insertion point for field dependant code
 				}
+			case "GongLink":
+				switch fieldName {
+				// insertion point for field dependant code
+				}
 			case "GongNote":
 				switch fieldName {
 				// insertion point for field dependant code
@@ -627,6 +716,14 @@ func UnmarshallGongstructStaging(assignStmt *ast.AssignStmt, astCoordinate_ stri
 				// insertion point for field dependant code
 				}
 			case "GongTimeField":
+				switch fieldName {
+				// insertion point for field dependant code
+				}
+			case "Meta":
+				switch fieldName {
+				// insertion point for field dependant code
+				}
+			case "MetaReference":
 				switch fieldName {
 				// insertion point for field dependant code
 				}
@@ -695,6 +792,10 @@ func UnmarshallGongstructStaging(assignStmt *ast.AssignStmt, astCoordinate_ stri
 					switch fieldName {
 					// insertion point for enum assign code
 					}
+				case "GongLink":
+					switch fieldName {
+					// insertion point for enum assign code
+					}
 				case "GongNote":
 					switch fieldName {
 					// insertion point for enum assign code
@@ -704,6 +805,14 @@ func UnmarshallGongstructStaging(assignStmt *ast.AssignStmt, astCoordinate_ stri
 					// insertion point for enum assign code
 					}
 				case "GongTimeField":
+					switch fieldName {
+					// insertion point for enum assign code
+					}
+				case "Meta":
+					switch fieldName {
+					// insertion point for enum assign code
+					}
+				case "MetaReference":
 					switch fieldName {
 					// insertion point for enum assign code
 					}

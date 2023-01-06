@@ -17,12 +17,18 @@ import { GongEnumService } from '../gongenum.service'
 import { getGongEnumUniqueID } from '../front-repo.service'
 import { GongEnumValueService } from '../gongenumvalue.service'
 import { getGongEnumValueUniqueID } from '../front-repo.service'
+import { GongLinkService } from '../gonglink.service'
+import { getGongLinkUniqueID } from '../front-repo.service'
 import { GongNoteService } from '../gongnote.service'
 import { getGongNoteUniqueID } from '../front-repo.service'
 import { GongStructService } from '../gongstruct.service'
 import { getGongStructUniqueID } from '../front-repo.service'
 import { GongTimeFieldService } from '../gongtimefield.service'
 import { getGongTimeFieldUniqueID } from '../front-repo.service'
+import { MetaService } from '../meta.service'
+import { getMetaUniqueID } from '../front-repo.service'
+import { MetaReferenceService } from '../metareference.service'
+import { getMetaReferenceUniqueID } from '../front-repo.service'
 import { ModelPkgService } from '../modelpkg.service'
 import { getModelPkgUniqueID } from '../front-repo.service'
 import { PointerToGongStructFieldService } from '../pointertogongstructfield.service'
@@ -174,9 +180,12 @@ export class SidebarComponent implements OnInit {
     private gongbasicfieldService: GongBasicFieldService,
     private gongenumService: GongEnumService,
     private gongenumvalueService: GongEnumValueService,
+    private gonglinkService: GongLinkService,
     private gongnoteService: GongNoteService,
     private gongstructService: GongStructService,
     private gongtimefieldService: GongTimeFieldService,
+    private metaService: MetaService,
+    private metareferenceService: MetaReferenceService,
     private modelpkgService: ModelPkgService,
     private pointertogongstructfieldService: PointerToGongStructFieldService,
     private sliceofpointertogongstructfieldService: SliceOfPointerToGongStructFieldService,
@@ -232,6 +241,14 @@ export class SidebarComponent implements OnInit {
       }
     )
     // observable for changes in structs
+    this.gonglinkService.GongLinkServiceChanged.subscribe(
+      message => {
+        if (message == "post" || message == "update" || message == "delete") {
+          this.refresh()
+        }
+      }
+    )
+    // observable for changes in structs
     this.gongnoteService.GongNoteServiceChanged.subscribe(
       message => {
         if (message == "post" || message == "update" || message == "delete") {
@@ -249,6 +266,22 @@ export class SidebarComponent implements OnInit {
     )
     // observable for changes in structs
     this.gongtimefieldService.GongTimeFieldServiceChanged.subscribe(
+      message => {
+        if (message == "post" || message == "update" || message == "delete") {
+          this.refresh()
+        }
+      }
+    )
+    // observable for changes in structs
+    this.metaService.MetaServiceChanged.subscribe(
+      message => {
+        if (message == "post" || message == "update" || message == "delete") {
+          this.refresh()
+        }
+      }
+    )
+    // observable for changes in structs
+    this.metareferenceService.MetaReferenceServiceChanged.subscribe(
       message => {
         if (message == "post" || message == "update" || message == "delete") {
           this.refresh()
@@ -503,6 +536,50 @@ export class SidebarComponent implements OnInit {
       )
 
       /**
+      * fill up the GongLink part of the mat tree
+      */
+      let gonglinkGongNodeStruct: GongNode = {
+        name: "GongLink",
+        type: GongNodeType.STRUCT,
+        id: 0,
+        uniqueIdPerStack: 13 * nonInstanceNodeId,
+        structName: "GongLink",
+        associationField: "",
+        associatedStructName: "",
+        children: new Array<GongNode>()
+      }
+      nonInstanceNodeId = nonInstanceNodeId + 1
+      this.gongNodeTree.push(gonglinkGongNodeStruct)
+
+      this.frontRepo.GongLinks_array.sort((t1, t2) => {
+        if (t1.Name > t2.Name) {
+          return 1;
+        }
+        if (t1.Name < t2.Name) {
+          return -1;
+        }
+        return 0;
+      });
+
+      this.frontRepo.GongLinks_array.forEach(
+        gonglinkDB => {
+          let gonglinkGongNodeInstance: GongNode = {
+            name: gonglinkDB.Name,
+            type: GongNodeType.INSTANCE,
+            id: gonglinkDB.ID,
+            uniqueIdPerStack: getGongLinkUniqueID(gonglinkDB.ID),
+            structName: "GongLink",
+            associationField: "",
+            associatedStructName: "",
+            children: new Array<GongNode>()
+          }
+          gonglinkGongNodeStruct.children!.push(gonglinkGongNodeInstance)
+
+          // insertion point for per field code
+        }
+      )
+
+      /**
       * fill up the GongNote part of the mat tree
       */
       let gongnoteGongNodeStruct: GongNode = {
@@ -543,6 +620,38 @@ export class SidebarComponent implements OnInit {
           gongnoteGongNodeStruct.children!.push(gongnoteGongNodeInstance)
 
           // insertion point for per field code
+          /**
+          * let append a node for the slide of pointer Links
+          */
+          let LinksGongNodeAssociation: GongNode = {
+            name: "(GongLink) Links",
+            type: GongNodeType.ONE__ZERO_MANY_ASSOCIATION,
+            id: gongnoteDB.ID,
+            uniqueIdPerStack: 19 * nonInstanceNodeId,
+            structName: "GongNote",
+            associationField: "Links",
+            associatedStructName: "GongLink",
+            children: new Array<GongNode>()
+          }
+          nonInstanceNodeId = nonInstanceNodeId + 1
+          gongnoteGongNodeInstance.children.push(LinksGongNodeAssociation)
+
+          gongnoteDB.Links?.forEach(gonglinkDB => {
+            let gonglinkNode: GongNode = {
+              name: gonglinkDB.Name,
+              type: GongNodeType.INSTANCE,
+              id: gonglinkDB.ID,
+              uniqueIdPerStack: // godel numbering (thank you kurt)
+                7 * getGongNoteUniqueID(gongnoteDB.ID)
+                + 11 * getGongLinkUniqueID(gonglinkDB.ID),
+              structName: "GongLink",
+              associationField: "",
+              associatedStructName: "",
+              children: new Array<GongNode>()
+            }
+            LinksGongNodeAssociation.children.push(gonglinkNode)
+          })
+
         }
       )
 
@@ -757,6 +866,126 @@ export class SidebarComponent implements OnInit {
             children: new Array<GongNode>()
           }
           gongtimefieldGongNodeStruct.children!.push(gongtimefieldGongNodeInstance)
+
+          // insertion point for per field code
+        }
+      )
+
+      /**
+      * fill up the Meta part of the mat tree
+      */
+      let metaGongNodeStruct: GongNode = {
+        name: "Meta",
+        type: GongNodeType.STRUCT,
+        id: 0,
+        uniqueIdPerStack: 13 * nonInstanceNodeId,
+        structName: "Meta",
+        associationField: "",
+        associatedStructName: "",
+        children: new Array<GongNode>()
+      }
+      nonInstanceNodeId = nonInstanceNodeId + 1
+      this.gongNodeTree.push(metaGongNodeStruct)
+
+      this.frontRepo.Metas_array.sort((t1, t2) => {
+        if (t1.Name > t2.Name) {
+          return 1;
+        }
+        if (t1.Name < t2.Name) {
+          return -1;
+        }
+        return 0;
+      });
+
+      this.frontRepo.Metas_array.forEach(
+        metaDB => {
+          let metaGongNodeInstance: GongNode = {
+            name: metaDB.Name,
+            type: GongNodeType.INSTANCE,
+            id: metaDB.ID,
+            uniqueIdPerStack: getMetaUniqueID(metaDB.ID),
+            structName: "Meta",
+            associationField: "",
+            associatedStructName: "",
+            children: new Array<GongNode>()
+          }
+          metaGongNodeStruct.children!.push(metaGongNodeInstance)
+
+          // insertion point for per field code
+          /**
+          * let append a node for the slide of pointer MetaReferences
+          */
+          let MetaReferencesGongNodeAssociation: GongNode = {
+            name: "(MetaReference) MetaReferences",
+            type: GongNodeType.ONE__ZERO_MANY_ASSOCIATION,
+            id: metaDB.ID,
+            uniqueIdPerStack: 19 * nonInstanceNodeId,
+            structName: "Meta",
+            associationField: "MetaReferences",
+            associatedStructName: "MetaReference",
+            children: new Array<GongNode>()
+          }
+          nonInstanceNodeId = nonInstanceNodeId + 1
+          metaGongNodeInstance.children.push(MetaReferencesGongNodeAssociation)
+
+          metaDB.MetaReferences?.forEach(metareferenceDB => {
+            let metareferenceNode: GongNode = {
+              name: metareferenceDB.Name,
+              type: GongNodeType.INSTANCE,
+              id: metareferenceDB.ID,
+              uniqueIdPerStack: // godel numbering (thank you kurt)
+                7 * getMetaUniqueID(metaDB.ID)
+                + 11 * getMetaReferenceUniqueID(metareferenceDB.ID),
+              structName: "MetaReference",
+              associationField: "",
+              associatedStructName: "",
+              children: new Array<GongNode>()
+            }
+            MetaReferencesGongNodeAssociation.children.push(metareferenceNode)
+          })
+
+        }
+      )
+
+      /**
+      * fill up the MetaReference part of the mat tree
+      */
+      let metareferenceGongNodeStruct: GongNode = {
+        name: "MetaReference",
+        type: GongNodeType.STRUCT,
+        id: 0,
+        uniqueIdPerStack: 13 * nonInstanceNodeId,
+        structName: "MetaReference",
+        associationField: "",
+        associatedStructName: "",
+        children: new Array<GongNode>()
+      }
+      nonInstanceNodeId = nonInstanceNodeId + 1
+      this.gongNodeTree.push(metareferenceGongNodeStruct)
+
+      this.frontRepo.MetaReferences_array.sort((t1, t2) => {
+        if (t1.Name > t2.Name) {
+          return 1;
+        }
+        if (t1.Name < t2.Name) {
+          return -1;
+        }
+        return 0;
+      });
+
+      this.frontRepo.MetaReferences_array.forEach(
+        metareferenceDB => {
+          let metareferenceGongNodeInstance: GongNode = {
+            name: metareferenceDB.Name,
+            type: GongNodeType.INSTANCE,
+            id: metareferenceDB.ID,
+            uniqueIdPerStack: getMetaReferenceUniqueID(metareferenceDB.ID),
+            structName: "MetaReference",
+            associationField: "",
+            associatedStructName: "",
+            children: new Array<GongNode>()
+          }
+          metareferenceGongNodeStruct.children!.push(metareferenceGongNodeInstance)
 
           // insertion point for per field code
         }

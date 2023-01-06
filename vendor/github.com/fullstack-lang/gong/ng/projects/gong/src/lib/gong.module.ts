@@ -54,6 +54,11 @@ import { GongEnumValueSortingComponent } from './gongenumvalue-sorting/gongenumv
 import { GongEnumValueDetailComponent } from './gongenumvalue-detail/gongenumvalue-detail.component'
 import { GongEnumValuePresentationComponent } from './gongenumvalue-presentation/gongenumvalue-presentation.component'
 
+import { GongLinksTableComponent } from './gonglinks-table/gonglinks-table.component'
+import { GongLinkSortingComponent } from './gonglink-sorting/gonglink-sorting.component'
+import { GongLinkDetailComponent } from './gonglink-detail/gonglink-detail.component'
+import { GongLinkPresentationComponent } from './gonglink-presentation/gonglink-presentation.component'
+
 import { GongNotesTableComponent } from './gongnotes-table/gongnotes-table.component'
 import { GongNoteSortingComponent } from './gongnote-sorting/gongnote-sorting.component'
 import { GongNoteDetailComponent } from './gongnote-detail/gongnote-detail.component'
@@ -68,6 +73,16 @@ import { GongTimeFieldsTableComponent } from './gongtimefields-table/gongtimefie
 import { GongTimeFieldSortingComponent } from './gongtimefield-sorting/gongtimefield-sorting.component'
 import { GongTimeFieldDetailComponent } from './gongtimefield-detail/gongtimefield-detail.component'
 import { GongTimeFieldPresentationComponent } from './gongtimefield-presentation/gongtimefield-presentation.component'
+
+import { MetasTableComponent } from './metas-table/metas-table.component'
+import { MetaSortingComponent } from './meta-sorting/meta-sorting.component'
+import { MetaDetailComponent } from './meta-detail/meta-detail.component'
+import { MetaPresentationComponent } from './meta-presentation/meta-presentation.component'
+
+import { MetaReferencesTableComponent } from './metareferences-table/metareferences-table.component'
+import { MetaReferenceSortingComponent } from './metareference-sorting/metareference-sorting.component'
+import { MetaReferenceDetailComponent } from './metareference-detail/metareference-detail.component'
+import { MetaReferencePresentationComponent } from './metareference-presentation/metareference-presentation.component'
 
 import { ModelPkgsTableComponent } from './modelpkgs-table/modelpkgs-table.component'
 import { ModelPkgSortingComponent } from './modelpkg-sorting/modelpkg-sorting.component'
@@ -103,6 +118,11 @@ import { SliceOfPointerToGongStructFieldPresentationComponent } from './sliceofp
 		GongEnumValueDetailComponent,
 		GongEnumValuePresentationComponent,
 
+		GongLinksTableComponent,
+		GongLinkSortingComponent,
+		GongLinkDetailComponent,
+		GongLinkPresentationComponent,
+
 		GongNotesTableComponent,
 		GongNoteSortingComponent,
 		GongNoteDetailComponent,
@@ -117,6 +137,16 @@ import { SliceOfPointerToGongStructFieldPresentationComponent } from './sliceofp
 		GongTimeFieldSortingComponent,
 		GongTimeFieldDetailComponent,
 		GongTimeFieldPresentationComponent,
+
+		MetasTableComponent,
+		MetaSortingComponent,
+		MetaDetailComponent,
+		MetaPresentationComponent,
+
+		MetaReferencesTableComponent,
+		MetaReferenceSortingComponent,
+		MetaReferenceDetailComponent,
+		MetaReferencePresentationComponent,
 
 		ModelPkgsTableComponent,
 		ModelPkgSortingComponent,
@@ -187,6 +217,11 @@ import { SliceOfPointerToGongStructFieldPresentationComponent } from './sliceofp
 		GongEnumValueDetailComponent,
 		GongEnumValuePresentationComponent,
 
+		GongLinksTableComponent,
+		GongLinkSortingComponent,
+		GongLinkDetailComponent,
+		GongLinkPresentationComponent,
+
 		GongNotesTableComponent,
 		GongNoteSortingComponent,
 		GongNoteDetailComponent,
@@ -201,6 +236,16 @@ import { SliceOfPointerToGongStructFieldPresentationComponent } from './sliceofp
 		GongTimeFieldSortingComponent,
 		GongTimeFieldDetailComponent,
 		GongTimeFieldPresentationComponent,
+
+		MetasTableComponent,
+		MetaSortingComponent,
+		MetaDetailComponent,
+		MetaPresentationComponent,
+
+		MetaReferencesTableComponent,
+		MetaReferenceSortingComponent,
+		MetaReferenceDetailComponent,
+		MetaReferencePresentationComponent,
 
 		ModelPkgsTableComponent,
 		ModelPkgSortingComponent,

@@ -1,4 +1,5 @@
 // insertion point for imports
+import { GongLinkDB } from './gonglink-db'
 
 // usefull for managing pointer ID values that can be nullable
 import { NullInt64 } from './null-int64'
@@ -13,4 +14,5 @@ export class GongNoteDB {
 	Body: string = ""
 
 	// insertion point for other declarations
+	Links?: Array<GongLinkDB>
 }
