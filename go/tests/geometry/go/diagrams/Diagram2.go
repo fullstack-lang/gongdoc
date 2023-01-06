@@ -64,8 +64,8 @@ var Diagram2 uml.Classdiagram = uml.Classdiagram{
 			Name: `Short note on the models`,
 			Body: `this is an example of a short note
 `,
-			X:      430.000000,
-			Y:      100.000000,
+			X:      320.000000,
+			Y:      120.000000,
 			Width:  240.000000,
 			Heigth: 63.000000,
 		},

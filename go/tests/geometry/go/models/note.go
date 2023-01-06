@@ -22,3 +22,5 @@ package models
 //
 
 // GONGNOTE(Short note on the models): this is an example of a short note
+// It uses the DocLink convention for referencing Identifiers
+// In this case [Line], [Point] and [Line.Start]
