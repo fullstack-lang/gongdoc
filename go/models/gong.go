@@ -4405,6 +4405,8 @@ func (gongdocnodetype GongdocNodeType) ToString() (res string) {
 		res = "ROOT_OF_GONG_NOTES"
 	case GONG_NOTE:
 		res = "GONG_NOTE"
+	case GONG_NOTE_LINK:
+		res = "GONG_NOTE_LINK"
 	}
 	return
 }
@@ -4439,6 +4441,8 @@ func (gongdocnodetype *GongdocNodeType) FromString(input string) (err error) {
 		*gongdocnodetype = ROOT_OF_GONG_NOTES
 	case "GONG_NOTE":
 		*gongdocnodetype = GONG_NOTE
+	case "GONG_NOTE_LINK":
+		*gongdocnodetype = GONG_NOTE_LINK
 	default:
 		return errUnkownEnum
 	}
@@ -4475,6 +4479,8 @@ func (gongdocnodetype *GongdocNodeType) FromCodeString(input string) (err error)
 		*gongdocnodetype = ROOT_OF_GONG_NOTES
 	case "GONG_NOTE":
 		*gongdocnodetype = GONG_NOTE
+	case "GONG_NOTE_LINK":
+		*gongdocnodetype = GONG_NOTE_LINK
 	default:
 		return errUnkownEnum
 	}
@@ -4511,6 +4517,8 @@ func (gongdocnodetype *GongdocNodeType) ToCodeString() (res string) {
 		res = "ROOT_OF_GONG_NOTES"
 	case GONG_NOTE:
 		res = "GONG_NOTE"
+	case GONG_NOTE_LINK:
+		res = "GONG_NOTE_LINK"
 	}
 	return
 }
