@@ -17,6 +17,23 @@ type NodeCallbacksSingloton struct {
 	idTree *Tree
 }
 
+func (nodesCb *NodeCallbacksSingloton) GetSelectedClassdiagram() (classdiagram *Classdiagram) {
+	for _, classdiagramNode := range nodesCb.ClassdiagramsRootNode.Children {
+		if classdiagramNode.IsChecked {
+			// get the diagram
+			classdiagram = classdiagramNode.Classdiagram
+		}
+	}
+	return
+}
+
+// OnAfterUpdate is called each time the end user interacts
+// with any node. The front commit the state of the front node
+// to the back ([frontNode] in the function).
+// Therefore, the [stageNode] is now different from the [frontNode].
+//
+// This functiion and its siblings analyse which field of the
+// node has changed and performs all necessary actions
 func (nodesCb *NodeCallbacksSingloton) OnAfterUpdate(
 	stage *StageStruct,
 	stagedNode, frontNode *Node) {
@@ -37,8 +54,6 @@ func (nodesCb *NodeCallbacksSingloton) OnAfterUpdate(
 	}
 
 	if stagedNode.IsExpanded != frontNode.IsExpanded {
-		// editablelog.Println("Node " + stagedNode.Name + " is updated with value IsExpanded to " + strconv.FormatBool(frontNode.IsExpanded))
-
 		// setting the value of the staged node	to the new value
 		stagedNode.IsExpanded = frontNode.IsExpanded
 	}
@@ -48,14 +63,16 @@ func (nodesCb *NodeCallbacksSingloton) OnAfterUpdateDiagram(
 	stage *StageStruct,
 	stagedNode, frontNode *Node) {
 
-	// if node is selected
-	if !stagedNode.IsChecked && frontNode.IsChecked {
+	// node has been checked by the end user
+	if frontNode.IsChecked && !stagedNode.IsChecked {
 
 		// setting the value of the staged node	to the new value
+		// and commit to the database,
+		// The front will detect that the backend has been commited
+		// It will refresh and fetch the node with checked value
 		stagedNode.IsChecked = true
-		stagedNode.Commit()
 
-		// parse all nodes and uncheck them if necessary
+		// uncheck all other diagram nodes
 		diagramNodes := append(
 			nodesCb.ClassdiagramsRootNode.Children,
 			nodesCb.StateDiagramsRootNode.Children...)
@@ -69,12 +86,11 @@ func (nodesCb *NodeCallbacksSingloton) OnAfterUpdateDiagram(
 			if otherDiagramNode.IsChecked {
 				// log.Println("Node " + node.Name + " is checked and should be unchecked")
 				otherDiagramNode.IsChecked = false
-				otherDiagramNode.Commit()
 			}
 		}
 
-		// update the tree of identifiers in order to show
-		// which identifiers are presents in the selected diagram
+		// update the nodes in the tree of identifiers in order to update
+		// which identifiers are present/absent in the selected diagram
 		updateNodesStates(stage, nodesCb)
 	}
 
@@ -148,6 +164,8 @@ func (nodesCb *NodeCallbacksSingloton) OnAfterUpdateDiagram(
 			}
 
 		case STATE_DIAGRAM:
+
+			// to be done
 			stagedNode.Umlsc.Name = frontNode.Name
 			stagedNode.Umlsc.Commit()
 		}
@@ -159,6 +177,7 @@ func (nodesCb *NodeCallbacksSingloton) OnAfterUpdateDiagram(
 		}
 	}
 
+	// the end user switch the edit mode
 	if stagedNode.IsInEditMode != frontNode.IsInEditMode {
 		stagedNode.IsInEditMode = frontNode.IsInEditMode
 		updateNodesStates(stage, nodesCb)
@@ -209,19 +228,15 @@ func (nodesCb *NodeCallbacksSingloton) OnAfterUpdateStruct(
 		stage.Checkout()
 
 		// remove the classshape from the selected diagram
-		for _, classdiagramNode := range nodesCb.ClassdiagramsRootNode.Children {
-			if classdiagramNode.IsChecked {
-				// get the diagram
-				classDiagram := classdiagramNode.Classdiagram
 
-				// get the referenced gongstructs
-				for _, classshape := range classDiagram.Classshapes {
-					gongstruct := classshape.Reference
-					if gongstruct.Name == stagedNode.Name {
-						classDiagram.RemoveClassshape(gongstruct.Name)
-					}
-				}
+		// get the referenced gongstructs
+		classDiagram := nodesCb.GetSelectedClassdiagram()
+		for _, classshape := range classDiagram.Classshapes {
+			gongstruct := classshape.Reference
+			if gongstruct.Name == stagedNode.Name {
+				classDiagram.RemoveClassshape(gongstruct.Name)
 			}
+
 		}
 		updateNodesStates(stage, nodesCb)
 	}
@@ -232,13 +247,9 @@ func (nodesCb *NodeCallbacksSingloton) OnAfterUpdateStruct(
 		// get the latest version of the diagram before modifying it
 		stage.Checkout()
 
-		for _, classdiagramNode := range nodesCb.ClassdiagramsRootNode.Children {
-			if classdiagramNode.IsChecked {
-				// get the diagram
-				classDiagram := classdiagramNode.Classdiagram
-				classDiagram.AddClassshape(frontNode.Name, REFERENCE_GONG_STRUCT)
-			}
-		}
+		classDiagram := nodesCb.GetSelectedClassdiagram()
+		classDiagram.AddClassshape(frontNode.Name, REFERENCE_GONG_STRUCT)
+
 		updateNodesStates(stage, nodesCb)
 	}
 }
@@ -246,14 +257,8 @@ func (nodesCb *NodeCallbacksSingloton) OnAfterUpdateStruct(
 func (nodesCb *NodeCallbacksSingloton) OnAfterUpdateStructField(
 	stage *StageStruct,
 	stagedNode, frontNode *Node) {
-	// find classdiagram
-	var classdiagram *Classdiagram
-	for _, classdiagramNode := range nodesCb.ClassdiagramsRootNode.Children {
-		if classdiagramNode.IsChecked {
-			// get the diagram
-			classdiagram = classdiagramNode.Classdiagram
-		}
-	}
+
+	classdiagram := nodesCb.GetSelectedClassdiagram()
 
 	// find the parent node to find the gongstruct to find the classshape
 	// the node is field, one needs to find the gongstruct that contains it
@@ -434,13 +439,7 @@ func (nodesCb *NodeCallbacksSingloton) OnAfterUpdateStructField(
 func (nodesCb *NodeCallbacksSingloton) OnAfterUpdateNote(
 	stage *StageStruct,
 	stagedNode, frontNode *Node) {
-	var classdiagram *Classdiagram
-	for _, classdiagramNode := range nodesCb.ClassdiagramsRootNode.Children {
-		if classdiagramNode.IsChecked {
-			// get the diagram
-			classdiagram = classdiagramNode.Classdiagram
-		}
-	}
+	classdiagram := nodesCb.GetSelectedClassdiagram()
 
 	if !stagedNode.IsChecked && frontNode.IsChecked {
 		stage.Checkout()
@@ -495,19 +494,15 @@ func (nodesCb *NodeCallbacksSingloton) OnAfterUpdateEnum(
 		stage.Checkout()
 
 		// remove the classshape from the selected diagram
-		for _, classdiagramNode := range nodesCb.ClassdiagramsRootNode.Children {
-			if classdiagramNode.IsChecked {
-				// get the diagram
-				classDiagram := classdiagramNode.Classdiagram
+		classDiagram := nodesCb.GetSelectedClassdiagram()
 
-				// get the referenced gongstructs
-				for _, classshape := range classDiagram.Classshapes {
-					reference := classshape.Reference
-					if reference.Name == stagedNode.Name {
-						classDiagram.RemoveClassshape(reference.Name)
-					}
-				}
+		// get the referenced gongstructs
+		for _, classshape := range classDiagram.Classshapes {
+			reference := classshape.Reference
+			if reference.Name == stagedNode.Name {
+				classDiagram.RemoveClassshape(reference.Name)
 			}
+
 		}
 		updateNodesStates(stage, nodesCb)
 	}
@@ -518,13 +513,8 @@ func (nodesCb *NodeCallbacksSingloton) OnAfterUpdateEnum(
 		// get the latest version of the diagram before modifying it
 		stage.Checkout()
 
-		for _, classdiagramNode := range nodesCb.ClassdiagramsRootNode.Children {
-			if classdiagramNode.IsChecked {
-				// get the diagram
-				classDiagram := classdiagramNode.Classdiagram
-				classDiagram.AddClassshape(frontNode.Name, REFERENCE_GONG_ENUM)
-			}
-		}
+		classDiagram := nodesCb.GetSelectedClassdiagram()
+		classDiagram.AddClassshape(frontNode.Name, REFERENCE_GONG_ENUM)
 		updateNodesStates(stage, nodesCb)
 	}
 }
@@ -533,13 +523,7 @@ func (nodesCb *NodeCallbacksSingloton) OnAfterUpdateEnumValue(
 	stage *StageStruct,
 	stagedNode, frontNode *Node) {
 	// find classdiagram
-	var classdiagram *Classdiagram
-	for _, classdiagramNode := range nodesCb.ClassdiagramsRootNode.Children {
-		if classdiagramNode.IsChecked {
-			// get the diagram
-			classdiagram = classdiagramNode.Classdiagram
-		}
-	}
+	classdiagram := nodesCb.GetSelectedClassdiagram()
 
 	// find the parent node to find the gongstruct to find the classshape
 	// the node is field, one needs to find the gongstruct that contains it
@@ -633,7 +617,7 @@ func (nodesCb *NodeCallbacksSingloton) OnAfterUpdateEnumValue(
 	}
 }
 
-func (callbacksSingloton *NodeCallbacksSingloton) OnAfterCreate(
+func (nodesCb *NodeCallbacksSingloton) OnAfterCreate(
 	stage *StageStruct,
 	newDiagramNode *Node) {
 
@@ -656,10 +640,10 @@ func (callbacksSingloton *NodeCallbacksSingloton) OnAfterCreate(
 		newDiagramNode.IsInDrawMode = false
 		newDiagramNode.HasEditButton = false
 
-		callbacksSingloton.ClassdiagramsRootNode.Children =
-			append(callbacksSingloton.ClassdiagramsRootNode.Children, newDiagramNode)
+		nodesCb.ClassdiagramsRootNode.Children =
+			append(nodesCb.ClassdiagramsRootNode.Children, newDiagramNode)
 
-		updateNodesStates(stage, callbacksSingloton)
+		updateNodesStates(stage, nodesCb)
 		stage.Commit()
 	}
 }
