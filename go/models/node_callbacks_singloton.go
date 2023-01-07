@@ -15,10 +15,6 @@ type NodeCallbacksSingloton struct {
 	StateDiagramsRootNode *Node
 
 	idTree *Tree
-
-	GongstructsRootNode *Node
-	GongenumsRootNode   *Node
-	GongnotesRootNode   *Node
 }
 
 func (nodeCallbacksSingloton *NodeCallbacksSingloton) OnAfterUpdate(

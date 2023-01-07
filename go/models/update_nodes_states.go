@@ -42,8 +42,8 @@ func updateNodesStates(stage *StageStruct, nodesCb *NodeCallbacksSingloton) {
 		classDiagram := classdiagramNode.Classdiagram
 
 		// 1. allow all gongstructs node to be checked/unckecked
-		for _, gognstructNode := range nodesCb.GongstructsRootNode.Children {
-			gognstructNode.IsCheckboxDisabled = !classDiagram.IsInDrawMode
+		for gongStruct := range *gong_models.GetGongstructInstancesSet[gong_models.GongStruct]() {
+			nodesCb.idTree.nodeMap[gongStruct.Name].IsCheckboxDisabled = !classDiagram.IsInDrawMode
 		}
 
 		//
@@ -58,11 +58,11 @@ func updateNodesStates(stage *StageStruct, nodesCb *NodeCallbacksSingloton) {
 		// referenced gongstructs if it is referenced by the classshape
 		for _, classshape := range classDiagram.Classshapes {
 			ref_GongStruct := classshape.Reference
-
 			node, ok := nodesCb.idTree.nodeMap[ref_GongStruct.Name]
 
 			if !ok {
-				log.Fatalln("Unknown node ", ref_GongStruct.Name)
+				log.Println("Unknown node, diagram not synchro with model ", ref_GongStruct.Name)
+				continue
 			}
 			node.IsChecked = true
 
@@ -97,7 +97,9 @@ func updateNodesStates(stage *StageStruct, nodesCb *NodeCallbacksSingloton) {
 			map_OfGongstruct[classshape.ReferenceName] = true
 		}
 		// then iterate over all fields of all gongstructs node
-		for _, gognstructNode := range nodesCb.GongstructsRootNode.Children {
+		for gongStruct := range *gong_models.GetGongstructInstancesSet[gong_models.GongStruct]() {
+			gognstructNode := nodesCb.idTree.nodeMap[gongStruct.Name]
+
 			for _, fieldNode := range gognstructNode.Children {
 				// then disable the checkbox
 				if fieldNode.Type == GONG_STRUCT_FIELD {
