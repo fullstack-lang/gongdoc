@@ -2,17 +2,17 @@ package models
 
 import gong_models "github.com/fullstack-lang/gong/go/models"
 
-func FillUpTreeOfIdentifiers(pkgelt *DiagramPackage, onNodeCallbackIdentifiers *NodeCallbacksSingloton) {
+func FillUpTreeOfIdentifiers(pkgelt *DiagramPackage, nodesCb *NodeCallbacksSingloton) {
 
 	// set up the gongTree to display elements
 	gongTree := (&Tree{Name: "gong", Type: TREE_OF_IDENTIFIERS}).Stage()
 	gongTree.nodeMap = make(map[string]*Node)
-	onNodeCallbackIdentifiers.tree = gongTree
+	nodesCb.idTree = gongTree
 
 	gongstructRootNode := (&Node{Name: "gongstructs"}).Stage()
 	gongstructRootNode.IsExpanded = true
 	gongTree.RootNodes = append(gongTree.RootNodes, gongstructRootNode)
-	onNodeCallbackIdentifiers.GongstructsRootNode = gongstructRootNode
+	nodesCb.GongstructsRootNode = gongstructRootNode
 	for gongStruct := range *gong_models.GetGongstructInstancesSet[gong_models.GongStruct]() {
 
 		node := (&Node{Name: gongStruct.Name}).Stage()
@@ -40,7 +40,7 @@ func FillUpTreeOfIdentifiers(pkgelt *DiagramPackage, onNodeCallbackIdentifiers *
 	gongenumRootNode := (&Node{Name: "gongenums"}).Stage()
 	gongenumRootNode.IsExpanded = true
 	gongTree.RootNodes = append(gongTree.RootNodes, gongenumRootNode)
-	onNodeCallbackIdentifiers.GongenumsRootNode = gongenumRootNode
+	nodesCb.GongenumsRootNode = gongenumRootNode
 	for gongEnum := range *gong_models.GetGongstructInstancesSet[gong_models.GongEnum]() {
 
 		node := (&Node{Name: gongEnum.Name}).Stage()
@@ -67,7 +67,7 @@ func FillUpTreeOfIdentifiers(pkgelt *DiagramPackage, onNodeCallbackIdentifiers *
 	gongNotesRootNode := (&Node{Name: "notes"}).Stage()
 	gongNotesRootNode.IsExpanded = true
 	gongTree.RootNodes = append(gongTree.RootNodes, gongNotesRootNode)
-	onNodeCallbackIdentifiers.GongnotesRootNode = gongNotesRootNode
+	nodesCb.GongnotesRootNode = gongNotesRootNode
 	for gongNote := range *gong_models.GetGongstructInstancesSet[gong_models.GongNote]() {
 
 		node := (&Node{Name: gongNote.Name}).Stage()

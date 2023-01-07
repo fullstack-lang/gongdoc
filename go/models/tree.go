@@ -14,3 +14,10 @@ type Tree struct {
 	// the corresponding node
 	nodeMap map[string]*Node
 }
+
+func (tree *Tree) UncheckAndDisable() {
+
+	for _, _node := range tree.RootNodes {
+		_node.UncheckAndDisableBranch()
+	}
+}
