@@ -336,41 +336,41 @@ func (nodesCb *NodeCallbacksSingloton) OnAfterUpdateStructField(
 			classshape.Heigth = classshape.Heigth + 15
 
 			// construct ordered slice of fields
-			rankOfFieldsInTheOriginalGongStruct := make(map[gong_models.FieldInterface]int, 0)
-			nameOfFields := make(map[string]gong_models.FieldInterface, 0)
+			map_Field_Rank := make(map[gong_models.FieldInterface]int, 0)
+			map_Name_Field := make(map[string]gong_models.FieldInterface, 0)
 
 			// what is the index of the field to insert in the gong struct ?
-			indexOfFieldToInsertInTheOriginalGongStruct := 0
+			fieldRank := 0
 
 			// let's compute it by parsing the field of the gongstruct
 			gongStruct_ := (*gong_models.GetGongstructInstancesMap[gong_models.GongStruct]())[gongStruct.Name]
 			for idx, gongField := range gongStruct_.Fields {
 
-				rankOfFieldsInTheOriginalGongStruct[gongField] = idx
-				nameOfFields[gongField.GetName()] = gongField
+				map_Field_Rank[gongField] = idx
+				map_Name_Field[gongField.GetName()] = gongField
 
 				if gongField.GetName() == field.Name {
-					indexOfFieldToInsertInTheOriginalGongStruct = idx
+					fieldRank = idx
 				}
 			}
 
-			// compute indexOfFieldToInsertInTheGongStructToDisplay (index where to insert the field to display)
-			indexOfFieldToInsertInTheGongStructToDisplay := 0
+			// compute insertionIndex (index where to insert the field to display)
+			insertionIndex := 0
 			for idx, field := range classshape.Fields {
-				gongField := nameOfFields[field.Fieldname]
-				rankInTheOriginalGoncStructOfField := rankOfFieldsInTheOriginalGongStruct[gongField]
-				if indexOfFieldToInsertInTheOriginalGongStruct > rankInTheOriginalGoncStructOfField {
-					indexOfFieldToInsertInTheGongStructToDisplay = idx + 1
+				gongField := map_Name_Field[field.Fieldname]
+				_fieldRank := map_Field_Rank[gongField]
+				if fieldRank > _fieldRank {
+					insertionIndex = idx + 1
 				}
 			}
 
 			// append the filed to display in the right index
-			if indexOfFieldToInsertInTheGongStructToDisplay == len(classshape.Fields) {
+			if insertionIndex == len(classshape.Fields) {
 				classshape.Fields = append(classshape.Fields, &field)
 			} else {
-				classshape.Fields = append(classshape.Fields[:indexOfFieldToInsertInTheGongStructToDisplay+1],
-					classshape.Fields[indexOfFieldToInsertInTheGongStructToDisplay:]...)
-				classshape.Fields[indexOfFieldToInsertInTheGongStructToDisplay] = &field
+				classshape.Fields = append(classshape.Fields[:insertionIndex+1],
+					classshape.Fields[insertionIndex:]...)
+				classshape.Fields[insertionIndex] = &field
 			}
 
 		case *gong_models.PointerToGongStructField, *gong_models.SliceOfPointerToGongStructField:
