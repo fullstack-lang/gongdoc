@@ -1,6 +1,6 @@
 package models
 
-// GONGNOTE(Note on the models): This is an example of a note that
+// GONGNOTE(LongNodeOnModels): This is an example of a note that
 // could be displayed on a diagram.
 //
 // It could explain one aspect of the model
@@ -19,8 +19,9 @@ package models
 // In the UML diagram, the size of the note is automaticaly computed from the note
 // number of lines (for the width) and the number of characters per line (for the height)
 // in the go code
-//
+const LongNodeOnModels = ""
 
-// GONGNOTE(Short note on the models): this is an example of a short note
+// GONGNOTE(ShortNodeOnModels): this is an example of a short note
 // It uses the DocLink convention for referencing Identifiers
 // In this case [Line], [Point] and [Line.Start]
+const ShortNodeOnModels = ""

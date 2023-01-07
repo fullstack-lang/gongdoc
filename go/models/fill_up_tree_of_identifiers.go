@@ -58,6 +58,7 @@ func FillUpTreeOfIdentifiers(pkgelt *DiagramPackage, onNodeCallbackStruct *NodeC
 		noteNode := (&Node{Name: gongNote.Name}).Stage()
 		noteNode.HasCheckboxButton = true
 		noteNode.Type = GONG_NOTE
+		noteNode.IsExpanded = true
 		gongNotesRootNode.Children = append(gongNotesRootNode.Children, noteNode)
 
 		for _, gongLink := range gongNote.Links {

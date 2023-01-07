@@ -61,7 +61,7 @@ var Diagram2 uml.Classdiagram = uml.Classdiagram{
 	},
 	Notes: []*uml.NoteShape{
 		{
-			Name: `Short note on the models`,
+			Name: `ShortNodeOnModels`,
 			Body: `this is an example of a short note
 `,
 			X:      320.000000,

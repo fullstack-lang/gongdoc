@@ -7,4 +7,7 @@ type Tree struct {
 	Type TreeType
 
 	RootNodes []*Node
+
+	// map to access each according to its id
+	map_Identifier_Node map[string]*Node
 }
