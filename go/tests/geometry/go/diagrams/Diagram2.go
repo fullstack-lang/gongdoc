@@ -21,8 +21,17 @@ var Diagram2 uml.Classdiagram = uml.Classdiagram{
 				{
 					Field: models.Line{}.End,
 					Middlevertice: &uml.Vertice{
-						X: 452.500000,
-						Y: 346.000000,
+						X: 449.000000,
+						Y: 329.500000,
+					},
+					TargetMultiplicity: "0..1",
+					SourceMultiplicity: "*",
+				},
+				{
+					Field: models.Line{}.Start,
+					Middlevertice: &uml.Vertice{
+						X: 485.000000,
+						Y: 201.500000,
 					},
 					TargetMultiplicity: "0..1",
 					SourceMultiplicity: "*",
@@ -61,11 +70,13 @@ var Diagram2 uml.Classdiagram = uml.Classdiagram{
 	},
 	Notes: []*uml.NoteShape{
 		{
-			Name: `Short note on the models`,
+			Name: `ShortNodeOnModels`,
 			Body: `this is an example of a short note
+It uses the DocLink convention for referencing Identifiers
+In this case [Line], [Point] and [Line.Start]
 `,
-			X:      430.000000,
-			Y:      100.000000,
+			X:      90.000000,
+			Y:      60.000000,
 			Width:  240.000000,
 			Heigth: 63.000000,
 		},

@@ -144,7 +144,7 @@ var Diagram3 uml.Classdiagram = uml.Classdiagram{
 	},
 	Notes: []*uml.NoteShape{
 		{
-			Name: `Note on the models`,
+			Name: `LongNodeOnModels`,
 			Body: `This is an example of a note that
 could be displayed on a diagram.
 
@@ -171,7 +171,7 @@ in the go code
 			Heigth: 63.000000,
 		},
 		{
-			Name: `Short note on the models`,
+			Name: `ShortNodeOnModels`,
 			Body: `this is an of a short note
 `,
 			X:      90.000000,
