@@ -11,6 +11,8 @@ import (
 )
 
 type NodeCallbacksSingloton struct {
+	tree *Tree
+
 	ClassdiagramsRootNode *Node
 	StateDiagramsRootNode *Node
 

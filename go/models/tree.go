@@ -9,5 +9,8 @@ type Tree struct {
 	RootNodes []*Node
 
 	// map to access each according to its id
-	map_Identifier_Node map[string]*Node
+	// This is usefull since, when navigating a classdiagram
+	// one meet a classshape and one need to pick up
+	// the corresponding node
+	nodeMap map[string]*Node
 }
