@@ -17,6 +17,7 @@ import (
 	"github.com/gin-gonic/gin"
 
 	gongdoc_fullstack "github.com/fullstack-lang/gongdoc/go/fullstack"
+	"github.com/fullstack-lang/gongdoc/go/models"
 	gongdoc_models "github.com/fullstack-lang/gongdoc/go/models"
 
 	gongdoc "github.com/fullstack-lang/gongdoc"
@@ -39,6 +40,10 @@ var (
 
 	editable = flag.Bool("editable", true, "have the diagram editable")
 
+	marshallOnCommit = flag.String("marshallOnCommit", "",
+		"on all commits, marshall staged data to a go file with the marshall name and '.go' "+
+			"(must be lowercased without spaces). If marshall arg is '', no marshalling")
+
 	port = flag.Int("port", 8080, "port server")
 )
 
@@ -59,6 +64,21 @@ func EmbedFolder(fsEmbed embed.FS, targetPath string) static.ServeFileSystem {
 	return embedFileSystem{
 		FileSystem: http.FS(fsys),
 	}
+}
+
+// hook marhalling to stage
+type BeforeCommitImplementation struct {
+}
+
+func (impl *BeforeCommitImplementation) BeforeCommit(stage *gongdoc_models.StageStruct) {
+	file, err := os.Create(fmt.Sprintf("./%s.go", *marshallOnCommit))
+	if err != nil {
+		log.Fatal(err.Error())
+	}
+	defer file.Close()
+
+	gongdoc_models.Stage.Checkout()
+	gongdoc_models.Stage.Marshall(file, "github.com/fullstack-lang/gongdoc/go/models", "diagrams")
 }
 
 func main() {
@@ -146,6 +166,12 @@ func main() {
 
 	diagramPackageCallbackSingloton := new(gongdoc_models.DiagramPackageCallbacksSingloton)
 	gongdoc_models.Stage.OnAfterDiagramPackageUpdateCallback = diagramPackageCallbackSingloton
+
+	if *marshallOnCommit != "" {
+		hook := new(BeforeCommitImplementation)
+		models.Stage.OnInitCommitFromFrontCallback = hook
+		models.Stage.OnInitCommitFromBackCallback = hook
+	}
 
 	log.Printf("Server ready to serve on http://localhost:" + strconv.Itoa(*port) + "/")
 	err := r.Run(":" + strconv.Itoa(*port))
