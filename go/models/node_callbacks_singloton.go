@@ -19,6 +19,12 @@ type NodeCallbacksSingloton struct {
 
 	// map to navigate from a children node to its parent
 	map_Children_Parent map[*Node]*Node
+
+	// map to navigate from identifiers in the package
+	// to nodes, and backforth
+	// identifiers are unique in a package (that's the point of identifiers)
+	map_Identifier_Node map[string]*Node
+	map_Node_Identifier map[*Node]string
 }
 
 func (nodesCb *NodeCallbacksSingloton) GetSelectedClassdiagram() (classdiagram *Classdiagram) {
