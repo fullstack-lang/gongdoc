@@ -12,18 +12,16 @@ import (
 
 type NodeCallbacksSingloton struct {
 	ClassdiagramsRootNode *Node
-	StateDiagramsRootNode *Node
 
 	idTree *Tree
+
+	selectedClassdiagram *Classdiagram
 }
 
 func (nodesCb *NodeCallbacksSingloton) GetSelectedClassdiagram() (classdiagram *Classdiagram) {
-	for _, classdiagramNode := range nodesCb.ClassdiagramsRootNode.Children {
-		if classdiagramNode.IsChecked {
-			// get the diagram
-			classdiagram = classdiagramNode.Classdiagram
-		}
-	}
+
+	classdiagram = nodesCb.selectedClassdiagram
+
 	return
 }
 
@@ -72,10 +70,11 @@ func (nodesCb *NodeCallbacksSingloton) OnAfterUpdateDiagram(
 		// It will refresh and fetch the node with checked value
 		stagedNode.IsChecked = true
 
+		nodesCb.selectedClassdiagram = stagedNode.Classdiagram
+
 		// uncheck all other diagram nodes
 		diagramNodes := append(
-			nodesCb.ClassdiagramsRootNode.Children,
-			nodesCb.StateDiagramsRootNode.Children...)
+			nodesCb.ClassdiagramsRootNode.Children)
 
 		for _, otherDiagramNode := range diagramNodes {
 			if otherDiagramNode == stagedNode {

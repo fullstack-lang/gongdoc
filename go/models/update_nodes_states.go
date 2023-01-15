@@ -134,13 +134,6 @@ func updateNodesStates(stage *StageStruct, nodesCb *NodeCallbacksSingloton) {
 		}
 
 	}
-
-	for _, stateDiagramNode := range nodesCb.StateDiagramsRootNode.Children {
-		stateDiagramNode.HasEditButton = pkglet.IsEditable && stateDiagramNode.IsChecked && !stateDiagramNode.IsInEditMode
-		stateDiagramNode.HasDeleteButton = pkglet.IsEditable && stateDiagramNode.IsChecked && !stateDiagramNode.IsInEditMode
-		stateDiagramNode.HasDrawButton = pkglet.IsEditable && stateDiagramNode.IsChecked && !stateDiagramNode.IsInEditMode
-	}
-
 	// log.Println("UpdateNodeStates, before commit, nb ", stage.BackRepo.GetLastCommitFromBackNb())
 	stage.Commit()
 	// log.Println("UpdateNodeStates, after  commit, nb ", stage.BackRepo.GetLastCommitFromBackNb())
