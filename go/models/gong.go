@@ -1971,26 +1971,6 @@ func (stageStruct *StageStruct) CreateReverseMap_Node_Classdiagram() (res map[*C
 
 	return
 }
-func (stageStruct *StageStruct) CreateReverseMap_Node_Umlsc() (res map[*Umlsc][]*Node) {
-	res = make(map[*Umlsc][]*Node)
-
-	for node := range stageStruct.Nodes {
-		if node.Umlsc != nil {
-			umlsc_ := node.Umlsc
-			var nodes []*Node
-			_, ok := res[umlsc_]
-			if ok {
-				nodes = res[umlsc_]
-			} else {
-				nodes = make([]*Node, 0)
-			}
-			nodes = append(nodes, node)
-			res[umlsc_] = nodes
-		}
-	}
-
-	return
-}
 func (stageStruct *StageStruct) CreateReverseMap_Node_Children() (res map[*Node]*Node) {
 	res = make(map[*Node]*Node)
 
@@ -2387,8 +2367,6 @@ func GetAssociationName[Type Gongstruct]() *Type {
 			// Initialisation of associations
 			// field is initialized with an instance of Classdiagram with the name of the field
 			Classdiagram: &Classdiagram{Name: "Classdiagram"},
-			// field is initialized with an instance of Umlsc with the name of the field
-			Umlsc: &Umlsc{Name: "Umlsc"},
 			// field is initialized with an instance of Node with the name of the field
 			Children: []*Node{{Name: "Children"}},
 		}).(*Type)
@@ -2547,23 +2525,6 @@ func GetPointerReverseMap[Start, End Gongstruct](fieldname string) map[*End][]*S
 					}
 					nodes = append(nodes, node)
 					res[classdiagram_] = nodes
-				}
-			}
-			return any(res).(map[*End][]*Start)
-		case "Umlsc":
-			res := make(map[*Umlsc][]*Node)
-			for node := range Stage.Nodes {
-				if node.Umlsc != nil {
-					umlsc_ := node.Umlsc
-					var nodes []*Node
-					_, ok := res[umlsc_]
-					if ok {
-						nodes = res[umlsc_]
-					} else {
-						nodes = make([]*Node, 0)
-					}
-					nodes = append(nodes, node)
-					res[umlsc_] = nodes
 				}
 			}
 			return any(res).(map[*End][]*Start)
@@ -2886,7 +2847,7 @@ func GetFields[Type Gongstruct]() (res []string) {
 	case Link:
 		res = []string{"Name", "Fieldname", "Structname", "Fieldtypename", "TargetMultiplicity", "SourceMultiplicity", "Middlevertice"}
 	case Node:
-		res = []string{"Name", "Type", "Classdiagram", "Umlsc", "IsExpanded", "HasCheckboxButton", "IsChecked", "IsCheckboxDisabled", "HasAddChildButton", "HasEditButton", "IsInEditMode", "HasDrawButton", "HasDrawOffButton", "IsInDrawMode", "IsSaved", "HasDeleteButton", "Children"}
+		res = []string{"Name", "Type", "Classdiagram", "IsExpanded", "HasCheckboxButton", "IsChecked", "IsCheckboxDisabled", "HasAddChildButton", "HasEditButton", "IsInEditMode", "HasDrawButton", "HasDrawOffButton", "IsInDrawMode", "IsSaved", "HasDeleteButton", "Children"}
 	case NoteLink:
 		res = []string{"Name", "Type", "Classshape", "Link", "Middlevertice"}
 	case NoteShape:
@@ -3051,10 +3012,6 @@ func GetFieldStringValue[Type Gongstruct](instance Type, fieldName string) (res 
 		case "Classdiagram":
 			if any(instance).(Node).Classdiagram != nil {
 				res = any(instance).(Node).Classdiagram.Name
-			}
-		case "Umlsc":
-			if any(instance).(Node).Umlsc != nil {
-				res = any(instance).(Node).Umlsc.Name
 			}
 		case "IsExpanded":
 			res = fmt.Sprintf("%t", any(instance).(Node).IsExpanded)

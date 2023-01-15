@@ -161,12 +161,6 @@ func (nodesCb *NodeCallbacksSingloton) OnAfterUpdateDiagram(
 					stagedNode.Classdiagram.Commit()
 				}
 			}
-
-		case STATE_DIAGRAM:
-
-			// to be done
-			stagedNode.Umlsc.Name = frontNode.Name
-			stagedNode.Umlsc.Commit()
 		}
 		switch stagedNode.Type {
 		case CLASS_DIAGRAM, STATE_DIAGRAM:
@@ -187,8 +181,6 @@ func (nodesCb *NodeCallbacksSingloton) OnAfterUpdateDiagram(
 		switch stagedNode.Type {
 		case CLASS_DIAGRAM:
 			stagedNode.Classdiagram.IsInDrawMode = frontNode.IsInDrawMode
-		case STATE_DIAGRAM:
-			stagedNode.Umlsc.IsInDrawMode = frontNode.IsInDrawMode
 		}
 		updateNodesStates(stage, nodesCb)
 	}
@@ -664,22 +656,6 @@ func (callbacksSingloton *NodeCallbacksSingloton) OnAfterDelete(
 		if _, err := os.Stat(classdiagramFilePath); err == nil {
 			if err := os.Remove(classdiagramFilePath); err != nil {
 				log.Println("Error while deleting file " + classdiagramFilePath + " : " + err.Error())
-			}
-		}
-
-	case STATE_DIAGRAM:
-		// remove the umlsc node from the pkg element node
-		fieldName := GetAssociationName[DiagramPackage]().Umlscs[0].Name
-		mapReverse := GetSliceOfPointersReverseMap[DiagramPackage, Umlsc](fieldName)
-		pkgelt := mapReverse[stagedNode.Umlsc]
-		pkgelt.Umlscs = remove(pkgelt.Umlscs, stagedNode.Umlsc)
-		stagedNode.Umlsc.Unstage()
-
-		// remove the actual classdiagram file if it exsits
-		statediagramFilePath := filepath.Join(pkgelt.Path, "../diagrams", stagedNode.Umlsc.Name) + ".go"
-		if _, err := os.Stat(statediagramFilePath); err == nil {
-			if err := os.Remove(statediagramFilePath); err != nil {
-				log.Println("Error while deleting file " + statediagramFilePath + " : " + err.Error())
 			}
 		}
 	}

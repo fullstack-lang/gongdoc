@@ -10,7 +10,6 @@ type Node struct {
 
 	// pointer to the related instance (depends on type)
 	Classdiagram *Classdiagram
-	Umlsc        *Umlsc
 	Gongstruct   *gong_models.GongStruct
 	Gongfield    gong_models.FieldInterface
 	GongEnum     *gong_models.GongEnum
