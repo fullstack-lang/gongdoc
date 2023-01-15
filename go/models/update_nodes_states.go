@@ -15,6 +15,39 @@ func updateNodesStates(stage *StageStruct, nodesCb *NodeCallbacksSingloton) {
 	for _pkgelt := range *GetGongstructInstancesSet[DiagramPackage]() {
 		pkglet = _pkgelt
 	}
+
+	for node := range *GetGongstructInstancesSet[Node]() {
+
+		node.UncheckAndDisable()
+
+		switch impl := node.impl.(type) {
+		case *Classdiagram:
+			classdiagram := impl
+			classdiagramNode := node
+			classdiagramNode.HasEditButton = false
+			classdiagramNode.HasDeleteButton = false
+			classdiagramNode.HasDrawButton = false
+			classdiagramNode.HasDrawOffButton = false
+
+			if !classdiagramNode.IsChecked {
+				classdiagramNode.IsInEditMode = false
+				classdiagramNode.IsInDrawMode = false
+				continue
+			}
+
+			editable := pkglet.IsEditable && !classdiagramNode.IsInEditMode && !classdiagramNode.IsInDrawMode
+
+			classdiagramNode.HasEditButton = editable
+			classdiagramNode.HasDeleteButton = editable
+			classdiagramNode.HasDrawButton = editable
+
+			// 1. allow all gongstructs node to be checked/unckecked
+			for gongStruct := range *gong_models.GetGongstructInstancesSet[gong_models.GongStruct]() {
+				nodesCb.idTree.nodeMap[gongStruct.Name].IsCheckboxDisabled = !classdiagram.IsInDrawMode
+			}
+		}
+	}
+
 	nodesCb.idTree.UncheckAndDisable()
 
 	// get the selected diagram and collect what are its referenced
@@ -132,7 +165,6 @@ func updateNodesStates(stage *StageStruct, nodesCb *NodeCallbacksSingloton) {
 		for _, note := range classDiagram.Notes {
 			nodesCb.idTree.nodeMap[note.Name].IsChecked = true
 		}
-
 	}
 	// log.Println("UpdateNodeStates, before commit, nb ", stage.BackRepo.GetLastCommitFromBackNb())
 	stage.Commit()

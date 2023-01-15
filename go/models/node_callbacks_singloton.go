@@ -16,6 +16,9 @@ type NodeCallbacksSingloton struct {
 	idTree *Tree
 
 	selectedClassdiagram *Classdiagram
+
+	// map to navigate from a children node to its parent
+	map_Children_Parent map[*Node]*Node
 }
 
 func (nodesCb *NodeCallbacksSingloton) GetSelectedClassdiagram() (classdiagram *Classdiagram) {
@@ -247,7 +250,7 @@ func (nodesCb *NodeCallbacksSingloton) OnAfterUpdateStructField(
 	// find the parent node to find the gongstruct to find the classshape
 	// the node is field, one needs to find the gongstruct that contains it
 	// get the parent node
-	parentNode := nodesCb.idTree.map_Children_Parent[stagedNode]
+	parentNode := nodesCb.map_Children_Parent[stagedNode]
 	gongStruct := parentNode.Gongstruct
 
 	// find the classhape in the classdiagram
@@ -510,7 +513,7 @@ func (nodesCb *NodeCallbacksSingloton) OnAfterUpdateEnumValue(
 	// find the parent node to find the gongstruct to find the classshape
 	// the node is field, one needs to find the gongstruct that contains it
 	// get the parent node
-	parentNode := nodesCb.idTree.map_Children_Parent[stagedNode]
+	parentNode := nodesCb.map_Children_Parent[stagedNode]
 	gongEnum := parentNode.GongEnum
 
 	// find the classhape in the classdiagram

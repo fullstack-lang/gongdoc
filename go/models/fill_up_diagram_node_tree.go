@@ -15,6 +15,7 @@ func FillUpDiagramNodeTree(diagramPackage *DiagramPackage, onNodeCallbackStruct 
 	for classdiagram := range *GetGongstructInstancesSet[Classdiagram]() {
 		node := (&Node{Name: classdiagram.Name}).Stage()
 		node.Classdiagram = classdiagram
+		node.impl = classdiagram
 		node.Type = CLASS_DIAGRAM
 		node.HasCheckboxButton = true
 		node.HasDeleteButton = true

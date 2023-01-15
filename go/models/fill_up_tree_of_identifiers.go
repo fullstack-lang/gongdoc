@@ -89,5 +89,5 @@ func FillUpTreeOfIdentifiers(pkgelt *DiagramPackage, nodesCb *NodeCallbacksSingl
 
 	// generate the map to navigate from children to parents
 	fieldName := GetAssociationName[Node]().Children[0].Name
-	gongTree.map_Children_Parent = GetSliceOfPointersReverseMap[Node, Node](fieldName)
+	nodesCb.map_Children_Parent = GetSliceOfPointersReverseMap[Node, Node](fieldName)
 }
