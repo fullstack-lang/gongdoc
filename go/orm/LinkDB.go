@@ -77,6 +77,9 @@ type LinkDB struct {
 	// Declation for basic field linkDB.Structname
 	Structname_Data sql.NullString
 
+	// Declation for basic field linkDB.Identifier
+	Identifier_Data sql.NullString
+
 	// Declation for basic field linkDB.Fieldtypename
 	Fieldtypename_Data sql.NullString
 
@@ -112,11 +115,13 @@ type LinkWOP struct {
 
 	Structname string `xlsx:"3"`
 
-	Fieldtypename string `xlsx:"4"`
+	Identifier string `xlsx:"4"`
 
-	TargetMultiplicity models.MultiplicityType `xlsx:"5"`
+	Fieldtypename string `xlsx:"5"`
 
-	SourceMultiplicity models.MultiplicityType `xlsx:"6"`
+	TargetMultiplicity models.MultiplicityType `xlsx:"6"`
+
+	SourceMultiplicity models.MultiplicityType `xlsx:"7"`
 	// insertion for WOP pointer fields
 }
 
@@ -126,6 +131,7 @@ var Link_Fields = []string{
 	"Name",
 	"Fieldname",
 	"Structname",
+	"Identifier",
 	"Fieldtypename",
 	"TargetMultiplicity",
 	"SourceMultiplicity",
@@ -433,6 +439,9 @@ func (linkDB *LinkDB) CopyBasicFieldsFromLink(link *models.Link) {
 	linkDB.Structname_Data.String = link.Structname
 	linkDB.Structname_Data.Valid = true
 
+	linkDB.Identifier_Data.String = link.Identifier
+	linkDB.Identifier_Data.Valid = true
+
 	linkDB.Fieldtypename_Data.String = link.Fieldtypename
 	linkDB.Fieldtypename_Data.Valid = true
 
@@ -456,6 +465,9 @@ func (linkDB *LinkDB) CopyBasicFieldsFromLinkWOP(link *LinkWOP) {
 	linkDB.Structname_Data.String = link.Structname
 	linkDB.Structname_Data.Valid = true
 
+	linkDB.Identifier_Data.String = link.Identifier
+	linkDB.Identifier_Data.Valid = true
+
 	linkDB.Fieldtypename_Data.String = link.Fieldtypename
 	linkDB.Fieldtypename_Data.Valid = true
 
@@ -472,6 +484,7 @@ func (linkDB *LinkDB) CopyBasicFieldsToLink(link *models.Link) {
 	link.Name = linkDB.Name_Data.String
 	link.Fieldname = linkDB.Fieldname_Data.String
 	link.Structname = linkDB.Structname_Data.String
+	link.Identifier = linkDB.Identifier_Data.String
 	link.Fieldtypename = linkDB.Fieldtypename_Data.String
 	link.TargetMultiplicity.FromString(linkDB.TargetMultiplicity_Data.String)
 	link.SourceMultiplicity.FromString(linkDB.SourceMultiplicity_Data.String)
@@ -484,6 +497,7 @@ func (linkDB *LinkDB) CopyBasicFieldsToLinkWOP(link *LinkWOP) {
 	link.Name = linkDB.Name_Data.String
 	link.Fieldname = linkDB.Fieldname_Data.String
 	link.Structname = linkDB.Structname_Data.String
+	link.Identifier = linkDB.Identifier_Data.String
 	link.Fieldtypename = linkDB.Fieldtypename_Data.String
 	link.TargetMultiplicity.FromString(linkDB.TargetMultiplicity_Data.String)
 	link.SourceMultiplicity.FromString(linkDB.SourceMultiplicity_Data.String)

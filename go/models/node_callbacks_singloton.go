@@ -208,15 +208,8 @@ func (nodesCb *NodeCallbacksSingloton) OnAfterUpdateDiagram(
 
 			Stage.Reset()
 
+			// stage only the selected diagram and its siblings
 			stagedNode.Classdiagram.SerializeToStage()
-
-			// // prune all elements from the stage that not within the selected diagram
-			// for diagram := range *GetGongstructInstancesSet[Classdiagram]() {
-			// 	if diagram == stagedNode.Classdiagram {
-			// 		continue
-			// 	}
-			// 	diagram.SerializeToStage()
-			// }
 
 			filepath := filepath.Join(
 				filepath.Join(nodesCb.diagramPackage.Path,
@@ -232,6 +225,7 @@ func (nodesCb *NodeCallbacksSingloton) OnAfterUpdateDiagram(
 			Stage.MetaPackageImportPath = `"` + nodesCb.diagramPackage.GongModelPath + `"`
 			Stage.Marshall(file, "github.com/fullstack-lang/gongdoc/go/models", "diagrams")
 
+			// restore the stage
 			Stage.Checkout()
 			stagedNode.IsSaved = false
 			stage.Commit()

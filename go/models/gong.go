@@ -2845,7 +2845,7 @@ func GetFields[Type Gongstruct]() (res []string) {
 	case Field:
 		res = []string{"Name", "Fieldname", "Identifier", "FieldTypeAsString", "Structname", "Fieldtypename"}
 	case Link:
-		res = []string{"Name", "Fieldname", "Structname", "Fieldtypename", "TargetMultiplicity", "SourceMultiplicity", "Middlevertice"}
+		res = []string{"Name", "Fieldname", "Structname", "Identifier", "Fieldtypename", "TargetMultiplicity", "SourceMultiplicity", "Middlevertice"}
 	case Node:
 		res = []string{"Name", "Type", "Classdiagram", "IsExpanded", "HasCheckboxButton", "IsChecked", "IsCheckboxDisabled", "HasAddChildButton", "HasEditButton", "IsInEditMode", "HasDrawButton", "HasDrawOffButton", "IsInDrawMode", "IsSaved", "HasDeleteButton", "Children"}
 	case NoteLink:
@@ -2992,6 +2992,8 @@ func GetFieldStringValue[Type Gongstruct](instance Type, fieldName string) (res 
 			res = any(instance).(Link).Fieldname
 		case "Structname":
 			res = any(instance).(Link).Structname
+		case "Identifier":
+			res = any(instance).(Link).Identifier
 		case "Fieldtypename":
 			res = any(instance).(Link).Fieldtypename
 		case "TargetMultiplicity":

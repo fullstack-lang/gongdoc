@@ -24,7 +24,8 @@ type Field struct {
 
 	Fieldname string
 
-	// Identifier is the identifier of the struct field referenced by the shape in the modeled package
+	// Identifier is the identifier of the struct field referenced
+	// by the UML classshape in the modeled package
 	//gong:ident
 	Identifier string
 
