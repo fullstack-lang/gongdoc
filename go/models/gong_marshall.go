@@ -88,10 +88,8 @@ func (stage *StageStruct) Marshall(file *os.File, modelsPackageName, packageName
 		log.Fatalln(name + " is not a go filename")
 	}
 
-	log.Println("filename of marshall output  is " + name)
-
+	log.Println("filename of marshall output is " + name)
 	newBase := filepath.Base(file.Name())
-	_ = newBase
 
 	res := marshallRes
 	res = strings.ReplaceAll(res, "{{databaseName}}", strings.ReplaceAll(newBase, ".go", ""))

@@ -327,6 +327,9 @@ func (backRepoUmlState *BackRepoUmlStateStruct) CheckoutPhaseOneInstance(umlstat
 	}
 	umlstateDB.CopyBasicFieldsToUmlState(umlstate)
 
+	// in some cases, the instance might have been unstaged. It is necessary to stage it again
+	umlstate.Stage()
+
 	// preserve pointer to umlstateDB. Otherwise, pointer will is recycled and the map of pointers
 	// Map_UmlStateDBID_UmlStateDB)[umlstateDB hold variable pointers
 	umlstateDB_Data := *umlstateDB

@@ -364,6 +364,9 @@ func (backRepoLink *BackRepoLinkStruct) CheckoutPhaseOneInstance(linkDB *LinkDB)
 	}
 	linkDB.CopyBasicFieldsToLink(link)
 
+	// in some cases, the instance might have been unstaged. It is necessary to stage it again
+	link.Stage()
+
 	// preserve pointer to linkDB. Otherwise, pointer will is recycled and the map of pointers
 	// Map_LinkDBID_LinkDB)[linkDB hold variable pointers
 	linkDB_Data := *linkDB

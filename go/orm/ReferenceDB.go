@@ -321,6 +321,9 @@ func (backRepoReference *BackRepoReferenceStruct) CheckoutPhaseOneInstance(refer
 	}
 	referenceDB.CopyBasicFieldsToReference(reference)
 
+	// in some cases, the instance might have been unstaged. It is necessary to stage it again
+	reference.Stage()
+
 	// preserve pointer to referenceDB. Otherwise, pointer will is recycled and the map of pointers
 	// Map_ReferenceDBID_ReferenceDB)[referenceDB hold variable pointers
 	referenceDB_Data := *referenceDB

@@ -1806,6 +1806,65 @@ func (stage *StageStruct) Nil() { // insertion point for array nil
 
 }
 
+func (stage *StageStruct) Unstage() { // insertion point for array nil
+	for classdiagram := range stage.Classdiagrams {
+		classdiagram.Unstage()
+	}
+
+	for classshape := range stage.Classshapes {
+		classshape.Unstage()
+	}
+
+	for diagrampackage := range stage.DiagramPackages {
+		diagrampackage.Unstage()
+	}
+
+	for field := range stage.Fields {
+		field.Unstage()
+	}
+
+	for link := range stage.Links {
+		link.Unstage()
+	}
+
+	for node := range stage.Nodes {
+		node.Unstage()
+	}
+
+	for notelink := range stage.NoteLinks {
+		notelink.Unstage()
+	}
+
+	for noteshape := range stage.NoteShapes {
+		noteshape.Unstage()
+	}
+
+	for position := range stage.Positions {
+		position.Unstage()
+	}
+
+	for reference := range stage.References {
+		reference.Unstage()
+	}
+
+	for tree := range stage.Trees {
+		tree.Unstage()
+	}
+
+	for umlstate := range stage.UmlStates {
+		umlstate.Unstage()
+	}
+
+	for umlsc := range stage.Umlscs {
+		umlsc.Unstage()
+	}
+
+	for vertice := range stage.Vertices {
+		vertice.Unstage()
+	}
+
+}
+
 // insertion point of functions that provide maps for reverse associations
 
 // generate function for reverse association maps of Classdiagram

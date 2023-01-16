@@ -347,6 +347,9 @@ func (backRepoUmlsc *BackRepoUmlscStruct) CheckoutPhaseOneInstance(umlscDB *Umls
 	}
 	umlscDB.CopyBasicFieldsToUmlsc(umlsc)
 
+	// in some cases, the instance might have been unstaged. It is necessary to stage it again
+	umlsc.Stage()
+
 	// preserve pointer to umlscDB. Otherwise, pointer will is recycled and the map of pointers
 	// Map_UmlscDBID_UmlscDB)[umlscDB hold variable pointers
 	umlscDB_Data := *umlscDB

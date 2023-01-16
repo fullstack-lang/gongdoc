@@ -334,6 +334,9 @@ func (backRepoTree *BackRepoTreeStruct) CheckoutPhaseOneInstance(treeDB *TreeDB)
 	}
 	treeDB.CopyBasicFieldsToTree(tree)
 
+	// in some cases, the instance might have been unstaged. It is necessary to stage it again
+	tree.Stage()
+
 	// preserve pointer to treeDB. Otherwise, pointer will is recycled and the map of pointers
 	// Map_TreeDBID_TreeDB)[treeDB hold variable pointers
 	treeDB_Data := *treeDB

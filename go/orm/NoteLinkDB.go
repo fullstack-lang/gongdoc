@@ -360,6 +360,9 @@ func (backRepoNoteLink *BackRepoNoteLinkStruct) CheckoutPhaseOneInstance(notelin
 	}
 	notelinkDB.CopyBasicFieldsToNoteLink(notelink)
 
+	// in some cases, the instance might have been unstaged. It is necessary to stage it again
+	notelink.Stage()
+
 	// preserve pointer to notelinkDB. Otherwise, pointer will is recycled and the map of pointers
 	// Map_NoteLinkDBID_NoteLinkDB)[notelinkDB hold variable pointers
 	notelinkDB_Data := *notelinkDB

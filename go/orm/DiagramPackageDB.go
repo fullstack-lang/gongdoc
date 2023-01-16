@@ -379,6 +379,9 @@ func (backRepoDiagramPackage *BackRepoDiagramPackageStruct) CheckoutPhaseOneInst
 	}
 	diagrampackageDB.CopyBasicFieldsToDiagramPackage(diagrampackage)
 
+	// in some cases, the instance might have been unstaged. It is necessary to stage it again
+	diagrampackage.Stage()
+
 	// preserve pointer to diagrampackageDB. Otherwise, pointer will is recycled and the map of pointers
 	// Map_DiagramPackageDBID_DiagramPackageDB)[diagrampackageDB hold variable pointers
 	diagrampackageDB_Data := *diagrampackageDB

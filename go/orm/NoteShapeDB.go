@@ -371,6 +371,9 @@ func (backRepoNoteShape *BackRepoNoteShapeStruct) CheckoutPhaseOneInstance(notes
 	}
 	noteshapeDB.CopyBasicFieldsToNoteShape(noteshape)
 
+	// in some cases, the instance might have been unstaged. It is necessary to stage it again
+	noteshape.Stage()
+
 	// preserve pointer to noteshapeDB. Otherwise, pointer will is recycled and the map of pointers
 	// Map_NoteShapeDBID_NoteShapeDB)[noteshapeDB hold variable pointers
 	noteshapeDB_Data := *noteshapeDB

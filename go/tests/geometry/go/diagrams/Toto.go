@@ -7,21 +7,16 @@ import (
 	"github.com/fullstack-lang/gongdoc/go/tests/geometry/go/models"
 )
 
-var DiagramEnums uml.Classdiagram = uml.Classdiagram{
+var Toto uml.Classdiagram = uml.Classdiagram{
 	Classshapes: []*uml.Classshape{
 		{
-			ReferencedGong: new(models.LineType),
+			ReferencedGong: &(models.Point{}),
 			Position: &uml.Position{
-				X: 150.000000,
-				Y: 40.000000,
+				X: 40.000000,
+				Y: 61.000000,
 			},
 			Width:  240.000000,
-			Heigth: 78.000000,
-			Fields: []*uml.Field{
-				{
-					Field: models.CONTINUOUS,
-				},
-			},
+			Heigth: 63.000000,
 		},
 	},
 	Notes: []*uml.NoteShape{

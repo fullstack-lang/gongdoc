@@ -345,6 +345,9 @@ func (backRepoField *BackRepoFieldStruct) CheckoutPhaseOneInstance(fieldDB *Fiel
 	}
 	fieldDB.CopyBasicFieldsToField(field)
 
+	// in some cases, the instance might have been unstaged. It is necessary to stage it again
+	field.Stage()
+
 	// preserve pointer to fieldDB. Otherwise, pointer will is recycled and the map of pointers
 	// Map_FieldDBID_FieldDB)[fieldDB hold variable pointers
 	fieldDB_Data := *fieldDB

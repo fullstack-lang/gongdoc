@@ -76,10 +76,12 @@ var Diagram4 uml.Classdiagram = uml.Classdiagram{
 	Notes: []*uml.NoteShape{
 		{
 			Name: `ShortNodeOnModels`,
-			Body: `this is an of a short note
+			Body: `this is an example of a short note
+It uses the DocLink convention for referencing Identifiers
+In this case [Line], [Point] and [Line.Start]
 `,
-			X:      70.000000,
-			Y:      340.000000,
+			X:      40.000000,
+			Y:      310.000000,
 			Width:  240.000000,
 			Heigth: 63.000000,
 		},

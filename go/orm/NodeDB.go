@@ -443,6 +443,9 @@ func (backRepoNode *BackRepoNodeStruct) CheckoutPhaseOneInstance(nodeDB *NodeDB)
 	}
 	nodeDB.CopyBasicFieldsToNode(node)
 
+	// in some cases, the instance might have been unstaged. It is necessary to stage it again
+	node.Stage()
+
 	// preserve pointer to nodeDB. Otherwise, pointer will is recycled and the map of pointers
 	// Map_NodeDBID_NodeDB)[nodeDB hold variable pointers
 	nodeDB_Data := *nodeDB

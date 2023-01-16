@@ -44,9 +44,9 @@ func Diagram2Injection() {
 	__Classdiagram__000000_Diagram2 := (&models.Classdiagram{Name: `Diagram2`}).Stage()
 
 	// Declarations of staged instances of Classshape
-	__Classshape__000000_Classshape0001 := (&models.Classshape{Name: `Classshape0001`}).Stage()
-	__Classshape__000001_Classshape0002 := (&models.Classshape{Name: `Classshape0002`}).Stage()
-	__Classshape__000002_Classshape0003 := (&models.Classshape{Name: `Classshape0003`}).Stage()
+	__Classshape__000000_Classshape0000 := (&models.Classshape{Name: `Classshape0000`}).Stage()
+	__Classshape__000001_Classshape0001 := (&models.Classshape{Name: `Classshape0001`}).Stage()
+	__Classshape__000002_Classshape0002 := (&models.Classshape{Name: `Classshape0002`}).Stage()
 
 	// Declarations of staged instances of DiagramPackage
 
@@ -66,9 +66,9 @@ func Diagram2Injection() {
 	__NoteShape__000000_ShortNodeOnModels := (&models.NoteShape{Name: `ShortNodeOnModels`}).Stage()
 
 	// Declarations of staged instances of Position
-	__Position__000000_Position_0001 := (&models.Position{Name: `Position-0001`}).Stage()
-	__Position__000001_Position_0002 := (&models.Position{Name: `Position-0002`}).Stage()
-	__Position__000002_Position_0003 := (&models.Position{Name: `Position-0003`}).Stage()
+	__Position__000000_Position_0000 := (&models.Position{Name: `Position-0000`}).Stage()
+	__Position__000001_Position_0001 := (&models.Position{Name: `Position-0001`}).Stage()
+	__Position__000002_Position_0002 := (&models.Position{Name: `Position-0002`}).Stage()
 
 	// Declarations of staged instances of Reference
 	__Reference__000000_Line := (&models.Reference{Name: `Line`}).Stage()
@@ -93,46 +93,46 @@ func Diagram2Injection() {
 	__Classdiagram__000000_Diagram2.IsInDrawMode = true
 
 	// Classshape values setup
-	__Classshape__000000_Classshape0001.Name = `Classshape0001`
-	__Classshape__000000_Classshape0001.ReferenceName = `Line`
+	__Classshape__000000_Classshape0000.Name = `Classshape0000`
+	__Classshape__000000_Classshape0000.ReferenceName = `Line`
 	
 	// comment added to overcome the problem with the comment map association
 
 	//gong:ident [Ref_models.Line]
-	__Classshape__000000_Classshape0001.Identifier = `Ref_models.Line`
-	__Classshape__000000_Classshape0001.ShowNbInstances = true
-	__Classshape__000000_Classshape0001.NbInstances = 59
-	__Classshape__000000_Classshape0001.Width = 240.000000
-	__Classshape__000000_Classshape0001.Heigth = 78.000000
-	__Classshape__000000_Classshape0001.IsSelected = false
+	__Classshape__000000_Classshape0000.Identifier = `Ref_models.Line`
+	__Classshape__000000_Classshape0000.ShowNbInstances = true
+	__Classshape__000000_Classshape0000.NbInstances = 87
+	__Classshape__000000_Classshape0000.Width = 240.000000
+	__Classshape__000000_Classshape0000.Heigth = 78.000000
+	__Classshape__000000_Classshape0000.IsSelected = false
 
 	// Classshape values setup
-	__Classshape__000001_Classshape0002.Name = `Classshape0002`
-	__Classshape__000001_Classshape0002.ReferenceName = `Point`
+	__Classshape__000001_Classshape0001.Name = `Classshape0001`
+	__Classshape__000001_Classshape0001.ReferenceName = `Point`
 	
 	// comment added to overcome the problem with the comment map association
 
 	//gong:ident [Ref_models.Point]
-	__Classshape__000001_Classshape0002.Identifier = `Ref_models.Point`
-	__Classshape__000001_Classshape0002.ShowNbInstances = true
-	__Classshape__000001_Classshape0002.NbInstances = 81
-	__Classshape__000001_Classshape0002.Width = 240.000000
-	__Classshape__000001_Classshape0002.Heigth = 63.000000
-	__Classshape__000001_Classshape0002.IsSelected = false
+	__Classshape__000001_Classshape0001.Identifier = `Ref_models.Point`
+	__Classshape__000001_Classshape0001.ShowNbInstances = true
+	__Classshape__000001_Classshape0001.NbInstances = 47
+	__Classshape__000001_Classshape0001.Width = 240.000000
+	__Classshape__000001_Classshape0001.Heigth = 63.000000
+	__Classshape__000001_Classshape0001.IsSelected = false
 
 	// Classshape values setup
-	__Classshape__000002_Classshape0003.Name = `Classshape0003`
-	__Classshape__000002_Classshape0003.ReferenceName = `PointExclusiveSet`
+	__Classshape__000002_Classshape0002.Name = `Classshape0002`
+	__Classshape__000002_Classshape0002.ReferenceName = `PointExclusiveSet`
 	
 	// comment added to overcome the problem with the comment map association
 
 	//gong:ident [Ref_models.PointExclusiveSet]
-	__Classshape__000002_Classshape0003.Identifier = `Ref_models.PointExclusiveSet`
-	__Classshape__000002_Classshape0003.ShowNbInstances = true
-	__Classshape__000002_Classshape0003.NbInstances = 87
-	__Classshape__000002_Classshape0003.Width = 240.000000
-	__Classshape__000002_Classshape0003.Heigth = 63.000000
-	__Classshape__000002_Classshape0003.IsSelected = false
+	__Classshape__000002_Classshape0002.Identifier = `Ref_models.PointExclusiveSet`
+	__Classshape__000002_Classshape0002.ShowNbInstances = true
+	__Classshape__000002_Classshape0002.NbInstances = 59
+	__Classshape__000002_Classshape0002.Width = 240.000000
+	__Classshape__000002_Classshape0002.Heigth = 63.000000
+	__Classshape__000002_Classshape0002.IsSelected = false
 
 	// Field values setup
 	__Field__000000_CreationDate.Name = `CreationDate`
@@ -198,33 +198,33 @@ In this case [Line], [Point] and [Line.Start]
 	__NoteShape__000000_ShortNodeOnModels.Matched = true
 
 	// Position values setup
-	__Position__000000_Position_0001.X = 50.000000
-	__Position__000000_Position_0001.Y = 210.000000
-	__Position__000000_Position_0001.Name = `Position-0001`
+	__Position__000000_Position_0000.X = 50.000000
+	__Position__000000_Position_0000.Y = 210.000000
+	__Position__000000_Position_0000.Name = `Position-0000`
 
 	// Position values setup
-	__Position__000001_Position_0002.X = 680.000000
-	__Position__000001_Position_0002.Y = 220.000000
-	__Position__000001_Position_0002.Name = `Position-0002`
+	__Position__000001_Position_0001.X = 680.000000
+	__Position__000001_Position_0001.Y = 220.000000
+	__Position__000001_Position_0001.Name = `Position-0001`
 
 	// Position values setup
-	__Position__000002_Position_0003.X = 30.000000
-	__Position__000002_Position_0003.Y = 350.000000
-	__Position__000002_Position_0003.Name = `Position-0003`
+	__Position__000002_Position_0002.X = 30.000000
+	__Position__000002_Position_0002.Y = 350.000000
+	__Position__000002_Position_0002.Name = `Position-0002`
 
 	// Reference values setup
 	__Reference__000000_Line.Name = `Line`
-	__Reference__000000_Line.NbInstances = 59
+	__Reference__000000_Line.NbInstances = 87
 	__Reference__000000_Line.Type = models.REFERENCE_GONG_STRUCT
 
 	// Reference values setup
 	__Reference__000001_Point.Name = `Point`
-	__Reference__000001_Point.NbInstances = 81
+	__Reference__000001_Point.NbInstances = 47
 	__Reference__000001_Point.Type = models.REFERENCE_GONG_STRUCT
 
 	// Reference values setup
 	__Reference__000002_PointExclusiveSet.Name = `PointExclusiveSet`
-	__Reference__000002_PointExclusiveSet.NbInstances = 87
+	__Reference__000002_PointExclusiveSet.NbInstances = 59
 	__Reference__000002_PointExclusiveSet.Type = models.REFERENCE_GONG_STRUCT
 
 	// Vertice values setup
@@ -243,20 +243,20 @@ In this case [Line], [Point] and [Line.Start]
 	__Vertice__000002_Vertice_0002.Name = `Vertice-0002`
 
 	// Setup of pointers
-	__Classdiagram__000000_Diagram2.Classshapes = append(__Classdiagram__000000_Diagram2.Classshapes, __Classshape__000000_Classshape0001)
-	__Classdiagram__000000_Diagram2.Classshapes = append(__Classdiagram__000000_Diagram2.Classshapes, __Classshape__000001_Classshape0002)
-	__Classdiagram__000000_Diagram2.Classshapes = append(__Classdiagram__000000_Diagram2.Classshapes, __Classshape__000002_Classshape0003)
+	__Classdiagram__000000_Diagram2.Classshapes = append(__Classdiagram__000000_Diagram2.Classshapes, __Classshape__000000_Classshape0000)
+	__Classdiagram__000000_Diagram2.Classshapes = append(__Classdiagram__000000_Diagram2.Classshapes, __Classshape__000001_Classshape0001)
+	__Classdiagram__000000_Diagram2.Classshapes = append(__Classdiagram__000000_Diagram2.Classshapes, __Classshape__000002_Classshape0002)
 	__Classdiagram__000000_Diagram2.Notes = append(__Classdiagram__000000_Diagram2.Notes, __NoteShape__000000_ShortNodeOnModels)
-	__Classshape__000000_Classshape0001.Position = __Position__000000_Position_0001
-	__Classshape__000000_Classshape0001.Reference = __Reference__000000_Line
-	__Classshape__000000_Classshape0001.Fields = append(__Classshape__000000_Classshape0001.Fields, __Field__000000_CreationDate)
-	__Classshape__000000_Classshape0001.Links = append(__Classshape__000000_Classshape0001.Links, __Link__000000_End)
-	__Classshape__000000_Classshape0001.Links = append(__Classshape__000000_Classshape0001.Links, __Link__000002_Start)
-	__Classshape__000001_Classshape0002.Position = __Position__000001_Position_0002
-	__Classshape__000001_Classshape0002.Reference = __Reference__000001_Point
-	__Classshape__000002_Classshape0003.Position = __Position__000002_Position_0003
-	__Classshape__000002_Classshape0003.Reference = __Reference__000002_PointExclusiveSet
-	__Classshape__000002_Classshape0003.Links = append(__Classshape__000002_Classshape0003.Links, __Link__000001_Points)
+	__Classshape__000000_Classshape0000.Position = __Position__000000_Position_0000
+	__Classshape__000000_Classshape0000.Reference = __Reference__000000_Line
+	__Classshape__000000_Classshape0000.Fields = append(__Classshape__000000_Classshape0000.Fields, __Field__000000_CreationDate)
+	__Classshape__000000_Classshape0000.Links = append(__Classshape__000000_Classshape0000.Links, __Link__000000_End)
+	__Classshape__000000_Classshape0000.Links = append(__Classshape__000000_Classshape0000.Links, __Link__000002_Start)
+	__Classshape__000001_Classshape0001.Position = __Position__000001_Position_0001
+	__Classshape__000001_Classshape0001.Reference = __Reference__000001_Point
+	__Classshape__000002_Classshape0002.Position = __Position__000002_Position_0002
+	__Classshape__000002_Classshape0002.Reference = __Reference__000002_PointExclusiveSet
+	__Classshape__000002_Classshape0002.Links = append(__Classshape__000002_Classshape0002.Links, __Link__000001_Points)
 	__Link__000000_End.Middlevertice = __Vertice__000000_Vertice_0000
 	__Link__000001_Points.Middlevertice = __Vertice__000002_Vertice_0002
 	__Link__000002_Start.Middlevertice = __Vertice__000001_Vertice_0001

@@ -49,8 +49,8 @@ var Diagram3 uml.Classdiagram = uml.Classdiagram{
 		{
 			ReferencedGong: &(models.Point{}),
 			Position: &uml.Position{
-				X: 580.000000,
-				Y: 170.000000,
+				X: 610.000000,
+				Y: 150.000000,
 			},
 			Width:  240.000000,
 			Heigth: 93.000000,

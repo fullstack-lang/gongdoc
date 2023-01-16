@@ -321,6 +321,9 @@ func (backRepoPosition *BackRepoPositionStruct) CheckoutPhaseOneInstance(positio
 	}
 	positionDB.CopyBasicFieldsToPosition(position)
 
+	// in some cases, the instance might have been unstaged. It is necessary to stage it again
+	position.Stage()
+
 	// preserve pointer to positionDB. Otherwise, pointer will is recycled and the map of pointers
 	// Map_PositionDBID_PositionDB)[positionDB hold variable pointers
 	positionDB_Data := *positionDB

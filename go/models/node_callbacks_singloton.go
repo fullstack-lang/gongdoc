@@ -200,14 +200,14 @@ func (nodesCb *NodeCallbacksSingloton) OnAfterUpdateDiagram(
 		switch stagedNode.Type {
 		case CLASS_DIAGRAM:
 
-			// checkout in order to get the latest version of the diagram before modifying it updated
-			// by the front
+			// checkout in order to get the latest version of the diagram before
+			// modifying it updated by the front
 			Stage.Checkout()
 
+			// will be removed
 			stagedNode.Classdiagram.Marshall(nodesCb.diagramPackage, filepath.Join(nodesCb.diagramPackage.Path, "../diagrams"))
 
-			Stage.Reset()
-
+			Stage.Unstage()
 			stagedNode.Classdiagram.SerializeToStage()
 
 			filepath := filepath.Join(
@@ -224,14 +224,10 @@ func (nodesCb *NodeCallbacksSingloton) OnAfterUpdateDiagram(
 			Stage.MetaPackageImportPath = `"` + nodesCb.diagramPackage.GongModelPath + `"`
 			Stage.Marshall(file, "github.com/fullstack-lang/gongdoc/go/models", "diagrams")
 
-			// restore the stage
-			Stage.Reset()
-
+			// restore the original stage
+			Stage.Unstage()
 			Stage.Checkout()
 			stagedNode.IsSaved = false
-
-			stage = &Stage
-			_ = stage
 			stage.Commit()
 		case STATE_DIAGRAM:
 			// stagedNode.Umlsc = stagedNode.Umlsc.Saved

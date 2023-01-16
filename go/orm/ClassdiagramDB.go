@@ -360,6 +360,9 @@ func (backRepoClassdiagram *BackRepoClassdiagramStruct) CheckoutPhaseOneInstance
 	}
 	classdiagramDB.CopyBasicFieldsToClassdiagram(classdiagram)
 
+	// in some cases, the instance might have been unstaged. It is necessary to stage it again
+	classdiagram.Stage()
+
 	// preserve pointer to classdiagramDB. Otherwise, pointer will is recycled and the map of pointers
 	// Map_ClassdiagramDBID_ClassdiagramDB)[classdiagramDB hold variable pointers
 	classdiagramDB_Data := *classdiagramDB

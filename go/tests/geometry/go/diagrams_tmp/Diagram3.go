@@ -134,7 +134,7 @@ func Diagram3Injection() {
 	//gong:ident [Ref_models.Point]
 	__Classshape__000001_Classshape0004.Identifier = `Ref_models.Point`
 	__Classshape__000001_Classshape0004.ShowNbInstances = true
-	__Classshape__000001_Classshape0004.NbInstances = 59
+	__Classshape__000001_Classshape0004.NbInstances = 47
 	__Classshape__000001_Classshape0004.Width = 240.000000
 	__Classshape__000001_Classshape0004.Heigth = 93.000000
 	__Classshape__000001_Classshape0004.IsSelected = false
@@ -148,7 +148,7 @@ func Diagram3Injection() {
 	//gong:ident [Ref_models.PointExclusiveSet]
 	__Classshape__000002_Classshape0005.Identifier = `Ref_models.PointExclusiveSet`
 	__Classshape__000002_Classshape0005.ShowNbInstances = true
-	__Classshape__000002_Classshape0005.NbInstances = 81
+	__Classshape__000002_Classshape0005.NbInstances = 59
 	__Classshape__000002_Classshape0005.Width = 240.000000
 	__Classshape__000002_Classshape0005.Heigth = 63.000000
 	__Classshape__000002_Classshape0005.IsSelected = false
@@ -162,7 +162,7 @@ func Diagram3Injection() {
 	//gong:ident [Ref_models.PointNonExclusiveSet]
 	__Classshape__000003_Classshape0006.Identifier = `Ref_models.PointNonExclusiveSet`
 	__Classshape__000003_Classshape0006.ShowNbInstances = true
-	__Classshape__000003_Classshape0006.NbInstances = 47
+	__Classshape__000003_Classshape0006.NbInstances = 81
 	__Classshape__000003_Classshape0006.Width = 240.000000
 	__Classshape__000003_Classshape0006.Heigth = 63.000000
 	__Classshape__000003_Classshape0006.IsSelected = false
@@ -211,10 +211,10 @@ func Diagram3Injection() {
 	
 	// comment added to overcome the problem with the comment map association
 
-	//gong:ident [Ref_models.PointExclusiveSet.Name]
-	__Field__000002_Name.Identifier = `Ref_models.PointExclusiveSet.Name`
+	//gong:ident [Ref_models.Point.Name]
+	__Field__000002_Name.Identifier = `Ref_models.Point.Name`
 	__Field__000002_Name.FieldTypeAsString = ``
-	__Field__000002_Name.Structname = `PointExclusiveSet`
+	__Field__000002_Name.Structname = `Point`
 	__Field__000002_Name.Fieldtypename = `string`
 
 	// Field values setup
@@ -223,10 +223,10 @@ func Diagram3Injection() {
 	
 	// comment added to overcome the problem with the comment map association
 
-	//gong:ident [Ref_models.PointNonExclusiveSet.Name]
-	__Field__000003_Name.Identifier = `Ref_models.PointNonExclusiveSet.Name`
+	//gong:ident [Ref_models.PointUse.Name]
+	__Field__000003_Name.Identifier = `Ref_models.PointUse.Name`
 	__Field__000003_Name.FieldTypeAsString = ``
-	__Field__000003_Name.Structname = `PointNonExclusiveSet`
+	__Field__000003_Name.Structname = `PointUse`
 	__Field__000003_Name.Fieldtypename = `string`
 
 	// Field values setup
@@ -235,10 +235,10 @@ func Diagram3Injection() {
 	
 	// comment added to overcome the problem with the comment map association
 
-	//gong:ident [Ref_models.PointUse.Name]
-	__Field__000004_Name.Identifier = `Ref_models.PointUse.Name`
+	//gong:ident [Ref_models.Line.Name]
+	__Field__000004_Name.Identifier = `Ref_models.Line.Name`
 	__Field__000004_Name.FieldTypeAsString = ``
-	__Field__000004_Name.Structname = `PointUse`
+	__Field__000004_Name.Structname = `Line`
 	__Field__000004_Name.Fieldtypename = `string`
 
 	// Field values setup
@@ -247,10 +247,10 @@ func Diagram3Injection() {
 	
 	// comment added to overcome the problem with the comment map association
 
-	//gong:ident [Ref_models.Line.Name]
-	__Field__000005_Name.Identifier = `Ref_models.Line.Name`
+	//gong:ident [Ref_models.PointExclusiveSet.Name]
+	__Field__000005_Name.Identifier = `Ref_models.PointExclusiveSet.Name`
 	__Field__000005_Name.FieldTypeAsString = ``
-	__Field__000005_Name.Structname = `Line`
+	__Field__000005_Name.Structname = `PointExclusiveSet`
 	__Field__000005_Name.Fieldtypename = `string`
 
 	// Field values setup
@@ -259,10 +259,10 @@ func Diagram3Injection() {
 	
 	// comment added to overcome the problem with the comment map association
 
-	//gong:ident [Ref_models.Point.Name]
-	__Field__000006_Name.Identifier = `Ref_models.Point.Name`
+	//gong:ident [Ref_models.PointNonExclusiveSet.Name]
+	__Field__000006_Name.Identifier = `Ref_models.PointNonExclusiveSet.Name`
 	__Field__000006_Name.FieldTypeAsString = ``
-	__Field__000006_Name.Structname = `Point`
+	__Field__000006_Name.Structname = `PointNonExclusiveSet`
 	__Field__000006_Name.Fieldtypename = `string`
 
 	// Field values setup
@@ -411,8 +411,8 @@ In this case [Line], [Point] and [Line.Start]
 	__Position__000000_Position_0003.Name = `Position-0003`
 
 	// Position values setup
-	__Position__000001_Position_0004.X = 580.000000
-	__Position__000001_Position_0004.Y = 170.000000
+	__Position__000001_Position_0004.X = 610.000000
+	__Position__000001_Position_0004.Y = 150.000000
 	__Position__000001_Position_0004.Name = `Position-0004`
 
 	// Position values setup
@@ -437,17 +437,17 @@ In this case [Line], [Point] and [Line.Start]
 
 	// Reference values setup
 	__Reference__000001_Point.Name = `Point`
-	__Reference__000001_Point.NbInstances = 59
+	__Reference__000001_Point.NbInstances = 47
 	__Reference__000001_Point.Type = models.REFERENCE_GONG_STRUCT
 
 	// Reference values setup
 	__Reference__000002_PointExclusiveSet.Name = `PointExclusiveSet`
-	__Reference__000002_PointExclusiveSet.NbInstances = 81
+	__Reference__000002_PointExclusiveSet.NbInstances = 59
 	__Reference__000002_PointExclusiveSet.Type = models.REFERENCE_GONG_STRUCT
 
 	// Reference values setup
 	__Reference__000003_PointNonExclusiveSet.Name = `PointNonExclusiveSet`
-	__Reference__000003_PointNonExclusiveSet.NbInstances = 47
+	__Reference__000003_PointNonExclusiveSet.NbInstances = 81
 	__Reference__000003_PointNonExclusiveSet.Type = models.REFERENCE_GONG_STRUCT
 
 	// Reference values setup
@@ -487,26 +487,26 @@ In this case [Line], [Point] and [Line.Start]
 	__Classshape__000000_Classshape0003.Reference = __Reference__000000_Line
 	__Classshape__000000_Classshape0003.Fields = append(__Classshape__000000_Classshape0003.Fields, __Field__000000_CreationDate)
 	__Classshape__000000_Classshape0003.Fields = append(__Classshape__000000_Classshape0003.Fields, __Field__000001_JourneyTime)
-	__Classshape__000000_Classshape0003.Fields = append(__Classshape__000000_Classshape0003.Fields, __Field__000005_Name)
+	__Classshape__000000_Classshape0003.Fields = append(__Classshape__000000_Classshape0003.Fields, __Field__000004_Name)
 	__Classshape__000000_Classshape0003.Fields = append(__Classshape__000000_Classshape0003.Fields, __Field__000007_Type)
 	__Classshape__000000_Classshape0003.Fields = append(__Classshape__000000_Classshape0003.Fields, __Field__000008_VeryLongLongLongLongLongLongField)
 	__Classshape__000000_Classshape0003.Links = append(__Classshape__000000_Classshape0003.Links, __Link__000003_Start)
 	__Classshape__000001_Classshape0004.Position = __Position__000001_Position_0004
 	__Classshape__000001_Classshape0004.Reference = __Reference__000001_Point
-	__Classshape__000001_Classshape0004.Fields = append(__Classshape__000001_Classshape0004.Fields, __Field__000006_Name)
+	__Classshape__000001_Classshape0004.Fields = append(__Classshape__000001_Classshape0004.Fields, __Field__000002_Name)
 	__Classshape__000001_Classshape0004.Fields = append(__Classshape__000001_Classshape0004.Fields, __Field__000009_X)
 	__Classshape__000001_Classshape0004.Fields = append(__Classshape__000001_Classshape0004.Fields, __Field__000010_Y)
 	__Classshape__000002_Classshape0005.Position = __Position__000002_Position_0005
 	__Classshape__000002_Classshape0005.Reference = __Reference__000002_PointExclusiveSet
-	__Classshape__000002_Classshape0005.Fields = append(__Classshape__000002_Classshape0005.Fields, __Field__000002_Name)
+	__Classshape__000002_Classshape0005.Fields = append(__Classshape__000002_Classshape0005.Fields, __Field__000005_Name)
 	__Classshape__000002_Classshape0005.Links = append(__Classshape__000002_Classshape0005.Links, __Link__000001_Points)
 	__Classshape__000003_Classshape0006.Position = __Position__000003_Position_0006
 	__Classshape__000003_Classshape0006.Reference = __Reference__000003_PointNonExclusiveSet
-	__Classshape__000003_Classshape0006.Fields = append(__Classshape__000003_Classshape0006.Fields, __Field__000003_Name)
+	__Classshape__000003_Classshape0006.Fields = append(__Classshape__000003_Classshape0006.Fields, __Field__000006_Name)
 	__Classshape__000003_Classshape0006.Links = append(__Classshape__000003_Classshape0006.Links, __Link__000002_Points)
 	__Classshape__000004_Classshape0007.Position = __Position__000004_Position_0007
 	__Classshape__000004_Classshape0007.Reference = __Reference__000004_PointUse
-	__Classshape__000004_Classshape0007.Fields = append(__Classshape__000004_Classshape0007.Fields, __Field__000004_Name)
+	__Classshape__000004_Classshape0007.Fields = append(__Classshape__000004_Classshape0007.Fields, __Field__000003_Name)
 	__Classshape__000004_Classshape0007.Links = append(__Classshape__000004_Classshape0007.Links, __Link__000000_Points)
 	__Link__000000_Points.Middlevertice = __Vertice__000003_Vertice_0006
 	__Link__000001_Points.Middlevertice = __Vertice__000001_Vertice_0004

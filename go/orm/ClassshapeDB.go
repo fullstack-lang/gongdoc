@@ -423,6 +423,9 @@ func (backRepoClassshape *BackRepoClassshapeStruct) CheckoutPhaseOneInstance(cla
 	}
 	classshapeDB.CopyBasicFieldsToClassshape(classshape)
 
+	// in some cases, the instance might have been unstaged. It is necessary to stage it again
+	classshape.Stage()
+
 	// preserve pointer to classshapeDB. Otherwise, pointer will is recycled and the map of pointers
 	// Map_ClassshapeDBID_ClassshapeDB)[classshapeDB hold variable pointers
 	classshapeDB_Data := *classshapeDB

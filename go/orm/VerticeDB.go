@@ -321,6 +321,9 @@ func (backRepoVertice *BackRepoVerticeStruct) CheckoutPhaseOneInstance(verticeDB
 	}
 	verticeDB.CopyBasicFieldsToVertice(vertice)
 
+	// in some cases, the instance might have been unstaged. It is necessary to stage it again
+	vertice.Stage()
+
 	// preserve pointer to verticeDB. Otherwise, pointer will is recycled and the map of pointers
 	// Map_VerticeDBID_VerticeDB)[verticeDB hold variable pointers
 	verticeDB_Data := *verticeDB
