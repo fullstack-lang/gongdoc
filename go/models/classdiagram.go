@@ -504,7 +504,7 @@ func (classdiagram *Classdiagram) SerializeToStage() {
 // this is used if one Umlsc is dynamicaly created
 func (classdiagram *Classdiagram) SerializeToUnstage() {
 
-	classdiagram.Stage()
+	classdiagram.Unstage()
 
 	for _, classshape := range classdiagram.Classshapes {
 		classshape.SerializeToUnstage()

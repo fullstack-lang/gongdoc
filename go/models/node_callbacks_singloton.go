@@ -84,8 +84,18 @@ func (nodesCb *NodeCallbacksSingloton) OnAfterUpdateDiagram(
 		// It will refresh and fetch the node with checked value
 		stagedNode.IsChecked = true
 
+		// empty the diagram package of the classdiagram
+		var formerlyOpenedClassdiagram *Classdiagram
+		_ = formerlyOpenedClassdiagram
+		if len(nodesCb.diagramPackage.Classdiagrams) == 1 {
+			formerlyOpenedClassdiagram = nodesCb.diagramPackage.Classdiagrams[0]
+			formerlyOpenedClassdiagram.SerializeToUnstage()
+			nodesCb.diagramPackage.Classdiagrams = make([]*Classdiagram, 0)
+		}
+
 		nodesCb.diagramPackage.UnmarshallOneDiagram(stagedNode.Name)
 		stagedNode.Classdiagram = nodesCb.diagramPackage.Classdiagrams[0]
+		nodesCb.selectedClassdiagram = nodesCb.diagramPackage.Classdiagrams[0]
 		nodesCb.diagramPackage.SerializeToStage()
 
 		nodesCb.selectedClassdiagram = stagedNode.Classdiagram
