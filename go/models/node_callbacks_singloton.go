@@ -219,18 +219,19 @@ func (nodesCb *NodeCallbacksSingloton) OnAfterUpdateDiagram(
 			Stage.Checkout()
 
 			// will be removed
-			stagedNode.Classdiagram.Marshall(nodesCb.diagramPackage, filepath.Join(nodesCb.diagramPackage.Path, "../diagrams"))
+			stagedNode.Classdiagram.Marshall(nodesCb.diagramPackage,
+				filepath.Join(nodesCb.diagramPackage.AbsolutePathToDiagramPackage, "../diagrams"))
 
 			Stage.Unstage()
 			stagedNode.Classdiagram.SerializeToStage()
 
 			filepath := filepath.Join(
-				filepath.Join(nodesCb.diagramPackage.Path,
+				filepath.Join(nodesCb.diagramPackage.AbsolutePathToDiagramPackage,
 					"../diagrams_tmp"),
 				stagedNode.Classdiagram.Name) + ".go"
 			file, err := os.Create(filepath)
 			if err != nil {
-				log.Fatal(err.Error())
+				log.Fatal("Cannot open diagram file" + err.Error())
 			}
 			defer file.Close()
 

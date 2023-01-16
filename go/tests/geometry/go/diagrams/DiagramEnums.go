@@ -16,10 +16,30 @@ var DiagramEnums uml.Classdiagram = uml.Classdiagram{
 				Y: 40.000000,
 			},
 			Width:  240.000000,
-			Heigth: 78.000000,
+			Heigth: 93.000000,
 			Fields: []*uml.Field{
 				{
+					Field: models.DOTTED,
+				},
+				{
 					Field: models.CONTINUOUS,
+				},
+			},
+		},
+		{
+			ReferencedGong: new(models.SimulationStage),
+			Position: &uml.Position{
+				X: 240.000000,
+				Y: 130.000000,
+			},
+			Width:  240.000000,
+			Heigth: 93.000000,
+			Fields: []*uml.Field{
+				{
+					Field: models.AFTER,
+				},
+				{
+					Field: models.BEFORE,
 				},
 			},
 		},

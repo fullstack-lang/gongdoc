@@ -18,6 +18,8 @@ import (
 	"github.com/fullstack-lang/gongdoc/go/walk"
 )
 
+const LegacyDiagramUmarshalling = true
+
 // DiagramPackage stores all diagrams related to a gong package
 // swagger:model DiagramPackage
 type DiagramPackage struct {
@@ -117,7 +119,7 @@ func (diagramPackage *DiagramPackage) Reload() {
 }
 
 func closeFile(f *os.File) {
-	fmt.Println("Closing file ", f.Name())
+	fmt.Println("Closing file (legacy)", f.Name())
 
 	err := f.Close()
 
@@ -258,13 +260,18 @@ func (diagramPackage *DiagramPackage) Unmarshall(
 
 func (diagramPackage *DiagramPackage) UnmarshallOneDiagram(diagramName string) {
 
-	diagramPackage.Unmarshall(
-		diagramPackage.ModelPkg,
-		diagramPackage.ast,
-		diagramPackage.fset,
-		diagramPackage.GongModelPath,
-		diagramName)
-
+	if LegacyDiagramUmarshalling {
+		diagramPackage.Unmarshall(
+			diagramPackage.ModelPkg,
+			diagramPackage.ast,
+			diagramPackage.fset,
+			diagramPackage.GongModelPath,
+			diagramName)
+	} else {
+		diagramFileName :=
+			filepath.Join(diagramPackage.AbsolutePathToDiagramPackage, "../diagrams_tmp", diagramName, ".go")
+		ParseAstFile(diagramFileName)
+	}
 }
 
 // serialize the package and its elements to the Stage

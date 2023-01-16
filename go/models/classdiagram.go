@@ -364,7 +364,7 @@ func (classdiagram *Classdiagram) OutputSVG(path string) {
 	c.WriteFile(fmt.Sprintf(filepath.Join(path, "%s.svg"), classdiagram.Name), svg.Writer)
 }
 
-func (classDiagram *Classdiagram) Marshall(pkgelt *DiagramPackage, pkgPath string) error {
+func (classDiagram *Classdiagram) Marshall(diagramPackage *DiagramPackage, pkgPath string) error {
 
 	// open file
 
@@ -374,7 +374,7 @@ func (classDiagram *Classdiagram) Marshall(pkgelt *DiagramPackage, pkgPath strin
 	prelude := strings.ReplaceAll(preludeRef, "{{filename}}", filename)
 	prelude = strings.ReplaceAll(prelude, "{{ClassdiagramName}}", classDiagram.Name)
 	if len(classDiagram.Classshapes) > 0 {
-		prelude = strings.ReplaceAll(prelude, "{{Imports}}", "\n\t\""+pkgelt.GongModelPath+"\"")
+		prelude = strings.ReplaceAll(prelude, "{{Imports}}", "\n\t\""+diagramPackage.GongModelPath+"\"")
 	} else {
 		prelude = strings.ReplaceAll(prelude, "{{Imports}}", "")
 	}

@@ -101,7 +101,7 @@ func Diagram2Injection() {
 	//gong:ident [Ref_models.Line]
 	__Classshape__000000_Classshape0000.Identifier = `Ref_models.Line`
 	__Classshape__000000_Classshape0000.ShowNbInstances = true
-	__Classshape__000000_Classshape0000.NbInstances = 87
+	__Classshape__000000_Classshape0000.NbInstances = 0
 	__Classshape__000000_Classshape0000.Width = 240.000000
 	__Classshape__000000_Classshape0000.Heigth = 78.000000
 	__Classshape__000000_Classshape0000.IsSelected = false
@@ -115,7 +115,7 @@ func Diagram2Injection() {
 	//gong:ident [Ref_models.Point]
 	__Classshape__000001_Classshape0001.Identifier = `Ref_models.Point`
 	__Classshape__000001_Classshape0001.ShowNbInstances = true
-	__Classshape__000001_Classshape0001.NbInstances = 47
+	__Classshape__000001_Classshape0001.NbInstances = 0
 	__Classshape__000001_Classshape0001.Width = 240.000000
 	__Classshape__000001_Classshape0001.Heigth = 63.000000
 	__Classshape__000001_Classshape0001.IsSelected = false
@@ -129,7 +129,7 @@ func Diagram2Injection() {
 	//gong:ident [Ref_models.PointExclusiveSet]
 	__Classshape__000002_Classshape0002.Identifier = `Ref_models.PointExclusiveSet`
 	__Classshape__000002_Classshape0002.ShowNbInstances = true
-	__Classshape__000002_Classshape0002.NbInstances = 59
+	__Classshape__000002_Classshape0002.NbInstances = 0
 	__Classshape__000002_Classshape0002.Width = 240.000000
 	__Classshape__000002_Classshape0002.Heigth = 63.000000
 	__Classshape__000002_Classshape0002.IsSelected = false
@@ -214,17 +214,17 @@ In this case [Line], [Point] and [Line.Start]
 
 	// Reference values setup
 	__Reference__000000_Line.Name = `Line`
-	__Reference__000000_Line.NbInstances = 87
+	__Reference__000000_Line.NbInstances = 0
 	__Reference__000000_Line.Type = models.REFERENCE_GONG_STRUCT
 
 	// Reference values setup
 	__Reference__000001_Point.Name = `Point`
-	__Reference__000001_Point.NbInstances = 47
+	__Reference__000001_Point.NbInstances = 0
 	__Reference__000001_Point.Type = models.REFERENCE_GONG_STRUCT
 
 	// Reference values setup
 	__Reference__000002_PointExclusiveSet.Name = `PointExclusiveSet`
-	__Reference__000002_PointExclusiveSet.NbInstances = 59
+	__Reference__000002_PointExclusiveSet.NbInstances = 0
 	__Reference__000002_PointExclusiveSet.Type = models.REFERENCE_GONG_STRUCT
 
 	// Vertice values setup
