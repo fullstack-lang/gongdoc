@@ -25,6 +25,8 @@ type NodeCallbacksSingloton struct {
 	// identifiers are unique in a package (that's the point of identifiers)
 	map_Identifier_Node map[string]*Node
 	map_Node_Identifier map[*Node]string
+
+	diagramPackage *DiagramPackage
 }
 
 func (nodesCb *NodeCallbacksSingloton) GetSelectedClassdiagram() (classdiagram *Classdiagram) {
@@ -134,12 +136,8 @@ func (nodesCb *NodeCallbacksSingloton) OnAfterUpdateDiagram(
 
 			// rename the diagram file if it exists
 			// remove the actual classdiagram file if it exsits
-			fieldName := GetAssociationName[DiagramPackage]().Classdiagrams[0].Name
-			mapReverse := GetSliceOfPointersReverseMap[DiagramPackage, Classdiagram](fieldName)
-			pkgelt := mapReverse[stagedNode.Classdiagram]
-
-			oldClassdiagramFilePath := filepath.Join(pkgelt.Path, "../diagrams", stagedNode.Classdiagram.Name) + ".go"
-			newClassdiagramFilePath := filepath.Join(pkgelt.Path, "../diagrams", frontNode.Name) + ".go"
+			oldClassdiagramFilePath := filepath.Join(nodesCb.diagramPackage.Path, "../diagrams", stagedNode.Classdiagram.Name) + ".go"
+			newClassdiagramFilePath := filepath.Join(nodesCb.diagramPackage.Path, "../diagrams", frontNode.Name) + ".go"
 
 			if _, err := os.Stat(oldClassdiagramFilePath); err == nil {
 				if err := os.Rename(oldClassdiagramFilePath, newClassdiagramFilePath); err != nil {
@@ -196,11 +194,6 @@ func (nodesCb *NodeCallbacksSingloton) OnAfterUpdateDiagram(
 
 	// marshall diagram to switch to saved state
 	if !stagedNode.IsSaved && frontNode.IsSaved {
-		// fetch the only package
-		var pkgelt *DiagramPackage
-		for _pkgelt := range *GetGongstructInstancesSet[DiagramPackage]() {
-			pkgelt = _pkgelt
-		}
 		switch stagedNode.Type {
 		case CLASS_DIAGRAM:
 
@@ -208,7 +201,7 @@ func (nodesCb *NodeCallbacksSingloton) OnAfterUpdateDiagram(
 			// by the front
 			Stage.Checkout()
 			stagedNode.IsSaved = false
-			stagedNode.Classdiagram.Marshall(pkgelt, filepath.Join(pkgelt.Path, "../diagrams"))
+			stagedNode.Classdiagram.Marshall(nodesCb.diagramPackage, filepath.Join(nodesCb.diagramPackage.Path, "../diagrams"))
 			stage.Commit()
 		case STATE_DIAGRAM:
 			// stagedNode.Umlsc = stagedNode.Umlsc.Saved
@@ -616,14 +609,8 @@ func (nodesCb *NodeCallbacksSingloton) OnAfterCreate(
 	case CLASS_DIAGRAM, STATE_DIAGRAM:
 		newDiagramNode.HasCheckboxButton = true
 
-		// fetch the only package
-		var pkgelt *DiagramPackage
-		for _pkgelt := range *GetGongstructInstancesSet[DiagramPackage]() {
-			pkgelt = _pkgelt
-		}
-
 		classdiagram := (&Classdiagram{Name: newDiagramNode.Name}).Stage()
-		pkgelt.Classdiagrams = append(pkgelt.Classdiagrams, classdiagram)
+		nodesCb.diagramPackage.Classdiagrams = append(nodesCb.diagramPackage.Classdiagrams, classdiagram)
 		newDiagramNode.Classdiagram = classdiagram
 		newDiagramNode.IsInEditMode = true
 		newDiagramNode.IsInDrawMode = false
@@ -640,7 +627,7 @@ func (nodesCb *NodeCallbacksSingloton) OnAfterCreate(
 // OnAfterDelete is called after a node is deleted
 // notice that the fontNode only have its basic fields updated
 // its pointers are not ok
-func (callbacksSingloton *NodeCallbacksSingloton) OnAfterDelete(
+func (nodesCb *NodeCallbacksSingloton) OnAfterDelete(
 	stage *StageStruct,
 	stagedNode, frontNode *Node) {
 
@@ -654,14 +641,11 @@ func (callbacksSingloton *NodeCallbacksSingloton) OnAfterDelete(
 	switch stagedNode.Type {
 	case CLASS_DIAGRAM:
 		// remove the classdiagram node from the pkg element node
-		fieldName := GetAssociationName[DiagramPackage]().Classdiagrams[0].Name
-		mapReverse := GetSliceOfPointersReverseMap[DiagramPackage, Classdiagram](fieldName)
-		pkgelt := mapReverse[stagedNode.Classdiagram]
-		pkgelt.Classdiagrams = remove(pkgelt.Classdiagrams, stagedNode.Classdiagram)
+		nodesCb.diagramPackage.Classdiagrams = remove(nodesCb.diagramPackage.Classdiagrams, stagedNode.Classdiagram)
 		stagedNode.Classdiagram.Unstage()
 
 		// remove the actual classdiagram file if it exsits
-		classdiagramFilePath := filepath.Join(pkgelt.Path, "../diagrams", stagedNode.Classdiagram.Name) + ".go"
+		classdiagramFilePath := filepath.Join(nodesCb.diagramPackage.Path, "../diagrams", stagedNode.Classdiagram.Name) + ".go"
 		if _, err := os.Stat(classdiagramFilePath); err == nil {
 			if err := os.Remove(classdiagramFilePath); err != nil {
 				log.Println("Error while deleting file " + classdiagramFilePath + " : " + err.Error())

@@ -64,20 +64,21 @@ func stage_outInjection() {
 	// Declarations of staged instances of Field
 	__Field__000000_ := (&models.Field{Name: ``}).Stage()
 	__Field__000001_CreationDate := (&models.Field{Name: `CreationDate`}).Stage()
-	__Field__000002_JourneyTime := (&models.Field{Name: `JourneyTime`}).Stage()
+	__Field__000002_CreationDate := (&models.Field{Name: `CreationDate`}).Stage()
 	__Field__000003_JourneyTime := (&models.Field{Name: `JourneyTime`}).Stage()
-	__Field__000004_Name := (&models.Field{Name: `Name`}).Stage()
+	__Field__000004_JourneyTime := (&models.Field{Name: `JourneyTime`}).Stage()
 	__Field__000005_Name := (&models.Field{Name: `Name`}).Stage()
 	__Field__000006_Name := (&models.Field{Name: `Name`}).Stage()
 	__Field__000007_Name := (&models.Field{Name: `Name`}).Stage()
 	__Field__000008_Name := (&models.Field{Name: `Name`}).Stage()
 	__Field__000009_Name := (&models.Field{Name: `Name`}).Stage()
 	__Field__000010_Name := (&models.Field{Name: `Name`}).Stage()
-	__Field__000011_Type := (&models.Field{Name: `Type`}).Stage()
+	__Field__000011_Name := (&models.Field{Name: `Name`}).Stage()
 	__Field__000012_Type := (&models.Field{Name: `Type`}).Stage()
-	__Field__000013_VeryLongLongLongLongLongLongField := (&models.Field{Name: `VeryLongLongLongLongLongLongField`}).Stage()
-	__Field__000014_X := (&models.Field{Name: `X`}).Stage()
-	__Field__000015_Y := (&models.Field{Name: `Y`}).Stage()
+	__Field__000013_Type := (&models.Field{Name: `Type`}).Stage()
+	__Field__000014_VeryLongLongLongLongLongLongField := (&models.Field{Name: `VeryLongLongLongLongLongLongField`}).Stage()
+	__Field__000015_X := (&models.Field{Name: `X`}).Stage()
+	__Field__000016_Y := (&models.Field{Name: `Y`}).Stage()
 
 	// Declarations of staged instances of Link
 	__Link__000000_End := (&models.Link{Name: `End`}).Stage()
@@ -205,25 +206,25 @@ func stage_outInjection() {
 
 	// Classshape values setup
 	__Classshape__000000_Classshape0000.Name = `Classshape0000`
-	__Classshape__000000_Classshape0000.ReferenceName = `Line`
-	__Classshape__000000_Classshape0000.ShowNbInstances = true
+	__Classshape__000000_Classshape0000.ReferenceName = `LineType`
+	__Classshape__000000_Classshape0000.ShowNbInstances = false
 	__Classshape__000000_Classshape0000.NbInstances = 0
 	__Classshape__000000_Classshape0000.Width = 240.000000
-	__Classshape__000000_Classshape0000.Heigth = 63.000000
+	__Classshape__000000_Classshape0000.Heigth = 78.000000
 	__Classshape__000000_Classshape0000.IsSelected = false
 
 	// Classshape values setup
 	__Classshape__000001_Classshape0001.Name = `Classshape0001`
-	__Classshape__000001_Classshape0001.ReferenceName = `Point`
+	__Classshape__000001_Classshape0001.ReferenceName = `Line`
 	__Classshape__000001_Classshape0001.ShowNbInstances = true
 	__Classshape__000001_Classshape0001.NbInstances = 0
 	__Classshape__000001_Classshape0001.Width = 240.000000
-	__Classshape__000001_Classshape0001.Heigth = 63.000000
+	__Classshape__000001_Classshape0001.Heigth = 78.000000
 	__Classshape__000001_Classshape0001.IsSelected = false
 
 	// Classshape values setup
 	__Classshape__000002_Classshape0002.Name = `Classshape0002`
-	__Classshape__000002_Classshape0002.ReferenceName = `PointExclusiveSet`
+	__Classshape__000002_Classshape0002.ReferenceName = `Point`
 	__Classshape__000002_Classshape0002.ShowNbInstances = true
 	__Classshape__000002_Classshape0002.NbInstances = 0
 	__Classshape__000002_Classshape0002.Width = 240.000000
@@ -232,34 +233,34 @@ func stage_outInjection() {
 
 	// Classshape values setup
 	__Classshape__000003_Classshape0003.Name = `Classshape0003`
-	__Classshape__000003_Classshape0003.ReferenceName = `Line`
+	__Classshape__000003_Classshape0003.ReferenceName = `PointExclusiveSet`
 	__Classshape__000003_Classshape0003.ShowNbInstances = true
 	__Classshape__000003_Classshape0003.NbInstances = 0
-	__Classshape__000003_Classshape0003.Width = 400.000000
-	__Classshape__000003_Classshape0003.Heigth = 123.000000
+	__Classshape__000003_Classshape0003.Width = 240.000000
+	__Classshape__000003_Classshape0003.Heigth = 63.000000
 	__Classshape__000003_Classshape0003.IsSelected = false
 
 	// Classshape values setup
 	__Classshape__000004_Classshape0004.Name = `Classshape0004`
-	__Classshape__000004_Classshape0004.ReferenceName = `Point`
+	__Classshape__000004_Classshape0004.ReferenceName = `Line`
 	__Classshape__000004_Classshape0004.ShowNbInstances = true
 	__Classshape__000004_Classshape0004.NbInstances = 0
-	__Classshape__000004_Classshape0004.Width = 240.000000
-	__Classshape__000004_Classshape0004.Heigth = 93.000000
+	__Classshape__000004_Classshape0004.Width = 400.000000
+	__Classshape__000004_Classshape0004.Heigth = 123.000000
 	__Classshape__000004_Classshape0004.IsSelected = false
 
 	// Classshape values setup
 	__Classshape__000005_Classshape0005.Name = `Classshape0005`
-	__Classshape__000005_Classshape0005.ReferenceName = `PointExclusiveSet`
+	__Classshape__000005_Classshape0005.ReferenceName = `Point`
 	__Classshape__000005_Classshape0005.ShowNbInstances = true
 	__Classshape__000005_Classshape0005.NbInstances = 0
 	__Classshape__000005_Classshape0005.Width = 240.000000
-	__Classshape__000005_Classshape0005.Heigth = 63.000000
+	__Classshape__000005_Classshape0005.Heigth = 93.000000
 	__Classshape__000005_Classshape0005.IsSelected = false
 
 	// Classshape values setup
 	__Classshape__000006_Classshape0006.Name = `Classshape0006`
-	__Classshape__000006_Classshape0006.ReferenceName = `PointNonExclusiveSet`
+	__Classshape__000006_Classshape0006.ReferenceName = `PointExclusiveSet`
 	__Classshape__000006_Classshape0006.ShowNbInstances = true
 	__Classshape__000006_Classshape0006.NbInstances = 0
 	__Classshape__000006_Classshape0006.Width = 240.000000
@@ -268,7 +269,7 @@ func stage_outInjection() {
 
 	// Classshape values setup
 	__Classshape__000007_Classshape0007.Name = `Classshape0007`
-	__Classshape__000007_Classshape0007.ReferenceName = `PointUse`
+	__Classshape__000007_Classshape0007.ReferenceName = `PointNonExclusiveSet`
 	__Classshape__000007_Classshape0007.ShowNbInstances = true
 	__Classshape__000007_Classshape0007.NbInstances = 0
 	__Classshape__000007_Classshape0007.Width = 240.000000
@@ -277,38 +278,38 @@ func stage_outInjection() {
 
 	// Classshape values setup
 	__Classshape__000008_Classshape0008.Name = `Classshape0008`
-	__Classshape__000008_Classshape0008.ReferenceName = `Line`
+	__Classshape__000008_Classshape0008.ReferenceName = `PointUse`
 	__Classshape__000008_Classshape0008.ShowNbInstances = true
 	__Classshape__000008_Classshape0008.NbInstances = 0
 	__Classshape__000008_Classshape0008.Width = 240.000000
-	__Classshape__000008_Classshape0008.Heigth = 108.000000
+	__Classshape__000008_Classshape0008.Heigth = 63.000000
 	__Classshape__000008_Classshape0008.IsSelected = false
 
 	// Classshape values setup
 	__Classshape__000009_Classshape0009.Name = `Classshape0009`
-	__Classshape__000009_Classshape0009.ReferenceName = `Point`
+	__Classshape__000009_Classshape0009.ReferenceName = `Line`
 	__Classshape__000009_Classshape0009.ShowNbInstances = true
 	__Classshape__000009_Classshape0009.NbInstances = 0
 	__Classshape__000009_Classshape0009.Width = 240.000000
-	__Classshape__000009_Classshape0009.Heigth = 78.000000
+	__Classshape__000009_Classshape0009.Heigth = 108.000000
 	__Classshape__000009_Classshape0009.IsSelected = false
 
 	// Classshape values setup
 	__Classshape__000010_Classshape0010.Name = `Classshape0010`
-	__Classshape__000010_Classshape0010.ReferenceName = `PointExclusiveSet`
+	__Classshape__000010_Classshape0010.ReferenceName = `Point`
 	__Classshape__000010_Classshape0010.ShowNbInstances = true
 	__Classshape__000010_Classshape0010.NbInstances = 0
 	__Classshape__000010_Classshape0010.Width = 240.000000
-	__Classshape__000010_Classshape0010.Heigth = 63.000000
+	__Classshape__000010_Classshape0010.Heigth = 78.000000
 	__Classshape__000010_Classshape0010.IsSelected = false
 
 	// Classshape values setup
 	__Classshape__000011_Classshape0011.Name = `Classshape0011`
-	__Classshape__000011_Classshape0011.ReferenceName = `LineType`
-	__Classshape__000011_Classshape0011.ShowNbInstances = false
+	__Classshape__000011_Classshape0011.ReferenceName = `PointExclusiveSet`
+	__Classshape__000011_Classshape0011.ShowNbInstances = true
 	__Classshape__000011_Classshape0011.NbInstances = 0
 	__Classshape__000011_Classshape0011.Width = 240.000000
-	__Classshape__000011_Classshape0011.Heigth = 78.000000
+	__Classshape__000011_Classshape0011.Heigth = 63.000000
 	__Classshape__000011_Classshape0011.IsSelected = false
 
 	// DiagramPackage values setup
@@ -334,11 +335,11 @@ func stage_outInjection() {
 	__Field__000001_CreationDate.Fieldtypename = `Time`
 
 	// Field values setup
-	__Field__000002_JourneyTime.Name = `JourneyTime`
-	__Field__000002_JourneyTime.Fieldname = `JourneyTime`
-	__Field__000002_JourneyTime.FieldTypeAsString = ``
-	__Field__000002_JourneyTime.Structname = `Line`
-	__Field__000002_JourneyTime.Fieldtypename = `Duration`
+	__Field__000002_CreationDate.Name = `CreationDate`
+	__Field__000002_CreationDate.Fieldname = `CreationDate`
+	__Field__000002_CreationDate.FieldTypeAsString = ``
+	__Field__000002_CreationDate.Structname = `Line`
+	__Field__000002_CreationDate.Fieldtypename = `Time`
 
 	// Field values setup
 	__Field__000003_JourneyTime.Name = `JourneyTime`
@@ -348,17 +349,17 @@ func stage_outInjection() {
 	__Field__000003_JourneyTime.Fieldtypename = `Duration`
 
 	// Field values setup
-	__Field__000004_Name.Name = `Name`
-	__Field__000004_Name.Fieldname = `Name`
-	__Field__000004_Name.FieldTypeAsString = ``
-	__Field__000004_Name.Structname = `PointUse`
-	__Field__000004_Name.Fieldtypename = `string`
+	__Field__000004_JourneyTime.Name = `JourneyTime`
+	__Field__000004_JourneyTime.Fieldname = `JourneyTime`
+	__Field__000004_JourneyTime.FieldTypeAsString = ``
+	__Field__000004_JourneyTime.Structname = `Line`
+	__Field__000004_JourneyTime.Fieldtypename = `Duration`
 
 	// Field values setup
 	__Field__000005_Name.Name = `Name`
 	__Field__000005_Name.Fieldname = `Name`
 	__Field__000005_Name.FieldTypeAsString = ``
-	__Field__000005_Name.Structname = `Line`
+	__Field__000005_Name.Structname = `PointUse`
 	__Field__000005_Name.Fieldtypename = `string`
 
 	// Field values setup
@@ -386,7 +387,7 @@ func stage_outInjection() {
 	__Field__000009_Name.Name = `Name`
 	__Field__000009_Name.Fieldname = `Name`
 	__Field__000009_Name.FieldTypeAsString = ``
-	__Field__000009_Name.Structname = `Point`
+	__Field__000009_Name.Structname = `Line`
 	__Field__000009_Name.Fieldtypename = `string`
 
 	// Field values setup
@@ -397,11 +398,11 @@ func stage_outInjection() {
 	__Field__000010_Name.Fieldtypename = `string`
 
 	// Field values setup
-	__Field__000011_Type.Name = `Type`
-	__Field__000011_Type.Fieldname = `Type`
-	__Field__000011_Type.FieldTypeAsString = ``
-	__Field__000011_Type.Structname = `Line`
-	__Field__000011_Type.Fieldtypename = `LineType`
+	__Field__000011_Name.Name = `Name`
+	__Field__000011_Name.Fieldname = `Name`
+	__Field__000011_Name.FieldTypeAsString = ``
+	__Field__000011_Name.Structname = `Point`
+	__Field__000011_Name.Fieldtypename = `string`
 
 	// Field values setup
 	__Field__000012_Type.Name = `Type`
@@ -411,25 +412,32 @@ func stage_outInjection() {
 	__Field__000012_Type.Fieldtypename = `LineType`
 
 	// Field values setup
-	__Field__000013_VeryLongLongLongLongLongLongField.Name = `VeryLongLongLongLongLongLongField`
-	__Field__000013_VeryLongLongLongLongLongLongField.Fieldname = `VeryLongLongLongLongLongLongField`
-	__Field__000013_VeryLongLongLongLongLongLongField.FieldTypeAsString = ``
-	__Field__000013_VeryLongLongLongLongLongLongField.Structname = `Line`
-	__Field__000013_VeryLongLongLongLongLongLongField.Fieldtypename = `string`
+	__Field__000013_Type.Name = `Type`
+	__Field__000013_Type.Fieldname = `Type`
+	__Field__000013_Type.FieldTypeAsString = ``
+	__Field__000013_Type.Structname = `Line`
+	__Field__000013_Type.Fieldtypename = `LineType`
 
 	// Field values setup
-	__Field__000014_X.Name = `X`
-	__Field__000014_X.Fieldname = `X`
-	__Field__000014_X.FieldTypeAsString = ``
-	__Field__000014_X.Structname = `Point`
-	__Field__000014_X.Fieldtypename = `float64`
+	__Field__000014_VeryLongLongLongLongLongLongField.Name = `VeryLongLongLongLongLongLongField`
+	__Field__000014_VeryLongLongLongLongLongLongField.Fieldname = `VeryLongLongLongLongLongLongField`
+	__Field__000014_VeryLongLongLongLongLongLongField.FieldTypeAsString = ``
+	__Field__000014_VeryLongLongLongLongLongLongField.Structname = `Line`
+	__Field__000014_VeryLongLongLongLongLongLongField.Fieldtypename = `string`
 
 	// Field values setup
-	__Field__000015_Y.Name = `Y`
-	__Field__000015_Y.Fieldname = `Y`
-	__Field__000015_Y.FieldTypeAsString = ``
-	__Field__000015_Y.Structname = `Point`
-	__Field__000015_Y.Fieldtypename = `float64`
+	__Field__000015_X.Name = `X`
+	__Field__000015_X.Fieldname = `X`
+	__Field__000015_X.FieldTypeAsString = ``
+	__Field__000015_X.Structname = `Point`
+	__Field__000015_X.Fieldtypename = `float64`
+
+	// Field values setup
+	__Field__000016_Y.Name = `Y`
+	__Field__000016_Y.Fieldname = `Y`
+	__Field__000016_Y.FieldTypeAsString = ``
+	__Field__000016_Y.Structname = `Point`
+	__Field__000016_Y.Fieldtypename = `float64`
 
 	// Link values setup
 	__Link__000000_End.Name = `End`
@@ -458,18 +466,18 @@ func stage_outInjection() {
 	// Link values setup
 	__Link__000003_Points.Name = `Points`
 	__Link__000003_Points.Fieldname = `Points`
-	__Link__000003_Points.Structname = `PointExclusiveSet`
+	__Link__000003_Points.Structname = `PointUse`
 	__Link__000003_Points.Fieldtypename = `Point`
-	__Link__000003_Points.TargetMultiplicity = models.MANY
-	__Link__000003_Points.SourceMultiplicity = models.ZERO_ONE
+	__Link__000003_Points.TargetMultiplicity = models.ZERO_ONE
+	__Link__000003_Points.SourceMultiplicity = models.MANY
 
 	// Link values setup
 	__Link__000004_Points.Name = `Points`
 	__Link__000004_Points.Fieldname = `Points`
-	__Link__000004_Points.Structname = `PointUse`
+	__Link__000004_Points.Structname = `PointExclusiveSet`
 	__Link__000004_Points.Fieldtypename = `Point`
-	__Link__000004_Points.TargetMultiplicity = models.ZERO_ONE
-	__Link__000004_Points.SourceMultiplicity = models.MANY
+	__Link__000004_Points.TargetMultiplicity = models.MANY
+	__Link__000004_Points.SourceMultiplicity = models.ZERO_ONE
 
 	// Link values setup
 	__Link__000005_Points.Name = `Points`
@@ -540,7 +548,7 @@ func stage_outInjection() {
 	__Node__000002_CONTINUOUS.Type = models.GONG_ENUM_VALUE
 	__Node__000002_CONTINUOUS.IsExpanded = false
 	__Node__000002_CONTINUOUS.HasCheckboxButton = true
-	__Node__000002_CONTINUOUS.IsChecked = false
+	__Node__000002_CONTINUOUS.IsChecked = true
 	__Node__000002_CONTINUOUS.IsCheckboxDisabled = true
 	__Node__000002_CONTINUOUS.HasAddChildButton = false
 	__Node__000002_CONTINUOUS.HasEditButton = false
@@ -604,16 +612,16 @@ func stage_outInjection() {
 	__Node__000006_Diagram2.Type = models.CLASS_DIAGRAM
 	__Node__000006_Diagram2.IsExpanded = false
 	__Node__000006_Diagram2.HasCheckboxButton = true
-	__Node__000006_Diagram2.IsChecked = true
+	__Node__000006_Diagram2.IsChecked = false
 	__Node__000006_Diagram2.IsCheckboxDisabled = false
 	__Node__000006_Diagram2.HasAddChildButton = false
-	__Node__000006_Diagram2.HasEditButton = true
+	__Node__000006_Diagram2.HasEditButton = false
 	__Node__000006_Diagram2.IsInEditMode = false
-	__Node__000006_Diagram2.HasDrawButton = true
+	__Node__000006_Diagram2.HasDrawButton = false
 	__Node__000006_Diagram2.HasDrawOffButton = false
 	__Node__000006_Diagram2.IsInDrawMode = false
 	__Node__000006_Diagram2.IsSaved = false
-	__Node__000006_Diagram2.HasDeleteButton = true
+	__Node__000006_Diagram2.HasDeleteButton = false
 
 	// Node values setup
 	__Node__000007_Diagram3.Name = `Diagram3`
@@ -652,23 +660,23 @@ func stage_outInjection() {
 	__Node__000009_DiagramEnums.Type = models.CLASS_DIAGRAM
 	__Node__000009_DiagramEnums.IsExpanded = false
 	__Node__000009_DiagramEnums.HasCheckboxButton = true
-	__Node__000009_DiagramEnums.IsChecked = false
+	__Node__000009_DiagramEnums.IsChecked = true
 	__Node__000009_DiagramEnums.IsCheckboxDisabled = false
 	__Node__000009_DiagramEnums.HasAddChildButton = false
-	__Node__000009_DiagramEnums.HasEditButton = false
+	__Node__000009_DiagramEnums.HasEditButton = true
 	__Node__000009_DiagramEnums.IsInEditMode = false
-	__Node__000009_DiagramEnums.HasDrawButton = false
+	__Node__000009_DiagramEnums.HasDrawButton = true
 	__Node__000009_DiagramEnums.HasDrawOffButton = false
 	__Node__000009_DiagramEnums.IsInDrawMode = false
 	__Node__000009_DiagramEnums.IsSaved = false
-	__Node__000009_DiagramEnums.HasDeleteButton = false
+	__Node__000009_DiagramEnums.HasDeleteButton = true
 
 	// Node values setup
 	__Node__000010_End.Name = `End`
 	__Node__000010_End.Type = models.GONG_STRUCT_FIELD
 	__Node__000010_End.IsExpanded = false
 	__Node__000010_End.HasCheckboxButton = true
-	__Node__000010_End.IsChecked = true
+	__Node__000010_End.IsChecked = false
 	__Node__000010_End.IsCheckboxDisabled = true
 	__Node__000010_End.HasAddChildButton = false
 	__Node__000010_End.HasEditButton = false
@@ -697,10 +705,10 @@ func stage_outInjection() {
 
 	// Node values setup
 	__Node__000012_Line.Name = `Line`
-	__Node__000012_Line.Type = models.GONG_STRUCT
+	__Node__000012_Line.Type = models.GONG_NOTE_LINK
 	__Node__000012_Line.IsExpanded = false
 	__Node__000012_Line.HasCheckboxButton = true
-	__Node__000012_Line.IsChecked = true
+	__Node__000012_Line.IsChecked = false
 	__Node__000012_Line.IsCheckboxDisabled = true
 	__Node__000012_Line.HasAddChildButton = false
 	__Node__000012_Line.HasEditButton = false
@@ -713,8 +721,8 @@ func stage_outInjection() {
 
 	// Node values setup
 	__Node__000013_Line.Name = `Line`
-	__Node__000013_Line.Type = models.GONG_NOTE_LINK
-	__Node__000013_Line.IsExpanded = false
+	__Node__000013_Line.Type = models.GONG_STRUCT
+	__Node__000013_Line.IsExpanded = true
 	__Node__000013_Line.HasCheckboxButton = true
 	__Node__000013_Line.IsChecked = false
 	__Node__000013_Line.IsCheckboxDisabled = true
@@ -732,7 +740,7 @@ func stage_outInjection() {
 	__Node__000014_LineType.Type = models.GONG_ENUM
 	__Node__000014_LineType.IsExpanded = false
 	__Node__000014_LineType.HasCheckboxButton = true
-	__Node__000014_LineType.IsChecked = false
+	__Node__000014_LineType.IsChecked = true
 	__Node__000014_LineType.IsCheckboxDisabled = true
 	__Node__000014_LineType.HasAddChildButton = false
 	__Node__000014_LineType.HasEditButton = false
@@ -860,7 +868,7 @@ func stage_outInjection() {
 	__Node__000022_Point.Type = models.GONG_STRUCT
 	__Node__000022_Point.IsExpanded = false
 	__Node__000022_Point.HasCheckboxButton = true
-	__Node__000022_Point.IsChecked = true
+	__Node__000022_Point.IsChecked = false
 	__Node__000022_Point.IsCheckboxDisabled = true
 	__Node__000022_Point.HasAddChildButton = false
 	__Node__000022_Point.HasEditButton = false
@@ -876,7 +884,7 @@ func stage_outInjection() {
 	__Node__000023_PointExclusiveSet.Type = models.GONG_STRUCT
 	__Node__000023_PointExclusiveSet.IsExpanded = false
 	__Node__000023_PointExclusiveSet.HasCheckboxButton = true
-	__Node__000023_PointExclusiveSet.IsChecked = true
+	__Node__000023_PointExclusiveSet.IsChecked = false
 	__Node__000023_PointExclusiveSet.IsCheckboxDisabled = true
 	__Node__000023_PointExclusiveSet.HasAddChildButton = false
 	__Node__000023_PointExclusiveSet.HasEditButton = false
@@ -906,7 +914,7 @@ func stage_outInjection() {
 	// Node values setup
 	__Node__000025_PointUse.Name = `PointUse`
 	__Node__000025_PointUse.Type = models.GONG_STRUCT
-	__Node__000025_PointUse.IsExpanded = false
+	__Node__000025_PointUse.IsExpanded = true
 	__Node__000025_PointUse.HasCheckboxButton = true
 	__Node__000025_PointUse.IsChecked = false
 	__Node__000025_PointUse.IsCheckboxDisabled = true
@@ -956,7 +964,7 @@ func stage_outInjection() {
 	__Node__000028_Points.Type = models.GONG_STRUCT_FIELD
 	__Node__000028_Points.IsExpanded = false
 	__Node__000028_Points.HasCheckboxButton = true
-	__Node__000028_Points.IsChecked = true
+	__Node__000028_Points.IsChecked = false
 	__Node__000028_Points.IsCheckboxDisabled = true
 	__Node__000028_Points.HasAddChildButton = false
 	__Node__000028_Points.HasEditButton = false
@@ -972,7 +980,7 @@ func stage_outInjection() {
 	__Node__000029_ShortNodeOnModels.Type = models.GONG_NOTE
 	__Node__000029_ShortNodeOnModels.IsExpanded = true
 	__Node__000029_ShortNodeOnModels.HasCheckboxButton = true
-	__Node__000029_ShortNodeOnModels.IsChecked = true
+	__Node__000029_ShortNodeOnModels.IsChecked = false
 	__Node__000029_ShortNodeOnModels.IsCheckboxDisabled = true
 	__Node__000029_ShortNodeOnModels.HasAddChildButton = false
 	__Node__000029_ShortNodeOnModels.HasEditButton = false
@@ -1004,7 +1012,7 @@ func stage_outInjection() {
 	__Node__000031_Start.Type = models.GONG_STRUCT_FIELD
 	__Node__000031_Start.IsExpanded = false
 	__Node__000031_Start.HasCheckboxButton = true
-	__Node__000031_Start.IsChecked = true
+	__Node__000031_Start.IsChecked = false
 	__Node__000031_Start.IsCheckboxDisabled = true
 	__Node__000031_Start.HasAddChildButton = false
 	__Node__000031_Start.HasEditButton = false
@@ -1190,8 +1198,8 @@ in the go code
 It uses the DocLink convention for referencing Identifiers
 In this case [Line], [Point] and [Line.Start]
 `
-	__NoteShape__000001_ShortNodeOnModels.X = 90.000000
-	__NoteShape__000001_ShortNodeOnModels.Y = 220.000000
+	__NoteShape__000001_ShortNodeOnModels.X = 70.000000
+	__NoteShape__000001_ShortNodeOnModels.Y = 340.000000
 	__NoteShape__000001_ShortNodeOnModels.Width = 240.000000
 	__NoteShape__000001_ShortNodeOnModels.Heigth = 63.000000
 	__NoteShape__000001_ShortNodeOnModels.Matched = true
@@ -1202,8 +1210,8 @@ In this case [Line], [Point] and [Line.Start]
 It uses the DocLink convention for referencing Identifiers
 In this case [Line], [Point] and [Line.Start]
 `
-	__NoteShape__000002_ShortNodeOnModels.X = 70.000000
-	__NoteShape__000002_ShortNodeOnModels.Y = 340.000000
+	__NoteShape__000002_ShortNodeOnModels.X = 90.000000
+	__NoteShape__000002_ShortNodeOnModels.Y = 60.000000
 	__NoteShape__000002_ShortNodeOnModels.Width = 240.000000
 	__NoteShape__000002_ShortNodeOnModels.Heigth = 63.000000
 	__NoteShape__000002_ShortNodeOnModels.Matched = true
@@ -1215,69 +1223,69 @@ It uses the DocLink convention for referencing Identifiers
 In this case [Line], [Point] and [Line.Start]
 `
 	__NoteShape__000003_ShortNodeOnModels.X = 90.000000
-	__NoteShape__000003_ShortNodeOnModels.Y = 60.000000
+	__NoteShape__000003_ShortNodeOnModels.Y = 220.000000
 	__NoteShape__000003_ShortNodeOnModels.Width = 240.000000
 	__NoteShape__000003_ShortNodeOnModels.Heigth = 63.000000
 	__NoteShape__000003_ShortNodeOnModels.Matched = true
 
 	// Position values setup
 	__Position__000000_Position_0000.X = 40.000000
-	__Position__000000_Position_0000.Y = 210.000000
+	__Position__000000_Position_0000.Y = 61.000000
 	__Position__000000_Position_0000.Name = `Position-0000`
 
 	// Position values setup
-	__Position__000001_Position_0001.X = 680.000000
-	__Position__000001_Position_0001.Y = 220.000000
+	__Position__000001_Position_0001.X = 50.000000
+	__Position__000001_Position_0001.Y = 210.000000
 	__Position__000001_Position_0001.Name = `Position-0001`
 
 	// Position values setup
-	__Position__000002_Position_0002.X = 30.000000
-	__Position__000002_Position_0002.Y = 350.000000
+	__Position__000002_Position_0002.X = 680.000000
+	__Position__000002_Position_0002.Y = 220.000000
 	__Position__000002_Position_0002.Name = `Position-0002`
 
 	// Position values setup
-	__Position__000003_Position_0003.X = 110.000000
-	__Position__000003_Position_0003.Y = 40.000000
+	__Position__000003_Position_0003.X = 30.000000
+	__Position__000003_Position_0003.Y = 350.000000
 	__Position__000003_Position_0003.Name = `Position-0003`
 
 	// Position values setup
-	__Position__000004_Position_0004.X = 580.000000
-	__Position__000004_Position_0004.Y = 170.000000
+	__Position__000004_Position_0004.X = 110.000000
+	__Position__000004_Position_0004.Y = 40.000000
 	__Position__000004_Position_0004.Name = `Position-0004`
 
 	// Position values setup
-	__Position__000005_Position_0005.X = 140.000000
-	__Position__000005_Position_0005.Y = 290.000000
+	__Position__000005_Position_0005.X = 580.000000
+	__Position__000005_Position_0005.Y = 170.000000
 	__Position__000005_Position_0005.Name = `Position-0005`
 
 	// Position values setup
 	__Position__000006_Position_0006.X = 140.000000
-	__Position__000006_Position_0006.Y = 420.000000
+	__Position__000006_Position_0006.Y = 290.000000
 	__Position__000006_Position_0006.Name = `Position-0006`
 
 	// Position values setup
-	__Position__000007_Position_0007.X = 580.000000
+	__Position__000007_Position_0007.X = 140.000000
 	__Position__000007_Position_0007.Y = 420.000000
 	__Position__000007_Position_0007.Name = `Position-0007`
 
 	// Position values setup
-	__Position__000008_Position_0008.X = 130.000000
-	__Position__000008_Position_0008.Y = 150.000000
+	__Position__000008_Position_0008.X = 580.000000
+	__Position__000008_Position_0008.Y = 420.000000
 	__Position__000008_Position_0008.Name = `Position-0008`
 
 	// Position values setup
-	__Position__000009_Position_0009.X = 520.000000
+	__Position__000009_Position_0009.X = 130.000000
 	__Position__000009_Position_0009.Y = 150.000000
 	__Position__000009_Position_0009.Name = `Position-0009`
 
 	// Position values setup
-	__Position__000010_Position_0010.X = 360.000000
-	__Position__000010_Position_0010.Y = 400.000000
+	__Position__000010_Position_0010.X = 520.000000
+	__Position__000010_Position_0010.Y = 150.000000
 	__Position__000010_Position_0010.Name = `Position-0010`
 
 	// Position values setup
-	__Position__000011_Position_0011.X = 40.000000
-	__Position__000011_Position_0011.Y = 61.000000
+	__Position__000011_Position_0011.X = 360.000000
+	__Position__000011_Position_0011.Y = 400.000000
 	__Position__000011_Position_0011.Name = `Position-0011`
 
 	// Reference values setup
@@ -1379,81 +1387,82 @@ In this case [Line], [Point] and [Line.Start]
 	__Vertice__000008_Vertice_0008.Name = `Vertice-0008`
 
 	// Setup of pointers
-	__Classdiagram__000000_Diagram2.Classshapes = append(__Classdiagram__000000_Diagram2.Classshapes, __Classshape__000000_Classshape0000)
 	__Classdiagram__000000_Diagram2.Classshapes = append(__Classdiagram__000000_Diagram2.Classshapes, __Classshape__000001_Classshape0001)
 	__Classdiagram__000000_Diagram2.Classshapes = append(__Classdiagram__000000_Diagram2.Classshapes, __Classshape__000002_Classshape0002)
-	__Classdiagram__000000_Diagram2.Notes = append(__Classdiagram__000000_Diagram2.Notes, __NoteShape__000003_ShortNodeOnModels)
-	__Classdiagram__000001_Diagram3.Classshapes = append(__Classdiagram__000001_Diagram3.Classshapes, __Classshape__000003_Classshape0003)
+	__Classdiagram__000000_Diagram2.Classshapes = append(__Classdiagram__000000_Diagram2.Classshapes, __Classshape__000003_Classshape0003)
+	__Classdiagram__000000_Diagram2.Notes = append(__Classdiagram__000000_Diagram2.Notes, __NoteShape__000002_ShortNodeOnModels)
 	__Classdiagram__000001_Diagram3.Classshapes = append(__Classdiagram__000001_Diagram3.Classshapes, __Classshape__000004_Classshape0004)
 	__Classdiagram__000001_Diagram3.Classshapes = append(__Classdiagram__000001_Diagram3.Classshapes, __Classshape__000005_Classshape0005)
 	__Classdiagram__000001_Diagram3.Classshapes = append(__Classdiagram__000001_Diagram3.Classshapes, __Classshape__000006_Classshape0006)
 	__Classdiagram__000001_Diagram3.Classshapes = append(__Classdiagram__000001_Diagram3.Classshapes, __Classshape__000007_Classshape0007)
+	__Classdiagram__000001_Diagram3.Classshapes = append(__Classdiagram__000001_Diagram3.Classshapes, __Classshape__000008_Classshape0008)
 	__Classdiagram__000001_Diagram3.Notes = append(__Classdiagram__000001_Diagram3.Notes, __NoteShape__000000_LongNodeOnModels)
-	__Classdiagram__000001_Diagram3.Notes = append(__Classdiagram__000001_Diagram3.Notes, __NoteShape__000001_ShortNodeOnModels)
-	__Classdiagram__000002_Diagram4.Classshapes = append(__Classdiagram__000002_Diagram4.Classshapes, __Classshape__000008_Classshape0008)
+	__Classdiagram__000001_Diagram3.Notes = append(__Classdiagram__000001_Diagram3.Notes, __NoteShape__000003_ShortNodeOnModels)
 	__Classdiagram__000002_Diagram4.Classshapes = append(__Classdiagram__000002_Diagram4.Classshapes, __Classshape__000009_Classshape0009)
 	__Classdiagram__000002_Diagram4.Classshapes = append(__Classdiagram__000002_Diagram4.Classshapes, __Classshape__000010_Classshape0010)
-	__Classdiagram__000002_Diagram4.Notes = append(__Classdiagram__000002_Diagram4.Notes, __NoteShape__000002_ShortNodeOnModels)
-	__Classdiagram__000003_DiagramEnums.Classshapes = append(__Classdiagram__000003_DiagramEnums.Classshapes, __Classshape__000011_Classshape0011)
+	__Classdiagram__000002_Diagram4.Classshapes = append(__Classdiagram__000002_Diagram4.Classshapes, __Classshape__000011_Classshape0011)
+	__Classdiagram__000002_Diagram4.Notes = append(__Classdiagram__000002_Diagram4.Notes, __NoteShape__000001_ShortNodeOnModels)
+	__Classdiagram__000003_DiagramEnums.Classshapes = append(__Classdiagram__000003_DiagramEnums.Classshapes, __Classshape__000000_Classshape0000)
 	__Classshape__000000_Classshape0000.Position = __Position__000000_Position_0000
-	__Classshape__000000_Classshape0000.Reference = __Reference__000000_Line
-	__Classshape__000000_Classshape0000.Links = append(__Classshape__000000_Classshape0000.Links, __Link__000000_End)
-	__Classshape__000000_Classshape0000.Links = append(__Classshape__000000_Classshape0000.Links, __Link__000006_Start)
+	__Classshape__000000_Classshape0000.Reference = __Reference__000001_LineType
+	__Classshape__000000_Classshape0000.Fields = append(__Classshape__000000_Classshape0000.Fields, __Field__000000_)
 	__Classshape__000001_Classshape0001.Position = __Position__000001_Position_0001
-	__Classshape__000001_Classshape0001.Reference = __Reference__000002_Point
+	__Classshape__000001_Classshape0001.Reference = __Reference__000000_Line
+	__Classshape__000001_Classshape0001.Fields = append(__Classshape__000001_Classshape0001.Fields, __Field__000001_CreationDate)
+	__Classshape__000001_Classshape0001.Links = append(__Classshape__000001_Classshape0001.Links, __Link__000000_End)
+	__Classshape__000001_Classshape0001.Links = append(__Classshape__000001_Classshape0001.Links, __Link__000006_Start)
 	__Classshape__000002_Classshape0002.Position = __Position__000002_Position_0002
-	__Classshape__000002_Classshape0002.Reference = __Reference__000003_PointExclusiveSet
-	__Classshape__000002_Classshape0002.Links = append(__Classshape__000002_Classshape0002.Links, __Link__000002_Points)
+	__Classshape__000002_Classshape0002.Reference = __Reference__000002_Point
 	__Classshape__000003_Classshape0003.Position = __Position__000003_Position_0003
-	__Classshape__000003_Classshape0003.Reference = __Reference__000000_Line
-	__Classshape__000003_Classshape0003.Fields = append(__Classshape__000003_Classshape0003.Fields, __Field__000001_CreationDate)
-	__Classshape__000003_Classshape0003.Fields = append(__Classshape__000003_Classshape0003.Fields, __Field__000003_JourneyTime)
-	__Classshape__000003_Classshape0003.Fields = append(__Classshape__000003_Classshape0003.Fields, __Field__000005_Name)
-	__Classshape__000003_Classshape0003.Fields = append(__Classshape__000003_Classshape0003.Fields, __Field__000011_Type)
-	__Classshape__000003_Classshape0003.Fields = append(__Classshape__000003_Classshape0003.Fields, __Field__000013_VeryLongLongLongLongLongLongField)
-	__Classshape__000003_Classshape0003.Links = append(__Classshape__000003_Classshape0003.Links, __Link__000007_Start)
+	__Classshape__000003_Classshape0003.Reference = __Reference__000003_PointExclusiveSet
+	__Classshape__000003_Classshape0003.Links = append(__Classshape__000003_Classshape0003.Links, __Link__000002_Points)
 	__Classshape__000004_Classshape0004.Position = __Position__000004_Position_0004
-	__Classshape__000004_Classshape0004.Reference = __Reference__000002_Point
-	__Classshape__000004_Classshape0004.Fields = append(__Classshape__000004_Classshape0004.Fields, __Field__000006_Name)
-	__Classshape__000004_Classshape0004.Fields = append(__Classshape__000004_Classshape0004.Fields, __Field__000014_X)
-	__Classshape__000004_Classshape0004.Fields = append(__Classshape__000004_Classshape0004.Fields, __Field__000015_Y)
+	__Classshape__000004_Classshape0004.Reference = __Reference__000000_Line
+	__Classshape__000004_Classshape0004.Fields = append(__Classshape__000004_Classshape0004.Fields, __Field__000002_CreationDate)
+	__Classshape__000004_Classshape0004.Fields = append(__Classshape__000004_Classshape0004.Fields, __Field__000004_JourneyTime)
+	__Classshape__000004_Classshape0004.Fields = append(__Classshape__000004_Classshape0004.Fields, __Field__000009_Name)
+	__Classshape__000004_Classshape0004.Fields = append(__Classshape__000004_Classshape0004.Fields, __Field__000012_Type)
+	__Classshape__000004_Classshape0004.Fields = append(__Classshape__000004_Classshape0004.Fields, __Field__000014_VeryLongLongLongLongLongLongField)
+	__Classshape__000004_Classshape0004.Links = append(__Classshape__000004_Classshape0004.Links, __Link__000007_Start)
 	__Classshape__000005_Classshape0005.Position = __Position__000005_Position_0005
-	__Classshape__000005_Classshape0005.Reference = __Reference__000003_PointExclusiveSet
-	__Classshape__000005_Classshape0005.Fields = append(__Classshape__000005_Classshape0005.Fields, __Field__000008_Name)
-	__Classshape__000005_Classshape0005.Links = append(__Classshape__000005_Classshape0005.Links, __Link__000003_Points)
+	__Classshape__000005_Classshape0005.Reference = __Reference__000002_Point
+	__Classshape__000005_Classshape0005.Fields = append(__Classshape__000005_Classshape0005.Fields, __Field__000011_Name)
+	__Classshape__000005_Classshape0005.Fields = append(__Classshape__000005_Classshape0005.Fields, __Field__000015_X)
+	__Classshape__000005_Classshape0005.Fields = append(__Classshape__000005_Classshape0005.Fields, __Field__000016_Y)
 	__Classshape__000006_Classshape0006.Position = __Position__000006_Position_0006
-	__Classshape__000006_Classshape0006.Reference = __Reference__000004_PointNonExclusiveSet
-	__Classshape__000006_Classshape0006.Fields = append(__Classshape__000006_Classshape0006.Fields, __Field__000010_Name)
-	__Classshape__000006_Classshape0006.Links = append(__Classshape__000006_Classshape0006.Links, __Link__000005_Points)
+	__Classshape__000006_Classshape0006.Reference = __Reference__000003_PointExclusiveSet
+	__Classshape__000006_Classshape0006.Fields = append(__Classshape__000006_Classshape0006.Fields, __Field__000008_Name)
+	__Classshape__000006_Classshape0006.Links = append(__Classshape__000006_Classshape0006.Links, __Link__000004_Points)
 	__Classshape__000007_Classshape0007.Position = __Position__000007_Position_0007
-	__Classshape__000007_Classshape0007.Reference = __Reference__000005_PointUse
-	__Classshape__000007_Classshape0007.Fields = append(__Classshape__000007_Classshape0007.Fields, __Field__000004_Name)
-	__Classshape__000007_Classshape0007.Links = append(__Classshape__000007_Classshape0007.Links, __Link__000004_Points)
+	__Classshape__000007_Classshape0007.Reference = __Reference__000004_PointNonExclusiveSet
+	__Classshape__000007_Classshape0007.Fields = append(__Classshape__000007_Classshape0007.Fields, __Field__000010_Name)
+	__Classshape__000007_Classshape0007.Links = append(__Classshape__000007_Classshape0007.Links, __Link__000005_Points)
 	__Classshape__000008_Classshape0008.Position = __Position__000008_Position_0008
-	__Classshape__000008_Classshape0008.Reference = __Reference__000000_Line
-	__Classshape__000008_Classshape0008.Fields = append(__Classshape__000008_Classshape0008.Fields, __Field__000002_JourneyTime)
-	__Classshape__000008_Classshape0008.Fields = append(__Classshape__000008_Classshape0008.Fields, __Field__000007_Name)
-	__Classshape__000008_Classshape0008.Fields = append(__Classshape__000008_Classshape0008.Fields, __Field__000012_Type)
-	__Classshape__000008_Classshape0008.Links = append(__Classshape__000008_Classshape0008.Links, __Link__000001_End)
-	__Classshape__000008_Classshape0008.Links = append(__Classshape__000008_Classshape0008.Links, __Link__000008_Start)
+	__Classshape__000008_Classshape0008.Reference = __Reference__000005_PointUse
+	__Classshape__000008_Classshape0008.Fields = append(__Classshape__000008_Classshape0008.Fields, __Field__000005_Name)
+	__Classshape__000008_Classshape0008.Links = append(__Classshape__000008_Classshape0008.Links, __Link__000003_Points)
 	__Classshape__000009_Classshape0009.Position = __Position__000009_Position_0009
-	__Classshape__000009_Classshape0009.Reference = __Reference__000002_Point
-	__Classshape__000009_Classshape0009.Fields = append(__Classshape__000009_Classshape0009.Fields, __Field__000009_Name)
+	__Classshape__000009_Classshape0009.Reference = __Reference__000000_Line
+	__Classshape__000009_Classshape0009.Fields = append(__Classshape__000009_Classshape0009.Fields, __Field__000003_JourneyTime)
+	__Classshape__000009_Classshape0009.Fields = append(__Classshape__000009_Classshape0009.Fields, __Field__000007_Name)
+	__Classshape__000009_Classshape0009.Fields = append(__Classshape__000009_Classshape0009.Fields, __Field__000013_Type)
+	__Classshape__000009_Classshape0009.Links = append(__Classshape__000009_Classshape0009.Links, __Link__000001_End)
+	__Classshape__000009_Classshape0009.Links = append(__Classshape__000009_Classshape0009.Links, __Link__000008_Start)
 	__Classshape__000010_Classshape0010.Position = __Position__000010_Position_0010
-	__Classshape__000010_Classshape0010.Reference = __Reference__000003_PointExclusiveSet
+	__Classshape__000010_Classshape0010.Reference = __Reference__000002_Point
+	__Classshape__000010_Classshape0010.Fields = append(__Classshape__000010_Classshape0010.Fields, __Field__000006_Name)
 	__Classshape__000011_Classshape0011.Position = __Position__000011_Position_0011
-	__Classshape__000011_Classshape0011.Reference = __Reference__000001_LineType
-	__Classshape__000011_Classshape0011.Fields = append(__Classshape__000011_Classshape0011.Fields, __Field__000000_)
+	__Classshape__000011_Classshape0011.Reference = __Reference__000003_PointExclusiveSet
+	__DiagramPackage__000000_.Classdiagrams = append(__DiagramPackage__000000_.Classdiagrams, __Classdiagram__000003_DiagramEnums)
 	__DiagramPackage__000000_.Classdiagrams = append(__DiagramPackage__000000_.Classdiagrams, __Classdiagram__000000_Diagram2)
 	__DiagramPackage__000000_.Classdiagrams = append(__DiagramPackage__000000_.Classdiagrams, __Classdiagram__000001_Diagram3)
 	__DiagramPackage__000000_.Classdiagrams = append(__DiagramPackage__000000_.Classdiagrams, __Classdiagram__000002_Diagram4)
-	__DiagramPackage__000000_.Classdiagrams = append(__DiagramPackage__000000_.Classdiagrams, __Classdiagram__000003_DiagramEnums)
 	__DiagramPackage__000000_.Umlscs = append(__DiagramPackage__000000_.Umlscs, __Umlsc__000000_UmlscDiagram1)
 	__Link__000000_End.Middlevertice = __Vertice__000000_Vertice_0000
 	__Link__000001_End.Middlevertice = __Vertice__000007_Vertice_0007
 	__Link__000002_Points.Middlevertice = __Vertice__000002_Vertice_0002
-	__Link__000003_Points.Middlevertice = __Vertice__000004_Vertice_0004
-	__Link__000004_Points.Middlevertice = __Vertice__000006_Vertice_0006
+	__Link__000003_Points.Middlevertice = __Vertice__000006_Vertice_0006
+	__Link__000004_Points.Middlevertice = __Vertice__000004_Vertice_0004
 	__Link__000005_Points.Middlevertice = __Vertice__000005_Vertice_0005
 	__Link__000006_Start.Middlevertice = __Vertice__000001_Vertice_0001
 	__Link__000007_Start.Middlevertice = __Vertice__000003_Vertice_0003
@@ -1462,13 +1471,13 @@ In this case [Line], [Point] and [Line.Start]
 	__Node__000007_Diagram3.Classdiagram = __Classdiagram__000001_Diagram3
 	__Node__000008_Diagram4.Classdiagram = __Classdiagram__000002_Diagram4
 	__Node__000009_DiagramEnums.Classdiagram = __Classdiagram__000003_DiagramEnums
-	__Node__000012_Line.Children = append(__Node__000012_Line.Children, __Node__000019_Name)
-	__Node__000012_Line.Children = append(__Node__000012_Line.Children, __Node__000031_Start)
-	__Node__000012_Line.Children = append(__Node__000012_Line.Children, __Node__000010_End)
-	__Node__000012_Line.Children = append(__Node__000012_Line.Children, __Node__000004_CreationDate)
-	__Node__000012_Line.Children = append(__Node__000012_Line.Children, __Node__000011_JourneyTime)
-	__Node__000012_Line.Children = append(__Node__000012_Line.Children, __Node__000032_Type)
-	__Node__000012_Line.Children = append(__Node__000012_Line.Children, __Node__000033_VeryLongLongLongLongLongLongField)
+	__Node__000013_Line.Children = append(__Node__000013_Line.Children, __Node__000020_Name)
+	__Node__000013_Line.Children = append(__Node__000013_Line.Children, __Node__000031_Start)
+	__Node__000013_Line.Children = append(__Node__000013_Line.Children, __Node__000010_End)
+	__Node__000013_Line.Children = append(__Node__000013_Line.Children, __Node__000004_CreationDate)
+	__Node__000013_Line.Children = append(__Node__000013_Line.Children, __Node__000011_JourneyTime)
+	__Node__000013_Line.Children = append(__Node__000013_Line.Children, __Node__000032_Type)
+	__Node__000013_Line.Children = append(__Node__000013_Line.Children, __Node__000033_VeryLongLongLongLongLongLongField)
 	__Node__000014_LineType.Children = append(__Node__000014_LineType.Children, __Node__000002_CONTINUOUS)
 	__Node__000014_LineType.Children = append(__Node__000014_LineType.Children, __Node__000005_DOTTED)
 	__Node__000022_Point.Children = append(__Node__000022_Point.Children, __Node__000016_Name)
@@ -1476,13 +1485,13 @@ In this case [Line], [Point] and [Line.Start]
 	__Node__000022_Point.Children = append(__Node__000022_Point.Children, __Node__000034_X)
 	__Node__000022_Point.Children = append(__Node__000022_Point.Children, __Node__000035_Y)
 	__Node__000022_Point.Children = append(__Node__000022_Point.Children, __Node__000003_CreatedAt)
-	__Node__000023_PointExclusiveSet.Children = append(__Node__000023_PointExclusiveSet.Children, __Node__000018_Name)
-	__Node__000023_PointExclusiveSet.Children = append(__Node__000023_PointExclusiveSet.Children, __Node__000028_Points)
-	__Node__000024_PointNonExclusiveSet.Children = append(__Node__000024_PointNonExclusiveSet.Children, __Node__000020_Name)
+	__Node__000023_PointExclusiveSet.Children = append(__Node__000023_PointExclusiveSet.Children, __Node__000017_Name)
+	__Node__000023_PointExclusiveSet.Children = append(__Node__000023_PointExclusiveSet.Children, __Node__000026_Points)
+	__Node__000024_PointNonExclusiveSet.Children = append(__Node__000024_PointNonExclusiveSet.Children, __Node__000019_Name)
 	__Node__000024_PointNonExclusiveSet.Children = append(__Node__000024_PointNonExclusiveSet.Children, __Node__000027_Points)
-	__Node__000025_PointUse.Children = append(__Node__000025_PointUse.Children, __Node__000017_Name)
-	__Node__000025_PointUse.Children = append(__Node__000025_PointUse.Children, __Node__000026_Points)
-	__Node__000029_ShortNodeOnModels.Children = append(__Node__000029_ShortNodeOnModels.Children, __Node__000013_Line)
+	__Node__000025_PointUse.Children = append(__Node__000025_PointUse.Children, __Node__000018_Name)
+	__Node__000025_PointUse.Children = append(__Node__000025_PointUse.Children, __Node__000028_Points)
+	__Node__000029_ShortNodeOnModels.Children = append(__Node__000029_ShortNodeOnModels.Children, __Node__000012_Line)
 	__Node__000029_ShortNodeOnModels.Children = append(__Node__000029_ShortNodeOnModels.Children, __Node__000021_Point)
 	__Node__000030_SimulationStage.Children = append(__Node__000030_SimulationStage.Children, __Node__000001_BEFORE)
 	__Node__000030_SimulationStage.Children = append(__Node__000030_SimulationStage.Children, __Node__000000_AFTER)
@@ -1492,13 +1501,13 @@ In this case [Line], [Point] and [Line.Start]
 	__Node__000037_class_diagrams.Children = append(__Node__000037_class_diagrams.Children, __Node__000009_DiagramEnums)
 	__Node__000038_gongenums.Children = append(__Node__000038_gongenums.Children, __Node__000030_SimulationStage)
 	__Node__000038_gongenums.Children = append(__Node__000038_gongenums.Children, __Node__000014_LineType)
-	__Node__000039_gongstructs.Children = append(__Node__000039_gongstructs.Children, __Node__000025_PointUse)
-	__Node__000039_gongstructs.Children = append(__Node__000039_gongstructs.Children, __Node__000012_Line)
+	__Node__000039_gongstructs.Children = append(__Node__000039_gongstructs.Children, __Node__000013_Line)
 	__Node__000039_gongstructs.Children = append(__Node__000039_gongstructs.Children, __Node__000022_Point)
 	__Node__000039_gongstructs.Children = append(__Node__000039_gongstructs.Children, __Node__000023_PointExclusiveSet)
 	__Node__000039_gongstructs.Children = append(__Node__000039_gongstructs.Children, __Node__000024_PointNonExclusiveSet)
-	__Node__000040_notes.Children = append(__Node__000040_notes.Children, __Node__000015_LongNodeOnModels)
+	__Node__000039_gongstructs.Children = append(__Node__000039_gongstructs.Children, __Node__000025_PointUse)
 	__Node__000040_notes.Children = append(__Node__000040_notes.Children, __Node__000029_ShortNodeOnModels)
+	__Node__000040_notes.Children = append(__Node__000040_notes.Children, __Node__000015_LongNodeOnModels)
 	__Tree__000000_gong.RootNodes = append(__Tree__000000_gong.RootNodes, __Node__000039_gongstructs)
 	__Tree__000000_gong.RootNodes = append(__Tree__000000_gong.RootNodes, __Node__000038_gongenums)
 	__Tree__000000_gong.RootNodes = append(__Tree__000000_gong.RootNodes, __Node__000040_notes)
