@@ -121,11 +121,8 @@ func Diagram2Injection() {
 	__Tree__000001_gongdoc := (&models.Tree{Name: `gongdoc`}).Stage()
 
 	// Declarations of staged instances of UmlState
-	__UmlState__000000_AFTER := (&models.UmlState{Name: `AFTER`}).Stage()
-	__UmlState__000001_BEFORE := (&models.UmlState{Name: `BEFORE`}).Stage()
 
 	// Declarations of staged instances of Umlsc
-	__Umlsc__000000_UmlscDiagram1 := (&models.Umlsc{Name: `UmlscDiagram1`}).Stage()
 
 	// Declarations of staged instances of Vertice
 	__Vertice__000000_Vertice_0000 := (&models.Vertice{Name: `Vertice-0000`}).Stage()
@@ -159,7 +156,7 @@ func Diagram2Injection() {
 	//gong:ident [Ref_models.Line]
 	__Classshape__000000_Classshape0000.Identifier = `Ref_models.Line`
 	__Classshape__000000_Classshape0000.ShowNbInstances = true
-	__Classshape__000000_Classshape0000.NbInstances = 81
+	__Classshape__000000_Classshape0000.NbInstances = 59
 	__Classshape__000000_Classshape0000.Width = 240.000000
 	__Classshape__000000_Classshape0000.Heigth = 78.000000
 	__Classshape__000000_Classshape0000.IsSelected = false
@@ -173,7 +170,7 @@ func Diagram2Injection() {
 	//gong:ident [Ref_models.Point]
 	__Classshape__000001_Classshape0001.Identifier = `Ref_models.Point`
 	__Classshape__000001_Classshape0001.ShowNbInstances = true
-	__Classshape__000001_Classshape0001.NbInstances = 87
+	__Classshape__000001_Classshape0001.NbInstances = 81
 	__Classshape__000001_Classshape0001.Width = 240.000000
 	__Classshape__000001_Classshape0001.Heigth = 63.000000
 	__Classshape__000001_Classshape0001.IsSelected = false
@@ -187,7 +184,7 @@ func Diagram2Injection() {
 	//gong:ident [Ref_models.PointExclusiveSet]
 	__Classshape__000002_Classshape0002.Identifier = `Ref_models.PointExclusiveSet`
 	__Classshape__000002_Classshape0002.ShowNbInstances = true
-	__Classshape__000002_Classshape0002.NbInstances = 47
+	__Classshape__000002_Classshape0002.NbInstances = 87
 	__Classshape__000002_Classshape0002.Width = 240.000000
 	__Classshape__000002_Classshape0002.Heigth = 63.000000
 	__Classshape__000002_Classshape0002.IsSelected = false
@@ -437,10 +434,10 @@ func Diagram2Injection() {
 
 	// Node values setup
 	__Node__000012_Line.Name = `Line`
-	__Node__000012_Line.Type = models.GONG_NOTE_LINK
+	__Node__000012_Line.Type = models.GONG_STRUCT
 	__Node__000012_Line.IsExpanded = false
 	__Node__000012_Line.HasCheckboxButton = true
-	__Node__000012_Line.IsChecked = false
+	__Node__000012_Line.IsChecked = true
 	__Node__000012_Line.IsCheckboxDisabled = false
 	__Node__000012_Line.HasAddChildButton = false
 	__Node__000012_Line.HasEditButton = false
@@ -453,10 +450,10 @@ func Diagram2Injection() {
 
 	// Node values setup
 	__Node__000013_Line.Name = `Line`
-	__Node__000013_Line.Type = models.GONG_STRUCT
+	__Node__000013_Line.Type = models.GONG_NOTE_LINK
 	__Node__000013_Line.IsExpanded = false
 	__Node__000013_Line.HasCheckboxButton = true
-	__Node__000013_Line.IsChecked = true
+	__Node__000013_Line.IsChecked = false
 	__Node__000013_Line.IsCheckboxDisabled = false
 	__Node__000013_Line.HasAddChildButton = false
 	__Node__000013_Line.HasEditButton = false
@@ -505,7 +502,7 @@ func Diagram2Injection() {
 	__Node__000016_Name.IsExpanded = false
 	__Node__000016_Name.HasCheckboxButton = true
 	__Node__000016_Name.IsChecked = false
-	__Node__000016_Name.IsCheckboxDisabled = true
+	__Node__000016_Name.IsCheckboxDisabled = false
 	__Node__000016_Name.HasAddChildButton = false
 	__Node__000016_Name.HasEditButton = false
 	__Node__000016_Name.IsInEditMode = false
@@ -521,7 +518,7 @@ func Diagram2Injection() {
 	__Node__000017_Name.IsExpanded = false
 	__Node__000017_Name.HasCheckboxButton = true
 	__Node__000017_Name.IsChecked = false
-	__Node__000017_Name.IsCheckboxDisabled = true
+	__Node__000017_Name.IsCheckboxDisabled = false
 	__Node__000017_Name.HasAddChildButton = false
 	__Node__000017_Name.HasEditButton = false
 	__Node__000017_Name.IsInEditMode = false
@@ -553,7 +550,7 @@ func Diagram2Injection() {
 	__Node__000019_Name.IsExpanded = false
 	__Node__000019_Name.HasCheckboxButton = true
 	__Node__000019_Name.IsChecked = false
-	__Node__000019_Name.IsCheckboxDisabled = false
+	__Node__000019_Name.IsCheckboxDisabled = true
 	__Node__000019_Name.HasAddChildButton = false
 	__Node__000019_Name.HasEditButton = false
 	__Node__000019_Name.IsInEditMode = false
@@ -569,7 +566,7 @@ func Diagram2Injection() {
 	__Node__000020_Name.IsExpanded = false
 	__Node__000020_Name.HasCheckboxButton = true
 	__Node__000020_Name.IsChecked = false
-	__Node__000020_Name.IsCheckboxDisabled = false
+	__Node__000020_Name.IsCheckboxDisabled = true
 	__Node__000020_Name.HasAddChildButton = false
 	__Node__000020_Name.HasEditButton = false
 	__Node__000020_Name.IsInEditMode = false
@@ -664,8 +661,8 @@ func Diagram2Injection() {
 	__Node__000026_Points.Type = models.GONG_STRUCT_FIELD
 	__Node__000026_Points.IsExpanded = false
 	__Node__000026_Points.HasCheckboxButton = true
-	__Node__000026_Points.IsChecked = true
-	__Node__000026_Points.IsCheckboxDisabled = false
+	__Node__000026_Points.IsChecked = false
+	__Node__000026_Points.IsCheckboxDisabled = true
 	__Node__000026_Points.HasAddChildButton = false
 	__Node__000026_Points.HasEditButton = false
 	__Node__000026_Points.IsInEditMode = false
@@ -696,8 +693,8 @@ func Diagram2Injection() {
 	__Node__000028_Points.Type = models.GONG_STRUCT_FIELD
 	__Node__000028_Points.IsExpanded = false
 	__Node__000028_Points.HasCheckboxButton = true
-	__Node__000028_Points.IsChecked = false
-	__Node__000028_Points.IsCheckboxDisabled = true
+	__Node__000028_Points.IsChecked = true
+	__Node__000028_Points.IsCheckboxDisabled = false
 	__Node__000028_Points.HasAddChildButton = false
 	__Node__000028_Points.HasEditButton = false
 	__Node__000028_Points.IsInEditMode = false
@@ -931,21 +928,6 @@ In this case [Line], [Point] and [Line.Start]
 	__Tree__000001_gongdoc.Name = `gongdoc`
 	__Tree__000001_gongdoc.Type = models.TREE_OF_DIAGRAMS
 
-	// UmlState values setup
-	__UmlState__000000_AFTER.Name = `AFTER`
-	__UmlState__000000_AFTER.X = 20.000000
-	__UmlState__000000_AFTER.Y = 90.000000
-
-	// UmlState values setup
-	__UmlState__000001_BEFORE.Name = `BEFORE`
-	__UmlState__000001_BEFORE.X = 20.000000
-	__UmlState__000001_BEFORE.Y = 30.000000
-
-	// Umlsc values setup
-	__Umlsc__000000_UmlscDiagram1.Name = `UmlscDiagram1`
-	__Umlsc__000000_UmlscDiagram1.Activestate = `AFTER`
-	__Umlsc__000000_UmlscDiagram1.IsInDrawMode = false
-
 	// Vertice values setup
 	__Vertice__000000_Vertice_0000.X = 449.000000
 	__Vertice__000000_Vertice_0000.Y = 329.500000
@@ -995,49 +977,47 @@ In this case [Line], [Point] and [Line.Start]
 	__Node__000007_Diagram3.Classdiagram = __Classdiagram__000001_Diagram3
 	__Node__000008_Diagram4.Classdiagram = __Classdiagram__000002_Diagram4
 	__Node__000009_DiagramEnums.Classdiagram = __Classdiagram__000003_DiagramEnums
-	__Node__000013_Line.Children = append(__Node__000013_Line.Children, __Node__000019_Name)
-	__Node__000013_Line.Children = append(__Node__000013_Line.Children, __Node__000031_Start)
-	__Node__000013_Line.Children = append(__Node__000013_Line.Children, __Node__000010_End)
-	__Node__000013_Line.Children = append(__Node__000013_Line.Children, __Node__000004_CreationDate)
-	__Node__000013_Line.Children = append(__Node__000013_Line.Children, __Node__000011_JourneyTime)
-	__Node__000013_Line.Children = append(__Node__000013_Line.Children, __Node__000032_Type)
-	__Node__000013_Line.Children = append(__Node__000013_Line.Children, __Node__000033_VeryLongLongLongLongLongLongField)
+	__Node__000012_Line.Children = append(__Node__000012_Line.Children, __Node__000017_Name)
+	__Node__000012_Line.Children = append(__Node__000012_Line.Children, __Node__000031_Start)
+	__Node__000012_Line.Children = append(__Node__000012_Line.Children, __Node__000010_End)
+	__Node__000012_Line.Children = append(__Node__000012_Line.Children, __Node__000004_CreationDate)
+	__Node__000012_Line.Children = append(__Node__000012_Line.Children, __Node__000011_JourneyTime)
+	__Node__000012_Line.Children = append(__Node__000012_Line.Children, __Node__000032_Type)
+	__Node__000012_Line.Children = append(__Node__000012_Line.Children, __Node__000033_VeryLongLongLongLongLongLongField)
 	__Node__000014_LineType.Children = append(__Node__000014_LineType.Children, __Node__000002_CONTINUOUS)
 	__Node__000014_LineType.Children = append(__Node__000014_LineType.Children, __Node__000005_DOTTED)
-	__Node__000022_Point.Children = append(__Node__000022_Point.Children, __Node__000020_Name)
+	__Node__000022_Point.Children = append(__Node__000022_Point.Children, __Node__000016_Name)
 	__Node__000022_Point.Children = append(__Node__000022_Point.Children, __Node__000036_Z)
 	__Node__000022_Point.Children = append(__Node__000022_Point.Children, __Node__000034_X)
 	__Node__000022_Point.Children = append(__Node__000022_Point.Children, __Node__000035_Y)
 	__Node__000022_Point.Children = append(__Node__000022_Point.Children, __Node__000003_CreatedAt)
 	__Node__000023_PointExclusiveSet.Children = append(__Node__000023_PointExclusiveSet.Children, __Node__000018_Name)
-	__Node__000023_PointExclusiveSet.Children = append(__Node__000023_PointExclusiveSet.Children, __Node__000026_Points)
-	__Node__000024_PointNonExclusiveSet.Children = append(__Node__000024_PointNonExclusiveSet.Children, __Node__000016_Name)
-	__Node__000024_PointNonExclusiveSet.Children = append(__Node__000024_PointNonExclusiveSet.Children, __Node__000028_Points)
-	__Node__000025_PointUse.Children = append(__Node__000025_PointUse.Children, __Node__000017_Name)
+	__Node__000023_PointExclusiveSet.Children = append(__Node__000023_PointExclusiveSet.Children, __Node__000028_Points)
+	__Node__000024_PointNonExclusiveSet.Children = append(__Node__000024_PointNonExclusiveSet.Children, __Node__000020_Name)
+	__Node__000024_PointNonExclusiveSet.Children = append(__Node__000024_PointNonExclusiveSet.Children, __Node__000026_Points)
+	__Node__000025_PointUse.Children = append(__Node__000025_PointUse.Children, __Node__000019_Name)
 	__Node__000025_PointUse.Children = append(__Node__000025_PointUse.Children, __Node__000027_Points)
-	__Node__000029_ShortNodeOnModels.Children = append(__Node__000029_ShortNodeOnModels.Children, __Node__000012_Line)
+	__Node__000029_ShortNodeOnModels.Children = append(__Node__000029_ShortNodeOnModels.Children, __Node__000013_Line)
 	__Node__000029_ShortNodeOnModels.Children = append(__Node__000029_ShortNodeOnModels.Children, __Node__000021_Point)
 	__Node__000030_SimulationStage.Children = append(__Node__000030_SimulationStage.Children, __Node__000001_BEFORE)
 	__Node__000030_SimulationStage.Children = append(__Node__000030_SimulationStage.Children, __Node__000000_AFTER)
-	__Node__000037_class_diagrams.Children = append(__Node__000037_class_diagrams.Children, __Node__000006_Diagram2)
-	__Node__000037_class_diagrams.Children = append(__Node__000037_class_diagrams.Children, __Node__000007_Diagram3)
 	__Node__000037_class_diagrams.Children = append(__Node__000037_class_diagrams.Children, __Node__000008_Diagram4)
 	__Node__000037_class_diagrams.Children = append(__Node__000037_class_diagrams.Children, __Node__000009_DiagramEnums)
-	__Node__000038_gongenums.Children = append(__Node__000038_gongenums.Children, __Node__000030_SimulationStage)
+	__Node__000037_class_diagrams.Children = append(__Node__000037_class_diagrams.Children, __Node__000006_Diagram2)
+	__Node__000037_class_diagrams.Children = append(__Node__000037_class_diagrams.Children, __Node__000007_Diagram3)
 	__Node__000038_gongenums.Children = append(__Node__000038_gongenums.Children, __Node__000014_LineType)
-	__Node__000039_gongstructs.Children = append(__Node__000039_gongstructs.Children, __Node__000025_PointUse)
-	__Node__000039_gongstructs.Children = append(__Node__000039_gongstructs.Children, __Node__000013_Line)
-	__Node__000039_gongstructs.Children = append(__Node__000039_gongstructs.Children, __Node__000024_PointNonExclusiveSet)
+	__Node__000038_gongenums.Children = append(__Node__000038_gongenums.Children, __Node__000030_SimulationStage)
 	__Node__000039_gongstructs.Children = append(__Node__000039_gongstructs.Children, __Node__000022_Point)
 	__Node__000039_gongstructs.Children = append(__Node__000039_gongstructs.Children, __Node__000023_PointExclusiveSet)
+	__Node__000039_gongstructs.Children = append(__Node__000039_gongstructs.Children, __Node__000024_PointNonExclusiveSet)
+	__Node__000039_gongstructs.Children = append(__Node__000039_gongstructs.Children, __Node__000012_Line)
+	__Node__000039_gongstructs.Children = append(__Node__000039_gongstructs.Children, __Node__000025_PointUse)
 	__Node__000040_notes.Children = append(__Node__000040_notes.Children, __Node__000015_LongNodeOnModels)
 	__Node__000040_notes.Children = append(__Node__000040_notes.Children, __Node__000029_ShortNodeOnModels)
 	__Tree__000000_gong.RootNodes = append(__Tree__000000_gong.RootNodes, __Node__000039_gongstructs)
 	__Tree__000000_gong.RootNodes = append(__Tree__000000_gong.RootNodes, __Node__000038_gongenums)
 	__Tree__000000_gong.RootNodes = append(__Tree__000000_gong.RootNodes, __Node__000040_notes)
 	__Tree__000001_gongdoc.RootNodes = append(__Tree__000001_gongdoc.RootNodes, __Node__000037_class_diagrams)
-	__Umlsc__000000_UmlscDiagram1.States = append(__Umlsc__000000_UmlscDiagram1.States, __UmlState__000000_AFTER)
-	__Umlsc__000000_UmlscDiagram1.States = append(__Umlsc__000000_UmlscDiagram1.States, __UmlState__000001_BEFORE)
 }
 
 
