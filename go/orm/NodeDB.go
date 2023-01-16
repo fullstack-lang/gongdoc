@@ -383,8 +383,7 @@ func (backRepoNode *BackRepoNodeStruct) CommitPhaseTwoInstance(backRepo *BackRep
 // BackRepoNode.CheckoutPhaseOne Checkouts all BackRepo instances to the Stage
 //
 // Phase One will result in having instances on the stage aligned with the back repo
-// pointers are not initialized yet (this is for pahse two)
-//
+// pointers are not initialized yet (this is for phase two)
 func (backRepoNode *BackRepoNodeStruct) CheckoutPhaseOne() (Error error) {
 
 	nodeDBArray := make([]NodeDB, 0)

@@ -30,7 +30,13 @@ type DiagramPackage struct {
 	GongModelPath string
 
 	// Classdiagrams store UML Classdiagrams
+	// only one diagram is present at a time
 	Classdiagrams []*Classdiagram
+
+	// list of files in the "diagrams" directory
+	Files []string
+	ast   *ast.Package
+	fset  *token.FileSet
 
 	// Umlscs stores UML State charts diagrams
 	Umlscs []*Umlsc
@@ -62,51 +68,9 @@ func LoadEmbedded(fs embed.FS, modelPkg *gong_models.ModelPkg) (diagramPackage *
 		log.Panic("Unable to parser, wrong number of parsers ", len(pkgsParser))
 	}
 	if pkgParser, ok := pkgsParser["diagrams"]; ok {
-		diagramPackage.Unmarshall(modelPkg, pkgParser, fset, "go/diagrams")
+		diagramPackage.Unmarshall(modelPkg, pkgParser, fset, "go/diagrams", "")
 	}
 
-	diagramPackage.SerializeToStage()
-	FillUpNodeTree(diagramPackage)
-	return diagramPackage, nil
-}
-
-func Load(pkgPath string, modelPkg *gong_models.ModelPkg, editable bool) (diagramPackage *DiagramPackage, err error) {
-	diagramPackage = (&DiagramPackage{})
-	diagramPackage.IsEditable = editable
-	diagramPackage.ModelPkg = modelPkg
-
-	// parse the diagram package
-	diagramPkgPath := filepath.Join(pkgPath, "../diagrams")
-	diagramPackage.AbsolutePathToDiagramPackage, _ = filepath.Abs(diagramPkgPath)
-
-	// if diagrams directory does not exist create it
-	_, errd := os.Stat(diagramPkgPath)
-	if os.IsNotExist(errd) {
-		log.Printf(diagramPkgPath, " does not exist, gongdoc creates it")
-
-		errd := os.MkdirAll(diagramPkgPath, os.ModePerm)
-		if os.IsNotExist(errd) {
-			log.Println("creating directory : " + diagramPkgPath)
-		}
-		if os.IsExist(errd) {
-			log.Println("directory " + diagramPkgPath + " allready exists")
-		}
-	}
-
-	fset := token.NewFileSet()
-	startParser := time.Now()
-	pkgsParser, errParser := parser.ParseDir(fset, diagramPkgPath, nil, parser.ParseComments)
-	log.Printf("Parser took %s", time.Since(startParser))
-
-	if errParser != nil {
-		log.Panic("Unable to parser ")
-	}
-	if len(pkgsParser) != 1 {
-		log.Println("Unable to parser, wrong number of parsers ", len(pkgsParser))
-	} else {
-		diagramPackage.Unmarshall(modelPkg, pkgsParser["diagrams"], fset, diagramPkgPath)
-		diagramPackage.IsEditable = editable
-	}
 	diagramPackage.SerializeToStage()
 	FillUpNodeTree(diagramPackage)
 	return diagramPackage, nil
@@ -145,7 +109,7 @@ func (diagramPackage *DiagramPackage) Reload() {
 		diagramPackage.Unmarshall(
 			diagramPackage.ModelPkg,
 			pkgsParser["diagrams"],
-			fset, filepath.Join(diagramPackage.GongModelPath, "../diagrams"))
+			fset, filepath.Join(diagramPackage.GongModelPath, "../diagrams"), "")
 	}
 	diagramPackage.SerializeToStage()
 	FillUpNodeTree(diagramPackage)
@@ -175,13 +139,13 @@ import (
 
 // Marshall translates all elements of a Pkgelt into a go file
 // it recusively call Marshall function into the elements
-func (pkgelt *DiagramPackage) Marshall(pkgPath string) error {
+func (diagramPackage *DiagramPackage) Marshall(pkgPath string) error {
 
 	// sort Classdiagrams
-	sort.Slice(pkgelt.Classdiagrams[:], func(i, j int) bool {
-		return pkgelt.Classdiagrams[i].Name < pkgelt.Classdiagrams[j].Name
+	sort.Slice(diagramPackage.Classdiagrams[:], func(i, j int) bool {
+		return diagramPackage.Classdiagrams[i].Name < diagramPackage.Classdiagrams[j].Name
 	})
-	for _, classdiagram := range pkgelt.Classdiagrams {
+	for _, classdiagram := range diagramPackage.Classdiagrams {
 		// open file
 		file, err := os.Create(filepath.Join(pkgPath, classdiagram.Name) + ".go")
 		defer closeFile(file)
@@ -193,7 +157,7 @@ func (pkgelt *DiagramPackage) Marshall(pkgPath string) error {
 		prelude = strings.ReplaceAll(prelude, "{{ClassdiagramName}}", classdiagram.Name)
 		if len(classdiagram.Classshapes) > 0 {
 			prelude = strings.ReplaceAll(prelude, "{{Imports}}", "\n\t\""+
-				pkgelt.GongModelPath+"\"")
+				diagramPackage.GongModelPath+"\"")
 		} else {
 			prelude = strings.ReplaceAll(prelude, "{{Imports}}", "")
 		}
@@ -209,12 +173,12 @@ func (pkgelt *DiagramPackage) Marshall(pkgPath string) error {
 		}
 	}
 
-	for _, umlsc := range pkgelt.Umlscs {
+	for _, umlsc := range diagramPackage.Umlscs {
 		// open file
 		file, err := os.Create(filepath.Join(pkgPath, umlsc.Name) + ".go")
 		defer closeFile(file)
 
-		prelude := strings.ReplaceAll(preludeRef, "{{Imports}}", strings.ReplaceAll(pkgelt.Name, "diagrams", "models"))
+		prelude := strings.ReplaceAll(preludeRef, "{{Imports}}", strings.ReplaceAll(diagramPackage.Name, "diagrams", "models"))
 		prelude = strings.ReplaceAll(prelude, "docs", "models")
 
 		if err == nil {
@@ -240,10 +204,15 @@ var PkgeltStore PkgeltMap = make(map[string]*DiagramPackage, 0)
 // Unmarshall parse the diagram package to get diagrams
 // diagramPackagePath is "../diagrams" relative to the "models"
 // gongModelPackagePath is the model package path, e.g. "github.com/fullstack-lang/gongxlsx/go/models"
-func (pkgelt *DiagramPackage) Unmarshall(modelPkg *gong_models.ModelPkg, astPkg *ast.Package, fset2 *token.FileSet, diagramPackagePath string) {
+func (diagramPackage *DiagramPackage) Unmarshall(
+	modelPkg *gong_models.ModelPkg,
+	astPkg *ast.Package,
+	fset2 *token.FileSet,
+	diagramPackagePath string,
+	diagramName string) {
 
-	pkgelt.Path = diagramPackagePath
-	pkgelt.GongModelPath = modelPkg.PkgPath
+	diagramPackage.Path = diagramPackagePath
+	diagramPackage.GongModelPath = modelPkg.PkgPath
 
 	ast.Inspect(astPkg, func(n ast.Node) bool {
 		switch x := n.(type) {
@@ -260,19 +229,23 @@ func (pkgelt *DiagramPackage) Unmarshall(modelPkg *gong_models.ModelPkg, astPkg 
 						case "Classdiagram":
 							var classdiagram Classdiagram
 							classdiagram.Name = vs.Names[0].Name
+
+							if classdiagram.Name != diagramName {
+								return false
+							}
 							_ = astPkg
 							// log.Println("nb files ", len(astPkg.Files))
 							astNode := vs.Values[0]
 							classdiagram.Unmarshall(modelPkg, astNode, fset2)
 
-							pkgelt.Classdiagrams = append(pkgelt.Classdiagrams, &classdiagram)
+							diagramPackage.Classdiagrams = append(diagramPackage.Classdiagrams, &classdiagram)
 						case "Umlsc":
 							var umlsc Umlsc
 							umlsc.Name = vs.Names[0].Name
 							astNode := vs.Values[0]
 							umlsc.Unmarshall(modelPkg, astNode, fset2)
 
-							pkgelt.Umlscs = append(pkgelt.Umlscs, &umlsc)
+							diagramPackage.Umlscs = append(diagramPackage.Umlscs, &umlsc)
 						}
 
 					}
@@ -283,17 +256,28 @@ func (pkgelt *DiagramPackage) Unmarshall(modelPkg *gong_models.ModelPkg, astPkg 
 	})
 }
 
+func (diagramPackage *DiagramPackage) UnmarshallOneDiagram(diagramName string) {
+
+	diagramPackage.Unmarshall(
+		diagramPackage.ModelPkg,
+		diagramPackage.ast,
+		diagramPackage.fset,
+		diagramPackage.GongModelPath,
+		diagramName)
+
+}
+
 // serialize the package and its elements to the Stage
 // this is used if one Umlsc is dynamicaly created
-func (pkgelt *DiagramPackage) SerializeToStage() {
+func (diagramPackage *DiagramPackage) SerializeToStage() {
 
-	pkgelt.Stage()
+	diagramPackage.Stage()
 
-	for _, classdiagram := range pkgelt.Classdiagrams {
+	for _, classdiagram := range diagramPackage.Classdiagrams {
 		classdiagram.SerializeToStage()
 	}
 
-	for _, umlsc := range pkgelt.Umlscs {
+	for _, umlsc := range diagramPackage.Umlscs {
 		umlsc.SerializeToStage()
 	}
 

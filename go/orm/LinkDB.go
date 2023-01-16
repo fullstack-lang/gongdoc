@@ -304,8 +304,7 @@ func (backRepoLink *BackRepoLinkStruct) CommitPhaseTwoInstance(backRepo *BackRep
 // BackRepoLink.CheckoutPhaseOne Checkouts all BackRepo instances to the Stage
 //
 // Phase One will result in having instances on the stage aligned with the back repo
-// pointers are not initialized yet (this is for pahse two)
-//
+// pointers are not initialized yet (this is for phase two)
 func (backRepoLink *BackRepoLinkStruct) CheckoutPhaseOne() (Error error) {
 
 	linkDBArray := make([]LinkDB, 0)
