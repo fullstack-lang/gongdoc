@@ -341,7 +341,7 @@ func (classshape *Classshape) SerializeToStage() {
 
 	classshape.Stage()
 
-	classshape.Position.SerializeToStage()
+	classshape.Position.Stage()
 	classshape.Reference.Stage()
 
 	for _, link := range classshape.Links {
@@ -350,5 +350,21 @@ func (classshape *Classshape) SerializeToStage() {
 
 	for _, field := range classshape.Fields {
 		field.SerializeToStage()
+	}
+}
+
+func (classshape *Classshape) SerializeToUnstage() {
+
+	classshape.Unstage()
+
+	classshape.Position.Unstage()
+	classshape.Reference.Unstage()
+
+	for _, link := range classshape.Links {
+		link.SerializeToUnstage()
+	}
+
+	for _, field := range classshape.Fields {
+		field.Unstage()
 	}
 }

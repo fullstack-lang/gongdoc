@@ -172,7 +172,9 @@ in the go code
 		},
 		{
 			Name: `ShortNodeOnModels`,
-			Body: `this is an of a short note
+			Body: `this is an example of a short note
+It uses the DocLink convention for referencing Identifiers
+In this case [Line], [Point] and [Line.Start]
 `,
 			X:      90.000000,
 			Y:      220.000000,

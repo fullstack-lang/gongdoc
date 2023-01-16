@@ -227,3 +227,12 @@ func (link *Link) SerializeToStage() {
 		link.Middlevertice.Stage()
 	}
 }
+
+func (link *Link) SerializeToUnstage() {
+
+	link.Unstage()
+
+	if link.Middlevertice != nil {
+		link.Middlevertice.Unstage()
+	}
+}

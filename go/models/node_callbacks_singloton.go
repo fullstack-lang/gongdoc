@@ -206,10 +206,14 @@ func (nodesCb *NodeCallbacksSingloton) OnAfterUpdateDiagram(
 
 			stagedNode.Classdiagram.Marshall(nodesCb.diagramPackage, filepath.Join(nodesCb.diagramPackage.Path, "../diagrams"))
 
-			Stage.Reset()
-
-			// stage only the selected diagram and its siblings
-			stagedNode.Classdiagram.SerializeToStage()
+			// unstage the non selected diagram and their siblings
+			for diagram := range *GetGongstructInstancesSet[Classdiagram]() {
+				if diagram == stagedNode.Classdiagram {
+					continue
+				}
+				diagram.SerializeToUnstage()
+			}
+			nodesCb.diagramPackage.Unstage()
 
 			filepath := filepath.Join(
 				filepath.Join(nodesCb.diagramPackage.Path,

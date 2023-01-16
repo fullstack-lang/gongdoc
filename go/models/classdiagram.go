@@ -221,20 +221,6 @@ func (classdiagram *Classdiagram) Unmarshall(modelPkg *gong_models.ModelPkg, exp
 	}
 }
 
-// serialize the package and its elements to the Stage
-// this is used if one Umlsc is dynamicaly created
-func (classdiagram *Classdiagram) SerializeToStage() {
-
-	classdiagram.Stage()
-
-	for _, classshape := range classdiagram.Classshapes {
-		classshape.SerializeToStage()
-	}
-	for _, note := range classdiagram.Notes {
-		note.Stage()
-	}
-}
-
 // ModelSpaceToSVGPaperYCoord convert the Y coordinates from the model space
 // to the SVG space
 // in model space, Y coordinates are descending. In SVG, Y coordinates are
@@ -498,4 +484,32 @@ func (classdiagram *Classdiagram) AddClassshape(nodesCb *NodeCallbacksSingloton,
 
 func (classdiagram *Classdiagram) NodeUpdate() {
 
+}
+
+// serialize the package and its elements to the Stage
+// this is used if one Umlsc is dynamicaly created
+func (classdiagram *Classdiagram) SerializeToStage() {
+
+	classdiagram.Stage()
+
+	for _, classshape := range classdiagram.Classshapes {
+		classshape.SerializeToStage()
+	}
+	for _, note := range classdiagram.Notes {
+		note.Stage()
+	}
+}
+
+// serialize the package and its elements to the Stage
+// this is used if one Umlsc is dynamicaly created
+func (classdiagram *Classdiagram) SerializeToUnstage() {
+
+	classdiagram.Stage()
+
+	for _, classshape := range classdiagram.Classshapes {
+		classshape.SerializeToUnstage()
+	}
+	for _, note := range classdiagram.Notes {
+		note.Unstage()
+	}
 }
