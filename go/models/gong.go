@@ -2839,11 +2839,11 @@ func GetFields[Type Gongstruct]() (res []string) {
 	case Classdiagram:
 		res = []string{"Name", "Classshapes", "Notes", "IsInDrawMode"}
 	case Classshape:
-		res = []string{"Name", "Position", "ReferenceName", "Reference", "ShowNbInstances", "NbInstances", "Fields", "Links", "Width", "Heigth", "IsSelected"}
+		res = []string{"Name", "Position", "ReferenceName", "Reference", "Identifier", "ShowNbInstances", "NbInstances", "Fields", "Links", "Width", "Heigth", "IsSelected"}
 	case DiagramPackage:
 		res = []string{"Name", "Path", "GongModelPath", "Classdiagrams", "Umlscs", "IsEditable", "IsReloaded", "AbsolutePathToDiagramPackage"}
 	case Field:
-		res = []string{"Name", "Fieldname", "FieldTypeAsString", "Structname", "Fieldtypename"}
+		res = []string{"Name", "Fieldname", "Identifier", "FieldTypeAsString", "Structname", "Fieldtypename"}
 	case Link:
 		res = []string{"Name", "Fieldname", "Structname", "Fieldtypename", "TargetMultiplicity", "SourceMultiplicity", "Middlevertice"}
 	case Node:
@@ -2910,6 +2910,8 @@ func GetFieldStringValue[Type Gongstruct](instance Type, fieldName string) (res 
 			if any(instance).(Classshape).Reference != nil {
 				res = any(instance).(Classshape).Reference.Name
 			}
+		case "Identifier":
+			res = any(instance).(Classshape).Identifier
 		case "ShowNbInstances":
 			res = fmt.Sprintf("%t", any(instance).(Classshape).ShowNbInstances)
 		case "NbInstances":
@@ -2972,6 +2974,8 @@ func GetFieldStringValue[Type Gongstruct](instance Type, fieldName string) (res 
 			res = any(instance).(Field).Name
 		case "Fieldname":
 			res = any(instance).(Field).Fieldname
+		case "Identifier":
+			res = any(instance).(Field).Identifier
 		case "FieldTypeAsString":
 			res = any(instance).(Field).FieldTypeAsString
 		case "Structname":

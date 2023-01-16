@@ -4,6 +4,7 @@ import (
 	"io/ioutil"
 	"log"
 	"os"
+	"path"
 	"path/filepath"
 	"strings"
 
@@ -35,6 +36,8 @@ func (nodesCb *NodeCallbacksSingloton) GetSelectedClassdiagram() (classdiagram *
 
 	return
 }
+
+const RefPrefixReferencedPackage = "Ref_"
 
 // OnAfterUpdate is called each time the end user interacts
 // with any node. The front commit the state of the front node
@@ -200,8 +203,37 @@ func (nodesCb *NodeCallbacksSingloton) OnAfterUpdateDiagram(
 			// checkout in order to get the latest version of the diagram before modifying it updated
 			// by the front
 			Stage.Checkout()
-			stagedNode.IsSaved = false
+
 			stagedNode.Classdiagram.Marshall(nodesCb.diagramPackage, filepath.Join(nodesCb.diagramPackage.Path, "../diagrams"))
+
+			Stage.Reset()
+
+			stagedNode.Classdiagram.SerializeToStage()
+
+			// // prune all elements from the stage that not within the selected diagram
+			// for diagram := range *GetGongstructInstancesSet[Classdiagram]() {
+			// 	if diagram == stagedNode.Classdiagram {
+			// 		continue
+			// 	}
+			// 	diagram.SerializeToStage()
+			// }
+
+			filepath := filepath.Join(
+				filepath.Join(nodesCb.diagramPackage.Path,
+					"../diagrams_tmp"),
+				stagedNode.Classdiagram.Name) + ".go"
+			file, err := os.Create(filepath)
+			if err != nil {
+				log.Fatal(err.Error())
+			}
+			defer file.Close()
+
+			Stage.MetaPackageImportAlias = "ref_" + path.Base(nodesCb.diagramPackage.GongModelPath)
+			Stage.MetaPackageImportPath = `"` + nodesCb.diagramPackage.GongModelPath + `"`
+			Stage.Marshall(file, "github.com/fullstack-lang/gongdoc/go/models", "diagrams")
+
+			Stage.Checkout()
+			stagedNode.IsSaved = false
 			stage.Commit()
 		case STATE_DIAGRAM:
 			// stagedNode.Umlsc = stagedNode.Umlsc.Saved
@@ -234,7 +266,7 @@ func (nodesCb *NodeCallbacksSingloton) OnAfterUpdateStruct(
 		stage.Checkout()
 
 		classDiagram := nodesCb.GetSelectedClassdiagram()
-		classDiagram.AddClassshape(frontNode.Name, REFERENCE_GONG_STRUCT)
+		classDiagram.AddClassshape(nodesCb, frontNode.Name, REFERENCE_GONG_STRUCT)
 
 		updateNodesStates(stage, nodesCb)
 	}
@@ -498,7 +530,7 @@ func (nodesCb *NodeCallbacksSingloton) OnAfterUpdateEnum(
 		stage.Checkout()
 
 		classDiagram := nodesCb.GetSelectedClassdiagram()
-		classDiagram.AddClassshape(frontNode.Name, REFERENCE_GONG_ENUM)
+		classDiagram.AddClassshape(nodesCb, frontNode.Name, REFERENCE_GONG_ENUM)
 		updateNodesStates(stage, nodesCb)
 	}
 }

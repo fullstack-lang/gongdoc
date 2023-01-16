@@ -8,6 +8,7 @@ import (
 	"log"
 	"math/rand"
 	"os"
+	"path"
 	"path/filepath"
 	"sort"
 	"strings"
@@ -457,11 +458,12 @@ func (classdiagram *Classdiagram) RemoveClassshape(classshapeName string) {
 	// log.Println("RemoveClassshape, after commit, nb ", Stage.BackRepo.GetLastCommitFromBackNb())
 }
 
-func (classdiagram *Classdiagram) AddClassshape(classshapeName string, referenceType ReferenceType) {
+func (classdiagram *Classdiagram) AddClassshape(nodesCb *NodeCallbacksSingloton, classshapeName string, referenceType ReferenceType) {
 
 	var classshape Classshape
 	classshape.Name = classdiagram.Name + "-" + classshapeName
 	classshape.ReferenceName = classshapeName
+	classshape.Identifier = RefPrefixReferencedPackage + path.Base(nodesCb.diagramPackage.GongModelPath) + "." + classshapeName
 	classshape.Width = 240
 	classshape.Heigth = 63
 
