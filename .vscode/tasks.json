@@ -243,5 +243,19 @@
 			"group": "build",
 			"command": "go get -d github.com/fullstack-lang/gong@HEAD"
 		},
+		{
+			"label": "01 - compile for debug, go build -gcflags -N -l",
+			"type": "shell",
+			"options": {
+				"cwd": "go/cmd/gongdoc"
+			},
+			"command": "go",
+			"args": [
+				"build",
+				"-gcflags", 
+				"-N -l"
+			],
+			"group": "build"
+		},
 	]
 }

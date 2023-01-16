@@ -206,14 +206,9 @@ func (nodesCb *NodeCallbacksSingloton) OnAfterUpdateDiagram(
 
 			stagedNode.Classdiagram.Marshall(nodesCb.diagramPackage, filepath.Join(nodesCb.diagramPackage.Path, "../diagrams"))
 
-			// unstage the non selected diagram and their siblings
-			for diagram := range *GetGongstructInstancesSet[Classdiagram]() {
-				if diagram == stagedNode.Classdiagram {
-					continue
-				}
-				diagram.SerializeToUnstage()
-			}
-			nodesCb.diagramPackage.Unstage()
+			Stage.Reset()
+
+			stagedNode.Classdiagram.SerializeToStage()
 
 			filepath := filepath.Join(
 				filepath.Join(nodesCb.diagramPackage.Path,
@@ -230,8 +225,13 @@ func (nodesCb *NodeCallbacksSingloton) OnAfterUpdateDiagram(
 			Stage.Marshall(file, "github.com/fullstack-lang/gongdoc/go/models", "diagrams")
 
 			// restore the stage
+			Stage.Reset()
+
 			Stage.Checkout()
 			stagedNode.IsSaved = false
+
+			stage = &Stage
+			_ = stage
 			stage.Commit()
 		case STATE_DIAGRAM:
 			// stagedNode.Umlsc = stagedNode.Umlsc.Saved
