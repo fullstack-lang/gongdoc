@@ -13,8 +13,9 @@ import (
 	gong_models "github.com/fullstack-lang/gong/go/models"
 )
 
+// Load fill up the stage with the diagrams elements
 func Load(pkgPath string, modelPkg *gong_models.ModelPkg, editable bool) (diagramPackage *DiagramPackage, err error) {
-	diagramPackage = (&DiagramPackage{})
+	diagramPackage = (&DiagramPackage{}).Stage()
 	diagramPackage.IsEditable = editable
 	diagramPackage.ModelPkg = modelPkg
 	diagramPackage.Name = modelPkg.Name + "_diagrams"
@@ -53,11 +54,11 @@ func Load(pkgPath string, modelPkg *gong_models.ModelPkg, editable bool) (diagra
 	if errParser != nil {
 		log.Panic("Unable to parser ")
 	}
-	if len(pkgsParser) != 1 {
-		log.Panic("Unable to parser, wrong number of parsers ", len(pkgsParser))
-	}
 	diagramPackageAst, ok := pkgsParser["diagrams"]
 	if !ok {
+		diagramPackage.IsEditable = editable
+		FillUpNodeTree(diagramPackage)
+		Stage.Commit()
 		return diagramPackage, nil
 	}
 	diagramPackage.ast = diagramPackageAst
@@ -139,7 +140,6 @@ func Load(pkgPath string, modelPkg *gong_models.ModelPkg, editable bool) (diagra
 	_ = stage
 
 	// load all diagram files
-	diagramPackage.Stage()
 	for fileName := range diagramPackageAst.Files {
 		diagramName := strings.TrimSuffix(filepath.Base(fileName), ".go")
 		diagramPackage.UnmarshallOneDiagram(diagramName)
