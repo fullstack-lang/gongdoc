@@ -82,7 +82,11 @@ func updateNodesStates(stage *StageStruct, nodesCb *NodeCallbacksSingloton) {
 		for _, field := range classshape.Fields {
 			nodeId := ref_GongStruct.Name + "." + field.Fieldname
 			// node, ok := map_FieldId_Node[nodeId]
-			node, _ := nodesCb.map_Identifier_Node[nodeId]
+			node, ok := nodesCb.map_Identifier_Node[nodeId]
+
+			if !ok {
+				log.Fatalln(nodeId, "unknown node")
+			}
 
 			node.IsChecked = true
 			node.IsCheckboxDisabled = !classdiagram.IsInDrawMode
@@ -90,7 +94,11 @@ func updateNodesStates(stage *StageStruct, nodesCb *NodeCallbacksSingloton) {
 		}
 		for _, link := range classshape.Links {
 			nodeId := ref_GongStruct.Name + "." + link.Fieldname
-			node, _ := nodesCb.map_Identifier_Node[nodeId]
+			node, ok := nodesCb.map_Identifier_Node[nodeId]
+
+			if !ok {
+				log.Fatalln(nodeId, "unknown node")
+			}
 
 			node.IsChecked = true
 			node.IsCheckboxDisabled = !classdiagram.IsInDrawMode

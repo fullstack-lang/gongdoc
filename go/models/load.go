@@ -68,6 +68,10 @@ func LoadDiagramPackage(pkgPath string, modelPkg *gong_models.ModelPkg, editable
 	//
 	// check wether the file is in the legacy format
 	// convert it to the new format if it is the case
+	// if one legacy format is found, exit
+
+	var oneLegacyFormatFound bool
+
 	for fileName := range diagramPackageAst.Files {
 		diagramName := strings.TrimSuffix(filepath.Base(fileName), ".go")
 		diagramPackage.Files = append(diagramPackage.Files, diagramName)
@@ -102,6 +106,8 @@ func LoadDiagramPackage(pkgPath string, modelPkg *gong_models.ModelPkg, editable
 		if !isGenericFormat {
 			log.Println("File", diagramName, "is in the legacy format")
 
+			oneLegacyFormatFound = true
+
 			// checkout in order to get the latest version of the diagram before
 			// modifying it updated by the front
 			stage := Stage
@@ -135,7 +141,13 @@ func LoadDiagramPackage(pkgPath string, modelPkg *gong_models.ModelPkg, editable
 		}
 
 		// now the file is in the generic format. It can be load
-	} // End of TO BE REMOVED AFTER TRANSITION
+	}
+
+	if oneLegacyFormatFound {
+		log.Fatalln("Found at least one legacy format. Restart the application")
+	}
+
+	// End of TO BE REMOVED AFTER TRANSITION
 
 	stage := Stage
 	_ = stage
