@@ -19,10 +19,10 @@ var DiagramEnums uml.Classdiagram = uml.Classdiagram{
 			Heigth: 93.000000,
 			Fields: []*uml.Field{
 				{
-					Field: models.DOTTED,
+					Field: models.CONTINUOUS,
 				},
 				{
-					Field: models.CONTINUOUS,
+					Field: models.DOTTED,
 				},
 			},
 		},

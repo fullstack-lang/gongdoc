@@ -36,7 +36,7 @@ func (nodesCb *NodeCallbacksSingloton) GetSelectedClassdiagram() (classdiagram *
 	return
 }
 
-const RefPrefixReferencedPackage = "Ref_"
+const RefPrefixReferencedPackage = "ref_"
 
 // OnAfterUpdate is called each time the end user interacts
 // with any node. The front commit the state of the front node
@@ -344,6 +344,8 @@ func (nodesCb *NodeCallbacksSingloton) OnAfterUpdateStructField(
 			var field Field
 			field.Name = stagedNode.Name
 			field.Fieldname = stagedNode.Name
+			field.Identifier = RefPrefixReferencedPackage +
+				filepath.Base(nodesCb.diagramPackage.GongModelPath) + "." + stagedNode.Name
 
 			switch realField := stagedNode.Gongfield.(type) {
 			case *gong_models.GongBasicField:
@@ -438,6 +440,9 @@ func (nodesCb *NodeCallbacksSingloton) OnAfterUpdateStructField(
 			link.SourceMultiplicity = sourceMultiplicity
 			link.TargetMultiplicity = targetMultiplicity
 			link.Fieldname = stagedNode.Name
+			link.Identifier = RefPrefixReferencedPackage +
+				filepath.Base(nodesCb.diagramPackage.GongModelPath) + "." + stagedNode.Name
+
 			link.Structname = gongStruct.Name
 			link.Fieldtypename = targetStructName
 

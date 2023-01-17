@@ -18,7 +18,7 @@ import (
 	"github.com/fullstack-lang/gongdoc/go/walk"
 )
 
-const LegacyDiagramUmarshalling = true
+const LegacyDiagramUmarshalling = false
 
 // DiagramPackage stores all diagrams related to a gong package
 // swagger:model DiagramPackage
