@@ -1,6 +1,7 @@
 package models
 
 import (
+	"go/ast"
 	"go/parser"
 	"go/token"
 	"log"
@@ -16,6 +17,7 @@ func Load(pkgPath string, modelPkg *gong_models.ModelPkg, editable bool) (diagra
 	diagramPackage = (&DiagramPackage{})
 	diagramPackage.IsEditable = editable
 	diagramPackage.ModelPkg = modelPkg
+	diagramPackage.Name = modelPkg.Name + "_diagrams"
 
 	// parse the diagram package
 	diagramPkgPath := filepath.Join(pkgPath, "../diagrams")
@@ -61,14 +63,90 @@ func Load(pkgPath string, modelPkg *gong_models.ModelPkg, editable bool) (diagra
 	diagramPackage.ast = diagramPackageAst
 	diagramPackage.fset = fset
 
+	// TO BE REMOVED AFTER THE TRANSITION PHASE
+	//
+	// check wether the file is in the legacy format
+	// convert it to the new format if it is the case
 	for fileName := range diagramPackageAst.Files {
-		diagramPackage.Files = append(diagramPackage.Files, strings.TrimSuffix(filepath.Base(fileName), ".go"))
+		diagramName := strings.TrimSuffix(filepath.Base(fileName), ".go")
+		diagramPackage.Files = append(diagramPackage.Files, diagramName)
+
+		pathToDiagramFile, err := filepath.Abs(fileName)
+		if err != nil {
+			log.Fatalln("Path does not exist ", pathToDiagramFile)
+		}
+
+		fset := token.NewFileSet()
+		startParser := time.Now()
+		inFile, errParser := parser.ParseFile(fset, pathToDiagramFile, nil, parser.ParseComments)
+		log.Printf("Parser took %s", time.Since(startParser))
+		if errParser != nil {
+			log.Fatalln("Unable to parse ", pathToDiagramFile, errParser.Error())
+		}
+
+		var isGenericFormat bool
+		for _, decl := range inFile.Decls {
+			switch decl := decl.(type) {
+			case *ast.FuncDecl:
+				funcDecl := decl
+				if name := funcDecl.Name; name != nil {
+					isOfInterest := strings.Contains(funcDecl.Name.Name, "Injection")
+					if !isOfInterest {
+						continue
+					}
+					isGenericFormat = true
+				}
+			}
+		}
+		if !isGenericFormat {
+			log.Println("File", diagramName, "is in the legacy format")
+
+			// checkout in order to get the latest version of the diagram before
+			// modifying it updated by the front
+			stage := Stage
+			_ = stage
+			Stage.Checkout()
+			Stage.Unstage() // clean the stage
+
+			// load the file to the stage
+			diagramPackage.Unmarshall(
+				diagramPackage.ModelPkg,
+				diagramPackage.ast,
+				diagramPackage.fset,
+				diagramPackage.GongModelPath,
+				diagramName)
+			diagramPackage.SerializeToStage()
+
+			// marshall the stage to the new format.
+			file, err := os.Create(pathToDiagramFile)
+			if err != nil {
+				log.Fatal("Cannot open diagram file" + err.Error())
+			}
+			defer file.Close()
+			Stage.Marshall(file, "github.com/fullstack-lang/gongdoc/go/models", "diagrams")
+
+			// restore the original stage
+			Stage.Unstage()
+			Stage.Checkout()
+		} else {
+			log.Println("File", diagramName, "is in the generic format")
+		}
+
+		// now the file is in the generic format. It can be load
+	} // End of TO BE REMOVED AFTER TRANSITION
+
+	stage := Stage
+	_ = stage
+
+	// load all diagram files
+	diagramPackage.Stage()
+	for fileName := range diagramPackageAst.Files {
+		diagramName := strings.TrimSuffix(filepath.Base(fileName), ".go")
+		diagramPackage.UnmarshallOneDiagram(diagramName)
 	}
 
-	// diagramPackage.Unmarshall(modelPkg, pkgsParser["diagrams"], fset, diagramPkgPath)
 	diagramPackage.IsEditable = editable
-
-	diagramPackage.SerializeToStage()
 	FillUpNodeTree(diagramPackage)
+	Stage.Commit()
 	return diagramPackage, nil
 }

@@ -11,8 +11,11 @@ func FillUpDiagramNodeTree(diagramPackage *DiagramPackage, onNodeCallbackStruct 
 	classdiagramsRootNode.HasAddChildButton = diagramPackage.IsEditable
 	gongdocTree.RootNodes = append(gongdocTree.RootNodes, classdiagramsRootNode)
 
-	for _, file := range diagramPackage.Files {
-		node := (&Node{Name: file}).Stage()
+	// add one node per class diagram
+	for classdiagram := range *GetGongstructInstancesSet[Classdiagram]() {
+		node := (&Node{Name: classdiagram.Name}).Stage()
+		node.Classdiagram = classdiagram
+		node.impl = classdiagram
 		node.Type = CLASS_DIAGRAM
 		node.HasCheckboxButton = true
 		node.HasDeleteButton = true
