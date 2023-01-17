@@ -142,7 +142,7 @@
             ]
         },
         {
-            "name": "go server on dummy -setUpRandomNumberOfInstances",
+            "name": "go server on dummy",
             "type": "go",
             "request": "launch",
             "mode": "debug",
@@ -150,7 +150,6 @@
             "args": [
                 "-pkgPath",
                 "../../tests/dummy/go/models",
-                "-setUpRandomNumberOfInstances"
             ]
         },
         {
