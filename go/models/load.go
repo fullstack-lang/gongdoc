@@ -13,8 +13,8 @@ import (
 	gong_models "github.com/fullstack-lang/gong/go/models"
 )
 
-// Load fill up the stage with the diagrams elements
-func Load(pkgPath string, modelPkg *gong_models.ModelPkg, editable bool) (diagramPackage *DiagramPackage, err error) {
+// LoadDiagramPackage fill up the stage with the diagrams elements
+func LoadDiagramPackage(pkgPath string, modelPkg *gong_models.ModelPkg, editable bool) (diagramPackage *DiagramPackage, err error) {
 	diagramPackage = (&DiagramPackage{}).Stage()
 	diagramPackage.IsEditable = editable
 	diagramPackage.ModelPkg = modelPkg

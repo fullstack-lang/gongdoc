@@ -14,21 +14,22 @@ import (
 func main() {
 
 	// paramters
-	var embeddedDiagrams *bool
-	var map_StructName_InstanceNb *map[string]int
+	var embeddedDiagrams bool
 
+	map_StructName_InstanceNb := make(map[string]int)
 	r := gin.Default()
 	r.Use(cors.Default())
 	var goSourceDirectories embed.FS
 	goSourceDirectories = geometry.GoDir
 
 	stackName := "geometry"
+	embeddedDiagrams = true
 
 	gongdoc_load.Load(
 		stackName,
 		goSourceDirectories,
 		r,
-		*embeddedDiagrams,
-		map_StructName_InstanceNb)
+		embeddedDiagrams,
+		&map_StructName_InstanceNb)
 
 }

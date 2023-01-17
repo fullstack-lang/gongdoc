@@ -144,7 +144,7 @@ func main() {
 		}
 	}
 
-	diagramPackage, _ := gongdoc_models.Load(*pkgPath, modelPkg, *editable)
+	diagramPackage, _ := gongdoc_models.LoadDiagramPackage(*pkgPath, modelPkg, *editable)
 
 	if *svg {
 		for _, classDiagram := range diagramPackage.Classdiagrams {

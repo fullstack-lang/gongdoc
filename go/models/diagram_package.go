@@ -60,20 +60,37 @@ type DiagramPackage struct {
 	AbsolutePathToDiagramPackage string
 }
 
-func LoadEmbedded(fs embed.FS, modelPkg *gong_models.ModelPkg) (diagramPackage *DiagramPackage, err error) {
-	diagramPackage = (&DiagramPackage{})
+func LoadEmbeddedDiagramPackage(fs embed.FS, modelPkg *gong_models.ModelPkg) (diagramPackage *DiagramPackage, err error) {
+
+	diagramPackage = (&DiagramPackage{}).Stage()
 	diagramPackage.IsEditable = false
 	diagramPackage.ModelPkg = modelPkg
+
+	diagramPkgPath := filepath.Join(modelPkg.PkgPath, "../diagrams")
+	diagramPackage.AbsolutePathToDiagramPackage, _ = filepath.Abs(diagramPkgPath)
+	diagramPackage.Path = diagramPkgPath
+	diagramPackage.GongModelPath = modelPkg.PkgPath
+
 	fset := new(token.FileSet)
 	pkgsParser := gong_models.ParseEmbedModel(fs, "go/diagrams")
 	if len(pkgsParser) != 1 {
 		log.Panic("Unable to parser, wrong number of parsers ", len(pkgsParser))
 	}
-	if pkgParser, ok := pkgsParser["diagrams"]; ok {
-		diagramPackage.Unmarshall(modelPkg, pkgParser, fset, "go/diagrams", "")
+	diagramPackageAst, ok := pkgsParser["diagrams"]
+	if !ok {
+		FillUpNodeTree(diagramPackage)
+		Stage.Commit()
+		return diagramPackage, nil
 	}
 
-	diagramPackage.SerializeToStage()
+	diagramPackage.ast = diagramPackageAst
+	diagramPackage.fset = fset
+	// load all diagram files
+	for fileName := range diagramPackageAst.Files {
+		diagramName := strings.TrimSuffix(filepath.Base(fileName), ".go")
+		diagramPackage.UnmarshallOneDiagram(diagramName)
+	}
+
 	FillUpNodeTree(diagramPackage)
 	return diagramPackage, nil
 }
