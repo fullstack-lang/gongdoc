@@ -127,6 +127,7 @@ func LoadDiagramPackage(pkgPath string, modelPkg *gong_models.ModelPkg, editable
 			Stage.Marshall(file, "github.com/fullstack-lang/gongdoc/go/models", "diagrams")
 
 			// restore the original stage
+			diagramPackage.Classdiagrams = make([]*Classdiagram, 0)
 			Stage.Unstage()
 			Stage.Checkout()
 		} else {
