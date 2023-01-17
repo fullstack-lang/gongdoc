@@ -4,7 +4,6 @@ import (
 	"io/ioutil"
 	"log"
 	"os"
-	"path"
 	"path/filepath"
 	"strings"
 
@@ -92,7 +91,6 @@ func (nodesCb *NodeCallbacksSingloton) OnAfterUpdateDiagram(
 			formerlyOpenedClassdiagram.SerializeToUnstage()
 			nodesCb.diagramPackage.Classdiagrams = make([]*Classdiagram, 0)
 		}
-
 		nodesCb.diagramPackage.UnmarshallOneDiagram(stagedNode.Name)
 		stagedNode.Classdiagram = nodesCb.diagramPackage.Classdiagrams[0]
 		nodesCb.selectedClassdiagram = nodesCb.diagramPackage.Classdiagrams[0]
@@ -234,9 +232,6 @@ func (nodesCb *NodeCallbacksSingloton) OnAfterUpdateDiagram(
 				log.Fatal("Cannot open diagram file" + err.Error())
 			}
 			defer file.Close()
-
-			Stage.MetaPackageImportAlias = "ref_" + path.Base(nodesCb.diagramPackage.GongModelPath)
-			Stage.MetaPackageImportPath = `"` + nodesCb.diagramPackage.GongModelPath + `"`
 			Stage.Marshall(file, "github.com/fullstack-lang/gongdoc/go/models", "diagrams")
 
 			// restore the original stage

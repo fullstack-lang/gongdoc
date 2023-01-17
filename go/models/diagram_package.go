@@ -268,9 +268,26 @@ func (diagramPackage *DiagramPackage) UnmarshallOneDiagram(diagramName string) {
 			diagramPackage.GongModelPath,
 			diagramName)
 	} else {
+		stage := Stage
+		_ = stage
 		diagramFileName :=
-			filepath.Join(diagramPackage.AbsolutePathToDiagramPackage, "../diagrams_tmp", diagramName, ".go")
-		ParseAstFile(diagramFileName)
+			filepath.Join(diagramPackage.AbsolutePathToDiagramPackage, "../diagrams_tmp", diagramName) + ".go"
+		if err := ParseAstFile(diagramFileName); err != nil {
+			log.Fatalln("Unable to parse", diagramFileName)
+		} else {
+			log.Println("Parsed", diagramFileName)
+
+			// there should be one diagram on the stage and it has to be
+			// appended to the diagram package
+			classdiagram, ok := (*GetGongstructInstancesMap[Classdiagram]())[diagramName]
+
+			if !ok {
+				log.Fatalln("Unable to find", diagramName, "in", diagramFileName)
+			}
+
+			diagramPackage.Classdiagrams = append(diagramPackage.Classdiagrams,
+				classdiagram)
+		}
 	}
 }
 

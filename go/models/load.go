@@ -20,6 +20,14 @@ func Load(pkgPath string, modelPkg *gong_models.ModelPkg, editable bool) (diagra
 	// parse the diagram package
 	diagramPkgPath := filepath.Join(pkgPath, "../diagrams")
 	diagramPackage.AbsolutePathToDiagramPackage, _ = filepath.Abs(diagramPkgPath)
+	diagramPackage.Path = diagramPkgPath
+	diagramPackage.GongModelPath = modelPkg.PkgPath
+
+	// diagram package, when marshalled, will reference identifiers in the
+	// model package. Both of the variable need to be set up for the
+	// generic marshalling/unmarshalling to work
+	Stage.MetaPackageImportAlias = "ref_" + filepath.Base(diagramPackage.GongModelPath)
+	Stage.MetaPackageImportPath = `"` + diagramPackage.GongModelPath + `"`
 
 	// if diagrams directory does not exist create it
 	_, errd := os.Stat(diagramPkgPath)
