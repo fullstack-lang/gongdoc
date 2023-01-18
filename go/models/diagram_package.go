@@ -228,7 +228,7 @@ func (diagramPackage *DiagramPackage) Unmarshall(
 	astPkg *ast.Package,
 	fset2 *token.FileSet,
 	diagramPackagePath string,
-	diagramName string) {
+	diagramName string) (classdiagram *Classdiagram) {
 
 	diagramPackage.Path = diagramPackagePath
 	diagramPackage.GongModelPath = modelPkg.PkgPath
@@ -246,18 +246,17 @@ func (diagramPackage *DiagramPackage) Unmarshall(
 					case *ast.SelectorExpr:
 						switch se.Sel.Name {
 						case "Classdiagram":
-							var classdiagram Classdiagram
-							classdiagram.Name = vs.Names[0].Name
-
-							if classdiagram.Name != diagramName {
+							if vs.Names[0].Name != diagramName {
 								return false
 							}
+
+							classdiagram.Name = vs.Names[0].Name
 							_ = astPkg
 							// log.Println("nb files ", len(astPkg.Files))
 							astNode := vs.Values[0]
 							classdiagram.Unmarshall(modelPkg, astNode, fset2)
 
-							diagramPackage.Classdiagrams = append(diagramPackage.Classdiagrams, &classdiagram)
+							diagramPackage.Classdiagrams = append(diagramPackage.Classdiagrams, classdiagram)
 						case "Umlsc":
 							var umlsc Umlsc
 							umlsc.Name = vs.Names[0].Name
@@ -273,9 +272,10 @@ func (diagramPackage *DiagramPackage) Unmarshall(
 		}
 		return true
 	})
+	return
 }
 
-func (diagramPackage *DiagramPackage) UnmarshallOneDiagram(diagramName string) {
+func (diagramPackage *DiagramPackage) UnmarshallOneDiagram(diagramName string) (classdiagram *Classdiagram) {
 
 	stage := Stage
 	_ = stage
@@ -288,16 +288,18 @@ func (diagramPackage *DiagramPackage) UnmarshallOneDiagram(diagramName string) {
 
 		// there should be one diagram on the stage and it has to be
 		// appended to the diagram package
-		classdiagram, ok := (*GetGongstructInstancesMap[Classdiagram]())[diagramName]
+		var ok bool
+		classdiagram, ok = (*GetGongstructInstancesMap[Classdiagram]())[diagramName]
 
 		if !ok {
-			log.Fatalln("Unable to find", diagramName, "in", diagramFileName)
+			log.Println("Unable to find", diagramName, "in", diagramFileName, ". It might be a docs.go file")
+			return
 		}
 
 		diagramPackage.Classdiagrams = append(diagramPackage.Classdiagrams,
 			classdiagram)
 	}
-
+	return
 }
 
 // serialize the package and its elements to the Stage

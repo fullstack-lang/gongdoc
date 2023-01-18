@@ -106,8 +106,6 @@ func LoadDiagramPackage(pkgPath string, modelPkg *gong_models.ModelPkg, editable
 		if !isGenericFormat {
 			log.Println("File", diagramName, "is in the legacy format")
 
-			oneLegacyFormatFound = true
-
 			// checkout in order to get the latest version of the diagram before
 			// modifying it updated by the front
 			stage := Stage
@@ -116,12 +114,21 @@ func LoadDiagramPackage(pkgPath string, modelPkg *gong_models.ModelPkg, editable
 			Stage.Unstage() // clean the stage
 
 			// load the file to the stage
-			diagramPackage.Unmarshall(
+			classdiagram := diagramPackage.Unmarshall(
 				diagramPackage.ModelPkg,
 				diagramPackage.ast,
 				diagramPackage.fset,
 				diagramPackage.GongModelPath,
 				diagramName)
+
+			// some files, loke docs.go, are not in generic format and
+			// and are of no interest
+			if classdiagram == nil {
+				log.Println("File", diagramName, "is neither in the generic format or the generic format")
+				continue
+			}
+
+			oneLegacyFormatFound = true
 			diagramPackage.SerializeToStage()
 
 			// marshall the stage to the new format.
