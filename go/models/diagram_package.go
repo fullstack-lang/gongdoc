@@ -250,6 +250,7 @@ func (diagramPackage *DiagramPackage) Unmarshall(
 								return false
 							}
 
+							classdiagram = new(Classdiagram)
 							classdiagram.Name = vs.Names[0].Name
 							_ = astPkg
 							// log.Println("nb files ", len(astPkg.Files))
