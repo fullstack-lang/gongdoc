@@ -4,7 +4,7 @@ go 1.19
 
 require (
 	github.com/frankban/quicktest v1.13.1 // indirect
-	github.com/fullstack-lang/gong v0.0.0-20230113142403-16f40ea2992b
+	github.com/fullstack-lang/gong v0.0.0-20230116232930-94d32856af39
 	github.com/gin-contrib/cors v1.4.0
 	github.com/gin-contrib/static v0.0.1
 	github.com/gin-gonic/gin v1.8.1

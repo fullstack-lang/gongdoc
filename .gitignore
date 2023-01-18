@@ -5,3 +5,4 @@ go/controllers/gongdocapi.yml
 go/.DS_Store
 .DS_Store
 go/cmd/gongdoc/__debug_bin.exe
+go/tests/geometry/go/cmd/geometry/__debug_bin.exe

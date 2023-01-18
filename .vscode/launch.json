@@ -56,6 +56,41 @@
             ]
         },
         {
+            "name": "go server on geometry",
+            "type": "go",
+            "request": "launch",
+            "mode": "debug",
+            "program": "${workspaceFolder}/go/cmd/gongdoc",
+            "args": [
+                "-pkgPath",
+                "../../tests/geometry/go/models",
+            ]
+        },
+        {
+            "name": "go server on gongdoc",
+            "type": "go",
+            "request": "launch",
+            "mode": "debug",
+            "program": "${workspaceFolder}/go/cmd/gongdoc",
+            "args": [
+                "-pkgPath",
+                "../../models",
+            ]
+        },
+        {
+            "name": "go server on geometry -marshallOnCommit=stage_out",
+            "type": "go",
+            "request": "launch",
+            "mode": "debug",
+            "program": "${workspaceFolder}/go/cmd/gongdoc",
+            "cwd": "${workspaceFolder}/go/tests/geometry/go/diagrams",
+            "args": [
+                "-pkgPath",
+                "../models",
+                "-marshallOnCommit=stage_out"
+            ]
+        },
+        {
             "name": "go server on tdb -setUpRandomNumberOfInstances",
             "type": "go",
             "request": "launch",
@@ -94,6 +129,27 @@
             ]
         },
         {
+            "name": "go server on geometry -editable=false",
+            "type": "go",
+            "request": "launch",
+            "mode": "debug",
+            "program": "${workspaceFolder}/go/cmd/gongdoc",
+            "args": [
+                "-pkgPath",
+                "../../tests/geometry/go/models",
+                "-editable=false"
+            ]
+        },
+        {
+            "name": "go load geometry",
+            "type": "go",
+            "request": "launch",
+            "mode": "debug",
+            "program": "${workspaceFolder}/go/tests/geometry/go/cmd/geometry",
+            "args": [
+            ]
+        },
+        {
             "name": "go server on dummy -setUpRandomNumberOfInstances -editable=false",
             "type": "go",
             "request": "launch",
@@ -107,7 +163,7 @@
             ]
         },
         {
-            "name": "go server on dummy -setUpRandomNumberOfInstances",
+            "name": "go server on dummy",
             "type": "go",
             "request": "launch",
             "mode": "debug",
@@ -115,7 +171,6 @@
             "args": [
                 "-pkgPath",
                 "../../tests/dummy/go/models",
-                "-setUpRandomNumberOfInstances"
             ]
         },
         {
