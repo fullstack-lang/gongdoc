@@ -2,24 +2,17 @@ package models
 
 import (
 	"fmt"
-	"go/ast"
-	"go/token"
 	"image/color"
 	"log"
 	"math/rand"
-	"os"
 	"path"
 	"path/filepath"
-	"sort"
-	"strings"
 
 	"github.com/tdewolff/canvas"
 	"github.com/tdewolff/canvas/renderers/rasterizer"
 	"github.com/tdewolff/canvas/renderers/svg"
 
-	gong_models "github.com/fullstack-lang/gong/go/models"
 	"github.com/fullstack-lang/gongdoc/go/static"
-	"github.com/fullstack-lang/gongdoc/go/walk"
 )
 
 // Classdiagram diagram struct store a class diagram
@@ -73,153 +66,11 @@ func (classdiagram *Classdiagram) Extent() (x, y, maxClassshapeHeigth float64) {
 	return
 }
 
-// MarshallAsVariable transform the class diagram into a var
-func (classdiagram *Classdiagram) MarshallAsVariable(file *os.File) error {
-
-	fmt.Fprintf(file, "var %s uml.Classdiagram = uml.Classdiagram{\n", classdiagram.Name)
-
-	fmt.Fprintf(file, "\tClassshapes: []*uml.Classshape{\n")
-
-	if len(classdiagram.Classshapes) > 0 {
-		// sort Classshapes
-		sort.Slice(classdiagram.Classshapes[:], func(i, j int) bool {
-			return classdiagram.Classshapes[i].ReferenceName < classdiagram.Classshapes[j].ReferenceName
-		})
-		for _, classshape := range classdiagram.Classshapes {
-			classshape.Marshall(file, 2)
-			fmt.Fprintf(file, ",\n")
-		}
-	}
-	fmt.Fprintf(file, "\t},\n")
-
-	fmt.Fprintf(file, "\tNotes: []*uml."+GetGongstructName[NoteShape]()+"{\n")
-
-	if len(classdiagram.Notes) > 0 {
-		// sort Notes
-		sort.Slice(classdiagram.Notes[:], func(i, j int) bool {
-			return classdiagram.Notes[i].Body < classdiagram.Notes[j].Body
-		})
-		for _, note := range classdiagram.Notes {
-			note.Marshall(file, 2)
-			fmt.Fprintf(file, ",\n")
-		}
-	}
-	fmt.Fprintf(file, "\t},\n")
-
-	fmt.Fprintf(file, "}\n")
-	return nil
-}
-
 // ClassdiagramMap is a Map of all Classdiagram via their Name
 type ClassdiagramMap map[string]*Classdiagram
 
 // ClassdiagramStore is a handy ClassdiagramMap
 var ClassdiagramStore ClassdiagramMap = make(map[string]*Classdiagram, 0)
-
-// Unmarshall updates a classdiagram values from an ast.Epr
-// and appends it to the ClassdiagramStore
-func (classdiagram *Classdiagram) Unmarshall(modelPkg *gong_models.ModelPkg, expr ast.Expr, fset *token.FileSet) {
-
-	// expression should be a composite literal expression
-	// "uml.Classdiagram{
-	//   	Classshapes: []*uml.Classshape{ ...
-	//		Links: []*uml.Links{ ...
-	if cl, ok := expr.(*ast.CompositeLit); ok {
-
-		// parse all KeyValues of the Classdiagram
-		for _, elt := range cl.Elts {
-			if structvaluekeyexpr, ok := elt.(*ast.KeyValueExpr); !ok {
-				log.Panic("Expression should be a struct key" +
-					fset.Position(structvaluekeyexpr.Pos()).String())
-			} else {
-
-				if key, ok := structvaluekeyexpr.Key.(*ast.Ident); !ok {
-					log.Panic("Key shoud be an ident" +
-						fset.Position(key.Pos()).String())
-				} else {
-					switch key.Name {
-					case "Classshapes":
-						var cl *ast.CompositeLit
-						var ok bool
-						if cl, ok = structvaluekeyexpr.Value.(*ast.CompositeLit); !ok {
-							log.Panic("Value shoud be a composite lit" +
-								fset.Position(structvaluekeyexpr.Pos()).String())
-						}
-						// get the array of shapes (either as definition or as reference)
-						for _, expr := range cl.Elts {
-
-							var classshape *Classshape
-							switch exp := expr.(type) {
-							case *ast.UnaryExpr: // this is a reference to a variable
-								if ident, ok := exp.X.(*ast.Ident); !ok {
-									log.Panic("" + fset.Position(exp.Pos()).String())
-								} else {
-									log.Printf("found %s", ident.Name)
-
-									for _classshape := range Stage.Classshapes {
-										if _classshape.Name == ident.Name {
-											classshape = _classshape
-											continue
-										}
-									}
-									if classshape == nil {
-										log.Panic("Unable to find the shape " + ident.Name + " " +
-											fset.Position(cl.Pos()).String())
-									}
-								}
-							case *ast.CompositeLit: // this is a definition
-								classshape = new(Classshape)
-								classshape.Unmarshall(modelPkg, exp, fset)
-							default:
-								log.Panic("Value shoud be a composite lit or a unary" +
-									fset.Position(structvaluekeyexpr.Pos()).String())
-							}
-
-							classdiagram.Classshapes = append(classdiagram.Classshapes, classshape)
-						}
-					case "Notes":
-						var cl *ast.CompositeLit
-						var ok bool
-						if cl, ok = structvaluekeyexpr.Value.(*ast.CompositeLit); !ok {
-							log.Panic("Value shoud be a composite lit" +
-								fset.Position(structvaluekeyexpr.Pos()).String())
-						}
-						for _, expr := range cl.Elts {
-
-							var note *NoteShape
-							switch exp := expr.(type) {
-							case *ast.UnaryExpr: // this is a reference to a variable
-								if ident, ok := exp.X.(*ast.Ident); !ok {
-									log.Panic("" + fset.Position(exp.Pos()).String())
-								} else {
-									log.Printf("found %s", ident.Name)
-								}
-							case *ast.CompositeLit: // this is a definition
-								note = new(NoteShape)
-								note.Unmarshall(modelPkg, exp, fset)
-							default:
-								log.Panic("Value shoud be a composite lit or a unary" +
-									fset.Position(structvaluekeyexpr.Pos()).String())
-							}
-
-							// of the note is matched, add it to the diagram
-							if note.Matched {
-								classdiagram.Notes = append(classdiagram.Notes, note)
-							}
-						}
-					case "Name":
-						// already initialized
-					default:
-						log.Panic("Key shoud be Classshapes, Field or Link" +
-							fset.Position(key.Pos()).String())
-					}
-				}
-
-			}
-
-		}
-	}
-}
 
 // ModelSpaceToSVGPaperYCoord convert the Y coordinates from the model space
 // to the SVG space
@@ -362,38 +213,6 @@ func (classdiagram *Classdiagram) OutputSVG(path string) {
 
 	c.WriteFile(fmt.Sprintf(filepath.Join(path, "%s.png"), classdiagram.Name), rasterizer.PNGWriter(5.0))
 	c.WriteFile(fmt.Sprintf(filepath.Join(path, "%s.svg"), classdiagram.Name), svg.Writer)
-}
-
-func (classDiagram *Classdiagram) Marshall(diagramPackage *DiagramPackage, pkgPath string) error {
-
-	// open file
-
-	log.SetFlags(log.Lshortfile)
-	filename := walk.CaptureOutput(func() { log.Printf("") })
-	log.SetFlags(log.LstdFlags)
-	prelude := strings.ReplaceAll(preludeRef, "{{filename}}", filename)
-	prelude = strings.ReplaceAll(prelude, "{{ClassdiagramName}}", classDiagram.Name)
-	if len(classDiagram.Classshapes) > 0 {
-		prelude = strings.ReplaceAll(prelude, "{{Imports}}", "\n\t\""+diagramPackage.GongModelPath+"\"")
-	} else {
-		prelude = strings.ReplaceAll(prelude, "{{Imports}}", "")
-	}
-	prelude = strings.ReplaceAll(prelude, "docs", "models")
-
-	filepath := filepath.Join(pkgPath, classDiagram.Name) + ".go"
-	file, err := os.Create(filepath)
-	defer closeFile(file)
-	if err == nil {
-		fmt.Fprintf(file, prelude)
-	} else {
-		cwd, _ := os.Getwd()
-		log.Fatal("Cannot open file ", filepath, " from cwd ", cwd, ", Error is ", err)
-	}
-	if err2 := classDiagram.MarshallAsVariable(file); err != nil {
-		return err2
-	}
-
-	return err
 }
 
 func (classdiagram *Classdiagram) RemoveClassshape(classshapeName string) {
