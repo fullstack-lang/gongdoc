@@ -150,6 +150,16 @@
             ]
         },
         {
+            "name": "go load geometry -embeddedDiagrams",
+            "type": "go",
+            "request": "launch",
+            "mode": "debug",
+            "program": "${workspaceFolder}/go/tests/geometry/go/cmd/geometry",
+            "args": [
+                "-embeddedDiagrams"
+            ]
+        },
+        {
             "name": "go server on dummy -setUpRandomNumberOfInstances -editable=false",
             "type": "go",
             "request": "launch",
