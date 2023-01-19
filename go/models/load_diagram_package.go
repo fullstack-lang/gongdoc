@@ -16,8 +16,8 @@ import (
 // LoadDiagramPackage fill up the stage with the diagrams elements
 func LoadDiagramPackage(pkgPath string, modelPkg *gong_models.ModelPkg, editable bool) (diagramPackage *DiagramPackage, err error) {
 
-	gongStage := Stage
-	_ = gongStage
+	gongdocStage := Stage
+	_ = gongdocStage
 
 	diagramPackage = (&DiagramPackage{}).Stage()
 	diagramPackage.IsEditable = editable
@@ -156,6 +156,10 @@ func LoadDiagramPackage(pkgPath string, modelPkg *gong_models.ModelPkg, editable
 
 	if oneLegacyFormatFound {
 		log.Fatalln("Found at least one legacy format. Restart the application")
+	} else {
+		// the number of instances per classshape has to be restored.
+		Stage.Unstage()
+		Stage.Checkout()
 	}
 
 	// End of TO BE REMOVED AFTER TRANSITION
