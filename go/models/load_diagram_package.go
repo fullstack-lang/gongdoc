@@ -15,6 +15,10 @@ import (
 
 // LoadDiagramPackage fill up the stage with the diagrams elements
 func LoadDiagramPackage(pkgPath string, modelPkg *gong_models.ModelPkg, editable bool) (diagramPackage *DiagramPackage, err error) {
+
+	gongStage := Stage
+	_ = gongStage
+
 	diagramPackage = (&DiagramPackage{}).Stage()
 	diagramPackage.IsEditable = editable
 	diagramPackage.ModelPkg = modelPkg
@@ -155,9 +159,6 @@ func LoadDiagramPackage(pkgPath string, modelPkg *gong_models.ModelPkg, editable
 	}
 
 	// End of TO BE REMOVED AFTER TRANSITION
-
-	stage := Stage
-	_ = stage
 
 	// load all diagram files
 	for fileName := range diagramPackageAst.Files {
