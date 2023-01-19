@@ -50,10 +50,9 @@ func main() {
 	r := gin.Default()
 	r.Use(cors.Default())
 
-	stackName := "geometry"
-
 	gongdoc_load.Load(
-		stackName,
+		"geometry",
+		"github.com/fullstack-lang/gongdoc/go/tests/geometry/go/models",
 		geometry.GoDir,
 		r,
 		*embeddedDiagrams,
