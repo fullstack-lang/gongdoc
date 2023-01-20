@@ -249,7 +249,6 @@ var __gong__map_Node = make(map[string]*Node)
 var __gong__map_NoteLink = make(map[string]*NoteLink)
 var __gong__map_NoteShape = make(map[string]*NoteShape)
 var __gong__map_Position = make(map[string]*Position)
-var __gong__map_Reference = make(map[string]*Reference)
 var __gong__map_Tree = make(map[string]*Tree)
 var __gong__map_UmlState = make(map[string]*UmlState)
 var __gong__map_Umlsc = make(map[string]*Umlsc)
@@ -465,10 +464,6 @@ func UnmarshallGongstructStaging(cmap *ast.CommentMap, assignStmt *ast.AssignStm
 										instancePosition := (&Position{Name: instanceName}).Stage()
 										instance = any(instancePosition)
 										__gong__map_Position[identifier] = instancePosition
-									case "Reference":
-										instanceReference := (&Reference{Name: instanceName}).Stage()
-										instance = any(instanceReference)
-										__gong__map_Reference[identifier] = instanceReference
 									case "Tree":
 										instanceTree := (&Tree{Name: instanceName}).Stage()
 										instance = any(instanceTree)
@@ -554,10 +549,6 @@ func UnmarshallGongstructStaging(cmap *ast.CommentMap, assignStmt *ast.AssignStm
 							// insertion point for date assign code
 							}
 						case "Position":
-							switch fieldName {
-							// insertion point for date assign code
-							}
-						case "Reference":
 							switch fieldName {
 							// insertion point for date assign code
 							}
@@ -686,10 +677,6 @@ func UnmarshallGongstructStaging(cmap *ast.CommentMap, assignStmt *ast.AssignStm
 						switch fieldName {
 						// insertion point for slice of pointers assign code
 						}
-					case "Reference":
-						switch fieldName {
-						// insertion point for slice of pointers assign code
-						}
 					case "Tree":
 						switch fieldName {
 						// insertion point for slice of pointers assign code
@@ -769,10 +756,6 @@ func UnmarshallGongstructStaging(cmap *ast.CommentMap, assignStmt *ast.AssignStm
 					// remove first and last char
 					fielValue := basicLit.Value[1 : len(basicLit.Value)-1]
 					__gong__map_Classshape[identifier].Name = fielValue
-				case "ReferenceName":
-					// remove first and last char
-					fielValue := basicLit.Value[1 : len(basicLit.Value)-1]
-					__gong__map_Classshape[identifier].ReferenceName = fielValue
 				case "Identifier":
 					// remove first and last char
 					fielValue := basicLit.Value[1 : len(basicLit.Value)-1]
@@ -949,21 +932,6 @@ func UnmarshallGongstructStaging(cmap *ast.CommentMap, assignStmt *ast.AssignStm
 					fielValue := basicLit.Value[1 : len(basicLit.Value)-1]
 					__gong__map_Position[identifier].Name = fielValue
 				}
-			case "Reference":
-				switch fieldName {
-				// insertion point for field dependant code
-				case "Name":
-					// remove first and last char
-					fielValue := basicLit.Value[1 : len(basicLit.Value)-1]
-					__gong__map_Reference[identifier].Name = fielValue
-				case "NbInstances":
-					// convert string to int
-					fielValue, err := strconv.ParseInt(basicLit.Value, 10, 64)
-					if err != nil {
-						log.Fatalln(err)
-					}
-					__gong__map_Reference[identifier].NbInstances = int(fielValue)
-				}
 			case "Tree":
 				switch fieldName {
 				// insertion point for field dependant code
@@ -1059,9 +1027,6 @@ func UnmarshallGongstructStaging(cmap *ast.CommentMap, assignStmt *ast.AssignStm
 				case "Position":
 					targetIdentifier := ident.Name
 					__gong__map_Classshape[identifier].Position = __gong__map_Position[targetIdentifier]
-				case "Reference":
-					targetIdentifier := ident.Name
-					__gong__map_Classshape[identifier].Reference = __gong__map_Reference[targetIdentifier]
 				case "ShowNbInstances":
 					// convert string to boolean
 					fielValue, err := strconv.ParseBool(ident.Name)
@@ -1225,10 +1190,6 @@ func UnmarshallGongstructStaging(cmap *ast.CommentMap, assignStmt *ast.AssignStm
 				switch fieldName {
 				// insertion point for field dependant code
 				}
-			case "Reference":
-				switch fieldName {
-				// insertion point for field dependant code
-				}
 			case "Tree":
 				switch fieldName {
 				// insertion point for field dependant code
@@ -1343,17 +1304,6 @@ func UnmarshallGongstructStaging(cmap *ast.CommentMap, assignStmt *ast.AssignStm
 				case "Position":
 					switch fieldName {
 					// insertion point for enum assign code
-					}
-				case "Reference":
-					switch fieldName {
-					// insertion point for enum assign code
-					case "Type":
-						var val ReferenceType
-						err := (&val).FromCodeString(enumValue)
-						if err != nil {
-							log.Fatalln(err)
-						}
-						__gong__map_Reference[identifier].Type = ReferenceType(val)
 					}
 				case "Tree":
 					switch fieldName {

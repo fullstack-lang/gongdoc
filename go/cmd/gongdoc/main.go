@@ -131,16 +131,7 @@ func main() {
 	// set up gong structs for diagram package
 	if *setUpRandomNumberOfInstances {
 		for gongStruct := range *gong_models.GetGongstructInstancesSet[gong_models.GongStruct]() {
-
-			// let create the gong struct in the gongdoc models
-			var reference *gongdoc_models.Reference
-			var ok bool
-			reference, ok = (*gongdoc_models.GetGongstructInstancesMap[gongdoc_models.Reference]())[gongStruct.Name]
-			if !ok {
-				reference = (&gongdoc_models.Reference{Name: gongStruct.Name}).Stage()
-				reference.Type = gongdoc_models.REFERENCE_GONG_STRUCT
-			}
-			reference.NbInstances = rand.Intn(100)
+			gongdoc_models.Map_Identifier_NbInstances[gongStruct.Name] = rand.Intn(100)
 		}
 	}
 

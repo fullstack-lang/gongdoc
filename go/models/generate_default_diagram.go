@@ -43,7 +43,7 @@ func GenGoDefaultDiagram(modelPkg *gong_models.ModelPkg, pkgPath string) {
 			classshape.Name = _enum.Name
 
 			classshape.Position = new(Position)
-			classshape.ReferenceName = _enum.Name
+			classshape.Identifier = RefPrefixReferencedPackage + "models." + _enum.Name
 
 			classshape.Position.X = 40.0 + 300.0*idx
 			idx = idx + 1
@@ -67,7 +67,7 @@ func GenGoDefaultDiagram(modelPkg *gong_models.ModelPkg, pkgPath string) {
 			classshape.Name = _struct.Name
 
 			classshape.Position = new(Position)
-			classshape.ReferenceName = _struct.Name
+			classshape.Identifier = RefPrefixReferencedPackage + "models." + _struct.Name
 
 			classshape.Position.X = 40.0 + 300.0*idx
 			idx = idx + 1.0

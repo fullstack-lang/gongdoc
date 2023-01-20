@@ -22,7 +22,6 @@ func SerializeStage(filename string) {
 		SerializeExcelize[NoteLink](f)
 		SerializeExcelize[NoteShape](f)
 		SerializeExcelize[Position](f)
-		SerializeExcelize[Reference](f)
 		SerializeExcelize[Tree](f)
 		SerializeExcelize[UmlState](f)
 		SerializeExcelize[Umlsc](f)

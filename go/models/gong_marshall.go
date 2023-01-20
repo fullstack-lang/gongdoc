@@ -176,12 +176,6 @@ func (stage *StageStruct) Marshall(file *os.File, modelsPackageName, packageName
 		initializerStatements += setValueField
 
 		setValueField = StringInitStatement
-		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "ReferenceName")
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", string(classshape.ReferenceName))
-		initializerStatements += setValueField
-
-		setValueField = StringInitStatement
 		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}",
 			fmt.Sprintf("\n\t// comment added to overcome the problem with the comment map association\n\n\t//gong:ident [%s]\n\t{{Identifier}}",
 				string(classshape.Identifier)))
@@ -688,52 +682,6 @@ func (stage *StageStruct) Marshall(file *os.File, modelsPackageName, packageName
 
 	}
 
-	map_Reference_Identifiers := make(map[*Reference]string)
-	_ = map_Reference_Identifiers
-
-	referenceOrdered := []*Reference{}
-	for reference := range stage.References {
-		referenceOrdered = append(referenceOrdered, reference)
-	}
-	sort.Slice(referenceOrdered[:], func(i, j int) bool {
-		return referenceOrdered[i].Name < referenceOrdered[j].Name
-	})
-	identifiersDecl += "\n\n	// Declarations of staged instances of Reference"
-	for idx, reference := range referenceOrdered {
-
-		id = generatesIdentifier("Reference", idx, reference.Name)
-		map_Reference_Identifiers[reference] = id
-
-		decl = IdentifiersDecls
-		decl = strings.ReplaceAll(decl, "{{Identifier}}", id)
-		decl = strings.ReplaceAll(decl, "{{GeneratedStructName}}", "Reference")
-		decl = strings.ReplaceAll(decl, "{{GeneratedFieldNameValue}}", reference.Name)
-		identifiersDecl += decl
-
-		initializerStatements += "\n\n	// Reference values setup"
-		// Initialisation of values
-		setValueField = StringInitStatement
-		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "Name")
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", string(reference.Name))
-		initializerStatements += setValueField
-
-		setValueField = NumberInitStatement
-		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "NbInstances")
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", fmt.Sprintf("%d", reference.NbInstances))
-		initializerStatements += setValueField
-
-		if reference.Type != "" {
-			setValueField = StringEnumInitStatement
-			setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
-			setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "Type")
-			setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", "models."+reference.Type.ToCodeString())
-			initializerStatements += setValueField
-		}
-
-	}
-
 	map_Tree_Identifiers := make(map[*Tree]string)
 	_ = map_Tree_Identifiers
 
@@ -949,14 +897,6 @@ func (stage *StageStruct) Marshall(file *os.File, modelsPackageName, packageName
 			pointersInitializesStatements += setPointerField
 		}
 
-		if classshape.Reference != nil {
-			setPointerField = PointerFieldInitStatement
-			setPointerField = strings.ReplaceAll(setPointerField, "{{Identifier}}", id)
-			setPointerField = strings.ReplaceAll(setPointerField, "{{GeneratedFieldName}}", "Reference")
-			setPointerField = strings.ReplaceAll(setPointerField, "{{GeneratedFieldNameValue}}", map_Reference_Identifiers[classshape.Reference])
-			pointersInitializesStatements += setPointerField
-		}
-
 		for _, _field := range classshape.Fields {
 			setPointerField = SliceOfPointersFieldInitStatement
 			setPointerField = strings.ReplaceAll(setPointerField, "{{Identifier}}", id)
@@ -1113,16 +1053,6 @@ func (stage *StageStruct) Marshall(file *os.File, modelsPackageName, packageName
 
 		id = generatesIdentifier("Position", idx, position.Name)
 		map_Position_Identifiers[position] = id
-
-		// Initialisation of values
-	}
-
-	for idx, reference := range referenceOrdered {
-		var setPointerField string
-		_ = setPointerField
-
-		id = generatesIdentifier("Reference", idx, reference.Name)
-		map_Reference_Identifiers[reference] = id
 
 		// Initialisation of values
 	}

@@ -37,8 +37,6 @@ type BackRepoStruct struct {
 
 	BackRepoPosition BackRepoPositionStruct
 
-	BackRepoReference BackRepoReferenceStruct
-
 	BackRepoTree BackRepoTreeStruct
 
 	BackRepoUmlState BackRepoUmlStateStruct
@@ -94,7 +92,6 @@ func (backRepo *BackRepoStruct) init(db *gorm.DB) {
 	backRepo.BackRepoNoteLink.Init(db)
 	backRepo.BackRepoNoteShape.Init(db)
 	backRepo.BackRepoPosition.Init(db)
-	backRepo.BackRepoReference.Init(db)
 	backRepo.BackRepoTree.Init(db)
 	backRepo.BackRepoUmlState.Init(db)
 	backRepo.BackRepoUmlsc.Init(db)
@@ -115,7 +112,6 @@ func (backRepo *BackRepoStruct) Commit(stage *models.StageStruct) {
 	backRepo.BackRepoNoteLink.CommitPhaseOne(stage)
 	backRepo.BackRepoNoteShape.CommitPhaseOne(stage)
 	backRepo.BackRepoPosition.CommitPhaseOne(stage)
-	backRepo.BackRepoReference.CommitPhaseOne(stage)
 	backRepo.BackRepoTree.CommitPhaseOne(stage)
 	backRepo.BackRepoUmlState.CommitPhaseOne(stage)
 	backRepo.BackRepoUmlsc.CommitPhaseOne(stage)
@@ -131,7 +127,6 @@ func (backRepo *BackRepoStruct) Commit(stage *models.StageStruct) {
 	backRepo.BackRepoNoteLink.CommitPhaseTwo(backRepo)
 	backRepo.BackRepoNoteShape.CommitPhaseTwo(backRepo)
 	backRepo.BackRepoPosition.CommitPhaseTwo(backRepo)
-	backRepo.BackRepoReference.CommitPhaseTwo(backRepo)
 	backRepo.BackRepoTree.CommitPhaseTwo(backRepo)
 	backRepo.BackRepoUmlState.CommitPhaseTwo(backRepo)
 	backRepo.BackRepoUmlsc.CommitPhaseTwo(backRepo)
@@ -152,7 +147,6 @@ func (backRepo *BackRepoStruct) Checkout(stage *models.StageStruct) {
 	backRepo.BackRepoNoteLink.CheckoutPhaseOne()
 	backRepo.BackRepoNoteShape.CheckoutPhaseOne()
 	backRepo.BackRepoPosition.CheckoutPhaseOne()
-	backRepo.BackRepoReference.CheckoutPhaseOne()
 	backRepo.BackRepoTree.CheckoutPhaseOne()
 	backRepo.BackRepoUmlState.CheckoutPhaseOne()
 	backRepo.BackRepoUmlsc.CheckoutPhaseOne()
@@ -168,7 +162,6 @@ func (backRepo *BackRepoStruct) Checkout(stage *models.StageStruct) {
 	backRepo.BackRepoNoteLink.CheckoutPhaseTwo(backRepo)
 	backRepo.BackRepoNoteShape.CheckoutPhaseTwo(backRepo)
 	backRepo.BackRepoPosition.CheckoutPhaseTwo(backRepo)
-	backRepo.BackRepoReference.CheckoutPhaseTwo(backRepo)
 	backRepo.BackRepoTree.CheckoutPhaseTwo(backRepo)
 	backRepo.BackRepoUmlState.CheckoutPhaseTwo(backRepo)
 	backRepo.BackRepoUmlsc.CheckoutPhaseTwo(backRepo)
@@ -199,7 +192,6 @@ func (backRepo *BackRepoStruct) Backup(stage *models.StageStruct, dirPath string
 	backRepo.BackRepoNoteLink.Backup(dirPath)
 	backRepo.BackRepoNoteShape.Backup(dirPath)
 	backRepo.BackRepoPosition.Backup(dirPath)
-	backRepo.BackRepoReference.Backup(dirPath)
 	backRepo.BackRepoTree.Backup(dirPath)
 	backRepo.BackRepoUmlState.Backup(dirPath)
 	backRepo.BackRepoUmlsc.Backup(dirPath)
@@ -223,7 +215,6 @@ func (backRepo *BackRepoStruct) BackupXL(stage *models.StageStruct, dirPath stri
 	backRepo.BackRepoNoteLink.BackupXL(file)
 	backRepo.BackRepoNoteShape.BackupXL(file)
 	backRepo.BackRepoPosition.BackupXL(file)
-	backRepo.BackRepoReference.BackupXL(file)
 	backRepo.BackRepoTree.BackupXL(file)
 	backRepo.BackRepoUmlState.BackupXL(file)
 	backRepo.BackRepoUmlsc.BackupXL(file)
@@ -261,7 +252,6 @@ func (backRepo *BackRepoStruct) Restore(stage *models.StageStruct, dirPath strin
 	backRepo.BackRepoNoteLink.RestorePhaseOne(dirPath)
 	backRepo.BackRepoNoteShape.RestorePhaseOne(dirPath)
 	backRepo.BackRepoPosition.RestorePhaseOne(dirPath)
-	backRepo.BackRepoReference.RestorePhaseOne(dirPath)
 	backRepo.BackRepoTree.RestorePhaseOne(dirPath)
 	backRepo.BackRepoUmlState.RestorePhaseOne(dirPath)
 	backRepo.BackRepoUmlsc.RestorePhaseOne(dirPath)
@@ -281,7 +271,6 @@ func (backRepo *BackRepoStruct) Restore(stage *models.StageStruct, dirPath strin
 	backRepo.BackRepoNoteLink.RestorePhaseTwo()
 	backRepo.BackRepoNoteShape.RestorePhaseTwo()
 	backRepo.BackRepoPosition.RestorePhaseTwo()
-	backRepo.BackRepoReference.RestorePhaseTwo()
 	backRepo.BackRepoTree.RestorePhaseTwo()
 	backRepo.BackRepoUmlState.RestorePhaseTwo()
 	backRepo.BackRepoUmlsc.RestorePhaseTwo()
@@ -321,7 +310,6 @@ func (backRepo *BackRepoStruct) RestoreXL(stage *models.StageStruct, dirPath str
 	backRepo.BackRepoNoteLink.RestoreXLPhaseOne(file)
 	backRepo.BackRepoNoteShape.RestoreXLPhaseOne(file)
 	backRepo.BackRepoPosition.RestoreXLPhaseOne(file)
-	backRepo.BackRepoReference.RestoreXLPhaseOne(file)
 	backRepo.BackRepoTree.RestoreXLPhaseOne(file)
 	backRepo.BackRepoUmlState.RestoreXLPhaseOne(file)
 	backRepo.BackRepoUmlsc.RestoreXLPhaseOne(file)

@@ -46,14 +46,10 @@ func Load(
 
 	// first, get all gong struct in the model
 	for gongStruct := range gong_models.Stage.GongStructs {
-		// let create the gong struct in the gongdoc models
-		// and put the numbre of instances
-		reference := (&gongdoc_models.Reference{Name: gongStruct.Name}).Stage()
-		reference.Type = gongdoc_models.REFERENCE_GONG_STRUCT
 
 		nbInstances, ok := (*map_StructName_InstanceNb)[gongStruct.Name]
 		if ok {
-			reference.NbInstances = nbInstances
+			gongdoc_models.Map_Identifier_NbInstances[gongStruct.Name] = nbInstances
 		}
 	}
 	if embeddedDiagrams {

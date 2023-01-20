@@ -31,36 +31,6 @@
         </mat-select>
     </mat-form-field>
 
-    <mat-grid-list *ngIf='!isATextArea("ReferenceName")' cols="5" rowHeight="2:1">
-        <mat-grid-tile [colspan]="3">
-            <mat-form-field mat-form-field class="detail-full-width">
-                <mat-label>ReferenceName</mat-label>
-                <input name="" [ngModelOptions]="{standalone: true}" matInput [(ngModel)]="classshape.ReferenceName">
-            </mat-form-field>
-        </mat-grid-tile>
-        <mat-grid-tile>
-            <button mat-raised-button (click)="toggleTextArea('ReferenceName')">
-                <mat-icon>
-                    expand_more
-                </mat-icon>
-            </button>
-        </mat-grid-tile>
-    </mat-grid-list>
-    <mat-form-field *ngIf='isATextArea("ReferenceName")' mat-form-field class="detail-full-width">
-        <mat-label>ReferenceName</mat-label>
-        <textarea name="" [ngModelOptions]="{standalone: true}" matInput [(ngModel)]="classshape.ReferenceName"></textarea>
-    </mat-form-field>
-
-    <mat-form-field class="detail-full-width">
-        <mat-label>Reference</mat-label>
-        <mat-select [compareWith]="compareObjects" [(value)]="classshape.Reference" (selectionChange)="fillUpNameIfEmpty($event)">
-            <mat-option>None</mat-option>
-            <mat-option *ngFor="let reference of frontRepo.References_array" [value]="reference">
-                {{reference.Name}}
-            </mat-option>
-        </mat-select>
-    </mat-form-field>
-
     <mat-grid-list *ngIf='!isATextArea("Identifier")' cols="5" rowHeight="2:1">
         <mat-grid-tile [colspan]="3">
             <mat-form-field mat-form-field class="detail-full-width">

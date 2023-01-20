@@ -275,7 +275,7 @@ func (nodesCb *NodeCallbacksSingloton) OnAfterUpdateStructField(
 	var classshape *Classshape
 	for _, _classshape := range classdiagram.Classshapes {
 		// strange behavior when the classshape is remove within the loop
-		if _classshape.ReferenceName == gongStruct.Name && !foundClassshape {
+		if strings.TrimPrefix(_classshape.Identifier, RefPrefixReferencedPackage+"models.") == gongStruct.Name && !foundClassshape {
 			classshape = _classshape
 		}
 	}
@@ -343,7 +343,7 @@ func (nodesCb *NodeCallbacksSingloton) OnAfterUpdateStructField(
 			case *gong_models.SliceOfPointerToGongStructField:
 			}
 
-			field.Structname = classshape.ReferenceName
+			field.Structname = strings.TrimPrefix(classshape.Identifier, RefPrefixReferencedPackage+"models.")
 			field.Stage()
 
 			classshape.Heigth = classshape.Heigth + 15
@@ -407,7 +407,7 @@ func (nodesCb *NodeCallbacksSingloton) OnAfterUpdateStructField(
 			for _, _classshape := range classdiagram.Classshapes {
 
 				// strange behavior when the classshape is remove within the loop
-				if _classshape.ReferenceName == targetStructName && !targetSourceClassshape {
+				if strings.TrimPrefix(_classshape.Identifier, RefPrefixReferencedPackage+"models.") == targetStructName && !targetSourceClassshape {
 					targetSourceClassshape = true
 					targetClassshape = _classshape
 				}
@@ -505,9 +505,8 @@ func (nodesCb *NodeCallbacksSingloton) OnAfterUpdateEnum(
 
 		// get the referenced gongstructs
 		for _, classshape := range classDiagram.Classshapes {
-			reference := classshape.Reference
-			if reference.Name == stagedNode.Name {
-				classDiagram.RemoveClassshape(reference.Name)
+			if classshape.Identifier == stagedNode.Name {
+				classDiagram.RemoveClassshape(classshape.Identifier)
 			}
 
 		}
@@ -542,7 +541,7 @@ func (nodesCb *NodeCallbacksSingloton) OnAfterUpdateEnumValue(
 	foundClassshape := false
 	var classshape *Classshape
 	for _, _classshape := range classdiagram.Classshapes {
-		if _classshape.ReferenceName == gongEnum.Name && !foundClassshape {
+		if strings.TrimPrefix(_classshape.Identifier, RefPrefixReferencedPackage+"models.") == gongEnum.Name && !foundClassshape {
 			classshape = _classshape
 		}
 	}

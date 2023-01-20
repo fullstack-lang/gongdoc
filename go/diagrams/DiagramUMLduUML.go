@@ -69,7 +69,7 @@ func DiagramUMLduUMLInjection() {
 	__Field__000008_Name := (&models.Field{Name: `Name`}).Stage()
 	__Field__000009_Name := (&models.Field{Name: `Name`}).Stage()
 	__Field__000010_Path := (&models.Field{Name: `Path`}).Stage()
-	__Field__000011_ReferenceName := (&models.Field{Name: `ReferenceName`}).Stage()
+
 	__Field__000012_Structname := (&models.Field{Name: `Structname`}).Stage()
 	__Field__000013_Structname := (&models.Field{Name: `Structname`}).Stage()
 	__Field__000014_TargetMultiplicity := (&models.Field{Name: `TargetMultiplicity`}).Stage()
@@ -134,7 +134,6 @@ func DiagramUMLduUMLInjection() {
 
 	// Classshape values setup
 	__Classshape__000000_Classshape0000.Name = `Classshape0000`
-	__Classshape__000000_Classshape0000.ReferenceName = `Classdiagram`
 
 	// comment added to overcome the problem with the comment map association
 
@@ -148,7 +147,6 @@ func DiagramUMLduUMLInjection() {
 
 	// Classshape values setup
 	__Classshape__000001_Classshape0001.Name = `Classshape0001`
-	__Classshape__000001_Classshape0001.ReferenceName = `Classshape`
 
 	// comment added to overcome the problem with the comment map association
 
@@ -162,7 +160,6 @@ func DiagramUMLduUMLInjection() {
 
 	// Classshape values setup
 	__Classshape__000002_Classshape0002.Name = `Classshape0002`
-	__Classshape__000002_Classshape0002.ReferenceName = `Field`
 
 	// comment added to overcome the problem with the comment map association
 
@@ -176,7 +173,6 @@ func DiagramUMLduUMLInjection() {
 
 	// Classshape values setup
 	__Classshape__000003_Classshape0003.Name = `Classshape0003`
-	__Classshape__000003_Classshape0003.ReferenceName = `Link`
 
 	// comment added to overcome the problem with the comment map association
 
@@ -190,7 +186,6 @@ func DiagramUMLduUMLInjection() {
 
 	// Classshape values setup
 	__Classshape__000004_Classshape0004.Name = `Classshape0004`
-	__Classshape__000004_Classshape0004.ReferenceName = `DiagramPackage`
 
 	// comment added to overcome the problem with the comment map association
 
@@ -204,7 +199,6 @@ func DiagramUMLduUMLInjection() {
 
 	// Classshape values setup
 	__Classshape__000005_Classshape0005.Name = `Classshape0005`
-	__Classshape__000005_Classshape0005.ReferenceName = `Position`
 
 	// comment added to overcome the problem with the comment map association
 
@@ -218,7 +212,6 @@ func DiagramUMLduUMLInjection() {
 
 	// Classshape values setup
 	__Classshape__000006_Classshape0006.Name = `Classshape0006`
-	__Classshape__000006_Classshape0006.ReferenceName = `UmlState`
 
 	// comment added to overcome the problem with the comment map association
 
@@ -232,7 +225,6 @@ func DiagramUMLduUMLInjection() {
 
 	// Classshape values setup
 	__Classshape__000007_Classshape0007.Name = `Classshape0007`
-	__Classshape__000007_Classshape0007.ReferenceName = `Umlsc`
 
 	// comment added to overcome the problem with the comment map association
 
@@ -246,7 +238,6 @@ func DiagramUMLduUMLInjection() {
 
 	// Classshape values setup
 	__Classshape__000008_Classshape0008.Name = `Classshape0008`
-	__Classshape__000008_Classshape0008.ReferenceName = `Vertice`
 
 	// comment added to overcome the problem with the comment map association
 
@@ -399,16 +390,8 @@ func DiagramUMLduUMLInjection() {
 	__Field__000010_Path.Fieldtypename = `string`
 
 	// Field values setup
-	__Field__000011_ReferenceName.Name = `ReferenceName`
-	__Field__000011_ReferenceName.Fieldname = `ReferenceName`
 
 	// comment added to overcome the problem with the comment map association
-
-	//gong:ident [ref_models.Classshape.ReferenceName]
-	__Field__000011_ReferenceName.Identifier = `ref_models.Classshape.ReferenceName`
-	__Field__000011_ReferenceName.FieldTypeAsString = ``
-	__Field__000011_ReferenceName.Structname = `Classshape`
-	__Field__000011_ReferenceName.Fieldtypename = `string`
 
 	// Field values setup
 	__Field__000012_Structname.Name = `Structname`
@@ -746,7 +729,7 @@ func DiagramUMLduUMLInjection() {
 	__Classshape__000001_Classshape0001.Position = __Position__000001_Position_0001
 
 	__Classshape__000001_Classshape0001.Fields = append(__Classshape__000001_Classshape0001.Fields, __Field__000005_Heigth)
-	__Classshape__000001_Classshape0001.Fields = append(__Classshape__000001_Classshape0001.Fields, __Field__000011_ReferenceName)
+
 	__Classshape__000001_Classshape0001.Fields = append(__Classshape__000001_Classshape0001.Fields, __Field__000015_Width)
 	__Classshape__000001_Classshape0001.Links = append(__Classshape__000001_Classshape0001.Links, __Link__000002_Fields)
 	__Classshape__000001_Classshape0001.Links = append(__Classshape__000001_Classshape0001.Links, __Link__000003_Links)

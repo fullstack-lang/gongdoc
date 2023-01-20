@@ -84,11 +84,6 @@ import { PositionSortingComponent } from './position-sorting/position-sorting.co
 import { PositionDetailComponent } from './position-detail/position-detail.component'
 import { PositionPresentationComponent } from './position-presentation/position-presentation.component'
 
-import { ReferencesTableComponent } from './references-table/references-table.component'
-import { ReferenceSortingComponent } from './reference-sorting/reference-sorting.component'
-import { ReferenceDetailComponent } from './reference-detail/reference-detail.component'
-import { ReferencePresentationComponent } from './reference-presentation/reference-presentation.component'
-
 import { TreesTableComponent } from './trees-table/trees-table.component'
 import { TreeSortingComponent } from './tree-sorting/tree-sorting.component'
 import { TreeDetailComponent } from './tree-detail/tree-detail.component'
@@ -157,11 +152,6 @@ import { VerticePresentationComponent } from './vertice-presentation/vertice-pre
 		PositionSortingComponent,
 		PositionDetailComponent,
 		PositionPresentationComponent,
-
-		ReferencesTableComponent,
-		ReferenceSortingComponent,
-		ReferenceDetailComponent,
-		ReferencePresentationComponent,
 
 		TreesTableComponent,
 		TreeSortingComponent,
@@ -266,11 +256,6 @@ import { VerticePresentationComponent } from './vertice-presentation/vertice-pre
 		PositionSortingComponent,
 		PositionDetailComponent,
 		PositionPresentationComponent,
-
-		ReferencesTableComponent,
-		ReferenceSortingComponent,
-		ReferenceDetailComponent,
-		ReferencePresentationComponent,
 
 		TreesTableComponent,
 		TreeSortingComponent,
