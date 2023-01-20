@@ -64,8 +64,6 @@ func NewDiagramInjection() {
 	__Position__000001_Pos_NewDiagram_Point := (&models.Position{Name: `Pos-NewDiagram-Point`}).Stage()
 
 	// Declarations of staged instances of Reference
-	__Reference__000000_Line := (&models.Reference{Name: `Line`}).Stage()
-	__Reference__000001_Point := (&models.Reference{Name: `Point`}).Stage()
 
 	// Declarations of staged instances of Tree
 
@@ -83,8 +81,7 @@ func NewDiagramInjection() {
 
 	// Classshape values setup
 	__Classshape__000000_NewDiagram_Line.Name = `NewDiagram-Line`
-	__Classshape__000000_NewDiagram_Line.ReferenceName = `Line`
-	
+
 	// comment added to overcome the problem with the comment map association
 
 	//gong:ident [ref_models.Line]
@@ -97,8 +94,7 @@ func NewDiagramInjection() {
 
 	// Classshape values setup
 	__Classshape__000001_NewDiagram_Point.Name = `NewDiagram-Point`
-	__Classshape__000001_NewDiagram_Point.ReferenceName = `Point`
-	
+
 	// comment added to overcome the problem with the comment map association
 
 	//gong:ident [ref_models.Point]
@@ -120,22 +116,14 @@ func NewDiagramInjection() {
 	__Position__000001_Pos_NewDiagram_Point.Name = `Pos-NewDiagram-Point`
 
 	// Reference values setup
-	__Reference__000000_Line.Name = `Line`
-	__Reference__000000_Line.NbInstances = 0
-	__Reference__000000_Line.Type = models.REFERENCE_GONG_STRUCT
 
 	// Reference values setup
-	__Reference__000001_Point.Name = `Point`
-	__Reference__000001_Point.NbInstances = 0
-	__Reference__000001_Point.Type = models.REFERENCE_GONG_STRUCT
 
 	// Setup of pointers
 	__Classdiagram__000000_NewDiagram.Classshapes = append(__Classdiagram__000000_NewDiagram.Classshapes, __Classshape__000000_NewDiagram_Line)
 	__Classdiagram__000000_NewDiagram.Classshapes = append(__Classdiagram__000000_NewDiagram.Classshapes, __Classshape__000001_NewDiagram_Point)
 	__Classshape__000000_NewDiagram_Line.Position = __Position__000000_Pos_NewDiagram_Line
-	__Classshape__000000_NewDiagram_Line.Reference = __Reference__000000_Line
+
 	__Classshape__000001_NewDiagram_Point.Position = __Position__000001_Pos_NewDiagram_Point
-	__Classshape__000001_NewDiagram_Point.Reference = __Reference__000001_Point
+
 }
-
-
