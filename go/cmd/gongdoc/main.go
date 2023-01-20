@@ -11,6 +11,7 @@ import (
 	"os"
 	"path/filepath"
 	"strconv"
+	"strings"
 
 	"github.com/gin-contrib/cors"
 	"github.com/gin-contrib/static"
@@ -128,14 +129,34 @@ func main() {
 		c.Abort()
 	})
 
+	diagramPackage, _ := gongdoc_models.LoadDiagramPackage(*pkgPath, modelPkg, *editable)
+
+	map_ := gongdoc_models.Map_Identifier_NbInstances
+	_ = map_
 	// set up gong structs for diagram package
 	if *setUpRandomNumberOfInstances {
 		for gongStruct := range *gong_models.GetGongstructInstancesSet[gong_models.GongStruct]() {
 			gongdoc_models.Map_Identifier_NbInstances[gongStruct.Name] = rand.Intn(100)
 		}
-	}
+		// parse all classdiagrams and all classshape and put the number
+		// of instances
+		for _, classdiagram := range diagramPackage.Classdiagrams {
+			for _, classshape := range classdiagram.Classshapes {
 
-	diagramPackage, _ := gongdoc_models.LoadDiagramPackage(*pkgPath, modelPkg, *editable)
+				gongStructName := strings.TrimPrefix(
+					classshape.Identifier,
+					gongdoc_models.RefPrefixReferencedPackage+"models.")
+
+				nbInstances, ok := gongdoc_models.Map_Identifier_NbInstances[gongStructName]
+
+				if ok {
+					classshape.ShowNbInstances = true
+					classshape.NbInstances = nbInstances
+				}
+			}
+		}
+
+	}
 
 	if *svg {
 		for _, classDiagram := range diagramPackage.Classdiagrams {
@@ -144,14 +165,6 @@ func main() {
 		os.Exit(0)
 	}
 
-	if false {
-		for _, classDiagram := range diagramPackage.Classdiagrams {
-			for _, classShape := range classDiagram.Classshapes {
-				classShape.ShowNbInstances = true
-				classShape.NbInstances = rand.Intn(100)
-			}
-		}
-	}
 	classshapeCallbackSingloton := new(gongdoc_models.ClassshapeCallbacksSingloton)
 	gongdoc_models.Stage.OnAfterClassshapeUpdateCallback = classshapeCallbackSingloton
 

@@ -3,6 +3,7 @@ package load
 import (
 	"embed"
 	"path/filepath"
+	"strings"
 
 	gong_fullstack "github.com/fullstack-lang/gong/go/fullstack"
 	gong_models "github.com/fullstack-lang/gong/go/models"
@@ -46,7 +47,6 @@ func Load(
 
 	// first, get all gong struct in the model
 	for gongStruct := range gong_models.Stage.GongStructs {
-
 		nbInstances, ok := (*map_StructName_InstanceNb)[gongStruct.Name]
 		if ok {
 			gongdoc_models.Map_Identifier_NbInstances[gongStruct.Name] = nbInstances
@@ -58,4 +58,29 @@ func Load(
 		diagramPackage, _ = gongdoc_models.LoadDiagramPackage(filepath.Join("../../diagrams"), modelPackage, true)
 	}
 	diagramPackage.GongModelPath = pkgPath
+
+	// set up the number of instance per classshape
+	if map_StructName_InstanceNb != nil {
+
+		for gongStruct := range *gong_models.GetGongstructInstancesSet[gong_models.GongStruct]() {
+			gongdoc_models.Map_Identifier_NbInstances[gongStruct.Name] =
+				(*map_StructName_InstanceNb)[gongStruct.Name]
+		}
+
+		for _, classdiagram := range diagramPackage.Classdiagrams {
+			for _, classshape := range classdiagram.Classshapes {
+
+				gongStructName := strings.TrimPrefix(
+					classshape.Identifier,
+					gongdoc_models.RefPrefixReferencedPackage+"models.")
+
+				nbInstances, ok := gongdoc_models.Map_Identifier_NbInstances[gongStructName]
+
+				if ok {
+					classshape.ShowNbInstances = true
+					classshape.NbInstances = nbInstances
+				}
+			}
+		}
+	}
 }
