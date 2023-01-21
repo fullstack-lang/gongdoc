@@ -80,7 +80,7 @@ func (diagramPackage *DiagramPackage) UnmarshallOneDiagram(diagramName string, i
 	_ = gongdocStage
 
 	var err error
-	err = ParseAstFile(inFile, fset)
+	err = ParseAstFileFromAst(inFile, fset)
 
 	if err != nil {
 		log.Fatalln("Unable to parse", diagramName, err.Error())
