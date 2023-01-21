@@ -275,7 +275,8 @@ func (nodesCb *NodeCallbacksSingloton) OnAfterUpdateStructField(
 	var classshape *Classshape
 	for _, _classshape := range classdiagram.Classshapes {
 		// strange behavior when the classshape is remove within the loop
-		if strings.TrimPrefix(_classshape.Identifier, RefPrefixReferencedPackage+"models.") == gongStruct.Name && !foundClassshape {
+		if strings.TrimPrefix(_classshape.Identifier, RefPrefixReferencedPackage+"models.") ==
+			gongStruct.Name && !foundClassshape {
 			classshape = _classshape
 		}
 	}
@@ -327,7 +328,9 @@ func (nodesCb *NodeCallbacksSingloton) OnAfterUpdateStructField(
 			field.Name = stagedNode.Name
 			field.Fieldname = stagedNode.Name
 			field.Identifier = RefPrefixReferencedPackage +
-				filepath.Base(nodesCb.diagramPackage.GongModelPath) + "." + stagedNode.Name
+				filepath.Base(nodesCb.diagramPackage.GongModelPath) +
+				"." + gongStruct.Name +
+				"." + stagedNode.Name
 
 			switch realField := stagedNode.Gongfield.(type) {
 			case *gong_models.GongBasicField:

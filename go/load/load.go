@@ -45,6 +45,9 @@ func Load(
 	gongStage := gong_models.Stage
 	_ = gongStage
 
+	gongdoc_models.Stage.MetaPackageImportAlias = stackName
+	gongdoc_models.Stage.MetaPackageImportPath = pkgPath
+
 	// first, get all gong struct in the model
 	for gongStruct := range gong_models.Stage.GongStructs {
 		nbInstances, ok := (*map_StructName_InstanceNb)[gongStruct.Name]
@@ -59,12 +62,35 @@ func Load(
 	}
 	diagramPackage.GongModelPath = pkgPath
 
+	// set up Map_DocLink_Renaming
+	// to be removed after fix of [issue](https://github.com/golang/go/issues/57559)
+	gongdoc_models.Stage.Map_DocLink_Renaming = make(map[string]string)
+	for gongStruct := range *gong_models.GetGongstructInstancesSet[gong_models.GongStruct]() {
+
+		ident := gongdoc_models.RefPrefixReferencedPackage + "models." + gongStruct.Name
+
+		gongdoc_models.Stage.Map_DocLink_Renaming[ident] = ident
+
+		for _, field := range gongStruct.Fields {
+			ident := gongdoc_models.RefPrefixReferencedPackage + "models." + gongStruct.Name + "." + field.GetName()
+			gongdoc_models.Stage.Map_DocLink_Renaming[ident] = ident
+		}
+	}
+	for gongEnum := range *gong_models.GetGongstructInstancesSet[gong_models.GongEnum]() {
+		ident := gongdoc_models.RefPrefixReferencedPackage + "models." + gongEnum.Name
+		_ = ident
+
+		// to do after fix of https://github.com/fullstack-lang/gongdoc/issues/100
+		// gongdoc_models.Stage.Map_DocLink_Renaming[ident] = ident
+	}
+
 	// set up the number of instance per classshape
 	if map_StructName_InstanceNb != nil {
 
 		for gongStruct := range *gong_models.GetGongstructInstancesSet[gong_models.GongStruct]() {
 			gongdoc_models.Map_Identifier_NbInstances[gongStruct.Name] =
 				(*map_StructName_InstanceNb)[gongStruct.Name]
+
 		}
 
 		for _, classdiagram := range diagramPackage.Classdiagrams {

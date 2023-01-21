@@ -1140,14 +1140,15 @@ func (stage *StageStruct) Marshall(file *os.File, modelsPackageName, packageName
 
 			if nbPoints == 1 {
 				entries += fmt.Sprintf("\n\n\t\"%s\": &(%s{}),", value, value)
-			}
-			if nbPoints == 2 {
+			} else if nbPoints == 2 {
 				// substitute the second point with "{})."
 				joker := "__substitute_for_first_point__"
 				valueIdentifier := strings.Replace(value, ".", joker, 1)
 				valueIdentifier = strings.Replace(valueIdentifier, ".", "{}).", 1)
 				valueIdentifier = strings.Replace(valueIdentifier, joker, ".", 1)
 				entries += fmt.Sprintf("\n\n\t\"%s\": (%s,", value, valueIdentifier)
+			} else {
+				log.Fatalln("Marshalling, problem with Map_DocLink_Renaming entry", value)
 			}
 		}
 

@@ -1770,7 +1770,6 @@ func (stageStruct *StageStruct) CreateReverseMap_Classdiagram_Notes() (res map[*
 	return
 }
 
-
 // generate function for reverse association maps of Classshape
 func (stageStruct *StageStruct) CreateReverseMap_Classshape_Position() (res map[*Position][]*Classshape) {
 	res = make(map[*Position][]*Classshape)
@@ -1816,7 +1815,6 @@ func (stageStruct *StageStruct) CreateReverseMap_Classshape_Links() (res map[*Li
 	return
 }
 
-
 // generate function for reverse association maps of DiagramPackage
 func (stageStruct *StageStruct) CreateReverseMap_DiagramPackage_Classdiagrams() (res map[*Classdiagram]*DiagramPackage) {
 	res = make(map[*Classdiagram]*DiagramPackage)
@@ -1841,7 +1839,6 @@ func (stageStruct *StageStruct) CreateReverseMap_DiagramPackage_Umlscs() (res ma
 
 	return
 }
-
 
 // generate function for reverse association maps of Field
 
@@ -1899,7 +1896,6 @@ func (stageStruct *StageStruct) CreateReverseMap_Node_Children() (res map[*Node]
 
 	return
 }
-
 
 // generate function for reverse association maps of NoteLink
 func (stageStruct *StageStruct) CreateReverseMap_NoteLink_Classshape() (res map[*Classshape][]*NoteLink) {
@@ -1976,7 +1972,6 @@ func (stageStruct *StageStruct) CreateReverseMap_NoteShape_NoteLinks() (res map[
 	return
 }
 
-
 // generate function for reverse association maps of Position
 
 // generate function for reverse association maps of Tree
@@ -1992,7 +1987,6 @@ func (stageStruct *StageStruct) CreateReverseMap_Tree_RootNodes() (res map[*Node
 	return
 }
 
-
 // generate function for reverse association maps of UmlState
 
 // generate function for reverse association maps of Umlsc
@@ -2007,7 +2001,6 @@ func (stageStruct *StageStruct) CreateReverseMap_Umlsc_States() (res map[*UmlSta
 
 	return
 }
-
 
 // generate function for reverse association maps of Vertice
 
