@@ -1,45 +1,23 @@
 package models
 
 import (
-	"errors"
 	"go/ast"
 	"go/doc/comment"
-	"go/parser"
 	"go/token"
 	"log"
-	"path/filepath"
 	"strconv"
 	"strings"
-	"time"
 )
 
 var dummy_strconv_import strconv.NumError
 
 // ParseAstFile Parse pathToFile and stages all instances
 // declared in the file
-func ParseAstFile(pathToFile string) error {
-
-	// map to store renaming docLink
-	// to be removed after fix of [issue](https://github.com/golang/go/issues/57559)
-	Stage.Map_DocLink_Renaming = make(map[string]string, 0)
-
-	fileOfInterest, err := filepath.Abs(pathToFile)
-	if err != nil {
-		return errors.New("Path does not exist %s ;" + fileOfInterest)
-	}
-
-	fset := token.NewFileSet()
-	startParser := time.Now()
-	inFile, errParser := parser.ParseFile(fset, fileOfInterest, nil, parser.ParseComments)
-	log.Printf("Parser took %s", time.Since(startParser))
-
-	if errParser != nil {
-		return errors.New("Unable to parser " + errParser.Error())
-	}
+func ParseAstFile(inFile *ast.File, fset *token.FileSet) error {
 
 	// if there is a meta package import, it is the third import
 	if len(inFile.Imports) > 3 {
-		log.Fatalln("Too many imports in file", fileOfInterest)
+		log.Fatalln("Too many imports in file", inFile.Name)
 	}
 	stage := &Stage
 	_ = stage

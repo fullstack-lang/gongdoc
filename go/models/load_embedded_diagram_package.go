@@ -17,7 +17,7 @@ func LoadEmbeddedDiagramPackage(fs embed.FS, modelPkg *gong_models.ModelPkg) (di
 	diagramPackage.ModelPkg = modelPkg
 
 	diagramPkgPath := filepath.Join(modelPkg.PkgPath, "../diagrams")
-	diagramPackage.AbsolutePathToDiagramPackage, _ = filepath.Abs(diagramPkgPath)
+	diagramPackage.AbsolutePathToDiagramPackage = "go/models"
 	diagramPackage.Path = diagramPkgPath
 	diagramPackage.GongModelPath = modelPkg.PkgPath
 
@@ -36,9 +36,10 @@ func LoadEmbeddedDiagramPackage(fs embed.FS, modelPkg *gong_models.ModelPkg) (di
 	diagramPackage.ast = diagramPackageAst
 	diagramPackage.fset = fset
 	// load all diagram files
-	for fileName := range diagramPackageAst.Files {
-		diagramName := strings.TrimSuffix(filepath.Base(fileName), ".go")
-		diagramPackage.UnmarshallOneDiagram(diagramName)
+	for diagramName, inFile := range diagramPackageAst.Files {
+
+		diagramName := strings.TrimSuffix(filepath.Base(diagramName), ".go")
+		diagramPackage.UnmarshallOneDiagram(diagramName, inFile, fset)
 	}
 
 	FillUpNodeTree(diagramPackage)

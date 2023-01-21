@@ -7,6 +7,7 @@ import (
 	"io/fs"
 	"log"
 	"net/http"
+	"os"
 	"strconv"
 
 	"github.com/gin-contrib/cors"
@@ -21,6 +22,7 @@ import (
 )
 
 var (
+	logGINFlag       = flag.Bool("logGIN", false, "log mode for gin")
 	embeddedDiagrams = flag.Bool("embeddedDiagrams", false, "parse/analysis go/models and go/embeddedDiagrams")
 	port             = flag.Int("port", 8080, "port server")
 )
@@ -47,6 +49,15 @@ func EmbedFolder(fsEmbed embed.FS, targetPath string) static.ServeFileSystem {
 func main() {
 
 	map_StructName_InstanceNb := make(map[string]int)
+
+	flag.Parse()
+
+	// setup controlers
+	if !*logGINFlag {
+		myfile, _ := os.Create("/tmp/server.log")
+		gin.DefaultWriter = myfile
+	}
+
 	r := gin.Default()
 	r.Use(cors.Default())
 

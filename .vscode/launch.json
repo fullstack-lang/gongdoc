@@ -146,8 +146,7 @@
             "request": "launch",
             "mode": "debug",
             "program": "${workspaceFolder}/go/tests/geometry/go/cmd/geometry",
-            "args": [
-            ]
+            "args": []
         },
         {
             "name": "go load geometry -embeddedDiagrams",
@@ -156,7 +155,7 @@
             "mode": "debug",
             "program": "${workspaceFolder}/go/tests/geometry/go/cmd/geometry",
             "args": [
-                "-embeddedDiagrams"
+                "-embeddedDiagrams=true"
             ]
         },
         {

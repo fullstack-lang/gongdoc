@@ -6,7 +6,6 @@ import (
 	"go/token"
 	"log"
 	"os"
-	"path/filepath"
 
 	gong_models "github.com/fullstack-lang/gong/go/models"
 )
@@ -74,18 +73,19 @@ import (
 
 `
 
-func (diagramPackage *DiagramPackage) UnmarshallOneDiagram(diagramName string) (classdiagram *Classdiagram) {
+func (diagramPackage *DiagramPackage) UnmarshallOneDiagram(diagramName string, inFile *ast.File, fset *token.FileSet) (classdiagram *Classdiagram) {
 
 	// for debug purposes
 	gongdocStage := Stage
 	_ = gongdocStage
 
-	diagramFileName :=
-		filepath.Join(diagramPackage.AbsolutePathToDiagramPackage, "../diagrams", diagramName) + ".go"
-	if err := ParseAstFile(diagramFileName); err != nil {
-		log.Fatalln("Unable to parse", diagramFileName)
+	var err error
+	err = ParseAstFile(inFile, fset)
+
+	if err != nil {
+		log.Fatalln("Unable to parse", diagramName, err.Error())
 	} else {
-		log.Println("Parsed", diagramFileName)
+		log.Println("Parsed", diagramName)
 
 		// there should be one diagram on the stage and it has to be
 		// appended to the diagram package
@@ -93,9 +93,13 @@ func (diagramPackage *DiagramPackage) UnmarshallOneDiagram(diagramName string) (
 		classdiagram, ok = (*GetGongstructInstancesMap[Classdiagram]())[diagramName]
 
 		if !ok {
-			log.Println("Unable to find", diagramName, "in", diagramFileName, ". It might be a docs.go file")
+			log.Println("Unable to find", diagramName, ". It might be a docs.go file")
 			return
 		}
+
+		// the parsed diagram might have been in draw mode
+		// let's not keep that
+		classdiagram.IsInDrawMode = false
 
 		diagramPackage.Classdiagrams = append(diagramPackage.Classdiagrams,
 			classdiagram)
