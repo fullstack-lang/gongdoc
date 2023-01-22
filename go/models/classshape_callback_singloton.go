@@ -18,7 +18,9 @@ func (classshapeCallbacksSingloton *ClassshapeCallbacksSingloton) OnAfterUpdate(
 		stagedClassshape.Commit()
 
 		log.Println("UML Shape selected ", stagedClassshape.Identifier)
-		classshapeCallbacksSingloton.ClassshapeCallback.HasSelected(stagedClassshape.Identifier)
+		if classshapeCallbacksSingloton.ClassshapeCallback != nil {
+			classshapeCallbacksSingloton.ClassshapeCallback.HasSelected(stagedClassshape.Identifier)
+		}
 	}
 }
 

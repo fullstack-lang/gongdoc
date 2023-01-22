@@ -156,11 +156,18 @@ func main() {
 		os.Exit(0)
 	}
 
+	gongdocStage := &gongdoc_models.Stage
+	_ = gongdocStage
+
 	classshapeCallbackSingloton := new(gongdoc_models.ClassshapeCallbacksSingloton)
-	gongdoc_models.Stage.OnAfterClassshapeUpdateCallback = classshapeCallbackSingloton
+
+	// very strangely,
+	// gongdoc_models.Stage.OnAfterClassshapeUpdateCallback = classshapeCallbackSingloton
+	// does not seem to be executed
+	gongdocStage.OnAfterClassshapeUpdateCallback = classshapeCallbackSingloton
 
 	diagramPackageCallbackSingloton := new(gongdoc_models.DiagramPackageCallbacksSingloton)
-	gongdoc_models.Stage.OnAfterDiagramPackageUpdateCallback = diagramPackageCallbackSingloton
+	gongdocStage.OnAfterDiagramPackageUpdateCallback = diagramPackageCallbackSingloton
 
 	if *marshallOnCommit != "" {
 		hook := new(BeforeCommitImplementation)

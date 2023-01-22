@@ -302,7 +302,7 @@ func (nodesCb *NodeCallbacksSingloton) OnAfterUpdateStructField(
 			var link *Link
 
 			for _, _field := range classshape.Links {
-				if _field.Fieldname == stagedNode.Name {
+				if ToFieldName(ToFieldName(_field.Identifier)) == stagedNode.Name {
 					link = _field
 				}
 			}
@@ -418,9 +418,8 @@ func (nodesCb *NodeCallbacksSingloton) OnAfterUpdateStructField(
 			link.Name = stagedNode.Name
 			link.SourceMultiplicity = sourceMultiplicity
 			link.TargetMultiplicity = targetMultiplicity
-			link.Fieldname = stagedNode.Name
-			link.Identifier = RefPrefixReferencedPackage +
-				filepath.Base(nodesCb.diagramPackage.GongModelPath) + "." + stagedNode.Name
+			link.Identifier =
+				ToFieldIdentifier(gongStruct.Name, stagedNode.Name)
 
 			link.Structname = gongStruct.Name
 			link.Fieldtypename = targetStructName

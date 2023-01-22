@@ -174,7 +174,7 @@ func (classdiagram *Classdiagram) OutputSVG(path string) {
 			ctx.DrawPath(centerOfClassshapeX, centerOfClassshapeY, targetClassshapeToMiddleVerticePath)
 
 			// draw text between middle vertice & target position
-			text := canvas.NewTextLine(ff, link.Fieldname, canvas.TextAlign(canvas.Left)) // simple text line
+			text := canvas.NewTextLine(ff, ToFieldName(link.Identifier), canvas.TextAlign(canvas.Left)) // simple text line
 			linkFieldPosition := Position{
 				X: (verticeSVGX + centerOfClassshapeX) / 2.0,
 				Y: (verticeSVGY + centerOfClassshapeY) / 2.0,

@@ -838,10 +838,6 @@ func UnmarshallGongstructStaging(cmap *ast.CommentMap, assignStmt *ast.AssignStm
 					// remove first and last char
 					fielValue := basicLit.Value[1 : len(basicLit.Value)-1]
 					__gong__map_Link[identifier].Name = fielValue
-				case "Fieldname":
-					// remove first and last char
-					fielValue := basicLit.Value[1 : len(basicLit.Value)-1]
-					__gong__map_Link[identifier].Fieldname = fielValue
 				case "Structname":
 					// remove first and last char
 					fielValue := basicLit.Value[1 : len(basicLit.Value)-1]

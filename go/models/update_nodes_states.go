@@ -95,7 +95,7 @@ func updateNodesStates(stage *StageStruct, nodesCb *NodeCallbacksSingloton) {
 
 		}
 		for _, link := range classshape.Links {
-			nodeId := gongStructName + "." + link.Fieldname
+			nodeId := gongStructName + "." + ToFieldName(link.Identifier)
 			node, ok := nodesCb.map_Identifier_Node[nodeId]
 
 			if !ok {

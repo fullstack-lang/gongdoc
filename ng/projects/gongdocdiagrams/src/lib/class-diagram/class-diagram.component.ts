@@ -350,7 +350,10 @@ export class ClassDiagramComponent implements OnInit, OnDestroy {
             var toShape = this.Map_GongStructName_JointjsUMLClassShape.get(linkDB.Fieldtypename)
 
             var strockWidth = 2
-            let LinkEndlabel = linkDB.Fieldname
+
+            let parts = linkDB.Identifier.split(".")
+
+            let LinkEndlabel = parts[parts.length - 1]
             let distanceEndLabel = 0.75
             let linkTargetMuliplicity = linkDB.TargetMultiplicity
             let distanceTargetMultiplicity = 0.95
