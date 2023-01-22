@@ -67,9 +67,6 @@ type FieldDB struct {
 	// Declation for basic field fieldDB.Name
 	Name_Data sql.NullString
 
-	// Declation for basic field fieldDB.Fieldname
-	Fieldname_Data sql.NullString
-
 	// Declation for basic field fieldDB.Identifier
 	Identifier_Data sql.NullString
 
@@ -104,15 +101,13 @@ type FieldWOP struct {
 
 	Name string `xlsx:"1"`
 
-	Fieldname string `xlsx:"2"`
+	Identifier string `xlsx:"2"`
 
-	Identifier string `xlsx:"3"`
+	FieldTypeAsString string `xlsx:"3"`
 
-	FieldTypeAsString string `xlsx:"4"`
+	Structname string `xlsx:"4"`
 
-	Structname string `xlsx:"5"`
-
-	Fieldtypename string `xlsx:"6"`
+	Fieldtypename string `xlsx:"5"`
 	// insertion for WOP pointer fields
 }
 
@@ -120,7 +115,6 @@ var Field_Fields = []string{
 	// insertion for WOP basic fields
 	"ID",
 	"Name",
-	"Fieldname",
 	"Identifier",
 	"FieldTypeAsString",
 	"Structname",
@@ -412,9 +406,6 @@ func (fieldDB *FieldDB) CopyBasicFieldsFromField(field *models.Field) {
 	fieldDB.Name_Data.String = field.Name
 	fieldDB.Name_Data.Valid = true
 
-	fieldDB.Fieldname_Data.String = field.Fieldname
-	fieldDB.Fieldname_Data.Valid = true
-
 	fieldDB.Identifier_Data.String = field.Identifier
 	fieldDB.Identifier_Data.Valid = true
 
@@ -435,9 +426,6 @@ func (fieldDB *FieldDB) CopyBasicFieldsFromFieldWOP(field *FieldWOP) {
 	fieldDB.Name_Data.String = field.Name
 	fieldDB.Name_Data.Valid = true
 
-	fieldDB.Fieldname_Data.String = field.Fieldname
-	fieldDB.Fieldname_Data.Valid = true
-
 	fieldDB.Identifier_Data.String = field.Identifier
 	fieldDB.Identifier_Data.Valid = true
 
@@ -455,7 +443,6 @@ func (fieldDB *FieldDB) CopyBasicFieldsFromFieldWOP(field *FieldWOP) {
 func (fieldDB *FieldDB) CopyBasicFieldsToField(field *models.Field) {
 	// insertion point for checkout of basic fields (back repo to stage)
 	field.Name = fieldDB.Name_Data.String
-	field.Fieldname = fieldDB.Fieldname_Data.String
 	field.Identifier = fieldDB.Identifier_Data.String
 	field.FieldTypeAsString = fieldDB.FieldTypeAsString_Data.String
 	field.Structname = fieldDB.Structname_Data.String
@@ -467,7 +454,6 @@ func (fieldDB *FieldDB) CopyBasicFieldsToFieldWOP(field *FieldWOP) {
 	field.ID = int(fieldDB.ID)
 	// insertion point for checkout of basic fields (back repo to stage)
 	field.Name = fieldDB.Name_Data.String
-	field.Fieldname = fieldDB.Fieldname_Data.String
 	field.Identifier = fieldDB.Identifier_Data.String
 	field.FieldTypeAsString = fieldDB.FieldTypeAsString_Data.String
 	field.Structname = fieldDB.Structname_Data.String

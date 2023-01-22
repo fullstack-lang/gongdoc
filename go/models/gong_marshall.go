@@ -309,12 +309,6 @@ func (stage *StageStruct) Marshall(file *os.File, modelsPackageName, packageName
 		initializerStatements += setValueField
 
 		setValueField = StringInitStatement
-		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "Fieldname")
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", string(field.Fieldname))
-		initializerStatements += setValueField
-
-		setValueField = StringInitStatement
 		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}",
 			fmt.Sprintf("\n\t// comment added to overcome the problem with the comment map association\n\n\t//gong:ident [%s]\n\t{{Identifier}}",
 				string(field.Identifier)))
@@ -1140,15 +1134,14 @@ func (stage *StageStruct) Marshall(file *os.File, modelsPackageName, packageName
 
 			if nbPoints == 1 {
 				entries += fmt.Sprintf("\n\n\t\"%s\": &(%s{}),", value, value)
-			} else if nbPoints == 2 {
+			}
+			if nbPoints == 2 {
 				// substitute the second point with "{})."
 				joker := "__substitute_for_first_point__"
 				valueIdentifier := strings.Replace(value, ".", joker, 1)
 				valueIdentifier = strings.Replace(valueIdentifier, ".", "{}).", 1)
 				valueIdentifier = strings.Replace(valueIdentifier, joker, ".", 1)
 				entries += fmt.Sprintf("\n\n\t\"%s\": (%s,", value, valueIdentifier)
-			} else {
-				log.Fatalln("Marshalling, problem with Map_DocLink_Renaming entry", value)
 			}
 		}
 

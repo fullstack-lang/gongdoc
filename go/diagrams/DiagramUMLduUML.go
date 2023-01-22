@@ -259,7 +259,6 @@ func DiagramUMLduUMLInjection() {
 
 	// Field values setup
 	__Field__000000_FieldTypeAsString.Name = `FieldTypeAsString`
-	__Field__000000_FieldTypeAsString.Fieldname = `FieldTypeAsString`
 
 	// comment added to overcome the problem with the comment map association
 
@@ -271,7 +270,6 @@ func DiagramUMLduUMLInjection() {
 
 	// Field values setup
 	__Field__000001_Fieldname.Name = `Fieldname`
-	__Field__000001_Fieldname.Fieldname = `Fieldname`
 
 	// comment added to overcome the problem with the comment map association
 
@@ -283,7 +281,6 @@ func DiagramUMLduUMLInjection() {
 
 	// Field values setup
 	__Field__000002_Fieldname.Name = `Fieldname`
-	__Field__000002_Fieldname.Fieldname = `Fieldname`
 
 	// comment added to overcome the problem with the comment map association
 
@@ -295,7 +292,6 @@ func DiagramUMLduUMLInjection() {
 
 	// Field values setup
 	__Field__000003_Fieldtypename.Name = `Fieldtypename`
-	__Field__000003_Fieldtypename.Fieldname = `Fieldtypename`
 
 	// comment added to overcome the problem with the comment map association
 
@@ -307,7 +303,6 @@ func DiagramUMLduUMLInjection() {
 
 	// Field values setup
 	__Field__000004_Fieldtypename.Name = `Fieldtypename`
-	__Field__000004_Fieldtypename.Fieldname = `Fieldtypename`
 
 	// comment added to overcome the problem with the comment map association
 
@@ -319,7 +314,6 @@ func DiagramUMLduUMLInjection() {
 
 	// Field values setup
 	__Field__000005_Heigth.Name = `Heigth`
-	__Field__000005_Heigth.Fieldname = `Heigth`
 
 	// comment added to overcome the problem with the comment map association
 
@@ -331,7 +325,6 @@ func DiagramUMLduUMLInjection() {
 
 	// Field values setup
 	__Field__000006_Name.Name = `Name`
-	__Field__000006_Name.Fieldname = `Name`
 
 	// comment added to overcome the problem with the comment map association
 
@@ -343,7 +336,6 @@ func DiagramUMLduUMLInjection() {
 
 	// Field values setup
 	__Field__000007_Name.Name = `Name`
-	__Field__000007_Name.Fieldname = `Name`
 
 	// comment added to overcome the problem with the comment map association
 
@@ -355,7 +347,6 @@ func DiagramUMLduUMLInjection() {
 
 	// Field values setup
 	__Field__000008_Name.Name = `Name`
-	__Field__000008_Name.Fieldname = `Name`
 
 	// comment added to overcome the problem with the comment map association
 
@@ -367,7 +358,6 @@ func DiagramUMLduUMLInjection() {
 
 	// Field values setup
 	__Field__000009_Name.Name = `Name`
-	__Field__000009_Name.Fieldname = `Name`
 
 	// comment added to overcome the problem with the comment map association
 
@@ -379,7 +369,6 @@ func DiagramUMLduUMLInjection() {
 
 	// Field values setup
 	__Field__000010_Path.Name = `Path`
-	__Field__000010_Path.Fieldname = `Path`
 
 	// comment added to overcome the problem with the comment map association
 
@@ -395,7 +384,6 @@ func DiagramUMLduUMLInjection() {
 
 	// Field values setup
 	__Field__000012_Structname.Name = `Structname`
-	__Field__000012_Structname.Fieldname = `Structname`
 
 	// comment added to overcome the problem with the comment map association
 
@@ -407,7 +395,6 @@ func DiagramUMLduUMLInjection() {
 
 	// Field values setup
 	__Field__000013_Structname.Name = `Structname`
-	__Field__000013_Structname.Fieldname = `Structname`
 
 	// comment added to overcome the problem with the comment map association
 
@@ -419,7 +406,6 @@ func DiagramUMLduUMLInjection() {
 
 	// Field values setup
 	__Field__000014_TargetMultiplicity.Name = `TargetMultiplicity`
-	__Field__000014_TargetMultiplicity.Fieldname = `TargetMultiplicity`
 
 	// comment added to overcome the problem with the comment map association
 
@@ -431,7 +417,6 @@ func DiagramUMLduUMLInjection() {
 
 	// Field values setup
 	__Field__000015_Width.Name = `Width`
-	__Field__000015_Width.Fieldname = `Width`
 
 	// comment added to overcome the problem with the comment map association
 
@@ -443,7 +428,6 @@ func DiagramUMLduUMLInjection() {
 
 	// Field values setup
 	__Field__000016_X.Name = `X`
-	__Field__000016_X.Fieldname = `X`
 
 	// comment added to overcome the problem with the comment map association
 
@@ -455,7 +439,6 @@ func DiagramUMLduUMLInjection() {
 
 	// Field values setup
 	__Field__000017_X.Name = `X`
-	__Field__000017_X.Fieldname = `X`
 
 	// comment added to overcome the problem with the comment map association
 
@@ -467,7 +450,6 @@ func DiagramUMLduUMLInjection() {
 
 	// Field values setup
 	__Field__000018_X.Name = `X`
-	__Field__000018_X.Fieldname = `X`
 
 	// comment added to overcome the problem with the comment map association
 
@@ -479,7 +461,6 @@ func DiagramUMLduUMLInjection() {
 
 	// Field values setup
 	__Field__000019_Y.Name = `Y`
-	__Field__000019_Y.Fieldname = `Y`
 
 	// comment added to overcome the problem with the comment map association
 
@@ -491,7 +472,6 @@ func DiagramUMLduUMLInjection() {
 
 	// Field values setup
 	__Field__000020_Y.Name = `Y`
-	__Field__000020_Y.Fieldname = `Y`
 
 	// comment added to overcome the problem with the comment map association
 
@@ -503,7 +483,6 @@ func DiagramUMLduUMLInjection() {
 
 	// Field values setup
 	__Field__000021_Y.Name = `Y`
-	__Field__000021_Y.Fieldname = `Y`
 
 	// comment added to overcome the problem with the comment map association
 
@@ -515,7 +494,7 @@ func DiagramUMLduUMLInjection() {
 
 	// Link values setup
 	__Link__000000_Classdiagrams.Name = `Classdiagrams`
-	__Link__000000_Classdiagrams.Fieldname = `Classdiagrams`
+
 	__Link__000000_Classdiagrams.Structname = `DiagramPackage`
 
 	// comment added to overcome the problem with the comment map association
@@ -527,7 +506,7 @@ func DiagramUMLduUMLInjection() {
 
 	// Link values setup
 	__Link__000001_Classshapes.Name = `Classshapes`
-	__Link__000001_Classshapes.Fieldname = `Classshapes`
+
 	__Link__000001_Classshapes.Structname = `Classdiagram`
 
 	// comment added to overcome the problem with the comment map association
@@ -539,7 +518,7 @@ func DiagramUMLduUMLInjection() {
 
 	// Link values setup
 	__Link__000002_Fields.Name = `Fields`
-	__Link__000002_Fields.Fieldname = `Fields`
+
 	__Link__000002_Fields.Structname = `Classshape`
 
 	// comment added to overcome the problem with the comment map association
@@ -551,7 +530,7 @@ func DiagramUMLduUMLInjection() {
 
 	// Link values setup
 	__Link__000003_Links.Name = `Links`
-	__Link__000003_Links.Fieldname = `Links`
+
 	__Link__000003_Links.Structname = `Classshape`
 
 	// comment added to overcome the problem with the comment map association
@@ -563,7 +542,7 @@ func DiagramUMLduUMLInjection() {
 
 	// Link values setup
 	__Link__000004_Middlevertice.Name = `Middlevertice`
-	__Link__000004_Middlevertice.Fieldname = `Middlevertice`
+
 	__Link__000004_Middlevertice.Structname = `Link`
 
 	// comment added to overcome the problem with the comment map association
@@ -575,7 +554,7 @@ func DiagramUMLduUMLInjection() {
 
 	// Link values setup
 	__Link__000005_Position.Name = `Position`
-	__Link__000005_Position.Fieldname = `Position`
+
 	__Link__000005_Position.Structname = `Classshape`
 
 	// comment added to overcome the problem with the comment map association
@@ -587,7 +566,7 @@ func DiagramUMLduUMLInjection() {
 
 	// Link values setup
 	__Link__000006_States.Name = `States`
-	__Link__000006_States.Fieldname = `States`
+
 	__Link__000006_States.Structname = `Umlsc`
 
 	// comment added to overcome the problem with the comment map association
@@ -599,7 +578,7 @@ func DiagramUMLduUMLInjection() {
 
 	// Link values setup
 	__Link__000007_Umlscs.Name = `Umlscs`
-	__Link__000007_Umlscs.Fieldname = `Umlscs`
+
 	__Link__000007_Umlscs.Structname = `DiagramPackage`
 
 	// comment added to overcome the problem with the comment map association

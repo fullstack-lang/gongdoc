@@ -71,9 +71,6 @@ export class FieldsTableComponent implements OnInit {
         case 'Name':
           return fieldDB.Name;
 
-        case 'Fieldname':
-          return fieldDB.Fieldname;
-
         case 'Identifier':
           return fieldDB.Identifier;
 
@@ -108,7 +105,6 @@ export class FieldsTableComponent implements OnInit {
 
       // insertion point for merging of fields
       mergedContent += fieldDB.Name.toLowerCase()
-      mergedContent += fieldDB.Fieldname.toLowerCase()
       mergedContent += fieldDB.Identifier.toLowerCase()
       mergedContent += fieldDB.FieldTypeAsString.toLowerCase()
       mergedContent += fieldDB.Structname.toLowerCase()
@@ -168,7 +164,6 @@ export class FieldsTableComponent implements OnInit {
     if (this.mode == TableComponentMode.DISPLAY_MODE) {
       this.displayedColumns = ['ID', 'Edit', 'Delete', // insertion point for columns to display
         "Name",
-        "Fieldname",
         "Identifier",
         "FieldTypeAsString",
         "Structname",
@@ -178,7 +173,6 @@ export class FieldsTableComponent implements OnInit {
     } else {
       this.displayedColumns = ['select', 'ID', // insertion point for columns to display
         "Name",
-        "Fieldname",
         "Identifier",
         "FieldTypeAsString",
         "Structname",

@@ -36,8 +36,6 @@ func (nodesCb *NodeCallbacksSingloton) GetSelectedClassdiagram() (classdiagram *
 	return
 }
 
-const RefPrefixReferencedPackage = "ref_"
-
 // OnAfterUpdate is called each time the end user interacts
 // with any node. The front commit the state of the front node
 // to the back ([frontNode] in the function).
@@ -290,7 +288,7 @@ func (nodesCb *NodeCallbacksSingloton) OnAfterUpdateStructField(
 			var field *Field
 
 			for _, _field := range classshape.Fields {
-				if _field.Fieldname == stagedNode.Name {
+				if ToFieldName(_field.Identifier) == stagedNode.Name {
 					field = _field
 				}
 			}
@@ -326,11 +324,7 @@ func (nodesCb *NodeCallbacksSingloton) OnAfterUpdateStructField(
 
 			var field Field
 			field.Name = stagedNode.Name
-			field.Fieldname = stagedNode.Name
-			field.Identifier = RefPrefixReferencedPackage +
-				filepath.Base(nodesCb.diagramPackage.GongModelPath) +
-				"." + gongStruct.Name +
-				"." + stagedNode.Name
+			field.Identifier = ToFieldIdentifier(gongStruct.Name, stagedNode.Name)
 
 			switch realField := stagedNode.Gongfield.(type) {
 			case *gong_models.GongBasicField:
@@ -373,7 +367,7 @@ func (nodesCb *NodeCallbacksSingloton) OnAfterUpdateStructField(
 			// compute insertionIndex (index where to insert the field to display)
 			insertionIndex := 0
 			for idx, field := range classshape.Fields {
-				gongField := map_Name_Field[field.Fieldname]
+				gongField := map_Name_Field[ToFieldName(field.Identifier)]
 				_fieldRank := map_Field_Rank[gongField]
 				if fieldRank > _fieldRank {
 					insertionIndex = idx + 1
@@ -566,7 +560,7 @@ func (nodesCb *NodeCallbacksSingloton) OnAfterUpdateEnumValue(
 
 		var field Field
 		field.Name = stagedNode.Name
-		field.Fieldname = stagedNode.Name
+		field.Identifier = ToFieldIdentifier(gongEnum.Name, stagedNode.Name)
 
 		for idx, gongEnum := range gongEnum.GongEnumValues {
 
@@ -581,7 +575,7 @@ func (nodesCb *NodeCallbacksSingloton) OnAfterUpdateEnumValue(
 		// compute insertionIndex (index where to insert the field to display)
 		insertionIndex := 0
 		for idx, field := range classshape.Fields {
-			value := map_ValueName_Value[field.Fieldname]
+			value := map_ValueName_Value[ToFieldName(field.Identifier)]
 			_rankInEnum := map_Value_rankInEnum[value]
 			if rankkInEnum > _rankInEnum {
 				insertionIndex = idx + 1
@@ -609,7 +603,7 @@ func (nodesCb *NodeCallbacksSingloton) OnAfterUpdateEnumValue(
 			var field *Field
 
 			for _, _field := range classshape.Fields {
-				if _field.Fieldname == stagedNode.Name {
+				if ToFieldName(_field.Identifier) == stagedNode.Name {
 					field = _field
 				}
 			}

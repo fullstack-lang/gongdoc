@@ -207,7 +207,8 @@ func (classdiagram *Classdiagram) OutputSVG(path string) {
 		// draw fields name
 		for i, field := range classshape.Fields {
 			text := canvas.NewTextLine(ff,
-				field.Fieldname+":"+field.Fieldtypename,
+				ToFieldName(field.Identifier)+
+					":"+field.Fieldtypename,
 				canvas.TextAlign(canvas.Left)) // simple text line
 			ctx.DrawText(bottomLeftX+10.0, bottomLeftY+classshape.Heigth-12.0-float64(i+1)*heigthBetweenLines, text)
 		}
