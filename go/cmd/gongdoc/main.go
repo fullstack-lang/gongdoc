@@ -31,8 +31,7 @@ var (
 	logBBFlag  = flag.Bool("logDB", false, "log mode for db")
 	logGINFlag = flag.Bool("logGIN", false, "log mode for gin")
 
-	genDefaultDiagramFlag = flag.Bool("genDefaultDiagram", false, "generate default diagram")
-	svg                   = flag.Bool("svg", false, "generate svg output and exits")
+	svg = flag.Bool("svg", false, "generate svg output and exits")
 
 	pkgPath = flag.String("pkgPath", ".", "path to the models package")
 
@@ -113,14 +112,6 @@ func main() {
 
 	// load package to analyse
 	modelPkg, _ := gong_models.LoadSource(*pkgPath)
-
-	if *genDefaultDiagramFlag {
-		log.Printf("Generating default diagram")
-
-		// generates default UML diagrams
-		gongdoc_models.GenGoDefaultDiagram(modelPkg, *pkgPath)
-		return
-	}
 
 	r.Use(static.Serve("/", EmbedFolder(gongdoc.NgDistNg, "ng/dist/ng")))
 	r.NoRoute(func(c *gin.Context) {
