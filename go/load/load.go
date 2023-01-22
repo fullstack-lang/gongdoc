@@ -3,6 +3,7 @@ package load
 import (
 	"embed"
 	"path/filepath"
+	"sort"
 	"strings"
 
 	gong_fullstack "github.com/fullstack-lang/gong/go/fullstack"
@@ -63,9 +64,18 @@ func Load(
 	diagramPackage.GongModelPath = pkgPath
 
 	// set up Map_DocLink_Renaming
+	//  TO BE REMOVED
 	// to be removed after fix of [issue](https://github.com/golang/go/issues/57559)
 	gongdoc_models.Stage.Map_DocLink_Renaming = make(map[string]string)
-	for gongStruct := range *gong_models.GetGongstructInstancesSet[gong_models.GongStruct]() {
+
+	gongstructOrdered := []*gong_models.GongStruct{}
+	for gongstruct := range *gong_models.GetGongstructInstancesSet[gong_models.GongStruct]() {
+		gongstructOrdered = append(gongstructOrdered, gongstruct)
+	}
+	sort.Slice(gongstructOrdered[:], func(i, j int) bool {
+		return gongstructOrdered[i].Name < gongstructOrdered[j].Name
+	})
+	for _, gongStruct := range gongstructOrdered {
 
 		ident := gongdoc_models.RefPrefixReferencedPackage + "models." + gongStruct.Name
 
@@ -83,6 +93,7 @@ func Load(
 		// to do after fix of https://github.com/fullstack-lang/gongdoc/issues/100
 		// gongdoc_models.Stage.Map_DocLink_Renaming[ident] = ident
 	}
+	// end of TO BE REMOVED
 
 	// set up the number of instance per classshape
 	if map_StructName_InstanceNb != nil {
