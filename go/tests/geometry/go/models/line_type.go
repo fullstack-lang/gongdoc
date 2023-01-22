@@ -1,10 +1,17 @@
 package models
 
-// swagger:enum LineType
-type LineType string
+type LineTypeString string
 
 // values for EnumType
 const (
-	CONTINUOUS LineType = "CONTINUOUS"
-	DOTTED     LineType = "DOTTED"
+	CONTINUOUS LineTypeString = "CONTINUOUS"
+	DOTTED     LineTypeString = "DOTTED"
+)
+
+type LineTypeInt int
+
+// values for EnumType
+const (
+	CONTINUOUS_ZERO LineTypeInt = iota
+	DOTTED_ONE
 )

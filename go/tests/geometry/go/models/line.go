@@ -13,7 +13,7 @@ type Line struct {
 
 	JourneyTime time.Duration
 
-	Type LineType
+	Type LineTypeString
 
 	VeryLongLongLongLongLongLongField string
 }

@@ -27,7 +27,11 @@ var ___dummy__ref_models_NewDiagram ref_models.StageStruct
 var map_DocLink_Identifier_NewDiagram map[string]any = map[string]any{
 	// injection point for docLink to identifiers
 
-	"ref_models.Line": &(ref_models.Line{}),
+	"ref_models.Line":            &(ref_models.Line{}),
+	"ref_models.LineTypeInt":     ref_models.LineTypeString(""),
+	"ref_models.LineTypeString":  ref_models.LineTypeInt(0),
+	"ref_models.CONTINUOUS":      ref_models.CONTINUOUS,
+	"ref_models.CONTINUOUS_ZERO": ref_models.CONTINUOUS_ZERO,
 
 	"ref_models.Line.CreationDate": (ref_models.Line{}).CreationDate,
 
@@ -125,7 +129,7 @@ func NewDiagramInjection() {
 
 	// Classshape values setup
 	__Classshape__000000_NewDiagram_LineType.Name = `NewDiagram-LineType`
-	
+
 	// comment added to overcome the problem with the comment map association
 
 	//gong:ident [ref_models.LineType]
@@ -138,7 +142,7 @@ func NewDiagramInjection() {
 
 	// Field values setup
 	__Field__000000_CONTINUOUS.Name = `CONTINUOUS`
-	
+
 	// comment added to overcome the problem with the comment map association
 
 	//gong:ident [ref_models.LineType.CONTINUOUS]
@@ -149,7 +153,7 @@ func NewDiagramInjection() {
 
 	// Field values setup
 	__Field__000001_DOTTED.Name = `DOTTED`
-	
+
 	// comment added to overcome the problem with the comment map association
 
 	//gong:ident [ref_models.LineType.DOTTED]
@@ -169,5 +173,3 @@ func NewDiagramInjection() {
 	__Classshape__000000_NewDiagram_LineType.Fields = append(__Classshape__000000_NewDiagram_LineType.Fields, __Field__000000_CONTINUOUS)
 	__Classshape__000000_NewDiagram_LineType.Fields = append(__Classshape__000000_NewDiagram_LineType.Fields, __Field__000001_DOTTED)
 }
-
-
