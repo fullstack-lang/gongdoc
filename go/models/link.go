@@ -21,23 +21,3 @@ type Link struct {
 	// Vertices at the middle
 	Middlevertice *Vertice
 }
-
-// serialize the package and its elements to the Stage
-// this is used if one Umlsc is dynamicaly created
-func (link *Link) SerializeToStage() {
-
-	link.Stage()
-
-	if link.Middlevertice != nil {
-		link.Middlevertice.Stage()
-	}
-}
-
-func (link *Link) SerializeToUnstage() {
-
-	link.Unstage()
-
-	if link.Middlevertice != nil {
-		link.Middlevertice.Unstage()
-	}
-}

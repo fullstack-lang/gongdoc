@@ -18,14 +18,3 @@ type Umlsc struct {
 	// or not (in production mode)
 	IsInDrawMode bool
 }
-
-// serialize the package and its elements to the Stage
-// this is used if one Umlsc is dynamicaly created
-func (umlsc *Umlsc) SerializeToStage() {
-
-	umlsc.Stage()
-
-	for _, state := range umlsc.States {
-		state.SerializeToStage()
-	}
-}

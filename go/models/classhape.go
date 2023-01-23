@@ -35,35 +35,3 @@ type Classshape struct {
 }
 
 var Map_Identifier_NbInstances = make(map[string]int)
-
-// serialize the package and its elements to the Stage
-// this is used if one Umlsc is dynamicaly created
-func (classshape *Classshape) SerializeToStage() {
-
-	classshape.Stage()
-
-	classshape.Position.Stage()
-
-	for _, link := range classshape.Links {
-		link.SerializeToStage()
-	}
-
-	for _, field := range classshape.Fields {
-		field.SerializeToStage()
-	}
-}
-
-func (classshape *Classshape) SerializeToUnstage() {
-
-	classshape.Unstage()
-
-	classshape.Position.Unstage()
-
-	for _, link := range classshape.Links {
-		link.SerializeToUnstage()
-	}
-
-	for _, field := range classshape.Fields {
-		field.Unstage()
-	}
-}

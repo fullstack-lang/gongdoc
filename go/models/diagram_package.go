@@ -106,19 +106,3 @@ func (diagramPackage *DiagramPackage) UnmarshallOneDiagram(diagramName string, i
 	}
 	return
 }
-
-// serialize the package and its elements to the Stage
-// this is used if one Umlsc is dynamicaly created
-func (diagramPackage *DiagramPackage) SerializeToStage() {
-
-	diagramPackage.Stage()
-
-	for _, classdiagram := range diagramPackage.Classdiagrams {
-		classdiagram.SerializeToStage()
-	}
-
-	for _, umlsc := range diagramPackage.Umlscs {
-		umlsc.SerializeToStage()
-	}
-
-}
