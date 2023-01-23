@@ -295,35 +295,3 @@ func (classdiagram *Classdiagram) AddClassshape(nodesCb *NodeCallbacksSingloton,
 	// log.Println("AddClassshape, after commit, nb ", Stage.BackRepo.GetLastCommitFromBackNb())
 
 }
-
-func (classdiagram *Classdiagram) NodeUpdate() {
-
-}
-
-// serialize the package and its elements to the Stage
-// this is used if one Umlsc is dynamicaly created
-func (classdiagram *Classdiagram) SerializeToStage() {
-
-	classdiagram.Stage()
-
-	for _, classshape := range classdiagram.Classshapes {
-		classshape.SerializeToStage()
-	}
-	for _, note := range classdiagram.Notes {
-		note.Stage()
-	}
-}
-
-// serialize the package and its elements to the Stage
-// this is used if one Umlsc is dynamicaly created
-func (classdiagram *Classdiagram) SerializeToUnstage() {
-
-	classdiagram.Unstage()
-
-	for _, classshape := range classdiagram.Classshapes {
-		classshape.SerializeToUnstage()
-	}
-	for _, note := range classdiagram.Notes {
-		note.Unstage()
-	}
-}

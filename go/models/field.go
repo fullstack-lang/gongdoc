@@ -14,10 +14,3 @@ type Field struct {
 	Structname        string
 	Fieldtypename     string
 }
-
-// serialize the package and its elements to the Stage
-// this is used if one Umlsc is dynamicaly created
-func (field *Field) SerializeToStage() {
-
-	field.Stage()
-}
