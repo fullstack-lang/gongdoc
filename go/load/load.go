@@ -120,6 +120,16 @@ func Load(
 		// to do after fix of https://github.com/fullstack-lang/gongdoc/issues/100
 		// gongdoc_models.Stage.Map_DocLink_Renaming[ident] = ident
 	}
+
+	for gongNote := range *gong_models.GetGongstructInstancesSet[gong_models.GongNote]() {
+		ident := gongdoc_models.RefPrefixReferencedPackage + "models." + gongNote.Name
+
+		var identifier gongdoc_models.GONG__Identifier
+		identifier.Ident = ident
+		identifier.Type = gongdoc_models.GONG__IDENTIFIER_CONST
+		gongdoc_models.Stage.Map_DocLink_Renaming[ident] = identifier
+	}
+
 	// end of TO BE REMOVED
 
 	// set up the number of instance per classshape

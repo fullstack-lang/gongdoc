@@ -59,6 +59,8 @@ var map_DocLink_Identifier_NewDiagram map[string]any = map[string]any{
 
 	"ref_models.LineTypeString": ref_models.LineTypeString(""),
 
+	"ref_models.LongNodeOnModels": ref_models.LongNodeOnModels,
+
 	"ref_models.Point": &(ref_models.Point{}),
 
 	"ref_models.Point.CreatedAt": (ref_models.Point{}).CreatedAt,
@@ -88,6 +90,8 @@ var map_DocLink_Identifier_NewDiagram map[string]any = map[string]any{
 	"ref_models.PointUse.Name": (ref_models.PointUse{}).Name,
 
 	"ref_models.PointUse.Points": (ref_models.PointUse{}).Points,
+
+	"ref_models.ShortNodeOnModels": ref_models.ShortNodeOnModels,
 
 	"ref_models.SimulationStage": ref_models.SimulationStage(""),
 }
@@ -123,6 +127,7 @@ func NewDiagramInjection() {
 	// Declarations of staged instances of NoteLink
 
 	// Declarations of staged instances of NoteShape
+	__NoteShape__000000_ShortNodeOnModels := (&models.NoteShape{Name: `ShortNodeOnModels`}).Stage()
 
 	// Declarations of staged instances of Position
 	__Position__000000_Pos_NewDiagram_LineType := (&models.Position{Name: `Pos-NewDiagram-LineType`}).Stage()
@@ -176,6 +181,18 @@ func NewDiagramInjection() {
 	__Field__000001_DOTTED.Structname = ``
 	__Field__000001_DOTTED.Fieldtypename = ``
 
+	// NoteShape values setup
+	__NoteShape__000000_ShortNodeOnModels.Name = `ShortNodeOnModels`
+	__NoteShape__000000_ShortNodeOnModels.Body = `this is an example of a short note
+It uses the DocLink convention for referencing Identifiers
+In this case [Line], [Point] and [Line.Start]
+`
+	__NoteShape__000000_ShortNodeOnModels.X = 80.000000
+	__NoteShape__000000_ShortNodeOnModels.Y = 170.000000
+	__NoteShape__000000_ShortNodeOnModels.Width = 240.000000
+	__NoteShape__000000_ShortNodeOnModels.Heigth = 63.000000
+	__NoteShape__000000_ShortNodeOnModels.Matched = false
+
 	// Position values setup
 	__Position__000000_Pos_NewDiagram_LineType.X = 70.000000
 	__Position__000000_Pos_NewDiagram_LineType.Y = 50.000000
@@ -183,6 +200,7 @@ func NewDiagramInjection() {
 
 	// Setup of pointers
 	__Classdiagram__000000_NewDiagram.Classshapes = append(__Classdiagram__000000_NewDiagram.Classshapes, __Classshape__000000_NewDiagram_LineType)
+	__Classdiagram__000000_NewDiagram.Notes = append(__Classdiagram__000000_NewDiagram.Notes, __NoteShape__000000_ShortNodeOnModels)
 	__Classshape__000000_NewDiagram_LineType.Position = __Position__000000_Pos_NewDiagram_LineType
 	__Classshape__000000_NewDiagram_LineType.Fields = append(__Classshape__000000_NewDiagram_LineType.Fields, __Field__000000_CONTINUOUS)
 	__Classshape__000000_NewDiagram_LineType.Fields = append(__Classshape__000000_NewDiagram_LineType.Fields, __Field__000001_DOTTED)
