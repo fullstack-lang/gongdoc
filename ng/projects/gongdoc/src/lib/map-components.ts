@@ -17,8 +17,6 @@
   import { NoteShapeSortingComponent } from './noteshape-sorting/noteshape-sorting.component'
   import { PositionsTableComponent } from './positions-table/positions-table.component'
   import { PositionSortingComponent } from './position-sorting/position-sorting.component'
-  import { ReferencesTableComponent } from './references-table/references-table.component'
-  import { ReferenceSortingComponent } from './reference-sorting/reference-sorting.component'
   import { TreesTableComponent } from './trees-table/trees-table.component'
   import { TreeSortingComponent } from './tree-sorting/tree-sorting.component'
   import { UmlStatesTableComponent } from './umlstates-table/umlstates-table.component'
@@ -47,8 +45,6 @@
   export const MapOfNoteShapeSortingComponents: Map<string, any> = new Map([["NoteShapeSortingComponent", NoteShapeSortingComponent],])
   export const MapOfPositionsComponents: Map<string, any> = new Map([["PositionsTableComponent", PositionsTableComponent],])
   export const MapOfPositionSortingComponents: Map<string, any> = new Map([["PositionSortingComponent", PositionSortingComponent],])
-  export const MapOfReferencesComponents: Map<string, any> = new Map([["ReferencesTableComponent", ReferencesTableComponent],])
-  export const MapOfReferenceSortingComponents: Map<string, any> = new Map([["ReferenceSortingComponent", ReferenceSortingComponent],])
   export const MapOfTreesComponents: Map<string, any> = new Map([["TreesTableComponent", TreesTableComponent],])
   export const MapOfTreeSortingComponents: Map<string, any> = new Map([["TreeSortingComponent", TreeSortingComponent],])
   export const MapOfUmlStatesComponents: Map<string, any> = new Map([["UmlStatesTableComponent", UmlStatesTableComponent],])
@@ -72,7 +68,6 @@ export const MapOfComponents: Map<string, any> =
       ["NoteLink", MapOfNoteLinksComponents],
       ["NoteShape", MapOfNoteShapesComponents],
       ["Position", MapOfPositionsComponents],
-      ["Reference", MapOfReferencesComponents],
       ["Tree", MapOfTreesComponents],
       ["UmlState", MapOfUmlStatesComponents],
       ["Umlsc", MapOfUmlscsComponents],
@@ -94,7 +89,6 @@ export const MapOfSortingComponents: Map<string, any> =
       ["NoteLink", MapOfNoteLinkSortingComponents],
       ["NoteShape", MapOfNoteShapeSortingComponents],
       ["Position", MapOfPositionSortingComponents],
-      ["Reference", MapOfReferenceSortingComponents],
       ["Tree", MapOfTreeSortingComponents],
       ["UmlState", MapOfUmlStateSortingComponents],
       ["Umlsc", MapOfUmlscSortingComponents],

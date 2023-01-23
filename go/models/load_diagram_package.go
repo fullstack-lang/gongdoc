@@ -34,6 +34,9 @@ func LoadDiagramPackage(pkgPath string, modelPkg *gong_models.ModelPkg, editable
 	// generic marshalling/unmarshalling to work
 	Stage.MetaPackageImportAlias = "ref_" + filepath.Base(diagramPackage.GongModelPath)
 	Stage.MetaPackageImportPath = `"` + diagramPackage.GongModelPath + `"`
+	if Stage.Map_DocLink_Renaming == nil {
+		Stage.Map_DocLink_Renaming = make(map[string]GONG__Identifier)
+	}
 
 	// if diagrams directory does not exist create it
 	_, errd := os.Stat(diagramPkgPath)
@@ -68,9 +71,9 @@ func LoadDiagramPackage(pkgPath string, modelPkg *gong_models.ModelPkg, editable
 	diagramPackage.fset = fset
 
 	// load all diagram files
-	for fileName := range diagramPackageAst.Files {
-		diagramName := strings.TrimSuffix(filepath.Base(fileName), ".go")
-		diagramPackage.UnmarshallOneDiagram(diagramName)
+	for diagramName, inFile := range diagramPackageAst.Files {
+		diagramName := strings.TrimSuffix(filepath.Base(diagramName), ".go")
+		diagramPackage.UnmarshallOneDiagram(diagramName, inFile, fset)
 	}
 
 	diagramPackage.IsEditable = editable

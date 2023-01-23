@@ -7,10 +7,6 @@ package models
 type Link struct {
 	Name string
 
-	// swagger:ignore
-	Field interface{} `gorm:"-"` // field that is diagrammed
-
-	Fieldname  string
 	Structname string
 
 	// Identifier is the identifier of the struct field referenced by the

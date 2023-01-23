@@ -18,11 +18,15 @@ export function newUmlClassShape(classshape: gongdoc.ClassshapeDB,
         for (let idx = 0; idx < classshape.Fields!.length; idx++) {
             let field = classshape.Fields![idx]
             // console.log("Adding " + field.Fieldname + " " + field.Structname + " " + field.Fieldtypename)
-            attributes.push(field.Fieldname + " : " + field.Fieldtypename)
+
+            let parts = field.Identifier.split(".");
+            let fieldName = parts[parts.length - 1];
+
+            attributes.push(fieldName + " : " + field.Fieldtypename)
         }
     }
 
-    let classShapeTitle = classshape.ReferenceName
+    let classShapeTitle = classshape.Identifier.replace("ref_models.", "")
 
     // show nb of instances if necessary
     if (classshape.ShowNbInstances) {

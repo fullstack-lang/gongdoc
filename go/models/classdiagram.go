@@ -7,6 +7,7 @@ import (
 	"math/rand"
 	"path"
 	"path/filepath"
+	"strings"
 
 	"github.com/tdewolff/canvas"
 	"github.com/tdewolff/canvas/renderers/rasterizer"
@@ -106,7 +107,7 @@ func (classdiagram *Classdiagram) OutputSVG(path string) {
 
 	mapStringClassshape := make(map[string]*Classshape)
 	for _, classshape := range classdiagram.Classshapes {
-		mapStringClassshape[classshape.ReferenceName] = classshape
+		mapStringClassshape[strings.TrimPrefix(classshape.Identifier, RefPrefixReferencedPackage+"models.")] = classshape
 	}
 
 	dejaVuSerif := canvas.NewFontFamily("dejavu-serif")
@@ -173,7 +174,7 @@ func (classdiagram *Classdiagram) OutputSVG(path string) {
 			ctx.DrawPath(centerOfClassshapeX, centerOfClassshapeY, targetClassshapeToMiddleVerticePath)
 
 			// draw text between middle vertice & target position
-			text := canvas.NewTextLine(ff, link.Fieldname, canvas.TextAlign(canvas.Left)) // simple text line
+			text := canvas.NewTextLine(ff, ToFieldName(link.Identifier), canvas.TextAlign(canvas.Left)) // simple text line
 			linkFieldPosition := Position{
 				X: (verticeSVGX + centerOfClassshapeX) / 2.0,
 				Y: (verticeSVGY + centerOfClassshapeY) / 2.0,
@@ -192,7 +193,8 @@ func (classdiagram *Classdiagram) OutputSVG(path string) {
 		bottomLeftX := classshape.Position.X
 		bottomLeftY := ModelToSVGRectangleYOrigin(classshape.Position.Y, classshape.Heigth)
 
-		text := canvas.NewTextLine(ff, classshape.ReferenceName, canvas.TextAlign(canvas.Left)) // simple text line
+		text := canvas.NewTextLine(ff, strings.TrimPrefix(classshape.Identifier, RefPrefixReferencedPackage+"models."),
+			canvas.TextAlign(canvas.Left)) // simple text line
 		p := canvas.Rectangle(classshape.Width, classshape.Heigth)
 
 		// draw the line below the name of the class
@@ -205,7 +207,8 @@ func (classdiagram *Classdiagram) OutputSVG(path string) {
 		// draw fields name
 		for i, field := range classshape.Fields {
 			text := canvas.NewTextLine(ff,
-				field.Fieldname+":"+field.Fieldtypename,
+				ToFieldName(field.Identifier)+
+					":"+field.Fieldtypename,
 				canvas.TextAlign(canvas.Left)) // simple text line
 			ctx.DrawText(bottomLeftX+10.0, bottomLeftY+classshape.Heigth-12.0-float64(i+1)*heigthBetweenLines, text)
 		}
@@ -222,7 +225,7 @@ func (classdiagram *Classdiagram) RemoveClassshape(classshapeName string) {
 	for _, _classshape := range classdiagram.Classshapes {
 
 		// strange behavior when the classshape is remove within the loop
-		if _classshape.ReferenceName == classshapeName && !foundClassshape {
+		if strings.TrimPrefix(_classshape.Identifier, RefPrefixReferencedPackage+"models.") == classshapeName && !foundClassshape {
 			classshape = _classshape
 		}
 	}
@@ -243,7 +246,7 @@ func (classdiagram *Classdiagram) RemoveClassshape(classshapeName string) {
 
 		newSliceOfLinks := make([]*Link, 0)
 		for _, link := range fromClassshape.Links {
-			if link.Fieldtypename == classshape.ReferenceName {
+			if link.Fieldtypename == strings.TrimPrefix(classshape.Identifier, RefPrefixReferencedPackage+"models.") {
 				link.Middlevertice.Unstage()
 				link.Unstage()
 			} else {
@@ -267,23 +270,16 @@ func (classdiagram *Classdiagram) AddClassshape(nodesCb *NodeCallbacksSingloton,
 
 	var classshape Classshape
 	classshape.Name = classdiagram.Name + "-" + classshapeName
-	classshape.ReferenceName = classshapeName
 	classshape.Identifier = RefPrefixReferencedPackage + path.Base(nodesCb.diagramPackage.GongModelPath) + "." + classshapeName
 	classshape.Width = 240
 	classshape.Heigth = 63
 
 	// attach GongStruct to classshape
-	var reference *Reference
-	var ok bool
-	reference, ok = (*GetGongstructInstancesMap[Reference]())[classshape.ReferenceName]
+	nbInstances, ok := Map_Identifier_NbInstances[classshape.Identifier]
 	if ok {
 		classshape.ShowNbInstances = true
-		classshape.NbInstances = reference.NbInstances
-	} else {
-		reference = (&Reference{Name: classshape.ReferenceName}).Stage()
-		reference.Type = referenceType
+		classshape.NbInstances = nbInstances
 	}
-	classshape.Reference = reference
 	classshape.Stage()
 
 	var position Position

@@ -158,16 +158,6 @@ export class ClassshapeDetailComponent implements OnInit {
 			this.classshape.PositionID.Int64 = 0
 			this.classshape.PositionID.Valid = true
 		}
-		if (this.classshape.ReferenceID == undefined) {
-			this.classshape.ReferenceID = new NullInt64
-		}
-		if (this.classshape.Reference != undefined) {
-			this.classshape.ReferenceID.Int64 = this.classshape.Reference.ID
-			this.classshape.ReferenceID.Valid = true
-		} else {
-			this.classshape.ReferenceID.Int64 = 0
-			this.classshape.ReferenceID.Valid = true
-		}
 		this.classshape.ShowNbInstances = this.ShowNbInstancesFormControl.value
 		this.classshape.IsSelected = this.IsSelectedFormControl.value
 

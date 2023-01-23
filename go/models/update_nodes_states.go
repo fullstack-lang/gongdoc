@@ -2,6 +2,7 @@ package models
 
 import (
 	"log"
+	"strings"
 
 	gong_models "github.com/fullstack-lang/gong/go/models"
 )
@@ -65,11 +66,12 @@ func updateNodesStates(stage *StageStruct, nodesCb *NodeCallbacksSingloton) {
 	// 2. get the all classshape and check the node of the
 	// referenced gongstructs if it is referenced by the classshape
 	for _, classshape := range classdiagram.Classshapes {
-		ref_GongStruct := classshape.Reference
-		node, ok := nodesCb.map_Identifier_Node[ref_GongStruct.Name]
+
+		gongStructName := strings.TrimPrefix(classshape.Identifier, RefPrefixReferencedPackage+"models.")
+		node, ok := nodesCb.map_Identifier_Node[gongStructName]
 
 		if !ok {
-			log.Println("Unknown node, diagram not synchro with model ", ref_GongStruct.Name)
+			log.Println("Unknown node, diagram not synchro with model ", gongStructName)
 			continue
 		}
 		node.IsChecked = true
@@ -80,7 +82,7 @@ func updateNodesStates(stage *StageStruct, nodesCb *NodeCallbacksSingloton) {
 		}
 
 		for _, field := range classshape.Fields {
-			nodeId := ref_GongStruct.Name + "." + field.Fieldname
+			nodeId := gongStructName + "." + ToFieldName(field.Identifier)
 			// node, ok := map_FieldId_Node[nodeId]
 			node, ok := nodesCb.map_Identifier_Node[nodeId]
 
@@ -93,7 +95,7 @@ func updateNodesStates(stage *StageStruct, nodesCb *NodeCallbacksSingloton) {
 
 		}
 		for _, link := range classshape.Links {
-			nodeId := ref_GongStruct.Name + "." + link.Fieldname
+			nodeId := gongStructName + "." + ToFieldName(link.Identifier)
 			node, ok := nodesCb.map_Identifier_Node[nodeId]
 
 			if !ok {
@@ -110,7 +112,7 @@ func updateNodesStates(stage *StageStruct, nodesCb *NodeCallbacksSingloton) {
 	// first, construct map of all gongstructs present in the diagram
 	map_OfGongstruct := make(map[string]bool)
 	for _, classshape := range classdiagram.Classshapes {
-		map_OfGongstruct[classshape.ReferenceName] = true
+		map_OfGongstruct[strings.TrimPrefix(classshape.Identifier, RefPrefixReferencedPackage+"models.")] = true
 	}
 	// then iterate over all fields of all gongstructs node
 	for gongStruct := range *gong_models.GetGongstructInstancesSet[gong_models.GongStruct]() {

@@ -21,26 +21,6 @@
         <textarea name="" [ngModelOptions]="{standalone: true}" matInput [(ngModel)]="field.Name"></textarea>
     </mat-form-field>
 
-    <mat-grid-list *ngIf='!isATextArea("Fieldname")' cols="5" rowHeight="2:1">
-        <mat-grid-tile [colspan]="3">
-            <mat-form-field mat-form-field class="detail-full-width">
-                <mat-label>Fieldname</mat-label>
-                <input name="" [ngModelOptions]="{standalone: true}" matInput [(ngModel)]="field.Fieldname">
-            </mat-form-field>
-        </mat-grid-tile>
-        <mat-grid-tile>
-            <button mat-raised-button (click)="toggleTextArea('Fieldname')">
-                <mat-icon>
-                    expand_more
-                </mat-icon>
-            </button>
-        </mat-grid-tile>
-    </mat-grid-list>
-    <mat-form-field *ngIf='isATextArea("Fieldname")' mat-form-field class="detail-full-width">
-        <mat-label>Fieldname</mat-label>
-        <textarea name="" [ngModelOptions]="{standalone: true}" matInput [(ngModel)]="field.Fieldname"></textarea>
-    </mat-form-field>
-
     <mat-grid-list *ngIf='!isATextArea("Identifier")' cols="5" rowHeight="2:1">
         <mat-grid-tile [colspan]="3">
             <mat-form-field mat-form-field class="detail-full-width">

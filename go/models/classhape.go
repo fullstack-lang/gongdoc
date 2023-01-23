@@ -10,14 +10,6 @@ type Classshape struct {
 
 	Position *Position
 
-	// swagger:ignore, an "interface" field cannot be used by gong, therefore, one specifies
-	// both swagger and gorm ignore magic code
-	ReferencedGong interface{} `gorm:"-"` // pointer to the struct/enum of the model that it is diagramming
-	ReferenceName  string
-
-	// the related gong struct or gong enum
-	Reference *Reference
-
 	// Identifier is the identifier of the struct referenced by the shape in the modeled package
 	//gong:ident
 	Identifier string
@@ -42,6 +34,8 @@ type Classshape struct {
 	IsSelected bool
 }
 
+var Map_Identifier_NbInstances = make(map[string]int)
+
 // serialize the package and its elements to the Stage
 // this is used if one Umlsc is dynamicaly created
 func (classshape *Classshape) SerializeToStage() {
@@ -49,7 +43,6 @@ func (classshape *Classshape) SerializeToStage() {
 	classshape.Stage()
 
 	classshape.Position.Stage()
-	classshape.Reference.Stage()
 
 	for _, link := range classshape.Links {
 		link.SerializeToStage()
@@ -65,7 +58,6 @@ func (classshape *Classshape) SerializeToUnstage() {
 	classshape.Unstage()
 
 	classshape.Position.Unstage()
-	classshape.Reference.Unstage()
 
 	for _, link := range classshape.Links {
 		link.SerializeToUnstage()

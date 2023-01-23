@@ -78,13 +78,6 @@ export * from './lib/positions-table/positions-table.component'
 export * from './lib/position-db'
 export * from './lib/position.service'
 
-export * from './lib/reference-detail/reference-detail.component'
-export * from './lib/reference-presentation/reference-presentation.component'
-export * from './lib/reference-sorting/reference-sorting.component'
-export * from './lib/references-table/references-table.component'
-export * from './lib/reference-db'
-export * from './lib/reference.service'
-
 export * from './lib/tree-detail/tree-detail.component'
 export * from './lib/tree-presentation/tree-presentation.component'
 export * from './lib/tree-sorting/tree-sorting.component'
@@ -114,6 +107,7 @@ export * from './lib/vertice-db'
 export * from './lib/vertice.service'
 
 
+export * from './lib/GONG__ExpressionType'
 export * from './lib/GongdocNodeType'
 export * from './lib/MultiplicityType'
 export * from './lib/NoteLinkType'

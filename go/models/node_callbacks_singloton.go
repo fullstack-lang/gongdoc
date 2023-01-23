@@ -36,8 +36,6 @@ func (nodesCb *NodeCallbacksSingloton) GetSelectedClassdiagram() (classdiagram *
 	return
 }
 
-const RefPrefixReferencedPackage = "ref_"
-
 // OnAfterUpdate is called each time the end user interacts
 // with any node. The front commit the state of the front node
 // to the back ([frontNode] in the function).
@@ -275,7 +273,8 @@ func (nodesCb *NodeCallbacksSingloton) OnAfterUpdateStructField(
 	var classshape *Classshape
 	for _, _classshape := range classdiagram.Classshapes {
 		// strange behavior when the classshape is remove within the loop
-		if _classshape.ReferenceName == gongStruct.Name && !foundClassshape {
+		if strings.TrimPrefix(_classshape.Identifier, RefPrefixReferencedPackage+"models.") ==
+			gongStruct.Name && !foundClassshape {
 			classshape = _classshape
 		}
 	}
@@ -289,7 +288,7 @@ func (nodesCb *NodeCallbacksSingloton) OnAfterUpdateStructField(
 			var field *Field
 
 			for _, _field := range classshape.Fields {
-				if _field.Fieldname == stagedNode.Name {
+				if ToFieldName(_field.Identifier) == stagedNode.Name {
 					field = _field
 				}
 			}
@@ -303,7 +302,7 @@ func (nodesCb *NodeCallbacksSingloton) OnAfterUpdateStructField(
 			var link *Link
 
 			for _, _field := range classshape.Links {
-				if _field.Fieldname == stagedNode.Name {
+				if ToFieldName(ToFieldName(_field.Identifier)) == stagedNode.Name {
 					link = _field
 				}
 			}
@@ -325,9 +324,7 @@ func (nodesCb *NodeCallbacksSingloton) OnAfterUpdateStructField(
 
 			var field Field
 			field.Name = stagedNode.Name
-			field.Fieldname = stagedNode.Name
-			field.Identifier = RefPrefixReferencedPackage +
-				filepath.Base(nodesCb.diagramPackage.GongModelPath) + "." + stagedNode.Name
+			field.Identifier = ToFieldIdentifier(gongStruct.Name, stagedNode.Name)
 
 			switch realField := stagedNode.Gongfield.(type) {
 			case *gong_models.GongBasicField:
@@ -343,7 +340,7 @@ func (nodesCb *NodeCallbacksSingloton) OnAfterUpdateStructField(
 			case *gong_models.SliceOfPointerToGongStructField:
 			}
 
-			field.Structname = classshape.ReferenceName
+			field.Structname = strings.TrimPrefix(classshape.Identifier, RefPrefixReferencedPackage+"models.")
 			field.Stage()
 
 			classshape.Heigth = classshape.Heigth + 15
@@ -370,7 +367,7 @@ func (nodesCb *NodeCallbacksSingloton) OnAfterUpdateStructField(
 			// compute insertionIndex (index where to insert the field to display)
 			insertionIndex := 0
 			for idx, field := range classshape.Fields {
-				gongField := map_Name_Field[field.Fieldname]
+				gongField := map_Name_Field[ToFieldName(field.Identifier)]
 				_fieldRank := map_Field_Rank[gongField]
 				if fieldRank > _fieldRank {
 					insertionIndex = idx + 1
@@ -407,7 +404,7 @@ func (nodesCb *NodeCallbacksSingloton) OnAfterUpdateStructField(
 			for _, _classshape := range classdiagram.Classshapes {
 
 				// strange behavior when the classshape is remove within the loop
-				if _classshape.ReferenceName == targetStructName && !targetSourceClassshape {
+				if strings.TrimPrefix(_classshape.Identifier, RefPrefixReferencedPackage+"models.") == targetStructName && !targetSourceClassshape {
 					targetSourceClassshape = true
 					targetClassshape = _classshape
 				}
@@ -421,9 +418,8 @@ func (nodesCb *NodeCallbacksSingloton) OnAfterUpdateStructField(
 			link.Name = stagedNode.Name
 			link.SourceMultiplicity = sourceMultiplicity
 			link.TargetMultiplicity = targetMultiplicity
-			link.Fieldname = stagedNode.Name
-			link.Identifier = RefPrefixReferencedPackage +
-				filepath.Base(nodesCb.diagramPackage.GongModelPath) + "." + stagedNode.Name
+			link.Identifier =
+				ToFieldIdentifier(gongStruct.Name, stagedNode.Name)
 
 			link.Structname = gongStruct.Name
 			link.Fieldtypename = targetStructName
@@ -505,9 +501,8 @@ func (nodesCb *NodeCallbacksSingloton) OnAfterUpdateEnum(
 
 		// get the referenced gongstructs
 		for _, classshape := range classDiagram.Classshapes {
-			reference := classshape.Reference
-			if reference.Name == stagedNode.Name {
-				classDiagram.RemoveClassshape(reference.Name)
+			if classshape.Identifier == stagedNode.Name {
+				classDiagram.RemoveClassshape(classshape.Identifier)
 			}
 
 		}
@@ -542,7 +537,7 @@ func (nodesCb *NodeCallbacksSingloton) OnAfterUpdateEnumValue(
 	foundClassshape := false
 	var classshape *Classshape
 	for _, _classshape := range classdiagram.Classshapes {
-		if _classshape.ReferenceName == gongEnum.Name && !foundClassshape {
+		if strings.TrimPrefix(_classshape.Identifier, RefPrefixReferencedPackage+"models.") == gongEnum.Name && !foundClassshape {
 			classshape = _classshape
 		}
 	}
@@ -564,7 +559,7 @@ func (nodesCb *NodeCallbacksSingloton) OnAfterUpdateEnumValue(
 
 		var field Field
 		field.Name = stagedNode.Name
-		field.Fieldname = stagedNode.Name
+		field.Identifier = ToFieldIdentifier(gongEnum.Name, stagedNode.Name)
 
 		for idx, gongEnum := range gongEnum.GongEnumValues {
 
@@ -579,7 +574,7 @@ func (nodesCb *NodeCallbacksSingloton) OnAfterUpdateEnumValue(
 		// compute insertionIndex (index where to insert the field to display)
 		insertionIndex := 0
 		for idx, field := range classshape.Fields {
-			value := map_ValueName_Value[field.Fieldname]
+			value := map_ValueName_Value[ToFieldName(field.Identifier)]
 			_rankInEnum := map_Value_rankInEnum[value]
 			if rankkInEnum > _rankInEnum {
 				insertionIndex = idx + 1
@@ -607,7 +602,7 @@ func (nodesCb *NodeCallbacksSingloton) OnAfterUpdateEnumValue(
 			var field *Field
 
 			for _, _field := range classshape.Fields {
-				if _field.Fieldname == stagedNode.Name {
+				if ToFieldName(_field.Identifier) == stagedNode.Name {
 					field = _field
 				}
 			}

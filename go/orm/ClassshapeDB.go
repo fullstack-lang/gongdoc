@@ -50,10 +50,6 @@ type ClassshapePointersEnconding struct {
 	// This field is generated into another field to enable AS ONE association
 	PositionID sql.NullInt64
 
-	// field Reference is a pointer to another Struct (optional or 0..1)
-	// This field is generated into another field to enable AS ONE association
-	ReferenceID sql.NullInt64
-
 	// Implementation of a reverse ID for field Classdiagram{}.Classshapes []*Classshape
 	Classdiagram_ClassshapesDBID sql.NullInt64
 
@@ -74,9 +70,6 @@ type ClassshapeDB struct {
 
 	// Declation for basic field classshapeDB.Name
 	Name_Data sql.NullString
-
-	// Declation for basic field classshapeDB.ReferenceName
-	ReferenceName_Data sql.NullString
 
 	// Declation for basic field classshapeDB.Identifier
 	Identifier_Data sql.NullString
@@ -120,19 +113,17 @@ type ClassshapeWOP struct {
 
 	Name string `xlsx:"1"`
 
-	ReferenceName string `xlsx:"2"`
+	Identifier string `xlsx:"2"`
 
-	Identifier string `xlsx:"3"`
+	ShowNbInstances bool `xlsx:"3"`
 
-	ShowNbInstances bool `xlsx:"4"`
+	NbInstances int `xlsx:"4"`
 
-	NbInstances int `xlsx:"5"`
+	Width float64 `xlsx:"5"`
 
-	Width float64 `xlsx:"6"`
+	Heigth float64 `xlsx:"6"`
 
-	Heigth float64 `xlsx:"7"`
-
-	IsSelected bool `xlsx:"8"`
+	IsSelected bool `xlsx:"7"`
 	// insertion for WOP pointer fields
 }
 
@@ -140,7 +131,6 @@ var Classshape_Fields = []string{
 	// insertion for WOP basic fields
 	"ID",
 	"Name",
-	"ReferenceName",
 	"Identifier",
 	"ShowNbInstances",
 	"NbInstances",
@@ -299,15 +289,6 @@ func (backRepoClassshape *BackRepoClassshapeStruct) CommitPhaseTwoInstance(backR
 			}
 		}
 
-		// commit pointer value classshape.Reference translates to updating the classshape.ReferenceID
-		classshapeDB.ReferenceID.Valid = true // allow for a 0 value (nil association)
-		if classshape.Reference != nil {
-			if ReferenceId, ok := (*backRepo.BackRepoReference.Map_ReferencePtr_ReferenceDBID)[classshape.Reference]; ok {
-				classshapeDB.ReferenceID.Int64 = int64(ReferenceId)
-				classshapeDB.ReferenceID.Valid = true
-			}
-		}
-
 		// This loop encodes the slice of pointers classshape.Fields into the back repo.
 		// Each back repo instance at the end of the association encode the ID of the association start
 		// into a dedicated field for coding the association. The back repo instance is then saved to the db
@@ -457,10 +438,6 @@ func (backRepoClassshape *BackRepoClassshapeStruct) CheckoutPhaseTwoInstance(bac
 	if classshapeDB.PositionID.Int64 != 0 {
 		classshape.Position = (*backRepo.BackRepoPosition.Map_PositionDBID_PositionPtr)[uint(classshapeDB.PositionID.Int64)]
 	}
-	// Reference field
-	if classshapeDB.ReferenceID.Int64 != 0 {
-		classshape.Reference = (*backRepo.BackRepoReference.Map_ReferenceDBID_ReferencePtr)[uint(classshapeDB.ReferenceID.Int64)]
-	}
 	// This loop redeem classshape.Fields in the stage from the encode in the back repo
 	// It parses all FieldDB in the back repo and if the reverse pointer encoding matches the back repo ID
 	// it appends the stage instance
@@ -552,9 +529,6 @@ func (classshapeDB *ClassshapeDB) CopyBasicFieldsFromClassshape(classshape *mode
 	classshapeDB.Name_Data.String = classshape.Name
 	classshapeDB.Name_Data.Valid = true
 
-	classshapeDB.ReferenceName_Data.String = classshape.ReferenceName
-	classshapeDB.ReferenceName_Data.Valid = true
-
 	classshapeDB.Identifier_Data.String = classshape.Identifier
 	classshapeDB.Identifier_Data.Valid = true
 
@@ -581,9 +555,6 @@ func (classshapeDB *ClassshapeDB) CopyBasicFieldsFromClassshapeWOP(classshape *C
 	classshapeDB.Name_Data.String = classshape.Name
 	classshapeDB.Name_Data.Valid = true
 
-	classshapeDB.ReferenceName_Data.String = classshape.ReferenceName
-	classshapeDB.ReferenceName_Data.Valid = true
-
 	classshapeDB.Identifier_Data.String = classshape.Identifier
 	classshapeDB.Identifier_Data.Valid = true
 
@@ -607,7 +578,6 @@ func (classshapeDB *ClassshapeDB) CopyBasicFieldsFromClassshapeWOP(classshape *C
 func (classshapeDB *ClassshapeDB) CopyBasicFieldsToClassshape(classshape *models.Classshape) {
 	// insertion point for checkout of basic fields (back repo to stage)
 	classshape.Name = classshapeDB.Name_Data.String
-	classshape.ReferenceName = classshapeDB.ReferenceName_Data.String
 	classshape.Identifier = classshapeDB.Identifier_Data.String
 	classshape.ShowNbInstances = classshapeDB.ShowNbInstances_Data.Bool
 	classshape.NbInstances = int(classshapeDB.NbInstances_Data.Int64)
@@ -621,7 +591,6 @@ func (classshapeDB *ClassshapeDB) CopyBasicFieldsToClassshapeWOP(classshape *Cla
 	classshape.ID = int(classshapeDB.ID)
 	// insertion point for checkout of basic fields (back repo to stage)
 	classshape.Name = classshapeDB.Name_Data.String
-	classshape.ReferenceName = classshapeDB.ReferenceName_Data.String
 	classshape.Identifier = classshapeDB.Identifier_Data.String
 	classshape.ShowNbInstances = classshapeDB.ShowNbInstances_Data.Bool
 	classshape.NbInstances = int(classshapeDB.NbInstances_Data.Int64)
@@ -789,12 +758,6 @@ func (backRepoClassshape *BackRepoClassshapeStruct) RestorePhaseTwo() {
 		if classshapeDB.PositionID.Int64 != 0 {
 			classshapeDB.PositionID.Int64 = int64(BackRepoPositionid_atBckpTime_newID[uint(classshapeDB.PositionID.Int64)])
 			classshapeDB.PositionID.Valid = true
-		}
-
-		// reindexing Reference field
-		if classshapeDB.ReferenceID.Int64 != 0 {
-			classshapeDB.ReferenceID.Int64 = int64(BackRepoReferenceid_atBckpTime_newID[uint(classshapeDB.ReferenceID.Int64)])
-			classshapeDB.ReferenceID.Valid = true
 		}
 
 		// This reindex classshape.Classshapes

@@ -11,6 +11,7 @@ import (
 	"os"
 	"path/filepath"
 	"strconv"
+	"strings"
 
 	"github.com/gin-contrib/cors"
 	"github.com/gin-contrib/static"
@@ -30,8 +31,7 @@ var (
 	logBBFlag  = flag.Bool("logDB", false, "log mode for db")
 	logGINFlag = flag.Bool("logGIN", false, "log mode for gin")
 
-	genDefaultDiagramFlag = flag.Bool("genDefaultDiagram", false, "generate default diagram")
-	svg                   = flag.Bool("svg", false, "generate svg output and exits")
+	svg = flag.Bool("svg", false, "generate svg output and exits")
 
 	pkgPath = flag.String("pkgPath", ".", "path to the models package")
 
@@ -113,14 +113,6 @@ func main() {
 	// load package to analyse
 	modelPkg, _ := gong_models.LoadSource(*pkgPath)
 
-	if *genDefaultDiagramFlag {
-		log.Printf("Generating default diagram")
-
-		// generates default UML diagrams
-		gongdoc_models.GenGoDefaultDiagram(modelPkg, *pkgPath)
-		return
-	}
-
 	r.Use(static.Serve("/", EmbedFolder(gongdoc.NgDistNg, "ng/dist/ng")))
 	r.NoRoute(func(c *gin.Context) {
 		fmt.Println(c.Request.URL.Path, "doesn't exists, redirect on /")
@@ -128,23 +120,34 @@ func main() {
 		c.Abort()
 	})
 
+	diagramPackage, _ := gongdoc_models.LoadDiagramPackage(*pkgPath, modelPkg, *editable)
+
+	map_ := gongdoc_models.Map_Identifier_NbInstances
+	_ = map_
 	// set up gong structs for diagram package
 	if *setUpRandomNumberOfInstances {
 		for gongStruct := range *gong_models.GetGongstructInstancesSet[gong_models.GongStruct]() {
-
-			// let create the gong struct in the gongdoc models
-			var reference *gongdoc_models.Reference
-			var ok bool
-			reference, ok = (*gongdoc_models.GetGongstructInstancesMap[gongdoc_models.Reference]())[gongStruct.Name]
-			if !ok {
-				reference = (&gongdoc_models.Reference{Name: gongStruct.Name}).Stage()
-				reference.Type = gongdoc_models.REFERENCE_GONG_STRUCT
-			}
-			reference.NbInstances = rand.Intn(100)
+			gongdoc_models.Map_Identifier_NbInstances[gongStruct.Name] = rand.Intn(100)
 		}
-	}
+		// parse all classdiagrams and all classshape and put the number
+		// of instances
+		for _, classdiagram := range diagramPackage.Classdiagrams {
+			for _, classshape := range classdiagram.Classshapes {
 
-	diagramPackage, _ := gongdoc_models.LoadDiagramPackage(*pkgPath, modelPkg, *editable)
+				gongStructName := strings.TrimPrefix(
+					classshape.Identifier,
+					gongdoc_models.RefPrefixReferencedPackage+"models.")
+
+				nbInstances, ok := gongdoc_models.Map_Identifier_NbInstances[gongStructName]
+
+				if ok {
+					classshape.ShowNbInstances = true
+					classshape.NbInstances = nbInstances
+				}
+			}
+		}
+
+	}
 
 	if *svg {
 		for _, classDiagram := range diagramPackage.Classdiagrams {
@@ -153,19 +156,18 @@ func main() {
 		os.Exit(0)
 	}
 
-	if false {
-		for _, classDiagram := range diagramPackage.Classdiagrams {
-			for _, classShape := range classDiagram.Classshapes {
-				classShape.ShowNbInstances = true
-				classShape.NbInstances = rand.Intn(100)
-			}
-		}
-	}
+	gongdocStage := &gongdoc_models.Stage
+	_ = gongdocStage
+
 	classshapeCallbackSingloton := new(gongdoc_models.ClassshapeCallbacksSingloton)
-	gongdoc_models.Stage.OnAfterClassshapeUpdateCallback = classshapeCallbackSingloton
+
+	// very strangely,
+	// gongdoc_models.Stage.OnAfterClassshapeUpdateCallback = classshapeCallbackSingloton
+	// does not seem to be executed
+	gongdocStage.OnAfterClassshapeUpdateCallback = classshapeCallbackSingloton
 
 	diagramPackageCallbackSingloton := new(gongdoc_models.DiagramPackageCallbacksSingloton)
-	gongdoc_models.Stage.OnAfterDiagramPackageUpdateCallback = diagramPackageCallbackSingloton
+	gongdocStage.OnAfterDiagramPackageUpdateCallback = diagramPackageCallbackSingloton
 
 	if *marshallOnCommit != "" {
 		hook := new(BeforeCommitImplementation)

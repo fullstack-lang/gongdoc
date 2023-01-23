@@ -71,9 +71,6 @@ export class LinksTableComponent implements OnInit {
         case 'Name':
           return linkDB.Name;
 
-        case 'Fieldname':
-          return linkDB.Fieldname;
-
         case 'Structname':
           return linkDB.Structname;
 
@@ -114,7 +111,6 @@ export class LinksTableComponent implements OnInit {
 
       // insertion point for merging of fields
       mergedContent += linkDB.Name.toLowerCase()
-      mergedContent += linkDB.Fieldname.toLowerCase()
       mergedContent += linkDB.Structname.toLowerCase()
       mergedContent += linkDB.Identifier.toLowerCase()
       mergedContent += linkDB.Fieldtypename.toLowerCase()
@@ -178,7 +174,6 @@ export class LinksTableComponent implements OnInit {
     if (this.mode == TableComponentMode.DISPLAY_MODE) {
       this.displayedColumns = ['ID', 'Edit', 'Delete', // insertion point for columns to display
         "Name",
-        "Fieldname",
         "Structname",
         "Identifier",
         "Fieldtypename",
@@ -190,7 +185,6 @@ export class LinksTableComponent implements OnInit {
     } else {
       this.displayedColumns = ['select', 'ID', // insertion point for columns to display
         "Name",
-        "Fieldname",
         "Structname",
         "Identifier",
         "Fieldtypename",
