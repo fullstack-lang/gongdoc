@@ -162,7 +162,7 @@ func NewDiagramInjection() {
 
 	//gong:ident [ref_models.Line]
 	__Classshape__000000_NewDiagram_Line.Identifier = `ref_models.Line`
-	__Classshape__000000_NewDiagram_Line.ShowNbInstances = false
+	__Classshape__000000_NewDiagram_Line.ShowNbInstances = true
 	__Classshape__000000_NewDiagram_Line.NbInstances = 0
 	__Classshape__000000_NewDiagram_Line.Width = 240.000000
 	__Classshape__000000_NewDiagram_Line.Heigth = 78.000000
@@ -188,7 +188,7 @@ func NewDiagramInjection() {
 
 	//gong:ident [ref_models.Point]
 	__Classshape__000002_NewDiagram_Point.Identifier = `ref_models.Point`
-	__Classshape__000002_NewDiagram_Point.ShowNbInstances = false
+	__Classshape__000002_NewDiagram_Point.ShowNbInstances = true
 	__Classshape__000002_NewDiagram_Point.NbInstances = 0
 	__Classshape__000002_NewDiagram_Point.Width = 240.000000
 	__Classshape__000002_NewDiagram_Point.Heigth = 63.000000
@@ -201,7 +201,7 @@ func NewDiagramInjection() {
 
 	//gong:ident [ref_models.PointExclusiveSet]
 	__Classshape__000003_NewDiagram_PointExclusiveSet.Identifier = `ref_models.PointExclusiveSet`
-	__Classshape__000003_NewDiagram_PointExclusiveSet.ShowNbInstances = false
+	__Classshape__000003_NewDiagram_PointExclusiveSet.ShowNbInstances = true
 	__Classshape__000003_NewDiagram_PointExclusiveSet.NbInstances = 0
 	__Classshape__000003_NewDiagram_PointExclusiveSet.Width = 240.000000
 	__Classshape__000003_NewDiagram_PointExclusiveSet.Heigth = 63.000000

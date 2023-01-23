@@ -201,7 +201,7 @@ func (nodesCb *NodeCallbacksSingloton) OnAfterUpdateDiagram(
 			Stage.Checkout()
 
 			Stage.Unstage()
-			stagedNode.Classdiagram.SerializeToStage()
+			StageBranch(&Stage, stagedNode.Classdiagram)
 
 			filepath := filepath.Join(
 				filepath.Join(nodesCb.diagramPackage.AbsolutePathToDiagramPackage,
