@@ -11,7 +11,6 @@ import (
 	"os"
 	"path/filepath"
 	"strconv"
-	"strings"
 
 	"github.com/gin-contrib/cors"
 	"github.com/gin-contrib/static"
@@ -134,9 +133,7 @@ func main() {
 		for _, classdiagram := range diagramPackage.Classdiagrams {
 			for _, classshape := range classdiagram.Classshapes {
 
-				gongStructName := strings.TrimPrefix(
-					classshape.Identifier,
-					gongdoc_models.RefPrefixReferencedPackage+"models.")
+				gongStructName := gongdoc_models.IdentifierToShape(classshape.Identifier)
 
 				nbInstances, ok := gongdoc_models.Map_Identifier_NbInstances[gongStructName]
 

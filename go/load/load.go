@@ -4,7 +4,6 @@ import (
 	"embed"
 	"path/filepath"
 	"sort"
-	"strings"
 
 	gong_fullstack "github.com/fullstack-lang/gong/go/fullstack"
 	gong_models "github.com/fullstack-lang/gong/go/models"
@@ -77,7 +76,7 @@ func Load(
 	})
 	for _, gongStruct := range gongstructOrdered {
 
-		ident := gongdoc_models.RefPrefixReferencedPackage + "models." + gongStruct.Name
+		ident := gongdoc_models.ShapenameToIdentifier(gongStruct.Name)
 		var identifier gongdoc_models.GONG__Identifier
 		identifier.Ident = ident
 		identifier.Type = gongdoc_models.GONG__STRUCT_INSTANCE
@@ -85,7 +84,8 @@ func Load(
 		gongdoc_models.Stage.Map_DocLink_Renaming[ident] = identifier
 
 		for _, field := range gongStruct.Fields {
-			ident := gongdoc_models.RefPrefixReferencedPackage + "models." + gongStruct.Name + "." + field.GetName()
+			ident := gongdoc_models.ShapeAndFieldnameToFieldIdentifier(
+				gongStruct.Name, field.GetName())
 
 			var identifier gongdoc_models.GONG__Identifier
 			identifier.Ident = ident
@@ -94,8 +94,7 @@ func Load(
 		}
 	}
 	for gongEnum := range *gong_models.GetGongstructInstancesSet[gong_models.GongEnum]() {
-		ident := gongdoc_models.RefPrefixReferencedPackage + "models." + gongEnum.Name
-		_ = ident
+		ident := gongdoc_models.ShapenameToIdentifier(gongEnum.Name)
 
 		var identifier gongdoc_models.GONG__Identifier
 		identifier.Ident = ident
@@ -109,7 +108,7 @@ func Load(
 		gongdoc_models.Stage.Map_DocLink_Renaming[ident] = identifier
 
 		for _, value := range gongEnum.GongEnumValues {
-			ident := gongdoc_models.RefPrefixReferencedPackage + "models." + value.Name
+			ident := gongdoc_models.ShapenameToIdentifier(value.Name)
 
 			var identifier gongdoc_models.GONG__Identifier
 			identifier.Ident = ident
@@ -122,7 +121,7 @@ func Load(
 	}
 
 	for gongNote := range *gong_models.GetGongstructInstancesSet[gong_models.GongNote]() {
-		ident := gongdoc_models.RefPrefixReferencedPackage + "models." + gongNote.Name
+		ident := gongdoc_models.ShapenameToIdentifier(gongNote.Name)
 
 		var identifier gongdoc_models.GONG__Identifier
 		identifier.Ident = ident
@@ -144,10 +143,7 @@ func Load(
 		for _, classdiagram := range diagramPackage.Classdiagrams {
 			for _, classshape := range classdiagram.Classshapes {
 
-				gongStructName := strings.TrimPrefix(
-					classshape.Identifier,
-					gongdoc_models.RefPrefixReferencedPackage+"models.")
-
+				gongStructName := gongdoc_models.IdentifierToShape(classshape.Identifier)
 				nbInstances, ok := gongdoc_models.Map_Identifier_NbInstances[gongStructName]
 
 				if ok {

@@ -8,9 +8,9 @@ import (
 const RefPrefixReferencedPackage = "ref_"
 const RefPackagePlusPeriod = "models."
 
-// ToFieldName take an ident in the forms
+// IdentifierToFieldName take an ident in the forms
 // "ref_models.Foo.Name" and returns "Name"
-func ToFieldName(fieldIdentifier string) (fieldName string) {
+func IdentifierToFieldName(fieldIdentifier string) (fieldName string) {
 
 	if !strings.Contains(fieldIdentifier, RefPackagePlusPeriod) {
 		log.Fatalln("ToFieldName: missing", RefPackagePlusPeriod, "in", fieldIdentifier)
@@ -28,8 +28,8 @@ func ToFieldName(fieldIdentifier string) (fieldName string) {
 	return
 }
 
-// ToFieldIdentifier takes "Foo" "Name" and returns "ref_models.Foo.Name"
-func ToFieldIdentifier(structName string, fieldName string) (fieldIdentifier string) {
+// ShapeAndFieldnameToFieldIdentifier takes "Foo" "Name" and returns "ref_models.Foo.Name"
+func ShapeAndFieldnameToFieldIdentifier(structName string, fieldName string) (fieldIdentifier string) {
 
 	fieldIdentifier = RefPrefixReferencedPackage + RefPackagePlusPeriod +
 		structName + "." + fieldName
@@ -37,11 +37,17 @@ func ToFieldIdentifier(structName string, fieldName string) (fieldIdentifier str
 	return
 }
 
-// ToStructName take an ident in the forms
+// IdentifierToShape take an ident in the forms
 // "ref_models.Foo" and returns "Foo"
-func ToStructName(structIdentifier string) (structName string) {
+func IdentifierToShape(structIdentifier string) (structName string) {
 
 	structName = strings.TrimPrefix(structIdentifier, RefPrefixReferencedPackage+"models.")
 
+	return
+}
+
+func ShapenameToIdentifier(structName string) (identifier string) {
+
+	identifier = RefPrefixReferencedPackage + "models." + structName
 	return
 }
