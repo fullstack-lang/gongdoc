@@ -273,7 +273,7 @@ func (nodesCb *NodeCallbacksSingloton) OnAfterUpdateStructField(
 	var classshape *Classshape
 	for _, _classshape := range classdiagram.Classshapes {
 		// strange behavior when the classshape is remove within the loop
-		if IdentifierToShape(_classshape.Identifier) ==
+		if IdentifierToShapename(_classshape.Identifier) ==
 			gongStruct.Name && !foundClassshape {
 			classshape = _classshape
 		}
@@ -340,7 +340,7 @@ func (nodesCb *NodeCallbacksSingloton) OnAfterUpdateStructField(
 			case *gong_models.SliceOfPointerToGongStructField:
 			}
 
-			field.Structname = IdentifierToShape(classshape.Identifier)
+			field.Structname = IdentifierToShapename(classshape.Identifier)
 			field.Stage()
 
 			classshape.Heigth = classshape.Heigth + 15
@@ -404,7 +404,7 @@ func (nodesCb *NodeCallbacksSingloton) OnAfterUpdateStructField(
 			for _, _classshape := range classdiagram.Classshapes {
 
 				// strange behavior when the classshape is remove within the loop
-				if IdentifierToShape(_classshape.Identifier) == targetStructName && !targetSourceClassshape {
+				if IdentifierToShapename(_classshape.Identifier) == targetStructName && !targetSourceClassshape {
 					targetSourceClassshape = true
 					targetClassshape = _classshape
 				}
@@ -501,8 +501,8 @@ func (nodesCb *NodeCallbacksSingloton) OnAfterUpdateEnum(
 
 		// get the referenced gongstructs
 		for _, classshape := range classDiagram.Classshapes {
-			if classshape.Identifier == stagedNode.Name {
-				classDiagram.RemoveClassshape(classshape.Identifier)
+			if IdentifierToShapename(classshape.Identifier) == stagedNode.Name {
+				classDiagram.RemoveClassshape(IdentifierToShapename(classshape.Identifier))
 			}
 
 		}
@@ -537,7 +537,7 @@ func (nodesCb *NodeCallbacksSingloton) OnAfterUpdateEnumValue(
 	foundClassshape := false
 	var classshape *Classshape
 	for _, _classshape := range classdiagram.Classshapes {
-		if IdentifierToShape(_classshape.Identifier) == gongEnum.Name && !foundClassshape {
+		if IdentifierToShapename(_classshape.Identifier) == gongEnum.Name && !foundClassshape {
 			classshape = _classshape
 		}
 	}

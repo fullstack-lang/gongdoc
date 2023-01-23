@@ -66,7 +66,7 @@ func updateNodesStates(stage *StageStruct, nodesCb *NodeCallbacksSingloton) {
 	// gongstructs / gongenum referenced by the classshape
 	for _, classshape := range classdiagram.Classshapes {
 
-		classshapeName := IdentifierToShape(classshape.Identifier)
+		classshapeName := IdentifierToShapename(classshape.Identifier)
 		var node *Node
 		var ok bool
 		node, ok = nodesCb.map_Identifier_Node[classshapeName]
@@ -113,7 +113,7 @@ func updateNodesStates(stage *StageStruct, nodesCb *NodeCallbacksSingloton) {
 	// first, construct map of all gongstructs present in the diagram
 	map_OfGongstruct := make(map[string]bool)
 	for _, classshape := range classdiagram.Classshapes {
-		map_OfGongstruct[IdentifierToShape(classshape.Identifier)] = true
+		map_OfGongstruct[IdentifierToShapename(classshape.Identifier)] = true
 	}
 	// then iterate over all fields of all gongstructs node
 	for gongStruct := range *gong_models.GetGongstructInstancesSet[gong_models.GongStruct]() {

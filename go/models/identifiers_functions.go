@@ -37,9 +37,9 @@ func ShapeAndFieldnameToFieldIdentifier(structName string, fieldName string) (fi
 	return
 }
 
-// IdentifierToShape take an ident in the forms
+// IdentifierToShapename take an ident in the forms
 // "ref_models.Foo" and returns "Foo"
-func IdentifierToShape(structIdentifier string) (structName string) {
+func IdentifierToShapename(structIdentifier string) (structName string) {
 
 	structName = strings.TrimPrefix(structIdentifier, RefPrefixReferencedPackage+"models.")
 

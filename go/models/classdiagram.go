@@ -105,7 +105,7 @@ func (classdiagram *Classdiagram) OutputSVG(path string) {
 
 	mapStringClassshape := make(map[string]*Classshape)
 	for _, classshape := range classdiagram.Classshapes {
-		mapStringClassshape[IdentifierToShape(classshape.Identifier)] = classshape
+		mapStringClassshape[IdentifierToShapename(classshape.Identifier)] = classshape
 	}
 
 	dejaVuSerif := canvas.NewFontFamily("dejavu-serif")
@@ -192,7 +192,7 @@ func (classdiagram *Classdiagram) OutputSVG(path string) {
 		bottomLeftY := ModelToSVGRectangleYOrigin(classshape.Position.Y, classshape.Heigth)
 
 		text := canvas.NewTextLine(ff,
-			IdentifierToShape(classshape.Identifier),
+			IdentifierToShapename(classshape.Identifier),
 			canvas.TextAlign(canvas.Left)) // simple text line
 		p := canvas.Rectangle(classshape.Width, classshape.Heigth)
 
@@ -224,7 +224,7 @@ func (classdiagram *Classdiagram) RemoveClassshape(classshapeName string) {
 	for _, _classshape := range classdiagram.Classshapes {
 
 		// strange behavior when the classshape is remove within the loop
-		if IdentifierToShape(_classshape.Identifier) == classshapeName && !foundClassshape {
+		if IdentifierToShapename(_classshape.Identifier) == classshapeName && !foundClassshape {
 			classshape = _classshape
 		}
 	}
@@ -245,7 +245,7 @@ func (classdiagram *Classdiagram) RemoveClassshape(classshapeName string) {
 
 		newSliceOfLinks := make([]*Link, 0)
 		for _, link := range fromClassshape.Links {
-			if link.Fieldtypename == IdentifierToShape(classshape.Identifier) {
+			if link.Fieldtypename == IdentifierToShapename(classshape.Identifier) {
 				link.Middlevertice.Unstage()
 				link.Unstage()
 			} else {
