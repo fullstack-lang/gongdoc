@@ -66,7 +66,7 @@ func Load(
 	// set up Map_DocLink_Renaming
 	//  TO BE REMOVED
 	// to be removed after fix of [issue](https://github.com/golang/go/issues/57559)
-	gongdoc_models.Stage.Map_DocLink_Renaming = make(map[string]string)
+	gongdoc_models.Stage.Map_DocLink_Renaming = make(map[string]gongdoc_models.GONG__Identifier)
 
 	gongstructOrdered := []*gong_models.GongStruct{}
 	for gongstruct := range *gong_models.GetGongstructInstancesSet[gong_models.GongStruct]() {
@@ -78,17 +78,44 @@ func Load(
 	for _, gongStruct := range gongstructOrdered {
 
 		ident := gongdoc_models.RefPrefixReferencedPackage + "models." + gongStruct.Name
+		var identifier gongdoc_models.GONG__Identifier
+		identifier.Ident = ident
+		identifier.Type = gongdoc_models.GONG__STRUCT_INSTANCE
 
-		gongdoc_models.Stage.Map_DocLink_Renaming[ident] = ident
+		gongdoc_models.Stage.Map_DocLink_Renaming[ident] = identifier
 
 		for _, field := range gongStruct.Fields {
 			ident := gongdoc_models.RefPrefixReferencedPackage + "models." + gongStruct.Name + "." + field.GetName()
-			gongdoc_models.Stage.Map_DocLink_Renaming[ident] = ident
+
+			var identifier gongdoc_models.GONG__Identifier
+			identifier.Ident = ident
+			identifier.Type = gongdoc_models.GONG__FIELD_VALUE
+			gongdoc_models.Stage.Map_DocLink_Renaming[ident] = identifier
 		}
 	}
 	for gongEnum := range *gong_models.GetGongstructInstancesSet[gong_models.GongEnum]() {
 		ident := gongdoc_models.RefPrefixReferencedPackage + "models." + gongEnum.Name
 		_ = ident
+
+		var identifier gongdoc_models.GONG__Identifier
+		identifier.Ident = ident
+		switch gongEnum.Type {
+		case gong_models.Int:
+			identifier.Type = gongdoc_models.GONG__ENUM_CAST_INT
+		case gong_models.String:
+			identifier.Type = gongdoc_models.GONG__ENUM_CAST_STRING
+		}
+
+		gongdoc_models.Stage.Map_DocLink_Renaming[ident] = identifier
+
+		for _, value := range gongEnum.GongEnumValues {
+			ident := gongdoc_models.RefPrefixReferencedPackage + "models." + value.Name
+
+			var identifier gongdoc_models.GONG__Identifier
+			identifier.Ident = ident
+			identifier.Type = gongdoc_models.GONG__IDENTIFIER_CONST
+			gongdoc_models.Stage.Map_DocLink_Renaming[ident] = identifier
+		}
 
 		// to do after fix of https://github.com/fullstack-lang/gongdoc/issues/100
 		// gongdoc_models.Stage.Map_DocLink_Renaming[ident] = ident

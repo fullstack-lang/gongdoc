@@ -35,7 +35,7 @@ func LoadDiagramPackage(pkgPath string, modelPkg *gong_models.ModelPkg, editable
 	Stage.MetaPackageImportAlias = "ref_" + filepath.Base(diagramPackage.GongModelPath)
 	Stage.MetaPackageImportPath = `"` + diagramPackage.GongModelPath + `"`
 	if Stage.Map_DocLink_Renaming == nil {
-		Stage.Map_DocLink_Renaming = make(map[string]string)
+		Stage.Map_DocLink_Renaming = make(map[string]GONG__Identifier)
 	}
 
 	// if diagrams directory does not exist create it
