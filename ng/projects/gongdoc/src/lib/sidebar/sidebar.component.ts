@@ -421,22 +421,22 @@ export class SidebarComponent implements OnInit {
           })
 
           /**
-          * let append a node for the slide of pointer Notes
+          * let append a node for the slide of pointer NoteShapes
           */
-          let NotesGongNodeAssociation: GongNode = {
-            name: "(NoteShape) Notes",
+          let NoteShapesGongNodeAssociation: GongNode = {
+            name: "(NoteShape) NoteShapes",
             type: GongNodeType.ONE__ZERO_MANY_ASSOCIATION,
             id: classdiagramDB.ID,
             uniqueIdPerStack: 19 * nonInstanceNodeId,
             structName: "Classdiagram",
-            associationField: "Notes",
+            associationField: "NoteShapes",
             associatedStructName: "NoteShape",
             children: new Array<GongNode>()
           }
           nonInstanceNodeId = nonInstanceNodeId + 1
-          classdiagramGongNodeInstance.children.push(NotesGongNodeAssociation)
+          classdiagramGongNodeInstance.children.push(NoteShapesGongNodeAssociation)
 
-          classdiagramDB.Notes?.forEach(noteshapeDB => {
+          classdiagramDB.NoteShapes?.forEach(noteshapeDB => {
             let noteshapeNode: GongNode = {
               name: noteshapeDB.Name,
               type: GongNodeType.INSTANCE,
@@ -449,7 +449,7 @@ export class SidebarComponent implements OnInit {
               associatedStructName: "",
               children: new Array<GongNode>()
             }
-            NotesGongNodeAssociation.children.push(noteshapeNode)
+            NoteShapesGongNodeAssociation.children.push(noteshapeNode)
           })
 
         }

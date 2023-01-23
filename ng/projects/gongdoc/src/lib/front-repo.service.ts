@@ -894,16 +894,16 @@ export class FrontRepoService {
                 // insertion point sub sub template for ONE-/ZERO-ONE associations pointers redeeming
 
                 // insertion point for redeeming ONE-MANY associations
-                // insertion point for slice of pointer field Classdiagram.Notes redeeming
+                // insertion point for slice of pointer field Classdiagram.NoteShapes redeeming
                 {
-                  let _classdiagram = FrontRepoSingloton.Classdiagrams.get(noteshape.Classdiagram_NotesDBID.Int64)
+                  let _classdiagram = FrontRepoSingloton.Classdiagrams.get(noteshape.Classdiagram_NoteShapesDBID.Int64)
                   if (_classdiagram) {
-                    if (_classdiagram.Notes == undefined) {
-                      _classdiagram.Notes = new Array<NoteShapeDB>()
+                    if (_classdiagram.NoteShapes == undefined) {
+                      _classdiagram.NoteShapes = new Array<NoteShapeDB>()
                     }
-                    _classdiagram.Notes.push(noteshape)
-                    if (noteshape.Classdiagram_Notes_reverse == undefined) {
-                      noteshape.Classdiagram_Notes_reverse = _classdiagram
+                    _classdiagram.NoteShapes.push(noteshape)
+                    if (noteshape.Classdiagram_NoteShapes_reverse == undefined) {
+                      noteshape.Classdiagram_NoteShapes_reverse = _classdiagram
                     }
                   }
                 }
@@ -1498,16 +1498,16 @@ export class FrontRepoService {
                 // insertion point for redeeming ONE/ZERO-ONE associations
 
                 // insertion point for redeeming ONE-MANY associations
-                // insertion point for slice of pointer field Classdiagram.Notes redeeming
+                // insertion point for slice of pointer field Classdiagram.NoteShapes redeeming
                 {
-                  let _classdiagram = FrontRepoSingloton.Classdiagrams.get(noteshape.Classdiagram_NotesDBID.Int64)
+                  let _classdiagram = FrontRepoSingloton.Classdiagrams.get(noteshape.Classdiagram_NoteShapesDBID.Int64)
                   if (_classdiagram) {
-                    if (_classdiagram.Notes == undefined) {
-                      _classdiagram.Notes = new Array<NoteShapeDB>()
+                    if (_classdiagram.NoteShapes == undefined) {
+                      _classdiagram.NoteShapes = new Array<NoteShapeDB>()
                     }
-                    _classdiagram.Notes.push(noteshape)
-                    if (noteshape.Classdiagram_Notes_reverse == undefined) {
-                      noteshape.Classdiagram_Notes_reverse = _classdiagram
+                    _classdiagram.NoteShapes.push(noteshape)
+                    if (noteshape.Classdiagram_NoteShapes_reverse == undefined) {
+                      noteshape.Classdiagram_NoteShapes_reverse = _classdiagram
                     }
                   }
                 }

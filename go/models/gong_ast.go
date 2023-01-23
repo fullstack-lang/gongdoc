@@ -669,12 +669,12 @@ func UnmarshallGongstructStaging(cmap *ast.CommentMap, assignStmt *ast.AssignStm
 							target := __gong__map_Classshape[targetIdentifier]
 							__gong__map_Classdiagram[identifier].Classshapes =
 								append(__gong__map_Classdiagram[identifier].Classshapes, target)
-						case "Notes":
+						case "NoteShapes":
 							// remove first and last char
 							targetIdentifier := ident.Name
 							target := __gong__map_NoteShape[targetIdentifier]
-							__gong__map_Classdiagram[identifier].Notes =
-								append(__gong__map_Classdiagram[identifier].Notes, target)
+							__gong__map_Classdiagram[identifier].NoteShapes =
+								append(__gong__map_Classdiagram[identifier].NoteShapes, target)
 						}
 					case "Classshape":
 						switch fieldName {
@@ -936,6 +936,10 @@ func UnmarshallGongstructStaging(cmap *ast.CommentMap, assignStmt *ast.AssignStm
 					// remove first and last char
 					fielValue := basicLit.Value[1 : len(basicLit.Value)-1]
 					__gong__map_NoteShape[identifier].Name = fielValue
+				case "Identifier":
+					// remove first and last char
+					fielValue := basicLit.Value[1 : len(basicLit.Value)-1]
+					__gong__map_NoteShape[identifier].Identifier = fielValue
 				case "Body":
 					// remove first and last char
 					fielValue := basicLit.Value[1 : len(basicLit.Value)-1]

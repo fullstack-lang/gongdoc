@@ -446,8 +446,8 @@ export class ClassDiagramComponent implements OnInit, OnDestroy {
     }
 
     // draw notes from the gong notes
-    if (this.classdiagram?.Notes != undefined) {
-      for (let note of this.classdiagram.Notes) {
+    if (this.classdiagram?.NoteShapes != undefined) {
+      for (let note of this.classdiagram.NoteShapes) {
         let umlNote = this.addNoteToGraph(note)
 
         // add a backbone event handler to update the position

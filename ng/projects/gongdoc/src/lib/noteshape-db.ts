@@ -12,6 +12,7 @@ export class NoteShapeDB {
 
 	// insertion point for basic fields declarations
 	Name: string = ""
+	Identifier: string = ""
 	Body: string = ""
 	X: number = 0
 	Y: number = 0
@@ -21,8 +22,8 @@ export class NoteShapeDB {
 
 	// insertion point for other declarations
 	NoteLinks?: Array<NoteLinkDB>
-	Classdiagram_NotesDBID: NullInt64 = new NullInt64
-	Classdiagram_NotesDBID_Index: NullInt64  = new NullInt64 // store the index of the noteshape instance in Classdiagram.Notes
-	Classdiagram_Notes_reverse?: ClassdiagramDB 
+	Classdiagram_NoteShapesDBID: NullInt64 = new NullInt64
+	Classdiagram_NoteShapesDBID_Index: NullInt64  = new NullInt64 // store the index of the noteshape instance in Classdiagram.NoteShapes
+	Classdiagram_NoteShapes_reverse?: ClassdiagramDB 
 
 }

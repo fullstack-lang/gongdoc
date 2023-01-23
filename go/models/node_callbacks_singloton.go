@@ -444,45 +444,49 @@ func (nodesCb *NodeCallbacksSingloton) OnAfterUpdateNote(
 	stagedNode, frontNode *Node) {
 	classdiagram := nodesCb.GetSelectedClassdiagram()
 
+	// adding a note shape
 	if !stagedNode.IsChecked && frontNode.IsChecked {
 		stage.Checkout()
 
-		note := (&NoteShape{Name: stagedNode.Name}).Stage()
+		noteShape := (&NoteShape{Name: stagedNode.Name}).Stage()
 
 		mapOfGongNotes := *gong_models.GetGongstructInstancesMap[gong_models.GongNote]()
 
-		gongNote, ok := mapOfGongNotes[note.Name]
+		gongNote, ok := mapOfGongNotes[noteShape.Name]
 		if !ok {
-			log.Fatal("Unkown note ", note.Name)
+			log.Fatal("Unkown note ", noteShape.Name)
 		}
-		note.Body = gongNote.Body
-		note.X = 30
-		note.Y = 30
-		note.Width = 240
-		note.Heigth = 63
 
-		classdiagram.Notes = append(classdiagram.Notes, note)
+		noteShape.Identifier = ShapenameToIdentifier(noteShape.Name)
+
+		noteShape.Body = gongNote.Body
+		noteShape.X = 30
+		noteShape.Y = 30
+		noteShape.Width = 240
+		noteShape.Heigth = 63
+
+		classdiagram.NoteShapes = append(classdiagram.NoteShapes, noteShape)
 		Stage.Commit()
 
 	}
 	if stagedNode.IsChecked && !frontNode.IsChecked {
 		stage.Checkout()
 		foundNote := false
-		var note *NoteShape
-		var _note *NoteShape
-		for _, _note = range classdiagram.Notes {
+		var noteShape *NoteShape
+		var _noteShape *NoteShape
+		for _, _noteShape = range classdiagram.NoteShapes {
 
 			// strange behavior when the note is removed within the loop
-			if _note.Name == stagedNode.Name && !foundNote {
+			if IdentifierToShapename(_noteShape.Identifier) == stagedNode.Name && !foundNote {
 				foundNote = true
-				note = _note
+				noteShape = _noteShape
 			}
 		}
 		if !foundNote {
 			log.Panicf("Note %s of field not present ", stagedNode.Name)
 		}
-		classdiagram.Notes = remove(classdiagram.Notes, note)
-		note.Unstage()
+		classdiagram.NoteShapes = remove(classdiagram.NoteShapes, noteShape)
+		noteShape.Unstage()
 		Stage.Commit()
 	}
 }

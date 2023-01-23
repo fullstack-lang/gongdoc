@@ -112,15 +112,10 @@ func NewDiagramInjection() {
 	__Classdiagram__000000_NewDiagram := (&models.Classdiagram{Name: `NewDiagram`}).Stage()
 
 	// Declarations of staged instances of Classshape
-	__Classshape__000000_NewDiagram_LineTypeInt := (&models.Classshape{Name: `NewDiagram-LineTypeInt`}).Stage()
-	__Classshape__000001_NewDiagram_LineTypeString := (&models.Classshape{Name: `NewDiagram-LineTypeString`}).Stage()
 
 	// Declarations of staged instances of DiagramPackage
 
 	// Declarations of staged instances of Field
-	__Field__000000_CONTINUOUS_ZERO := (&models.Field{Name: `CONTINUOUS_ZERO`}).Stage()
-	__Field__000001_DOTTED := (&models.Field{Name: `DOTTED`}).Stage()
-	__Field__000002_DOTTED_ONE := (&models.Field{Name: `DOTTED_ONE`}).Stage()
 
 	// Declarations of staged instances of Link
 
@@ -129,10 +124,10 @@ func NewDiagramInjection() {
 	// Declarations of staged instances of NoteLink
 
 	// Declarations of staged instances of NoteShape
+	__NoteShape__000000_LongNodeOnModels := (&models.NoteShape{Name: `LongNodeOnModels`}).Stage()
+	__NoteShape__000001_ShortNodeOnModels := (&models.NoteShape{Name: `ShortNodeOnModels`}).Stage()
 
 	// Declarations of staged instances of Position
-	__Position__000000_Pos_NewDiagram_LineTypeInt := (&models.Position{Name: `Pos-NewDiagram-LineTypeInt`}).Stage()
-	__Position__000001_Pos_NewDiagram_LineTypeString := (&models.Position{Name: `Pos-NewDiagram-LineTypeString`}).Stage()
 
 	// Declarations of staged instances of Tree
 
@@ -148,83 +143,59 @@ func NewDiagramInjection() {
 	__Classdiagram__000000_NewDiagram.Name = `NewDiagram`
 	__Classdiagram__000000_NewDiagram.IsInDrawMode = true
 
-	// Classshape values setup
-	__Classshape__000000_NewDiagram_LineTypeInt.Name = `NewDiagram-LineTypeInt`
+	// NoteShape values setup
+	__NoteShape__000000_LongNodeOnModels.Name = `LongNodeOnModels`
 	
 	// comment added to overcome the problem with the comment map association
 
-	//gong:ident [ref_models.LineTypeInt]
-	__Classshape__000000_NewDiagram_LineTypeInt.Identifier = `ref_models.LineTypeInt`
-	__Classshape__000000_NewDiagram_LineTypeInt.ShowNbInstances = false
-	__Classshape__000000_NewDiagram_LineTypeInt.NbInstances = 0
-	__Classshape__000000_NewDiagram_LineTypeInt.Width = 240.000000
-	__Classshape__000000_NewDiagram_LineTypeInt.Heigth = 93.000000
-	__Classshape__000000_NewDiagram_LineTypeInt.IsSelected = false
+	//gong:ident [ref_models.LongNodeOnModels]
+	__NoteShape__000000_LongNodeOnModels.Identifier = `ref_models.LongNodeOnModels`
+	__NoteShape__000000_LongNodeOnModels.Body = `This is an example of a note that
+could be displayed on a diagram.
 
-	// Classshape values setup
-	__Classshape__000001_NewDiagram_LineTypeString.Name = `NewDiagram-LineTypeString`
+It could explain one aspect of the model
+for intance, describing relations between structs
+
+The text of a UML note refers a comment with the GONGNOTE keyword which is
+a special case of go Note convention. See example
+for details in the go code of the models.
+
+This follows the go code convention described in https://pkg.go.dev/go/doc#Note
+
+"A Note represents a marked comment starting with "MARKER(uid): note body".
+Any note with a marker of 2 or more upper case [A-Z] letters and a uid of at least one character is recognized.
+The ":" following the uid is optional. Notes are collected in the Package.Notes map indexed by the notes marker."
+
+In the UML diagram, the size of the note is automaticaly computed from the note
+number of lines (for the width) and the number of characters per line (for the height)
+in the go code
+`
+	__NoteShape__000000_LongNodeOnModels.X = 90.000000
+	__NoteShape__000000_LongNodeOnModels.Y = 130.000000
+	__NoteShape__000000_LongNodeOnModels.Width = 240.000000
+	__NoteShape__000000_LongNodeOnModels.Heigth = 63.000000
+	__NoteShape__000000_LongNodeOnModels.Matched = false
+
+	// NoteShape values setup
+	__NoteShape__000001_ShortNodeOnModels.Name = `ShortNodeOnModels`
 	
 	// comment added to overcome the problem with the comment map association
 
-	//gong:ident [ref_models.LineTypeString]
-	__Classshape__000001_NewDiagram_LineTypeString.Identifier = `ref_models.LineTypeString`
-	__Classshape__000001_NewDiagram_LineTypeString.ShowNbInstances = false
-	__Classshape__000001_NewDiagram_LineTypeString.NbInstances = 0
-	__Classshape__000001_NewDiagram_LineTypeString.Width = 240.000000
-	__Classshape__000001_NewDiagram_LineTypeString.Heigth = 78.000000
-	__Classshape__000001_NewDiagram_LineTypeString.IsSelected = false
-
-	// Field values setup
-	__Field__000000_CONTINUOUS_ZERO.Name = `CONTINUOUS_ZERO`
-	
-	// comment added to overcome the problem with the comment map association
-
-	//gong:ident [ref_models.LineTypeInt.CONTINUOUS_ZERO]
-	__Field__000000_CONTINUOUS_ZERO.Identifier = `ref_models.LineTypeInt.CONTINUOUS_ZERO`
-	__Field__000000_CONTINUOUS_ZERO.FieldTypeAsString = ``
-	__Field__000000_CONTINUOUS_ZERO.Structname = ``
-	__Field__000000_CONTINUOUS_ZERO.Fieldtypename = ``
-
-	// Field values setup
-	__Field__000001_DOTTED.Name = `DOTTED`
-	
-	// comment added to overcome the problem with the comment map association
-
-	//gong:ident [ref_models.LineTypeString.DOTTED]
-	__Field__000001_DOTTED.Identifier = `ref_models.LineTypeString.DOTTED`
-	__Field__000001_DOTTED.FieldTypeAsString = ``
-	__Field__000001_DOTTED.Structname = ``
-	__Field__000001_DOTTED.Fieldtypename = ``
-
-	// Field values setup
-	__Field__000002_DOTTED_ONE.Name = `DOTTED_ONE`
-	
-	// comment added to overcome the problem with the comment map association
-
-	//gong:ident [ref_models.LineTypeInt.DOTTED_ONE]
-	__Field__000002_DOTTED_ONE.Identifier = `ref_models.LineTypeInt.DOTTED_ONE`
-	__Field__000002_DOTTED_ONE.FieldTypeAsString = ``
-	__Field__000002_DOTTED_ONE.Structname = ``
-	__Field__000002_DOTTED_ONE.Fieldtypename = ``
-
-	// Position values setup
-	__Position__000000_Pos_NewDiagram_LineTypeInt.X = 110.000000
-	__Position__000000_Pos_NewDiagram_LineTypeInt.Y = 210.000000
-	__Position__000000_Pos_NewDiagram_LineTypeInt.Name = `Pos-NewDiagram-LineTypeInt`
-
-	// Position values setup
-	__Position__000001_Pos_NewDiagram_LineTypeString.X = 140.000000
-	__Position__000001_Pos_NewDiagram_LineTypeString.Y = 340.000000
-	__Position__000001_Pos_NewDiagram_LineTypeString.Name = `Pos-NewDiagram-LineTypeString`
+	//gong:ident [ref_models.ShortNodeOnModels]
+	__NoteShape__000001_ShortNodeOnModels.Identifier = `ref_models.ShortNodeOnModels`
+	__NoteShape__000001_ShortNodeOnModels.Body = `this is an example of a short note
+It uses the DocLink convention for referencing Identifiers
+In this case [Line], [Point] and [Line.Start]
+`
+	__NoteShape__000001_ShortNodeOnModels.X = 30.000000
+	__NoteShape__000001_ShortNodeOnModels.Y = 30.000000
+	__NoteShape__000001_ShortNodeOnModels.Width = 240.000000
+	__NoteShape__000001_ShortNodeOnModels.Heigth = 63.000000
+	__NoteShape__000001_ShortNodeOnModels.Matched = false
 
 	// Setup of pointers
-	__Classdiagram__000000_NewDiagram.Classshapes = append(__Classdiagram__000000_NewDiagram.Classshapes, __Classshape__000000_NewDiagram_LineTypeInt)
-	__Classdiagram__000000_NewDiagram.Classshapes = append(__Classdiagram__000000_NewDiagram.Classshapes, __Classshape__000001_NewDiagram_LineTypeString)
-	__Classshape__000000_NewDiagram_LineTypeInt.Position = __Position__000000_Pos_NewDiagram_LineTypeInt
-	__Classshape__000000_NewDiagram_LineTypeInt.Fields = append(__Classshape__000000_NewDiagram_LineTypeInt.Fields, __Field__000000_CONTINUOUS_ZERO)
-	__Classshape__000000_NewDiagram_LineTypeInt.Fields = append(__Classshape__000000_NewDiagram_LineTypeInt.Fields, __Field__000002_DOTTED_ONE)
-	__Classshape__000001_NewDiagram_LineTypeString.Position = __Position__000001_Pos_NewDiagram_LineTypeString
-	__Classshape__000001_NewDiagram_LineTypeString.Fields = append(__Classshape__000001_NewDiagram_LineTypeString.Fields, __Field__000001_DOTTED)
+	__Classdiagram__000000_NewDiagram.NoteShapes = append(__Classdiagram__000000_NewDiagram.NoteShapes, __NoteShape__000001_ShortNodeOnModels)
+	__Classdiagram__000000_NewDiagram.NoteShapes = append(__Classdiagram__000000_NewDiagram.NoteShapes, __NoteShape__000000_LongNodeOnModels)
 }
 
 

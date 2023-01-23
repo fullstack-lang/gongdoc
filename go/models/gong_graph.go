@@ -207,7 +207,7 @@ func (stage *StageStruct) StageBranchClassdiagram(classdiagram *Classdiagram) {
 	for _, _classshape := range classdiagram.Classshapes {
 		StageBranch(stage, _classshape)
 	}
-	for _, _noteshape := range classdiagram.Notes {
+	for _, _noteshape := range classdiagram.NoteShapes {
 		StageBranch(stage, _noteshape)
 	}
 

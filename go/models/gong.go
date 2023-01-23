@@ -1763,11 +1763,11 @@ func (stageStruct *StageStruct) CreateReverseMap_Classdiagram_Classshapes() (res
 	return
 }
 
-func (stageStruct *StageStruct) CreateReverseMap_Classdiagram_Notes() (res map[*NoteShape]*Classdiagram) {
+func (stageStruct *StageStruct) CreateReverseMap_Classdiagram_NoteShapes() (res map[*NoteShape]*Classdiagram) {
 	res = make(map[*NoteShape]*Classdiagram)
 
 	for classdiagram := range stageStruct.Classdiagrams {
-		for _, noteshape_ := range classdiagram.Notes {
+		for _, noteshape_ := range classdiagram.NoteShapes {
 			res[noteshape_] = classdiagram
 		}
 	}
@@ -2240,7 +2240,7 @@ func GetAssociationName[Type Gongstruct]() *Type {
 			// field is initialized with an instance of Classshape with the name of the field
 			Classshapes: []*Classshape{{Name: "Classshapes"}},
 			// field is initialized with an instance of NoteShape with the name of the field
-			Notes: []*NoteShape{{Name: "Notes"}},
+			NoteShapes: []*NoteShape{{Name: "NoteShapes"}},
 		}).(*Type)
 	case Classshape:
 		return any(&Classshape{
@@ -2529,10 +2529,10 @@ func GetSliceOfPointersReverseMap[Start, End Gongstruct](fieldname string) map[*
 				}
 			}
 			return any(res).(map[*End]*Start)
-		case "Notes":
+		case "NoteShapes":
 			res := make(map[*NoteShape]*Classdiagram)
 			for classdiagram := range Stage.Classdiagrams {
-				for _, noteshape_ := range classdiagram.Notes {
+				for _, noteshape_ := range classdiagram.NoteShapes {
 					res[noteshape_] = classdiagram
 				}
 			}
@@ -2712,7 +2712,7 @@ func GetFields[Type Gongstruct]() (res []string) {
 	switch any(ret).(type) {
 	// insertion point for generic get gongstruct name
 	case Classdiagram:
-		res = []string{"Name", "Classshapes", "Notes", "IsInDrawMode"}
+		res = []string{"Name", "Classshapes", "NoteShapes", "IsInDrawMode"}
 	case Classshape:
 		res = []string{"Name", "Position", "Identifier", "ShowNbInstances", "NbInstances", "Fields", "Links", "Width", "Heigth", "IsSelected"}
 	case DiagramPackage:
@@ -2726,7 +2726,7 @@ func GetFields[Type Gongstruct]() (res []string) {
 	case NoteLink:
 		res = []string{"Name", "Type", "Classshape", "Link", "Middlevertice"}
 	case NoteShape:
-		res = []string{"Name", "Body", "X", "Y", "Width", "Heigth", "Matched", "NoteLinks"}
+		res = []string{"Name", "Identifier", "Body", "X", "Y", "Width", "Heigth", "Matched", "NoteLinks"}
 	case Position:
 		res = []string{"X", "Y", "Name"}
 	case Tree:
@@ -2758,8 +2758,8 @@ func GetFieldStringValue[Type Gongstruct](instance Type, fieldName string) (res 
 				}
 				res += __instance__.Name
 			}
-		case "Notes":
-			for idx, __instance__ := range any(instance).(Classdiagram).Notes {
+		case "NoteShapes":
+			for idx, __instance__ := range any(instance).(Classdiagram).NoteShapes {
 				if idx > 0 {
 					res += "\n"
 				}
@@ -2940,6 +2940,8 @@ func GetFieldStringValue[Type Gongstruct](instance Type, fieldName string) (res 
 		// string value of fields
 		case "Name":
 			res = any(instance).(NoteShape).Name
+		case "Identifier":
+			res = any(instance).(NoteShape).Identifier
 		case "Body":
 			res = any(instance).(NoteShape).Body
 		case "X":

@@ -24,7 +24,7 @@ type Classdiagram struct {
 	Classshapes []*Classshape
 
 	// list of notes in the diagram
-	Notes []*NoteShape
+	NoteShapes []*NoteShape
 
 	// IsInDrawMode indicates the the drawing can be edited (in development mode)
 	// or not (in production mode)

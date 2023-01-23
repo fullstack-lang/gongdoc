@@ -17,7 +17,7 @@ export class ClassdiagramDB {
 
 	// insertion point for other declarations
 	Classshapes?: Array<ClassshapeDB>
-	Notes?: Array<NoteShapeDB>
+	NoteShapes?: Array<NoteShapeDB>
 	DiagramPackage_ClassdiagramsDBID: NullInt64 = new NullInt64
 	DiagramPackage_ClassdiagramsDBID_Index: NullInt64  = new NullInt64 // store the index of the classdiagram instance in DiagramPackage.Classdiagrams
 	DiagramPackage_Classdiagrams_reverse?: DiagramPackageDB 

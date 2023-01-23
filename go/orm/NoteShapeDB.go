@@ -46,11 +46,11 @@ type NoteShapeAPI struct {
 type NoteShapePointersEnconding struct {
 	// insertion for pointer fields encoding declaration
 
-	// Implementation of a reverse ID for field Classdiagram{}.Notes []*NoteShape
-	Classdiagram_NotesDBID sql.NullInt64
+	// Implementation of a reverse ID for field Classdiagram{}.NoteShapes []*NoteShape
+	Classdiagram_NoteShapesDBID sql.NullInt64
 
 	// implementation of the index of the withing the slice
-	Classdiagram_NotesDBID_Index sql.NullInt64
+	Classdiagram_NoteShapesDBID_Index sql.NullInt64
 }
 
 // NoteShapeDB describes a noteshape in the database
@@ -66,6 +66,9 @@ type NoteShapeDB struct {
 
 	// Declation for basic field noteshapeDB.Name
 	Name_Data sql.NullString
+
+	// Declation for basic field noteshapeDB.Identifier
+	Identifier_Data sql.NullString
 
 	// Declation for basic field noteshapeDB.Body
 	Body_Data sql.NullString
@@ -108,17 +111,19 @@ type NoteShapeWOP struct {
 
 	Name string `xlsx:"1"`
 
-	Body string `xlsx:"2"`
+	Identifier string `xlsx:"2"`
 
-	X float64 `xlsx:"3"`
+	Body string `xlsx:"3"`
 
-	Y float64 `xlsx:"4"`
+	X float64 `xlsx:"4"`
 
-	Width float64 `xlsx:"5"`
+	Y float64 `xlsx:"5"`
 
-	Heigth float64 `xlsx:"6"`
+	Width float64 `xlsx:"6"`
 
-	Matched bool `xlsx:"7"`
+	Heigth float64 `xlsx:"7"`
+
+	Matched bool `xlsx:"8"`
 	// insertion for WOP pointer fields
 }
 
@@ -126,6 +131,7 @@ var NoteShape_Fields = []string{
 	// insertion for WOP basic fields
 	"ID",
 	"Name",
+	"Identifier",
 	"Body",
 	"X",
 	"Y",
@@ -465,6 +471,9 @@ func (noteshapeDB *NoteShapeDB) CopyBasicFieldsFromNoteShape(noteshape *models.N
 	noteshapeDB.Name_Data.String = noteshape.Name
 	noteshapeDB.Name_Data.Valid = true
 
+	noteshapeDB.Identifier_Data.String = noteshape.Identifier
+	noteshapeDB.Identifier_Data.Valid = true
+
 	noteshapeDB.Body_Data.String = noteshape.Body
 	noteshapeDB.Body_Data.Valid = true
 
@@ -491,6 +500,9 @@ func (noteshapeDB *NoteShapeDB) CopyBasicFieldsFromNoteShapeWOP(noteshape *NoteS
 	noteshapeDB.Name_Data.String = noteshape.Name
 	noteshapeDB.Name_Data.Valid = true
 
+	noteshapeDB.Identifier_Data.String = noteshape.Identifier
+	noteshapeDB.Identifier_Data.Valid = true
+
 	noteshapeDB.Body_Data.String = noteshape.Body
 	noteshapeDB.Body_Data.Valid = true
 
@@ -514,6 +526,7 @@ func (noteshapeDB *NoteShapeDB) CopyBasicFieldsFromNoteShapeWOP(noteshape *NoteS
 func (noteshapeDB *NoteShapeDB) CopyBasicFieldsToNoteShape(noteshape *models.NoteShape) {
 	// insertion point for checkout of basic fields (back repo to stage)
 	noteshape.Name = noteshapeDB.Name_Data.String
+	noteshape.Identifier = noteshapeDB.Identifier_Data.String
 	noteshape.Body = noteshapeDB.Body_Data.String
 	noteshape.X = noteshapeDB.X_Data.Float64
 	noteshape.Y = noteshapeDB.Y_Data.Float64
@@ -527,6 +540,7 @@ func (noteshapeDB *NoteShapeDB) CopyBasicFieldsToNoteShapeWOP(noteshape *NoteSha
 	noteshape.ID = int(noteshapeDB.ID)
 	// insertion point for checkout of basic fields (back repo to stage)
 	noteshape.Name = noteshapeDB.Name_Data.String
+	noteshape.Identifier = noteshapeDB.Identifier_Data.String
 	noteshape.Body = noteshapeDB.Body_Data.String
 	noteshape.X = noteshapeDB.X_Data.Float64
 	noteshape.Y = noteshapeDB.Y_Data.Float64
@@ -690,10 +704,10 @@ func (backRepoNoteShape *BackRepoNoteShapeStruct) RestorePhaseTwo() {
 		_ = noteshapeDB
 
 		// insertion point for reindexing pointers encoding
-		// This reindex noteshape.Notes
-		if noteshapeDB.Classdiagram_NotesDBID.Int64 != 0 {
-			noteshapeDB.Classdiagram_NotesDBID.Int64 =
-				int64(BackRepoClassdiagramid_atBckpTime_newID[uint(noteshapeDB.Classdiagram_NotesDBID.Int64)])
+		// This reindex noteshape.NoteShapes
+		if noteshapeDB.Classdiagram_NoteShapesDBID.Int64 != 0 {
+			noteshapeDB.Classdiagram_NoteShapesDBID.Int64 =
+				int64(BackRepoClassdiagramid_atBckpTime_newID[uint(noteshapeDB.Classdiagram_NoteShapesDBID.Int64)])
 		}
 
 		// update databse with new index encoding

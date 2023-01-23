@@ -2,7 +2,11 @@ package models
 
 // NoteShape is a UML note in a class diagram
 type NoteShape struct {
-	Name          string
+	Name string
+
+	//gong:ident
+	Identifier string
+
 	Body          string
 	X, Y          float64
 	Width, Heigth float64

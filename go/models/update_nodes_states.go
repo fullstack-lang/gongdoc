@@ -148,8 +148,8 @@ func updateNodesStates(stage *StageStruct, nodesCb *NodeCallbacksSingloton) {
 		}
 	}
 	// 2. for each note of the diagram, set the check button to true
-	for _, note := range classdiagram.Notes {
-		nodesCb.map_Identifier_Node[note.Name].IsChecked = true
+	for _, note := range classdiagram.NoteShapes {
+		nodesCb.map_Identifier_Node[IdentifierToShapename(note.Identifier)].IsChecked = true
 	}
 
 	// log.Println("UpdateNodeStates, before commit, nb ", stage.BackRepo.GetLastCommitFromBackNb())
