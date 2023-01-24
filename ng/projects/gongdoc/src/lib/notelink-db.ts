@@ -14,6 +14,7 @@ export class NoteLinkDB {
 
 	// insertion point for basic fields declarations
 	Name: string = ""
+	Identifier: string = ""
 	Type: string = ""
 
 	// insertion point for other declarations

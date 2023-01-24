@@ -71,6 +71,9 @@ export class NoteLinksTableComponent implements OnInit {
         case 'Name':
           return notelinkDB.Name;
 
+        case 'Identifier':
+          return notelinkDB.Identifier;
+
         case 'Type':
           return notelinkDB.Type;
 
@@ -105,6 +108,7 @@ export class NoteLinksTableComponent implements OnInit {
 
       // insertion point for merging of fields
       mergedContent += notelinkDB.Name.toLowerCase()
+      mergedContent += notelinkDB.Identifier.toLowerCase()
       mergedContent += notelinkDB.Type.toLowerCase()
       if (notelinkDB.Classshape) {
         mergedContent += notelinkDB.Classshape.Name.toLowerCase()
@@ -170,6 +174,7 @@ export class NoteLinksTableComponent implements OnInit {
     if (this.mode == TableComponentMode.DISPLAY_MODE) {
       this.displayedColumns = ['ID', 'Edit', 'Delete', // insertion point for columns to display
         "Name",
+        "Identifier",
         "Type",
         "Classshape",
         "Link",
@@ -179,6 +184,7 @@ export class NoteLinksTableComponent implements OnInit {
     } else {
       this.displayedColumns = ['select', 'ID', // insertion point for columns to display
         "Name",
+        "Identifier",
         "Type",
         "Classshape",
         "Link",

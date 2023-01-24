@@ -79,6 +79,9 @@ type NoteLinkDB struct {
 	// Declation for basic field notelinkDB.Name
 	Name_Data sql.NullString
 
+	// Declation for basic field notelinkDB.Identifier
+	Identifier_Data sql.NullString
+
 	// Declation for basic field notelinkDB.Type
 	Type_Data sql.NullString
 	// encoding of pointers
@@ -104,7 +107,9 @@ type NoteLinkWOP struct {
 
 	Name string `xlsx:"1"`
 
-	Type models.ReferenceType `xlsx:"2"`
+	Identifier string `xlsx:"2"`
+
+	Type models.ReferenceType `xlsx:"3"`
 	// insertion for WOP pointer fields
 }
 
@@ -112,6 +117,7 @@ var NoteLink_Fields = []string{
 	// insertion for WOP basic fields
 	"ID",
 	"Name",
+	"Identifier",
 	"Type",
 }
 
@@ -439,6 +445,9 @@ func (notelinkDB *NoteLinkDB) CopyBasicFieldsFromNoteLink(notelink *models.NoteL
 	notelinkDB.Name_Data.String = notelink.Name
 	notelinkDB.Name_Data.Valid = true
 
+	notelinkDB.Identifier_Data.String = notelink.Identifier
+	notelinkDB.Identifier_Data.Valid = true
+
 	notelinkDB.Type_Data.String = notelink.Type.ToString()
 	notelinkDB.Type_Data.Valid = true
 }
@@ -450,6 +459,9 @@ func (notelinkDB *NoteLinkDB) CopyBasicFieldsFromNoteLinkWOP(notelink *NoteLinkW
 	notelinkDB.Name_Data.String = notelink.Name
 	notelinkDB.Name_Data.Valid = true
 
+	notelinkDB.Identifier_Data.String = notelink.Identifier
+	notelinkDB.Identifier_Data.Valid = true
+
 	notelinkDB.Type_Data.String = notelink.Type.ToString()
 	notelinkDB.Type_Data.Valid = true
 }
@@ -458,6 +470,7 @@ func (notelinkDB *NoteLinkDB) CopyBasicFieldsFromNoteLinkWOP(notelink *NoteLinkW
 func (notelinkDB *NoteLinkDB) CopyBasicFieldsToNoteLink(notelink *models.NoteLink) {
 	// insertion point for checkout of basic fields (back repo to stage)
 	notelink.Name = notelinkDB.Name_Data.String
+	notelink.Identifier = notelinkDB.Identifier_Data.String
 	notelink.Type.FromString(notelinkDB.Type_Data.String)
 }
 
@@ -466,6 +479,7 @@ func (notelinkDB *NoteLinkDB) CopyBasicFieldsToNoteLinkWOP(notelink *NoteLinkWOP
 	notelink.ID = int(notelinkDB.ID)
 	// insertion point for checkout of basic fields (back repo to stage)
 	notelink.Name = notelinkDB.Name_Data.String
+	notelink.Identifier = notelinkDB.Identifier_Data.String
 	notelink.Type.FromString(notelinkDB.Type_Data.String)
 }
 
