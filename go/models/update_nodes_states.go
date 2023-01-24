@@ -14,7 +14,7 @@ import (
 // ## For the diagram nodes
 //
 // For the identifiers nodes
-func updateNodesStates(stage *StageStruct, nodesCb *NodeCallbacksSingloton) {
+func updateNodesStates(stage *StageStruct, nodesCb *NodeCB) {
 
 	nodesCb.idTree.UncheckAndDisable()
 
@@ -111,24 +111,24 @@ func updateNodesStates(stage *StageStruct, nodesCb *NodeCallbacksSingloton) {
 	// disable checkbox field node that reference a gongstruct whose classshape is
 	// not present in the diagram
 	// first, construct map of all gongstructs present in the diagram
-	map_OfGongstruct := make(map[string]bool)
+	set_of_classshape_names := make(map[string]bool)
 	for _, classshape := range classdiagram.Classshapes {
-		map_OfGongstruct[IdentifierToShapename(classshape.Identifier)] = true
+		set_of_classshape_names[IdentifierToShapename(classshape.Identifier)] = true
 	}
 	// then iterate over all fields of all gongstructs node
 	for gongStruct := range *gong_models.GetGongstructInstancesSet[gong_models.GongStruct]() {
-		gognstructNode := nodesCb.map_Identifier_Node[gongStruct.Name]
+		gongstructNode := nodesCb.map_Identifier_Node[gongStruct.Name]
 
-		for _, fieldNode := range gognstructNode.Children {
+		for _, fieldNode := range gongstructNode.Children {
 			// then disable the checkbox
 			if fieldNode.Type == GONG_STRUCT_FIELD {
 				switch fieldWithRef := fieldNode.Gongfield.(type) {
 				case *gong_models.PointerToGongStructField:
-					if _, ok := map_OfGongstruct[fieldWithRef.GongStruct.Name]; !ok {
+					if _, ok := set_of_classshape_names[fieldWithRef.GongStruct.Name]; !ok {
 						fieldNode.IsCheckboxDisabled = true
 					}
 				case *gong_models.SliceOfPointerToGongStructField:
-					if _, ok := map_OfGongstruct[fieldWithRef.GongStruct.Name]; !ok {
+					if _, ok := set_of_classshape_names[fieldWithRef.GongStruct.Name]; !ok {
 						fieldNode.IsCheckboxDisabled = true
 					}
 				}
@@ -140,11 +140,25 @@ func updateNodesStates(stage *StageStruct, nodesCb *NodeCallbacksSingloton) {
 	// For notes
 	//
 	// 1. for each note of the model, enable the check button if the class diagram is in draw mode
+	set_of_noteshape_names := make(map[string]bool)
+	for _, noteshape := range classdiagram.NoteShapes {
+		set_of_noteshape_names[IdentifierToShapename(noteshape.Identifier)] = true
+	}
 	for note := range *gong_models.GetGongstructInstancesSet[gong_models.GongNote]() {
 		nodesCb.map_Identifier_Node[note.Name].IsCheckboxDisabled = !classdiagram.IsInDrawMode
 
-		for _, link := range note.Links {
-			nodesCb.map_Identifier_Node[note.Name+"."+link.Name].IsCheckboxDisabled = !classdiagram.IsInDrawMode
+		for _, noteLink := range note.Links {
+
+			noteLinkName := note.Name + "." + noteLink.Name
+			node := nodesCb.map_Identifier_Node[noteLinkName]
+
+			// default choice
+			node.IsCheckboxDisabled = !classdiagram.IsInDrawMode
+
+			// disable check box of the note link if the note is not present
+			if _, ok := set_of_noteshape_names[note.Name]; !ok {
+				node.IsCheckboxDisabled = true
+			}
 		}
 	}
 	// 2. for each note of the diagram, set the check button to true

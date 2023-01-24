@@ -265,7 +265,7 @@ func (classdiagram *Classdiagram) RemoveClassshape(classshapeName string) {
 	// log.Println("RemoveClassshape, after commit, nb ", Stage.BackRepo.GetLastCommitFromBackNb())
 }
 
-func (classdiagram *Classdiagram) AddClassshape(nodesCb *NodeCallbacksSingloton, classshapeName string, referenceType ReferenceType) {
+func (classdiagram *Classdiagram) AddClassshape(nodesCb *NodeCB, classshapeName string, referenceType ReferenceType) {
 
 	var classshape Classshape
 	classshape.Name = classdiagram.Name + "-" + classshapeName

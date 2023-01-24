@@ -2,7 +2,7 @@ package models
 
 import gong_models "github.com/fullstack-lang/gong/go/models"
 
-func FillUpTreeOfIdentifiers(pkgelt *DiagramPackage, nodesCb *NodeCallbacksSingloton) {
+func FillUpTreeOfIdentifiers(pkgelt *DiagramPackage, nodesCb *NodeCB) {
 
 	// set up the gongTree to display elements
 	gongTree := (&Tree{Name: "gong", Type: TREE_OF_IDENTIFIERS}).Stage()
@@ -71,6 +71,7 @@ func FillUpTreeOfIdentifiers(pkgelt *DiagramPackage, nodesCb *NodeCallbacksSingl
 
 		node := (&Node{Name: gongNote.Name}).Stage()
 		node.HasCheckboxButton = true
+		node.GongNote = gongNote
 		node.Type = GONG_NOTE
 		node.IsExpanded = true
 

@@ -8,7 +8,7 @@ func FillUpNodeTree(diagramPackage *DiagramPackage) {
 
 	// a node tree is agnostic of the node types it manages
 	// therefore, a callback functiion is necessary
-	onNodeCallbackStruct := new(NodeCallbacksSingloton)
+	onNodeCallbackStruct := new(NodeCB)
 	onNodeCallbackStruct.diagramPackage = diagramPackage
 
 	FillUpDiagramNodeTree(diagramPackage, onNodeCallbackStruct)

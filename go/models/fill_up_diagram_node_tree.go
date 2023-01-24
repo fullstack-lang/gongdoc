@@ -1,6 +1,6 @@
 package models
 
-func FillUpDiagramNodeTree(diagramPackage *DiagramPackage, onNodeCallbackStruct *NodeCallbacksSingloton) {
+func FillUpDiagramNodeTree(diagramPackage *DiagramPackage, onNodeCallbackStruct *NodeCB) {
 
 	// generate tree of diagrams
 	gongdocTree := (&Tree{Name: "gongdoc", Type: TREE_OF_DIAGRAMS}).Stage()
