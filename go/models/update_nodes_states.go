@@ -159,6 +159,12 @@ func updateNodesStates(stage *StageStruct, nodesCb *NodeCB) {
 			if _, ok := set_of_noteshape_names[note.Name]; !ok {
 				node.IsCheckboxDisabled = true
 			}
+
+			// disable check box of the note link if the target shape is not present
+			if _, ok := set_of_classshape_names[noteLinkName]; !ok {
+				node.IsCheckboxDisabled = true
+			}
+
 		}
 	}
 	// 2. for each note of the diagram, set the check button to true

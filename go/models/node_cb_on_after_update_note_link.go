@@ -25,14 +25,33 @@ func (nodesCb *NodeCB) OnAfterUpdateNoteLink(
 		}
 	}
 
-	// adding a note link
+	// removing a note link
 	if !stagedNode.IsChecked && frontNode.IsChecked {
 		stage.Checkout()
 
+		// get the relevant note link
+		var noteLink *NoteLink
+		for _, _noteLink := range noteshape.NoteLinks {
+			if _noteLink.Identifier == noteshape.Identifier {
+				noteLink = _noteLink
+			}
+		}
+
+		noteshape.NoteLinks = append(noteshape.NoteLinks, noteLink)
+
 		Stage.Commit()
 	}
+
+	// adding a note link
 	if stagedNode.IsChecked && !frontNode.IsChecked {
 		stage.Checkout()
+
+		noteLink := (&NoteLink{Name: stagedNode.GetName()}).Stage()
+		noteLink.Identifier =
+			ShapeAndFieldnameToFieldIdentifier(gongNote.Name, stagedNode.Name)
+
+		noteshape.NoteLinks = append(noteshape.NoteLinks, noteLink)
+
 		Stage.Commit()
 	}
 }
