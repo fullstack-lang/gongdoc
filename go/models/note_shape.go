@@ -30,5 +30,5 @@ type NoteShape struct {
 	Width, Heigth float64
 	Matched       bool // if a note with the same name has been found
 
-	NoteLinks []*NoteLink
+	NoteShapeLinks []*NoteShapeLink
 }

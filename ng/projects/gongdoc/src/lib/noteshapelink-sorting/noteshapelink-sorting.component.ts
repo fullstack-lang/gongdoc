@@ -8,30 +8,30 @@ import { DialogData } from '../front-repo.service'
 import { SelectionModel } from '@angular/cdk/collections';
 
 import { Router, RouterState } from '@angular/router';
-import { NoteLinkDB } from '../notelink-db'
-import { NoteLinkService } from '../notelink.service'
+import { NoteShapeLinkDB } from '../noteshapelink-db'
+import { NoteShapeLinkService } from '../noteshapelink.service'
 
 import { FrontRepoService, FrontRepo } from '../front-repo.service'
 import { NullInt64 } from '../null-int64'
 
 @Component({
-  selector: 'lib-notelink-sorting',
-  templateUrl: './notelink-sorting.component.html',
-  styleUrls: ['./notelink-sorting.component.css']
+  selector: 'lib-noteshapelink-sorting',
+  templateUrl: './noteshapelink-sorting.component.html',
+  styleUrls: ['./noteshapelink-sorting.component.css']
 })
-export class NoteLinkSortingComponent implements OnInit {
+export class NoteShapeLinkSortingComponent implements OnInit {
 
   frontRepo: FrontRepo = new (FrontRepo)
 
-  // array of NoteLink instances that are in the association
-  associatedNoteLinks = new Array<NoteLinkDB>();
+  // array of NoteShapeLink instances that are in the association
+  associatedNoteShapeLinks = new Array<NoteShapeLinkDB>();
 
   constructor(
-    private notelinkService: NoteLinkService,
+    private noteshapelinkService: NoteShapeLinkService,
     private frontRepoService: FrontRepoService,
 
-    // not null if the component is called as a selection component of notelink instances
-    public dialogRef: MatDialogRef<NoteLinkSortingComponent>,
+    // not null if the component is called as a selection component of noteshapelink instances
+    public dialogRef: MatDialogRef<NoteShapeLinkSortingComponent>,
     @Optional() @Inject(MAT_DIALOG_DATA) public dialogData: DialogData,
 
     private router: Router,
@@ -42,31 +42,31 @@ export class NoteLinkSortingComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.getNoteLinks()
+    this.getNoteShapeLinks()
   }
 
-  getNoteLinks(): void {
+  getNoteShapeLinks(): void {
     this.frontRepoService.pull().subscribe(
       frontRepo => {
         this.frontRepo = frontRepo
 
         let index = 0
-        for (let notelink of this.frontRepo.NoteLinks_array) {
+        for (let noteshapelink of this.frontRepo.NoteShapeLinks_array) {
           let ID = this.dialogData.ID
-          let revPointerID = notelink[this.dialogData.ReversePointer as keyof NoteLinkDB] as unknown as NullInt64
-          let revPointerID_Index = notelink[this.dialogData.ReversePointer + "_Index" as keyof NoteLinkDB] as unknown as NullInt64
+          let revPointerID = noteshapelink[this.dialogData.ReversePointer as keyof NoteShapeLinkDB] as unknown as NullInt64
+          let revPointerID_Index = noteshapelink[this.dialogData.ReversePointer + "_Index" as keyof NoteShapeLinkDB] as unknown as NullInt64
           if (revPointerID.Int64 == ID) {
             if (revPointerID_Index == undefined) {
               revPointerID_Index = new NullInt64
               revPointerID_Index.Valid = true
               revPointerID_Index.Int64 = index++
             }
-            this.associatedNoteLinks.push(notelink)
+            this.associatedNoteShapeLinks.push(noteshapelink)
           }
         }
 
-        // sort associated notelink according to order
-        this.associatedNoteLinks.sort((t1, t2) => {
+        // sort associated noteshapelink according to order
+        this.associatedNoteShapeLinks.sort((t1, t2) => {
           let t1_revPointerID_Index = t1[this.dialogData.ReversePointer + "_Index" as keyof typeof t1] as unknown as NullInt64
           let t2_revPointerID_Index = t2[this.dialogData.ReversePointer + "_Index" as keyof typeof t2] as unknown as NullInt64
           if (t1_revPointerID_Index && t2_revPointerID_Index) {
@@ -84,13 +84,13 @@ export class NoteLinkSortingComponent implements OnInit {
   }
 
   drop(event: CdkDragDrop<string[]>) {
-    moveItemInArray(this.associatedNoteLinks, event.previousIndex, event.currentIndex);
+    moveItemInArray(this.associatedNoteShapeLinks, event.previousIndex, event.currentIndex);
 
-    // set the order of NoteLink instances
+    // set the order of NoteShapeLink instances
     let index = 0
 
-    for (let notelink of this.associatedNoteLinks) {
-      let revPointerID_Index = notelink[this.dialogData.ReversePointer + "_Index" as keyof NoteLinkDB] as unknown as NullInt64
+    for (let noteshapelink of this.associatedNoteShapeLinks) {
+      let revPointerID_Index = noteshapelink[this.dialogData.ReversePointer + "_Index" as keyof NoteShapeLinkDB] as unknown as NullInt64
       revPointerID_Index.Valid = true
       revPointerID_Index.Int64 = index++
     }
@@ -98,11 +98,11 @@ export class NoteLinkSortingComponent implements OnInit {
 
   save() {
 
-    this.associatedNoteLinks.forEach(
-      notelink => {
-        this.notelinkService.updateNoteLink(notelink)
-          .subscribe(notelink => {
-            this.notelinkService.NoteLinkServiceChanged.next("update")
+    this.associatedNoteShapeLinks.forEach(
+      noteshapelink => {
+        this.noteshapelinkService.updateNoteShapeLink(noteshapelink)
+          .subscribe(noteshapelink => {
+            this.noteshapelinkService.NoteShapeLinkServiceChanged.next("update")
           });
       }
     )

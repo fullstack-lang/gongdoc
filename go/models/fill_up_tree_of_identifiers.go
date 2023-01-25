@@ -16,15 +16,15 @@ func FillUpTreeOfIdentifiers(pkgelt *DiagramPackage, nodesCb *NodeCB) {
 	gongTree.RootNodes = append(gongTree.RootNodes, gongstructRootNode)
 	for gongStruct := range *gong_models.GetGongstructInstancesSet[gong_models.GongStruct]() {
 
-		node := (&Node{Name: gongStruct.Name}).Stage()
-		node.Type = GONG_STRUCT
-		node.Gongstruct = gongStruct
-		node.HasCheckboxButton = true
-		node.IsExpanded = false
+		nodeClassshape := (&Node{Name: gongStruct.Name}).Stage()
+		nodeClassshape.Type = GONG_STRUCT
+		nodeClassshape.Gongstruct = gongStruct
+		nodeClassshape.HasCheckboxButton = true
+		nodeClassshape.IsExpanded = false
 
 		// append to the tree
-		gongstructRootNode.Children = append(gongstructRootNode.Children, node)
-		nodesCb.map_Identifier_Node[gongStruct.Name] = node
+		gongstructRootNode.Children = append(gongstructRootNode.Children, nodeClassshape)
+		nodesCb.map_Identifier_Node[ShapenameToIdentifier(gongStruct.Name)] = nodeClassshape
 
 		for _, field := range gongStruct.Fields {
 			node2 := (&Node{Name: field.GetName()}).Stage()
@@ -33,8 +33,8 @@ func FillUpTreeOfIdentifiers(pkgelt *DiagramPackage, nodesCb *NodeCB) {
 			node2.HasCheckboxButton = true
 
 			// append to tree
-			node.Children = append(node.Children, node2)
-			nodesCb.map_Identifier_Node[gongStruct.Name+"."+field.GetName()] = node2
+			nodeClassshape.Children = append(nodeClassshape.Children, node2)
+			nodesCb.map_Identifier_Node[ShapeAndFieldnameToFieldIdentifier(gongStruct.Name, field.GetName())] = node2
 		}
 	}
 
@@ -51,7 +51,7 @@ func FillUpTreeOfIdentifiers(pkgelt *DiagramPackage, nodesCb *NodeCB) {
 
 		// append to tree
 		gongenumRootNode.Children = append(gongenumRootNode.Children, node)
-		nodesCb.map_Identifier_Node[gongEnum.Name] = node
+		nodesCb.map_Identifier_Node[ShapenameToIdentifier(gongEnum.Name)] = node
 
 		for _, value := range gongEnum.GongEnumValues {
 			node2 := (&Node{Name: value.GetName()}).Stage()
@@ -60,7 +60,7 @@ func FillUpTreeOfIdentifiers(pkgelt *DiagramPackage, nodesCb *NodeCB) {
 
 			// append to tree
 			node.Children = append(node.Children, node2)
-			nodesCb.map_Identifier_Node[gongEnum.Name+"."+value.GetName()] = node2
+			nodesCb.map_Identifier_Node[ShapeAndFieldnameToFieldIdentifier(gongEnum.Name, value.GetName())] = node2
 		}
 	}
 
@@ -77,7 +77,7 @@ func FillUpTreeOfIdentifiers(pkgelt *DiagramPackage, nodesCb *NodeCB) {
 
 		// append to tree
 		gongNotesRootNode.Children = append(gongNotesRootNode.Children, node)
-		nodesCb.map_Identifier_Node[gongNote.Name] = node
+		nodesCb.map_Identifier_Node[ShapenameToIdentifier(gongNote.Name)] = node
 
 		for _, gongLink := range gongNote.Links {
 			node2 := (&Node{Name: gongLink.Name}).Stage()
@@ -86,7 +86,7 @@ func FillUpTreeOfIdentifiers(pkgelt *DiagramPackage, nodesCb *NodeCB) {
 
 			// append to tree
 			node.Children = append(node.Children, node2)
-			nodesCb.map_Identifier_Node[gongNote.Name+"."+gongLink.Name] = node2
+			nodesCb.map_Identifier_Node[ShapeAndFieldnameToFieldIdentifier(gongNote.Name, gongLink.Name)] = node2
 		}
 	}
 

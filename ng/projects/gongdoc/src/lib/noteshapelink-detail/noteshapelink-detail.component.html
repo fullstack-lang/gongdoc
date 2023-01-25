@@ -1,11 +1,11 @@
-<form *ngIf="notelink" class="details">
-    <h2 class="details__title">notelink</h2>
+<form *ngIf="noteshapelink" class="details">
+    <h2 class="details__title">noteshapelink</h2>
     <!-- insertion point for fields specific code -->
     <mat-grid-list *ngIf='!isATextArea("Name")' cols="5" rowHeight="2:1">
         <mat-grid-tile [colspan]="3">
             <mat-form-field mat-form-field class="detail-full-width">
                 <mat-label>Name</mat-label>
-                <input name="" [ngModelOptions]="{standalone: true}" matInput [(ngModel)]="notelink.Name">
+                <input name="" [ngModelOptions]="{standalone: true}" matInput [(ngModel)]="noteshapelink.Name">
             </mat-form-field>
         </mat-grid-tile>
         <mat-grid-tile>
@@ -18,14 +18,14 @@
     </mat-grid-list>
     <mat-form-field *ngIf='isATextArea("Name")' mat-form-field class="detail-full-width">
         <mat-label>Name</mat-label>
-        <textarea name="" [ngModelOptions]="{standalone: true}" matInput [(ngModel)]="notelink.Name"></textarea>
+        <textarea name="" [ngModelOptions]="{standalone: true}" matInput [(ngModel)]="noteshapelink.Name"></textarea>
     </mat-form-field>
 
     <mat-grid-list *ngIf='!isATextArea("Identifier")' cols="5" rowHeight="2:1">
         <mat-grid-tile [colspan]="3">
             <mat-form-field mat-form-field class="detail-full-width">
                 <mat-label>Identifier</mat-label>
-                <input name="" [ngModelOptions]="{standalone: true}" matInput [(ngModel)]="notelink.Identifier">
+                <input name="" [ngModelOptions]="{standalone: true}" matInput [(ngModel)]="noteshapelink.Identifier">
             </mat-form-field>
         </mat-grid-tile>
         <mat-grid-tile>
@@ -38,13 +38,13 @@
     </mat-grid-list>
     <mat-form-field *ngIf='isATextArea("Identifier")' mat-form-field class="detail-full-width">
         <mat-label>Identifier</mat-label>
-        <textarea name="" [ngModelOptions]="{standalone: true}" matInput [(ngModel)]="notelink.Identifier"></textarea>
+        <textarea name="" [ngModelOptions]="{standalone: true}" matInput [(ngModel)]="noteshapelink.Identifier"></textarea>
     </mat-form-field>
 
     <!-- -->
     <mat-form-field appearance="fill" class="detail-full-width">
         <mat-label>Type</mat-label>
-        <mat-select [(ngModel)]="notelink.Type" [ngModelOptions]="{standalone: true}">
+        <mat-select [(ngModel)]="noteshapelink.Type" [ngModelOptions]="{standalone: true}">
             <mat-option *ngFor="let enum of ReferenceTypeList" [value]="enum.value">
                 {{enum.viewValue}}
             </mat-option>
@@ -53,7 +53,7 @@
 
     <mat-form-field class="detail-full-width">
         <mat-label>Classshape</mat-label>
-        <mat-select [compareWith]="compareObjects" [(value)]="notelink.Classshape" (selectionChange)="fillUpNameIfEmpty($event)">
+        <mat-select [compareWith]="compareObjects" [(value)]="noteshapelink.Classshape" (selectionChange)="fillUpNameIfEmpty($event)">
             <mat-option>None</mat-option>
             <mat-option *ngFor="let classshape of frontRepo.Classshapes_array" [value]="classshape">
                 {{classshape.Name}}
@@ -63,7 +63,7 @@
 
     <mat-form-field class="detail-full-width">
         <mat-label>Link</mat-label>
-        <mat-select [compareWith]="compareObjects" [(value)]="notelink.Link" (selectionChange)="fillUpNameIfEmpty($event)">
+        <mat-select [compareWith]="compareObjects" [(value)]="noteshapelink.Link" (selectionChange)="fillUpNameIfEmpty($event)">
             <mat-option>None</mat-option>
             <mat-option *ngFor="let link of frontRepo.Links_array" [value]="link">
                 {{link.Name}}
@@ -73,7 +73,7 @@
 
     <mat-form-field class="detail-full-width">
         <mat-label>Middlevertice</mat-label>
-        <mat-select [compareWith]="compareObjects" [(value)]="notelink.Middlevertice" (selectionChange)="fillUpNameIfEmpty($event)">
+        <mat-select [compareWith]="compareObjects" [(value)]="noteshapelink.Middlevertice" (selectionChange)="fillUpNameIfEmpty($event)">
             <mat-option>None</mat-option>
             <mat-option *ngFor="let vertice of frontRepo.Vertices_array" [value]="vertice">
                 {{vertice.Name}}
@@ -82,8 +82,8 @@
     </mat-form-field>
 
     <mat-form-field class="detail-full-width">
-        <mat-label>(NoteShape) NoteLinks</mat-label>
-        <mat-select [compareWith]="compareObjects" [(ngModel)]="notelink.NoteShape_NoteLinks_reverse" [ngModelOptions]="{standalone: true}">
+        <mat-label>(NoteShape) NoteShapeLinks</mat-label>
+        <mat-select [compareWith]="compareObjects" [(ngModel)]="noteshapelink.NoteShape_NoteShapeLinks_reverse" [ngModelOptions]="{standalone: true}">
             <mat-option>None</mat-option>
             <mat-option *ngFor="let noteshape of frontRepo.NoteShapes_array" [value]="noteshape">
                 {{noteshape.Name}}
@@ -92,7 +92,7 @@
     </mat-form-field>
     <div class="details__save">
         <button mat-raised-button color="primary" (click)="save()">
-            Save notelink
+            Save noteshapelink
         </button>
     </div>
 </form>

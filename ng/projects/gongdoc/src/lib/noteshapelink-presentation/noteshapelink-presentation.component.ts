@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 
-import { NoteLinkDB } from '../notelink-db'
-import { NoteLinkService } from '../notelink.service'
+import { NoteShapeLinkDB } from '../noteshapelink-db'
+import { NoteShapeLinkService } from '../noteshapelink.service'
 
 import { FrontRepoService, FrontRepo } from '../front-repo.service'
 
@@ -10,18 +10,18 @@ import { Router, RouterState, ActivatedRoute } from '@angular/router';
 
 // insertion point for additional imports
 
-export interface notelinkDummyElement {
+export interface noteshapelinkDummyElement {
 }
 
-const ELEMENT_DATA: notelinkDummyElement[] = [
+const ELEMENT_DATA: noteshapelinkDummyElement[] = [
 ];
 
 @Component({
-	selector: 'app-notelink-presentation',
-	templateUrl: './notelink-presentation.component.html',
-	styleUrls: ['./notelink-presentation.component.css'],
+	selector: 'app-noteshapelink-presentation',
+	templateUrl: './noteshapelink-presentation.component.html',
+	styleUrls: ['./noteshapelink-presentation.component.css'],
 })
-export class NoteLinkPresentationComponent implements OnInit {
+export class NoteShapeLinkPresentationComponent implements OnInit {
 
 	// insertion point for additionnal time duration declarations
 	// insertion point for additionnal enum int field declarations
@@ -29,13 +29,13 @@ export class NoteLinkPresentationComponent implements OnInit {
 	displayedColumns: string[] = []
 	dataSource = ELEMENT_DATA
 
-	notelink: NoteLinkDB = new (NoteLinkDB)
+	noteshapelink: NoteShapeLinkDB = new (NoteShapeLinkDB)
 
 	// front repo
 	frontRepo: FrontRepo = new (FrontRepo)
  
 	constructor(
-		private notelinkService: NoteLinkService,
+		private noteshapelinkService: NoteShapeLinkService,
 		private frontRepoService: FrontRepoService,
 		private route: ActivatedRoute,
 		private router: Router,
@@ -46,25 +46,25 @@ export class NoteLinkPresentationComponent implements OnInit {
 	}
 
 	ngOnInit(): void {
-		this.getNoteLink();
+		this.getNoteShapeLink();
 
 		// observable for changes in 
-		this.notelinkService.NoteLinkServiceChanged.subscribe(
+		this.noteshapelinkService.NoteShapeLinkServiceChanged.subscribe(
 			message => {
 				if (message == "update") {
-					this.getNoteLink()
+					this.getNoteShapeLink()
 				}
 			}
 		)
 	}
 
-	getNoteLink(): void {
+	getNoteShapeLink(): void {
 		const id = +this.route.snapshot.paramMap.get('id')!
 		this.frontRepoService.pull().subscribe(
 			frontRepo => {
 				this.frontRepo = frontRepo
 
-				this.notelink = this.frontRepo.NoteLinks.get(id)!
+				this.noteshapelink = this.frontRepo.NoteShapeLinks.get(id)!
 
 				// insertion point for recovery of durations
 				// insertion point for recovery of enum tint
@@ -85,7 +85,7 @@ export class NoteLinkPresentationComponent implements OnInit {
 	setEditorRouterOutlet(ID: number) {
 		this.router.navigate([{
 			outlets: {
-				github_com_fullstack_lang_gongdoc_go_editor: ["github_com_fullstack_lang_gongdoc_go-" + "notelink-detail", ID]
+				github_com_fullstack_lang_gongdoc_go_editor: ["github_com_fullstack_lang_gongdoc_go-" + "noteshapelink-detail", ID]
 			}
 		}]);
 	}

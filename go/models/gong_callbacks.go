@@ -29,13 +29,13 @@ func AfterCreateFromFront[Type Gongstruct](stage *StageStruct, instance *Type) {
 		if stage.OnAfterNodeCreateCallback != nil {
 			stage.OnAfterNodeCreateCallback.OnAfterCreate(stage, target)
 		}
-	case *NoteLink:
-		if stage.OnAfterNoteLinkCreateCallback != nil {
-			stage.OnAfterNoteLinkCreateCallback.OnAfterCreate(stage, target)
-		}
 	case *NoteShape:
 		if stage.OnAfterNoteShapeCreateCallback != nil {
 			stage.OnAfterNoteShapeCreateCallback.OnAfterCreate(stage, target)
+		}
+	case *NoteShapeLink:
+		if stage.OnAfterNoteShapeLinkCreateCallback != nil {
+			stage.OnAfterNoteShapeLinkCreateCallback.OnAfterCreate(stage, target)
 		}
 	case *Position:
 		if stage.OnAfterPositionCreateCallback != nil {
@@ -95,15 +95,15 @@ func AfterUpdateFromFront[Type Gongstruct](stage *StageStruct, old, new *Type) {
 		if stage.OnAfterNodeUpdateCallback != nil {
 			stage.OnAfterNodeUpdateCallback.OnAfterUpdate(stage, oldTarget, newTarget)
 		}
-	case *NoteLink:
-		newTarget := any(new).(*NoteLink)
-		if stage.OnAfterNoteLinkUpdateCallback != nil {
-			stage.OnAfterNoteLinkUpdateCallback.OnAfterUpdate(stage, oldTarget, newTarget)
-		}
 	case *NoteShape:
 		newTarget := any(new).(*NoteShape)
 		if stage.OnAfterNoteShapeUpdateCallback != nil {
 			stage.OnAfterNoteShapeUpdateCallback.OnAfterUpdate(stage, oldTarget, newTarget)
+		}
+	case *NoteShapeLink:
+		newTarget := any(new).(*NoteShapeLink)
+		if stage.OnAfterNoteShapeLinkUpdateCallback != nil {
+			stage.OnAfterNoteShapeLinkUpdateCallback.OnAfterUpdate(stage, oldTarget, newTarget)
 		}
 	case *Position:
 		newTarget := any(new).(*Position)
@@ -168,15 +168,15 @@ func AfterDeleteFromFront[Type Gongstruct](stage *StageStruct, staged, front *Ty
 			staged := any(staged).(*Node)
 			stage.OnAfterNodeDeleteCallback.OnAfterDelete(stage, staged, front)
 		}
-	case *NoteLink:
-		if stage.OnAfterNoteLinkDeleteCallback != nil {
-			staged := any(staged).(*NoteLink)
-			stage.OnAfterNoteLinkDeleteCallback.OnAfterDelete(stage, staged, front)
-		}
 	case *NoteShape:
 		if stage.OnAfterNoteShapeDeleteCallback != nil {
 			staged := any(staged).(*NoteShape)
 			stage.OnAfterNoteShapeDeleteCallback.OnAfterDelete(stage, staged, front)
+		}
+	case *NoteShapeLink:
+		if stage.OnAfterNoteShapeLinkDeleteCallback != nil {
+			staged := any(staged).(*NoteShapeLink)
+			stage.OnAfterNoteShapeLinkDeleteCallback.OnAfterDelete(stage, staged, front)
 		}
 	case *Position:
 		if stage.OnAfterPositionDeleteCallback != nil {
@@ -235,13 +235,13 @@ func AfterReadFromFront[Type Gongstruct](stage *StageStruct, instance *Type) {
 		if stage.OnAfterNodeReadCallback != nil {
 			stage.OnAfterNodeReadCallback.OnAfterRead(stage, target)
 		}
-	case *NoteLink:
-		if stage.OnAfterNoteLinkReadCallback != nil {
-			stage.OnAfterNoteLinkReadCallback.OnAfterRead(stage, target)
-		}
 	case *NoteShape:
 		if stage.OnAfterNoteShapeReadCallback != nil {
 			stage.OnAfterNoteShapeReadCallback.OnAfterRead(stage, target)
+		}
+	case *NoteShapeLink:
+		if stage.OnAfterNoteShapeLinkReadCallback != nil {
+			stage.OnAfterNoteShapeLinkReadCallback.OnAfterRead(stage, target)
 		}
 	case *Position:
 		if stage.OnAfterPositionReadCallback != nil {
@@ -290,11 +290,11 @@ func SetCallbackAfterUpdateFromFront[Type Gongstruct](stage *StageStruct, callba
 	case *Node:
 		stage.OnAfterNodeUpdateCallback = any(callback).(OnAfterUpdateInterface[Node])
 	
-	case *NoteLink:
-		stage.OnAfterNoteLinkUpdateCallback = any(callback).(OnAfterUpdateInterface[NoteLink])
-	
 	case *NoteShape:
 		stage.OnAfterNoteShapeUpdateCallback = any(callback).(OnAfterUpdateInterface[NoteShape])
+	
+	case *NoteShapeLink:
+		stage.OnAfterNoteShapeLinkUpdateCallback = any(callback).(OnAfterUpdateInterface[NoteShapeLink])
 	
 	case *Position:
 		stage.OnAfterPositionUpdateCallback = any(callback).(OnAfterUpdateInterface[Position])
@@ -336,11 +336,11 @@ func SetCallbackAfterCreateFromFront[Type Gongstruct](stage *StageStruct, callba
 	case *Node:
 		stage.OnAfterNodeCreateCallback = any(callback).(OnAfterCreateInterface[Node])
 	
-	case *NoteLink:
-		stage.OnAfterNoteLinkCreateCallback = any(callback).(OnAfterCreateInterface[NoteLink])
-	
 	case *NoteShape:
 		stage.OnAfterNoteShapeCreateCallback = any(callback).(OnAfterCreateInterface[NoteShape])
+	
+	case *NoteShapeLink:
+		stage.OnAfterNoteShapeLinkCreateCallback = any(callback).(OnAfterCreateInterface[NoteShapeLink])
 	
 	case *Position:
 		stage.OnAfterPositionCreateCallback = any(callback).(OnAfterCreateInterface[Position])
@@ -382,11 +382,11 @@ func SetCallbackAfterDeleteFromFront[Type Gongstruct](stage *StageStruct, callba
 	case *Node:
 		stage.OnAfterNodeDeleteCallback = any(callback).(OnAfterDeleteInterface[Node])
 	
-	case *NoteLink:
-		stage.OnAfterNoteLinkDeleteCallback = any(callback).(OnAfterDeleteInterface[NoteLink])
-	
 	case *NoteShape:
 		stage.OnAfterNoteShapeDeleteCallback = any(callback).(OnAfterDeleteInterface[NoteShape])
+	
+	case *NoteShapeLink:
+		stage.OnAfterNoteShapeLinkDeleteCallback = any(callback).(OnAfterDeleteInterface[NoteShapeLink])
 	
 	case *Position:
 		stage.OnAfterPositionDeleteCallback = any(callback).(OnAfterDeleteInterface[Position])
@@ -428,11 +428,11 @@ func SetCallbackAfterReadFromFront[Type Gongstruct](stage *StageStruct, callback
 	case *Node:
 		stage.OnAfterNodeReadCallback = any(callback).(OnAfterReadInterface[Node])
 	
-	case *NoteLink:
-		stage.OnAfterNoteLinkReadCallback = any(callback).(OnAfterReadInterface[NoteLink])
-	
 	case *NoteShape:
 		stage.OnAfterNoteShapeReadCallback = any(callback).(OnAfterReadInterface[NoteShape])
+	
+	case *NoteShapeLink:
+		stage.OnAfterNoteShapeLinkReadCallback = any(callback).(OnAfterReadInterface[NoteShapeLink])
 	
 	case *Position:
 		stage.OnAfterPositionReadCallback = any(callback).(OnAfterReadInterface[Position])

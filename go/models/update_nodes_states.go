@@ -51,7 +51,7 @@ func updateNodesStates(stage *StageStruct, nodesCb *NodeCB) {
 
 	// 1. allow all gongstructs node to be checked/unckecked
 	for gongStruct := range *gong_models.GetGongstructInstancesSet[gong_models.GongStruct]() {
-		classshapeNode := nodesCb.map_Identifier_Node[gongStruct.Name]
+		classshapeNode := nodesCb.map_Identifier_Node[ShapenameToIdentifier(gongStruct.Name)]
 		classshapeNode.IsCheckboxDisabled = !classdiagram.IsInDrawMode
 	}
 
@@ -60,7 +60,7 @@ func updateNodesStates(stage *StageStruct, nodesCb *NodeCB) {
 	//
 	// 1. for each enum of the model, enable the check button if the class diagram is in draw mode
 	for gongEnum := range *gong_models.GetGongstructInstancesSet[gong_models.GongEnum]() {
-		classshapeNode := nodesCb.map_Identifier_Node[gongEnum.Name]
+		classshapeNode := nodesCb.map_Identifier_Node[ShapenameToIdentifier(gongEnum.Name)]
 		classshapeNode.IsCheckboxDisabled = !classdiagram.IsInDrawMode
 	}
 
@@ -70,13 +70,12 @@ func updateNodesStates(stage *StageStruct, nodesCb *NodeCB) {
 	// 1. gongstructs / gongenum referenced by the classshape
 	for _, classshape := range classdiagram.Classshapes {
 
-		classshapeName := IdentifierToShapename(classshape.Identifier)
 		var classshapeNode *Node
 		var ok bool
-		classshapeNode, ok = nodesCb.map_Identifier_Node[classshapeName]
+		classshapeNode, ok = nodesCb.map_Identifier_Node[classshape.Identifier]
 
 		if !ok {
-			log.Println("Unknown node, diagram not synchro with model ", classshapeName)
+			log.Println("Unknown node, diagram not synchro with model ", classshape.Identifier)
 			continue
 		}
 		classshapeNode.IsChecked = true
@@ -87,12 +86,10 @@ func updateNodesStates(stage *StageStruct, nodesCb *NodeCB) {
 		}
 
 		for _, field := range classshape.Fields {
-			nodeId := classshapeName + "." + IdentifierToFieldName(field.Identifier)
-			// classshapeFieldNode, ok := map_FieldId_Node[nodeId]
-			classshapeFieldNode, ok := nodesCb.map_Identifier_Node[nodeId]
+			classshapeFieldNode, ok := nodesCb.map_Identifier_Node[field.Identifier]
 
 			if !ok {
-				log.Fatalln(nodeId, "unknown node")
+				log.Fatalln(field.Identifier, "unknown node")
 			}
 
 			classshapeFieldNode.IsChecked = true
@@ -100,11 +97,10 @@ func updateNodesStates(stage *StageStruct, nodesCb *NodeCB) {
 
 		}
 		for _, link := range classshape.Links {
-			nodeId := classshapeName + "." + IdentifierToFieldName(link.Identifier)
-			linkNode, ok := nodesCb.map_Identifier_Node[nodeId]
+			linkNode, ok := nodesCb.map_Identifier_Node[link.Identifier]
 
 			if !ok {
-				log.Fatalln(nodeId, "unknown node")
+				log.Fatalln(link.Identifier, "unknown node")
 			}
 
 			linkNode.IsChecked = true
@@ -121,7 +117,7 @@ func updateNodesStates(stage *StageStruct, nodesCb *NodeCB) {
 	}
 	// then iterate over all fields of all gongstructs node
 	for gongStruct := range *gong_models.GetGongstructInstancesSet[gong_models.GongStruct]() {
-		classshapeNode := nodesCb.map_Identifier_Node[gongStruct.Name]
+		classshapeNode := nodesCb.map_Identifier_Node[ShapenameToIdentifier(gongStruct.Name)]
 
 		for _, fieldOfClassshapeNode := range classshapeNode.Children {
 			// then disable the checkbox
@@ -149,13 +145,12 @@ func updateNodesStates(stage *StageStruct, nodesCb *NodeCB) {
 		set_of_noteshape_names[IdentifierToShapename(noteshape.Identifier)] = true
 	}
 	for note := range *gong_models.GetGongstructInstancesSet[gong_models.GongNote]() {
-		noteshapeNode := nodesCb.map_Identifier_Node[note.Name]
+		noteshapeNode := nodesCb.map_Identifier_Node[ShapenameToIdentifier(note.Name)]
 		noteshapeNode.IsCheckboxDisabled = !classdiagram.IsInDrawMode
 
 		for _, noteLink := range note.Links {
 
-			noteLinkName := note.Name + "." + noteLink.Name
-			noteLinkNode := nodesCb.map_Identifier_Node[noteLinkName]
+			noteLinkNode := nodesCb.map_Identifier_Node[ShapeAndFieldnameToFieldIdentifier(note.Name, noteLink.Name)]
 
 			// default choice
 			noteLinkNode.IsCheckboxDisabled = !classdiagram.IsInDrawMode
@@ -172,11 +167,18 @@ func updateNodesStates(stage *StageStruct, nodesCb *NodeCB) {
 
 		}
 	}
-	// 2. for each note of the diagram, set the check button to true
-	for _, note := range classdiagram.NoteShapes {
-		noteshapeNode := nodesCb.map_Identifier_Node[IdentifierToShapename(note.Identifier)]
+
+	// 2. for each noteShape of the diagram, set the check button of the related node to true
+	for _, noteshape := range classdiagram.NoteShapes {
+		noteshapeNode := nodesCb.map_Identifier_Node[noteshape.Identifier]
 
 		noteshapeNode.IsChecked = true
+
+		// 2.1 for each link of the note in the diagram, set the check button to true
+		for _, noteShapeLink := range noteshape.NoteShapeLinks {
+			noteShapeLinkNode := nodesCb.map_Identifier_Node[noteShapeLink.Identifier]
+			noteShapeLinkNode.IsChecked = true
+		}
 	}
 
 	// log.Println("UpdateNodeStates, before commit, nb ", stage.BackRepo.GetLastCommitFromBackNb())

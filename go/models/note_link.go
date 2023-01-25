@@ -1,6 +1,6 @@
 package models
 
-// A NoteLink is a visual link from a shape to
+// A NoteShapeLink is a visual link from a shape to
 // a Link or to a Classshape
 //
 // # The end point of the link is computed from the Type
@@ -9,7 +9,7 @@ package models
 // the referenced identifiers in the note comments are not
 // renamed. Unlinke for identifiers used for referencing
 // stuff, there is workaround this limitation
-type NoteLink struct {
+type NoteShapeLink struct {
 	Name string
 
 	// Identifier of the target shape / link of the note link

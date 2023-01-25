@@ -55,9 +55,9 @@ func (nodesCb *NodeCB) OnAfterUpdateNote(
 		}
 
 		// remove the links of the note shape
-		for _, noteLink := range noteShape.NoteLinks {
+		for _, noteLink := range noteShape.NoteShapeLinks {
 			noteLink.Unstage()
-			noteShape.NoteLinks = remove(noteShape.NoteLinks, noteLink)
+			noteShape.NoteShapeLinks = remove(noteShape.NoteShapeLinks, noteLink)
 		}
 		classdiagram.NoteShapes = remove(classdiagram.NoteShapes, noteShape)
 		noteShape.Unstage()
