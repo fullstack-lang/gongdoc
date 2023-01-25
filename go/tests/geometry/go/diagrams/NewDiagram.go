@@ -127,7 +127,6 @@ func NewDiagramInjection() {
 
 	// Declarations of staged instances of NoteShapeLink
 	__NoteShapeLink__000000_Line := (&models.NoteShapeLink{Name: `Line`}).Stage()
-	__NoteShapeLink__000001_Line := (&models.NoteShapeLink{Name: `Line`}).Stage()
 
 	// Declarations of staged instances of Position
 	__Position__000000_Pos_NewDiagram_Line := (&models.Position{Name: `Pos-NewDiagram-Line`}).Stage()
@@ -184,17 +183,9 @@ In this case [Line], [Point] and [Line.Start]
 	//gong:ident [ref_models.ShortNodeOnModels.Line]
 	__NoteShapeLink__000000_Line.Identifier = `ref_models.ShortNodeOnModels.Line`
 
-	// NoteShapeLink values setup
-	__NoteShapeLink__000001_Line.Name = `Line`
-	
-	// comment added to overcome the problem with the comment map association
-
-	//gong:ident [ref_models.ShortNodeOnModels.Line]
-	__NoteShapeLink__000001_Line.Identifier = `ref_models.ShortNodeOnModels.Line`
-
 	// Position values setup
-	__Position__000000_Pos_NewDiagram_Line.X = 480.000000
-	__Position__000000_Pos_NewDiagram_Line.Y = 270.000000
+	__Position__000000_Pos_NewDiagram_Line.X = 70.000000
+	__Position__000000_Pos_NewDiagram_Line.Y = 104.000000
 	__Position__000000_Pos_NewDiagram_Line.Name = `Pos-NewDiagram-Line`
 
 	// Setup of pointers
@@ -202,7 +193,6 @@ In this case [Line], [Point] and [Line.Start]
 	__Classdiagram__000000_NewDiagram.NoteShapes = append(__Classdiagram__000000_NewDiagram.NoteShapes, __NoteShape__000000_ShortNodeOnModels)
 	__Classshape__000000_NewDiagram_Line.Position = __Position__000000_Pos_NewDiagram_Line
 	__NoteShape__000000_ShortNodeOnModels.NoteShapeLinks = append(__NoteShape__000000_ShortNodeOnModels.NoteShapeLinks, __NoteShapeLink__000000_Line)
-	__NoteShape__000000_ShortNodeOnModels.NoteShapeLinks = append(__NoteShape__000000_ShortNodeOnModels.NoteShapeLinks, __NoteShapeLink__000001_Line)
 }
 
 

@@ -51,6 +51,7 @@ func (nodesCb *NodeCB) OnAfterUpdateNoteLink(
 			}
 		}
 
+		noteLink.Unstage()
 		noteshape.NoteShapeLinks = remove(noteshape.NoteShapeLinks, noteLink)
 
 		updateNodesStates(stage, nodesCb)
