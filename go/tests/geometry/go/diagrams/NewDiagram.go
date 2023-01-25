@@ -112,6 +112,7 @@ func NewDiagramInjection() {
 	__Classdiagram__000000_NewDiagram := (&models.Classdiagram{Name: `NewDiagram`}).Stage()
 
 	// Declarations of staged instances of Classshape
+	__Classshape__000000_NewDiagram_Line := (&models.Classshape{Name: `NewDiagram-Line`}).Stage()
 
 	// Declarations of staged instances of DiagramPackage
 
@@ -124,10 +125,10 @@ func NewDiagramInjection() {
 	// Declarations of staged instances of NoteLink
 
 	// Declarations of staged instances of NoteShape
-	__NoteShape__000000_LongNodeOnModels := (&models.NoteShape{Name: `LongNodeOnModels`}).Stage()
-	__NoteShape__000001_ShortNodeOnModels := (&models.NoteShape{Name: `ShortNodeOnModels`}).Stage()
+	__NoteShape__000000_ShortNodeOnModels := (&models.NoteShape{Name: `ShortNodeOnModels`}).Stage()
 
 	// Declarations of staged instances of Position
+	__Position__000000_Pos_NewDiagram_Line := (&models.Position{Name: `Pos-NewDiagram-Line`}).Stage()
 
 	// Declarations of staged instances of Tree
 
@@ -143,59 +144,45 @@ func NewDiagramInjection() {
 	__Classdiagram__000000_NewDiagram.Name = `NewDiagram`
 	__Classdiagram__000000_NewDiagram.IsInDrawMode = true
 
-	// NoteShape values setup
-	__NoteShape__000000_LongNodeOnModels.Name = `LongNodeOnModels`
+	// Classshape values setup
+	__Classshape__000000_NewDiagram_Line.Name = `NewDiagram-Line`
 	
 	// comment added to overcome the problem with the comment map association
 
-	//gong:ident [ref_models.LongNodeOnModels]
-	__NoteShape__000000_LongNodeOnModels.Identifier = `ref_models.LongNodeOnModels`
-	__NoteShape__000000_LongNodeOnModels.Body = `This is an example of a note that
-could be displayed on a diagram.
-
-It could explain one aspect of the model
-for intance, describing relations between structs
-
-The text of a UML note refers a comment with the GONGNOTE keyword which is
-a special case of go Note convention. See example
-for details in the go code of the models.
-
-This follows the go code convention described in https://pkg.go.dev/go/doc#Note
-
-"A Note represents a marked comment starting with "MARKER(uid): note body".
-Any note with a marker of 2 or more upper case [A-Z] letters and a uid of at least one character is recognized.
-The ":" following the uid is optional. Notes are collected in the Package.Notes map indexed by the notes marker."
-
-In the UML diagram, the size of the note is automaticaly computed from the note
-number of lines (for the width) and the number of characters per line (for the height)
-in the go code
-`
-	__NoteShape__000000_LongNodeOnModels.X = 90.000000
-	__NoteShape__000000_LongNodeOnModels.Y = 130.000000
-	__NoteShape__000000_LongNodeOnModels.Width = 240.000000
-	__NoteShape__000000_LongNodeOnModels.Heigth = 63.000000
-	__NoteShape__000000_LongNodeOnModels.Matched = false
+	//gong:ident [ref_models.Line]
+	__Classshape__000000_NewDiagram_Line.Identifier = `ref_models.Line`
+	__Classshape__000000_NewDiagram_Line.ShowNbInstances = false
+	__Classshape__000000_NewDiagram_Line.NbInstances = 0
+	__Classshape__000000_NewDiagram_Line.Width = 240.000000
+	__Classshape__000000_NewDiagram_Line.Heigth = 63.000000
+	__Classshape__000000_NewDiagram_Line.IsSelected = false
 
 	// NoteShape values setup
-	__NoteShape__000001_ShortNodeOnModels.Name = `ShortNodeOnModels`
+	__NoteShape__000000_ShortNodeOnModels.Name = `ShortNodeOnModels`
 	
 	// comment added to overcome the problem with the comment map association
 
 	//gong:ident [ref_models.ShortNodeOnModels]
-	__NoteShape__000001_ShortNodeOnModels.Identifier = `ref_models.ShortNodeOnModels`
-	__NoteShape__000001_ShortNodeOnModels.Body = `this is an example of a short note
+	__NoteShape__000000_ShortNodeOnModels.Identifier = `ref_models.ShortNodeOnModels`
+	__NoteShape__000000_ShortNodeOnModels.Body = `this is an example of a short note
 It uses the DocLink convention for referencing Identifiers
 In this case [Line], [Point] and [Line.Start]
 `
-	__NoteShape__000001_ShortNodeOnModels.X = 30.000000
-	__NoteShape__000001_ShortNodeOnModels.Y = 30.000000
-	__NoteShape__000001_ShortNodeOnModels.Width = 240.000000
-	__NoteShape__000001_ShortNodeOnModels.Heigth = 63.000000
-	__NoteShape__000001_ShortNodeOnModels.Matched = false
+	__NoteShape__000000_ShortNodeOnModels.X = 30.000000
+	__NoteShape__000000_ShortNodeOnModels.Y = 30.000000
+	__NoteShape__000000_ShortNodeOnModels.Width = 240.000000
+	__NoteShape__000000_ShortNodeOnModels.Heigth = 63.000000
+	__NoteShape__000000_ShortNodeOnModels.Matched = false
+
+	// Position values setup
+	__Position__000000_Pos_NewDiagram_Line.X = 480.000000
+	__Position__000000_Pos_NewDiagram_Line.Y = 170.000000
+	__Position__000000_Pos_NewDiagram_Line.Name = `Pos-NewDiagram-Line`
 
 	// Setup of pointers
-	__Classdiagram__000000_NewDiagram.NoteShapes = append(__Classdiagram__000000_NewDiagram.NoteShapes, __NoteShape__000001_ShortNodeOnModels)
-	__Classdiagram__000000_NewDiagram.NoteShapes = append(__Classdiagram__000000_NewDiagram.NoteShapes, __NoteShape__000000_LongNodeOnModels)
+	__Classdiagram__000000_NewDiagram.Classshapes = append(__Classdiagram__000000_NewDiagram.Classshapes, __Classshape__000000_NewDiagram_Line)
+	__Classdiagram__000000_NewDiagram.NoteShapes = append(__Classdiagram__000000_NewDiagram.NoteShapes, __NoteShape__000000_ShortNodeOnModels)
+	__Classshape__000000_NewDiagram_Line.Position = __Position__000000_Pos_NewDiagram_Line
 }
 
 
