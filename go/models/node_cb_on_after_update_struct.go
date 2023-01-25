@@ -1,6 +1,6 @@
 package models
 
-func (nodesCb *NodeCB) OnAfterUpdateEnum(
+func (nodesCb *NodeCB) OnAfterUpdateStruct(
 	stage *StageStruct,
 	stagedNode, frontNode *Node) {
 	// if node is unchecked
@@ -11,14 +11,8 @@ func (nodesCb *NodeCB) OnAfterUpdateEnum(
 
 		// remove the classshape from the selected diagram
 		classDiagram := nodesCb.GetSelectedClassdiagram()
+		classDiagram.RemoveClassshape(stagedNode.Name)
 
-		// get the referenced gongstructs
-		for _, classshape := range classDiagram.Classshapes {
-			if IdentifierToShapename(classshape.Identifier) == stagedNode.Name {
-				classDiagram.RemoveClassshape(IdentifierToShapename(classshape.Identifier))
-			}
-
-		}
 		updateNodesStates(stage, nodesCb)
 	}
 
@@ -29,7 +23,8 @@ func (nodesCb *NodeCB) OnAfterUpdateEnum(
 		stage.Checkout()
 
 		classDiagram := nodesCb.GetSelectedClassdiagram()
-		classDiagram.AddClassshape(nodesCb, frontNode.Name, REFERENCE_GONG_ENUM)
+		classDiagram.AddClassshape(nodesCb, frontNode.Name, REFERENCE_GONG_STRUCT)
+
 		updateNodesStates(stage, nodesCb)
 	}
 }

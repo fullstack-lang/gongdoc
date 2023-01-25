@@ -33,9 +33,10 @@ func (nodesCb *NodeCB) OnAfterUpdateNote(
 		noteShape.Heigth = 63
 
 		classdiagram.NoteShapes = append(classdiagram.NoteShapes, noteShape)
-		Stage.Commit()
-
+		updateNodesStates(stage, nodesCb)
 	}
+
+	// suppression a note
 	if stagedNode.IsChecked && !frontNode.IsChecked {
 		stage.Checkout()
 		foundNote := false
@@ -52,8 +53,14 @@ func (nodesCb *NodeCB) OnAfterUpdateNote(
 		if !foundNote {
 			log.Panicf("Note %s of field not present ", stagedNode.Name)
 		}
+
+		// remove the links of the note shape
+		for _, noteLink := range noteShape.NoteLinks {
+			noteLink.Unstage()
+			noteShape.NoteLinks = remove(noteShape.NoteLinks, noteLink)
+		}
 		classdiagram.NoteShapes = remove(classdiagram.NoteShapes, noteShape)
 		noteShape.Unstage()
-		Stage.Commit()
+		updateNodesStates(stage, nodesCb)
 	}
 }

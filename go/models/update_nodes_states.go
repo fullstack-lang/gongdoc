@@ -51,7 +51,8 @@ func updateNodesStates(stage *StageStruct, nodesCb *NodeCB) {
 
 	// 1. allow all gongstructs node to be checked/unckecked
 	for gongStruct := range *gong_models.GetGongstructInstancesSet[gong_models.GongStruct]() {
-		nodesCb.map_Identifier_Node[gongStruct.Name].IsCheckboxDisabled = !classdiagram.IsInDrawMode
+		classshapeNode := nodesCb.map_Identifier_Node[gongStruct.Name]
+		classshapeNode.IsCheckboxDisabled = !classdiagram.IsInDrawMode
 	}
 
 	//
@@ -59,52 +60,55 @@ func updateNodesStates(stage *StageStruct, nodesCb *NodeCB) {
 	//
 	// 1. for each enum of the model, enable the check button if the class diagram is in draw mode
 	for gongEnum := range *gong_models.GetGongstructInstancesSet[gong_models.GongEnum]() {
-		nodesCb.map_Identifier_Node[gongEnum.Name].IsCheckboxDisabled = !classdiagram.IsInDrawMode
+		classshapeNode := nodesCb.map_Identifier_Node[gongEnum.Name]
+		classshapeNode.IsCheckboxDisabled = !classdiagram.IsInDrawMode
 	}
 
-	// 2. get the all classshape and check the node of the
-	// gongstructs / gongenum referenced by the classshape
+	// FIRST STAGE : for each identifiers node with a related visual element is in
+	// the classdiagram: check the node and enable it if the diagram is in drawMode
+
+	// 1. gongstructs / gongenum referenced by the classshape
 	for _, classshape := range classdiagram.Classshapes {
 
 		classshapeName := IdentifierToShapename(classshape.Identifier)
-		var node *Node
+		var classshapeNode *Node
 		var ok bool
-		node, ok = nodesCb.map_Identifier_Node[classshapeName]
+		classshapeNode, ok = nodesCb.map_Identifier_Node[classshapeName]
 
 		if !ok {
 			log.Println("Unknown node, diagram not synchro with model ", classshapeName)
 			continue
 		}
-		node.IsChecked = true
+		classshapeNode.IsChecked = true
 
 		// disable checkbox of all children of the gongstruct
-		for _, gongfieldNode := range node.Children {
-			gongfieldNode.IsCheckboxDisabled = !classdiagram.IsInDrawMode
+		for _, fieldOfClassshapeNode := range classshapeNode.Children {
+			fieldOfClassshapeNode.IsCheckboxDisabled = !classdiagram.IsInDrawMode
 		}
 
 		for _, field := range classshape.Fields {
 			nodeId := classshapeName + "." + IdentifierToFieldName(field.Identifier)
-			// node, ok := map_FieldId_Node[nodeId]
-			node, ok := nodesCb.map_Identifier_Node[nodeId]
+			// classshapeFieldNode, ok := map_FieldId_Node[nodeId]
+			classshapeFieldNode, ok := nodesCb.map_Identifier_Node[nodeId]
 
 			if !ok {
 				log.Fatalln(nodeId, "unknown node")
 			}
 
-			node.IsChecked = true
-			node.IsCheckboxDisabled = !classdiagram.IsInDrawMode
+			classshapeFieldNode.IsChecked = true
+			classshapeFieldNode.IsCheckboxDisabled = !classdiagram.IsInDrawMode
 
 		}
 		for _, link := range classshape.Links {
 			nodeId := classshapeName + "." + IdentifierToFieldName(link.Identifier)
-			node, ok := nodesCb.map_Identifier_Node[nodeId]
+			linkNode, ok := nodesCb.map_Identifier_Node[nodeId]
 
 			if !ok {
 				log.Fatalln(nodeId, "unknown node")
 			}
 
-			node.IsChecked = true
-			node.IsCheckboxDisabled = !classdiagram.IsInDrawMode
+			linkNode.IsChecked = true
+			linkNode.IsCheckboxDisabled = !classdiagram.IsInDrawMode
 		}
 	}
 
@@ -117,19 +121,19 @@ func updateNodesStates(stage *StageStruct, nodesCb *NodeCB) {
 	}
 	// then iterate over all fields of all gongstructs node
 	for gongStruct := range *gong_models.GetGongstructInstancesSet[gong_models.GongStruct]() {
-		gongstructNode := nodesCb.map_Identifier_Node[gongStruct.Name]
+		classshapeNode := nodesCb.map_Identifier_Node[gongStruct.Name]
 
-		for _, fieldNode := range gongstructNode.Children {
+		for _, fieldOfClassshapeNode := range classshapeNode.Children {
 			// then disable the checkbox
-			if fieldNode.Type == GONG_STRUCT_FIELD {
-				switch fieldWithRef := fieldNode.Gongfield.(type) {
+			if fieldOfClassshapeNode.Type == GONG_STRUCT_FIELD {
+				switch fieldWithRef := fieldOfClassshapeNode.Gongfield.(type) {
 				case *gong_models.PointerToGongStructField:
 					if _, ok := set_of_classshape_names[fieldWithRef.GongStruct.Name]; !ok {
-						fieldNode.IsCheckboxDisabled = true
+						fieldOfClassshapeNode.IsCheckboxDisabled = true
 					}
 				case *gong_models.SliceOfPointerToGongStructField:
 					if _, ok := set_of_classshape_names[fieldWithRef.GongStruct.Name]; !ok {
-						fieldNode.IsCheckboxDisabled = true
+						fieldOfClassshapeNode.IsCheckboxDisabled = true
 					}
 				}
 			}
@@ -145,31 +149,34 @@ func updateNodesStates(stage *StageStruct, nodesCb *NodeCB) {
 		set_of_noteshape_names[IdentifierToShapename(noteshape.Identifier)] = true
 	}
 	for note := range *gong_models.GetGongstructInstancesSet[gong_models.GongNote]() {
-		nodesCb.map_Identifier_Node[note.Name].IsCheckboxDisabled = !classdiagram.IsInDrawMode
+		noteshapeNode := nodesCb.map_Identifier_Node[note.Name]
+		noteshapeNode.IsCheckboxDisabled = !classdiagram.IsInDrawMode
 
 		for _, noteLink := range note.Links {
 
 			noteLinkName := note.Name + "." + noteLink.Name
-			node := nodesCb.map_Identifier_Node[noteLinkName]
+			noteLinkNode := nodesCb.map_Identifier_Node[noteLinkName]
 
 			// default choice
-			node.IsCheckboxDisabled = !classdiagram.IsInDrawMode
+			noteLinkNode.IsCheckboxDisabled = !classdiagram.IsInDrawMode
 
 			// disable check box of the note link if the note is not present
 			if _, ok := set_of_noteshape_names[note.Name]; !ok {
-				node.IsCheckboxDisabled = true
+				noteLinkNode.IsCheckboxDisabled = true
 			}
 
 			// disable check box of the note link if the target shape is not present
 			if _, ok := set_of_classshape_names[noteLink.Name]; !ok {
-				node.IsCheckboxDisabled = true
+				noteLinkNode.IsCheckboxDisabled = true
 			}
 
 		}
 	}
 	// 2. for each note of the diagram, set the check button to true
 	for _, note := range classdiagram.NoteShapes {
-		nodesCb.map_Identifier_Node[IdentifierToShapename(note.Identifier)].IsChecked = true
+		noteshapeNode := nodesCb.map_Identifier_Node[IdentifierToShapename(note.Identifier)]
+
+		noteshapeNode.IsChecked = true
 	}
 
 	// log.Println("UpdateNodeStates, before commit, nb ", stage.BackRepo.GetLastCommitFromBackNb())
