@@ -240,7 +240,7 @@ func (classdiagram *Classdiagram) RemoveClassshape(classshapeName string) {
 	}
 	classshape.Links = []*Link{}
 
-	// remove links that go to this classshape
+	// remove association links that go to this classshape
 	for _, fromClassshape := range classdiagram.Classshapes {
 
 		newSliceOfLinks := make([]*Link, 0)
@@ -258,6 +258,25 @@ func (classdiagram *Classdiagram) RemoveClassshape(classshapeName string) {
 	// remove fields of the classshape
 	for _, field := range classshape.Fields {
 		field.Unstage()
+	}
+
+	//
+	// remove documentation links that go this classshape
+	//
+	// generate the map to navigate from children to parents
+	fieldName := GetAssociationName[NoteShape]().NoteShapeLinks[0].Name
+	map_NoteShapeLink_NodeShape := GetSliceOfPointersReverseMap[NoteShape, NoteShapeLink](fieldName)
+	for noteShapeLink := range *GetGongstructInstancesSet[NoteShapeLink]() {
+		if noteShapeLink.Name == classshapeName {
+
+			// get the note shape
+			noteShape := map_NoteShapeLink_NodeShape[noteShapeLink]
+
+			// remove it from the slice of links
+			noteShape.NoteShapeLinks = remove(noteShape.NoteShapeLinks, noteShapeLink)
+
+			noteShapeLink.DeleteStageAndCommit()
+		}
 	}
 
 	// log.Println("RemoveClassshape, before commit, nb ", Stage.BackRepo.GetLastCommitFromBackNb())

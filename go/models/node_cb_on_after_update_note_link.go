@@ -29,11 +29,11 @@ func (nodesCb *NodeCB) OnAfterUpdateNoteLink(
 	if !stagedNode.IsChecked && frontNode.IsChecked {
 		stage.Checkout()
 
-		noteLink := (&NoteShapeLink{Name: stagedNode.GetName()}).Stage()
-		noteLink.Identifier =
+		noteShapeLink := (&NoteShapeLink{Name: stagedNode.GetName()}).Stage()
+		noteShapeLink.Identifier =
 			ShapeAndFieldnameToFieldIdentifier(gongNote.Name, stagedNode.Name)
 
-		noteshape.NoteShapeLinks = append(noteshape.NoteShapeLinks, noteLink)
+		noteshape.NoteShapeLinks = append(noteshape.NoteShapeLinks, noteShapeLink)
 
 		updateNodesStates(stage, nodesCb)
 	}

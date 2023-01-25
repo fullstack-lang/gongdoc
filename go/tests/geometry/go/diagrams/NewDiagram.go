@@ -184,8 +184,8 @@ In this case [Line], [Point] and [Line.Start]
 	__NoteShapeLink__000000_Line.Identifier = `ref_models.ShortNodeOnModels.Line`
 
 	// Position values setup
-	__Position__000000_Pos_NewDiagram_Line.X = 70.000000
-	__Position__000000_Pos_NewDiagram_Line.Y = 104.000000
+	__Position__000000_Pos_NewDiagram_Line.X = 340.000000
+	__Position__000000_Pos_NewDiagram_Line.Y = 270.000000
 	__Position__000000_Pos_NewDiagram_Line.Name = `Pos-NewDiagram-Line`
 
 	// Setup of pointers
