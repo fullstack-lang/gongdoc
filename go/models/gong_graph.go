@@ -23,11 +23,11 @@ func IsStaged[Type Gongstruct](stage *StageStruct, instance *Type) (ok bool) {
 	case *Node:
 		ok = stage.IsStagedNode(target)
 
-	case *NoteLink:
-		ok = stage.IsStagedNoteLink(target)
-
 	case *NoteShape:
 		ok = stage.IsStagedNoteShape(target)
+
+	case *NoteShapeLink:
+		ok = stage.IsStagedNoteShapeLink(target)
 
 	case *Position:
 		ok = stage.IsStagedPosition(target)
@@ -91,16 +91,16 @@ func IsStaged[Type Gongstruct](stage *StageStruct, instance *Type) (ok bool) {
 		return
 	}
 
-	func (stage *StageStruct) IsStagedNoteLink(notelink *NoteLink) (ok bool) {
+	func (stage *StageStruct) IsStagedNoteShape(noteshape *NoteShape) (ok bool) {
 
-		_, ok = stage.NoteLinks[notelink]
+		_, ok = stage.NoteShapes[noteshape]
 	
 		return
 	}
 
-	func (stage *StageStruct) IsStagedNoteShape(noteshape *NoteShape) (ok bool) {
+	func (stage *StageStruct) IsStagedNoteShapeLink(noteshapelink *NoteShapeLink) (ok bool) {
 
-		_, ok = stage.NoteShapes[noteshape]
+		_, ok = stage.NoteShapeLinks[noteshapelink]
 	
 		return
 	}
@@ -167,11 +167,11 @@ func StageBranch[Type Gongstruct](stage *StageStruct, instance *Type) {
 	case *Node:
 		stage.StageBranchNode(target)
 
-	case *NoteLink:
-		stage.StageBranchNoteLink(target)
-
 	case *NoteShape:
 		stage.StageBranchNoteShape(target)
+
+	case *NoteShapeLink:
+		stage.StageBranchNoteShapeLink(target)
 
 	case *Position:
 		stage.StageBranchPosition(target)
@@ -207,7 +207,7 @@ func (stage *StageStruct) StageBranchClassdiagram(classdiagram *Classdiagram) {
 	for _, _classshape := range classdiagram.Classshapes {
 		StageBranch(stage, _classshape)
 	}
-	for _, _noteshape := range classdiagram.Notes {
+	for _, _noteshape := range classdiagram.NoteShapes {
 		StageBranch(stage, _noteshape)
 	}
 
@@ -312,30 +312,6 @@ func (stage *StageStruct) StageBranchNode(node *Node) {
 
 }
 
-func (stage *StageStruct) StageBranchNoteLink(notelink *NoteLink) {
-
-	// check if instance is already staged
-	if IsStaged(stage, notelink) {
-		return
-	}
-
-	notelink.Stage()
-
-	//insertion point for the staging of instances referenced by pointers
-	if notelink.Classshape != nil {
-		StageBranch(stage, notelink.Classshape)
-	}
-	if notelink.Link != nil {
-		StageBranch(stage, notelink.Link)
-	}
-	if notelink.Middlevertice != nil {
-		StageBranch(stage, notelink.Middlevertice)
-	}
-
-	//insertion point for the staging of instances referenced by slice of pointers
-
-}
-
 func (stage *StageStruct) StageBranchNoteShape(noteshape *NoteShape) {
 
 	// check if instance is already staged
@@ -348,9 +324,33 @@ func (stage *StageStruct) StageBranchNoteShape(noteshape *NoteShape) {
 	//insertion point for the staging of instances referenced by pointers
 
 	//insertion point for the staging of instances referenced by slice of pointers
-	for _, _notelink := range noteshape.NoteLinks {
-		StageBranch(stage, _notelink)
+	for _, _noteshapelink := range noteshape.NoteShapeLinks {
+		StageBranch(stage, _noteshapelink)
 	}
+
+}
+
+func (stage *StageStruct) StageBranchNoteShapeLink(noteshapelink *NoteShapeLink) {
+
+	// check if instance is already staged
+	if IsStaged(stage, noteshapelink) {
+		return
+	}
+
+	noteshapelink.Stage()
+
+	//insertion point for the staging of instances referenced by pointers
+	if noteshapelink.Classshape != nil {
+		StageBranch(stage, noteshapelink.Classshape)
+	}
+	if noteshapelink.Link != nil {
+		StageBranch(stage, noteshapelink.Link)
+	}
+	if noteshapelink.Middlevertice != nil {
+		StageBranch(stage, noteshapelink.Middlevertice)
+	}
+
+	//insertion point for the staging of instances referenced by slice of pointers
 
 }
 

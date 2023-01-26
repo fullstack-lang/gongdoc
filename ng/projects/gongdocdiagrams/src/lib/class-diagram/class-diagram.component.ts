@@ -14,6 +14,7 @@ import { newUmlClassShape } from './newUmlClassShape'
 import { ClassdiagramContextSubject, ClassdiagramContext } from '../diagram-displayed-gongstruct'
 import { MatSlideToggleChange } from '@angular/material/slide-toggle';
 import { newUmlNote } from './newUmlNote';
+import { NONE_TYPE } from '@angular/compiler';
 
 @Component({
   selector: 'lib-class-diagram',
@@ -446,12 +447,43 @@ export class ClassDiagramComponent implements OnInit, OnDestroy {
     }
 
     // draw notes from the gong notes
-    if (this.classdiagram?.Notes != undefined) {
-      for (let note of this.classdiagram.Notes) {
-        let umlNote = this.addNoteToGraph(note)
+    if (this.classdiagram?.NoteShapes != undefined) {
+      for (let noteShape of this.classdiagram.NoteShapes) {
+        let rectShape = this.addNoteToGraph(noteShape)
 
         // add a backbone event handler to update the position
-        umlNote.on('change:position', this.onNoteMove)
+        rectShape.on('change:position', this.onNoteMove)
+
+
+        if (noteShape.NoteShapeLinks != undefined) {
+          for (let noteShapeLink of noteShape.NoteShapeLinks) {
+
+            let fromShape = rectShape
+            var toShape = this.Map_GongStructName_JointjsUMLClassShape.get(noteShapeLink.Name)
+
+            let xFrom = fromShape!.get('position')!.x
+            let yFrom = fromShape!.get('position')!.y
+            let xTo = toShape!.get('position')!.x
+            let yTo = toShape!.get('position')!.y
+            var strockWidth = 1
+
+            var link = new joint.shapes.standard.Link({
+              source: fromShape,
+              target: toShape,
+              attrs: {
+                line: {
+                  stroke: '#3c4260',
+                  strokeWidth: strockWidth,
+                  strokeDasharray: '2 2',
+                  targetMarker: NONE_TYPE,
+                },
+
+              },
+            })
+
+            link.addTo(this.graph);
+          }
+        }
       }
     }
 

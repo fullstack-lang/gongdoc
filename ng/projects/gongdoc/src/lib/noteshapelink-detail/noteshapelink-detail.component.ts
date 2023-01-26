@@ -2,8 +2,8 @@
 import { Component, OnInit } from '@angular/core';
 import { UntypedFormControl } from '@angular/forms';
 
-import { NoteLinkDB } from '../notelink-db'
-import { NoteLinkService } from '../notelink.service'
+import { NoteShapeLinkDB } from '../noteshapelink-db'
+import { NoteShapeLinkService } from '../noteshapelink.service'
 
 import { FrontRepoService, FrontRepo, SelectionMode, DialogData } from '../front-repo.service'
 import { MapOfComponents } from '../map-components'
@@ -19,27 +19,27 @@ import { MatDialog, MAT_DIALOG_DATA, MatDialogRef, MatDialogConfig } from '@angu
 
 import { NullInt64 } from '../null-int64'
 
-// NoteLinkDetailComponent is initilizaed from different routes
-// NoteLinkDetailComponentState detail different cases 
-enum NoteLinkDetailComponentState {
+// NoteShapeLinkDetailComponent is initilizaed from different routes
+// NoteShapeLinkDetailComponentState detail different cases 
+enum NoteShapeLinkDetailComponentState {
 	CREATE_INSTANCE,
 	UPDATE_INSTANCE,
 	// insertion point for declarations of enum values of state
-	CREATE_INSTANCE_WITH_ASSOCIATION_NoteShape_NoteLinks_SET,
+	CREATE_INSTANCE_WITH_ASSOCIATION_NoteShape_NoteShapeLinks_SET,
 }
 
 @Component({
-	selector: 'app-notelink-detail',
-	templateUrl: './notelink-detail.component.html',
-	styleUrls: ['./notelink-detail.component.css'],
+	selector: 'app-noteshapelink-detail',
+	templateUrl: './noteshapelink-detail.component.html',
+	styleUrls: ['./noteshapelink-detail.component.css'],
 })
-export class NoteLinkDetailComponent implements OnInit {
+export class NoteShapeLinkDetailComponent implements OnInit {
 
 	// insertion point for declarations
 	ReferenceTypeList: ReferenceTypeSelect[] = []
 
-	// the NoteLinkDB of interest
-	notelink: NoteLinkDB = new NoteLinkDB
+	// the NoteShapeLinkDB of interest
+	noteshapelink: NoteShapeLinkDB = new NoteShapeLinkDB
 
 	// front repo
 	frontRepo: FrontRepo = new FrontRepo
@@ -50,7 +50,7 @@ export class NoteLinkDetailComponent implements OnInit {
 	mapFields_displayAsTextArea = new Map<string, boolean>()
 
 	// the state at initialization (CREATION, UPDATE or CREATE with one association set)
-	state: NoteLinkDetailComponentState = NoteLinkDetailComponentState.CREATE_INSTANCE
+	state: NoteShapeLinkDetailComponentState = NoteShapeLinkDetailComponentState.CREATE_INSTANCE
 
 	// in UDPATE state, if is the id of the instance to update
 	// in CREATE state with one association set, this is the id of the associated instance
@@ -61,7 +61,7 @@ export class NoteLinkDetailComponent implements OnInit {
 	originStructFieldName: string = ""
 
 	constructor(
-		private notelinkService: NoteLinkService,
+		private noteshapelinkService: NoteShapeLinkService,
 		private frontRepoService: FrontRepoService,
 		public dialog: MatDialog,
 		private route: ActivatedRoute,
@@ -78,16 +78,16 @@ export class NoteLinkDetailComponent implements OnInit {
 
 		const association = this.route.snapshot.paramMap.get('association');
 		if (this.id == 0) {
-			this.state = NoteLinkDetailComponentState.CREATE_INSTANCE
+			this.state = NoteShapeLinkDetailComponentState.CREATE_INSTANCE
 		} else {
 			if (this.originStruct == undefined) {
-				this.state = NoteLinkDetailComponentState.UPDATE_INSTANCE
+				this.state = NoteShapeLinkDetailComponentState.UPDATE_INSTANCE
 			} else {
 				switch (this.originStructFieldName) {
 					// insertion point for state computation
-					case "NoteLinks":
-						// console.log("NoteLink" + " is instanciated with back pointer to instance " + this.id + " NoteShape association NoteLinks")
-						this.state = NoteLinkDetailComponentState.CREATE_INSTANCE_WITH_ASSOCIATION_NoteShape_NoteLinks_SET
+					case "NoteShapeLinks":
+						// console.log("NoteShapeLink" + " is instanciated with back pointer to instance " + this.id + " NoteShape association NoteShapeLinks")
+						this.state = NoteShapeLinkDetailComponentState.CREATE_INSTANCE_WITH_ASSOCIATION_NoteShape_NoteShapeLinks_SET
 						break;
 					default:
 						console.log(this.originStructFieldName + " is unkown association")
@@ -95,13 +95,13 @@ export class NoteLinkDetailComponent implements OnInit {
 			}
 		}
 
-		this.getNoteLink()
+		this.getNoteShapeLink()
 
 		// observable for changes in structs
-		this.notelinkService.NoteLinkServiceChanged.subscribe(
+		this.noteshapelinkService.NoteShapeLinkServiceChanged.subscribe(
 			message => {
 				if (message == "post" || message == "update" || message == "delete") {
-					this.getNoteLink()
+					this.getNoteShapeLink()
 				}
 			}
 		)
@@ -110,25 +110,25 @@ export class NoteLinkDetailComponent implements OnInit {
 		this.ReferenceTypeList = ReferenceTypeList
 	}
 
-	getNoteLink(): void {
+	getNoteShapeLink(): void {
 
 		this.frontRepoService.pull().subscribe(
 			frontRepo => {
 				this.frontRepo = frontRepo
 
 				switch (this.state) {
-					case NoteLinkDetailComponentState.CREATE_INSTANCE:
-						this.notelink = new (NoteLinkDB)
+					case NoteShapeLinkDetailComponentState.CREATE_INSTANCE:
+						this.noteshapelink = new (NoteShapeLinkDB)
 						break;
-					case NoteLinkDetailComponentState.UPDATE_INSTANCE:
-						let notelink = frontRepo.NoteLinks.get(this.id)
-						console.assert(notelink != undefined, "missing notelink with id:" + this.id)
-						this.notelink = notelink!
+					case NoteShapeLinkDetailComponentState.UPDATE_INSTANCE:
+						let noteshapelink = frontRepo.NoteShapeLinks.get(this.id)
+						console.assert(noteshapelink != undefined, "missing noteshapelink with id:" + this.id)
+						this.noteshapelink = noteshapelink!
 						break;
 					// insertion point for init of association field
-					case NoteLinkDetailComponentState.CREATE_INSTANCE_WITH_ASSOCIATION_NoteShape_NoteLinks_SET:
-						this.notelink = new (NoteLinkDB)
-						this.notelink.NoteShape_NoteLinks_reverse = frontRepo.NoteShapes.get(this.id)!
+					case NoteShapeLinkDetailComponentState.CREATE_INSTANCE_WITH_ASSOCIATION_NoteShape_NoteShapeLinks_SET:
+						this.noteshapelink = new (NoteShapeLinkDB)
+						this.noteshapelink.NoteShape_NoteShapeLinks_reverse = frontRepo.NoteShapes.get(this.id)!
 						break;
 					default:
 						console.log(this.state + " is unkown state")
@@ -147,64 +147,64 @@ export class NoteLinkDetailComponent implements OnInit {
 		// pointers fields, after the translation, are nulled in order to perform serialization
 
 		// insertion point for translation/nullation of each field
-		if (this.notelink.ClassshapeID == undefined) {
-			this.notelink.ClassshapeID = new NullInt64
+		if (this.noteshapelink.ClassshapeID == undefined) {
+			this.noteshapelink.ClassshapeID = new NullInt64
 		}
-		if (this.notelink.Classshape != undefined) {
-			this.notelink.ClassshapeID.Int64 = this.notelink.Classshape.ID
-			this.notelink.ClassshapeID.Valid = true
+		if (this.noteshapelink.Classshape != undefined) {
+			this.noteshapelink.ClassshapeID.Int64 = this.noteshapelink.Classshape.ID
+			this.noteshapelink.ClassshapeID.Valid = true
 		} else {
-			this.notelink.ClassshapeID.Int64 = 0
-			this.notelink.ClassshapeID.Valid = true
+			this.noteshapelink.ClassshapeID.Int64 = 0
+			this.noteshapelink.ClassshapeID.Valid = true
 		}
-		if (this.notelink.LinkID == undefined) {
-			this.notelink.LinkID = new NullInt64
+		if (this.noteshapelink.LinkID == undefined) {
+			this.noteshapelink.LinkID = new NullInt64
 		}
-		if (this.notelink.Link != undefined) {
-			this.notelink.LinkID.Int64 = this.notelink.Link.ID
-			this.notelink.LinkID.Valid = true
+		if (this.noteshapelink.Link != undefined) {
+			this.noteshapelink.LinkID.Int64 = this.noteshapelink.Link.ID
+			this.noteshapelink.LinkID.Valid = true
 		} else {
-			this.notelink.LinkID.Int64 = 0
-			this.notelink.LinkID.Valid = true
+			this.noteshapelink.LinkID.Int64 = 0
+			this.noteshapelink.LinkID.Valid = true
 		}
-		if (this.notelink.MiddleverticeID == undefined) {
-			this.notelink.MiddleverticeID = new NullInt64
+		if (this.noteshapelink.MiddleverticeID == undefined) {
+			this.noteshapelink.MiddleverticeID = new NullInt64
 		}
-		if (this.notelink.Middlevertice != undefined) {
-			this.notelink.MiddleverticeID.Int64 = this.notelink.Middlevertice.ID
-			this.notelink.MiddleverticeID.Valid = true
+		if (this.noteshapelink.Middlevertice != undefined) {
+			this.noteshapelink.MiddleverticeID.Int64 = this.noteshapelink.Middlevertice.ID
+			this.noteshapelink.MiddleverticeID.Valid = true
 		} else {
-			this.notelink.MiddleverticeID.Int64 = 0
-			this.notelink.MiddleverticeID.Valid = true
+			this.noteshapelink.MiddleverticeID.Int64 = 0
+			this.noteshapelink.MiddleverticeID.Valid = true
 		}
 
 		// save from the front pointer space to the non pointer space for serialization
 
 		// insertion point for translation/nullation of each pointers
-		if (this.notelink.NoteShape_NoteLinks_reverse != undefined) {
-			if (this.notelink.NoteShape_NoteLinksDBID == undefined) {
-				this.notelink.NoteShape_NoteLinksDBID = new NullInt64
+		if (this.noteshapelink.NoteShape_NoteShapeLinks_reverse != undefined) {
+			if (this.noteshapelink.NoteShape_NoteShapeLinksDBID == undefined) {
+				this.noteshapelink.NoteShape_NoteShapeLinksDBID = new NullInt64
 			}
-			this.notelink.NoteShape_NoteLinksDBID.Int64 = this.notelink.NoteShape_NoteLinks_reverse.ID
-			this.notelink.NoteShape_NoteLinksDBID.Valid = true
-			if (this.notelink.NoteShape_NoteLinksDBID_Index == undefined) {
-				this.notelink.NoteShape_NoteLinksDBID_Index = new NullInt64
+			this.noteshapelink.NoteShape_NoteShapeLinksDBID.Int64 = this.noteshapelink.NoteShape_NoteShapeLinks_reverse.ID
+			this.noteshapelink.NoteShape_NoteShapeLinksDBID.Valid = true
+			if (this.noteshapelink.NoteShape_NoteShapeLinksDBID_Index == undefined) {
+				this.noteshapelink.NoteShape_NoteShapeLinksDBID_Index = new NullInt64
 			}
-			this.notelink.NoteShape_NoteLinksDBID_Index.Valid = true
-			this.notelink.NoteShape_NoteLinks_reverse = new NoteShapeDB // very important, otherwise, circular JSON
+			this.noteshapelink.NoteShape_NoteShapeLinksDBID_Index.Valid = true
+			this.noteshapelink.NoteShape_NoteShapeLinks_reverse = new NoteShapeDB // very important, otherwise, circular JSON
 		}
 
 		switch (this.state) {
-			case NoteLinkDetailComponentState.UPDATE_INSTANCE:
-				this.notelinkService.updateNoteLink(this.notelink)
-					.subscribe(notelink => {
-						this.notelinkService.NoteLinkServiceChanged.next("update")
+			case NoteShapeLinkDetailComponentState.UPDATE_INSTANCE:
+				this.noteshapelinkService.updateNoteShapeLink(this.noteshapelink)
+					.subscribe(noteshapelink => {
+						this.noteshapelinkService.NoteShapeLinkServiceChanged.next("update")
 					});
 				break;
 			default:
-				this.notelinkService.postNoteLink(this.notelink).subscribe(notelink => {
-					this.notelinkService.NoteLinkServiceChanged.next("post")
-					this.notelink = new (NoteLinkDB) // reset fields
+				this.noteshapelinkService.postNoteShapeLink(this.noteshapelink).subscribe(noteshapelink => {
+					this.noteshapelinkService.NoteShapeLinkServiceChanged.next("post")
+					this.noteshapelink = new (NoteShapeLinkDB) // reset fields
 				});
 		}
 	}
@@ -227,7 +227,7 @@ export class NoteLinkDetailComponent implements OnInit {
 		dialogConfig.height = "50%"
 		if (selectionMode == SelectionMode.ONE_MANY_ASSOCIATION_MODE) {
 
-			dialogData.ID = this.notelink.ID!
+			dialogData.ID = this.noteshapelink.ID!
 			dialogData.ReversePointer = reverseField
 			dialogData.OrderingMode = false
 			dialogData.SelectionMode = selectionMode
@@ -243,13 +243,13 @@ export class NoteLinkDetailComponent implements OnInit {
 			});
 		}
 		if (selectionMode == SelectionMode.MANY_MANY_ASSOCIATION_MODE) {
-			dialogData.ID = this.notelink.ID!
+			dialogData.ID = this.noteshapelink.ID!
 			dialogData.ReversePointer = reverseField
 			dialogData.OrderingMode = false
 			dialogData.SelectionMode = selectionMode
 
 			// set up the source
-			dialogData.SourceStruct = "NoteLink"
+			dialogData.SourceStruct = "NoteShapeLink"
 			dialogData.SourceField = sourceField
 
 			// set up the intermediate struct
@@ -279,7 +279,7 @@ export class NoteLinkDetailComponent implements OnInit {
 		// dialogConfig.disableClose = true;
 		dialogConfig.autoFocus = true;
 		dialogConfig.data = {
-			ID: this.notelink.ID,
+			ID: this.noteshapelink.ID,
 			ReversePointer: reverseField,
 			OrderingMode: true,
 		};
@@ -295,8 +295,8 @@ export class NoteLinkDetailComponent implements OnInit {
 	}
 
 	fillUpNameIfEmpty(event: { value: { Name: string; }; }) {
-		if (this.notelink.Name == "") {
-			this.notelink.Name = event.value.Name
+		if (this.noteshapelink.Name == "") {
+			this.noteshapelink.Name = event.value.Name
 		}
 	}
 

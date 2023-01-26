@@ -22,11 +22,11 @@ import { LinkService } from './link.service'
 import { NodeDB } from './node-db'
 import { NodeService } from './node.service'
 
-import { NoteLinkDB } from './notelink-db'
-import { NoteLinkService } from './notelink.service'
-
 import { NoteShapeDB } from './noteshape-db'
 import { NoteShapeService } from './noteshape.service'
+
+import { NoteShapeLinkDB } from './noteshapelink-db'
+import { NoteShapeLinkService } from './noteshapelink.service'
 
 import { PositionDB } from './position-db'
 import { PositionService } from './position.service'
@@ -64,12 +64,12 @@ export class FrontRepo { // insertion point sub template
   Nodes_array = new Array<NodeDB>(); // array of repo instances
   Nodes = new Map<number, NodeDB>(); // map of repo instances
   Nodes_batch = new Map<number, NodeDB>(); // same but only in last GET (for finding repo instances to delete)
-  NoteLinks_array = new Array<NoteLinkDB>(); // array of repo instances
-  NoteLinks = new Map<number, NoteLinkDB>(); // map of repo instances
-  NoteLinks_batch = new Map<number, NoteLinkDB>(); // same but only in last GET (for finding repo instances to delete)
   NoteShapes_array = new Array<NoteShapeDB>(); // array of repo instances
   NoteShapes = new Map<number, NoteShapeDB>(); // map of repo instances
   NoteShapes_batch = new Map<number, NoteShapeDB>(); // same but only in last GET (for finding repo instances to delete)
+  NoteShapeLinks_array = new Array<NoteShapeLinkDB>(); // array of repo instances
+  NoteShapeLinks = new Map<number, NoteShapeLinkDB>(); // map of repo instances
+  NoteShapeLinks_batch = new Map<number, NoteShapeLinkDB>(); // same but only in last GET (for finding repo instances to delete)
   Positions_array = new Array<PositionDB>(); // array of repo instances
   Positions = new Map<number, PositionDB>(); // map of repo instances
   Positions_batch = new Map<number, PositionDB>(); // same but only in last GET (for finding repo instances to delete)
@@ -149,8 +149,8 @@ export class FrontRepoService {
     private fieldService: FieldService,
     private linkService: LinkService,
     private nodeService: NodeService,
-    private notelinkService: NoteLinkService,
     private noteshapeService: NoteShapeService,
+    private noteshapelinkService: NoteShapeLinkService,
     private positionService: PositionService,
     private treeService: TreeService,
     private umlstateService: UmlStateService,
@@ -192,8 +192,8 @@ export class FrontRepoService {
     Observable<FieldDB[]>,
     Observable<LinkDB[]>,
     Observable<NodeDB[]>,
-    Observable<NoteLinkDB[]>,
     Observable<NoteShapeDB[]>,
+    Observable<NoteShapeLinkDB[]>,
     Observable<PositionDB[]>,
     Observable<TreeDB[]>,
     Observable<UmlStateDB[]>,
@@ -206,8 +206,8 @@ export class FrontRepoService {
       this.fieldService.getFields(),
       this.linkService.getLinks(),
       this.nodeService.getNodes(),
-      this.notelinkService.getNoteLinks(),
       this.noteshapeService.getNoteShapes(),
+      this.noteshapelinkService.getNoteShapeLinks(),
       this.positionService.getPositions(),
       this.treeService.getTrees(),
       this.umlstateService.getUmlStates(),
@@ -234,8 +234,8 @@ export class FrontRepoService {
             fields_,
             links_,
             nodes_,
-            notelinks_,
             noteshapes_,
+            noteshapelinks_,
             positions_,
             trees_,
             umlstates_,
@@ -256,10 +256,10 @@ export class FrontRepoService {
             links = links_ as LinkDB[]
             var nodes: NodeDB[]
             nodes = nodes_ as NodeDB[]
-            var notelinks: NoteLinkDB[]
-            notelinks = notelinks_ as NoteLinkDB[]
             var noteshapes: NoteShapeDB[]
             noteshapes = noteshapes_ as NoteShapeDB[]
+            var noteshapelinks: NoteShapeLinkDB[]
+            noteshapelinks = noteshapelinks_ as NoteShapeLinkDB[]
             var positions: PositionDB[]
             positions = positions_ as PositionDB[]
             var trees: TreeDB[]
@@ -473,39 +473,6 @@ export class FrontRepoService {
             });
 
             // init the array
-            FrontRepoSingloton.NoteLinks_array = notelinks
-
-            // clear the map that counts NoteLink in the GET
-            FrontRepoSingloton.NoteLinks_batch.clear()
-
-            notelinks.forEach(
-              notelink => {
-                FrontRepoSingloton.NoteLinks.set(notelink.ID, notelink)
-                FrontRepoSingloton.NoteLinks_batch.set(notelink.ID, notelink)
-              }
-            )
-
-            // clear notelinks that are absent from the batch
-            FrontRepoSingloton.NoteLinks.forEach(
-              notelink => {
-                if (FrontRepoSingloton.NoteLinks_batch.get(notelink.ID) == undefined) {
-                  FrontRepoSingloton.NoteLinks.delete(notelink.ID)
-                }
-              }
-            )
-
-            // sort NoteLinks_array array
-            FrontRepoSingloton.NoteLinks_array.sort((t1, t2) => {
-              if (t1.Name > t2.Name) {
-                return 1;
-              }
-              if (t1.Name < t2.Name) {
-                return -1;
-              }
-              return 0;
-            });
-
-            // init the array
             FrontRepoSingloton.NoteShapes_array = noteshapes
 
             // clear the map that counts NoteShape in the GET
@@ -529,6 +496,39 @@ export class FrontRepoService {
 
             // sort NoteShapes_array array
             FrontRepoSingloton.NoteShapes_array.sort((t1, t2) => {
+              if (t1.Name > t2.Name) {
+                return 1;
+              }
+              if (t1.Name < t2.Name) {
+                return -1;
+              }
+              return 0;
+            });
+
+            // init the array
+            FrontRepoSingloton.NoteShapeLinks_array = noteshapelinks
+
+            // clear the map that counts NoteShapeLink in the GET
+            FrontRepoSingloton.NoteShapeLinks_batch.clear()
+
+            noteshapelinks.forEach(
+              noteshapelink => {
+                FrontRepoSingloton.NoteShapeLinks.set(noteshapelink.ID, noteshapelink)
+                FrontRepoSingloton.NoteShapeLinks_batch.set(noteshapelink.ID, noteshapelink)
+              }
+            )
+
+            // clear noteshapelinks that are absent from the batch
+            FrontRepoSingloton.NoteShapeLinks.forEach(
+              noteshapelink => {
+                if (FrontRepoSingloton.NoteShapeLinks_batch.get(noteshapelink.ID) == undefined) {
+                  FrontRepoSingloton.NoteShapeLinks.delete(noteshapelink.ID)
+                }
+              }
+            )
+
+            // sort NoteShapeLinks_array array
+            FrontRepoSingloton.NoteShapeLinks_array.sort((t1, t2) => {
               if (t1.Name > t2.Name) {
                 return 1;
               }
@@ -848,62 +848,62 @@ export class FrontRepoService {
                 }
               }
             )
-            notelinks.forEach(
-              notelink => {
-                // insertion point sub sub template for ONE-/ZERO-ONE associations pointers redeeming
-                // insertion point for pointer field Classshape redeeming
-                {
-                  let _classshape = FrontRepoSingloton.Classshapes.get(notelink.ClassshapeID.Int64)
-                  if (_classshape) {
-                    notelink.Classshape = _classshape
-                  }
-                }
-                // insertion point for pointer field Link redeeming
-                {
-                  let _link = FrontRepoSingloton.Links.get(notelink.LinkID.Int64)
-                  if (_link) {
-                    notelink.Link = _link
-                  }
-                }
-                // insertion point for pointer field Middlevertice redeeming
-                {
-                  let _vertice = FrontRepoSingloton.Vertices.get(notelink.MiddleverticeID.Int64)
-                  if (_vertice) {
-                    notelink.Middlevertice = _vertice
-                  }
-                }
-
-                // insertion point for redeeming ONE-MANY associations
-                // insertion point for slice of pointer field NoteShape.NoteLinks redeeming
-                {
-                  let _noteshape = FrontRepoSingloton.NoteShapes.get(notelink.NoteShape_NoteLinksDBID.Int64)
-                  if (_noteshape) {
-                    if (_noteshape.NoteLinks == undefined) {
-                      _noteshape.NoteLinks = new Array<NoteLinkDB>()
-                    }
-                    _noteshape.NoteLinks.push(notelink)
-                    if (notelink.NoteShape_NoteLinks_reverse == undefined) {
-                      notelink.NoteShape_NoteLinks_reverse = _noteshape
-                    }
-                  }
-                }
-              }
-            )
             noteshapes.forEach(
               noteshape => {
                 // insertion point sub sub template for ONE-/ZERO-ONE associations pointers redeeming
 
                 // insertion point for redeeming ONE-MANY associations
-                // insertion point for slice of pointer field Classdiagram.Notes redeeming
+                // insertion point for slice of pointer field Classdiagram.NoteShapes redeeming
                 {
-                  let _classdiagram = FrontRepoSingloton.Classdiagrams.get(noteshape.Classdiagram_NotesDBID.Int64)
+                  let _classdiagram = FrontRepoSingloton.Classdiagrams.get(noteshape.Classdiagram_NoteShapesDBID.Int64)
                   if (_classdiagram) {
-                    if (_classdiagram.Notes == undefined) {
-                      _classdiagram.Notes = new Array<NoteShapeDB>()
+                    if (_classdiagram.NoteShapes == undefined) {
+                      _classdiagram.NoteShapes = new Array<NoteShapeDB>()
                     }
-                    _classdiagram.Notes.push(noteshape)
-                    if (noteshape.Classdiagram_Notes_reverse == undefined) {
-                      noteshape.Classdiagram_Notes_reverse = _classdiagram
+                    _classdiagram.NoteShapes.push(noteshape)
+                    if (noteshape.Classdiagram_NoteShapes_reverse == undefined) {
+                      noteshape.Classdiagram_NoteShapes_reverse = _classdiagram
+                    }
+                  }
+                }
+              }
+            )
+            noteshapelinks.forEach(
+              noteshapelink => {
+                // insertion point sub sub template for ONE-/ZERO-ONE associations pointers redeeming
+                // insertion point for pointer field Classshape redeeming
+                {
+                  let _classshape = FrontRepoSingloton.Classshapes.get(noteshapelink.ClassshapeID.Int64)
+                  if (_classshape) {
+                    noteshapelink.Classshape = _classshape
+                  }
+                }
+                // insertion point for pointer field Link redeeming
+                {
+                  let _link = FrontRepoSingloton.Links.get(noteshapelink.LinkID.Int64)
+                  if (_link) {
+                    noteshapelink.Link = _link
+                  }
+                }
+                // insertion point for pointer field Middlevertice redeeming
+                {
+                  let _vertice = FrontRepoSingloton.Vertices.get(noteshapelink.MiddleverticeID.Int64)
+                  if (_vertice) {
+                    noteshapelink.Middlevertice = _vertice
+                  }
+                }
+
+                // insertion point for redeeming ONE-MANY associations
+                // insertion point for slice of pointer field NoteShape.NoteShapeLinks redeeming
+                {
+                  let _noteshape = FrontRepoSingloton.NoteShapes.get(noteshapelink.NoteShape_NoteShapeLinksDBID.Int64)
+                  if (_noteshape) {
+                    if (_noteshape.NoteShapeLinks == undefined) {
+                      _noteshape.NoteShapeLinks = new Array<NoteShapeLinkDB>()
+                    }
+                    _noteshape.NoteShapeLinks.push(noteshapelink)
+                    if (noteshapelink.NoteShape_NoteShapeLinks_reverse == undefined) {
+                      noteshapelink.NoteShape_NoteShapeLinks_reverse = _noteshape
                     }
                   }
                 }
@@ -1386,91 +1386,6 @@ export class FrontRepoService {
     )
   }
 
-  // NoteLinkPull performs a GET on NoteLink of the stack and redeem association pointers 
-  NoteLinkPull(): Observable<FrontRepo> {
-    return new Observable<FrontRepo>(
-      (observer) => {
-        combineLatest([
-          this.notelinkService.getNoteLinks()
-        ]).subscribe(
-          ([ // insertion point sub template 
-            notelinks,
-          ]) => {
-            // init the array
-            FrontRepoSingloton.NoteLinks_array = notelinks
-
-            // clear the map that counts NoteLink in the GET
-            FrontRepoSingloton.NoteLinks_batch.clear()
-
-            // 
-            // First Step: init map of instances
-            // insertion point sub template 
-            notelinks.forEach(
-              notelink => {
-                FrontRepoSingloton.NoteLinks.set(notelink.ID, notelink)
-                FrontRepoSingloton.NoteLinks_batch.set(notelink.ID, notelink)
-
-                // insertion point for redeeming ONE/ZERO-ONE associations
-                // insertion point for pointer field Classshape redeeming
-                {
-                  let _classshape = FrontRepoSingloton.Classshapes.get(notelink.ClassshapeID.Int64)
-                  if (_classshape) {
-                    notelink.Classshape = _classshape
-                  }
-                }
-                // insertion point for pointer field Link redeeming
-                {
-                  let _link = FrontRepoSingloton.Links.get(notelink.LinkID.Int64)
-                  if (_link) {
-                    notelink.Link = _link
-                  }
-                }
-                // insertion point for pointer field Middlevertice redeeming
-                {
-                  let _vertice = FrontRepoSingloton.Vertices.get(notelink.MiddleverticeID.Int64)
-                  if (_vertice) {
-                    notelink.Middlevertice = _vertice
-                  }
-                }
-
-                // insertion point for redeeming ONE-MANY associations
-                // insertion point for slice of pointer field NoteShape.NoteLinks redeeming
-                {
-                  let _noteshape = FrontRepoSingloton.NoteShapes.get(notelink.NoteShape_NoteLinksDBID.Int64)
-                  if (_noteshape) {
-                    if (_noteshape.NoteLinks == undefined) {
-                      _noteshape.NoteLinks = new Array<NoteLinkDB>()
-                    }
-                    _noteshape.NoteLinks.push(notelink)
-                    if (notelink.NoteShape_NoteLinks_reverse == undefined) {
-                      notelink.NoteShape_NoteLinks_reverse = _noteshape
-                    }
-                  }
-                }
-              }
-            )
-
-            // clear notelinks that are absent from the GET
-            FrontRepoSingloton.NoteLinks.forEach(
-              notelink => {
-                if (FrontRepoSingloton.NoteLinks_batch.get(notelink.ID) == undefined) {
-                  FrontRepoSingloton.NoteLinks.delete(notelink.ID)
-                }
-              }
-            )
-
-            // 
-            // Second Step: redeem pointers between instances (thanks to maps in the First Step)
-            // insertion point sub template 
-
-            // hand over control flow to observer
-            observer.next(FrontRepoSingloton)
-          }
-        )
-      }
-    )
-  }
-
   // NoteShapePull performs a GET on NoteShape of the stack and redeem association pointers 
   NoteShapePull(): Observable<FrontRepo> {
     return new Observable<FrontRepo>(
@@ -1498,16 +1413,16 @@ export class FrontRepoService {
                 // insertion point for redeeming ONE/ZERO-ONE associations
 
                 // insertion point for redeeming ONE-MANY associations
-                // insertion point for slice of pointer field Classdiagram.Notes redeeming
+                // insertion point for slice of pointer field Classdiagram.NoteShapes redeeming
                 {
-                  let _classdiagram = FrontRepoSingloton.Classdiagrams.get(noteshape.Classdiagram_NotesDBID.Int64)
+                  let _classdiagram = FrontRepoSingloton.Classdiagrams.get(noteshape.Classdiagram_NoteShapesDBID.Int64)
                   if (_classdiagram) {
-                    if (_classdiagram.Notes == undefined) {
-                      _classdiagram.Notes = new Array<NoteShapeDB>()
+                    if (_classdiagram.NoteShapes == undefined) {
+                      _classdiagram.NoteShapes = new Array<NoteShapeDB>()
                     }
-                    _classdiagram.Notes.push(noteshape)
-                    if (noteshape.Classdiagram_Notes_reverse == undefined) {
-                      noteshape.Classdiagram_Notes_reverse = _classdiagram
+                    _classdiagram.NoteShapes.push(noteshape)
+                    if (noteshape.Classdiagram_NoteShapes_reverse == undefined) {
+                      noteshape.Classdiagram_NoteShapes_reverse = _classdiagram
                     }
                   }
                 }
@@ -1519,6 +1434,91 @@ export class FrontRepoService {
               noteshape => {
                 if (FrontRepoSingloton.NoteShapes_batch.get(noteshape.ID) == undefined) {
                   FrontRepoSingloton.NoteShapes.delete(noteshape.ID)
+                }
+              }
+            )
+
+            // 
+            // Second Step: redeem pointers between instances (thanks to maps in the First Step)
+            // insertion point sub template 
+
+            // hand over control flow to observer
+            observer.next(FrontRepoSingloton)
+          }
+        )
+      }
+    )
+  }
+
+  // NoteShapeLinkPull performs a GET on NoteShapeLink of the stack and redeem association pointers 
+  NoteShapeLinkPull(): Observable<FrontRepo> {
+    return new Observable<FrontRepo>(
+      (observer) => {
+        combineLatest([
+          this.noteshapelinkService.getNoteShapeLinks()
+        ]).subscribe(
+          ([ // insertion point sub template 
+            noteshapelinks,
+          ]) => {
+            // init the array
+            FrontRepoSingloton.NoteShapeLinks_array = noteshapelinks
+
+            // clear the map that counts NoteShapeLink in the GET
+            FrontRepoSingloton.NoteShapeLinks_batch.clear()
+
+            // 
+            // First Step: init map of instances
+            // insertion point sub template 
+            noteshapelinks.forEach(
+              noteshapelink => {
+                FrontRepoSingloton.NoteShapeLinks.set(noteshapelink.ID, noteshapelink)
+                FrontRepoSingloton.NoteShapeLinks_batch.set(noteshapelink.ID, noteshapelink)
+
+                // insertion point for redeeming ONE/ZERO-ONE associations
+                // insertion point for pointer field Classshape redeeming
+                {
+                  let _classshape = FrontRepoSingloton.Classshapes.get(noteshapelink.ClassshapeID.Int64)
+                  if (_classshape) {
+                    noteshapelink.Classshape = _classshape
+                  }
+                }
+                // insertion point for pointer field Link redeeming
+                {
+                  let _link = FrontRepoSingloton.Links.get(noteshapelink.LinkID.Int64)
+                  if (_link) {
+                    noteshapelink.Link = _link
+                  }
+                }
+                // insertion point for pointer field Middlevertice redeeming
+                {
+                  let _vertice = FrontRepoSingloton.Vertices.get(noteshapelink.MiddleverticeID.Int64)
+                  if (_vertice) {
+                    noteshapelink.Middlevertice = _vertice
+                  }
+                }
+
+                // insertion point for redeeming ONE-MANY associations
+                // insertion point for slice of pointer field NoteShape.NoteShapeLinks redeeming
+                {
+                  let _noteshape = FrontRepoSingloton.NoteShapes.get(noteshapelink.NoteShape_NoteShapeLinksDBID.Int64)
+                  if (_noteshape) {
+                    if (_noteshape.NoteShapeLinks == undefined) {
+                      _noteshape.NoteShapeLinks = new Array<NoteShapeLinkDB>()
+                    }
+                    _noteshape.NoteShapeLinks.push(noteshapelink)
+                    if (noteshapelink.NoteShape_NoteShapeLinks_reverse == undefined) {
+                      noteshapelink.NoteShape_NoteShapeLinks_reverse = _noteshape
+                    }
+                  }
+                }
+              }
+            )
+
+            // clear noteshapelinks that are absent from the GET
+            FrontRepoSingloton.NoteShapeLinks.forEach(
+              noteshapelink => {
+                if (FrontRepoSingloton.NoteShapeLinks_batch.get(noteshapelink.ID) == undefined) {
+                  FrontRepoSingloton.NoteShapeLinks.delete(noteshapelink.ID)
                 }
               }
             )
@@ -1836,10 +1836,10 @@ export function getLinkUniqueID(id: number): number {
 export function getNodeUniqueID(id: number): number {
   return 53 * id
 }
-export function getNoteLinkUniqueID(id: number): number {
+export function getNoteShapeUniqueID(id: number): number {
   return 59 * id
 }
-export function getNoteShapeUniqueID(id: number): number {
+export function getNoteShapeLinkUniqueID(id: number): number {
   return 61 * id
 }
 export function getPositionUniqueID(id: number): number {

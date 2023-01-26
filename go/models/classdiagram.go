@@ -24,7 +24,7 @@ type Classdiagram struct {
 	Classshapes []*Classshape
 
 	// list of notes in the diagram
-	Notes []*NoteShape
+	NoteShapes []*NoteShape
 
 	// IsInDrawMode indicates the the drawing can be edited (in development mode)
 	// or not (in production mode)
@@ -240,7 +240,7 @@ func (classdiagram *Classdiagram) RemoveClassshape(classshapeName string) {
 	}
 	classshape.Links = []*Link{}
 
-	// remove links that go to this classshape
+	// remove association links that go to this classshape
 	for _, fromClassshape := range classdiagram.Classshapes {
 
 		newSliceOfLinks := make([]*Link, 0)
@@ -260,12 +260,31 @@ func (classdiagram *Classdiagram) RemoveClassshape(classshapeName string) {
 		field.Unstage()
 	}
 
+	//
+	// remove documentation links that go this classshape
+	//
+	// generate the map to navigate from children to parents
+	fieldName := GetAssociationName[NoteShape]().NoteShapeLinks[0].Name
+	map_NoteShapeLink_NodeShape := GetSliceOfPointersReverseMap[NoteShape, NoteShapeLink](fieldName)
+	for noteShapeLink := range *GetGongstructInstancesSet[NoteShapeLink]() {
+		if noteShapeLink.Name == classshapeName {
+
+			// get the note shape
+			noteShape := map_NoteShapeLink_NodeShape[noteShapeLink]
+
+			// remove it from the slice of links
+			noteShape.NoteShapeLinks = remove(noteShape.NoteShapeLinks, noteShapeLink)
+
+			noteShapeLink.DeleteStageAndCommit()
+		}
+	}
+
 	// log.Println("RemoveClassshape, before commit, nb ", Stage.BackRepo.GetLastCommitFromBackNb())
 	Stage.Commit()
 	// log.Println("RemoveClassshape, after commit, nb ", Stage.BackRepo.GetLastCommitFromBackNb())
 }
 
-func (classdiagram *Classdiagram) AddClassshape(nodesCb *NodeCallbacksSingloton, classshapeName string, referenceType ReferenceType) {
+func (classdiagram *Classdiagram) AddClassshape(nodesCb *NodeCB, classshapeName string, referenceType ReferenceType) {
 
 	var classshape Classshape
 	classshape.Name = classdiagram.Name + "-" + classshapeName

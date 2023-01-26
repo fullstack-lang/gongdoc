@@ -17,6 +17,7 @@ type Node struct {
 	Gongstruct *gong_models.GongStruct
 	Gongfield  gong_models.FieldInterface
 	GongEnum   *gong_models.GongEnum
+	GongNote   *gong_models.GongNote
 
 	IsExpanded bool
 

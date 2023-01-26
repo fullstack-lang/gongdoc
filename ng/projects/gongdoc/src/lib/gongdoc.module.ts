@@ -69,15 +69,15 @@ import { NodeSortingComponent } from './node-sorting/node-sorting.component'
 import { NodeDetailComponent } from './node-detail/node-detail.component'
 import { NodePresentationComponent } from './node-presentation/node-presentation.component'
 
-import { NoteLinksTableComponent } from './notelinks-table/notelinks-table.component'
-import { NoteLinkSortingComponent } from './notelink-sorting/notelink-sorting.component'
-import { NoteLinkDetailComponent } from './notelink-detail/notelink-detail.component'
-import { NoteLinkPresentationComponent } from './notelink-presentation/notelink-presentation.component'
-
 import { NoteShapesTableComponent } from './noteshapes-table/noteshapes-table.component'
 import { NoteShapeSortingComponent } from './noteshape-sorting/noteshape-sorting.component'
 import { NoteShapeDetailComponent } from './noteshape-detail/noteshape-detail.component'
 import { NoteShapePresentationComponent } from './noteshape-presentation/noteshape-presentation.component'
+
+import { NoteShapeLinksTableComponent } from './noteshapelinks-table/noteshapelinks-table.component'
+import { NoteShapeLinkSortingComponent } from './noteshapelink-sorting/noteshapelink-sorting.component'
+import { NoteShapeLinkDetailComponent } from './noteshapelink-detail/noteshapelink-detail.component'
+import { NoteShapeLinkPresentationComponent } from './noteshapelink-presentation/noteshapelink-presentation.component'
 
 import { PositionsTableComponent } from './positions-table/positions-table.component'
 import { PositionSortingComponent } from './position-sorting/position-sorting.component'
@@ -138,15 +138,15 @@ import { VerticePresentationComponent } from './vertice-presentation/vertice-pre
 		NodeDetailComponent,
 		NodePresentationComponent,
 
-		NoteLinksTableComponent,
-		NoteLinkSortingComponent,
-		NoteLinkDetailComponent,
-		NoteLinkPresentationComponent,
-
 		NoteShapesTableComponent,
 		NoteShapeSortingComponent,
 		NoteShapeDetailComponent,
 		NoteShapePresentationComponent,
+
+		NoteShapeLinksTableComponent,
+		NoteShapeLinkSortingComponent,
+		NoteShapeLinkDetailComponent,
+		NoteShapeLinkPresentationComponent,
 
 		PositionsTableComponent,
 		PositionSortingComponent,
@@ -242,15 +242,15 @@ import { VerticePresentationComponent } from './vertice-presentation/vertice-pre
 		NodeDetailComponent,
 		NodePresentationComponent,
 
-		NoteLinksTableComponent,
-		NoteLinkSortingComponent,
-		NoteLinkDetailComponent,
-		NoteLinkPresentationComponent,
-
 		NoteShapesTableComponent,
 		NoteShapeSortingComponent,
 		NoteShapeDetailComponent,
 		NoteShapePresentationComponent,
+
+		NoteShapeLinksTableComponent,
+		NoteShapeLinkSortingComponent,
+		NoteShapeLinkDetailComponent,
+		NoteShapeLinkPresentationComponent,
 
 		PositionsTableComponent,
 		PositionSortingComponent,

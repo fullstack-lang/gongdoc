@@ -313,8 +313,8 @@ var __gong__map_DiagramPackage = make(map[string]*DiagramPackage)
 var __gong__map_Field = make(map[string]*Field)
 var __gong__map_Link = make(map[string]*Link)
 var __gong__map_Node = make(map[string]*Node)
-var __gong__map_NoteLink = make(map[string]*NoteLink)
 var __gong__map_NoteShape = make(map[string]*NoteShape)
+var __gong__map_NoteShapeLink = make(map[string]*NoteShapeLink)
 var __gong__map_Position = make(map[string]*Position)
 var __gong__map_Tree = make(map[string]*Tree)
 var __gong__map_UmlState = make(map[string]*UmlState)
@@ -519,14 +519,14 @@ func UnmarshallGongstructStaging(cmap *ast.CommentMap, assignStmt *ast.AssignStm
 										instanceNode := (&Node{Name: instanceName}).Stage()
 										instance = any(instanceNode)
 										__gong__map_Node[identifier] = instanceNode
-									case "NoteLink":
-										instanceNoteLink := (&NoteLink{Name: instanceName}).Stage()
-										instance = any(instanceNoteLink)
-										__gong__map_NoteLink[identifier] = instanceNoteLink
 									case "NoteShape":
 										instanceNoteShape := (&NoteShape{Name: instanceName}).Stage()
 										instance = any(instanceNoteShape)
 										__gong__map_NoteShape[identifier] = instanceNoteShape
+									case "NoteShapeLink":
+										instanceNoteShapeLink := (&NoteShapeLink{Name: instanceName}).Stage()
+										instance = any(instanceNoteShapeLink)
+										__gong__map_NoteShapeLink[identifier] = instanceNoteShapeLink
 									case "Position":
 										instancePosition := (&Position{Name: instanceName}).Stage()
 										instance = any(instancePosition)
@@ -607,11 +607,11 @@ func UnmarshallGongstructStaging(cmap *ast.CommentMap, assignStmt *ast.AssignStm
 							switch fieldName {
 							// insertion point for date assign code
 							}
-						case "NoteLink":
+						case "NoteShape":
 							switch fieldName {
 							// insertion point for date assign code
 							}
-						case "NoteShape":
+						case "NoteShapeLink":
 							switch fieldName {
 							// insertion point for date assign code
 							}
@@ -669,12 +669,12 @@ func UnmarshallGongstructStaging(cmap *ast.CommentMap, assignStmt *ast.AssignStm
 							target := __gong__map_Classshape[targetIdentifier]
 							__gong__map_Classdiagram[identifier].Classshapes =
 								append(__gong__map_Classdiagram[identifier].Classshapes, target)
-						case "Notes":
+						case "NoteShapes":
 							// remove first and last char
 							targetIdentifier := ident.Name
 							target := __gong__map_NoteShape[targetIdentifier]
-							__gong__map_Classdiagram[identifier].Notes =
-								append(__gong__map_Classdiagram[identifier].Notes, target)
+							__gong__map_Classdiagram[identifier].NoteShapes =
+								append(__gong__map_Classdiagram[identifier].NoteShapes, target)
 						}
 					case "Classshape":
 						switch fieldName {
@@ -726,19 +726,19 @@ func UnmarshallGongstructStaging(cmap *ast.CommentMap, assignStmt *ast.AssignStm
 							__gong__map_Node[identifier].Children =
 								append(__gong__map_Node[identifier].Children, target)
 						}
-					case "NoteLink":
-						switch fieldName {
-						// insertion point for slice of pointers assign code
-						}
 					case "NoteShape":
 						switch fieldName {
 						// insertion point for slice of pointers assign code
-						case "NoteLinks":
+						case "NoteShapeLinks":
 							// remove first and last char
 							targetIdentifier := ident.Name
-							target := __gong__map_NoteLink[targetIdentifier]
-							__gong__map_NoteShape[identifier].NoteLinks =
-								append(__gong__map_NoteShape[identifier].NoteLinks, target)
+							target := __gong__map_NoteShapeLink[targetIdentifier]
+							__gong__map_NoteShape[identifier].NoteShapeLinks =
+								append(__gong__map_NoteShape[identifier].NoteShapeLinks, target)
+						}
+					case "NoteShapeLink":
+						switch fieldName {
+						// insertion point for slice of pointers assign code
 						}
 					case "Position":
 						switch fieldName {
@@ -921,14 +921,6 @@ func UnmarshallGongstructStaging(cmap *ast.CommentMap, assignStmt *ast.AssignStm
 					fielValue := basicLit.Value[1 : len(basicLit.Value)-1]
 					__gong__map_Node[identifier].Name = fielValue
 				}
-			case "NoteLink":
-				switch fieldName {
-				// insertion point for field dependant code
-				case "Name":
-					// remove first and last char
-					fielValue := basicLit.Value[1 : len(basicLit.Value)-1]
-					__gong__map_NoteLink[identifier].Name = fielValue
-				}
 			case "NoteShape":
 				switch fieldName {
 				// insertion point for field dependant code
@@ -936,6 +928,10 @@ func UnmarshallGongstructStaging(cmap *ast.CommentMap, assignStmt *ast.AssignStm
 					// remove first and last char
 					fielValue := basicLit.Value[1 : len(basicLit.Value)-1]
 					__gong__map_NoteShape[identifier].Name = fielValue
+				case "Identifier":
+					// remove first and last char
+					fielValue := basicLit.Value[1 : len(basicLit.Value)-1]
+					__gong__map_NoteShape[identifier].Identifier = fielValue
 				case "Body":
 					// remove first and last char
 					fielValue := basicLit.Value[1 : len(basicLit.Value)-1]
@@ -968,6 +964,18 @@ func UnmarshallGongstructStaging(cmap *ast.CommentMap, assignStmt *ast.AssignStm
 						log.Fatalln(err)
 					}
 					__gong__map_NoteShape[identifier].Heigth = fielValue
+				}
+			case "NoteShapeLink":
+				switch fieldName {
+				// insertion point for field dependant code
+				case "Name":
+					// remove first and last char
+					fielValue := basicLit.Value[1 : len(basicLit.Value)-1]
+					__gong__map_NoteShapeLink[identifier].Name = fielValue
+				case "Identifier":
+					// remove first and last char
+					fielValue := basicLit.Value[1 : len(basicLit.Value)-1]
+					__gong__map_NoteShapeLink[identifier].Identifier = fielValue
 				}
 			case "Position":
 				switch fieldName {
@@ -1221,19 +1229,6 @@ func UnmarshallGongstructStaging(cmap *ast.CommentMap, assignStmt *ast.AssignStm
 					}
 					__gong__map_Node[identifier].HasDeleteButton = fielValue
 				}
-			case "NoteLink":
-				switch fieldName {
-				// insertion point for field dependant code
-				case "Classshape":
-					targetIdentifier := ident.Name
-					__gong__map_NoteLink[identifier].Classshape = __gong__map_Classshape[targetIdentifier]
-				case "Link":
-					targetIdentifier := ident.Name
-					__gong__map_NoteLink[identifier].Link = __gong__map_Link[targetIdentifier]
-				case "Middlevertice":
-					targetIdentifier := ident.Name
-					__gong__map_NoteLink[identifier].Middlevertice = __gong__map_Vertice[targetIdentifier]
-				}
 			case "NoteShape":
 				switch fieldName {
 				// insertion point for field dependant code
@@ -1244,6 +1239,19 @@ func UnmarshallGongstructStaging(cmap *ast.CommentMap, assignStmt *ast.AssignStm
 						log.Fatalln(err)
 					}
 					__gong__map_NoteShape[identifier].Matched = fielValue
+				}
+			case "NoteShapeLink":
+				switch fieldName {
+				// insertion point for field dependant code
+				case "Classshape":
+					targetIdentifier := ident.Name
+					__gong__map_NoteShapeLink[identifier].Classshape = __gong__map_Classshape[targetIdentifier]
+				case "Link":
+					targetIdentifier := ident.Name
+					__gong__map_NoteShapeLink[identifier].Link = __gong__map_Link[targetIdentifier]
+				case "Middlevertice":
+					targetIdentifier := ident.Name
+					__gong__map_NoteShapeLink[identifier].Middlevertice = __gong__map_Vertice[targetIdentifier]
 				}
 			case "Position":
 				switch fieldName {
@@ -1345,7 +1353,11 @@ func UnmarshallGongstructStaging(cmap *ast.CommentMap, assignStmt *ast.AssignStm
 						}
 						__gong__map_Node[identifier].Type = GongdocNodeType(val)
 					}
-				case "NoteLink":
+				case "NoteShape":
+					switch fieldName {
+					// insertion point for enum assign code
+					}
+				case "NoteShapeLink":
 					switch fieldName {
 					// insertion point for enum assign code
 					case "Type":
@@ -1354,11 +1366,7 @@ func UnmarshallGongstructStaging(cmap *ast.CommentMap, assignStmt *ast.AssignStm
 						if err != nil {
 							log.Fatalln(err)
 						}
-						__gong__map_NoteLink[identifier].Type = ReferenceType(val)
-					}
-				case "NoteShape":
-					switch fieldName {
-					// insertion point for enum assign code
+						__gong__map_NoteShapeLink[identifier].Type = ReferenceType(val)
 					}
 				case "Position":
 					switch fieldName {
