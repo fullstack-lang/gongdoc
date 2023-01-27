@@ -113,12 +113,15 @@ func NewDiagramInjection() {
 
 	// Declarations of staged instances of Classshape
 	__Classshape__000000_NewDiagram_Line := (&models.Classshape{Name: `NewDiagram-Line`}).Stage()
+	__Classshape__000001_NewDiagram_Point := (&models.Classshape{Name: `NewDiagram-Point`}).Stage()
 
 	// Declarations of staged instances of DiagramPackage
 
 	// Declarations of staged instances of Field
 
 	// Declarations of staged instances of Link
+	__Link__000000_End := (&models.Link{Name: `End`}).Stage()
+	__Link__000001_Start := (&models.Link{Name: `Start`}).Stage()
 
 	// Declarations of staged instances of Node
 
@@ -127,9 +130,11 @@ func NewDiagramInjection() {
 
 	// Declarations of staged instances of NoteShapeLink
 	__NoteShapeLink__000000_Line := (&models.NoteShapeLink{Name: `Line`}).Stage()
+	__NoteShapeLink__000001_Point := (&models.NoteShapeLink{Name: `Point`}).Stage()
 
 	// Declarations of staged instances of Position
 	__Position__000000_Pos_NewDiagram_Line := (&models.Position{Name: `Pos-NewDiagram-Line`}).Stage()
+	__Position__000001_Pos_NewDiagram_Point := (&models.Position{Name: `Pos-NewDiagram-Point`}).Stage()
 
 	// Declarations of staged instances of Tree
 
@@ -138,6 +143,8 @@ func NewDiagramInjection() {
 	// Declarations of staged instances of Umlsc
 
 	// Declarations of staged instances of Vertice
+	__Vertice__000000_Verticle_in_class_diagram_NewDiagram_in_middle_between_NewDiagram_Line_and_NewDiagram_Point := (&models.Vertice{Name: `Verticle in class diagram NewDiagram in middle between NewDiagram-Line and NewDiagram-Point`}).Stage()
+	__Vertice__000001_Verticle_in_class_diagram_NewDiagram_in_middle_between_NewDiagram_Line_and_NewDiagram_Point := (&models.Vertice{Name: `Verticle in class diagram NewDiagram in middle between NewDiagram-Line and NewDiagram-Point`}).Stage()
 
 	// Setup of values
 
@@ -158,6 +165,43 @@ func NewDiagramInjection() {
 	__Classshape__000000_NewDiagram_Line.Heigth = 63.000000
 	__Classshape__000000_NewDiagram_Line.IsSelected = false
 
+	// Classshape values setup
+	__Classshape__000001_NewDiagram_Point.Name = `NewDiagram-Point`
+	
+	// comment added to overcome the problem with the comment map association
+
+	//gong:ident [ref_models.Point]
+	__Classshape__000001_NewDiagram_Point.Identifier = `ref_models.Point`
+	__Classshape__000001_NewDiagram_Point.ShowNbInstances = false
+	__Classshape__000001_NewDiagram_Point.NbInstances = 0
+	__Classshape__000001_NewDiagram_Point.Width = 240.000000
+	__Classshape__000001_NewDiagram_Point.Heigth = 63.000000
+	__Classshape__000001_NewDiagram_Point.IsSelected = false
+
+	// Link values setup
+	__Link__000000_End.Name = `End`
+	__Link__000000_End.Structname = `Line`
+	
+	// comment added to overcome the problem with the comment map association
+
+	//gong:ident [ref_models.Line.End]
+	__Link__000000_End.Identifier = `ref_models.Line.End`
+	__Link__000000_End.Fieldtypename = `Point`
+	__Link__000000_End.TargetMultiplicity = models.ZERO_ONE
+	__Link__000000_End.SourceMultiplicity = models.MANY
+
+	// Link values setup
+	__Link__000001_Start.Name = `Start`
+	__Link__000001_Start.Structname = `Line`
+	
+	// comment added to overcome the problem with the comment map association
+
+	//gong:ident [ref_models.Line.Start]
+	__Link__000001_Start.Identifier = `ref_models.Line.Start`
+	__Link__000001_Start.Fieldtypename = `Point`
+	__Link__000001_Start.TargetMultiplicity = models.ZERO_ONE
+	__Link__000001_Start.SourceMultiplicity = models.MANY
+
 	// NoteShape values setup
 	__NoteShape__000000_ShortNodeOnModels.Name = `ShortNodeOnModels`
 	
@@ -169,8 +213,8 @@ func NewDiagramInjection() {
 It uses the DocLink convention for referencing Identifiers
 In this case [Line], [Point] and [Line.Start]
 `
-	__NoteShape__000000_ShortNodeOnModels.X = 30.000000
-	__NoteShape__000000_ShortNodeOnModels.Y = 30.000000
+	__NoteShape__000000_ShortNodeOnModels.X = 90.000000
+	__NoteShape__000000_ShortNodeOnModels.Y = 390.000000
 	__NoteShape__000000_ShortNodeOnModels.Width = 240.000000
 	__NoteShape__000000_ShortNodeOnModels.Heigth = 63.000000
 	__NoteShape__000000_ShortNodeOnModels.Matched = false
@@ -183,16 +227,46 @@ In this case [Line], [Point] and [Line.Start]
 	//gong:ident [ref_models.ShortNodeOnModels.Line]
 	__NoteShapeLink__000000_Line.Identifier = `ref_models.ShortNodeOnModels.Line`
 
+	// NoteShapeLink values setup
+	__NoteShapeLink__000001_Point.Name = `Point`
+	
+	// comment added to overcome the problem with the comment map association
+
+	//gong:ident [ref_models.ShortNodeOnModels.Point]
+	__NoteShapeLink__000001_Point.Identifier = `ref_models.ShortNodeOnModels.Point`
+
 	// Position values setup
 	__Position__000000_Pos_NewDiagram_Line.X = 340.000000
 	__Position__000000_Pos_NewDiagram_Line.Y = 270.000000
 	__Position__000000_Pos_NewDiagram_Line.Name = `Pos-NewDiagram-Line`
 
+	// Position values setup
+	__Position__000001_Pos_NewDiagram_Point.X = 70.000000
+	__Position__000001_Pos_NewDiagram_Point.Y = 104.000000
+	__Position__000001_Pos_NewDiagram_Point.Name = `Pos-NewDiagram-Point`
+
+	// Vertice values setup
+	__Vertice__000000_Verticle_in_class_diagram_NewDiagram_in_middle_between_NewDiagram_Line_and_NewDiagram_Point.X = 565.000000
+	__Vertice__000000_Verticle_in_class_diagram_NewDiagram_in_middle_between_NewDiagram_Line_and_NewDiagram_Point.Y = 218.500000
+	__Vertice__000000_Verticle_in_class_diagram_NewDiagram_in_middle_between_NewDiagram_Line_and_NewDiagram_Point.Name = `Verticle in class diagram NewDiagram in middle between NewDiagram-Line and NewDiagram-Point`
+
+	// Vertice values setup
+	__Vertice__000001_Verticle_in_class_diagram_NewDiagram_in_middle_between_NewDiagram_Line_and_NewDiagram_Point.X = 565.000000
+	__Vertice__000001_Verticle_in_class_diagram_NewDiagram_in_middle_between_NewDiagram_Line_and_NewDiagram_Point.Y = 218.500000
+	__Vertice__000001_Verticle_in_class_diagram_NewDiagram_in_middle_between_NewDiagram_Line_and_NewDiagram_Point.Name = `Verticle in class diagram NewDiagram in middle between NewDiagram-Line and NewDiagram-Point`
+
 	// Setup of pointers
 	__Classdiagram__000000_NewDiagram.Classshapes = append(__Classdiagram__000000_NewDiagram.Classshapes, __Classshape__000000_NewDiagram_Line)
+	__Classdiagram__000000_NewDiagram.Classshapes = append(__Classdiagram__000000_NewDiagram.Classshapes, __Classshape__000001_NewDiagram_Point)
 	__Classdiagram__000000_NewDiagram.NoteShapes = append(__Classdiagram__000000_NewDiagram.NoteShapes, __NoteShape__000000_ShortNodeOnModels)
 	__Classshape__000000_NewDiagram_Line.Position = __Position__000000_Pos_NewDiagram_Line
+	__Classshape__000000_NewDiagram_Line.Links = append(__Classshape__000000_NewDiagram_Line.Links, __Link__000000_End)
+	__Classshape__000000_NewDiagram_Line.Links = append(__Classshape__000000_NewDiagram_Line.Links, __Link__000001_Start)
+	__Classshape__000001_NewDiagram_Point.Position = __Position__000001_Pos_NewDiagram_Point
+	__Link__000000_End.Middlevertice = __Vertice__000000_Verticle_in_class_diagram_NewDiagram_in_middle_between_NewDiagram_Line_and_NewDiagram_Point
+	__Link__000001_Start.Middlevertice = __Vertice__000001_Verticle_in_class_diagram_NewDiagram_in_middle_between_NewDiagram_Line_and_NewDiagram_Point
 	__NoteShape__000000_ShortNodeOnModels.NoteShapeLinks = append(__NoteShape__000000_ShortNodeOnModels.NoteShapeLinks, __NoteShapeLink__000000_Line)
+	__NoteShape__000000_ShortNodeOnModels.NoteShapeLinks = append(__NoteShape__000000_ShortNodeOnModels.NoteShapeLinks, __NoteShapeLink__000001_Point)
 }
 
 

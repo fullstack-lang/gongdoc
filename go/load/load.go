@@ -62,6 +62,37 @@ func Load(
 	}
 	diagramPackage.GongModelPath = pkgPath
 
+	// to be removed after fix of [issue](https://github.com/golang/go/issues/57559)
+	SetupMapDocLinkRenaming()
+	// end of the be removed
+
+	// set up the number of instance per classshape
+	if map_StructName_InstanceNb != nil {
+
+		for gongStruct := range *gong_models.GetGongstructInstancesSet[gong_models.GongStruct]() {
+			gongdoc_models.Map_Identifier_NbInstances[gongStruct.Name] =
+				(*map_StructName_InstanceNb)[gongStruct.Name]
+
+		}
+
+		for _, classdiagram := range diagramPackage.Classdiagrams {
+			for _, classshape := range classdiagram.Classshapes {
+
+				gongStructName := gongdoc_models.IdentifierToShapename(classshape.Identifier)
+				nbInstances, ok := gongdoc_models.Map_Identifier_NbInstances[gongStructName]
+
+				if ok {
+					classshape.ShowNbInstances = true
+					classshape.NbInstances = nbInstances
+				}
+			}
+		}
+	}
+}
+
+// to be removed after fix of [issue](https://github.com/golang/go/issues/57559)
+func SetupMapDocLinkRenaming() {
+
 	// set up Map_DocLink_Renaming
 	//  TO BE REMOVED
 	// to be removed after fix of [issue](https://github.com/golang/go/issues/57559)
@@ -131,26 +162,4 @@ func Load(
 
 	// end of TO BE REMOVED
 
-	// set up the number of instance per classshape
-	if map_StructName_InstanceNb != nil {
-
-		for gongStruct := range *gong_models.GetGongstructInstancesSet[gong_models.GongStruct]() {
-			gongdoc_models.Map_Identifier_NbInstances[gongStruct.Name] =
-				(*map_StructName_InstanceNb)[gongStruct.Name]
-
-		}
-
-		for _, classdiagram := range diagramPackage.Classdiagrams {
-			for _, classshape := range classdiagram.Classshapes {
-
-				gongStructName := gongdoc_models.IdentifierToShapename(classshape.Identifier)
-				nbInstances, ok := gongdoc_models.Map_Identifier_NbInstances[gongStructName]
-
-				if ok {
-					classshape.ShowNbInstances = true
-					classshape.NbInstances = nbInstances
-				}
-			}
-		}
-	}
 }
