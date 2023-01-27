@@ -39,6 +39,21 @@
 			"group": "build"
 		},
 		{
+			"label": "02 - go run on test/geometry",
+			"type": "shell",
+			"options": {
+				"cwd": "go/cmd/gongdoc"
+			},
+			"command": "go",
+			"args": [
+				"run",
+				"main.go",
+				"-pkgPath",
+				"../../tests/geometry/go/models",
+			],
+			"group": "build"
+		},
+		{
 			"label": "02 - go run on test/geometry -setUpRandomNumberOfInstances",
 			"type": "shell",
 			"options": {
@@ -70,7 +85,6 @@
 			],
 			"group": "build"
 		},
-
 		{
 			"label": "02 - go run on test/geometry -setUpRandomNumberOfInstances -editable=false",
 			"type": "shell",
@@ -266,7 +280,7 @@
 			"command": "go",
 			"args": [
 				"build",
-				"-gcflags", 
+				"-gcflags",
 				"-N -l"
 			],
 			"group": "build"
