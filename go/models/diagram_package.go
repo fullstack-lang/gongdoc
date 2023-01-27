@@ -7,6 +7,7 @@ import (
 	"log"
 	"os"
 	"path/filepath"
+	"time"
 
 	gong_models "github.com/fullstack-lang/gong/go/models"
 )
@@ -70,7 +71,9 @@ func (diagramPackage *DiagramPackage) UnmarshallOneDiagram(diagramName string, i
 	_ = gongdocStage
 
 	var err error
+	startParser := time.Now()
 	err = ParseAstFileFromAst(inFile, fset)
+	log.Printf("Parsing of %s took %s", diagramName, time.Since(startParser))
 
 	if err != nil {
 		log.Fatalln("Unable to parse", diagramName, err.Error())
@@ -83,7 +86,7 @@ func (diagramPackage *DiagramPackage) UnmarshallOneDiagram(diagramName string, i
 		classdiagram, ok = (*GetGongstructInstancesMap[Classdiagram]())[diagramName]
 
 		if !ok {
-			log.Println("Unable to find", diagramName, ". It might be a docs.go file")
+			// log.Println("Unable to find", diagramName, ". It might be a docs.go file")
 			return
 		}
 
