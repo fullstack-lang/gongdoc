@@ -4,7 +4,7 @@ package models
 func IsStaged[Type Gongstruct](stage *StageStruct, instance *Type) (ok bool) {
 
 	switch target := any(instance).(type) {
-	// insertion stage
+	// insertion point for stage
 	case *Classdiagram:
 		ok = stage.IsStagedClassdiagram(target)
 
@@ -48,7 +48,7 @@ func IsStaged[Type Gongstruct](stage *StageStruct, instance *Type) (ok bool) {
 	return
 }
 
-// insertion stage per struct
+// insertion point for stage per struct
 	func (stage *StageStruct) IsStagedClassdiagram(classdiagram *Classdiagram) (ok bool) {
 
 		_, ok = stage.Classdiagrams[classdiagram]
@@ -148,7 +148,7 @@ func IsStaged[Type Gongstruct](stage *StageStruct, instance *Type) (ok bool) {
 func StageBranch[Type Gongstruct](stage *StageStruct, instance *Type) {
 
 	switch target := any(instance).(type) {
-	// insertion stage branch
+	// insertion point for stage branch
 	case *Classdiagram:
 		stage.StageBranchClassdiagram(target)
 
@@ -191,7 +191,7 @@ func StageBranch[Type Gongstruct](stage *StageStruct, instance *Type) {
 	}
 }
 
-// insertion stage branchper struct
+// insertion point for stage branch per struct
 func (stage *StageStruct) StageBranchClassdiagram(classdiagram *Classdiagram) {
 
 	// check if instance is already staged
@@ -428,6 +428,301 @@ func (stage *StageStruct) StageBranchVertice(vertice *Vertice) {
 	}
 
 	vertice.Stage()
+
+	//insertion point for the staging of instances referenced by pointers
+
+	//insertion point for the staging of instances referenced by slice of pointers
+
+}
+
+
+// UnstageBranch stages instance and apply UnstageBranch on all gongstruct instances that are
+// referenced by pointers or slices of pointers of the insance
+//
+// the algorithm stops along the course of graph if a vertex is already staged
+func UnstageBranch[Type Gongstruct](stage *StageStruct, instance *Type) {
+
+	switch target := any(instance).(type) {
+	// insertion point for unstage branch
+	case *Classdiagram:
+		stage.UnstageBranchClassdiagram(target)
+
+	case *Classshape:
+		stage.UnstageBranchClassshape(target)
+
+	case *DiagramPackage:
+		stage.UnstageBranchDiagramPackage(target)
+
+	case *Field:
+		stage.UnstageBranchField(target)
+
+	case *Link:
+		stage.UnstageBranchLink(target)
+
+	case *Node:
+		stage.UnstageBranchNode(target)
+
+	case *NoteShape:
+		stage.UnstageBranchNoteShape(target)
+
+	case *NoteShapeLink:
+		stage.UnstageBranchNoteShapeLink(target)
+
+	case *Position:
+		stage.UnstageBranchPosition(target)
+
+	case *Tree:
+		stage.UnstageBranchTree(target)
+
+	case *UmlState:
+		stage.UnstageBranchUmlState(target)
+
+	case *Umlsc:
+		stage.UnstageBranchUmlsc(target)
+
+	case *Vertice:
+		stage.UnstageBranchVertice(target)
+
+	}
+}
+
+// insertion point for unstage branch per struct
+func (stage *StageStruct) UnstageBranchClassdiagram(classdiagram *Classdiagram) {
+
+	// check if instance is already staged
+	if ! IsStaged(stage, classdiagram) {
+		return
+	}
+
+	classdiagram.Unstage()
+
+	//insertion point for the staging of instances referenced by pointers
+
+	//insertion point for the staging of instances referenced by slice of pointers
+	for _, _classshape := range classdiagram.Classshapes {
+		UnstageBranch(stage, _classshape)
+	}
+	for _, _noteshape := range classdiagram.NoteShapes {
+		UnstageBranch(stage, _noteshape)
+	}
+
+}
+
+func (stage *StageStruct) UnstageBranchClassshape(classshape *Classshape) {
+
+	// check if instance is already staged
+	if ! IsStaged(stage, classshape) {
+		return
+	}
+
+	classshape.Unstage()
+
+	//insertion point for the staging of instances referenced by pointers
+	if classshape.Position != nil {
+		UnstageBranch(stage, classshape.Position)
+	}
+
+	//insertion point for the staging of instances referenced by slice of pointers
+	for _, _field := range classshape.Fields {
+		UnstageBranch(stage, _field)
+	}
+	for _, _link := range classshape.Links {
+		UnstageBranch(stage, _link)
+	}
+
+}
+
+func (stage *StageStruct) UnstageBranchDiagramPackage(diagrampackage *DiagramPackage) {
+
+	// check if instance is already staged
+	if ! IsStaged(stage, diagrampackage) {
+		return
+	}
+
+	diagrampackage.Unstage()
+
+	//insertion point for the staging of instances referenced by pointers
+
+	//insertion point for the staging of instances referenced by slice of pointers
+	for _, _classdiagram := range diagrampackage.Classdiagrams {
+		UnstageBranch(stage, _classdiagram)
+	}
+	for _, _umlsc := range diagrampackage.Umlscs {
+		UnstageBranch(stage, _umlsc)
+	}
+
+}
+
+func (stage *StageStruct) UnstageBranchField(field *Field) {
+
+	// check if instance is already staged
+	if ! IsStaged(stage, field) {
+		return
+	}
+
+	field.Unstage()
+
+	//insertion point for the staging of instances referenced by pointers
+
+	//insertion point for the staging of instances referenced by slice of pointers
+
+}
+
+func (stage *StageStruct) UnstageBranchLink(link *Link) {
+
+	// check if instance is already staged
+	if ! IsStaged(stage, link) {
+		return
+	}
+
+	link.Unstage()
+
+	//insertion point for the staging of instances referenced by pointers
+	if link.Middlevertice != nil {
+		UnstageBranch(stage, link.Middlevertice)
+	}
+
+	//insertion point for the staging of instances referenced by slice of pointers
+
+}
+
+func (stage *StageStruct) UnstageBranchNode(node *Node) {
+
+	// check if instance is already staged
+	if ! IsStaged(stage, node) {
+		return
+	}
+
+	node.Unstage()
+
+	//insertion point for the staging of instances referenced by pointers
+	if node.Classdiagram != nil {
+		UnstageBranch(stage, node.Classdiagram)
+	}
+
+	//insertion point for the staging of instances referenced by slice of pointers
+	for _, _node := range node.Children {
+		UnstageBranch(stage, _node)
+	}
+
+}
+
+func (stage *StageStruct) UnstageBranchNoteShape(noteshape *NoteShape) {
+
+	// check if instance is already staged
+	if ! IsStaged(stage, noteshape) {
+		return
+	}
+
+	noteshape.Unstage()
+
+	//insertion point for the staging of instances referenced by pointers
+
+	//insertion point for the staging of instances referenced by slice of pointers
+	for _, _noteshapelink := range noteshape.NoteShapeLinks {
+		UnstageBranch(stage, _noteshapelink)
+	}
+
+}
+
+func (stage *StageStruct) UnstageBranchNoteShapeLink(noteshapelink *NoteShapeLink) {
+
+	// check if instance is already staged
+	if ! IsStaged(stage, noteshapelink) {
+		return
+	}
+
+	noteshapelink.Unstage()
+
+	//insertion point for the staging of instances referenced by pointers
+	if noteshapelink.Classshape != nil {
+		UnstageBranch(stage, noteshapelink.Classshape)
+	}
+	if noteshapelink.Link != nil {
+		UnstageBranch(stage, noteshapelink.Link)
+	}
+	if noteshapelink.Middlevertice != nil {
+		UnstageBranch(stage, noteshapelink.Middlevertice)
+	}
+
+	//insertion point for the staging of instances referenced by slice of pointers
+
+}
+
+func (stage *StageStruct) UnstageBranchPosition(position *Position) {
+
+	// check if instance is already staged
+	if ! IsStaged(stage, position) {
+		return
+	}
+
+	position.Unstage()
+
+	//insertion point for the staging of instances referenced by pointers
+
+	//insertion point for the staging of instances referenced by slice of pointers
+
+}
+
+func (stage *StageStruct) UnstageBranchTree(tree *Tree) {
+
+	// check if instance is already staged
+	if ! IsStaged(stage, tree) {
+		return
+	}
+
+	tree.Unstage()
+
+	//insertion point for the staging of instances referenced by pointers
+
+	//insertion point for the staging of instances referenced by slice of pointers
+	for _, _node := range tree.RootNodes {
+		UnstageBranch(stage, _node)
+	}
+
+}
+
+func (stage *StageStruct) UnstageBranchUmlState(umlstate *UmlState) {
+
+	// check if instance is already staged
+	if ! IsStaged(stage, umlstate) {
+		return
+	}
+
+	umlstate.Unstage()
+
+	//insertion point for the staging of instances referenced by pointers
+
+	//insertion point for the staging of instances referenced by slice of pointers
+
+}
+
+func (stage *StageStruct) UnstageBranchUmlsc(umlsc *Umlsc) {
+
+	// check if instance is already staged
+	if ! IsStaged(stage, umlsc) {
+		return
+	}
+
+	umlsc.Unstage()
+
+	//insertion point for the staging of instances referenced by pointers
+
+	//insertion point for the staging of instances referenced by slice of pointers
+	for _, _umlstate := range umlsc.States {
+		UnstageBranch(stage, _umlstate)
+	}
+
+}
+
+func (stage *StageStruct) UnstageBranchVertice(vertice *Vertice) {
+
+	// check if instance is already staged
+	if ! IsStaged(stage, vertice) {
+		return
+	}
+
+	vertice.Unstage()
 
 	//insertion point for the staging of instances referenced by pointers
 

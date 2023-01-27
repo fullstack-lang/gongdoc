@@ -293,12 +293,6 @@ export class ClassDiagramComponent implements OnInit, OnDestroy {
 
     this.paper = new joint.dia.Paper(paperOptions)
 
-    if (this.classdiagram.IsInDrawMode) {
-      this.paper.setInteractivity(true)
-    } else {
-      this.paper.setInteractivity(false)
-    }
-
     this.paper.on('cell:pointerdown',
       function (cellView, evt, x, y) {
 
@@ -328,6 +322,16 @@ export class ClassDiagramComponent implements OnInit, OnDestroy {
         )
       }
     )
+
+    if (this.classdiagram == undefined) {
+      return
+    }
+
+    if (this.classdiagram.IsInDrawMode) {
+      this.paper.setInteractivity(true)
+    } else {
+      this.paper.setInteractivity(false)
+    }
 
     // draw class shapes from the gong classshapes
     if (this.classdiagram?.Classshapes != undefined) {
@@ -511,15 +515,8 @@ export class ClassDiagramComponent implements OnInit, OnDestroy {
         this.editable = false
         this.classdiagram = frontRepo.Classdiagrams.get(id)!
 
-        // intercept click on shapes when in production mode
-        if (this.classdiagram == undefined) {
-          console.log("unkwnown classdiagram id : " + id)
-        } else {
-
-          this.drawClassdiagram();
-          this.paper!.setInteractivity(this.classdiagram.IsInDrawMode)
-
-        }
+        this.drawClassdiagram();
+        this.paper!.setInteractivity(this.classdiagram.IsInDrawMode)
       }
     )
   }
