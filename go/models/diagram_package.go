@@ -6,6 +6,7 @@ import (
 	"go/token"
 	"log"
 	"os"
+	"path/filepath"
 
 	gong_models "github.com/fullstack-lang/gong/go/models"
 )
@@ -52,17 +53,6 @@ type DiagramPackage struct {
 	AbsolutePathToDiagramPackage string
 }
 
-func closeFile(f *os.File) {
-	fmt.Println("Closing file (legacy)", f.Name())
-
-	err := f.Close()
-
-	if err != nil {
-		fmt.Fprintf(os.Stderr, "error: %v\n", err)
-		os.Exit(1)
-	}
-}
-
 const preludeRef string = `package diagrams
 
 import (
@@ -103,6 +93,74 @@ func (diagramPackage *DiagramPackage) UnmarshallOneDiagram(diagramName string, i
 
 		diagramPackage.Classdiagrams = append(diagramPackage.Classdiagrams,
 			classdiagram)
+
+		// refresh all notes body from the original gong note in the package models
+		// because, note are not synchronized via the gopls renaming request
+		//
+		// if a can be traced, this is probably for a lack of diagram maintenance
+		for noteShape := range *GetGongstructInstancesSet[NoteShape]() {
+
+			note, ok := (*gong_models.GetGongstructInstancesMap[gong_models.GongNote]())[IdentifierToShapename(noteShape.Identifier)]
+
+			if !ok {
+				log.Println("UnmarshallOneDiagram: In diagram", classdiagram.Name, "unknown note related to note shape", noteShape.Identifier)
+				noteShape.Unstage()
+
+				if contains(classdiagram.NoteShapes, noteShape) {
+					classdiagram.NoteShapes = remove(classdiagram.NoteShapes, noteShape)
+				}
+				continue
+			}
+
+			noteShape.Body = note.Body
+		}
 	}
 	return
+}
+
+func contains[T comparable](elems []T, v T) bool {
+	for _, s := range elems {
+		if v == s {
+			return true
+		}
+	}
+	return false
+}
+
+func (diagramPackage *DiagramPackage) Reload() {
+
+	gong_models.Stage.Checkout()
+	gong_models.Stage.Reset()
+	modelPkg, _ := gong_models.LoadSource(
+		filepath.Join(diagramPackage.AbsolutePathToDiagramPackage, "../models"))
+	gong_models.Stage.Commit()
+
+	Stage.Checkout()
+	Stage.Reset()
+	Stage.Commit()
+
+	diagramPackage.Classdiagrams = nil
+	diagramPackage.Umlscs = nil
+	diagramPackage.ModelPkg = modelPkg
+
+	diagramPackage, _ = LoadDiagramPackage(
+		filepath.Join(diagramPackage.AbsolutePathToDiagramPackage, "../models"),
+		modelPkg, true)
+
+	// to be removed after fix of [issue](https://github.com/golang/go/issues/57559)
+	SetupMapDocLinkRenaming()
+	// end of the be removed
+	FillUpNodeTree(diagramPackage)
+	Stage.Commit()
+}
+
+func closeFile(f *os.File) {
+	fmt.Println("Closing file (legacy)", f.Name())
+
+	err := f.Close()
+
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "error: %v\n", err)
+		os.Exit(1)
+	}
 }

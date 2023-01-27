@@ -170,7 +170,11 @@ func updateNodesStates(stage *StageStruct, nodesCb *NodeCB) {
 
 	// 2. for each noteShape of the diagram, set the check button of the related node to true
 	for _, noteshape := range classdiagram.NoteShapes {
-		noteshapeNode := nodesCb.map_Identifier_Node[noteshape.Identifier]
+		noteshapeNode, ok := nodesCb.map_Identifier_Node[noteshape.Identifier]
+
+		if !ok {
+			log.Println("Unknown identifier", noteshape.Identifier)
+		}
 
 		noteshapeNode.IsChecked = true
 

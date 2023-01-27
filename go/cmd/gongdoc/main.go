@@ -17,7 +17,6 @@ import (
 	"github.com/gin-gonic/gin"
 
 	gongdoc_fullstack "github.com/fullstack-lang/gongdoc/go/fullstack"
-	"github.com/fullstack-lang/gongdoc/go/load"
 	"github.com/fullstack-lang/gongdoc/go/models"
 	gongdoc_models "github.com/fullstack-lang/gongdoc/go/models"
 
@@ -123,7 +122,7 @@ func main() {
 	diagramPackage, _ := gongdoc_models.LoadDiagramPackage(*pkgPath, modelPkg, *editable)
 
 	// to be removed after fix of [issue](https://github.com/golang/go/issues/57559)
-	load.SetupMapDocLinkRenaming()
+	gongdoc_models.SetupMapDocLinkRenaming()
 	// end of the be removed
 
 	map_ := gongdoc_models.Map_Identifier_NbInstances

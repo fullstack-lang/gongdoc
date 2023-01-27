@@ -91,7 +91,7 @@
             ]
         },
         {
-            "name": "go server on tdb -setUpRandomNumberOfInstances",
+            "name": "go server on tdb",
             "type": "go",
             "request": "launch",
             "mode": "debug",
@@ -99,7 +99,6 @@
             "args": [
                 "-pkgPath",
                 "D:/MOSS-Users/peugeot/go/src/r/DEV_COHERENCE/ppstdb/go/models",
-                "-setUpRandomNumberOfInstances"
             ]
         },
         {
