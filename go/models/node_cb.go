@@ -107,7 +107,6 @@ func (nodesCb *NodeCB) OnAfterCreate(
 			append(nodesCb.ClassdiagramsRootNode.Children, newDiagramNode)
 
 		updateNodesStates(stage, nodesCb)
-		stage.Commit()
 	}
 }
 
@@ -129,7 +128,7 @@ func (nodesCb *NodeCB) OnAfterDelete(
 	case CLASS_DIAGRAM:
 		// remove the classdiagram node from the pkg element node
 		nodesCb.diagramPackage.Classdiagrams = remove(nodesCb.diagramPackage.Classdiagrams, stagedNode.Classdiagram)
-		stagedNode.Classdiagram.Unstage()
+		UnstageBranch(stage, stagedNode.Classdiagram)
 
 		// remove the actual classdiagram file if it exsits
 		classdiagramFilePath := filepath.Join(nodesCb.diagramPackage.Path, "../diagrams", stagedNode.Classdiagram.Name) + ".go"
@@ -143,6 +142,6 @@ func (nodesCb *NodeCB) OnAfterDelete(
 	case CLASS_DIAGRAM, STATE_DIAGRAM:
 
 		// commit will clean up the stage associations
-		stage.Commit()
+		updateNodesStates(stage, nodesCb)
 	}
 }

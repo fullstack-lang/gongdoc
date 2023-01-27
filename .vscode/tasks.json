@@ -196,7 +196,7 @@
 			"group": "build"
 		},
 		{
-			"label": "01 - gongc -skipGoModCommands -skipNg -compileForDebug",
+			"label": "01 - gongc -skipGoModCommands -skipNpmInstall -skipNg -compileForDebug",
 			"type": "shell",
 			"options": {
 				"cwd": "go/models"
@@ -204,7 +204,9 @@
 			"command": "gongc",
 			"args": [
 				"-skipGoModCommands",
-				"-compileForDebug"
+				"-compileForDebug",
+				"-skipNpmInstall",
+				"-skipNg"
 			],
 			"group": "build"
 		},
