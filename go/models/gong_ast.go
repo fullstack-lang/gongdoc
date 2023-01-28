@@ -1112,6 +1112,9 @@ func UnmarshallGongstructStaging(cmap *ast.CommentMap, assignStmt *ast.AssignStm
 			case "DiagramPackage":
 				switch fieldName {
 				// insertion point for field dependant code
+				case "SelectedClassdiagram":
+					targetIdentifier := ident.Name
+					__gong__map_DiagramPackage[identifier].SelectedClassdiagram = __gong__map_Classdiagram[targetIdentifier]
 				case "IsEditable":
 					// convert string to boolean
 					fielValue, err := strconv.ParseBool(ident.Name)
@@ -1375,13 +1378,6 @@ func UnmarshallGongstructStaging(cmap *ast.CommentMap, assignStmt *ast.AssignStm
 				case "Tree":
 					switch fieldName {
 					// insertion point for enum assign code
-					case "Type":
-						var val TreeType
-						err := (&val).FromCodeString(enumValue)
-						if err != nil {
-							log.Fatalln(err)
-						}
-						__gong__map_Tree[identifier].Type = TreeType(val)
 					}
 				case "UmlState":
 					switch fieldName {

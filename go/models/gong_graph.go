@@ -247,6 +247,9 @@ func (stage *StageStruct) StageBranchDiagramPackage(diagrampackage *DiagramPacka
 	diagrampackage.Stage()
 
 	//insertion point for the staging of instances referenced by pointers
+	if diagrampackage.SelectedClassdiagram != nil {
+		StageBranch(stage, diagrampackage.SelectedClassdiagram)
+	}
 
 	//insertion point for the staging of instances referenced by slice of pointers
 	for _, _classdiagram := range diagrampackage.Classdiagrams {
@@ -542,6 +545,9 @@ func (stage *StageStruct) UnstageBranchDiagramPackage(diagrampackage *DiagramPac
 	diagrampackage.Unstage()
 
 	//insertion point for the staging of instances referenced by pointers
+	if diagrampackage.SelectedClassdiagram != nil {
+		UnstageBranch(stage, diagrampackage.SelectedClassdiagram)
+	}
 
 	//insertion point for the staging of instances referenced by slice of pointers
 	for _, _classdiagram := range diagrampackage.Classdiagrams {

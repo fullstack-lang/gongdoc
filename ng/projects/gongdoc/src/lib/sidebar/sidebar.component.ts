@@ -672,6 +672,41 @@ export class SidebarComponent implements OnInit {
           })
 
           /**
+          * let append a node for the association SelectedClassdiagram
+          */
+          let SelectedClassdiagramGongNodeAssociation: GongNode = {
+            name: "(Classdiagram) SelectedClassdiagram",
+            type: GongNodeType.ONE__ZERO_ONE_ASSOCIATION,
+            id: diagrampackageDB.ID,
+            uniqueIdPerStack: 17 * nonInstanceNodeId,
+            structName: "DiagramPackage",
+            associationField: "SelectedClassdiagram",
+            associatedStructName: "Classdiagram",
+            children: new Array<GongNode>()
+          }
+          nonInstanceNodeId = nonInstanceNodeId + 1
+          diagrampackageGongNodeInstance.children!.push(SelectedClassdiagramGongNodeAssociation)
+
+          /**
+            * let append a node for the instance behind the asssociation SelectedClassdiagram
+            */
+          if (diagrampackageDB.SelectedClassdiagram != undefined) {
+            let diagrampackageGongNodeInstance_SelectedClassdiagram: GongNode = {
+              name: diagrampackageDB.SelectedClassdiagram.Name,
+              type: GongNodeType.INSTANCE,
+              id: diagrampackageDB.SelectedClassdiagram.ID,
+              uniqueIdPerStack: // godel numbering (thank you kurt)
+                3 * getDiagramPackageUniqueID(diagrampackageDB.ID)
+                + 5 * getClassdiagramUniqueID(diagrampackageDB.SelectedClassdiagram.ID),
+              structName: "Classdiagram",
+              associationField: "",
+              associatedStructName: "",
+              children: new Array<GongNode>()
+            }
+            SelectedClassdiagramGongNodeAssociation.children.push(diagrampackageGongNodeInstance_SelectedClassdiagram)
+          }
+
+          /**
           * let append a node for the slide of pointer Umlscs
           */
           let UmlscsGongNodeAssociation: GongNode = {

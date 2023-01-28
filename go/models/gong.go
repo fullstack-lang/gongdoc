@@ -1989,6 +1989,8 @@ func GetAssociationName[Type Gongstruct]() *Type {
 			// Initialisation of associations
 			// field is initialized with an instance of Classdiagram with the name of the field
 			Classdiagrams: []*Classdiagram{{Name: "Classdiagrams"}},
+			// field is initialized with an instance of Classdiagram with the name of the field
+			SelectedClassdiagram: &Classdiagram{Name: "SelectedClassdiagram"},
 			// field is initialized with an instance of Umlsc with the name of the field
 			Umlscs: []*Umlsc{{Name: "Umlscs"}},
 		}).(*Type)
@@ -2098,6 +2100,23 @@ func GetPointerReverseMap[Start, End Gongstruct](fieldname string) map[*End][]*S
 	case DiagramPackage:
 		switch fieldname {
 		// insertion point for per direct association field
+		case "SelectedClassdiagram":
+			res := make(map[*Classdiagram][]*DiagramPackage)
+			for diagrampackage := range Stage.DiagramPackages {
+				if diagrampackage.SelectedClassdiagram != nil {
+					classdiagram_ := diagrampackage.SelectedClassdiagram
+					var diagrampackages []*DiagramPackage
+					_, ok := res[classdiagram_]
+					if ok {
+						diagrampackages = res[classdiagram_]
+					} else {
+						diagrampackages = make([]*DiagramPackage, 0)
+					}
+					diagrampackages = append(diagrampackages, diagrampackage)
+					res[classdiagram_] = diagrampackages
+				}
+			}
+			return any(res).(map[*End][]*Start)
 		}
 	// reverse maps of direct associations of Field
 	case Field:
@@ -2448,7 +2467,7 @@ func GetFields[Type Gongstruct]() (res []string) {
 	case Classshape:
 		res = []string{"Name", "Position", "Identifier", "ShowNbInstances", "NbInstances", "Fields", "Links", "Width", "Heigth", "IsSelected"}
 	case DiagramPackage:
-		res = []string{"Name", "Path", "GongModelPath", "Classdiagrams", "Umlscs", "IsEditable", "IsReloaded", "AbsolutePathToDiagramPackage"}
+		res = []string{"Name", "Path", "GongModelPath", "Classdiagrams", "SelectedClassdiagram", "Umlscs", "IsEditable", "IsReloaded", "AbsolutePathToDiagramPackage"}
 	case Field:
 		res = []string{"Name", "Identifier", "FieldTypeAsString", "Structname", "Fieldtypename"}
 	case Link:
@@ -2462,7 +2481,7 @@ func GetFields[Type Gongstruct]() (res []string) {
 	case Position:
 		res = []string{"X", "Y", "Name"}
 	case Tree:
-		res = []string{"Name", "Type", "RootNodes"}
+		res = []string{"Name", "RootNodes"}
 	case UmlState:
 		res = []string{"Name", "X", "Y"}
 	case Umlsc:
@@ -2551,6 +2570,10 @@ func GetFieldStringValue[Type Gongstruct](instance Type, fieldName string) (res 
 					res += "\n"
 				}
 				res += __instance__.Name
+			}
+		case "SelectedClassdiagram":
+			if any(instance).(DiagramPackage).SelectedClassdiagram != nil {
+				res = any(instance).(DiagramPackage).SelectedClassdiagram.Name
 			}
 		case "Umlscs":
 			for idx, __instance__ := range any(instance).(DiagramPackage).Umlscs {
@@ -2711,9 +2734,6 @@ func GetFieldStringValue[Type Gongstruct](instance Type, fieldName string) (res 
 		// string value of fields
 		case "Name":
 			res = any(instance).(Tree).Name
-		case "Type":
-			enum := any(instance).(Tree).Type
-			res = enum.ToCodeString()
 		case "RootNodes":
 			for idx, __instance__ := range any(instance).(Tree).RootNodes {
 				if idx > 0 {

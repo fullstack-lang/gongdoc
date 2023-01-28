@@ -21,6 +21,7 @@ func (nodesCb *NodeCB) OnAfterUpdateDiagram(
 		// It will refresh and fetch the node with checked value
 		stagedNode.IsChecked = true
 		nodesCb.selectedClassdiagram = stagedNode.Classdiagram
+		nodesCb.diagramPackage.SelectedClassdiagram = nodesCb.selectedClassdiagram
 
 		// uncheck all other diagram nodes
 		diagramNodes := append(

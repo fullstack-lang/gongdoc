@@ -26,8 +26,10 @@ type DiagramPackage struct {
 	GongModelPath string
 
 	// Classdiagrams store UML Classdiagrams
-	// only one diagram is present at a time
 	Classdiagrams []*Classdiagram
+
+	// SelectedClassdiagram is the diagram of interest
+	SelectedClassdiagram *Classdiagram
 
 	// list of files in the "diagrams" directory
 	Files []string
