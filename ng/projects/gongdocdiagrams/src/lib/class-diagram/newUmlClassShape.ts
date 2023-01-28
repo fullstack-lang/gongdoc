@@ -1,5 +1,6 @@
 import * as joint from 'jointjs';
 import * as gongdoc from 'gongdoc'
+import { shapeIdentifierToShapeName } from './shape-identifier-to-shape-name';
 
 export function newUmlClassShape(classshape: gongdoc.ClassshapeDB,
     positionService: gongdoc.PositionService,
@@ -26,7 +27,7 @@ export function newUmlClassShape(classshape: gongdoc.ClassshapeDB,
         }
     }
 
-    let classShapeTitle = classshape.Identifier.replace("ref_models.", "")
+    let classShapeTitle = shapeIdentifierToShapeName(classshape.Identifier)
 
     // show nb of instances if necessary
     if (classshape.ShowNbInstances) {

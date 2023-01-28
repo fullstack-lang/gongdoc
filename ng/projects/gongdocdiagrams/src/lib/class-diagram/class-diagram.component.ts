@@ -1,20 +1,20 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Observable, Subscription, timer } from 'rxjs';
 
-import { ThemePalette } from '@angular/material/core';
-
 import * as joint from 'jointjs';
 
 import { ActivatedRoute, Router } from '@angular/router';
 
 import * as gongdoc from 'gongdoc'
-import * as gong from 'gong'
 
 import { newUmlClassShape } from './newUmlClassShape'
 import { ClassdiagramContextSubject, ClassdiagramContext } from '../diagram-displayed-gongstruct'
-import { MatSlideToggleChange } from '@angular/material/slide-toggle';
 import { newUmlNote } from './newUmlNote';
 import { NONE_TYPE } from '@angular/compiler';
+
+import { onClassshapeMove, onLinkMove, onNoteMove } from './on-move-functions'
+import { shapeIdentifierToShapeName } from './shape-identifier-to-shape-name';
+import { informBackEndOfSelection } from './on-pointer-down-function';
 
 @Component({
   selector: 'lib-class-diagram',
@@ -39,52 +39,25 @@ export class ClassDiagramComponent implements OnInit, OnDestroy {
   /**
    * jointjs stuff
    */
-  namespace = joint.shapes;
+  namespace = joint.shapes
   private paper?: joint.dia.Paper
   private graph?: joint.dia.Graph
-
-  /**
-   * slider management
-   */
-  color: ThemePalette = 'primary';
 
   // the gong diagram of interest ot be drawn
   public classdiagram: gongdoc.ClassdiagramDB = new gongdoc.ClassdiagramDB
 
   /**
-   * gongdoc manages 2 stacks: gongdoc and gong
-   * 
    * gongdoc is for CRUDing the diagram elements (shapes, links, ...)
-   * 
-   * gong is for getting the elements of the go package (it has to be of an isntance of a gong model)
-   * that are being modeled
-   * 
-   * instances in gongdoc refers to the gong model via the names of the elements.
-   * a classshape instance modeling a "foo" gong struct will have a the value "foo" for the Structname field 
    */
   gongdocFrontRepo: gongdoc.FrontRepo = new gongdoc.FrontRepo
-  gongFrontRepo: gong.FrontRepo = new gong.FrontRepo
-
-  // map of Classhapes according to the joint.shapes.uml.Class
-  // it is used to save the position of the classhape in the diagram (which only know the ids)
-  // into the Classshape object (via its Position field)
-  public Map_CellId_ClassshapeDB = new Map<string, gongdoc.ClassshapeDB>();
 
   // map for storing which gong struct have a classshape
   // it is important for drawing links between shapes
   public Map_GongStructName_JointjsUMLClassShape = new Map<string, joint.shapes.uml.Class>();
 
-  // important for storing the relation from the jointjs link to the 
-  // gongdoc Link. When the user saves the position of the vertice, this enables
-  // the saving it into the Link object
-  public Map_CellId_LinkDB = new Map<string, gongdoc.LinkDB>();
-
   // idOfDrawnClassDiagram stores the id of the drawn classdiagram. Usefull for knowing if
   // one has to redraw the diagram by comparaison with the route
   public idOfDrawnClassDiagram: number = 0
-
-  // editable
-  editable: boolean = false
 
   constructor(
     private route: ActivatedRoute,
@@ -97,8 +70,6 @@ export class ClassDiagramComponent implements OnInit, OnDestroy {
 
     private gongdocFrontRepoService: gongdoc.FrontRepoService,
     private gongdocCommitNbFromBackService: gongdoc.CommitNbFromBackService,
-
-    private ClassdiagramService: gongdoc.ClassdiagramService,
   ) {
     // https://stackoverflow.com/questions/54627478/angular-7-routing-to-same-component-but-different-param-not-working
     // this is for routerLink on same component when only queryParameter changes
@@ -113,9 +84,6 @@ export class ClassDiagramComponent implements OnInit, OnDestroy {
   // Therefore, it is mandatory to manage subscriptions in order to unscribe them on the ngOnDestroy hook
   checkGongdocCommitNbFromBackTimerSubscription: Subscription = new Subscription
   gongdocCommitNbFromBackService_getCommitNbFromBack: Subscription = new Subscription
-
-  subscriptionToDragAndDropEvent: Subscription = new Subscription
-  subscriptionToRemoveFromDiagramEvent: Subscription = new Subscription
 
   // neccessary to unsubscribe
   ngOnDestroy() {
@@ -157,52 +125,20 @@ export class ClassDiagramComponent implements OnInit, OnDestroy {
     )
   }
 
-  // onMove is called each time the shape is moved
-  onClassshapeMove(umlClassShape: joint.shapes.uml.Class) {
-    // console.log(umlClassShape.id, ':', umlClassShape.get('position'));
+  /**
+   * pullGongdocAndDrawDiagram refresh the front repo and calls redraw
+   */
+  pullGongdocAndDrawDiagram() {
+    this.gongdocFrontRepoService.pull().subscribe(
+      frontRepo => {
+        this.gongdocFrontRepo = frontRepo
+        // console.log("gongdoc front repo pull returned")
 
-    let classhape = umlClassShape.attributes['classshape'] as gongdoc.ClassshapeDB
-    let positionService = umlClassShape.attributes['positionService'] as gongdoc.PositionService
-    let position = classhape.Position
-    position!.X = umlClassShape.get('position')!.x
-    position!.Y = umlClassShape.get('position')!.y
+        const id = +this.route.snapshot.paramMap.get('id')!
+        this.classdiagram = frontRepo.Classdiagrams.get(id)!
 
-    positionService.updatePosition(position!).subscribe(
-      position => {
-        // console.log("position updated")
-      }
-    )
-  }
-
-  // onMove is called each time the shape is moved
-  onNoteMove(umlNote: joint.shapes.standard.Rectangle) {
-
-
-    let note = umlNote.attributes['note'] as gongdoc.NoteShapeDB
-    let noteService = umlNote.attributes['noteService'] as gongdoc.NoteShapeService
-    note.X = umlNote.get('position')!.x
-    note.Y = umlNote.get('position')!.y
-    noteService.updateNoteShape(note!).subscribe(
-      note => {
-
-      }
-    )
-    // console.log(note.Name, ':', umlNote.get('position'));
-  }
-
-  // onMove is called each time the shape is moved
-  onLinkMove(standardLink: joint.shapes.standard.Link) {
-    // console.log(standardLink.id, ':', standardLink.get('vertices'));
-
-    let middleVertice = standardLink.attributes['middleVertice'] as gongdoc.VerticeDB
-    let verticeService = standardLink.attributes['verticeService'] as gongdoc.VerticeService
-
-    middleVertice!.X = standardLink.get('vertices')![0].x
-    middleVertice!.Y = standardLink.get('vertices')![0].y
-
-    verticeService.updateVertice(middleVertice!).subscribe(
-      middleVertice => {
-        // console.log("middleVertice updated")
+        this.drawClassdiagram();
+        this.paper!.setInteractivity(this.classdiagram.IsInDrawMode)
       }
     )
   }
@@ -212,17 +148,15 @@ export class ClassDiagramComponent implements OnInit, OnDestroy {
   //
   addClassshapeToGraph(classshape: gongdoc.ClassshapeDB): joint.shapes.uml.Class {
 
-
-    // back pointers: 
-    // stores  as an attribute in the jointjs uml class shape :
-    // - the position service to be able to update the position
     let umlClassShape = newUmlClassShape(classshape, this.positionService, this.classshapeService)
-
-    // structRectangle.attributes = ['firstName: String']
     umlClassShape.addTo(this.graph!);
 
-    this.Map_CellId_ClassshapeDB.set(umlClassShape.id.toString(), classshape)
-    this.Map_GongStructName_JointjsUMLClassShape.set(classshape.Identifier.replace("ref_models.", ""), umlClassShape)
+    // add a backbone event handler to update the position
+    umlClassShape.on('change:position', onClassshapeMove)
+
+    // update the map that is used for find shapes
+    this.Map_GongStructName_JointjsUMLClassShape.set(
+      shapeIdentifierToShapeName(classshape.Identifier), umlClassShape)
 
     return umlClassShape
   }
@@ -232,28 +166,12 @@ export class ClassDiagramComponent implements OnInit, OnDestroy {
   //
   addNoteToGraph(note: gongdoc.NoteShapeDB): joint.shapes.basic.Rect {
 
-    //
-    // creates the UML shape
-    //
-
-    // back pointers: 
-    // stores  as an attribute in the jointjs uml class shape :
-    // - the position service
     let umlNote = newUmlNote(note, this.noteService)
-
-    // structRectangle.attributes = ['firstName: String']
     umlNote.addTo(this.graph!);
-
-    // this.Map_CellId_NoteDB.set(umlNote.id.toString(), note)
-    // this.Map_GongStructName_JointjsUMLNote.set(note.Structname, umlNote)
-
     return umlNote
   }
-  //
-  // turn gong instances into a jointjs diagram
-  //
+
   drawClassdiagram(): void {
-    // console.log("draw diagram")
 
     const namespace = joint.shapes;
 
@@ -293,36 +211,6 @@ export class ClassDiagramComponent implements OnInit, OnDestroy {
 
     this.paper = new joint.dia.Paper(paperOptions)
 
-    this.paper.on('cell:pointerdown',
-      function (cellView, evt, x, y) {
-
-        // console.log(cellView)
-
-        // if paper is interactive, this means we are in dev mode
-        // and we do not have to take click on shapes into account
-        if (cellView.paper?.options.interactive) {
-          return
-        }
-
-        let umlClassShape = cellView.model
-
-        let classhape = umlClassShape.attributes['classshape'] as gongdoc.ClassshapeDB
-        let classshapeService = umlClassShape.attributes['classshapeService'] as gongdoc.ClassshapeService
-
-        // if selected object is not a classshape, move on
-        if (classhape == undefined) {
-          return
-        }
-
-        classhape.IsSelected = true
-        classshapeService.updateClassshape(classhape).subscribe(
-          classhape => {
-            console.log("classhape updated")
-          }
-        )
-      }
-    )
-
     if (this.classdiagram == undefined) {
       return
     }
@@ -331,15 +219,17 @@ export class ClassDiagramComponent implements OnInit, OnDestroy {
       this.paper.setInteractivity(true)
     } else {
       this.paper.setInteractivity(false)
+
+      // when a user selects a shape, we would like the backend to know
+      // for example, it might display in another component the list
+      // of instances of the struct pointed
+      this.paper.on('cell:pointerdown', informBackEndOfSelection)
     }
 
     // draw class shapes from the gong classshapes
     if (this.classdiagram?.Classshapes != undefined) {
       for (let classshape of this.classdiagram.Classshapes) {
         let umlClassShape = this.addClassshapeToGraph(classshape)
-
-        // add a backbone event handler to update the position
-        umlClassShape.on('change:position', this.onClassshapeMove)
       }
 
 
@@ -430,20 +320,9 @@ export class ClassDiagramComponent implements OnInit, OnDestroy {
               })
 
               // add a backbone event handler to update the position
-              link.on('change:vertices', this.onLinkMove)
+              link.on('change:vertices', onLinkMove)
 
               link.addTo(this.graph);
-
-              // later, we need to save the diagram
-              // 
-              // algo is 
-              // - for each cells of the diagram, 
-              //      get its id & position
-              //      find the original LinkDB and updates its position
-              //
-              // Because each cell has an unique id
-              // we create a map of cell id to LinkDB
-              this.Map_CellId_LinkDB.set(link.id.toString(), linkDB)
             }
           }
         }
@@ -456,7 +335,7 @@ export class ClassDiagramComponent implements OnInit, OnDestroy {
         let rectShape = this.addNoteToGraph(noteShape)
 
         // add a backbone event handler to update the position
-        rectShape.on('change:position', this.onNoteMove)
+        rectShape.on('change:position', onNoteMove)
 
 
         if (noteShape.NoteShapeLinks != undefined) {
@@ -499,48 +378,6 @@ export class ClassDiagramComponent implements OnInit, OnDestroy {
     }
   }
 
-  /**
-   * saving the classdiagram
-   * 
-   * the challenge is to update the positions of classshapes and vertices
-   */
 
-  pullGongdocAndDrawDiagram() {
-    this.gongdocFrontRepoService.pull().subscribe(
-      frontRepo => {
-        this.gongdocFrontRepo = frontRepo
-        // console.log("gongdoc front repo pull returned")
-
-        const id = +this.route.snapshot.paramMap.get('id')!
-        this.editable = false
-        this.classdiagram = frontRepo.Classdiagrams.get(id)!
-
-        this.drawClassdiagram();
-        this.paper!.setInteractivity(this.classdiagram.IsInDrawMode)
-      }
-    )
-  }
-
-  public toggle(event: MatSlideToggleChange) {
-    console.log('toggle', event.checked);
-
-    if (!event.checked) {
-      this.paper!.setInteractivity(false)
-      this.classdiagram.IsInDrawMode = false
-      this.ClassdiagramService.updateClassdiagram(this.classdiagram).subscribe(
-        classdiagram => {
-          console.log("classdiagram edition mode set to PROD")
-        }
-      )
-    } else {
-      this.paper!.setInteractivity(true)
-      this.classdiagram.IsInDrawMode = true
-      this.ClassdiagramService.updateClassdiagram(this.classdiagram).subscribe(
-        classdiagram => {
-          console.log("classdiagram edition mode set to DEV")
-        }
-      )
-    }
-  }
 }
 
