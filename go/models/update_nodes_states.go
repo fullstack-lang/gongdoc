@@ -18,6 +18,15 @@ func updateNodesStates(stage *StageStruct, nodesCb *NodeCB) {
 
 	nodesCb.idTree.UncheckAndDisable()
 
+	// compute wether one of the diagrams is in draw/edit mode
+	// if so, all diagram check need to be disabled
+	var inModificationMode bool
+	for _, classdiagramNode := range nodesCb.ClassdiagramsRootNode.Children {
+		if classdiagramNode.IsInDrawMode || classdiagramNode.IsInEditMode {
+			inModificationMode = true
+		}
+	}
+
 	// get the selected diagram and collect what are its referenced
 	// gongstructs
 	for _, classdiagramNode := range nodesCb.ClassdiagramsRootNode.Children {
@@ -26,6 +35,8 @@ func updateNodesStates(stage *StageStruct, nodesCb *NodeCB) {
 		classdiagramNode.HasDeleteButton = false
 		classdiagramNode.HasDrawButton = false
 		classdiagramNode.HasDrawOffButton = false
+
+		classdiagramNode.IsCheckboxDisabled = inModificationMode
 
 		if !classdiagramNode.IsChecked {
 			classdiagramNode.IsInEditMode = false

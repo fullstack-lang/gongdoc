@@ -92,14 +92,14 @@ func (nodesCb *NodeCB) OnAfterCreate(
 				}
 			}
 			if hasNameCollision {
-				newDiagramNode.Name = initialName + fmt.Sprintf("-%d", index)
+				newDiagramNode.Name = initialName + fmt.Sprintf("_%d", index)
 			}
 		}
 
 		classdiagram := (&Classdiagram{Name: newDiagramNode.Name}).Stage()
 		nodesCb.diagramPackage.Classdiagrams = append(nodesCb.diagramPackage.Classdiagrams, classdiagram)
 		newDiagramNode.Classdiagram = classdiagram
-		newDiagramNode.IsInEditMode = true
+		newDiagramNode.IsInEditMode = false
 		newDiagramNode.IsInDrawMode = false
 		newDiagramNode.HasEditButton = false
 
