@@ -15,6 +15,7 @@ import { NONE_TYPE } from '@angular/compiler';
 import { onClassshapeMove, onLinkMove, onNoteMove } from './on-move-functions'
 import { shapeIdentifierToShapeName } from './shape-identifier-to-shape-name';
 import { informBackEndOfSelection } from './on-pointer-down-function';
+import { ClassdiagramDB } from 'gongdoc';
 
 @Component({
   selector: 'lib-class-diagram',
@@ -33,7 +34,6 @@ export class ClassDiagramComponent implements OnInit, OnDestroy {
    */
   checkGongdocCommitNbFromBackTimer: Observable<number> = timer(500, 500);
   lastCommitNbFromBack = -1
-  lastDiagramId = 0
   currTime: number = 0
 
   /**
@@ -54,10 +54,6 @@ export class ClassDiagramComponent implements OnInit, OnDestroy {
   // map for storing which gong struct have a classshape
   // it is important for drawing links between shapes
   public Map_GongStructName_JointjsUMLClassShape = new Map<string, joint.shapes.uml.Class>();
-
-  // idOfDrawnClassDiagram stores the id of the drawn classdiagram. Usefull for knowing if
-  // one has to redraw the diagram by comparaison with the route
-  public idOfDrawnClassDiagram: number = 0
 
   constructor(
     private route: ActivatedRoute,
@@ -102,22 +98,15 @@ export class ClassDiagramComponent implements OnInit, OnDestroy {
         this.gongdocCommitNbFromBackService_getCommitNbFromBack = this.gongdocCommitNbFromBackService.getCommitNbFromBack().subscribe(
           commitNbFromBack => {
 
-            const id = +this.route.snapshot.paramMap.get('id')!;
-
-            // console.log("last commit nb " + this.lastCommitNbFromBack + " new: " + commitNbFromBack)
-            // console.log("last diagram id " + this.lastDiagramId + " new: " + id)
-            // console.log("last drawn diagram id " + this.idOfDrawnClassDiagram + " new: " + id)
-
+            console.log("last commit nb " + this.lastCommitNbFromBack + " new: " + commitNbFromBack)
             // condition for refresh
-            if (this.lastCommitNbFromBack < commitNbFromBack || this.lastDiagramId != id || this.idOfDrawnClassDiagram != id) {
+            if (this.lastCommitNbFromBack < commitNbFromBack) {
 
               // console.log("last commit nb " + this.lastCommitNbFromBack + " new: " + commitNbFromBack)
               // console.log("last diagram id " + this.lastDiagramId + " new: " + id)
               // console.log("last drawn diagram id " + this.idOfDrawnClassDiagram + " new: " + id)
               this.pullGongdocAndDrawDiagram()
               this.lastCommitNbFromBack = commitNbFromBack
-              this.lastDiagramId = id
-              this.idOfDrawnClassDiagram = id
             }
           }
         )
@@ -132,11 +121,16 @@ export class ClassDiagramComponent implements OnInit, OnDestroy {
     this.gongdocFrontRepoService.pull().subscribe(
       frontRepo => {
         this.gongdocFrontRepo = frontRepo
-        // console.log("gongdoc front repo pull returned")
+        console.log("gongdoc front repo pull returned")
 
-        const id = +this.route.snapshot.paramMap.get('id')!
-        this.classdiagram = frontRepo.Classdiagrams.get(id)!
+        // find the selected classdiagram
+        for (let packageDiagram of frontRepo.DiagramPackages_array) {
+          if (packageDiagram.SelectedClassdiagram != undefined) {
+            this.classdiagram = packageDiagram.SelectedClassdiagram
+          }
+        }
 
+        console.log("drawing classdiagram" + this.classdiagram.Name)
         this.drawClassdiagram();
         this.paper!.setInteractivity(this.classdiagram.IsInDrawMode)
       }
@@ -184,8 +178,6 @@ export class ClassDiagramComponent implements OnInit, OnDestroy {
     if (this.classdiagram != undefined) {
       if (this.classdiagram.Classshapes != undefined) {
         diagramWidth = (this.classdiagram.Classshapes.length + 2) * 300
-
-        this.idOfDrawnClassDiagram = this.classdiagram.ID
       }
     }
 
