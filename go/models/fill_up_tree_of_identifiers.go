@@ -5,7 +5,7 @@ import gong_models "github.com/fullstack-lang/gong/go/models"
 func FillUpTreeOfIdentifiers(pkgelt *DiagramPackage, nodesCb *NodeCB) {
 
 	// set up the gongTree to display elements
-	gongTree := (&Tree{Name: "gong", Type: TREE_OF_IDENTIFIERS}).Stage()
+	gongTree := (&Tree{Name: "gong"}).Stage()
 	nodesCb.idTree = gongTree
 
 	nodesCb.map_Identifier_Node = make(map[string]*Node)

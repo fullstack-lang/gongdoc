@@ -2481,7 +2481,7 @@ func GetFields[Type Gongstruct]() (res []string) {
 	case Position:
 		res = []string{"X", "Y", "Name"}
 	case Tree:
-		res = []string{"Name", "Type", "RootNodes"}
+		res = []string{"Name", "RootNodes"}
 	case UmlState:
 		res = []string{"Name", "X", "Y"}
 	case Umlsc:
@@ -2734,9 +2734,6 @@ func GetFieldStringValue[Type Gongstruct](instance Type, fieldName string) (res 
 		// string value of fields
 		case "Name":
 			res = any(instance).(Tree).Name
-		case "Type":
-			enum := any(instance).(Tree).Type
-			res = enum.ToCodeString()
 		case "RootNodes":
 			for idx, __instance__ := range any(instance).(Tree).RootNodes {
 				if idx > 0 {

@@ -3,7 +3,7 @@ package models
 func FillUpDiagramNodeTree(diagramPackage *DiagramPackage, onNodeCallbackStruct *NodeCB) {
 
 	// generate tree of diagrams
-	gongdocTree := (&Tree{Name: "gongdoc", Type: TREE_OF_DIAGRAMS}).Stage()
+	gongdocTree := (&Tree{Name: "gongdoc"}).Stage()
 
 	// add the root of class diagrams
 	classdiagramsRootNode := (&Node{Name: "class diagrams", Type: ROOT_OF_CLASS_DIAGRAMS}).Stage()

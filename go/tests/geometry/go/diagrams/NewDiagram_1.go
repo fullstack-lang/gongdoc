@@ -230,8 +230,8 @@ In this case [Line], [Point] and [Line.Start]
 	__Position__000000_Pos_NewDiagram_1_Line.Name = `Pos-NewDiagram_1-Line`
 
 	// Position values setup
-	__Position__000001_Pos_NewDiagram_1_Point.X = 76.000000
-	__Position__000001_Pos_NewDiagram_1_Point.Y = 53.000000
+	__Position__000001_Pos_NewDiagram_1_Point.X = 60.000000
+	__Position__000001_Pos_NewDiagram_1_Point.Y = 160.000000
 	__Position__000001_Pos_NewDiagram_1_Point.Name = `Pos-NewDiagram_1-Point`
 
 	// Vertice values setup

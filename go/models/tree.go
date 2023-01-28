@@ -4,8 +4,6 @@ package models
 type Tree struct {
 	Name string
 
-	Type TreeType
-
 	RootNodes []*Node
 }
 

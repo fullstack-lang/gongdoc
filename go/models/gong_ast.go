@@ -1378,13 +1378,6 @@ func UnmarshallGongstructStaging(cmap *ast.CommentMap, assignStmt *ast.AssignStm
 				case "Tree":
 					switch fieldName {
 					// insertion point for enum assign code
-					case "Type":
-						var val TreeType
-						err := (&val).FromCodeString(enumValue)
-						if err != nil {
-							log.Fatalln(err)
-						}
-						__gong__map_Tree[identifier].Type = TreeType(val)
 					}
 				case "UmlState":
 					switch fieldName {
