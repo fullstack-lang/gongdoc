@@ -57,7 +57,12 @@ func FillUpTreeOfIdentifiers(pkgelt *DiagramPackage, nodeCb *NodeCB) {
 		node.HasCheckboxButton = true
 		node.IsExpanded = false
 		node.Type = GONG_ENUM
-		node.GongEnum = gongEnum
+
+		gongEnumImpl := new(GongEnumImpl)
+		gongEnumImpl.node = node
+		gongEnumImpl.gongEnum = gongEnum
+		gongEnumImpl.nodeCb = nodeCb
+		node.impl = gongEnumImpl
 
 		// append to tree
 		gongenumRootNode.Children = append(gongenumRootNode.Children, node)

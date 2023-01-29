@@ -55,6 +55,8 @@ func (nodesCb *NodeCB) OnAfterUpdate(
 		impl.OnAfterUpdate(stage, stagedNode, frontNode)
 	case *FieldImpl:
 		impl.OnAfterUpdate(stage, stagedNode, frontNode)
+	case *GongEnumImpl:
+		impl.OnAfterUpdate(stage, stagedNode, frontNode)
 	}
 
 	switch stagedNode.Type {
@@ -62,8 +64,6 @@ func (nodesCb *NodeCB) OnAfterUpdate(
 		nodesCb.OnAfterUpdateNote(stage, stagedNode, frontNode)
 	case GONG_NOTE_LINK:
 		nodesCb.OnAfterUpdateNoteLink(stage, stagedNode, frontNode)
-	case GONG_ENUM:
-		nodesCb.OnAfterUpdateEnum(stage, stagedNode, frontNode)
 	case GONG_ENUM_VALUE:
 		nodesCb.OnAfterUpdateEnumValue(stage, stagedNode, frontNode)
 	}

@@ -1,8 +1,17 @@
 package models
 
-func (nodesCb *NodeCB) OnAfterUpdateEnum(
+import gong_models "github.com/fullstack-lang/gong/go/models"
+
+type GongEnumImpl struct {
+	gongEnum *gong_models.GongEnum
+	node     *Node
+	nodeCb   *NodeCB
+}
+
+func (gongEnumImpl *GongEnumImpl) OnAfterUpdate(
 	stage *StageStruct,
 	stagedNode, frontNode *Node) {
+
 	// if node is unchecked
 	if stagedNode.IsChecked && !frontNode.IsChecked {
 
@@ -10,7 +19,7 @@ func (nodesCb *NodeCB) OnAfterUpdateEnum(
 		stage.Checkout()
 
 		// remove the classshape from the selected diagram
-		classDiagram := nodesCb.GetSelectedClassdiagram()
+		classDiagram := gongEnumImpl.nodeCb.GetSelectedClassdiagram()
 
 		// get the referenced gongstructs
 		for _, classshape := range classDiagram.Classshapes {
@@ -19,7 +28,7 @@ func (nodesCb *NodeCB) OnAfterUpdateEnum(
 			}
 
 		}
-		updateNodesStates(stage, nodesCb)
+		updateNodesStates(stage, gongEnumImpl.nodeCb)
 	}
 
 	// if node is checked, add classshape
@@ -28,8 +37,14 @@ func (nodesCb *NodeCB) OnAfterUpdateEnum(
 		// get the latest version of the diagram before modifying it
 		stage.Checkout()
 
-		classDiagram := nodesCb.GetSelectedClassdiagram()
-		classDiagram.AddClassshape(nodesCb, frontNode.Name, REFERENCE_GONG_ENUM)
-		updateNodesStates(stage, nodesCb)
+		classDiagram := gongEnumImpl.nodeCb.GetSelectedClassdiagram()
+		classDiagram.AddClassshape(gongEnumImpl.nodeCb, frontNode.Name, REFERENCE_GONG_ENUM)
+		updateNodesStates(stage, gongEnumImpl.nodeCb)
 	}
+
+}
+
+func (gongEnumImpl *GongEnumImpl) OnAfterDelete(
+	stage *StageStruct,
+	stagedNode, frontNode *Node) {
 }

@@ -9,7 +9,6 @@ type Node struct {
 	Type GongdocNodeType
 
 	// pointer to the related instance (depends on type)
-	GongEnum *gong_models.GongEnum
 	GongNote *gong_models.GongNote
 
 	// impl is the pointer to the implementation of the node in the models of interest

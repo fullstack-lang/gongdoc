@@ -14,7 +14,9 @@ func (nodesCb *NodeCB) OnAfterUpdateEnumValue(
 	// the node is field, one needs to find the gongstruct that contains it
 	// get the parent node
 	parentNode := nodesCb.map_Children_Parent[stagedNode]
-	gongEnum := parentNode.GongEnum
+
+	gongEnumImpl := parentNode.impl.(*GongEnumImpl)
+	gongEnum := gongEnumImpl.gongEnum
 
 	// find the classhape in the classdiagram
 	foundClassshape := false
