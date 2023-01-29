@@ -1,19 +1,24 @@
 package models
 
-import (
-	gong_models "github.com/fullstack-lang/gong/go/models"
-)
+import gong_models "github.com/fullstack-lang/gong/go/models"
 
-func (nodesCb *NodeCB) OnAfterUpdateEnumValue(
+type GongEnumValueImpl struct {
+	gongEnumValue *gong_models.GongEnumValue
+	node          *Node
+	nodeCb        *NodeCB
+}
+
+func (enumValueImpl *GongEnumValueImpl) OnAfterUpdate(
 	stage *StageStruct,
 	stagedNode, frontNode *Node) {
+
 	// find classdiagram
-	classdiagram := nodesCb.GetSelectedClassdiagram()
+	classdiagram := enumValueImpl.nodeCb.GetSelectedClassdiagram()
 
 	// find the parent node to find the gongstruct to find the classshape
 	// the node is field, one needs to find the gongstruct that contains it
 	// get the parent node
-	parentNode := nodesCb.map_Children_Parent[stagedNode]
+	parentNode := enumValueImpl.nodeCb.map_Children_Parent[stagedNode]
 
 	gongEnumImpl := parentNode.impl.(*GongEnumImpl)
 	gongEnum := gongEnumImpl.gongEnum
@@ -100,4 +105,9 @@ func (nodesCb *NodeCB) OnAfterUpdateEnumValue(
 
 		Stage.Commit()
 	}
+}
+
+func (EnumValueImpl *GongEnumValueImpl) OnAfterDelete(
+	stage *StageStruct,
+	stagedNode, frontNode *Node) {
 }
