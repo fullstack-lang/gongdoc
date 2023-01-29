@@ -1,6 +1,6 @@
 package models
 
-func FillUpDiagramNodeTree(diagramPackage *DiagramPackage, onNodeCallbackStruct *NodeCB) {
+func FillUpDiagramNodeTree(diagramPackage *DiagramPackage, nodeCb *NodeCB) {
 
 	// generate tree of diagrams
 	gongdocTree := (&Tree{Name: "gongdoc"}).Stage()
@@ -23,5 +23,5 @@ func FillUpDiagramNodeTree(diagramPackage *DiagramPackage, onNodeCallbackStruct 
 	}
 
 	// set callbacks on node updates
-	onNodeCallbackStruct.ClassdiagramsRootNode = classdiagramsRootNode
+	nodeCb.diagramPackageNode = classdiagramsRootNode
 }

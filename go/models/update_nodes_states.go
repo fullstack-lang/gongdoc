@@ -16,12 +16,12 @@ import (
 // For the identifiers nodes
 func updateNodesStates(stage *StageStruct, nodesCb *NodeCB) {
 
-	nodesCb.idTree.UncheckAndDisable()
+	nodesCb.treeOfGongObjects.UncheckAndDisable()
 
 	// compute wether one of the diagrams is in draw/edit mode
 	// if so, all diagram check need to be disabled
 	var inModificationMode bool
-	for _, classdiagramNode := range nodesCb.ClassdiagramsRootNode.Children {
+	for _, classdiagramNode := range nodesCb.diagramPackageNode.Children {
 		if classdiagramNode.IsInDrawMode || classdiagramNode.IsInEditMode {
 			inModificationMode = true
 		}
@@ -29,7 +29,7 @@ func updateNodesStates(stage *StageStruct, nodesCb *NodeCB) {
 
 	// get the selected diagram and collect what are its referenced
 	// gongstructs
-	for _, classdiagramNode := range nodesCb.ClassdiagramsRootNode.Children {
+	for _, classdiagramNode := range nodesCb.diagramPackageNode.Children {
 
 		classdiagramNode.HasEditButton = false
 		classdiagramNode.HasDeleteButton = false
@@ -53,7 +53,7 @@ func updateNodesStates(stage *StageStruct, nodesCb *NodeCB) {
 	}
 
 	// get the diagram
-	classdiagram := nodesCb.selectedClassdiagram
+	classdiagram := nodesCb.diagramPackage.SelectedClassdiagram
 
 	if classdiagram == nil {
 		Stage.Commit()

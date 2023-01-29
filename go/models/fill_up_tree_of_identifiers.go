@@ -6,7 +6,7 @@ func FillUpTreeOfIdentifiers(pkgelt *DiagramPackage, nodesCb *NodeCB) {
 
 	// set up the gongTree to display elements
 	gongTree := (&Tree{Name: "gong"}).Stage()
-	nodesCb.idTree = gongTree
+	nodesCb.treeOfGongObjects = gongTree
 
 	nodesCb.map_Identifier_Node = make(map[string]*Node)
 

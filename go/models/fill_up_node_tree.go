@@ -8,18 +8,18 @@ func FillUpNodeTree(diagramPackage *DiagramPackage) {
 
 	// a node tree is agnostic of the node types it manages
 	// therefore, a callback functiion is necessary
-	onNodeCallbackStruct := new(NodeCB)
-	onNodeCallbackStruct.diagramPackage = diagramPackage
+	nodeCb := new(NodeCB)
+	nodeCb.diagramPackage = diagramPackage
 
-	FillUpDiagramNodeTree(diagramPackage, onNodeCallbackStruct)
-	FillUpTreeOfIdentifiers(diagramPackage, onNodeCallbackStruct)
+	FillUpDiagramNodeTree(diagramPackage, nodeCb)
+	FillUpTreeOfIdentifiers(diagramPackage, nodeCb)
 
-	updateNodesStates(&Stage, onNodeCallbackStruct)
+	updateNodesStates(&Stage, nodeCb)
 
 	// set callbacks on node updates
-	Stage.OnAfterNodeUpdateCallback = onNodeCallbackStruct
-	Stage.OnAfterNodeCreateCallback = onNodeCallbackStruct
-	Stage.OnAfterNodeDeleteCallback = onNodeCallbackStruct
+	Stage.OnAfterNodeUpdateCallback = nodeCb
+	Stage.OnAfterNodeCreateCallback = nodeCb
+	Stage.OnAfterNodeDeleteCallback = nodeCb
 
 	log.Printf("Parse found %d diagrams\n", len(diagramPackage.Classdiagrams))
 }

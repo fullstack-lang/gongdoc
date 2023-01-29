@@ -20,12 +20,11 @@ func (nodesCb *NodeCB) OnAfterUpdateDiagram(
 		// The front will detect that the backend has been commited
 		// It will refresh and fetch the node with checked value
 		stagedNode.IsChecked = true
-		nodesCb.selectedClassdiagram = stagedNode.Classdiagram
-		nodesCb.diagramPackage.SelectedClassdiagram = nodesCb.selectedClassdiagram
+		nodesCb.diagramPackage.SelectedClassdiagram = stagedNode.Classdiagram
 
 		// uncheck all other diagram nodes
 		diagramNodes := append(
-			nodesCb.ClassdiagramsRootNode.Children)
+			nodesCb.diagramPackageNode.Children)
 
 		for _, otherDiagramNode := range diagramNodes {
 			if otherDiagramNode == stagedNode {

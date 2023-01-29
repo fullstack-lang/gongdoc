@@ -7,27 +7,35 @@ import (
 	"path/filepath"
 )
 
+// NodeCB is the singloton callback implementation of CUD operations on node
 type NodeCB struct {
-	ClassdiagramsRootNode *Node
 
-	idTree *Tree
+	// diagramPackageNode is used for iterating on classdiagram nodes
+	// and for getting the selected diagram
+	diagramPackageNode *Node
+	diagramPackage     *DiagramPackage
 
-	selectedClassdiagram *Classdiagram
+	// treeOfGongObjects is the root of all nodes related to gong objects
+	// it is necessary for performing operation on all elements of the tree
+	treeOfGongObjects *Tree
 
-	// map to navigate from a children node to its parent
+	// map_Children_Parent is a map to navigate from a children node to its parent node
+	// it is set up once at the init phase
 	map_Children_Parent map[*Node]*Node
 
-	// map to navigate from identifiers in the package
+	// map_Identifier_Node is a map to navigate from identifiers in the package
 	// to nodes, and backforth
 	// identifiers are unique in a package (that's the point of identifiers)
+	// TO BE CHANGED, both a NoteLink and a GongField can have the same identifier
+	// New form, a impl field to navigate from the node to the shape
+	// a node field to navigate from a shape to the corresponding node
 	map_Identifier_Node map[string]*Node
-	diagramPackage      *DiagramPackage
 }
 
+// GetSelectedClassdiagram
 func (nodesCb *NodeCB) GetSelectedClassdiagram() (classdiagram *Classdiagram) {
 
-	classdiagram = nodesCb.selectedClassdiagram
-
+	classdiagram = nodesCb.diagramPackage.SelectedClassdiagram
 	return
 }
 
@@ -65,6 +73,7 @@ func (nodesCb *NodeCB) OnAfterUpdate(
 	}
 }
 
+// OnAfterCreate is another callback
 func (nodesCb *NodeCB) OnAfterCreate(
 	stage *StageStruct,
 	node *Node) {
@@ -99,8 +108,8 @@ func (nodesCb *NodeCB) OnAfterCreate(
 	node.IsInDrawMode = false
 	node.HasEditButton = false
 
-	nodesCb.ClassdiagramsRootNode.Children =
-		append(nodesCb.ClassdiagramsRootNode.Children, node)
+	nodesCb.diagramPackageNode.Children =
+		append(nodesCb.diagramPackageNode.Children, node)
 
 	updateNodesStates(stage, nodesCb)
 
