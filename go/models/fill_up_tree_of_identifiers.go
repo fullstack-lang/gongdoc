@@ -68,20 +68,20 @@ func FillUpTreeOfIdentifiers(pkgelt *DiagramPackage, nodeCb *NodeCB) {
 		gongenumRootNode.Children = append(gongenumRootNode.Children, node)
 		nodeCb.map_Identifier_Node[ShapenameToIdentifier(gongEnum.Name)] = node
 
-		for _, value := range gongEnum.GongEnumValues {
-			node2 := (&Node{Name: value.GetName()}).Stage()
-			node2.Type = GONG_ENUM_VALUE
-			node2.HasCheckboxButton = true
+		for _, gongEnumValue := range gongEnum.GongEnumValues {
+			nodeGongEnumValue := (&Node{Name: gongEnumValue.GetName()}).Stage()
+			nodeGongEnumValue.Type = GONG_ENUM_VALUE
+			nodeGongEnumValue.HasCheckboxButton = true
 
 			gongEnumValueImpl := new(GongEnumValueImpl)
 			gongEnumValueImpl.node = node
-			gongEnumValueImpl.gongEnumValue = value
+			gongEnumValueImpl.gongEnumValue = gongEnumValue
 			gongEnumValueImpl.nodeCb = nodeCb
-			node.impl = gongEnumValueImpl
+			nodeGongEnumValue.impl = gongEnumValueImpl
 
 			// append to tree
-			node.Children = append(node.Children, node2)
-			nodeCb.map_Identifier_Node[ShapeAndFieldnameToFieldIdentifier(gongEnum.Name, value.GetName())] = node2
+			node.Children = append(node.Children, nodeGongEnumValue)
+			nodeCb.map_Identifier_Node[ShapeAndFieldnameToFieldIdentifier(gongEnum.Name, gongEnumValue.GetName())] = nodeGongEnumValue
 		}
 	}
 
