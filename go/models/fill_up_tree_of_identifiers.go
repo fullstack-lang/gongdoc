@@ -21,11 +21,11 @@ func FillUpTreeOfIdentifiers(pkgelt *DiagramPackage, nodeCb *NodeCB) {
 		nodeClassshape.IsExpanded = false
 
 		// set up the back pointer from the shape to the node
-		classdiagramImpl := new(GongStructImpl)
-		classdiagramImpl.node = nodeClassshape
-		classdiagramImpl.gongStruct = gongStruct
-		classdiagramImpl.nodeCb = nodeCb
-		nodeClassshape.impl = classdiagramImpl
+		gongStructImpl := new(GongStructImpl)
+		gongStructImpl.node = nodeClassshape
+		gongStructImpl.gongStruct = gongStruct
+		gongStructImpl.nodeCb = nodeCb
+		nodeClassshape.impl = gongStructImpl
 
 		// append to the tree
 		gongstructRootNode.Children = append(gongstructRootNode.Children, nodeClassshape)
@@ -34,8 +34,13 @@ func FillUpTreeOfIdentifiers(pkgelt *DiagramPackage, nodeCb *NodeCB) {
 		for _, field := range gongStruct.Fields {
 			node2 := (&Node{Name: field.GetName()}).Stage()
 			node2.Type = GONG_STRUCT_FIELD
-			node2.Gongfield = field
 			node2.HasCheckboxButton = true
+
+			fieldImpl := new(FieldImpl)
+			fieldImpl.node = nodeClassshape
+			fieldImpl.field = field
+			fieldImpl.nodeCb = nodeCb
+			node2.impl = fieldImpl
 
 			// append to tree
 			nodeClassshape.Children = append(nodeClassshape.Children, node2)

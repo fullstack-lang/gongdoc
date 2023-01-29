@@ -53,11 +53,11 @@ func (nodesCb *NodeCB) OnAfterUpdate(
 		impl.OnAfterUpdate(stage, stagedNode, frontNode)
 	case *GongStructImpl:
 		impl.OnAfterUpdate(stage, stagedNode, frontNode)
+	case *FieldImpl:
+		impl.OnAfterUpdate(stage, stagedNode, frontNode)
 	}
 
 	switch stagedNode.Type {
-	case GONG_STRUCT_FIELD:
-		nodesCb.OnAfterUpdateStructField(stage, stagedNode, frontNode)
 	case GONG_NOTE:
 		nodesCb.OnAfterUpdateNote(stage, stagedNode, frontNode)
 	case GONG_NOTE_LINK:
