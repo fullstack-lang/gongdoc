@@ -53,7 +53,7 @@ func (nodesCb *NodeCB) OnAfterUpdateStructField(
 			var link *Link
 
 			for _, _field := range classshape.Links {
-				if IdentifierToFieldName(IdentifierToFieldName(_field.Identifier)) == stagedNode.Name {
+				if IdentifierToFieldName(_field.Identifier) == stagedNode.Name {
 					link = _field
 				}
 			}

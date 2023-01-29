@@ -3,31 +3,37 @@ package models
 import (
 	"fmt"
 	"log"
-	"os"
-	"path/filepath"
 )
 
+// NodeCB is the singloton callback implementation of CUD operations on node
 type NodeCB struct {
-	ClassdiagramsRootNode *Node
 
-	idTree *Tree
+	// diagramPackageNode is used for iterating on classdiagram nodes
+	// and for getting the selected diagram
+	diagramPackageNode *Node
+	diagramPackage     *DiagramPackage
 
-	selectedClassdiagram *Classdiagram
+	// treeOfGongObjects is the root of all nodes related to gong objects
+	// it is necessary for performing operation on all elements of the tree
+	treeOfGongObjects *Tree
 
-	// map to navigate from a children node to its parent
+	// map_Children_Parent is a map to navigate from a children node to its parent node
+	// it is set up once at the init phase
 	map_Children_Parent map[*Node]*Node
 
-	// map to navigate from identifiers in the package
+	// map_Identifier_Node is a map to navigate from identifiers in the package
 	// to nodes, and backforth
 	// identifiers are unique in a package (that's the point of identifiers)
+	// TO BE CHANGED, both a NoteLink and a GongField can have the same identifier
+	// New form, a impl field to navigate from the node to the shape
+	// a node field to navigate from a shape to the corresponding node
 	map_Identifier_Node map[string]*Node
-	diagramPackage      *DiagramPackage
 }
 
+// GetSelectedClassdiagram
 func (nodesCb *NodeCB) GetSelectedClassdiagram() (classdiagram *Classdiagram) {
 
-	classdiagram = nodesCb.selectedClassdiagram
-
+	classdiagram = nodesCb.diagramPackage.SelectedClassdiagram
 	return
 }
 
@@ -42,9 +48,12 @@ func (nodesCb *NodeCB) OnAfterUpdate(
 	stage *StageStruct,
 	stagedNode, frontNode *Node) {
 
+	switch impl := stagedNode.impl.(type) {
+	case *ClassdiagramImpl:
+		impl.OnAfterUpdate(stage, stagedNode, frontNode)
+	}
+
 	switch stagedNode.Type {
-	case CLASS_DIAGRAM, STATE_DIAGRAM:
-		nodesCb.OnAfterUpdateDiagram(stage, stagedNode, frontNode)
 	case GONG_STRUCT:
 		nodesCb.OnAfterUpdateStruct(stage, stagedNode, frontNode)
 	case GONG_STRUCT_FIELD:
@@ -65,47 +74,52 @@ func (nodesCb *NodeCB) OnAfterUpdate(
 	}
 }
 
-func (nodesCb *NodeCB) OnAfterCreate(
+// OnAfterCreate is another callback
+func (nodeCb *NodeCB) OnAfterCreate(
 	stage *StageStruct,
-	newDiagramNode *Node) {
+	node *Node) {
 
-	log.Println("Node " + newDiagramNode.Name + " is created")
+	log.Println("Node " + node.Name + " is created")
 
-	switch newDiagramNode.Type {
-	case CLASS_DIAGRAM, STATE_DIAGRAM:
-		newDiagramNode.HasCheckboxButton = true
+	node.HasCheckboxButton = true
 
-		// check unicity of name, otherwise, add an index
-		var hasNameCollision bool
-		initialName := newDiagramNode.Name
-		index := 0
-		// loop until the name of the new diagram is not in collision with an existing
-		// diagram name
-		for index == 0 || hasNameCollision {
-			index++
-			hasNameCollision = false
-			for classdiagram := range *GetGongstructInstancesSet[Classdiagram]() {
-				if classdiagram.Name == newDiagramNode.Name {
-					hasNameCollision = true
-				}
-			}
-			if hasNameCollision {
-				newDiagramNode.Name = initialName + fmt.Sprintf("_%d", index)
+	// check unicity of name, otherwise, add an index
+	var hasNameCollision bool
+	initialName := node.Name
+	index := 0
+	// loop until the name of the new diagram is not in collision with an existing
+	// diagram name
+	for index == 0 || hasNameCollision {
+		index++
+		hasNameCollision = false
+		for classdiagram := range *GetGongstructInstancesSet[Classdiagram]() {
+			if classdiagram.Name == node.Name {
+				hasNameCollision = true
 			}
 		}
-
-		classdiagram := (&Classdiagram{Name: newDiagramNode.Name}).Stage()
-		nodesCb.diagramPackage.Classdiagrams = append(nodesCb.diagramPackage.Classdiagrams, classdiagram)
-		newDiagramNode.Classdiagram = classdiagram
-		newDiagramNode.IsInEditMode = false
-		newDiagramNode.IsInDrawMode = false
-		newDiagramNode.HasEditButton = false
-
-		nodesCb.ClassdiagramsRootNode.Children =
-			append(nodesCb.ClassdiagramsRootNode.Children, newDiagramNode)
-
-		updateNodesStates(stage, nodesCb)
+		if hasNameCollision {
+			node.Name = initialName + fmt.Sprintf("_%d", index)
+		}
 	}
+
+	classdiagram := (&Classdiagram{Name: node.Name}).Stage()
+	nodeCb.diagramPackage.Classdiagrams = append(nodeCb.diagramPackage.Classdiagrams, classdiagram)
+	node.IsInEditMode = false
+	node.IsInDrawMode = false
+	node.HasEditButton = false
+
+	nodeCb.diagramPackageNode.Children =
+		append(nodeCb.diagramPackageNode.Children, node)
+
+	// set up the back pointer from the shape to the node
+	classdiagramImpl := new(ClassdiagramImpl)
+	classdiagramImpl.node = node
+	classdiagramImpl.classdiagram = classdiagram
+	classdiagramImpl.nodeCb = nodeCb
+	node.impl = classdiagramImpl
+
+	updateNodesStates(stage, nodeCb)
+
 }
 
 // OnAfterDelete is called after a node is deleted
@@ -115,31 +129,8 @@ func (nodesCb *NodeCB) OnAfterDelete(
 	stage *StageStruct,
 	stagedNode, frontNode *Node) {
 
-	switch stagedNode.Type {
-	case CLASS_DIAGRAM, STATE_DIAGRAM:
-		// checkout the stage, it shall remove the link between
-		// the parent node and the staged node because 0..1->0..N association
-		// is stored in the staged node as a reverse pointer
-		stage.Checkout()
-	}
-	switch stagedNode.Type {
-	case CLASS_DIAGRAM:
-		// remove the classdiagram node from the pkg element node
-		nodesCb.diagramPackage.Classdiagrams = remove(nodesCb.diagramPackage.Classdiagrams, stagedNode.Classdiagram)
-		UnstageBranch(stage, stagedNode.Classdiagram)
-
-		// remove the actual classdiagram file if it exsits
-		classdiagramFilePath := filepath.Join(nodesCb.diagramPackage.Path, "../diagrams", stagedNode.Classdiagram.Name) + ".go"
-		if _, err := os.Stat(classdiagramFilePath); err == nil {
-			if err := os.Remove(classdiagramFilePath); err != nil {
-				log.Println("Error while deleting file " + classdiagramFilePath + " : " + err.Error())
-			}
-		}
-	}
-	switch stagedNode.Type {
-	case CLASS_DIAGRAM, STATE_DIAGRAM:
-
-		// commit will clean up the stage associations
-		updateNodesStates(stage, nodesCb)
+	switch impl := stagedNode.impl.(type) {
+	case *ClassdiagramImpl:
+		impl.OnAfterDelete(stage, stagedNode, frontNode)
 	}
 }

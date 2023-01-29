@@ -818,13 +818,6 @@ export class FrontRepoService {
             nodes.forEach(
               node => {
                 // insertion point sub sub template for ONE-/ZERO-ONE associations pointers redeeming
-                // insertion point for pointer field Classdiagram redeeming
-                {
-                  let _classdiagram = FrontRepoSingloton.Classdiagrams.get(node.ClassdiagramID.Int64)
-                  if (_classdiagram) {
-                    node.Classdiagram = _classdiagram
-                  }
-                }
 
                 // insertion point for redeeming ONE-MANY associations
                 // insertion point for slice of pointer field Node.Children redeeming
@@ -1341,13 +1334,6 @@ export class FrontRepoService {
                 FrontRepoSingloton.Nodes_batch.set(node.ID, node)
 
                 // insertion point for redeeming ONE/ZERO-ONE associations
-                // insertion point for pointer field Classdiagram redeeming
-                {
-                  let _classdiagram = FrontRepoSingloton.Classdiagrams.get(node.ClassdiagramID.Int64)
-                  if (_classdiagram) {
-                    node.Classdiagram = _classdiagram
-                  }
-                }
 
                 // insertion point for redeeming ONE-MANY associations
                 // insertion point for slice of pointer field Node.Children redeeming

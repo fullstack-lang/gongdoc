@@ -304,9 +304,6 @@ func (stage *StageStruct) StageBranchNode(node *Node) {
 	node.Stage()
 
 	//insertion point for the staging of instances referenced by pointers
-	if node.Classdiagram != nil {
-		StageBranch(stage, node.Classdiagram)
-	}
 
 	//insertion point for the staging of instances referenced by slice of pointers
 	for _, _node := range node.Children {
@@ -602,9 +599,6 @@ func (stage *StageStruct) UnstageBranchNode(node *Node) {
 	node.Unstage()
 
 	//insertion point for the staging of instances referenced by pointers
-	if node.Classdiagram != nil {
-		UnstageBranch(stage, node.Classdiagram)
-	}
 
 	//insertion point for the staging of instances referenced by slice of pointers
 	for _, _node := range node.Children {

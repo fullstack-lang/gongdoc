@@ -983,14 +983,6 @@ func (stage *StageStruct) Marshall(file *os.File, modelsPackageName, packageName
 		map_Node_Identifiers[node] = id
 
 		// Initialisation of values
-		if node.Classdiagram != nil {
-			setPointerField = PointerFieldInitStatement
-			setPointerField = strings.ReplaceAll(setPointerField, "{{Identifier}}", id)
-			setPointerField = strings.ReplaceAll(setPointerField, "{{GeneratedFieldName}}", "Classdiagram")
-			setPointerField = strings.ReplaceAll(setPointerField, "{{GeneratedFieldNameValue}}", map_Classdiagram_Identifiers[node.Classdiagram])
-			pointersInitializesStatements += setPointerField
-		}
-
 		for _, _node := range node.Children {
 			setPointerField = SliceOfPointersFieldInitStatement
 			setPointerField = strings.ReplaceAll(setPointerField, "{{Identifier}}", id)
