@@ -21,9 +21,7 @@ type NodeCB struct {
 	// to nodes, and backforth
 	// identifiers are unique in a package (that's the point of identifiers)
 	map_Identifier_Node map[string]*Node
-	map_Node_Identifier map[*Node]string
-
-	diagramPackage *DiagramPackage
+	diagramPackage      *DiagramPackage
 }
 
 func (nodesCb *NodeCB) GetSelectedClassdiagram() (classdiagram *Classdiagram) {

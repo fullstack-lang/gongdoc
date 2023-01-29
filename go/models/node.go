@@ -11,9 +11,6 @@ type Node struct {
 	// pointer to the related instance (depends on type)
 	Classdiagram *Classdiagram
 
-	// the node behavioral interface
-	impl NodeImplInterface
-
 	Gongstruct *gong_models.GongStruct
 	Gongfield  gong_models.FieldInterface
 	GongEnum   *gong_models.GongEnum

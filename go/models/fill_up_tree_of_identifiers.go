@@ -9,7 +9,6 @@ func FillUpTreeOfIdentifiers(pkgelt *DiagramPackage, nodesCb *NodeCB) {
 	nodesCb.idTree = gongTree
 
 	nodesCb.map_Identifier_Node = make(map[string]*Node)
-	nodesCb.map_Node_Identifier = make(map[*Node]string)
 
 	gongstructRootNode := (&Node{Name: "gongstructs"}).Stage()
 	gongstructRootNode.IsExpanded = true
@@ -93,9 +92,4 @@ func FillUpTreeOfIdentifiers(pkgelt *DiagramPackage, nodesCb *NodeCB) {
 	// generate the map to navigate from children to parents
 	fieldName := GetAssociationName[Node]().Children[0].Name
 	nodesCb.map_Children_Parent = GetSliceOfPointersReverseMap[Node, Node](fieldName)
-
-	// create reverse map of identifiers nodes
-	for id, node := range nodesCb.map_Identifier_Node {
-		nodesCb.map_Node_Identifier[node] = id
-	}
 }
