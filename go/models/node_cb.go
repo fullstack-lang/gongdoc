@@ -48,25 +48,7 @@ func (nodesCb *NodeCB) OnAfterUpdate(
 	stage *StageStruct,
 	stagedNode, frontNode *Node) {
 
-	switch impl := stagedNode.impl.(type) {
-	case *ClassdiagramImpl:
-		impl.OnAfterUpdate(stage, stagedNode, frontNode)
-	case *GongStructImpl:
-		impl.OnAfterUpdate(stage, stagedNode, frontNode)
-	case *FieldImpl:
-		impl.OnAfterUpdate(stage, stagedNode, frontNode)
-	}
-
-	switch stagedNode.Type {
-	case GONG_NOTE:
-		nodesCb.OnAfterUpdateNote(stage, stagedNode, frontNode)
-	case GONG_NOTE_LINK:
-		nodesCb.OnAfterUpdateNoteLink(stage, stagedNode, frontNode)
-	case GONG_ENUM:
-		nodesCb.OnAfterUpdateEnum(stage, stagedNode, frontNode)
-	case GONG_ENUM_VALUE:
-		nodesCb.OnAfterUpdateEnumValue(stage, stagedNode, frontNode)
-	}
+	stagedNode.impl.OnAfterUpdate(stage, stagedNode, frontNode)
 
 	if stagedNode.IsExpanded != frontNode.IsExpanded {
 		// setting the value of the staged node	to the new value

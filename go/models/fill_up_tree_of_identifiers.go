@@ -57,20 +57,31 @@ func FillUpTreeOfIdentifiers(pkgelt *DiagramPackage, nodeCb *NodeCB) {
 		node.HasCheckboxButton = true
 		node.IsExpanded = false
 		node.Type = GONG_ENUM
-		node.GongEnum = gongEnum
+
+		gongEnumImpl := new(GongEnumImpl)
+		gongEnumImpl.node = node
+		gongEnumImpl.gongEnum = gongEnum
+		gongEnumImpl.nodeCb = nodeCb
+		node.impl = gongEnumImpl
 
 		// append to tree
 		gongenumRootNode.Children = append(gongenumRootNode.Children, node)
 		nodeCb.map_Identifier_Node[ShapenameToIdentifier(gongEnum.Name)] = node
 
-		for _, value := range gongEnum.GongEnumValues {
-			node2 := (&Node{Name: value.GetName()}).Stage()
-			node2.Type = GONG_ENUM_VALUE
-			node2.HasCheckboxButton = true
+		for _, gongEnumValue := range gongEnum.GongEnumValues {
+			nodeGongEnumValue := (&Node{Name: gongEnumValue.GetName()}).Stage()
+			nodeGongEnumValue.Type = GONG_ENUM_VALUE
+			nodeGongEnumValue.HasCheckboxButton = true
+
+			gongEnumValueImpl := new(GongEnumValueImpl)
+			gongEnumValueImpl.node = node
+			gongEnumValueImpl.gongEnumValue = gongEnumValue
+			gongEnumValueImpl.nodeCb = nodeCb
+			nodeGongEnumValue.impl = gongEnumValueImpl
 
 			// append to tree
-			node.Children = append(node.Children, node2)
-			nodeCb.map_Identifier_Node[ShapeAndFieldnameToFieldIdentifier(gongEnum.Name, value.GetName())] = node2
+			node.Children = append(node.Children, nodeGongEnumValue)
+			nodeCb.map_Identifier_Node[ShapeAndFieldnameToFieldIdentifier(gongEnum.Name, gongEnumValue.GetName())] = nodeGongEnumValue
 		}
 	}
 
@@ -81,22 +92,33 @@ func FillUpTreeOfIdentifiers(pkgelt *DiagramPackage, nodeCb *NodeCB) {
 
 		node := (&Node{Name: gongNote.Name}).Stage()
 		node.HasCheckboxButton = true
-		node.GongNote = gongNote
 		node.Type = GONG_NOTE
 		node.IsExpanded = true
+
+		gongNoteImpl := new(GongNoteImpl)
+		gongNoteImpl.node = node
+		gongNoteImpl.gongNote = gongNote
+		gongNoteImpl.nodeCb = nodeCb
+		node.impl = gongNoteImpl
 
 		// append to tree
 		gongNotesRootNode.Children = append(gongNotesRootNode.Children, node)
 		nodeCb.map_Identifier_Node[ShapenameToIdentifier(gongNote.Name)] = node
 
 		for _, gongLink := range gongNote.Links {
-			node2 := (&Node{Name: gongLink.Name}).Stage()
-			node2.HasCheckboxButton = true
-			node2.Type = GONG_NOTE_LINK
+			nodeGongLink := (&Node{Name: gongLink.Name}).Stage()
+			nodeGongLink.HasCheckboxButton = true
+			nodeGongLink.Type = GONG_NOTE_LINK
+
+			gongLinkImpl := new(GongLinkImpl)
+			gongLinkImpl.node = node
+			gongLinkImpl.gongLink = gongLink
+			gongLinkImpl.nodeCb = nodeCb
+			nodeGongLink.impl = gongLinkImpl
 
 			// append to tree
-			node.Children = append(node.Children, node2)
-			nodeCb.map_Identifier_Node[ShapeAndFieldnameToFieldIdentifier(gongNote.Name, gongLink.Name)] = node2
+			node.Children = append(node.Children, nodeGongLink)
+			nodeCb.map_Identifier_Node[ShapeAndFieldnameToFieldIdentifier(gongNote.Name, gongLink.Name)] = nodeGongLink
 		}
 	}
 

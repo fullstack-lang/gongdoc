@@ -6,10 +6,17 @@ import (
 	gong_models "github.com/fullstack-lang/gong/go/models"
 )
 
-func (nodesCb *NodeCB) OnAfterUpdateNote(
+type GongNoteImpl struct {
+	gongNote *gong_models.GongNote
+	node     *Node
+	nodeCb   *NodeCB
+}
+
+func (gongNoteImpl *GongNoteImpl) OnAfterUpdate(
 	stage *StageStruct,
 	stagedNode, frontNode *Node) {
-	classdiagram := nodesCb.GetSelectedClassdiagram()
+
+	classdiagram := gongNoteImpl.nodeCb.GetSelectedClassdiagram()
 
 	// adding a note shape
 	if !stagedNode.IsChecked && frontNode.IsChecked {
@@ -33,7 +40,7 @@ func (nodesCb *NodeCB) OnAfterUpdateNote(
 		noteShape.Heigth = 63
 
 		classdiagram.NoteShapes = append(classdiagram.NoteShapes, noteShape)
-		updateNodesStates(stage, nodesCb)
+		updateNodesStates(stage, gongNoteImpl.nodeCb)
 	}
 
 	// suppression a note
@@ -61,6 +68,12 @@ func (nodesCb *NodeCB) OnAfterUpdateNote(
 		}
 		classdiagram.NoteShapes = remove(classdiagram.NoteShapes, noteShape)
 		noteShape.Unstage()
-		updateNodesStates(stage, nodesCb)
+		updateNodesStates(stage, gongNoteImpl.nodeCb)
 	}
+
+}
+
+func (GongNoteImpl *GongNoteImpl) OnAfterDelete(
+	stage *StageStruct,
+	stagedNode, frontNode *Node) {
 }
