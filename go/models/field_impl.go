@@ -7,16 +7,22 @@ import (
 	gong_models "github.com/fullstack-lang/gong/go/models"
 )
 
-func (nodesCb *NodeCB) OnAfterUpdateStructField(
+type FieldImpl struct {
+	field  gong_models.FieldInterface
+	node   *Node
+	nodeCb *NodeCB
+}
+
+func (fieldImpl *FieldImpl) OnAfterUpdate(
 	stage *StageStruct,
 	stagedNode, frontNode *Node) {
 
-	classdiagram := nodesCb.GetSelectedClassdiagram()
+	classdiagram := fieldImpl.nodeCb.GetSelectedClassdiagram()
 
 	// find the parent node to find the gongstruct to find the classshape
 	// the node is field, one needs to find the gongstruct that contains it
 	// get the parent node
-	parentNode := nodesCb.map_Children_Parent[stagedNode]
+	parentNode := fieldImpl.nodeCb.map_Children_Parent[stagedNode]
 
 	gongStructImpl := parentNode.impl.(*GongStructImpl)
 	gongStruct := gongStructImpl.gongStruct
@@ -72,14 +78,14 @@ func (nodesCb *NodeCB) OnAfterUpdateStructField(
 		// get the latest version of the diagram before modifying it
 		stage.Checkout()
 
-		switch stagedNode.Gongfield.(type) {
+		switch fieldImpl.field.(type) {
 		case *gong_models.GongBasicField, *gong_models.GongTimeField:
 
 			var field Field
 			field.Name = stagedNode.Name
 			field.Identifier = ShapeAndFieldnameToFieldIdentifier(gongStruct.Name, stagedNode.Name)
 
-			switch realField := stagedNode.Gongfield.(type) {
+			switch realField := fieldImpl.field.(type) {
 			case *gong_models.GongBasicField:
 
 				// get the type after the "."
@@ -142,7 +148,7 @@ func (nodesCb *NodeCB) OnAfterUpdateStructField(
 			var sourceMultiplicity MultiplicityType
 			var targetMultiplicity MultiplicityType
 
-			switch realField := stagedNode.Gongfield.(type) {
+			switch realField := fieldImpl.field.(type) {
 			case *gong_models.PointerToGongStructField:
 				targetStructName = realField.GongStruct.Name
 				sourceMultiplicity = MANY
@@ -190,4 +196,9 @@ func (nodesCb *NodeCB) OnAfterUpdateStructField(
 
 		Stage.Commit()
 	}
+}
+
+func (fieldImpl *FieldImpl) OnAfterDelete(
+	stage *StageStruct,
+	stagedNode, frontNode *Node) {
 }

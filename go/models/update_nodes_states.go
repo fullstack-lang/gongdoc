@@ -133,7 +133,10 @@ func updateNodesStates(stage *StageStruct, nodesCb *NodeCB) {
 		for _, fieldOfClassshapeNode := range classshapeNode.Children {
 			// then disable the checkbox
 			if fieldOfClassshapeNode.Type == GONG_STRUCT_FIELD {
-				switch fieldWithRef := fieldOfClassshapeNode.Gongfield.(type) {
+
+				fieldImpl := fieldOfClassshapeNode.impl.(*FieldImpl)
+
+				switch fieldWithRef := fieldImpl.field.(type) {
 				case *gong_models.PointerToGongStructField:
 					if _, ok := set_of_classshape_names[fieldWithRef.GongStruct.Name]; !ok {
 						fieldOfClassshapeNode.IsCheckboxDisabled = true
