@@ -180,16 +180,6 @@ export class NodeDetailComponent implements OnInit {
 		// pointers fields, after the translation, are nulled in order to perform serialization
 
 		// insertion point for translation/nullation of each field
-		if (this.node.ClassdiagramID == undefined) {
-			this.node.ClassdiagramID = new NullInt64
-		}
-		if (this.node.Classdiagram != undefined) {
-			this.node.ClassdiagramID.Int64 = this.node.Classdiagram.ID
-			this.node.ClassdiagramID.Valid = true
-		} else {
-			this.node.ClassdiagramID.Int64 = 0
-			this.node.ClassdiagramID.Valid = true
-		}
 		this.node.IsExpanded = this.IsExpandedFormControl.value
 		this.node.HasCheckboxButton = this.HasCheckboxButtonFormControl.value
 		this.node.IsChecked = this.IsCheckedFormControl.value

@@ -14,7 +14,6 @@ func FillUpDiagramNodeTree(diagramPackage *DiagramPackage, nodeCb *NodeCB) {
 	// add one node per class diagram
 	for classdiagram := range *GetGongstructInstancesSet[Classdiagram]() {
 		node := (&Node{Name: classdiagram.Name}).Stage()
-		node.Classdiagram = classdiagram
 		node.Type = CLASS_DIAGRAM
 		node.HasCheckboxButton = true
 		node.HasDeleteButton = true
@@ -25,6 +24,7 @@ func FillUpDiagramNodeTree(diagramPackage *DiagramPackage, nodeCb *NodeCB) {
 		classdiagramImpl := new(ClassdiagramImpl)
 		classdiagramImpl.node = node
 		classdiagramImpl.classdiagram = classdiagram
+		classdiagramImpl.nodeCb = nodeCb
 		node.impl = classdiagramImpl
 	}
 

@@ -1144,9 +1144,6 @@ func UnmarshallGongstructStaging(cmap *ast.CommentMap, assignStmt *ast.AssignStm
 			case "Node":
 				switch fieldName {
 				// insertion point for field dependant code
-				case "Classdiagram":
-					targetIdentifier := ident.Name
-					__gong__map_Node[identifier].Classdiagram = __gong__map_Classdiagram[targetIdentifier]
 				case "IsExpanded":
 					// convert string to boolean
 					fielValue, err := strconv.ParseBool(ident.Name)

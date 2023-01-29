@@ -3,8 +3,6 @@ package models
 import (
 	"fmt"
 	"log"
-	"os"
-	"path/filepath"
 )
 
 // NodeCB is the singloton callback implementation of CUD operations on node
@@ -50,9 +48,12 @@ func (nodesCb *NodeCB) OnAfterUpdate(
 	stage *StageStruct,
 	stagedNode, frontNode *Node) {
 
+	switch impl := stagedNode.impl.(type) {
+	case *ClassdiagramImpl:
+		impl.OnAfterUpdate(stage, stagedNode, frontNode)
+	}
+
 	switch stagedNode.Type {
-	case CLASS_DIAGRAM, STATE_DIAGRAM:
-		nodesCb.OnAfterUpdateDiagram(stage, stagedNode, frontNode)
 	case GONG_STRUCT:
 		nodesCb.OnAfterUpdateStruct(stage, stagedNode, frontNode)
 	case GONG_STRUCT_FIELD:
@@ -74,7 +75,7 @@ func (nodesCb *NodeCB) OnAfterUpdate(
 }
 
 // OnAfterCreate is another callback
-func (nodesCb *NodeCB) OnAfterCreate(
+func (nodeCb *NodeCB) OnAfterCreate(
 	stage *StageStruct,
 	node *Node) {
 
@@ -102,22 +103,22 @@ func (nodesCb *NodeCB) OnAfterCreate(
 	}
 
 	classdiagram := (&Classdiagram{Name: node.Name}).Stage()
-	nodesCb.diagramPackage.Classdiagrams = append(nodesCb.diagramPackage.Classdiagrams, classdiagram)
-	node.Classdiagram = classdiagram
+	nodeCb.diagramPackage.Classdiagrams = append(nodeCb.diagramPackage.Classdiagrams, classdiagram)
 	node.IsInEditMode = false
 	node.IsInDrawMode = false
 	node.HasEditButton = false
 
-	nodesCb.diagramPackageNode.Children =
-		append(nodesCb.diagramPackageNode.Children, node)
+	nodeCb.diagramPackageNode.Children =
+		append(nodeCb.diagramPackageNode.Children, node)
 
 	// set up the back pointer from the shape to the node
 	classdiagramImpl := new(ClassdiagramImpl)
 	classdiagramImpl.node = node
 	classdiagramImpl.classdiagram = classdiagram
+	classdiagramImpl.nodeCb = nodeCb
 	node.impl = classdiagramImpl
 
-	updateNodesStates(stage, nodesCb)
+	updateNodesStates(stage, nodeCb)
 
 }
 
@@ -128,31 +129,8 @@ func (nodesCb *NodeCB) OnAfterDelete(
 	stage *StageStruct,
 	stagedNode, frontNode *Node) {
 
-	switch stagedNode.Type {
-	case CLASS_DIAGRAM, STATE_DIAGRAM:
-		// checkout the stage, it shall remove the link between
-		// the parent node and the staged node because 0..1->0..N association
-		// is stored in the staged node as a reverse pointer
-		stage.Checkout()
-	}
-	switch stagedNode.Type {
-	case CLASS_DIAGRAM:
-		// remove the classdiagram node from the pkg element node
-		nodesCb.diagramPackage.Classdiagrams = remove(nodesCb.diagramPackage.Classdiagrams, stagedNode.Classdiagram)
-		UnstageBranch(stage, stagedNode.Classdiagram)
-
-		// remove the actual classdiagram file if it exsits
-		classdiagramFilePath := filepath.Join(nodesCb.diagramPackage.Path, "../diagrams", stagedNode.Classdiagram.Name) + ".go"
-		if _, err := os.Stat(classdiagramFilePath); err == nil {
-			if err := os.Remove(classdiagramFilePath); err != nil {
-				log.Println("Error while deleting file " + classdiagramFilePath + " : " + err.Error())
-			}
-		}
-	}
-	switch stagedNode.Type {
-	case CLASS_DIAGRAM, STATE_DIAGRAM:
-
-		// commit will clean up the stage associations
-		updateNodesStates(stage, nodesCb)
+	switch impl := stagedNode.impl.(type) {
+	case *ClassdiagramImpl:
+		impl.OnAfterDelete(stage, stagedNode, frontNode)
 	}
 }

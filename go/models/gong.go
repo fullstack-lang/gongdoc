@@ -2007,8 +2007,6 @@ func GetAssociationName[Type Gongstruct]() *Type {
 	case Node:
 		return any(&Node{
 			// Initialisation of associations
-			// field is initialized with an instance of Classdiagram with the name of the field
-			Classdiagram: &Classdiagram{Name: "Classdiagram"},
 			// field is initialized with an instance of Node with the name of the field
 			Children: []*Node{{Name: "Children"}},
 		}).(*Type)
@@ -2149,23 +2147,6 @@ func GetPointerReverseMap[Start, End Gongstruct](fieldname string) map[*End][]*S
 	case Node:
 		switch fieldname {
 		// insertion point for per direct association field
-		case "Classdiagram":
-			res := make(map[*Classdiagram][]*Node)
-			for node := range Stage.Nodes {
-				if node.Classdiagram != nil {
-					classdiagram_ := node.Classdiagram
-					var nodes []*Node
-					_, ok := res[classdiagram_]
-					if ok {
-						nodes = res[classdiagram_]
-					} else {
-						nodes = make([]*Node, 0)
-					}
-					nodes = append(nodes, node)
-					res[classdiagram_] = nodes
-				}
-			}
-			return any(res).(map[*End][]*Start)
 		}
 	// reverse maps of direct associations of NoteShape
 	case NoteShape:
@@ -2473,7 +2454,7 @@ func GetFields[Type Gongstruct]() (res []string) {
 	case Link:
 		res = []string{"Name", "Structname", "Identifier", "Fieldtypename", "TargetMultiplicity", "SourceMultiplicity", "Middlevertice"}
 	case Node:
-		res = []string{"Name", "Type", "Classdiagram", "IsExpanded", "HasCheckboxButton", "IsChecked", "IsCheckboxDisabled", "HasAddChildButton", "HasEditButton", "IsInEditMode", "HasDrawButton", "HasDrawOffButton", "IsInDrawMode", "IsSaved", "HasDeleteButton", "Children"}
+		res = []string{"Name", "Type", "IsExpanded", "HasCheckboxButton", "IsChecked", "IsCheckboxDisabled", "HasAddChildButton", "HasEditButton", "IsInEditMode", "HasDrawButton", "HasDrawOffButton", "IsInDrawMode", "IsSaved", "HasDeleteButton", "Children"}
 	case NoteShape:
 		res = []string{"Name", "Identifier", "Body", "X", "Y", "Width", "Heigth", "Matched", "NoteShapeLinks"}
 	case NoteShapeLink:
@@ -2633,10 +2614,6 @@ func GetFieldStringValue[Type Gongstruct](instance Type, fieldName string) (res 
 		case "Type":
 			enum := any(instance).(Node).Type
 			res = enum.ToCodeString()
-		case "Classdiagram":
-			if any(instance).(Node).Classdiagram != nil {
-				res = any(instance).(Node).Classdiagram.Name
-			}
 		case "IsExpanded":
 			res = fmt.Sprintf("%t", any(instance).(Node).IsExpanded)
 		case "HasCheckboxButton":

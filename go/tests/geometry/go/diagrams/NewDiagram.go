@@ -116,7 +116,6 @@ func NewDiagramInjection() {
 	__Classshape__000001_NewDiagram_LineTypeInt := (&models.Classshape{Name: `NewDiagram-LineTypeInt`}).Stage()
 	__Classshape__000002_NewDiagram_Point := (&models.Classshape{Name: `NewDiagram-Point`}).Stage()
 	__Classshape__000003_NewDiagram_PointExclusiveSet := (&models.Classshape{Name: `NewDiagram-PointExclusiveSet`}).Stage()
-	__Classshape__000004_NewDiagram_PointUse := (&models.Classshape{Name: `NewDiagram-PointUse`}).Stage()
 
 	// Declarations of staged instances of DiagramPackage
 
@@ -143,7 +142,6 @@ func NewDiagramInjection() {
 	__Position__000001_Pos_NewDiagram_LineTypeInt := (&models.Position{Name: `Pos-NewDiagram-LineTypeInt`}).Stage()
 	__Position__000002_Pos_NewDiagram_Point := (&models.Position{Name: `Pos-NewDiagram-Point`}).Stage()
 	__Position__000003_Pos_NewDiagram_PointExclusiveSet := (&models.Position{Name: `Pos-NewDiagram-PointExclusiveSet`}).Stage()
-	__Position__000004_Pos_NewDiagram_PointUse := (&models.Position{Name: `Pos-NewDiagram-PointUse`}).Stage()
 
 	// Declarations of staged instances of Tree
 
@@ -213,19 +211,6 @@ func NewDiagramInjection() {
 	__Classshape__000003_NewDiagram_PointExclusiveSet.Width = 240.000000
 	__Classshape__000003_NewDiagram_PointExclusiveSet.Heigth = 63.000000
 	__Classshape__000003_NewDiagram_PointExclusiveSet.IsSelected = false
-
-	// Classshape values setup
-	__Classshape__000004_NewDiagram_PointUse.Name = `NewDiagram-PointUse`
-	
-	// comment added to overcome the problem with the comment map association
-
-	//gong:ident [ref_models.PointUse]
-	__Classshape__000004_NewDiagram_PointUse.Identifier = `ref_models.PointUse`
-	__Classshape__000004_NewDiagram_PointUse.ShowNbInstances = false
-	__Classshape__000004_NewDiagram_PointUse.NbInstances = 0
-	__Classshape__000004_NewDiagram_PointUse.Width = 240.000000
-	__Classshape__000004_NewDiagram_PointUse.Heigth = 63.000000
-	__Classshape__000004_NewDiagram_PointUse.IsSelected = false
 
 	// Field values setup
 	__Field__000000_CONTINUOUS_ZERO.Name = `CONTINUOUS_ZERO`
@@ -329,19 +314,14 @@ In this case [Line], [Point] and [Line.Start]
 	__Position__000001_Pos_NewDiagram_LineTypeInt.Name = `Pos-NewDiagram-LineTypeInt`
 
 	// Position values setup
-	__Position__000002_Pos_NewDiagram_Point.X = 20.000000
-	__Position__000002_Pos_NewDiagram_Point.Y = 180.000000
+	__Position__000002_Pos_NewDiagram_Point.X = 40.000000
+	__Position__000002_Pos_NewDiagram_Point.Y = 270.000000
 	__Position__000002_Pos_NewDiagram_Point.Name = `Pos-NewDiagram-Point`
 
 	// Position values setup
 	__Position__000003_Pos_NewDiagram_PointExclusiveSet.X = 40.000000
-	__Position__000003_Pos_NewDiagram_PointExclusiveSet.Y = 40.000000
+	__Position__000003_Pos_NewDiagram_PointExclusiveSet.Y = 80.000000
 	__Position__000003_Pos_NewDiagram_PointExclusiveSet.Name = `Pos-NewDiagram-PointExclusiveSet`
-
-	// Position values setup
-	__Position__000004_Pos_NewDiagram_PointUse.X = 370.000000
-	__Position__000004_Pos_NewDiagram_PointUse.Y = 30.000000
-	__Position__000004_Pos_NewDiagram_PointUse.Name = `Pos-NewDiagram-PointUse`
 
 	// Vertice values setup
 	__Vertice__000000_Verticle_in_class_diagram_NewDiagram_in_middle_between_NewDiagram_Line_and_NewDiagram_Point.X = 565.000000
@@ -354,15 +334,14 @@ In this case [Line], [Point] and [Line.Start]
 	__Vertice__000001_Verticle_in_class_diagram_NewDiagram_in_middle_between_NewDiagram_Line_and_NewDiagram_Point.Name = `Verticle in class diagram NewDiagram in middle between NewDiagram-Line and NewDiagram-Point`
 
 	// Vertice values setup
-	__Vertice__000002_Verticle_in_class_diagram_NewDiagram_in_middle_between_NewDiagram_PointExclusiveSet_and_NewDiagram_Point.X = 390.000000
-	__Vertice__000002_Verticle_in_class_diagram_NewDiagram_in_middle_between_NewDiagram_PointExclusiveSet_and_NewDiagram_Point.Y = 141.500000
+	__Vertice__000002_Verticle_in_class_diagram_NewDiagram_in_middle_between_NewDiagram_PointExclusiveSet_and_NewDiagram_Point.X = 400.000000
+	__Vertice__000002_Verticle_in_class_diagram_NewDiagram_in_middle_between_NewDiagram_PointExclusiveSet_and_NewDiagram_Point.Y = 206.500000
 	__Vertice__000002_Verticle_in_class_diagram_NewDiagram_in_middle_between_NewDiagram_PointExclusiveSet_and_NewDiagram_Point.Name = `Verticle in class diagram NewDiagram in middle between NewDiagram-PointExclusiveSet and NewDiagram-Point`
 
 	// Setup of pointers
 	__Classdiagram__000000_NewDiagram.Classshapes = append(__Classdiagram__000000_NewDiagram.Classshapes, __Classshape__000000_NewDiagram_Line)
 	__Classdiagram__000000_NewDiagram.Classshapes = append(__Classdiagram__000000_NewDiagram.Classshapes, __Classshape__000002_NewDiagram_Point)
 	__Classdiagram__000000_NewDiagram.Classshapes = append(__Classdiagram__000000_NewDiagram.Classshapes, __Classshape__000001_NewDiagram_LineTypeInt)
-	__Classdiagram__000000_NewDiagram.Classshapes = append(__Classdiagram__000000_NewDiagram.Classshapes, __Classshape__000004_NewDiagram_PointUse)
 	__Classdiagram__000000_NewDiagram.Classshapes = append(__Classdiagram__000000_NewDiagram.Classshapes, __Classshape__000003_NewDiagram_PointExclusiveSet)
 	__Classdiagram__000000_NewDiagram.NoteShapes = append(__Classdiagram__000000_NewDiagram.NoteShapes, __NoteShape__000000_ShortNodeOnModels)
 	__Classshape__000000_NewDiagram_Line.Position = __Position__000000_Pos_NewDiagram_Line
@@ -374,7 +353,6 @@ In this case [Line], [Point] and [Line.Start]
 	__Classshape__000002_NewDiagram_Point.Position = __Position__000002_Pos_NewDiagram_Point
 	__Classshape__000003_NewDiagram_PointExclusiveSet.Position = __Position__000003_Pos_NewDiagram_PointExclusiveSet
 	__Classshape__000003_NewDiagram_PointExclusiveSet.Links = append(__Classshape__000003_NewDiagram_PointExclusiveSet.Links, __Link__000001_Points)
-	__Classshape__000004_NewDiagram_PointUse.Position = __Position__000004_Pos_NewDiagram_PointUse
 	__Link__000000_End.Middlevertice = __Vertice__000000_Verticle_in_class_diagram_NewDiagram_in_middle_between_NewDiagram_Line_and_NewDiagram_Point
 	__Link__000001_Points.Middlevertice = __Vertice__000002_Verticle_in_class_diagram_NewDiagram_in_middle_between_NewDiagram_PointExclusiveSet_and_NewDiagram_Point
 	__Link__000002_Start.Middlevertice = __Vertice__000001_Verticle_in_class_diagram_NewDiagram_in_middle_between_NewDiagram_Line_and_NewDiagram_Point

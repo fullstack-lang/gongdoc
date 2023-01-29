@@ -906,41 +906,6 @@ export class SidebarComponent implements OnInit {
 
           // insertion point for per field code
           /**
-          * let append a node for the association Classdiagram
-          */
-          let ClassdiagramGongNodeAssociation: GongNode = {
-            name: "(Classdiagram) Classdiagram",
-            type: GongNodeType.ONE__ZERO_ONE_ASSOCIATION,
-            id: nodeDB.ID,
-            uniqueIdPerStack: 17 * nonInstanceNodeId,
-            structName: "Node",
-            associationField: "Classdiagram",
-            associatedStructName: "Classdiagram",
-            children: new Array<GongNode>()
-          }
-          nonInstanceNodeId = nonInstanceNodeId + 1
-          nodeGongNodeInstance.children!.push(ClassdiagramGongNodeAssociation)
-
-          /**
-            * let append a node for the instance behind the asssociation Classdiagram
-            */
-          if (nodeDB.Classdiagram != undefined) {
-            let nodeGongNodeInstance_Classdiagram: GongNode = {
-              name: nodeDB.Classdiagram.Name,
-              type: GongNodeType.INSTANCE,
-              id: nodeDB.Classdiagram.ID,
-              uniqueIdPerStack: // godel numbering (thank you kurt)
-                3 * getNodeUniqueID(nodeDB.ID)
-                + 5 * getClassdiagramUniqueID(nodeDB.Classdiagram.ID),
-              structName: "Classdiagram",
-              associationField: "",
-              associatedStructName: "",
-              children: new Array<GongNode>()
-            }
-            ClassdiagramGongNodeAssociation.children.push(nodeGongNodeInstance_Classdiagram)
-          }
-
-          /**
           * let append a node for the slide of pointer Children
           */
           let ChildrenGongNodeAssociation: GongNode = {

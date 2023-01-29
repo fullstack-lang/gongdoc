@@ -31,16 +31,6 @@
         </mat-select>
     </mat-form-field>
 
-    <mat-form-field class="detail-full-width">
-        <mat-label>Classdiagram</mat-label>
-        <mat-select [compareWith]="compareObjects" [(value)]="node.Classdiagram" (selectionChange)="fillUpNameIfEmpty($event)">
-            <mat-option>None</mat-option>
-            <mat-option *ngFor="let classdiagram of frontRepo.Classdiagrams_array" [value]="classdiagram">
-                {{classdiagram.Name}}
-            </mat-option>
-        </mat-select>
-    </mat-form-field>
-
     <!-- -->
     <mat-checkbox [formControl]="IsExpandedFormControl">IsExpanded</mat-checkbox>
 
