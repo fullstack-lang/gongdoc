@@ -67,45 +67,43 @@ func (nodesCb *NodeCB) OnAfterUpdate(
 
 func (nodesCb *NodeCB) OnAfterCreate(
 	stage *StageStruct,
-	newDiagramNode *Node) {
+	node *Node) {
 
-	log.Println("Node " + newDiagramNode.Name + " is created")
+	log.Println("Node " + node.Name + " is created")
 
-	switch newDiagramNode.Type {
-	case CLASS_DIAGRAM, STATE_DIAGRAM:
-		newDiagramNode.HasCheckboxButton = true
+	node.HasCheckboxButton = true
 
-		// check unicity of name, otherwise, add an index
-		var hasNameCollision bool
-		initialName := newDiagramNode.Name
-		index := 0
-		// loop until the name of the new diagram is not in collision with an existing
-		// diagram name
-		for index == 0 || hasNameCollision {
-			index++
-			hasNameCollision = false
-			for classdiagram := range *GetGongstructInstancesSet[Classdiagram]() {
-				if classdiagram.Name == newDiagramNode.Name {
-					hasNameCollision = true
-				}
-			}
-			if hasNameCollision {
-				newDiagramNode.Name = initialName + fmt.Sprintf("_%d", index)
+	// check unicity of name, otherwise, add an index
+	var hasNameCollision bool
+	initialName := node.Name
+	index := 0
+	// loop until the name of the new diagram is not in collision with an existing
+	// diagram name
+	for index == 0 || hasNameCollision {
+		index++
+		hasNameCollision = false
+		for classdiagram := range *GetGongstructInstancesSet[Classdiagram]() {
+			if classdiagram.Name == node.Name {
+				hasNameCollision = true
 			}
 		}
-
-		classdiagram := (&Classdiagram{Name: newDiagramNode.Name}).Stage()
-		nodesCb.diagramPackage.Classdiagrams = append(nodesCb.diagramPackage.Classdiagrams, classdiagram)
-		newDiagramNode.Classdiagram = classdiagram
-		newDiagramNode.IsInEditMode = false
-		newDiagramNode.IsInDrawMode = false
-		newDiagramNode.HasEditButton = false
-
-		nodesCb.ClassdiagramsRootNode.Children =
-			append(nodesCb.ClassdiagramsRootNode.Children, newDiagramNode)
-
-		updateNodesStates(stage, nodesCb)
+		if hasNameCollision {
+			node.Name = initialName + fmt.Sprintf("_%d", index)
+		}
 	}
+
+	classdiagram := (&Classdiagram{Name: node.Name}).Stage()
+	nodesCb.diagramPackage.Classdiagrams = append(nodesCb.diagramPackage.Classdiagrams, classdiagram)
+	node.Classdiagram = classdiagram
+	node.IsInEditMode = false
+	node.IsInDrawMode = false
+	node.HasEditButton = false
+
+	nodesCb.ClassdiagramsRootNode.Children =
+		append(nodesCb.ClassdiagramsRootNode.Children, node)
+
+	updateNodesStates(stage, nodesCb)
+
 }
 
 // OnAfterDelete is called after a node is deleted
