@@ -2,13 +2,13 @@ package models
 
 import gong_models "github.com/fullstack-lang/gong/go/models"
 
-func FillUpTreeOfIdentifiers(pkgelt *DiagramPackage, nodesCb *NodeCB) {
+func FillUpTreeOfIdentifiers(pkgelt *DiagramPackage, nodeCb *NodeCB) {
 
 	// set up the gongTree to display elements
 	gongTree := (&Tree{Name: "gong"}).Stage()
-	nodesCb.treeOfGongObjects = gongTree
+	nodeCb.treeOfGongObjects = gongTree
 
-	nodesCb.map_Identifier_Node = make(map[string]*Node)
+	nodeCb.map_Identifier_Node = make(map[string]*Node)
 
 	gongstructRootNode := (&Node{Name: "gongstructs"}).Stage()
 	gongstructRootNode.IsExpanded = true
@@ -17,13 +17,19 @@ func FillUpTreeOfIdentifiers(pkgelt *DiagramPackage, nodesCb *NodeCB) {
 
 		nodeClassshape := (&Node{Name: gongStruct.Name}).Stage()
 		nodeClassshape.Type = GONG_STRUCT
-		nodeClassshape.Gongstruct = gongStruct
 		nodeClassshape.HasCheckboxButton = true
 		nodeClassshape.IsExpanded = false
 
+		// set up the back pointer from the shape to the node
+		classdiagramImpl := new(GongStructImpl)
+		classdiagramImpl.node = nodeClassshape
+		classdiagramImpl.gongStruct = gongStruct
+		classdiagramImpl.nodeCb = nodeCb
+		nodeClassshape.impl = classdiagramImpl
+
 		// append to the tree
 		gongstructRootNode.Children = append(gongstructRootNode.Children, nodeClassshape)
-		nodesCb.map_Identifier_Node[ShapenameToIdentifier(gongStruct.Name)] = nodeClassshape
+		nodeCb.map_Identifier_Node[ShapenameToIdentifier(gongStruct.Name)] = nodeClassshape
 
 		for _, field := range gongStruct.Fields {
 			node2 := (&Node{Name: field.GetName()}).Stage()
@@ -33,7 +39,7 @@ func FillUpTreeOfIdentifiers(pkgelt *DiagramPackage, nodesCb *NodeCB) {
 
 			// append to tree
 			nodeClassshape.Children = append(nodeClassshape.Children, node2)
-			nodesCb.map_Identifier_Node[ShapeAndFieldnameToFieldIdentifier(gongStruct.Name, field.GetName())] = node2
+			nodeCb.map_Identifier_Node[ShapeAndFieldnameToFieldIdentifier(gongStruct.Name, field.GetName())] = node2
 		}
 	}
 
@@ -50,7 +56,7 @@ func FillUpTreeOfIdentifiers(pkgelt *DiagramPackage, nodesCb *NodeCB) {
 
 		// append to tree
 		gongenumRootNode.Children = append(gongenumRootNode.Children, node)
-		nodesCb.map_Identifier_Node[ShapenameToIdentifier(gongEnum.Name)] = node
+		nodeCb.map_Identifier_Node[ShapenameToIdentifier(gongEnum.Name)] = node
 
 		for _, value := range gongEnum.GongEnumValues {
 			node2 := (&Node{Name: value.GetName()}).Stage()
@@ -59,7 +65,7 @@ func FillUpTreeOfIdentifiers(pkgelt *DiagramPackage, nodesCb *NodeCB) {
 
 			// append to tree
 			node.Children = append(node.Children, node2)
-			nodesCb.map_Identifier_Node[ShapeAndFieldnameToFieldIdentifier(gongEnum.Name, value.GetName())] = node2
+			nodeCb.map_Identifier_Node[ShapeAndFieldnameToFieldIdentifier(gongEnum.Name, value.GetName())] = node2
 		}
 	}
 
@@ -76,7 +82,7 @@ func FillUpTreeOfIdentifiers(pkgelt *DiagramPackage, nodesCb *NodeCB) {
 
 		// append to tree
 		gongNotesRootNode.Children = append(gongNotesRootNode.Children, node)
-		nodesCb.map_Identifier_Node[ShapenameToIdentifier(gongNote.Name)] = node
+		nodeCb.map_Identifier_Node[ShapenameToIdentifier(gongNote.Name)] = node
 
 		for _, gongLink := range gongNote.Links {
 			node2 := (&Node{Name: gongLink.Name}).Stage()
@@ -85,11 +91,11 @@ func FillUpTreeOfIdentifiers(pkgelt *DiagramPackage, nodesCb *NodeCB) {
 
 			// append to tree
 			node.Children = append(node.Children, node2)
-			nodesCb.map_Identifier_Node[ShapeAndFieldnameToFieldIdentifier(gongNote.Name, gongLink.Name)] = node2
+			nodeCb.map_Identifier_Node[ShapeAndFieldnameToFieldIdentifier(gongNote.Name, gongLink.Name)] = node2
 		}
 	}
 
 	// generate the map to navigate from children to parents
 	fieldName := GetAssociationName[Node]().Children[0].Name
-	nodesCb.map_Children_Parent = GetSliceOfPointersReverseMap[Node, Node](fieldName)
+	nodeCb.map_Children_Parent = GetSliceOfPointersReverseMap[Node, Node](fieldName)
 }

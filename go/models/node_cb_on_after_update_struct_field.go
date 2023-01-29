@@ -17,7 +17,9 @@ func (nodesCb *NodeCB) OnAfterUpdateStructField(
 	// the node is field, one needs to find the gongstruct that contains it
 	// get the parent node
 	parentNode := nodesCb.map_Children_Parent[stagedNode]
-	gongStruct := parentNode.Gongstruct
+
+	gongStructImpl := parentNode.impl.(*GongStructImpl)
+	gongStruct := gongStructImpl.gongStruct
 
 	// find the classhape in the classdiagram
 	foundClassshape := false

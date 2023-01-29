@@ -51,11 +51,11 @@ func (nodesCb *NodeCB) OnAfterUpdate(
 	switch impl := stagedNode.impl.(type) {
 	case *ClassdiagramImpl:
 		impl.OnAfterUpdate(stage, stagedNode, frontNode)
+	case *GongStructImpl:
+		impl.OnAfterUpdate(stage, stagedNode, frontNode)
 	}
 
 	switch stagedNode.Type {
-	case GONG_STRUCT:
-		nodesCb.OnAfterUpdateStruct(stage, stagedNode, frontNode)
 	case GONG_STRUCT_FIELD:
 		nodesCb.OnAfterUpdateStructField(stage, stagedNode, frontNode)
 	case GONG_NOTE:
