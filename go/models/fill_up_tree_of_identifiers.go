@@ -114,7 +114,7 @@ func FillUpTreeOfIdentifiers(pkgelt *DiagramPackage, nodeCb *NodeCB) {
 			gongLinkImpl.node = node
 			gongLinkImpl.gongLink = gongLink
 			gongLinkImpl.nodeCb = nodeCb
-			node.impl = gongLinkImpl
+			nodeGongLink.impl = gongLinkImpl
 
 			// append to tree
 			node.Children = append(node.Children, nodeGongLink)
