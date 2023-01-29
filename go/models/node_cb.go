@@ -111,6 +111,12 @@ func (nodesCb *NodeCB) OnAfterCreate(
 	nodesCb.diagramPackageNode.Children =
 		append(nodesCb.diagramPackageNode.Children, node)
 
+	// set up the back pointer from the shape to the node
+	classdiagramImpl := new(ClassdiagramImpl)
+	classdiagramImpl.node = node
+	classdiagramImpl.classdiagram = classdiagram
+	node.impl = classdiagramImpl
+
 	updateNodesStates(stage, nodesCb)
 
 }

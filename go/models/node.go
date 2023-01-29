@@ -10,11 +10,13 @@ type Node struct {
 
 	// pointer to the related instance (depends on type)
 	Classdiagram *Classdiagram
+	Gongstruct   *gong_models.GongStruct
+	Gongfield    gong_models.FieldInterface
+	GongEnum     *gong_models.GongEnum
+	GongNote     *gong_models.GongNote
 
-	Gongstruct *gong_models.GongStruct
-	Gongfield  gong_models.FieldInterface
-	GongEnum   *gong_models.GongEnum
-	GongNote   *gong_models.GongNote
+	// impl is the pointer to the implementation of the node in the models of interest
+	impl NodeImplInterface
 
 	IsExpanded bool
 
