@@ -1,16 +1,28 @@
 package models
 
-func (nodesCb *NodeCB) OnAfterUpdateNoteLink(
+import (
+	gong_models "github.com/fullstack-lang/gong/go/models"
+)
+
+type GongLinkImpl struct {
+	gongLink *gong_models.GongLink
+	node     *Node
+	nodeCb   *NodeCB
+}
+
+func (gongLinkImpl *GongLinkImpl) OnAfterUpdate(
 	stage *StageStruct,
 	stagedNode, frontNode *Node) {
 
-	classdiagram := nodesCb.GetSelectedClassdiagram()
+	classdiagram := gongLinkImpl.nodeCb.GetSelectedClassdiagram()
 
 	// find the parent node to find the gongstruct to find the classshape
 	// the node is field, one needs to find the gongstruct that contains it
 	// get the parent node
-	parentNode := nodesCb.map_Children_Parent[stagedNode]
-	gongNote := parentNode.GongNote
+	parentNode := gongLinkImpl.nodeCb.map_Children_Parent[stagedNode]
+
+	gongNoteImpl := parentNode.impl.(*GongNoteImpl)
+	gongNote := gongNoteImpl.gongNote
 
 	// find the classhape in the classdiagram
 	foundNoteshape := false
@@ -35,7 +47,7 @@ func (nodesCb *NodeCB) OnAfterUpdateNoteLink(
 
 		noteshape.NoteShapeLinks = append(noteshape.NoteShapeLinks, noteShapeLink)
 
-		updateNodesStates(stage, nodesCb)
+		updateNodesStates(stage, gongLinkImpl.nodeCb)
 	}
 
 	// removing a note link
@@ -54,6 +66,12 @@ func (nodesCb *NodeCB) OnAfterUpdateNoteLink(
 		noteLink.Unstage()
 		noteshape.NoteShapeLinks = remove(noteshape.NoteShapeLinks, noteLink)
 
-		updateNodesStates(stage, nodesCb)
+		updateNodesStates(stage, gongLinkImpl.nodeCb)
 	}
+
+}
+
+func (gongLinkImpl *GongLinkImpl) OnAfterDelete(
+	stage *StageStruct,
+	stagedNode, frontNode *Node) {
 }

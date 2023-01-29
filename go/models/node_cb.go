@@ -50,13 +50,6 @@ func (nodesCb *NodeCB) OnAfterUpdate(
 
 	stagedNode.impl.OnAfterUpdate(stage, stagedNode, frontNode)
 
-	switch stagedNode.Type {
-	case GONG_NOTE:
-		nodesCb.OnAfterUpdateNote(stage, stagedNode, frontNode)
-	case GONG_NOTE_LINK:
-		nodesCb.OnAfterUpdateNoteLink(stage, stagedNode, frontNode)
-	}
-
 	if stagedNode.IsExpanded != frontNode.IsExpanded {
 		// setting the value of the staged node	to the new value
 		stagedNode.IsExpanded = frontNode.IsExpanded

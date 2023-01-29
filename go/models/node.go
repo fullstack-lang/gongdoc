@@ -1,15 +1,10 @@
 package models
 
-import gong_models "github.com/fullstack-lang/gong/go/models"
-
 // Node is a node in the tree for selecting items to display
 type Node struct {
 	Name string
 
 	Type GongdocNodeType
-
-	// pointer to the related instance (depends on type)
-	GongNote *gong_models.GongNote
 
 	// impl is the pointer to the implementation of the node in the models of interest
 	impl NodeImplInterface

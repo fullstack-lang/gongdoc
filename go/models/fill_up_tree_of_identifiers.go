@@ -92,22 +92,33 @@ func FillUpTreeOfIdentifiers(pkgelt *DiagramPackage, nodeCb *NodeCB) {
 
 		node := (&Node{Name: gongNote.Name}).Stage()
 		node.HasCheckboxButton = true
-		node.GongNote = gongNote
 		node.Type = GONG_NOTE
 		node.IsExpanded = true
+
+		gongNoteImpl := new(GongNoteImpl)
+		gongNoteImpl.node = node
+		gongNoteImpl.gongNote = gongNote
+		gongNoteImpl.nodeCb = nodeCb
+		node.impl = gongNoteImpl
 
 		// append to tree
 		gongNotesRootNode.Children = append(gongNotesRootNode.Children, node)
 		nodeCb.map_Identifier_Node[ShapenameToIdentifier(gongNote.Name)] = node
 
 		for _, gongLink := range gongNote.Links {
-			node2 := (&Node{Name: gongLink.Name}).Stage()
-			node2.HasCheckboxButton = true
-			node2.Type = GONG_NOTE_LINK
+			nodeGongLink := (&Node{Name: gongLink.Name}).Stage()
+			nodeGongLink.HasCheckboxButton = true
+			nodeGongLink.Type = GONG_NOTE_LINK
+
+			gongLinkImpl := new(GongLinkImpl)
+			gongLinkImpl.node = node
+			gongLinkImpl.gongLink = gongLink
+			gongLinkImpl.nodeCb = nodeCb
+			node.impl = gongLinkImpl
 
 			// append to tree
-			node.Children = append(node.Children, node2)
-			nodeCb.map_Identifier_Node[ShapeAndFieldnameToFieldIdentifier(gongNote.Name, gongLink.Name)] = node2
+			node.Children = append(node.Children, nodeGongLink)
+			nodeCb.map_Identifier_Node[ShapeAndFieldnameToFieldIdentifier(gongNote.Name, gongLink.Name)] = nodeGongLink
 		}
 	}
 
