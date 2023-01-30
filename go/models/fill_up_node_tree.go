@@ -12,7 +12,7 @@ func FillUpNodeTree(diagramPackage *DiagramPackage) {
 	nodeCb.diagramPackage = diagramPackage
 
 	FillUpDiagramNodeTree(diagramPackage, nodeCb)
-	FillUpTreeOfIdentifiers(diagramPackage, nodeCb)
+	FillUpTreeOfGongObjects(diagramPackage, nodeCb)
 
 	updateNodesStates(&Stage, nodeCb)
 

@@ -60,19 +60,14 @@ func updateNodesStates(stage *StageStruct, nodesCb *NodeCB) {
 		return
 	}
 
-	// 1. allow all gongstructs node to be checked/unckecked
-	for gongStruct := range *gong_models.GetGongstructInstancesSet[gong_models.GongStruct]() {
-		classshapeNode := nodesCb.map_Identifier_Node[ShapenameToIdentifier(gongStruct.Name)]
-		classshapeNode.IsCheckboxDisabled = !classdiagram.IsInDrawMode
-	}
-
-	//
-	// Enum
-	//
-	// 1. for each enum of the model, enable the check button if the class diagram is in draw mode
-	for gongEnum := range *gong_models.GetGongstructInstancesSet[gong_models.GongEnum]() {
-		classshapeNode := nodesCb.map_Identifier_Node[ShapenameToIdentifier(gongEnum.Name)]
-		classshapeNode.IsCheckboxDisabled = !classdiagram.IsInDrawMode
+	// parse gong object nodes and disable the check box
+	for _, rootNode := range nodesCb.treeOfGongObjects.RootNodes {
+		for _, node := range rootNode.Children {
+			node.IsCheckboxDisabled = !classdiagram.IsInDrawMode
+			for _, node := range node.Children {
+				node.IsCheckboxDisabled = !classdiagram.IsInDrawMode
+			}
+		}
 	}
 
 	// FIRST STAGE : for each identifiers node with a related visual element is in
@@ -126,6 +121,7 @@ func updateNodesStates(stage *StageStruct, nodesCb *NodeCB) {
 	for _, classshape := range classdiagram.Classshapes {
 		set_of_classshape_names[IdentifierToShapename(classshape.Identifier)] = true
 	}
+
 	// then iterate over all fields of all gongstructs node
 	for gongStruct := range *gong_models.GetGongstructInstancesSet[gong_models.GongStruct]() {
 		classshapeNode := nodesCb.map_Identifier_Node[ShapenameToIdentifier(gongStruct.Name)]
@@ -165,9 +161,6 @@ func updateNodesStates(stage *StageStruct, nodesCb *NodeCB) {
 		for _, noteLink := range note.Links {
 
 			noteLinkNode := nodesCb.map_Identifier_Node[ShapeAndFieldnameToFieldIdentifier(note.Name, noteLink.Name)]
-
-			// default choice
-			noteLinkNode.IsCheckboxDisabled = !classdiagram.IsInDrawMode
 
 			// disable check box of the note link if the note is not present
 			if _, ok := set_of_noteshape_names[note.Name]; !ok {

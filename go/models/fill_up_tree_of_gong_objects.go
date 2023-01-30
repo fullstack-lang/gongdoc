@@ -2,7 +2,7 @@ package models
 
 import gong_models "github.com/fullstack-lang/gong/go/models"
 
-func FillUpTreeOfIdentifiers(pkgelt *DiagramPackage, nodeCb *NodeCB) {
+func FillUpTreeOfGongObjects(pkgelt *DiagramPackage, nodeCb *NodeCB) {
 
 	// set up the gongTree to display elements
 	gongTree := (&Tree{Name: "gong"}).Stage()
