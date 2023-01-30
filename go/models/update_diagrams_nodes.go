@@ -1,6 +1,6 @@
 package models
 
-func updateDiagramsNodesStates(stage *StageStruct, nodesCb *NodeCB) {
+func updateDiagramsNodes(stage *StageStruct, nodesCb *NodeCB) {
 
 	// compute wether one of the diagrams is in draw/edit mode
 	// if so, all diagram check need to be disabled

@@ -12,7 +12,7 @@ func updateNodesStates(stage *StageStruct, nodeCb *NodeCB) {
 
 	nodeCb.treeOfGongObjects.UncheckAndDisable()
 
-	updateDiagramsNodesStates(stage, nodeCb)
+	updateDiagramsNodes(stage, nodeCb)
 
 	// get the diagram
 	classdiagram := nodeCb.diagramPackage.SelectedClassdiagram
@@ -22,7 +22,7 @@ func updateNodesStates(stage *StageStruct, nodeCb *NodeCB) {
 		return
 	}
 
-	updateGongObjectsNodesStates(stage, nodeCb, classdiagram)
+	updateGongObjectsNodes(stage, nodeCb, classdiagram)
 
 	// log.Println("UpdateNodeStates, before commit, nb ", stage.BackRepo.GetLastCommitFromBackNb())
 	stage.Commit()

@@ -15,36 +15,36 @@ func FillUpTreeOfGongObjects(pkgelt *DiagramPackage, nodeCb *NodeCB) {
 	gongTree.RootNodes = append(gongTree.RootNodes, gongstructRootNode)
 	for gongStruct := range *gong_models.GetGongstructInstancesSet[gong_models.GongStruct]() {
 
-		nodeClassshape := (&Node{Name: gongStruct.Name}).Stage()
-		nodeClassshape.Type = GONG_STRUCT
-		nodeClassshape.HasCheckboxButton = true
-		nodeClassshape.IsExpanded = false
+		nodeGongstruct := (&Node{Name: gongStruct.Name}).Stage()
+		nodeGongstruct.Type = GONG_STRUCT
+		nodeGongstruct.HasCheckboxButton = true
+		nodeGongstruct.IsExpanded = false
 
 		// set up the back pointer from the shape to the node
 		gongStructImpl := new(GongStructImpl)
-		gongStructImpl.node = nodeClassshape
+		gongStructImpl.node = nodeGongstruct
 		gongStructImpl.gongStruct = gongStruct
 		gongStructImpl.nodeCb = nodeCb
-		nodeClassshape.impl = gongStructImpl
+		nodeGongstruct.impl = gongStructImpl
 
 		// append to the tree
-		gongstructRootNode.Children = append(gongstructRootNode.Children, nodeClassshape)
-		nodeCb.map_Identifier_Node[ShapenameToIdentifier(gongStruct.Name)] = nodeClassshape
+		gongstructRootNode.Children = append(gongstructRootNode.Children, nodeGongstruct)
+		nodeCb.map_Identifier_Node[ShapenameToIdentifier(gongStruct.Name)] = nodeGongstruct
 
 		for _, field := range gongStruct.Fields {
-			node2 := (&Node{Name: field.GetName()}).Stage()
-			node2.Type = GONG_STRUCT_FIELD
-			node2.HasCheckboxButton = true
+			nodeGongField := (&Node{Name: field.GetName()}).Stage()
+			nodeGongField.Type = GONG_STRUCT_FIELD
+			nodeGongField.HasCheckboxButton = true
 
 			fieldImpl := new(FieldImpl)
-			fieldImpl.node = nodeClassshape
+			fieldImpl.node = nodeGongstruct
 			fieldImpl.field = field
 			fieldImpl.nodeCb = nodeCb
-			node2.impl = fieldImpl
+			nodeGongField.impl = fieldImpl
 
 			// append to tree
-			nodeClassshape.Children = append(nodeClassshape.Children, node2)
-			nodeCb.map_Identifier_Node[ShapeAndFieldnameToFieldIdentifier(gongStruct.Name, field.GetName())] = node2
+			nodeGongstruct.Children = append(nodeGongstruct.Children, nodeGongField)
+			nodeCb.map_Identifier_Node[ShapeAndFieldnameToFieldIdentifier(gongStruct.Name, field.GetName())] = nodeGongField
 		}
 	}
 

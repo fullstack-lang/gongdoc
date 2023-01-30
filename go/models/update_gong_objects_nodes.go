@@ -6,7 +6,7 @@ import (
 	gong_models "github.com/fullstack-lang/gong/go/models"
 )
 
-func updateGongObjectsNodesStates(stage *StageStruct, nodeCb *NodeCB, classdiagram *Classdiagram) {
+func updateGongObjectsNodes(stage *StageStruct, nodeCb *NodeCB, classdiagram *Classdiagram) {
 
 	// parse gong object nodes and disable the check box
 	for _, rootNode := range nodeCb.treeOfGongObjects.RootNodes {
