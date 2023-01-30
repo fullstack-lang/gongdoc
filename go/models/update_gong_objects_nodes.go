@@ -22,24 +22,35 @@ func updateGongObjectsNodes(stage *StageStruct, nodeCb *NodeCB, classdiagram *Cl
 	// the classdiagram: check the node and enable it if the diagram is in drawMode
 
 	// 1. gongstructs / gongenum referenced by the classshape
-	for _, classshape := range classdiagram.GongStructShapes {
+	for _, gongStructShape := range classdiagram.GongStructShapes {
 
-		var classshapeNode *Node
+		var gongStructShapeNode *Node
 		var ok bool
-		classshapeNode, ok = nodeCb.map_Identifier_Node[classshape.Identifier]
+		gongStructShapeNode, ok = nodeCb.map_Identifier_Node[gongStructShape.Identifier]
 
 		if !ok {
-			log.Println("Unknown node, diagram not synchro with model ", classshape.Identifier)
+			log.Println("Unknown node, diagram not synchro with model ", gongStructShape.Identifier)
 			continue
 		}
-		classshapeNode.IsChecked = true
+
+		// get the gong object from the identifier
+		gongStruct, ok := (*gong_models.GetGongstructInstancesMap[gong_models.GongStruct]())[gongStructShape.Identifier]
+
+		if !ok {
+			log.Println("updateGongObjectsNodes: Unknown gong struct related to identifier:", gongStructShape.Identifier)
+			continue
+		}
+		gongStructShapeNode2, ok := nodeCb.map_gongObject_gongObjectImpl[gongStruct]
+		
+
+		gongStructShapeNode.IsChecked = true
 
 		// disable checkbox of all children of the gongstruct
-		for _, fieldOfClassshapeNode := range classshapeNode.Children {
+		for _, fieldOfClassshapeNode := range gongStructShapeNode.Children {
 			fieldOfClassshapeNode.IsCheckboxDisabled = !classdiagram.IsInDrawMode
 		}
 
-		for _, field := range classshape.Fields {
+		for _, field := range gongStructShape.Fields {
 			classshapeFieldNode, ok := nodeCb.map_Identifier_Node[field.Identifier]
 
 			if !ok {
@@ -50,7 +61,7 @@ func updateGongObjectsNodes(stage *StageStruct, nodeCb *NodeCB, classdiagram *Cl
 			classshapeFieldNode.IsCheckboxDisabled = !classdiagram.IsInDrawMode
 
 		}
-		for _, link := range classshape.Links {
+		for _, link := range gongStructShape.Links {
 			linkNode, ok := nodeCb.map_Identifier_Node[link.Identifier]
 
 			if !ok {

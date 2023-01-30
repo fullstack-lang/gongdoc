@@ -9,6 +9,7 @@ func FillUpTreeOfGongObjects(pkgelt *DiagramPackage, nodeCb *NodeCB) {
 	nodeCb.treeOfGongObjects = gongTree
 
 	nodeCb.map_Identifier_Node = make(map[string]*Node)
+	nodeCb.map_gongObject_gongObjectImpl = make(map[gong_models.GongStructInterface]NodeImplInterface)
 
 	gongstructRootNode := (&Node{Name: "gongstructs"}).Stage()
 	gongstructRootNode.IsExpanded = true
@@ -30,6 +31,7 @@ func FillUpTreeOfGongObjects(pkgelt *DiagramPackage, nodeCb *NodeCB) {
 		// append to the tree
 		gongstructRootNode.Children = append(gongstructRootNode.Children, nodeGongstruct)
 		nodeCb.map_Identifier_Node[ShapenameToIdentifier(gongStruct.Name)] = nodeGongstruct
+		nodeCb.map_gongObject_gongObjectImpl[gongStruct] = gongStructImpl
 
 		for _, field := range gongStruct.Fields {
 			nodeGongField := (&Node{Name: field.GetName()}).Stage()
@@ -45,6 +47,7 @@ func FillUpTreeOfGongObjects(pkgelt *DiagramPackage, nodeCb *NodeCB) {
 			// append to tree
 			nodeGongstruct.Children = append(nodeGongstruct.Children, nodeGongField)
 			nodeCb.map_Identifier_Node[ShapeAndFieldnameToFieldIdentifier(gongStruct.Name, field.GetName())] = nodeGongField
+			nodeCb.map_gongObject_gongObjectImpl[field] = fieldImpl
 		}
 	}
 
@@ -67,6 +70,7 @@ func FillUpTreeOfGongObjects(pkgelt *DiagramPackage, nodeCb *NodeCB) {
 		// append to tree
 		gongenumRootNode.Children = append(gongenumRootNode.Children, node)
 		nodeCb.map_Identifier_Node[ShapenameToIdentifier(gongEnum.Name)] = node
+		nodeCb.map_gongObject_gongObjectImpl[gongEnum] = gongEnumImpl
 
 		for _, gongEnumValue := range gongEnum.GongEnumValues {
 			nodeGongEnumValue := (&Node{Name: gongEnumValue.GetName()}).Stage()
@@ -82,6 +86,7 @@ func FillUpTreeOfGongObjects(pkgelt *DiagramPackage, nodeCb *NodeCB) {
 			// append to tree
 			node.Children = append(node.Children, nodeGongEnumValue)
 			nodeCb.map_Identifier_Node[ShapeAndFieldnameToFieldIdentifier(gongEnum.Name, gongEnumValue.GetName())] = nodeGongEnumValue
+			nodeCb.map_gongObject_gongObjectImpl[gongEnumValue] = gongEnumValueImpl
 		}
 	}
 
@@ -104,6 +109,7 @@ func FillUpTreeOfGongObjects(pkgelt *DiagramPackage, nodeCb *NodeCB) {
 		// append to tree
 		gongNotesRootNode.Children = append(gongNotesRootNode.Children, node)
 		nodeCb.map_Identifier_Node[ShapenameToIdentifier(gongNote.Name)] = node
+		nodeCb.map_gongObject_gongObjectImpl[gongNote] = gongNoteImpl
 
 		for _, gongLink := range gongNote.Links {
 			nodeGongLink := (&Node{Name: gongLink.Name}).Stage()
@@ -119,6 +125,7 @@ func FillUpTreeOfGongObjects(pkgelt *DiagramPackage, nodeCb *NodeCB) {
 			// append to tree
 			node.Children = append(node.Children, nodeGongLink)
 			nodeCb.map_Identifier_Node[ShapeAndFieldnameToFieldIdentifier(gongNote.Name, gongLink.Name)] = nodeGongLink
+			nodeCb.map_gongObject_gongObjectImpl[gongLink] = gongLinkImpl
 		}
 	}
 

@@ -3,6 +3,8 @@ package models
 import (
 	"fmt"
 	"log"
+
+	gong_models "github.com/fullstack-lang/gong/go/models"
 )
 
 // NodeCB is the singloton callback implementation of CUD operations on node
@@ -28,6 +30,8 @@ type NodeCB struct {
 	// New form, a impl field to navigate from the node to the shape
 	// a node field to navigate from a shape to the corresponding node
 	map_Identifier_Node map[string]*Node
+
+	map_gongObject_gongObjectImpl map[gong_models.GongStructInterface]NodeImplInterface
 }
 
 // GetSelectedClassdiagram
