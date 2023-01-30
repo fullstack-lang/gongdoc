@@ -13,6 +13,9 @@ import { DiagramPackageService } from './diagrampackage.service'
 import { FieldDB } from './field-db'
 import { FieldService } from './field.service'
 
+import { GongEnumShapeDB } from './gongenumshape-db'
+import { GongEnumShapeService } from './gongenumshape.service'
+
 import { GongStructShapeDB } from './gongstructshape-db'
 import { GongStructShapeService } from './gongstructshape.service'
 
@@ -55,6 +58,9 @@ export class FrontRepo { // insertion point sub template
   Fields_array = new Array<FieldDB>(); // array of repo instances
   Fields = new Map<number, FieldDB>(); // map of repo instances
   Fields_batch = new Map<number, FieldDB>(); // same but only in last GET (for finding repo instances to delete)
+  GongEnumShapes_array = new Array<GongEnumShapeDB>(); // array of repo instances
+  GongEnumShapes = new Map<number, GongEnumShapeDB>(); // map of repo instances
+  GongEnumShapes_batch = new Map<number, GongEnumShapeDB>(); // same but only in last GET (for finding repo instances to delete)
   GongStructShapes_array = new Array<GongStructShapeDB>(); // array of repo instances
   GongStructShapes = new Map<number, GongStructShapeDB>(); // map of repo instances
   GongStructShapes_batch = new Map<number, GongStructShapeDB>(); // same but only in last GET (for finding repo instances to delete)
@@ -146,6 +152,7 @@ export class FrontRepoService {
     private classdiagramService: ClassdiagramService,
     private diagrampackageService: DiagramPackageService,
     private fieldService: FieldService,
+    private gongenumshapeService: GongEnumShapeService,
     private gongstructshapeService: GongStructShapeService,
     private linkService: LinkService,
     private nodeService: NodeService,
@@ -189,6 +196,7 @@ export class FrontRepoService {
     Observable<ClassdiagramDB[]>,
     Observable<DiagramPackageDB[]>,
     Observable<FieldDB[]>,
+    Observable<GongEnumShapeDB[]>,
     Observable<GongStructShapeDB[]>,
     Observable<LinkDB[]>,
     Observable<NodeDB[]>,
@@ -203,6 +211,7 @@ export class FrontRepoService {
       this.classdiagramService.getClassdiagrams(),
       this.diagrampackageService.getDiagramPackages(),
       this.fieldService.getFields(),
+      this.gongenumshapeService.getGongEnumShapes(),
       this.gongstructshapeService.getGongStructShapes(),
       this.linkService.getLinks(),
       this.nodeService.getNodes(),
@@ -231,6 +240,7 @@ export class FrontRepoService {
             classdiagrams_,
             diagrampackages_,
             fields_,
+            gongenumshapes_,
             gongstructshapes_,
             links_,
             nodes_,
@@ -250,6 +260,8 @@ export class FrontRepoService {
             diagrampackages = diagrampackages_ as DiagramPackageDB[]
             var fields: FieldDB[]
             fields = fields_ as FieldDB[]
+            var gongenumshapes: GongEnumShapeDB[]
+            gongenumshapes = gongenumshapes_ as GongEnumShapeDB[]
             var gongstructshapes: GongStructShapeDB[]
             gongstructshapes = gongstructshapes_ as GongStructShapeDB[]
             var links: LinkDB[]
@@ -364,6 +376,39 @@ export class FrontRepoService {
 
             // sort Fields_array array
             FrontRepoSingloton.Fields_array.sort((t1, t2) => {
+              if (t1.Name > t2.Name) {
+                return 1;
+              }
+              if (t1.Name < t2.Name) {
+                return -1;
+              }
+              return 0;
+            });
+
+            // init the array
+            FrontRepoSingloton.GongEnumShapes_array = gongenumshapes
+
+            // clear the map that counts GongEnumShape in the GET
+            FrontRepoSingloton.GongEnumShapes_batch.clear()
+
+            gongenumshapes.forEach(
+              gongenumshape => {
+                FrontRepoSingloton.GongEnumShapes.set(gongenumshape.ID, gongenumshape)
+                FrontRepoSingloton.GongEnumShapes_batch.set(gongenumshape.ID, gongenumshape)
+              }
+            )
+
+            // clear gongenumshapes that are absent from the batch
+            FrontRepoSingloton.GongEnumShapes.forEach(
+              gongenumshape => {
+                if (FrontRepoSingloton.GongEnumShapes_batch.get(gongenumshape.ID) == undefined) {
+                  FrontRepoSingloton.GongEnumShapes.delete(gongenumshape.ID)
+                }
+              }
+            )
+
+            // sort GongEnumShapes_array array
+            FrontRepoSingloton.GongEnumShapes_array.sort((t1, t2) => {
               if (t1.Name > t2.Name) {
                 return 1;
               }
@@ -746,6 +791,19 @@ export class FrontRepoService {
                 // insertion point sub sub template for ONE-/ZERO-ONE associations pointers redeeming
 
                 // insertion point for redeeming ONE-MANY associations
+                // insertion point for slice of pointer field GongEnumShape.Fields redeeming
+                {
+                  let _gongenumshape = FrontRepoSingloton.GongEnumShapes.get(field.GongEnumShape_FieldsDBID.Int64)
+                  if (_gongenumshape) {
+                    if (_gongenumshape.Fields == undefined) {
+                      _gongenumshape.Fields = new Array<FieldDB>()
+                    }
+                    _gongenumshape.Fields.push(field)
+                    if (field.GongEnumShape_Fields_reverse == undefined) {
+                      field.GongEnumShape_Fields_reverse = _gongenumshape
+                    }
+                  }
+                }
                 // insertion point for slice of pointer field GongStructShape.Fields redeeming
                 {
                   let _gongstructshape = FrontRepoSingloton.GongStructShapes.get(field.GongStructShape_FieldsDBID.Int64)
@@ -756,6 +814,33 @@ export class FrontRepoService {
                     _gongstructshape.Fields.push(field)
                     if (field.GongStructShape_Fields_reverse == undefined) {
                       field.GongStructShape_Fields_reverse = _gongstructshape
+                    }
+                  }
+                }
+              }
+            )
+            gongenumshapes.forEach(
+              gongenumshape => {
+                // insertion point sub sub template for ONE-/ZERO-ONE associations pointers redeeming
+                // insertion point for pointer field Position redeeming
+                {
+                  let _position = FrontRepoSingloton.Positions.get(gongenumshape.PositionID.Int64)
+                  if (_position) {
+                    gongenumshape.Position = _position
+                  }
+                }
+
+                // insertion point for redeeming ONE-MANY associations
+                // insertion point for slice of pointer field Classdiagram.GongEnumShapes redeeming
+                {
+                  let _classdiagram = FrontRepoSingloton.Classdiagrams.get(gongenumshape.Classdiagram_GongEnumShapesDBID.Int64)
+                  if (_classdiagram) {
+                    if (_classdiagram.GongEnumShapes == undefined) {
+                      _classdiagram.GongEnumShapes = new Array<GongEnumShapeDB>()
+                    }
+                    _classdiagram.GongEnumShapes.push(gongenumshape)
+                    if (gongenumshape.Classdiagram_GongEnumShapes_reverse == undefined) {
+                      gongenumshape.Classdiagram_GongEnumShapes_reverse = _classdiagram
                     }
                   }
                 }
@@ -1130,6 +1215,19 @@ export class FrontRepoService {
                 // insertion point for redeeming ONE/ZERO-ONE associations
 
                 // insertion point for redeeming ONE-MANY associations
+                // insertion point for slice of pointer field GongEnumShape.Fields redeeming
+                {
+                  let _gongenumshape = FrontRepoSingloton.GongEnumShapes.get(field.GongEnumShape_FieldsDBID.Int64)
+                  if (_gongenumshape) {
+                    if (_gongenumshape.Fields == undefined) {
+                      _gongenumshape.Fields = new Array<FieldDB>()
+                    }
+                    _gongenumshape.Fields.push(field)
+                    if (field.GongEnumShape_Fields_reverse == undefined) {
+                      field.GongEnumShape_Fields_reverse = _gongenumshape
+                    }
+                  }
+                }
                 // insertion point for slice of pointer field GongStructShape.Fields redeeming
                 {
                   let _gongstructshape = FrontRepoSingloton.GongStructShapes.get(field.GongStructShape_FieldsDBID.Int64)
@@ -1151,6 +1249,77 @@ export class FrontRepoService {
               field => {
                 if (FrontRepoSingloton.Fields_batch.get(field.ID) == undefined) {
                   FrontRepoSingloton.Fields.delete(field.ID)
+                }
+              }
+            )
+
+            // 
+            // Second Step: redeem pointers between instances (thanks to maps in the First Step)
+            // insertion point sub template 
+
+            // hand over control flow to observer
+            observer.next(FrontRepoSingloton)
+          }
+        )
+      }
+    )
+  }
+
+  // GongEnumShapePull performs a GET on GongEnumShape of the stack and redeem association pointers 
+  GongEnumShapePull(): Observable<FrontRepo> {
+    return new Observable<FrontRepo>(
+      (observer) => {
+        combineLatest([
+          this.gongenumshapeService.getGongEnumShapes()
+        ]).subscribe(
+          ([ // insertion point sub template 
+            gongenumshapes,
+          ]) => {
+            // init the array
+            FrontRepoSingloton.GongEnumShapes_array = gongenumshapes
+
+            // clear the map that counts GongEnumShape in the GET
+            FrontRepoSingloton.GongEnumShapes_batch.clear()
+
+            // 
+            // First Step: init map of instances
+            // insertion point sub template 
+            gongenumshapes.forEach(
+              gongenumshape => {
+                FrontRepoSingloton.GongEnumShapes.set(gongenumshape.ID, gongenumshape)
+                FrontRepoSingloton.GongEnumShapes_batch.set(gongenumshape.ID, gongenumshape)
+
+                // insertion point for redeeming ONE/ZERO-ONE associations
+                // insertion point for pointer field Position redeeming
+                {
+                  let _position = FrontRepoSingloton.Positions.get(gongenumshape.PositionID.Int64)
+                  if (_position) {
+                    gongenumshape.Position = _position
+                  }
+                }
+
+                // insertion point for redeeming ONE-MANY associations
+                // insertion point for slice of pointer field Classdiagram.GongEnumShapes redeeming
+                {
+                  let _classdiagram = FrontRepoSingloton.Classdiagrams.get(gongenumshape.Classdiagram_GongEnumShapesDBID.Int64)
+                  if (_classdiagram) {
+                    if (_classdiagram.GongEnumShapes == undefined) {
+                      _classdiagram.GongEnumShapes = new Array<GongEnumShapeDB>()
+                    }
+                    _classdiagram.GongEnumShapes.push(gongenumshape)
+                    if (gongenumshape.Classdiagram_GongEnumShapes_reverse == undefined) {
+                      gongenumshape.Classdiagram_GongEnumShapes_reverse = _classdiagram
+                    }
+                  }
+                }
+              }
+            )
+
+            // clear gongenumshapes that are absent from the GET
+            FrontRepoSingloton.GongEnumShapes.forEach(
+              gongenumshape => {
+                if (FrontRepoSingloton.GongEnumShapes_batch.get(gongenumshape.ID) == undefined) {
+                  FrontRepoSingloton.GongEnumShapes.delete(gongenumshape.ID)
                 }
               }
             )
@@ -1827,33 +1996,36 @@ export function getDiagramPackageUniqueID(id: number): number {
 export function getFieldUniqueID(id: number): number {
   return 41 * id
 }
-export function getGongStructShapeUniqueID(id: number): number {
+export function getGongEnumShapeUniqueID(id: number): number {
   return 43 * id
 }
-export function getLinkUniqueID(id: number): number {
+export function getGongStructShapeUniqueID(id: number): number {
   return 47 * id
 }
-export function getNodeUniqueID(id: number): number {
+export function getLinkUniqueID(id: number): number {
   return 53 * id
 }
-export function getNoteShapeUniqueID(id: number): number {
+export function getNodeUniqueID(id: number): number {
   return 59 * id
 }
-export function getNoteShapeLinkUniqueID(id: number): number {
+export function getNoteShapeUniqueID(id: number): number {
   return 61 * id
 }
-export function getPositionUniqueID(id: number): number {
+export function getNoteShapeLinkUniqueID(id: number): number {
   return 67 * id
 }
-export function getTreeUniqueID(id: number): number {
+export function getPositionUniqueID(id: number): number {
   return 71 * id
 }
-export function getUmlStateUniqueID(id: number): number {
+export function getTreeUniqueID(id: number): number {
   return 73 * id
 }
-export function getUmlscUniqueID(id: number): number {
+export function getUmlStateUniqueID(id: number): number {
   return 79 * id
 }
-export function getVerticeUniqueID(id: number): number {
+export function getUmlscUniqueID(id: number): number {
   return 83 * id
+}
+export function getVerticeUniqueID(id: number): number {
+  return 89 * id
 }

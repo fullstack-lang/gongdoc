@@ -14,6 +14,10 @@ import { FieldsTableComponent } from './fields-table/fields-table.component'
 import { FieldDetailComponent } from './field-detail/field-detail.component'
 import { FieldPresentationComponent } from './field-presentation/field-presentation.component'
 
+import { GongEnumShapesTableComponent } from './gongenumshapes-table/gongenumshapes-table.component'
+import { GongEnumShapeDetailComponent } from './gongenumshape-detail/gongenumshape-detail.component'
+import { GongEnumShapePresentationComponent } from './gongenumshape-presentation/gongenumshape-presentation.component'
+
 import { GongStructShapesTableComponent } from './gongstructshapes-table/gongstructshapes-table.component'
 import { GongStructShapeDetailComponent } from './gongstructshape-detail/gongstructshape-detail.component'
 import { GongStructShapePresentationComponent } from './gongstructshape-presentation/gongstructshape-presentation.component'
@@ -76,6 +80,13 @@ const routes: Routes = [ // insertion point for routes declarations
 	{ path: 'github_com_fullstack_lang_gongdoc_go-field-detail/:id', component: FieldDetailComponent, outlet: 'github_com_fullstack_lang_gongdoc_go_editor' },
 	{ path: 'github_com_fullstack_lang_gongdoc_go-field-presentation/:id', component: FieldPresentationComponent, outlet: 'github_com_fullstack_lang_gongdoc_go_presentation' },
 	{ path: 'github_com_fullstack_lang_gongdoc_go-field-presentation-special/:id', component: FieldPresentationComponent, outlet: 'github_com_fullstack_lang_gongdoc_gofieldpres' },
+
+	{ path: 'github_com_fullstack_lang_gongdoc_go-gongenumshapes', component: GongEnumShapesTableComponent, outlet: 'github_com_fullstack_lang_gongdoc_go_table' },
+	{ path: 'github_com_fullstack_lang_gongdoc_go-gongenumshape-adder', component: GongEnumShapeDetailComponent, outlet: 'github_com_fullstack_lang_gongdoc_go_editor' },
+	{ path: 'github_com_fullstack_lang_gongdoc_go-gongenumshape-adder/:id/:originStruct/:originStructFieldName', component: GongEnumShapeDetailComponent, outlet: 'github_com_fullstack_lang_gongdoc_go_editor' },
+	{ path: 'github_com_fullstack_lang_gongdoc_go-gongenumshape-detail/:id', component: GongEnumShapeDetailComponent, outlet: 'github_com_fullstack_lang_gongdoc_go_editor' },
+	{ path: 'github_com_fullstack_lang_gongdoc_go-gongenumshape-presentation/:id', component: GongEnumShapePresentationComponent, outlet: 'github_com_fullstack_lang_gongdoc_go_presentation' },
+	{ path: 'github_com_fullstack_lang_gongdoc_go-gongenumshape-presentation-special/:id', component: GongEnumShapePresentationComponent, outlet: 'github_com_fullstack_lang_gongdoc_gogongenumshapepres' },
 
 	{ path: 'github_com_fullstack_lang_gongdoc_go-gongstructshapes', component: GongStructShapesTableComponent, outlet: 'github_com_fullstack_lang_gongdoc_go_table' },
 	{ path: 'github_com_fullstack_lang_gongdoc_go-gongstructshape-adder', component: GongStructShapeDetailComponent, outlet: 'github_com_fullstack_lang_gongdoc_go_editor' },

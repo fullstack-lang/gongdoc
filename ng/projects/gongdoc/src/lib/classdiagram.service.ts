@@ -72,6 +72,7 @@ export class ClassdiagramService {
 
     // insertion point for reset of pointers and reverse pointers (to avoid circular JSON)
     classdiagramdb.GongStructShapes = []
+    classdiagramdb.GongEnumShapes = []
     classdiagramdb.NoteShapes = []
     let _DiagramPackage_Classdiagrams_reverse = classdiagramdb.DiagramPackage_Classdiagrams_reverse
     classdiagramdb.DiagramPackage_Classdiagrams_reverse = new DiagramPackageDB
@@ -104,6 +105,7 @@ export class ClassdiagramService {
 
     // insertion point for reset of pointers and reverse pointers (to avoid circular JSON)
     classdiagramdb.GongStructShapes = []
+    classdiagramdb.GongEnumShapes = []
     classdiagramdb.NoteShapes = []
     let _DiagramPackage_Classdiagrams_reverse = classdiagramdb.DiagramPackage_Classdiagrams_reverse
     classdiagramdb.DiagramPackage_Classdiagrams_reverse = new DiagramPackageDB

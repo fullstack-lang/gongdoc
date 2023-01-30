@@ -264,6 +264,25 @@ func (backRepoClassdiagram *BackRepoClassdiagramStruct) CommitPhaseTwoInstance(b
 			}
 		}
 
+		// This loop encodes the slice of pointers classdiagram.GongEnumShapes into the back repo.
+		// Each back repo instance at the end of the association encode the ID of the association start
+		// into a dedicated field for coding the association. The back repo instance is then saved to the db
+		for idx, gongenumshapeAssocEnd := range classdiagram.GongEnumShapes {
+
+			// get the back repo instance at the association end
+			gongenumshapeAssocEnd_DB :=
+				backRepo.BackRepoGongEnumShape.GetGongEnumShapeDBFromGongEnumShapePtr(gongenumshapeAssocEnd)
+
+			// encode reverse pointer in the association end back repo instance
+			gongenumshapeAssocEnd_DB.Classdiagram_GongEnumShapesDBID.Int64 = int64(classdiagramDB.ID)
+			gongenumshapeAssocEnd_DB.Classdiagram_GongEnumShapesDBID.Valid = true
+			gongenumshapeAssocEnd_DB.Classdiagram_GongEnumShapesDBID_Index.Int64 = int64(idx)
+			gongenumshapeAssocEnd_DB.Classdiagram_GongEnumShapesDBID_Index.Valid = true
+			if q := backRepoClassdiagram.db.Save(gongenumshapeAssocEnd_DB); q.Error != nil {
+				return q.Error
+			}
+		}
+
 		// This loop encodes the slice of pointers classdiagram.NoteShapes into the back repo.
 		// Each back repo instance at the end of the association encode the ID of the association start
 		// into a dedicated field for coding the association. The back repo instance is then saved to the db
@@ -415,6 +434,33 @@ func (backRepoClassdiagram *BackRepoClassdiagramStruct) CheckoutPhaseTwoInstance
 		gongstructshapeDB_j := (*backRepo.BackRepoGongStructShape.Map_GongStructShapeDBID_GongStructShapeDB)[gongstructshapeDB_j_ID]
 
 		return gongstructshapeDB_i.Classdiagram_GongStructShapesDBID_Index.Int64 < gongstructshapeDB_j.Classdiagram_GongStructShapesDBID_Index.Int64
+	})
+
+	// This loop redeem classdiagram.GongEnumShapes in the stage from the encode in the back repo
+	// It parses all GongEnumShapeDB in the back repo and if the reverse pointer encoding matches the back repo ID
+	// it appends the stage instance
+	// 1. reset the slice
+	classdiagram.GongEnumShapes = classdiagram.GongEnumShapes[:0]
+	// 2. loop all instances in the type in the association end
+	for _, gongenumshapeDB_AssocEnd := range *backRepo.BackRepoGongEnumShape.Map_GongEnumShapeDBID_GongEnumShapeDB {
+		// 3. Does the ID encoding at the end and the ID at the start matches ?
+		if gongenumshapeDB_AssocEnd.Classdiagram_GongEnumShapesDBID.Int64 == int64(classdiagramDB.ID) {
+			// 4. fetch the associated instance in the stage
+			gongenumshape_AssocEnd := (*backRepo.BackRepoGongEnumShape.Map_GongEnumShapeDBID_GongEnumShapePtr)[gongenumshapeDB_AssocEnd.ID]
+			// 5. append it the association slice
+			classdiagram.GongEnumShapes = append(classdiagram.GongEnumShapes, gongenumshape_AssocEnd)
+		}
+	}
+
+	// sort the array according to the order
+	sort.Slice(classdiagram.GongEnumShapes, func(i, j int) bool {
+		gongenumshapeDB_i_ID := (*backRepo.BackRepoGongEnumShape.Map_GongEnumShapePtr_GongEnumShapeDBID)[classdiagram.GongEnumShapes[i]]
+		gongenumshapeDB_j_ID := (*backRepo.BackRepoGongEnumShape.Map_GongEnumShapePtr_GongEnumShapeDBID)[classdiagram.GongEnumShapes[j]]
+
+		gongenumshapeDB_i := (*backRepo.BackRepoGongEnumShape.Map_GongEnumShapeDBID_GongEnumShapeDB)[gongenumshapeDB_i_ID]
+		gongenumshapeDB_j := (*backRepo.BackRepoGongEnumShape.Map_GongEnumShapeDBID_GongEnumShapeDB)[gongenumshapeDB_j_ID]
+
+		return gongenumshapeDB_i.Classdiagram_GongEnumShapesDBID_Index.Int64 < gongenumshapeDB_j.Classdiagram_GongEnumShapesDBID_Index.Int64
 	})
 
 	// This loop redeem classdiagram.NoteShapes in the stage from the encode in the back repo

@@ -25,6 +25,8 @@ type BackRepoStruct struct {
 
 	BackRepoField BackRepoFieldStruct
 
+	BackRepoGongEnumShape BackRepoGongEnumShapeStruct
+
 	BackRepoGongStructShape BackRepoGongStructShapeStruct
 
 	BackRepoLink BackRepoLinkStruct
@@ -86,6 +88,7 @@ func (backRepo *BackRepoStruct) init(db *gorm.DB) {
 	backRepo.BackRepoClassdiagram.Init(db)
 	backRepo.BackRepoDiagramPackage.Init(db)
 	backRepo.BackRepoField.Init(db)
+	backRepo.BackRepoGongEnumShape.Init(db)
 	backRepo.BackRepoGongStructShape.Init(db)
 	backRepo.BackRepoLink.Init(db)
 	backRepo.BackRepoNode.Init(db)
@@ -106,6 +109,7 @@ func (backRepo *BackRepoStruct) Commit(stage *models.StageStruct) {
 	backRepo.BackRepoClassdiagram.CommitPhaseOne(stage)
 	backRepo.BackRepoDiagramPackage.CommitPhaseOne(stage)
 	backRepo.BackRepoField.CommitPhaseOne(stage)
+	backRepo.BackRepoGongEnumShape.CommitPhaseOne(stage)
 	backRepo.BackRepoGongStructShape.CommitPhaseOne(stage)
 	backRepo.BackRepoLink.CommitPhaseOne(stage)
 	backRepo.BackRepoNode.CommitPhaseOne(stage)
@@ -121,6 +125,7 @@ func (backRepo *BackRepoStruct) Commit(stage *models.StageStruct) {
 	backRepo.BackRepoClassdiagram.CommitPhaseTwo(backRepo)
 	backRepo.BackRepoDiagramPackage.CommitPhaseTwo(backRepo)
 	backRepo.BackRepoField.CommitPhaseTwo(backRepo)
+	backRepo.BackRepoGongEnumShape.CommitPhaseTwo(backRepo)
 	backRepo.BackRepoGongStructShape.CommitPhaseTwo(backRepo)
 	backRepo.BackRepoLink.CommitPhaseTwo(backRepo)
 	backRepo.BackRepoNode.CommitPhaseTwo(backRepo)
@@ -141,6 +146,7 @@ func (backRepo *BackRepoStruct) Checkout(stage *models.StageStruct) {
 	backRepo.BackRepoClassdiagram.CheckoutPhaseOne()
 	backRepo.BackRepoDiagramPackage.CheckoutPhaseOne()
 	backRepo.BackRepoField.CheckoutPhaseOne()
+	backRepo.BackRepoGongEnumShape.CheckoutPhaseOne()
 	backRepo.BackRepoGongStructShape.CheckoutPhaseOne()
 	backRepo.BackRepoLink.CheckoutPhaseOne()
 	backRepo.BackRepoNode.CheckoutPhaseOne()
@@ -156,6 +162,7 @@ func (backRepo *BackRepoStruct) Checkout(stage *models.StageStruct) {
 	backRepo.BackRepoClassdiagram.CheckoutPhaseTwo(backRepo)
 	backRepo.BackRepoDiagramPackage.CheckoutPhaseTwo(backRepo)
 	backRepo.BackRepoField.CheckoutPhaseTwo(backRepo)
+	backRepo.BackRepoGongEnumShape.CheckoutPhaseTwo(backRepo)
 	backRepo.BackRepoGongStructShape.CheckoutPhaseTwo(backRepo)
 	backRepo.BackRepoLink.CheckoutPhaseTwo(backRepo)
 	backRepo.BackRepoNode.CheckoutPhaseTwo(backRepo)
@@ -186,6 +193,7 @@ func (backRepo *BackRepoStruct) Backup(stage *models.StageStruct, dirPath string
 	backRepo.BackRepoClassdiagram.Backup(dirPath)
 	backRepo.BackRepoDiagramPackage.Backup(dirPath)
 	backRepo.BackRepoField.Backup(dirPath)
+	backRepo.BackRepoGongEnumShape.Backup(dirPath)
 	backRepo.BackRepoGongStructShape.Backup(dirPath)
 	backRepo.BackRepoLink.Backup(dirPath)
 	backRepo.BackRepoNode.Backup(dirPath)
@@ -209,6 +217,7 @@ func (backRepo *BackRepoStruct) BackupXL(stage *models.StageStruct, dirPath stri
 	backRepo.BackRepoClassdiagram.BackupXL(file)
 	backRepo.BackRepoDiagramPackage.BackupXL(file)
 	backRepo.BackRepoField.BackupXL(file)
+	backRepo.BackRepoGongEnumShape.BackupXL(file)
 	backRepo.BackRepoGongStructShape.BackupXL(file)
 	backRepo.BackRepoLink.BackupXL(file)
 	backRepo.BackRepoNode.BackupXL(file)
@@ -246,6 +255,7 @@ func (backRepo *BackRepoStruct) Restore(stage *models.StageStruct, dirPath strin
 	backRepo.BackRepoClassdiagram.RestorePhaseOne(dirPath)
 	backRepo.BackRepoDiagramPackage.RestorePhaseOne(dirPath)
 	backRepo.BackRepoField.RestorePhaseOne(dirPath)
+	backRepo.BackRepoGongEnumShape.RestorePhaseOne(dirPath)
 	backRepo.BackRepoGongStructShape.RestorePhaseOne(dirPath)
 	backRepo.BackRepoLink.RestorePhaseOne(dirPath)
 	backRepo.BackRepoNode.RestorePhaseOne(dirPath)
@@ -265,6 +275,7 @@ func (backRepo *BackRepoStruct) Restore(stage *models.StageStruct, dirPath strin
 	backRepo.BackRepoClassdiagram.RestorePhaseTwo()
 	backRepo.BackRepoDiagramPackage.RestorePhaseTwo()
 	backRepo.BackRepoField.RestorePhaseTwo()
+	backRepo.BackRepoGongEnumShape.RestorePhaseTwo()
 	backRepo.BackRepoGongStructShape.RestorePhaseTwo()
 	backRepo.BackRepoLink.RestorePhaseTwo()
 	backRepo.BackRepoNode.RestorePhaseTwo()
@@ -304,6 +315,7 @@ func (backRepo *BackRepoStruct) RestoreXL(stage *models.StageStruct, dirPath str
 	backRepo.BackRepoClassdiagram.RestoreXLPhaseOne(file)
 	backRepo.BackRepoDiagramPackage.RestoreXLPhaseOne(file)
 	backRepo.BackRepoField.RestoreXLPhaseOne(file)
+	backRepo.BackRepoGongEnumShape.RestoreXLPhaseOne(file)
 	backRepo.BackRepoGongStructShape.RestoreXLPhaseOne(file)
 	backRepo.BackRepoLink.RestoreXLPhaseOne(file)
 	backRepo.BackRepoNode.RestoreXLPhaseOne(file)

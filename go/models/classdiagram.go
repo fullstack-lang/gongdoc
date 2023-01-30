@@ -23,6 +23,8 @@ type Classdiagram struct {
 	// list of classshapes in the diagram
 	GongStructShapes []*GongStructShape
 
+	GongEnumShapes []*GongEnumShape
+
 	// list of notes in the diagram
 	NoteShapes []*NoteShape
 

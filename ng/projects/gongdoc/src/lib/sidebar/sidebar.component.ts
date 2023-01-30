@@ -17,6 +17,8 @@ import { DiagramPackageService } from '../diagrampackage.service'
 import { getDiagramPackageUniqueID } from '../front-repo.service'
 import { FieldService } from '../field.service'
 import { getFieldUniqueID } from '../front-repo.service'
+import { GongEnumShapeService } from '../gongenumshape.service'
+import { getGongEnumShapeUniqueID } from '../front-repo.service'
 import { GongStructShapeService } from '../gongstructshape.service'
 import { getGongStructShapeUniqueID } from '../front-repo.service'
 import { LinkService } from '../link.service'
@@ -182,6 +184,7 @@ export class SidebarComponent implements OnInit {
     private classdiagramService: ClassdiagramService,
     private diagrampackageService: DiagramPackageService,
     private fieldService: FieldService,
+    private gongenumshapeService: GongEnumShapeService,
     private gongstructshapeService: GongStructShapeService,
     private linkService: LinkService,
     private nodeService: NodeService,
@@ -237,6 +240,14 @@ export class SidebarComponent implements OnInit {
     )
     // observable for changes in structs
     this.fieldService.FieldServiceChanged.subscribe(
+      message => {
+        if (message == "post" || message == "update" || message == "delete") {
+          this.refresh()
+        }
+      }
+    )
+    // observable for changes in structs
+    this.gongenumshapeService.GongEnumShapeServiceChanged.subscribe(
       message => {
         if (message == "post" || message == "update" || message == "delete") {
           this.refresh()
@@ -418,6 +429,38 @@ export class SidebarComponent implements OnInit {
               children: new Array<GongNode>()
             }
             GongStructShapesGongNodeAssociation.children.push(gongstructshapeNode)
+          })
+
+          /**
+          * let append a node for the slide of pointer GongEnumShapes
+          */
+          let GongEnumShapesGongNodeAssociation: GongNode = {
+            name: "(GongEnumShape) GongEnumShapes",
+            type: GongNodeType.ONE__ZERO_MANY_ASSOCIATION,
+            id: classdiagramDB.ID,
+            uniqueIdPerStack: 19 * nonInstanceNodeId,
+            structName: "Classdiagram",
+            associationField: "GongEnumShapes",
+            associatedStructName: "GongEnumShape",
+            children: new Array<GongNode>()
+          }
+          nonInstanceNodeId = nonInstanceNodeId + 1
+          classdiagramGongNodeInstance.children.push(GongEnumShapesGongNodeAssociation)
+
+          classdiagramDB.GongEnumShapes?.forEach(gongenumshapeDB => {
+            let gongenumshapeNode: GongNode = {
+              name: gongenumshapeDB.Name,
+              type: GongNodeType.INSTANCE,
+              id: gongenumshapeDB.ID,
+              uniqueIdPerStack: // godel numbering (thank you kurt)
+                7 * getClassdiagramUniqueID(classdiagramDB.ID)
+                + 11 * getGongEnumShapeUniqueID(gongenumshapeDB.ID),
+              structName: "GongEnumShape",
+              associationField: "",
+              associatedStructName: "",
+              children: new Array<GongNode>()
+            }
+            GongEnumShapesGongNodeAssociation.children.push(gongenumshapeNode)
           })
 
           /**
@@ -639,6 +682,117 @@ export class SidebarComponent implements OnInit {
           fieldGongNodeStruct.children!.push(fieldGongNodeInstance)
 
           // insertion point for per field code
+        }
+      )
+
+      /**
+      * fill up the GongEnumShape part of the mat tree
+      */
+      let gongenumshapeGongNodeStruct: GongNode = {
+        name: "GongEnumShape",
+        type: GongNodeType.STRUCT,
+        id: 0,
+        uniqueIdPerStack: 13 * nonInstanceNodeId,
+        structName: "GongEnumShape",
+        associationField: "",
+        associatedStructName: "",
+        children: new Array<GongNode>()
+      }
+      nonInstanceNodeId = nonInstanceNodeId + 1
+      this.gongNodeTree.push(gongenumshapeGongNodeStruct)
+
+      this.frontRepo.GongEnumShapes_array.sort((t1, t2) => {
+        if (t1.Name > t2.Name) {
+          return 1;
+        }
+        if (t1.Name < t2.Name) {
+          return -1;
+        }
+        return 0;
+      });
+
+      this.frontRepo.GongEnumShapes_array.forEach(
+        gongenumshapeDB => {
+          let gongenumshapeGongNodeInstance: GongNode = {
+            name: gongenumshapeDB.Name,
+            type: GongNodeType.INSTANCE,
+            id: gongenumshapeDB.ID,
+            uniqueIdPerStack: getGongEnumShapeUniqueID(gongenumshapeDB.ID),
+            structName: "GongEnumShape",
+            associationField: "",
+            associatedStructName: "",
+            children: new Array<GongNode>()
+          }
+          gongenumshapeGongNodeStruct.children!.push(gongenumshapeGongNodeInstance)
+
+          // insertion point for per field code
+          /**
+          * let append a node for the association Position
+          */
+          let PositionGongNodeAssociation: GongNode = {
+            name: "(Position) Position",
+            type: GongNodeType.ONE__ZERO_ONE_ASSOCIATION,
+            id: gongenumshapeDB.ID,
+            uniqueIdPerStack: 17 * nonInstanceNodeId,
+            structName: "GongEnumShape",
+            associationField: "Position",
+            associatedStructName: "Position",
+            children: new Array<GongNode>()
+          }
+          nonInstanceNodeId = nonInstanceNodeId + 1
+          gongenumshapeGongNodeInstance.children!.push(PositionGongNodeAssociation)
+
+          /**
+            * let append a node for the instance behind the asssociation Position
+            */
+          if (gongenumshapeDB.Position != undefined) {
+            let gongenumshapeGongNodeInstance_Position: GongNode = {
+              name: gongenumshapeDB.Position.Name,
+              type: GongNodeType.INSTANCE,
+              id: gongenumshapeDB.Position.ID,
+              uniqueIdPerStack: // godel numbering (thank you kurt)
+                3 * getGongEnumShapeUniqueID(gongenumshapeDB.ID)
+                + 5 * getPositionUniqueID(gongenumshapeDB.Position.ID),
+              structName: "Position",
+              associationField: "",
+              associatedStructName: "",
+              children: new Array<GongNode>()
+            }
+            PositionGongNodeAssociation.children.push(gongenumshapeGongNodeInstance_Position)
+          }
+
+          /**
+          * let append a node for the slide of pointer Fields
+          */
+          let FieldsGongNodeAssociation: GongNode = {
+            name: "(Field) Fields",
+            type: GongNodeType.ONE__ZERO_MANY_ASSOCIATION,
+            id: gongenumshapeDB.ID,
+            uniqueIdPerStack: 19 * nonInstanceNodeId,
+            structName: "GongEnumShape",
+            associationField: "Fields",
+            associatedStructName: "Field",
+            children: new Array<GongNode>()
+          }
+          nonInstanceNodeId = nonInstanceNodeId + 1
+          gongenumshapeGongNodeInstance.children.push(FieldsGongNodeAssociation)
+
+          gongenumshapeDB.Fields?.forEach(fieldDB => {
+            let fieldNode: GongNode = {
+              name: fieldDB.Name,
+              type: GongNodeType.INSTANCE,
+              id: fieldDB.ID,
+              uniqueIdPerStack: // godel numbering (thank you kurt)
+                7 * getGongEnumShapeUniqueID(gongenumshapeDB.ID)
+                + 11 * getFieldUniqueID(fieldDB.ID),
+              structName: "Field",
+              associationField: "",
+              associatedStructName: "",
+              children: new Array<GongNode>()
+            }
+            FieldsGongNodeAssociation.children.push(fieldNode)
+          })
+
         }
       )
 

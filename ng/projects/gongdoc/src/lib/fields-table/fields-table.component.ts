@@ -83,6 +83,13 @@ export class FieldsTableComponent implements OnInit {
         case 'Fieldtypename':
           return fieldDB.Fieldtypename;
 
+        case 'GongEnumShape_Fields':
+          if (this.frontRepo.GongEnumShapes.get(fieldDB.GongEnumShape_FieldsDBID.Int64) != undefined) {
+            return this.frontRepo.GongEnumShapes.get(fieldDB.GongEnumShape_FieldsDBID.Int64)!.Name
+          } else {
+            return ""
+          }
+
         case 'GongStructShape_Fields':
           if (this.frontRepo.GongStructShapes.get(fieldDB.GongStructShape_FieldsDBID.Int64) != undefined) {
             return this.frontRepo.GongStructShapes.get(fieldDB.GongStructShape_FieldsDBID.Int64)!.Name
@@ -109,6 +116,10 @@ export class FieldsTableComponent implements OnInit {
       mergedContent += fieldDB.FieldTypeAsString.toLowerCase()
       mergedContent += fieldDB.Structname.toLowerCase()
       mergedContent += fieldDB.Fieldtypename.toLowerCase()
+      if (fieldDB.GongEnumShape_FieldsDBID.Int64 != 0) {
+        mergedContent += this.frontRepo.GongEnumShapes.get(fieldDB.GongEnumShape_FieldsDBID.Int64)!.Name.toLowerCase()
+      }
+
       if (fieldDB.GongStructShape_FieldsDBID.Int64 != 0) {
         mergedContent += this.frontRepo.GongStructShapes.get(fieldDB.GongStructShape_FieldsDBID.Int64)!.Name.toLowerCase()
       }
@@ -168,6 +179,7 @@ export class FieldsTableComponent implements OnInit {
         "FieldTypeAsString",
         "Structname",
         "Fieldtypename",
+        "GongEnumShape_Fields",
         "GongStructShape_Fields",
       ]
     } else {
@@ -177,6 +189,7 @@ export class FieldsTableComponent implements OnInit {
         "FieldTypeAsString",
         "Structname",
         "Fieldtypename",
+        "GongEnumShape_Fields",
         "GongStructShape_Fields",
       ]
       this.selection = new SelectionModel<FieldDB>(allowMultiSelect, this.initialSelection);

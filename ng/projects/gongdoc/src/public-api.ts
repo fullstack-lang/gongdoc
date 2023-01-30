@@ -36,6 +36,13 @@ export * from './lib/fields-table/fields-table.component'
 export * from './lib/field-db'
 export * from './lib/field.service'
 
+export * from './lib/gongenumshape-detail/gongenumshape-detail.component'
+export * from './lib/gongenumshape-presentation/gongenumshape-presentation.component'
+export * from './lib/gongenumshape-sorting/gongenumshape-sorting.component'
+export * from './lib/gongenumshapes-table/gongenumshapes-table.component'
+export * from './lib/gongenumshape-db'
+export * from './lib/gongenumshape.service'
+
 export * from './lib/gongstructshape-detail/gongstructshape-detail.component'
 export * from './lib/gongstructshape-presentation/gongstructshape-presentation.component'
 export * from './lib/gongstructshape-sorting/gongstructshape-sorting.component'

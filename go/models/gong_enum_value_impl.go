@@ -14,8 +14,8 @@ func (enumValueImpl *GongEnumValueImpl) OnAfterUpdate(
 	// find classdiagram
 	classdiagram := enumValueImpl.nodeCb.GetSelectedClassdiagram()
 
-	// find the parent node to find the gongstruct to find the classshape
-	// the node is field, one needs to find the gongstruct that contains it
+	// find the parent node to find the gongenum to find the classshape
+	// the node is field, one needs to find the gongenum that contains it
 	// get the parent node
 	parentNode := enumValueImpl.nodeCb.map_Children_Parent[stagedNode]
 
@@ -24,8 +24,8 @@ func (enumValueImpl *GongEnumValueImpl) OnAfterUpdate(
 
 	// find the classhape in the classdiagram
 	foundClassshape := false
-	var classshape *GongStructShape
-	for _, _classshape := range classdiagram.GongStructShapes {
+	var classshape *GongEnumShape
+	for _, _classshape := range classdiagram.GongEnumShapes {
 		if IdentifierToShapename(_classshape.Identifier) == gongEnum.Name && !foundClassshape {
 			classshape = _classshape
 		}

@@ -16,6 +16,7 @@ func SerializeStage(filename string) {
 		SerializeExcelize[Classdiagram](f)
 		SerializeExcelize[DiagramPackage](f)
 		SerializeExcelize[Field](f)
+		SerializeExcelize[GongEnumShape](f)
 		SerializeExcelize[GongStructShape](f)
 		SerializeExcelize[Link](f)
 		SerializeExcelize[Node](f)

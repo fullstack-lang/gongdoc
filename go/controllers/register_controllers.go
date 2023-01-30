@@ -64,6 +64,13 @@ func RegisterControllers(r *gin.Engine) {
 		v1.PUT("/v1/fields/:id", UpdateField)
 		v1.DELETE("/v1/fields/:id", DeleteField)
 
+		v1.GET("/v1/gongenumshapes", GetGongEnumShapes)
+		v1.GET("/v1/gongenumshapes/:id", GetGongEnumShape)
+		v1.POST("/v1/gongenumshapes", PostGongEnumShape)
+		v1.PATCH("/v1/gongenumshapes/:id", UpdateGongEnumShape)
+		v1.PUT("/v1/gongenumshapes/:id", UpdateGongEnumShape)
+		v1.DELETE("/v1/gongenumshapes/:id", DeleteGongEnumShape)
+
 		v1.GET("/v1/gongstructshapes", GetGongStructShapes)
 		v1.GET("/v1/gongstructshapes/:id", GetGongStructShape)
 		v1.POST("/v1/gongstructshapes", PostGongStructShape)

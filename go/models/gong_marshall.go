@@ -266,6 +266,59 @@ func (stage *StageStruct) Marshall(file *os.File, modelsPackageName, packageName
 
 	}
 
+	map_GongEnumShape_Identifiers := make(map[*GongEnumShape]string)
+	_ = map_GongEnumShape_Identifiers
+
+	gongenumshapeOrdered := []*GongEnumShape{}
+	for gongenumshape := range stage.GongEnumShapes {
+		gongenumshapeOrdered = append(gongenumshapeOrdered, gongenumshape)
+	}
+	sort.Slice(gongenumshapeOrdered[:], func(i, j int) bool {
+		return gongenumshapeOrdered[i].Name < gongenumshapeOrdered[j].Name
+	})
+	identifiersDecl += "\n\n	// Declarations of staged instances of GongEnumShape"
+	for idx, gongenumshape := range gongenumshapeOrdered {
+
+		id = generatesIdentifier("GongEnumShape", idx, gongenumshape.Name)
+		map_GongEnumShape_Identifiers[gongenumshape] = id
+
+		decl = IdentifiersDecls
+		decl = strings.ReplaceAll(decl, "{{Identifier}}", id)
+		decl = strings.ReplaceAll(decl, "{{GeneratedStructName}}", "GongEnumShape")
+		decl = strings.ReplaceAll(decl, "{{GeneratedFieldNameValue}}", gongenumshape.Name)
+		identifiersDecl += decl
+
+		initializerStatements += "\n\n	// GongEnumShape values setup"
+		// Initialisation of values
+		setValueField = StringInitStatement
+		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
+		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "Name")
+		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", string(gongenumshape.Name))
+		initializerStatements += setValueField
+
+		setValueField = StringInitStatement
+		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}",
+			fmt.Sprintf("\n\t// comment added to overcome the problem with the comment map association\n\n\t//gong:ident [%s]\n\t{{Identifier}}",
+				string(gongenumshape.Identifier)))
+		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
+		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "Identifier")
+		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", string(gongenumshape.Identifier))
+		initializerStatements += setValueField
+
+		setValueField = NumberInitStatement
+		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
+		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "Width")
+		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", fmt.Sprintf("%f", gongenumshape.Width))
+		initializerStatements += setValueField
+
+		setValueField = NumberInitStatement
+		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
+		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "Heigth")
+		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", fmt.Sprintf("%f", gongenumshape.Heigth))
+		initializerStatements += setValueField
+
+	}
+
 	map_GongStructShape_Identifiers := make(map[*GongStructShape]string)
 	_ = map_GongStructShape_Identifiers
 
@@ -869,6 +922,14 @@ func (stage *StageStruct) Marshall(file *os.File, modelsPackageName, packageName
 			pointersInitializesStatements += setPointerField
 		}
 
+		for _, _gongenumshape := range classdiagram.GongEnumShapes {
+			setPointerField = SliceOfPointersFieldInitStatement
+			setPointerField = strings.ReplaceAll(setPointerField, "{{Identifier}}", id)
+			setPointerField = strings.ReplaceAll(setPointerField, "{{GeneratedFieldName}}", "GongEnumShapes")
+			setPointerField = strings.ReplaceAll(setPointerField, "{{GeneratedFieldNameValue}}", map_GongEnumShape_Identifiers[_gongenumshape])
+			pointersInitializesStatements += setPointerField
+		}
+
 		for _, _noteshape := range classdiagram.NoteShapes {
 			setPointerField = SliceOfPointersFieldInitStatement
 			setPointerField = strings.ReplaceAll(setPointerField, "{{Identifier}}", id)
@@ -921,6 +982,32 @@ func (stage *StageStruct) Marshall(file *os.File, modelsPackageName, packageName
 		map_Field_Identifiers[field] = id
 
 		// Initialisation of values
+	}
+
+	for idx, gongenumshape := range gongenumshapeOrdered {
+		var setPointerField string
+		_ = setPointerField
+
+		id = generatesIdentifier("GongEnumShape", idx, gongenumshape.Name)
+		map_GongEnumShape_Identifiers[gongenumshape] = id
+
+		// Initialisation of values
+		if gongenumshape.Position != nil {
+			setPointerField = PointerFieldInitStatement
+			setPointerField = strings.ReplaceAll(setPointerField, "{{Identifier}}", id)
+			setPointerField = strings.ReplaceAll(setPointerField, "{{GeneratedFieldName}}", "Position")
+			setPointerField = strings.ReplaceAll(setPointerField, "{{GeneratedFieldNameValue}}", map_Position_Identifiers[gongenumshape.Position])
+			pointersInitializesStatements += setPointerField
+		}
+
+		for _, _field := range gongenumshape.Fields {
+			setPointerField = SliceOfPointersFieldInitStatement
+			setPointerField = strings.ReplaceAll(setPointerField, "{{Identifier}}", id)
+			setPointerField = strings.ReplaceAll(setPointerField, "{{GeneratedFieldName}}", "Fields")
+			setPointerField = strings.ReplaceAll(setPointerField, "{{GeneratedFieldNameValue}}", map_Field_Identifiers[_field])
+			pointersInitializesStatements += setPointerField
+		}
+
 	}
 
 	for idx, gongstructshape := range gongstructshapeOrdered {

@@ -54,6 +54,11 @@ import { FieldSortingComponent } from './field-sorting/field-sorting.component'
 import { FieldDetailComponent } from './field-detail/field-detail.component'
 import { FieldPresentationComponent } from './field-presentation/field-presentation.component'
 
+import { GongEnumShapesTableComponent } from './gongenumshapes-table/gongenumshapes-table.component'
+import { GongEnumShapeSortingComponent } from './gongenumshape-sorting/gongenumshape-sorting.component'
+import { GongEnumShapeDetailComponent } from './gongenumshape-detail/gongenumshape-detail.component'
+import { GongEnumShapePresentationComponent } from './gongenumshape-presentation/gongenumshape-presentation.component'
+
 import { GongStructShapesTableComponent } from './gongstructshapes-table/gongstructshapes-table.component'
 import { GongStructShapeSortingComponent } from './gongstructshape-sorting/gongstructshape-sorting.component'
 import { GongStructShapeDetailComponent } from './gongstructshape-detail/gongstructshape-detail.component'
@@ -122,6 +127,11 @@ import { VerticePresentationComponent } from './vertice-presentation/vertice-pre
 		FieldSortingComponent,
 		FieldDetailComponent,
 		FieldPresentationComponent,
+
+		GongEnumShapesTableComponent,
+		GongEnumShapeSortingComponent,
+		GongEnumShapeDetailComponent,
+		GongEnumShapePresentationComponent,
 
 		GongStructShapesTableComponent,
 		GongStructShapeSortingComponent,
@@ -226,6 +236,11 @@ import { VerticePresentationComponent } from './vertice-presentation/vertice-pre
 		FieldSortingComponent,
 		FieldDetailComponent,
 		FieldPresentationComponent,
+
+		GongEnumShapesTableComponent,
+		GongEnumShapeSortingComponent,
+		GongEnumShapeDetailComponent,
+		GongEnumShapePresentationComponent,
 
 		GongStructShapesTableComponent,
 		GongStructShapeSortingComponent,
