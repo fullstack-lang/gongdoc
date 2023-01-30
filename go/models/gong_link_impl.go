@@ -6,8 +6,7 @@ import (
 
 type GongLinkImpl struct {
 	gongLink *gong_models.GongLink
-	node     *Node
-	nodeCb   *NodeCB
+	NodeImpl
 }
 
 func (gongLinkImpl *GongLinkImpl) OnAfterUpdate(

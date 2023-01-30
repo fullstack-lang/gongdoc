@@ -8,8 +8,7 @@ import (
 
 type GongNoteImpl struct {
 	gongNote *gong_models.GongNote
-	node     *Node
-	nodeCb   *NodeCB
+	NodeImpl
 }
 
 func (gongNoteImpl *GongNoteImpl) OnAfterUpdate(

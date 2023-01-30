@@ -8,9 +8,8 @@ import (
 )
 
 type FieldImpl struct {
-	field  gong_models.FieldInterface
-	node   *Node
-	nodeCb *NodeCB
+	field gong_models.FieldInterface
+	NodeImpl
 }
 
 func (fieldImpl *FieldImpl) OnAfterUpdate(

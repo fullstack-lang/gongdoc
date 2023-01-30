@@ -4,8 +4,7 @@ import gong_models "github.com/fullstack-lang/gong/go/models"
 
 type GongStructImpl struct {
 	gongStruct *gong_models.GongStruct
-	node       *Node
-	nodeCb     *NodeCB
+	NodeImpl
 }
 
 func (gongStructImpl *GongStructImpl) OnAfterUpdate(

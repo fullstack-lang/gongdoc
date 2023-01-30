@@ -10,8 +10,7 @@ import (
 
 type ClassdiagramImpl struct {
 	classdiagram *Classdiagram
-	node         *Node
-	nodeCb       *NodeCB
+	NodeImpl
 }
 
 func (classdiagramImpl *ClassdiagramImpl) OnAfterUpdate(

@@ -4,8 +4,7 @@ import gong_models "github.com/fullstack-lang/gong/go/models"
 
 type GongEnumImpl struct {
 	gongEnum *gong_models.GongEnum
-	node     *Node
-	nodeCb   *NodeCB
+	NodeImpl
 }
 
 func (gongEnumImpl *GongEnumImpl) OnAfterUpdate(
