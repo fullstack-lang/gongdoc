@@ -50,11 +50,11 @@ type LinkPointersEnconding struct {
 	// This field is generated into another field to enable AS ONE association
 	MiddleverticeID sql.NullInt64
 
-	// Implementation of a reverse ID for field Classshape{}.Links []*Link
-	Classshape_LinksDBID sql.NullInt64
+	// Implementation of a reverse ID for field GongStructShape{}.Links []*Link
+	GongStructShape_LinksDBID sql.NullInt64
 
 	// implementation of the index of the withing the slice
-	Classshape_LinksDBID_Index sql.NullInt64
+	GongStructShape_LinksDBID_Index sql.NullInt64
 }
 
 // LinkDB describes a link in the database
@@ -653,9 +653,9 @@ func (backRepoLink *BackRepoLinkStruct) RestorePhaseTwo() {
 		}
 
 		// This reindex link.Links
-		if linkDB.Classshape_LinksDBID.Int64 != 0 {
-			linkDB.Classshape_LinksDBID.Int64 =
-				int64(BackRepoClassshapeid_atBckpTime_newID[uint(linkDB.Classshape_LinksDBID.Int64)])
+		if linkDB.GongStructShape_LinksDBID.Int64 != 0 {
+			linkDB.GongStructShape_LinksDBID.Int64 =
+				int64(BackRepoGongStructShapeid_atBckpTime_newID[uint(linkDB.GongStructShape_LinksDBID.Int64)])
 		}
 
 		// update databse with new index encoding

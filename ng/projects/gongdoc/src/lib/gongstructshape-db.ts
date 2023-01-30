@@ -7,7 +7,7 @@ import { ClassdiagramDB } from './classdiagram-db'
 // usefull for managing pointer ID values that can be nullable
 import { NullInt64 } from './null-int64'
 
-export class ClassshapeDB {
+export class GongStructShapeDB {
 	CreatedAt?: string
 	DeletedAt?: string
 	ID: number = 0
@@ -27,8 +27,8 @@ export class ClassshapeDB {
 
 	Fields?: Array<FieldDB>
 	Links?: Array<LinkDB>
-	Classdiagram_ClassshapesDBID: NullInt64 = new NullInt64
-	Classdiagram_ClassshapesDBID_Index: NullInt64  = new NullInt64 // store the index of the classshape instance in Classdiagram.Classshapes
-	Classdiagram_Classshapes_reverse?: ClassdiagramDB 
+	Classdiagram_GongStructShapesDBID: NullInt64 = new NullInt64
+	Classdiagram_GongStructShapesDBID_Index: NullInt64  = new NullInt64 // store the index of the gongstructshape instance in Classdiagram.GongStructShapes
+	Classdiagram_GongStructShapes_reverse?: ClassdiagramDB 
 
 }

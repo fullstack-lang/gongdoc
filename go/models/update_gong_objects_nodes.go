@@ -22,7 +22,7 @@ func updateGongObjectsNodes(stage *StageStruct, nodeCb *NodeCB, classdiagram *Cl
 	// the classdiagram: check the node and enable it if the diagram is in drawMode
 
 	// 1. gongstructs / gongenum referenced by the classshape
-	for _, classshape := range classdiagram.Classshapes {
+	for _, classshape := range classdiagram.GongStructShapes {
 
 		var classshapeNode *Node
 		var ok bool
@@ -66,7 +66,7 @@ func updateGongObjectsNodes(stage *StageStruct, nodeCb *NodeCB, classdiagram *Cl
 	// not present in the diagram
 	// first, construct map of all gongstructs present in the diagram
 	set_of_classshape_names := make(map[string]bool)
-	for _, classshape := range classdiagram.Classshapes {
+	for _, classshape := range classdiagram.GongStructShapes {
 		set_of_classshape_names[IdentifierToShapename(classshape.Identifier)] = true
 	}
 

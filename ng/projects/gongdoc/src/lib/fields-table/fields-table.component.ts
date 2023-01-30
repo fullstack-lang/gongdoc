@@ -83,9 +83,9 @@ export class FieldsTableComponent implements OnInit {
         case 'Fieldtypename':
           return fieldDB.Fieldtypename;
 
-        case 'Classshape_Fields':
-          if (this.frontRepo.Classshapes.get(fieldDB.Classshape_FieldsDBID.Int64) != undefined) {
-            return this.frontRepo.Classshapes.get(fieldDB.Classshape_FieldsDBID.Int64)!.Name
+        case 'GongStructShape_Fields':
+          if (this.frontRepo.GongStructShapes.get(fieldDB.GongStructShape_FieldsDBID.Int64) != undefined) {
+            return this.frontRepo.GongStructShapes.get(fieldDB.GongStructShape_FieldsDBID.Int64)!.Name
           } else {
             return ""
           }
@@ -109,8 +109,8 @@ export class FieldsTableComponent implements OnInit {
       mergedContent += fieldDB.FieldTypeAsString.toLowerCase()
       mergedContent += fieldDB.Structname.toLowerCase()
       mergedContent += fieldDB.Fieldtypename.toLowerCase()
-      if (fieldDB.Classshape_FieldsDBID.Int64 != 0) {
-        mergedContent += this.frontRepo.Classshapes.get(fieldDB.Classshape_FieldsDBID.Int64)!.Name.toLowerCase()
+      if (fieldDB.GongStructShape_FieldsDBID.Int64 != 0) {
+        mergedContent += this.frontRepo.GongStructShapes.get(fieldDB.GongStructShape_FieldsDBID.Int64)!.Name.toLowerCase()
       }
 
 
@@ -168,7 +168,7 @@ export class FieldsTableComponent implements OnInit {
         "FieldTypeAsString",
         "Structname",
         "Fieldtypename",
-        "Classshape_Fields",
+        "GongStructShape_Fields",
       ]
     } else {
       this.displayedColumns = ['select', 'ID', // insertion point for columns to display
@@ -177,7 +177,7 @@ export class FieldsTableComponent implements OnInit {
         "FieldTypeAsString",
         "Structname",
         "Fieldtypename",
-        "Classshape_Fields",
+        "GongStructShape_Fields",
       ]
       this.selection = new SelectionModel<FieldDB>(allowMultiSelect, this.initialSelection);
     }

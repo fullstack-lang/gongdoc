@@ -50,13 +50,6 @@ func RegisterControllers(r *gin.Engine) {
 		v1.PUT("/v1/classdiagrams/:id", UpdateClassdiagram)
 		v1.DELETE("/v1/classdiagrams/:id", DeleteClassdiagram)
 
-		v1.GET("/v1/classshapes", GetClassshapes)
-		v1.GET("/v1/classshapes/:id", GetClassshape)
-		v1.POST("/v1/classshapes", PostClassshape)
-		v1.PATCH("/v1/classshapes/:id", UpdateClassshape)
-		v1.PUT("/v1/classshapes/:id", UpdateClassshape)
-		v1.DELETE("/v1/classshapes/:id", DeleteClassshape)
-
 		v1.GET("/v1/diagrampackages", GetDiagramPackages)
 		v1.GET("/v1/diagrampackages/:id", GetDiagramPackage)
 		v1.POST("/v1/diagrampackages", PostDiagramPackage)
@@ -70,6 +63,13 @@ func RegisterControllers(r *gin.Engine) {
 		v1.PATCH("/v1/fields/:id", UpdateField)
 		v1.PUT("/v1/fields/:id", UpdateField)
 		v1.DELETE("/v1/fields/:id", DeleteField)
+
+		v1.GET("/v1/gongstructshapes", GetGongStructShapes)
+		v1.GET("/v1/gongstructshapes/:id", GetGongStructShape)
+		v1.POST("/v1/gongstructshapes", PostGongStructShape)
+		v1.PATCH("/v1/gongstructshapes/:id", UpdateGongStructShape)
+		v1.PUT("/v1/gongstructshapes/:id", UpdateGongStructShape)
+		v1.DELETE("/v1/gongstructshapes/:id", DeleteGongStructShape)
 
 		v1.GET("/v1/links", GetLinks)
 		v1.GET("/v1/links/:id", GetLink)

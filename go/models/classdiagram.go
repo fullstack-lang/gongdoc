@@ -21,7 +21,7 @@ type Classdiagram struct {
 	Name string
 
 	// list of classshapes in the diagram
-	Classshapes []*Classshape
+	GongStructShapes []*GongStructShape
 
 	// list of notes in the diagram
 	NoteShapes []*NoteShape
@@ -37,7 +37,7 @@ const DiagramMarginY = 10.0
 // Extent compute max X and max Y
 func (classdiagram *Classdiagram) Extent() (x, y, maxClassshapeHeigth float64) {
 
-	for _, classshape := range classdiagram.Classshapes {
+	for _, classshape := range classdiagram.GongStructShapes {
 
 		if maxClassshapeHeigth < classshape.Heigth {
 			maxClassshapeHeigth = classshape.Heigth
@@ -103,8 +103,8 @@ func (classdiagram *Classdiagram) OutputSVG(path string) {
 	ctx := canvas.NewContext(c)
 	ctx.SetStrokeColor(color.Black)
 
-	mapStringClassshape := make(map[string]*Classshape)
-	for _, classshape := range classdiagram.Classshapes {
+	mapStringClassshape := make(map[string]*GongStructShape)
+	for _, classshape := range classdiagram.GongStructShapes {
 		mapStringClassshape[IdentifierToShapename(classshape.Identifier)] = classshape
 	}
 
@@ -120,7 +120,7 @@ func (classdiagram *Classdiagram) OutputSVG(path string) {
 
 	// First, draw all links with full transparency
 	ctx.SetFillColor(color.Transparent)
-	for _, classshape := range classdiagram.Classshapes {
+	for _, classshape := range classdiagram.GongStructShapes {
 
 		bottomLeftX := classshape.Position.X
 		bottomLeftY := ModelToSVGRectangleYOrigin(classshape.Position.Y, classshape.Heigth)
@@ -184,7 +184,7 @@ func (classdiagram *Classdiagram) OutputSVG(path string) {
 	// draw the classshape AFTER the links
 	ctx.SetFillColor(color.RGBA{204, 224, 218, 255})
 
-	for _, classshape := range classdiagram.Classshapes {
+	for _, classshape := range classdiagram.GongStructShapes {
 
 		heigthBetweenLines := 16.0
 
@@ -220,8 +220,8 @@ func (classdiagram *Classdiagram) OutputSVG(path string) {
 func (classdiagram *Classdiagram) RemoveClassshape(classshapeName string) {
 
 	foundClassshape := false
-	var classshape *Classshape
-	for _, _classshape := range classdiagram.Classshapes {
+	var classshape *GongStructShape
+	for _, _classshape := range classdiagram.GongStructShapes {
 
 		// strange behavior when the classshape is remove within the loop
 		if IdentifierToShapename(_classshape.Identifier) == classshapeName && !foundClassshape {
@@ -229,7 +229,7 @@ func (classdiagram *Classdiagram) RemoveClassshape(classshapeName string) {
 		}
 	}
 
-	classdiagram.Classshapes = remove(classdiagram.Classshapes, classshape)
+	classdiagram.GongStructShapes = remove(classdiagram.GongStructShapes, classshape)
 	classshape.Position.Unstage()
 	classshape.Unstage()
 
@@ -241,7 +241,7 @@ func (classdiagram *Classdiagram) RemoveClassshape(classshapeName string) {
 	classshape.Links = []*Link{}
 
 	// remove association links that go to this classshape
-	for _, fromClassshape := range classdiagram.Classshapes {
+	for _, fromClassshape := range classdiagram.GongStructShapes {
 
 		newSliceOfLinks := make([]*Link, 0)
 		for _, link := range fromClassshape.Links {
@@ -286,7 +286,7 @@ func (classdiagram *Classdiagram) RemoveClassshape(classshapeName string) {
 
 func (classdiagram *Classdiagram) AddClassshape(nodesCb *NodeCB, classshapeName string, referenceType ReferenceType) {
 
-	var classshape Classshape
+	var classshape GongStructShape
 	classshape.Name = classdiagram.Name + "-" + classshapeName
 	classshape.Identifier = ShapenameToIdentifier(classshapeName)
 	classshape.Width = 240
@@ -307,7 +307,7 @@ func (classdiagram *Classdiagram) AddClassshape(nodesCb *NodeCB, classshapeName 
 	classshape.Position = &position
 	position.Stage()
 
-	classdiagram.Classshapes = append(classdiagram.Classshapes, &classshape)
+	classdiagram.GongStructShapes = append(classdiagram.GongStructShapes, &classshape)
 
 	// log.Println("AddClassshape, before commit, nb ", Stage.BackRepo.GetLastCommitFromBackNb())
 	Stage.Commit()

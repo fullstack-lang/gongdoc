@@ -46,11 +46,11 @@ type FieldAPI struct {
 type FieldPointersEnconding struct {
 	// insertion for pointer fields encoding declaration
 
-	// Implementation of a reverse ID for field Classshape{}.Fields []*Field
-	Classshape_FieldsDBID sql.NullInt64
+	// Implementation of a reverse ID for field GongStructShape{}.Fields []*Field
+	GongStructShape_FieldsDBID sql.NullInt64
 
 	// implementation of the index of the withing the slice
-	Classshape_FieldsDBID_Index sql.NullInt64
+	GongStructShape_FieldsDBID_Index sql.NullInt64
 }
 
 // FieldDB describes a field in the database
@@ -616,9 +616,9 @@ func (backRepoField *BackRepoFieldStruct) RestorePhaseTwo() {
 
 		// insertion point for reindexing pointers encoding
 		// This reindex field.Fields
-		if fieldDB.Classshape_FieldsDBID.Int64 != 0 {
-			fieldDB.Classshape_FieldsDBID.Int64 =
-				int64(BackRepoClassshapeid_atBckpTime_newID[uint(fieldDB.Classshape_FieldsDBID.Int64)])
+		if fieldDB.GongStructShape_FieldsDBID.Int64 != 0 {
+			fieldDB.GongStructShape_FieldsDBID.Int64 =
+				int64(BackRepoGongStructShapeid_atBckpTime_newID[uint(fieldDB.GongStructShape_FieldsDBID.Int64)])
 		}
 
 		// update databse with new index encoding

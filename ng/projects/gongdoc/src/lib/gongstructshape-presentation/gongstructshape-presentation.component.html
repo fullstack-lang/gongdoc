@@ -1,8 +1,8 @@
 
-<div class="presentation__header" (click)="setEditorRouterOutlet(classshape.ID)">
-    <h1>Classshape's fields <span class="material-icons">edit</span></h1>
+<div class="presentation__header" (click)="setEditorRouterOutlet(gongstructshape.ID)">
+    <h1>GongStructShape's fields <span class="material-icons">edit</span></h1>
 </div>
-<table *ngIf="classshape" class="presentation__table mat-table">
+<table *ngIf="gongstructshape" class="presentation__table mat-table">
     <tr class="mat-header-row">
         <th class="mat-header-cell">Name</th>
         <th class="mat-header-cell">Value</th>
@@ -10,39 +10,39 @@
     <!-- insertion point for fields specific code -->
     <tr class="mat-row">
         <td class="mat-cell">Name</td>
-        <td class="mat-cell">{{classshape.Name}}</td>
+        <td class="mat-cell">{{gongstructshape.Name}}</td>
     </tr>
     <tr class="mat-row">
         <td class="mat-cell">Position</td>
-        <td class="mat-cell">{{classshape.Position ? classshape.Position.Name : ""}}</td>
+        <td class="mat-cell">{{gongstructshape.Position ? gongstructshape.Position.Name : ""}}</td>
     </tr>
     <tr class="mat-row">
         <td class="mat-cell">Identifier</td>
-        <td class="mat-cell">{{classshape.Identifier}}</td>
+        <td class="mat-cell">{{gongstructshape.Identifier}}</td>
     </tr>
     <tr class="mat-row">
         <td class="mat-cell">ShowNbInstances</td>
         <td class="mat-cell">
-            <mat-checkbox [checked]="classshape.ShowNbInstances" disabled=true>
+            <mat-checkbox [checked]="gongstructshape.ShowNbInstances" disabled=true>
             </mat-checkbox>
         </td>
     </tr>
     <tr class="mat-row">
         <td class="mat-cell">NbInstances</td>
-        <td class="mat-cell">{{classshape.NbInstances}}</td>
+        <td class="mat-cell">{{gongstructshape.NbInstances}}</td>
     </tr>
     <tr class="mat-row">
         <td class="mat-cell">Width</td>
-        <td class="mat-cell">{{classshape.Width}}</td>
+        <td class="mat-cell">{{gongstructshape.Width}}</td>
     </tr>
     <tr class="mat-row">
         <td class="mat-cell">Heigth</td>
-        <td class="mat-cell">{{classshape.Heigth}}</td>
+        <td class="mat-cell">{{gongstructshape.Heigth}}</td>
     </tr>
     <tr class="mat-row">
         <td class="mat-cell">IsSelected</td>
         <td class="mat-cell">
-            <mat-checkbox [checked]="classshape.IsSelected" disabled=true>
+            <mat-checkbox [checked]="gongstructshape.IsSelected" disabled=true>
             </mat-checkbox>
         </td>
     </tr>

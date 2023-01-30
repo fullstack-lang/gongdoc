@@ -1,11 +1,11 @@
 package models
 
-const ClassshapeDefaultWidth = 240.0
-const ClassshapeDefaultHeigth = 48.0
+const GongStructShapeDefaultWidth = 240.0
+const GongStructShapeDefaultHeigth = 48.0
 
-// Classshape mirrors joint.shapes.uml.Class
-// swagger:model Classshape
-type Classshape struct {
+// GongStructShape mirrors joint.shapes.uml.Class
+// swagger:model GongStructShape
+type GongStructShape struct {
 	Name string
 
 	Position *Position

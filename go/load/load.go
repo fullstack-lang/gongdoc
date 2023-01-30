@@ -75,7 +75,7 @@ func Load(
 		}
 
 		for _, classdiagram := range diagramPackage.Classdiagrams {
-			for _, classshape := range classdiagram.Classshapes {
+			for _, classshape := range classdiagram.GongStructShapes {
 
 				gongStructName := gongdoc_models.IdentifierToShapename(classshape.Identifier)
 				nbInstances, ok := gongdoc_models.Map_Identifier_NbInstances[gongStructName]

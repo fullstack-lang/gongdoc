@@ -8,30 +8,30 @@ import { DialogData } from '../front-repo.service'
 import { SelectionModel } from '@angular/cdk/collections';
 
 import { Router, RouterState } from '@angular/router';
-import { ClassshapeDB } from '../classshape-db'
-import { ClassshapeService } from '../classshape.service'
+import { GongStructShapeDB } from '../gongstructshape-db'
+import { GongStructShapeService } from '../gongstructshape.service'
 
 import { FrontRepoService, FrontRepo } from '../front-repo.service'
 import { NullInt64 } from '../null-int64'
 
 @Component({
-  selector: 'lib-classshape-sorting',
-  templateUrl: './classshape-sorting.component.html',
-  styleUrls: ['./classshape-sorting.component.css']
+  selector: 'lib-gongstructshape-sorting',
+  templateUrl: './gongstructshape-sorting.component.html',
+  styleUrls: ['./gongstructshape-sorting.component.css']
 })
-export class ClassshapeSortingComponent implements OnInit {
+export class GongStructShapeSortingComponent implements OnInit {
 
   frontRepo: FrontRepo = new (FrontRepo)
 
-  // array of Classshape instances that are in the association
-  associatedClassshapes = new Array<ClassshapeDB>();
+  // array of GongStructShape instances that are in the association
+  associatedGongStructShapes = new Array<GongStructShapeDB>();
 
   constructor(
-    private classshapeService: ClassshapeService,
+    private gongstructshapeService: GongStructShapeService,
     private frontRepoService: FrontRepoService,
 
-    // not null if the component is called as a selection component of classshape instances
-    public dialogRef: MatDialogRef<ClassshapeSortingComponent>,
+    // not null if the component is called as a selection component of gongstructshape instances
+    public dialogRef: MatDialogRef<GongStructShapeSortingComponent>,
     @Optional() @Inject(MAT_DIALOG_DATA) public dialogData: DialogData,
 
     private router: Router,
@@ -42,31 +42,31 @@ export class ClassshapeSortingComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.getClassshapes()
+    this.getGongStructShapes()
   }
 
-  getClassshapes(): void {
+  getGongStructShapes(): void {
     this.frontRepoService.pull().subscribe(
       frontRepo => {
         this.frontRepo = frontRepo
 
         let index = 0
-        for (let classshape of this.frontRepo.Classshapes_array) {
+        for (let gongstructshape of this.frontRepo.GongStructShapes_array) {
           let ID = this.dialogData.ID
-          let revPointerID = classshape[this.dialogData.ReversePointer as keyof ClassshapeDB] as unknown as NullInt64
-          let revPointerID_Index = classshape[this.dialogData.ReversePointer + "_Index" as keyof ClassshapeDB] as unknown as NullInt64
+          let revPointerID = gongstructshape[this.dialogData.ReversePointer as keyof GongStructShapeDB] as unknown as NullInt64
+          let revPointerID_Index = gongstructshape[this.dialogData.ReversePointer + "_Index" as keyof GongStructShapeDB] as unknown as NullInt64
           if (revPointerID.Int64 == ID) {
             if (revPointerID_Index == undefined) {
               revPointerID_Index = new NullInt64
               revPointerID_Index.Valid = true
               revPointerID_Index.Int64 = index++
             }
-            this.associatedClassshapes.push(classshape)
+            this.associatedGongStructShapes.push(gongstructshape)
           }
         }
 
-        // sort associated classshape according to order
-        this.associatedClassshapes.sort((t1, t2) => {
+        // sort associated gongstructshape according to order
+        this.associatedGongStructShapes.sort((t1, t2) => {
           let t1_revPointerID_Index = t1[this.dialogData.ReversePointer + "_Index" as keyof typeof t1] as unknown as NullInt64
           let t2_revPointerID_Index = t2[this.dialogData.ReversePointer + "_Index" as keyof typeof t2] as unknown as NullInt64
           if (t1_revPointerID_Index && t2_revPointerID_Index) {
@@ -84,13 +84,13 @@ export class ClassshapeSortingComponent implements OnInit {
   }
 
   drop(event: CdkDragDrop<string[]>) {
-    moveItemInArray(this.associatedClassshapes, event.previousIndex, event.currentIndex);
+    moveItemInArray(this.associatedGongStructShapes, event.previousIndex, event.currentIndex);
 
-    // set the order of Classshape instances
+    // set the order of GongStructShape instances
     let index = 0
 
-    for (let classshape of this.associatedClassshapes) {
-      let revPointerID_Index = classshape[this.dialogData.ReversePointer + "_Index" as keyof ClassshapeDB] as unknown as NullInt64
+    for (let gongstructshape of this.associatedGongStructShapes) {
+      let revPointerID_Index = gongstructshape[this.dialogData.ReversePointer + "_Index" as keyof GongStructShapeDB] as unknown as NullInt64
       revPointerID_Index.Valid = true
       revPointerID_Index.Int64 = index++
     }
@@ -98,11 +98,11 @@ export class ClassshapeSortingComponent implements OnInit {
 
   save() {
 
-    this.associatedClassshapes.forEach(
-      classshape => {
-        this.classshapeService.updateClassshape(classshape)
-          .subscribe(classshape => {
-            this.classshapeService.ClassshapeServiceChanged.next("update")
+    this.associatedGongStructShapes.forEach(
+      gongstructshape => {
+        this.gongstructshapeService.updateGongStructShape(gongstructshape)
+          .subscribe(gongstructshape => {
+            this.gongstructshapeService.GongStructShapeServiceChanged.next("update")
           });
       }
     )

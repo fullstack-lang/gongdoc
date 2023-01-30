@@ -1,5 +1,5 @@
 // insertion point for imports
-import { ClassshapeDB } from './classshape-db'
+import { GongStructShapeDB } from './gongstructshape-db'
 import { LinkDB } from './link-db'
 import { VerticeDB } from './vertice-db'
 import { NoteShapeDB } from './noteshape-db'
@@ -18,7 +18,7 @@ export class NoteShapeLinkDB {
 	Type: string = ""
 
 	// insertion point for other declarations
-	Classshape?: ClassshapeDB
+	Classshape?: GongStructShapeDB
 	ClassshapeID: NullInt64 = new NullInt64 // if pointer is null, Classshape.ID = 0
 
 	Link?: LinkDB

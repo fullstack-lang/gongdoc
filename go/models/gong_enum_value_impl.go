@@ -24,8 +24,8 @@ func (enumValueImpl *GongEnumValueImpl) OnAfterUpdate(
 
 	// find the classhape in the classdiagram
 	foundClassshape := false
-	var classshape *Classshape
-	for _, _classshape := range classdiagram.Classshapes {
+	var classshape *GongStructShape
+	for _, _classshape := range classdiagram.GongStructShapes {
 		if IdentifierToShapename(_classshape.Identifier) == gongEnum.Name && !foundClassshape {
 			classshape = _classshape
 		}

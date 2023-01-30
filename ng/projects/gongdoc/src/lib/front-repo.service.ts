@@ -7,14 +7,14 @@ import { Observable, combineLatest, BehaviorSubject } from 'rxjs';
 import { ClassdiagramDB } from './classdiagram-db'
 import { ClassdiagramService } from './classdiagram.service'
 
-import { ClassshapeDB } from './classshape-db'
-import { ClassshapeService } from './classshape.service'
-
 import { DiagramPackageDB } from './diagrampackage-db'
 import { DiagramPackageService } from './diagrampackage.service'
 
 import { FieldDB } from './field-db'
 import { FieldService } from './field.service'
+
+import { GongStructShapeDB } from './gongstructshape-db'
+import { GongStructShapeService } from './gongstructshape.service'
 
 import { LinkDB } from './link-db'
 import { LinkService } from './link.service'
@@ -49,15 +49,15 @@ export class FrontRepo { // insertion point sub template
   Classdiagrams_array = new Array<ClassdiagramDB>(); // array of repo instances
   Classdiagrams = new Map<number, ClassdiagramDB>(); // map of repo instances
   Classdiagrams_batch = new Map<number, ClassdiagramDB>(); // same but only in last GET (for finding repo instances to delete)
-  Classshapes_array = new Array<ClassshapeDB>(); // array of repo instances
-  Classshapes = new Map<number, ClassshapeDB>(); // map of repo instances
-  Classshapes_batch = new Map<number, ClassshapeDB>(); // same but only in last GET (for finding repo instances to delete)
   DiagramPackages_array = new Array<DiagramPackageDB>(); // array of repo instances
   DiagramPackages = new Map<number, DiagramPackageDB>(); // map of repo instances
   DiagramPackages_batch = new Map<number, DiagramPackageDB>(); // same but only in last GET (for finding repo instances to delete)
   Fields_array = new Array<FieldDB>(); // array of repo instances
   Fields = new Map<number, FieldDB>(); // map of repo instances
   Fields_batch = new Map<number, FieldDB>(); // same but only in last GET (for finding repo instances to delete)
+  GongStructShapes_array = new Array<GongStructShapeDB>(); // array of repo instances
+  GongStructShapes = new Map<number, GongStructShapeDB>(); // map of repo instances
+  GongStructShapes_batch = new Map<number, GongStructShapeDB>(); // same but only in last GET (for finding repo instances to delete)
   Links_array = new Array<LinkDB>(); // array of repo instances
   Links = new Map<number, LinkDB>(); // map of repo instances
   Links_batch = new Map<number, LinkDB>(); // same but only in last GET (for finding repo instances to delete)
@@ -144,9 +144,9 @@ export class FrontRepoService {
   constructor(
     private http: HttpClient, // insertion point sub template 
     private classdiagramService: ClassdiagramService,
-    private classshapeService: ClassshapeService,
     private diagrampackageService: DiagramPackageService,
     private fieldService: FieldService,
+    private gongstructshapeService: GongStructShapeService,
     private linkService: LinkService,
     private nodeService: NodeService,
     private noteshapeService: NoteShapeService,
@@ -187,9 +187,9 @@ export class FrontRepoService {
   // typing of observable can be messy in typescript. Therefore, one force the type
   observableFrontRepo: [ // insertion point sub template 
     Observable<ClassdiagramDB[]>,
-    Observable<ClassshapeDB[]>,
     Observable<DiagramPackageDB[]>,
     Observable<FieldDB[]>,
+    Observable<GongStructShapeDB[]>,
     Observable<LinkDB[]>,
     Observable<NodeDB[]>,
     Observable<NoteShapeDB[]>,
@@ -201,9 +201,9 @@ export class FrontRepoService {
     Observable<VerticeDB[]>,
   ] = [ // insertion point sub template 
       this.classdiagramService.getClassdiagrams(),
-      this.classshapeService.getClassshapes(),
       this.diagrampackageService.getDiagramPackages(),
       this.fieldService.getFields(),
+      this.gongstructshapeService.getGongStructShapes(),
       this.linkService.getLinks(),
       this.nodeService.getNodes(),
       this.noteshapeService.getNoteShapes(),
@@ -229,9 +229,9 @@ export class FrontRepoService {
         ).subscribe(
           ([ // insertion point sub template for declarations 
             classdiagrams_,
-            classshapes_,
             diagrampackages_,
             fields_,
+            gongstructshapes_,
             links_,
             nodes_,
             noteshapes_,
@@ -246,12 +246,12 @@ export class FrontRepoService {
             // insertion point sub template for type casting 
             var classdiagrams: ClassdiagramDB[]
             classdiagrams = classdiagrams_ as ClassdiagramDB[]
-            var classshapes: ClassshapeDB[]
-            classshapes = classshapes_ as ClassshapeDB[]
             var diagrampackages: DiagramPackageDB[]
             diagrampackages = diagrampackages_ as DiagramPackageDB[]
             var fields: FieldDB[]
             fields = fields_ as FieldDB[]
+            var gongstructshapes: GongStructShapeDB[]
+            gongstructshapes = gongstructshapes_ as GongStructShapeDB[]
             var links: LinkDB[]
             links = links_ as LinkDB[]
             var nodes: NodeDB[]
@@ -298,39 +298,6 @@ export class FrontRepoService {
 
             // sort Classdiagrams_array array
             FrontRepoSingloton.Classdiagrams_array.sort((t1, t2) => {
-              if (t1.Name > t2.Name) {
-                return 1;
-              }
-              if (t1.Name < t2.Name) {
-                return -1;
-              }
-              return 0;
-            });
-
-            // init the array
-            FrontRepoSingloton.Classshapes_array = classshapes
-
-            // clear the map that counts Classshape in the GET
-            FrontRepoSingloton.Classshapes_batch.clear()
-
-            classshapes.forEach(
-              classshape => {
-                FrontRepoSingloton.Classshapes.set(classshape.ID, classshape)
-                FrontRepoSingloton.Classshapes_batch.set(classshape.ID, classshape)
-              }
-            )
-
-            // clear classshapes that are absent from the batch
-            FrontRepoSingloton.Classshapes.forEach(
-              classshape => {
-                if (FrontRepoSingloton.Classshapes_batch.get(classshape.ID) == undefined) {
-                  FrontRepoSingloton.Classshapes.delete(classshape.ID)
-                }
-              }
-            )
-
-            // sort Classshapes_array array
-            FrontRepoSingloton.Classshapes_array.sort((t1, t2) => {
               if (t1.Name > t2.Name) {
                 return 1;
               }
@@ -397,6 +364,39 @@ export class FrontRepoService {
 
             // sort Fields_array array
             FrontRepoSingloton.Fields_array.sort((t1, t2) => {
+              if (t1.Name > t2.Name) {
+                return 1;
+              }
+              if (t1.Name < t2.Name) {
+                return -1;
+              }
+              return 0;
+            });
+
+            // init the array
+            FrontRepoSingloton.GongStructShapes_array = gongstructshapes
+
+            // clear the map that counts GongStructShape in the GET
+            FrontRepoSingloton.GongStructShapes_batch.clear()
+
+            gongstructshapes.forEach(
+              gongstructshape => {
+                FrontRepoSingloton.GongStructShapes.set(gongstructshape.ID, gongstructshape)
+                FrontRepoSingloton.GongStructShapes_batch.set(gongstructshape.ID, gongstructshape)
+              }
+            )
+
+            // clear gongstructshapes that are absent from the batch
+            FrontRepoSingloton.GongStructShapes.forEach(
+              gongstructshape => {
+                if (FrontRepoSingloton.GongStructShapes_batch.get(gongstructshape.ID) == undefined) {
+                  FrontRepoSingloton.GongStructShapes.delete(gongstructshape.ID)
+                }
+              }
+            )
+
+            // sort GongStructShapes_array array
+            FrontRepoSingloton.GongStructShapes_array.sort((t1, t2) => {
               if (t1.Name > t2.Name) {
                 return 1;
               }
@@ -727,33 +727,6 @@ export class FrontRepoService {
                 }
               }
             )
-            classshapes.forEach(
-              classshape => {
-                // insertion point sub sub template for ONE-/ZERO-ONE associations pointers redeeming
-                // insertion point for pointer field Position redeeming
-                {
-                  let _position = FrontRepoSingloton.Positions.get(classshape.PositionID.Int64)
-                  if (_position) {
-                    classshape.Position = _position
-                  }
-                }
-
-                // insertion point for redeeming ONE-MANY associations
-                // insertion point for slice of pointer field Classdiagram.Classshapes redeeming
-                {
-                  let _classdiagram = FrontRepoSingloton.Classdiagrams.get(classshape.Classdiagram_ClassshapesDBID.Int64)
-                  if (_classdiagram) {
-                    if (_classdiagram.Classshapes == undefined) {
-                      _classdiagram.Classshapes = new Array<ClassshapeDB>()
-                    }
-                    _classdiagram.Classshapes.push(classshape)
-                    if (classshape.Classdiagram_Classshapes_reverse == undefined) {
-                      classshape.Classdiagram_Classshapes_reverse = _classdiagram
-                    }
-                  }
-                }
-              }
-            )
             diagrampackages.forEach(
               diagrampackage => {
                 // insertion point sub sub template for ONE-/ZERO-ONE associations pointers redeeming
@@ -773,16 +746,43 @@ export class FrontRepoService {
                 // insertion point sub sub template for ONE-/ZERO-ONE associations pointers redeeming
 
                 // insertion point for redeeming ONE-MANY associations
-                // insertion point for slice of pointer field Classshape.Fields redeeming
+                // insertion point for slice of pointer field GongStructShape.Fields redeeming
                 {
-                  let _classshape = FrontRepoSingloton.Classshapes.get(field.Classshape_FieldsDBID.Int64)
-                  if (_classshape) {
-                    if (_classshape.Fields == undefined) {
-                      _classshape.Fields = new Array<FieldDB>()
+                  let _gongstructshape = FrontRepoSingloton.GongStructShapes.get(field.GongStructShape_FieldsDBID.Int64)
+                  if (_gongstructshape) {
+                    if (_gongstructshape.Fields == undefined) {
+                      _gongstructshape.Fields = new Array<FieldDB>()
                     }
-                    _classshape.Fields.push(field)
-                    if (field.Classshape_Fields_reverse == undefined) {
-                      field.Classshape_Fields_reverse = _classshape
+                    _gongstructshape.Fields.push(field)
+                    if (field.GongStructShape_Fields_reverse == undefined) {
+                      field.GongStructShape_Fields_reverse = _gongstructshape
+                    }
+                  }
+                }
+              }
+            )
+            gongstructshapes.forEach(
+              gongstructshape => {
+                // insertion point sub sub template for ONE-/ZERO-ONE associations pointers redeeming
+                // insertion point for pointer field Position redeeming
+                {
+                  let _position = FrontRepoSingloton.Positions.get(gongstructshape.PositionID.Int64)
+                  if (_position) {
+                    gongstructshape.Position = _position
+                  }
+                }
+
+                // insertion point for redeeming ONE-MANY associations
+                // insertion point for slice of pointer field Classdiagram.GongStructShapes redeeming
+                {
+                  let _classdiagram = FrontRepoSingloton.Classdiagrams.get(gongstructshape.Classdiagram_GongStructShapesDBID.Int64)
+                  if (_classdiagram) {
+                    if (_classdiagram.GongStructShapes == undefined) {
+                      _classdiagram.GongStructShapes = new Array<GongStructShapeDB>()
+                    }
+                    _classdiagram.GongStructShapes.push(gongstructshape)
+                    if (gongstructshape.Classdiagram_GongStructShapes_reverse == undefined) {
+                      gongstructshape.Classdiagram_GongStructShapes_reverse = _classdiagram
                     }
                   }
                 }
@@ -800,16 +800,16 @@ export class FrontRepoService {
                 }
 
                 // insertion point for redeeming ONE-MANY associations
-                // insertion point for slice of pointer field Classshape.Links redeeming
+                // insertion point for slice of pointer field GongStructShape.Links redeeming
                 {
-                  let _classshape = FrontRepoSingloton.Classshapes.get(link.Classshape_LinksDBID.Int64)
-                  if (_classshape) {
-                    if (_classshape.Links == undefined) {
-                      _classshape.Links = new Array<LinkDB>()
+                  let _gongstructshape = FrontRepoSingloton.GongStructShapes.get(link.GongStructShape_LinksDBID.Int64)
+                  if (_gongstructshape) {
+                    if (_gongstructshape.Links == undefined) {
+                      _gongstructshape.Links = new Array<LinkDB>()
                     }
-                    _classshape.Links.push(link)
-                    if (link.Classshape_Links_reverse == undefined) {
-                      link.Classshape_Links_reverse = _classshape
+                    _gongstructshape.Links.push(link)
+                    if (link.GongStructShape_Links_reverse == undefined) {
+                      link.GongStructShape_Links_reverse = _gongstructshape
                     }
                   }
                 }
@@ -873,9 +873,9 @@ export class FrontRepoService {
                 // insertion point sub sub template for ONE-/ZERO-ONE associations pointers redeeming
                 // insertion point for pointer field Classshape redeeming
                 {
-                  let _classshape = FrontRepoSingloton.Classshapes.get(noteshapelink.ClassshapeID.Int64)
-                  if (_classshape) {
-                    noteshapelink.Classshape = _classshape
+                  let _gongstructshape = FrontRepoSingloton.GongStructShapes.get(noteshapelink.ClassshapeID.Int64)
+                  if (_gongstructshape) {
+                    noteshapelink.Classshape = _gongstructshape
                   }
                 }
                 // insertion point for pointer field Link redeeming
@@ -1045,77 +1045,6 @@ export class FrontRepoService {
     )
   }
 
-  // ClassshapePull performs a GET on Classshape of the stack and redeem association pointers 
-  ClassshapePull(): Observable<FrontRepo> {
-    return new Observable<FrontRepo>(
-      (observer) => {
-        combineLatest([
-          this.classshapeService.getClassshapes()
-        ]).subscribe(
-          ([ // insertion point sub template 
-            classshapes,
-          ]) => {
-            // init the array
-            FrontRepoSingloton.Classshapes_array = classshapes
-
-            // clear the map that counts Classshape in the GET
-            FrontRepoSingloton.Classshapes_batch.clear()
-
-            // 
-            // First Step: init map of instances
-            // insertion point sub template 
-            classshapes.forEach(
-              classshape => {
-                FrontRepoSingloton.Classshapes.set(classshape.ID, classshape)
-                FrontRepoSingloton.Classshapes_batch.set(classshape.ID, classshape)
-
-                // insertion point for redeeming ONE/ZERO-ONE associations
-                // insertion point for pointer field Position redeeming
-                {
-                  let _position = FrontRepoSingloton.Positions.get(classshape.PositionID.Int64)
-                  if (_position) {
-                    classshape.Position = _position
-                  }
-                }
-
-                // insertion point for redeeming ONE-MANY associations
-                // insertion point for slice of pointer field Classdiagram.Classshapes redeeming
-                {
-                  let _classdiagram = FrontRepoSingloton.Classdiagrams.get(classshape.Classdiagram_ClassshapesDBID.Int64)
-                  if (_classdiagram) {
-                    if (_classdiagram.Classshapes == undefined) {
-                      _classdiagram.Classshapes = new Array<ClassshapeDB>()
-                    }
-                    _classdiagram.Classshapes.push(classshape)
-                    if (classshape.Classdiagram_Classshapes_reverse == undefined) {
-                      classshape.Classdiagram_Classshapes_reverse = _classdiagram
-                    }
-                  }
-                }
-              }
-            )
-
-            // clear classshapes that are absent from the GET
-            FrontRepoSingloton.Classshapes.forEach(
-              classshape => {
-                if (FrontRepoSingloton.Classshapes_batch.get(classshape.ID) == undefined) {
-                  FrontRepoSingloton.Classshapes.delete(classshape.ID)
-                }
-              }
-            )
-
-            // 
-            // Second Step: redeem pointers between instances (thanks to maps in the First Step)
-            // insertion point sub template 
-
-            // hand over control flow to observer
-            observer.next(FrontRepoSingloton)
-          }
-        )
-      }
-    )
-  }
-
   // DiagramPackagePull performs a GET on DiagramPackage of the stack and redeem association pointers 
   DiagramPackagePull(): Observable<FrontRepo> {
     return new Observable<FrontRepo>(
@@ -1201,16 +1130,16 @@ export class FrontRepoService {
                 // insertion point for redeeming ONE/ZERO-ONE associations
 
                 // insertion point for redeeming ONE-MANY associations
-                // insertion point for slice of pointer field Classshape.Fields redeeming
+                // insertion point for slice of pointer field GongStructShape.Fields redeeming
                 {
-                  let _classshape = FrontRepoSingloton.Classshapes.get(field.Classshape_FieldsDBID.Int64)
-                  if (_classshape) {
-                    if (_classshape.Fields == undefined) {
-                      _classshape.Fields = new Array<FieldDB>()
+                  let _gongstructshape = FrontRepoSingloton.GongStructShapes.get(field.GongStructShape_FieldsDBID.Int64)
+                  if (_gongstructshape) {
+                    if (_gongstructshape.Fields == undefined) {
+                      _gongstructshape.Fields = new Array<FieldDB>()
                     }
-                    _classshape.Fields.push(field)
-                    if (field.Classshape_Fields_reverse == undefined) {
-                      field.Classshape_Fields_reverse = _classshape
+                    _gongstructshape.Fields.push(field)
+                    if (field.GongStructShape_Fields_reverse == undefined) {
+                      field.GongStructShape_Fields_reverse = _gongstructshape
                     }
                   }
                 }
@@ -1222,6 +1151,77 @@ export class FrontRepoService {
               field => {
                 if (FrontRepoSingloton.Fields_batch.get(field.ID) == undefined) {
                   FrontRepoSingloton.Fields.delete(field.ID)
+                }
+              }
+            )
+
+            // 
+            // Second Step: redeem pointers between instances (thanks to maps in the First Step)
+            // insertion point sub template 
+
+            // hand over control flow to observer
+            observer.next(FrontRepoSingloton)
+          }
+        )
+      }
+    )
+  }
+
+  // GongStructShapePull performs a GET on GongStructShape of the stack and redeem association pointers 
+  GongStructShapePull(): Observable<FrontRepo> {
+    return new Observable<FrontRepo>(
+      (observer) => {
+        combineLatest([
+          this.gongstructshapeService.getGongStructShapes()
+        ]).subscribe(
+          ([ // insertion point sub template 
+            gongstructshapes,
+          ]) => {
+            // init the array
+            FrontRepoSingloton.GongStructShapes_array = gongstructshapes
+
+            // clear the map that counts GongStructShape in the GET
+            FrontRepoSingloton.GongStructShapes_batch.clear()
+
+            // 
+            // First Step: init map of instances
+            // insertion point sub template 
+            gongstructshapes.forEach(
+              gongstructshape => {
+                FrontRepoSingloton.GongStructShapes.set(gongstructshape.ID, gongstructshape)
+                FrontRepoSingloton.GongStructShapes_batch.set(gongstructshape.ID, gongstructshape)
+
+                // insertion point for redeeming ONE/ZERO-ONE associations
+                // insertion point for pointer field Position redeeming
+                {
+                  let _position = FrontRepoSingloton.Positions.get(gongstructshape.PositionID.Int64)
+                  if (_position) {
+                    gongstructshape.Position = _position
+                  }
+                }
+
+                // insertion point for redeeming ONE-MANY associations
+                // insertion point for slice of pointer field Classdiagram.GongStructShapes redeeming
+                {
+                  let _classdiagram = FrontRepoSingloton.Classdiagrams.get(gongstructshape.Classdiagram_GongStructShapesDBID.Int64)
+                  if (_classdiagram) {
+                    if (_classdiagram.GongStructShapes == undefined) {
+                      _classdiagram.GongStructShapes = new Array<GongStructShapeDB>()
+                    }
+                    _classdiagram.GongStructShapes.push(gongstructshape)
+                    if (gongstructshape.Classdiagram_GongStructShapes_reverse == undefined) {
+                      gongstructshape.Classdiagram_GongStructShapes_reverse = _classdiagram
+                    }
+                  }
+                }
+              }
+            )
+
+            // clear gongstructshapes that are absent from the GET
+            FrontRepoSingloton.GongStructShapes.forEach(
+              gongstructshape => {
+                if (FrontRepoSingloton.GongStructShapes_batch.get(gongstructshape.ID) == undefined) {
+                  FrontRepoSingloton.GongStructShapes.delete(gongstructshape.ID)
                 }
               }
             )
@@ -1272,16 +1272,16 @@ export class FrontRepoService {
                 }
 
                 // insertion point for redeeming ONE-MANY associations
-                // insertion point for slice of pointer field Classshape.Links redeeming
+                // insertion point for slice of pointer field GongStructShape.Links redeeming
                 {
-                  let _classshape = FrontRepoSingloton.Classshapes.get(link.Classshape_LinksDBID.Int64)
-                  if (_classshape) {
-                    if (_classshape.Links == undefined) {
-                      _classshape.Links = new Array<LinkDB>()
+                  let _gongstructshape = FrontRepoSingloton.GongStructShapes.get(link.GongStructShape_LinksDBID.Int64)
+                  if (_gongstructshape) {
+                    if (_gongstructshape.Links == undefined) {
+                      _gongstructshape.Links = new Array<LinkDB>()
                     }
-                    _classshape.Links.push(link)
-                    if (link.Classshape_Links_reverse == undefined) {
-                      link.Classshape_Links_reverse = _classshape
+                    _gongstructshape.Links.push(link)
+                    if (link.GongStructShape_Links_reverse == undefined) {
+                      link.GongStructShape_Links_reverse = _gongstructshape
                     }
                   }
                 }
@@ -1477,9 +1477,9 @@ export class FrontRepoService {
                 // insertion point for redeeming ONE/ZERO-ONE associations
                 // insertion point for pointer field Classshape redeeming
                 {
-                  let _classshape = FrontRepoSingloton.Classshapes.get(noteshapelink.ClassshapeID.Int64)
-                  if (_classshape) {
-                    noteshapelink.Classshape = _classshape
+                  let _gongstructshape = FrontRepoSingloton.GongStructShapes.get(noteshapelink.ClassshapeID.Int64)
+                  if (_gongstructshape) {
+                    noteshapelink.Classshape = _gongstructshape
                   }
                 }
                 // insertion point for pointer field Link redeeming
@@ -1821,13 +1821,13 @@ export class FrontRepoService {
 export function getClassdiagramUniqueID(id: number): number {
   return 31 * id
 }
-export function getClassshapeUniqueID(id: number): number {
+export function getDiagramPackageUniqueID(id: number): number {
   return 37 * id
 }
-export function getDiagramPackageUniqueID(id: number): number {
+export function getFieldUniqueID(id: number): number {
   return 41 * id
 }
-export function getFieldUniqueID(id: number): number {
+export function getGongStructShapeUniqueID(id: number): number {
   return 43 * id
 }
 export function getLinkUniqueID(id: number): number {

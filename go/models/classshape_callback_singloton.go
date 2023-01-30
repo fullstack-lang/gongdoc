@@ -2,28 +2,28 @@ package models
 
 import "log"
 
-type ClassshapeCallbacksSingloton struct {
-	ClassshapeCallback ClassshapeCallback
+type GongStructShapeCallbacksSingloton struct {
+	GongStructShapeCallback GongStructShapeCallback
 }
 
-func (classshapeCallbacksSingloton *ClassshapeCallbacksSingloton) OnAfterUpdate(
+func (gongStructShapeCallbacksSingloton *GongStructShapeCallbacksSingloton) OnAfterUpdate(
 	stage *StageStruct,
-	stagedClassshape, frontClassshape *Classshape) {
+	stagedGongStructShape, frontGongStructShape *GongStructShape) {
 
-	if stagedClassshape.IsSelected != frontClassshape.IsSelected {
+	if stagedGongStructShape.IsSelected != frontGongStructShape.IsSelected {
 
 		// reset the IsSelected to false
-		stagedClassshape.Checkout()
-		stagedClassshape.IsSelected = false
-		stagedClassshape.Commit()
+		stagedGongStructShape.Checkout()
+		stagedGongStructShape.IsSelected = false
+		stagedGongStructShape.Commit()
 
-		log.Println("UML Shape selected ", stagedClassshape.Identifier)
-		if classshapeCallbacksSingloton.ClassshapeCallback != nil {
-			classshapeCallbacksSingloton.ClassshapeCallback.HasSelected(stagedClassshape.Identifier)
+		log.Println("UML Shape selected ", stagedGongStructShape.Identifier)
+		if gongStructShapeCallbacksSingloton.GongStructShapeCallback != nil {
+			gongStructShapeCallbacksSingloton.GongStructShapeCallback.HasSelected(stagedGongStructShape.Identifier)
 		}
 	}
 }
 
-type ClassshapeCallback interface {
+type GongStructShapeCallback interface {
 	HasSelected(gongstructName string)
 }

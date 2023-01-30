@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 
-import { ClassshapeDB } from '../classshape-db'
-import { ClassshapeService } from '../classshape.service'
+import { GongStructShapeDB } from '../gongstructshape-db'
+import { GongStructShapeService } from '../gongstructshape.service'
 
 import { FrontRepoService, FrontRepo } from '../front-repo.service'
 
@@ -10,18 +10,18 @@ import { Router, RouterState, ActivatedRoute } from '@angular/router';
 
 // insertion point for additional imports
 
-export interface classshapeDummyElement {
+export interface gongstructshapeDummyElement {
 }
 
-const ELEMENT_DATA: classshapeDummyElement[] = [
+const ELEMENT_DATA: gongstructshapeDummyElement[] = [
 ];
 
 @Component({
-	selector: 'app-classshape-presentation',
-	templateUrl: './classshape-presentation.component.html',
-	styleUrls: ['./classshape-presentation.component.css'],
+	selector: 'app-gongstructshape-presentation',
+	templateUrl: './gongstructshape-presentation.component.html',
+	styleUrls: ['./gongstructshape-presentation.component.css'],
 })
-export class ClassshapePresentationComponent implements OnInit {
+export class GongStructShapePresentationComponent implements OnInit {
 
 	// insertion point for additionnal time duration declarations
 	// insertion point for additionnal enum int field declarations
@@ -29,13 +29,13 @@ export class ClassshapePresentationComponent implements OnInit {
 	displayedColumns: string[] = []
 	dataSource = ELEMENT_DATA
 
-	classshape: ClassshapeDB = new (ClassshapeDB)
+	gongstructshape: GongStructShapeDB = new (GongStructShapeDB)
 
 	// front repo
 	frontRepo: FrontRepo = new (FrontRepo)
  
 	constructor(
-		private classshapeService: ClassshapeService,
+		private gongstructshapeService: GongStructShapeService,
 		private frontRepoService: FrontRepoService,
 		private route: ActivatedRoute,
 		private router: Router,
@@ -46,25 +46,25 @@ export class ClassshapePresentationComponent implements OnInit {
 	}
 
 	ngOnInit(): void {
-		this.getClassshape();
+		this.getGongStructShape();
 
 		// observable for changes in 
-		this.classshapeService.ClassshapeServiceChanged.subscribe(
+		this.gongstructshapeService.GongStructShapeServiceChanged.subscribe(
 			message => {
 				if (message == "update") {
-					this.getClassshape()
+					this.getGongStructShape()
 				}
 			}
 		)
 	}
 
-	getClassshape(): void {
+	getGongStructShape(): void {
 		const id = +this.route.snapshot.paramMap.get('id')!
 		this.frontRepoService.pull().subscribe(
 			frontRepo => {
 				this.frontRepo = frontRepo
 
-				this.classshape = this.frontRepo.Classshapes.get(id)!
+				this.gongstructshape = this.frontRepo.GongStructShapes.get(id)!
 
 				// insertion point for recovery of durations
 				// insertion point for recovery of enum tint
@@ -85,7 +85,7 @@ export class ClassshapePresentationComponent implements OnInit {
 	setEditorRouterOutlet(ID: number) {
 		this.router.navigate([{
 			outlets: {
-				github_com_fullstack_lang_gongdoc_go_editor: ["github_com_fullstack_lang_gongdoc_go-" + "classshape-detail", ID]
+				github_com_fullstack_lang_gongdoc_go_editor: ["github_com_fullstack_lang_gongdoc_go-" + "gongstructshape-detail", ID]
 			}
 		}]);
 	}

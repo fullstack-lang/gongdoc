@@ -14,7 +14,7 @@ import { catchError, map, tap } from 'rxjs/operators';
 import { FieldDB } from './field-db';
 
 // insertion point for imports
-import { ClassshapeDB } from './classshape-db'
+import { GongStructShapeDB } from './gongstructshape-db'
 
 @Injectable({
   providedIn: 'root'
@@ -71,13 +71,13 @@ export class FieldService {
   postField(fielddb: FieldDB): Observable<FieldDB> {
 
     // insertion point for reset of pointers and reverse pointers (to avoid circular JSON)
-    let _Classshape_Fields_reverse = fielddb.Classshape_Fields_reverse
-    fielddb.Classshape_Fields_reverse = new ClassshapeDB
+    let _GongStructShape_Fields_reverse = fielddb.GongStructShape_Fields_reverse
+    fielddb.GongStructShape_Fields_reverse = new GongStructShapeDB
 
     return this.http.post<FieldDB>(this.fieldsUrl, fielddb, this.httpOptions).pipe(
       tap(_ => {
         // insertion point for restoration of reverse pointers
-        fielddb.Classshape_Fields_reverse = _Classshape_Fields_reverse
+        fielddb.GongStructShape_Fields_reverse = _GongStructShape_Fields_reverse
         this.log(`posted fielddb id=${fielddb.ID}`)
       }),
       catchError(this.handleError<FieldDB>('postField'))
@@ -101,13 +101,13 @@ export class FieldService {
     const url = `${this.fieldsUrl}/${id}`;
 
     // insertion point for reset of pointers and reverse pointers (to avoid circular JSON)
-    let _Classshape_Fields_reverse = fielddb.Classshape_Fields_reverse
-    fielddb.Classshape_Fields_reverse = new ClassshapeDB
+    let _GongStructShape_Fields_reverse = fielddb.GongStructShape_Fields_reverse
+    fielddb.GongStructShape_Fields_reverse = new GongStructShapeDB
 
     return this.http.put<FieldDB>(url, fielddb, this.httpOptions).pipe(
       tap(_ => {
         // insertion point for restoration of reverse pointers
-        fielddb.Classshape_Fields_reverse = _Classshape_Fields_reverse
+        fielddb.GongStructShape_Fields_reverse = _GongStructShape_Fields_reverse
         this.log(`updated fielddb id=${fielddb.ID}`)
       }),
       catchError(this.handleError<FieldDB>('updateField'))

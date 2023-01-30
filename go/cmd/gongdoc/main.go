@@ -135,7 +135,7 @@ func main() {
 		// parse all classdiagrams and all classshape and put the number
 		// of instances
 		for _, classdiagram := range diagramPackage.Classdiagrams {
-			for _, classshape := range classdiagram.Classshapes {
+			for _, classshape := range classdiagram.GongStructShapes {
 
 				gongStructName := gongdoc_models.IdentifierToShapename(classshape.Identifier)
 
@@ -160,12 +160,12 @@ func main() {
 	gongdocStage := &gongdoc_models.Stage
 	_ = gongdocStage
 
-	classshapeCallbackSingloton := new(gongdoc_models.ClassshapeCallbacksSingloton)
+	gongStructShapeCallbackSingloton := new(gongdoc_models.GongStructShapeCallbacksSingloton)
 
 	// very strangely,
 	// gongdoc_models.Stage.OnAfterClassshapeUpdateCallback = classshapeCallbackSingloton
 	// does not seem to be executed
-	gongdocStage.OnAfterClassshapeUpdateCallback = classshapeCallbackSingloton
+	gongdocStage.OnAfterGongStructShapeUpdateCallback = gongStructShapeCallbackSingloton
 
 	diagramPackageCallbackSingloton := new(gongdoc_models.DiagramPackageCallbacksSingloton)
 	gongdocStage.OnAfterDiagramPackageUpdateCallback = diagramPackageCallbackSingloton

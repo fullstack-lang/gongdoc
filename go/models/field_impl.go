@@ -28,8 +28,8 @@ func (fieldImpl *FieldImpl) OnAfterUpdate(
 
 	// find the classhape in the classdiagram
 	foundClassshape := false
-	var classshape *Classshape
-	for _, _classshape := range classdiagram.Classshapes {
+	var classshape *GongStructShape
+	for _, _classshape := range classdiagram.GongStructShapes {
 		// strange behavior when the classshape is remove within the loop
 		if IdentifierToShapename(_classshape.Identifier) ==
 			gongStruct.Name && !foundClassshape {
@@ -158,8 +158,8 @@ func (fieldImpl *FieldImpl) OnAfterUpdate(
 				targetMultiplicity = MANY
 			}
 			targetSourceClassshape := false
-			var targetClassshape *Classshape
-			for _, _classshape := range classdiagram.Classshapes {
+			var targetClassshape *GongStructShape
+			for _, _classshape := range classdiagram.GongStructShapes {
 
 				// strange behavior when the classshape is remove within the loop
 				if IdentifierToShapename(_classshape.Identifier) == targetStructName && !targetSourceClassshape {
