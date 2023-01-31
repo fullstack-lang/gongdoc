@@ -19,6 +19,7 @@ import (
 	gongdoc_fullstack "github.com/fullstack-lang/gongdoc/go/fullstack"
 	"github.com/fullstack-lang/gongdoc/go/models"
 	gongdoc_models "github.com/fullstack-lang/gongdoc/go/models"
+	"github.com/fullstack-lang/gongdoc/go/node2gongdoc"
 
 	"github.com/fullstack-lang/gongdoc/go/load"
 
@@ -162,7 +163,7 @@ func main() {
 	gongdocStage := &gongdoc_models.Stage
 	_ = gongdocStage
 
-	gongStructShapeCallbackSingloton := new(gongdoc_models.GongStructShapeCallbacksSingloton)
+	gongStructShapeCallbackSingloton := new(node2gongdoc.GongStructShapeCallbacksSingloton)
 
 	// very strangely,
 	// gongdoc_models.Stage.OnAfterClassshapeUpdateCallback = classshapeCallbackSingloton

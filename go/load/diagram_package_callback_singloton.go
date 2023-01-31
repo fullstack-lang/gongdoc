@@ -10,7 +10,7 @@ type DiagramPackageCallbacksSingloton struct {
 	DiagramPackageCallback DiagramPackageCallback
 }
 
-func (classshapeCallbacksSingloton *DiagramPackageCallbacksSingloton) OnAfterUpdate(
+func (diagramPackageCallbacksSingloton *DiagramPackageCallbacksSingloton) OnAfterUpdate(
 	stage *gongdoc_models.StageStruct,
 	stagedDiagramPackage, frontDiagramPackage *gongdoc_models.DiagramPackage) {
 

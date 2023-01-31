@@ -1,14 +1,18 @@
-package models
+package node2gongdoc
 
-import "log"
+import (
+	"log"
+
+	gongdoc_models "github.com/fullstack-lang/gongdoc/go/models"
+)
 
 type GongStructShapeCallbacksSingloton struct {
 	GongStructShapeCallback GongStructShapeCallback
 }
 
 func (gongStructShapeCallbacksSingloton *GongStructShapeCallbacksSingloton) OnAfterUpdate(
-	stage *StageStruct,
-	stagedGongStructShape, frontGongStructShape *GongStructShape) {
+	stage *gongdoc_models.StageStruct,
+	stagedGongStructShape, frontGongStructShape *gongdoc_models.GongStructShape) {
 
 	if stagedGongStructShape.IsSelected != frontGongStructShape.IsSelected {
 
