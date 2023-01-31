@@ -1,7 +1,8 @@
-package models
+package node2gongdoc
 
 import (
 	gong_models "github.com/fullstack-lang/gong/go/models"
+	gongdoc_models "github.com/fullstack-lang/gongdoc/go/models"
 )
 
 type GongLinkImpl struct {
@@ -10,8 +11,8 @@ type GongLinkImpl struct {
 }
 
 func (gongLinkImpl *GongLinkImpl) OnAfterUpdate(
-	stage *StageStruct,
-	stagedNode, frontNode *Node) {
+	stage *gongdoc_models.StageStruct,
+	stagedNode, frontNode *gongdoc_models.Node) {
 
 	classdiagram := gongLinkImpl.nodeCb.GetSelectedClassdiagram()
 
@@ -20,17 +21,17 @@ func (gongLinkImpl *GongLinkImpl) OnAfterUpdate(
 	// get the parent node
 	parentNode := gongLinkImpl.nodeCb.map_Children_Parent[stagedNode]
 
-	gongNoteImpl := parentNode.impl.(*GongNoteImpl)
+	gongNoteImpl := parentNode.Impl.(*GongNoteImpl)
 	gongNote := gongNoteImpl.gongNote
 
 	// find the classhape in the classdiagram
 	foundNoteshape := false
-	var noteshape *NoteShape
+	var noteshape *gongdoc_models.NoteShape
 	_ = noteshape
 
 	for _, _noteshape := range classdiagram.NoteShapes {
 		// strange behavior when the classshape is remove within the loop
-		if IdentifierToShapename(_noteshape.Identifier) ==
+		if gongdoc_models.IdentifierToShapename(_noteshape.Identifier) ==
 			gongNote.Name && !foundNoteshape {
 			noteshape = _noteshape
 		}
@@ -40,9 +41,9 @@ func (gongLinkImpl *GongLinkImpl) OnAfterUpdate(
 	if !stagedNode.IsChecked && frontNode.IsChecked {
 		stage.Checkout()
 
-		noteShapeLink := (&NoteShapeLink{Name: stagedNode.GetName()}).Stage()
+		noteShapeLink := (&gongdoc_models.NoteShapeLink{Name: stagedNode.GetName()}).Stage()
 		noteShapeLink.Identifier =
-			ShapeAndFieldnameToFieldIdentifier(gongNote.Name, stagedNode.Name)
+			gongdoc_models.ShapeAndFieldnameToFieldIdentifier(gongNote.Name, stagedNode.Name)
 
 		noteshape.NoteShapeLinks = append(noteshape.NoteShapeLinks, noteShapeLink)
 
@@ -54,9 +55,9 @@ func (gongLinkImpl *GongLinkImpl) OnAfterUpdate(
 		stage.Checkout()
 
 		// get the relevant gong note link
-		var noteLink *NoteShapeLink
+		var noteLink *gongdoc_models.NoteShapeLink
 		for _, _noteLink := range noteshape.NoteShapeLinks {
-			if IdentifierToFieldName(_noteLink.Identifier) ==
+			if gongdoc_models.IdentifierToFieldName(_noteLink.Identifier) ==
 				stagedNode.Name {
 				noteLink = _noteLink
 			}
@@ -71,6 +72,6 @@ func (gongLinkImpl *GongLinkImpl) OnAfterUpdate(
 }
 
 func (gongLinkImpl *GongLinkImpl) OnAfterDelete(
-	stage *StageStruct,
-	stagedNode, frontNode *Node) {
+	stage *gongdoc_models.StageStruct,
+	stagedNode, frontNode *gongdoc_models.Node) {
 }

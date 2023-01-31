@@ -1,4 +1,4 @@
-package models
+package node2gongdoc
 
 import (
 	"io/ioutil"
@@ -6,16 +6,18 @@ import (
 	"os"
 	"path/filepath"
 	"strings"
+
+	gongdoc_models "github.com/fullstack-lang/gongdoc/go/models"
 )
 
 type ClassdiagramImpl struct {
-	classdiagram *Classdiagram
+	classdiagram *gongdoc_models.Classdiagram
 	NodeImpl
 }
 
 func (classdiagramImpl *ClassdiagramImpl) OnAfterUpdate(
-	stage *StageStruct,
-	stagedNode, frontNode *Node) {
+	stage *gongdoc_models.StageStruct,
+	stagedNode, frontNode *gongdoc_models.Node) {
 
 	// node has been checked by the end user
 	if frontNode.IsChecked && !stagedNode.IsChecked {
@@ -135,10 +137,10 @@ func (classdiagramImpl *ClassdiagramImpl) OnAfterUpdate(
 
 		// checkout in order to get the latest version of the diagram before
 		// modifying it updated by the front
-		Stage.Checkout()
+		gongdoc_models.Stage.Checkout()
 
-		Stage.Unstage()
-		StageBranch(&Stage, classdiagramImpl.classdiagram)
+		gongdoc_models.Stage.Unstage()
+		gongdoc_models.StageBranch(&gongdoc_models.Stage, classdiagramImpl.classdiagram)
 
 		filepath := filepath.Join(
 			filepath.Join(classdiagramImpl.nodeCb.diagramPackage.AbsolutePathToDiagramPackage,
@@ -149,11 +151,11 @@ func (classdiagramImpl *ClassdiagramImpl) OnAfterUpdate(
 			log.Fatal("Cannot open diagram file" + err.Error())
 		}
 		defer file.Close()
-		Stage.Marshall(file, "github.com/fullstack-lang/gongdoc/go/models", "diagrams")
+		gongdoc_models.Stage.Marshall(file, "github.com/fullstack-lang/gongdoc/go/models", "diagrams")
 
 		// restore the original stage
-		Stage.Unstage()
-		Stage.Checkout()
+		gongdoc_models.Stage.Unstage()
+		gongdoc_models.Stage.Checkout()
 		stagedNode.IsSaved = false
 		stage.Commit()
 
@@ -162,8 +164,8 @@ func (classdiagramImpl *ClassdiagramImpl) OnAfterUpdate(
 }
 
 func (classdiagramImpl *ClassdiagramImpl) OnAfterDelete(
-	stage *StageStruct,
-	stagedNode, frontNode *Node) {
+	stage *gongdoc_models.StageStruct,
+	stagedNode, frontNode *gongdoc_models.Node) {
 
 	// checkout the stage, it shall remove the link between
 	// the parent node and the staged node because 0..1->0..N association
@@ -173,7 +175,7 @@ func (classdiagramImpl *ClassdiagramImpl) OnAfterDelete(
 	// remove the classdiagram node from the pkg element node
 	classdiagramImpl.nodeCb.diagramPackage.Classdiagrams =
 		remove(classdiagramImpl.nodeCb.diagramPackage.Classdiagrams, classdiagramImpl.classdiagram)
-	UnstageBranch(stage, classdiagramImpl.classdiagram)
+	gongdoc_models.UnstageBranch(stage, classdiagramImpl.classdiagram)
 
 	// remove the actual classdiagram file if it exsits
 	classdiagramFilePath := filepath.Join(classdiagramImpl.nodeCb.diagramPackage.Path, "../diagrams", classdiagramImpl.classdiagram.Name) + ".go"
@@ -185,4 +187,17 @@ func (classdiagramImpl *ClassdiagramImpl) OnAfterDelete(
 
 	// commit will clean up the stage associations
 	updateNodesStates(stage, classdiagramImpl.nodeCb)
+}
+
+// remove node from slice
+func remove[T gongdoc_models.Gongstruct](slice []*T, t *T) []*T {
+
+	// get the index of the t
+	rank := -1
+	for i, t_ := range slice {
+		if t_ == t {
+			rank = i
+		}
+	}
+	return append(slice[:rank], slice[rank+1:]...)
 }

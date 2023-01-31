@@ -1,9 +1,10 @@
-package models
+package node2gongdoc
 
 import (
 	"log"
 
 	gong_models "github.com/fullstack-lang/gong/go/models"
+	gongdoc_models "github.com/fullstack-lang/gongdoc/go/models"
 )
 
 type GongNoteImpl struct {
@@ -12,8 +13,8 @@ type GongNoteImpl struct {
 }
 
 func (gongNoteImpl *GongNoteImpl) OnAfterUpdate(
-	stage *StageStruct,
-	stagedNode, frontNode *Node) {
+	stage *gongdoc_models.StageStruct,
+	stagedNode, frontNode *gongdoc_models.Node) {
 
 	classdiagram := gongNoteImpl.nodeCb.GetSelectedClassdiagram()
 
@@ -21,7 +22,7 @@ func (gongNoteImpl *GongNoteImpl) OnAfterUpdate(
 	if !stagedNode.IsChecked && frontNode.IsChecked {
 		stage.Checkout()
 
-		noteShape := (&NoteShape{Name: stagedNode.Name}).Stage()
+		noteShape := (&gongdoc_models.NoteShape{Name: stagedNode.Name}).Stage()
 
 		mapOfGongNotes := *gong_models.GetGongstructInstancesMap[gong_models.GongNote]()
 
@@ -30,7 +31,7 @@ func (gongNoteImpl *GongNoteImpl) OnAfterUpdate(
 			log.Fatal("Unkown note ", noteShape.Name)
 		}
 
-		noteShape.Identifier = ShapenameToIdentifier(noteShape.Name)
+		noteShape.Identifier = gongdoc_models.ShapenameToIdentifier(noteShape.Name)
 
 		noteShape.Body = gongNote.Body
 		noteShape.X = 30
@@ -46,12 +47,12 @@ func (gongNoteImpl *GongNoteImpl) OnAfterUpdate(
 	if stagedNode.IsChecked && !frontNode.IsChecked {
 		stage.Checkout()
 		foundNote := false
-		var noteShape *NoteShape
-		var _noteShape *NoteShape
+		var noteShape *gongdoc_models.NoteShape
+		var _noteShape *gongdoc_models.NoteShape
 		for _, _noteShape = range classdiagram.NoteShapes {
 
 			// strange behavior when the note is removed within the loop
-			if IdentifierToShapename(_noteShape.Identifier) == stagedNode.Name && !foundNote {
+			if gongdoc_models.IdentifierToShapename(_noteShape.Identifier) == stagedNode.Name && !foundNote {
 				foundNote = true
 				noteShape = _noteShape
 			}
@@ -73,6 +74,6 @@ func (gongNoteImpl *GongNoteImpl) OnAfterUpdate(
 }
 
 func (GongNoteImpl *GongNoteImpl) OnAfterDelete(
-	stage *StageStruct,
-	stagedNode, frontNode *Node) {
+	stage *gongdoc_models.StageStruct,
+	stagedNode, frontNode *gongdoc_models.Node) {
 }

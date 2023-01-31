@@ -1,6 +1,9 @@
-package models
+package node2gongdoc
 
-import gong_models "github.com/fullstack-lang/gong/go/models"
+import (
+	gong_models "github.com/fullstack-lang/gong/go/models"
+	gongdoc_models "github.com/fullstack-lang/gongdoc/go/models"
+)
 
 type GongEnumValueImpl struct {
 	gongEnumValue *gong_models.GongEnumValue
@@ -8,8 +11,8 @@ type GongEnumValueImpl struct {
 }
 
 func (enumValueImpl *GongEnumValueImpl) OnAfterUpdate(
-	stage *StageStruct,
-	stagedNode, frontNode *Node) {
+	stage *gongdoc_models.StageStruct,
+	stagedNode, frontNode *gongdoc_models.Node) {
 
 	// find classdiagram
 	classdiagram := enumValueImpl.nodeCb.GetSelectedClassdiagram()
@@ -19,14 +22,14 @@ func (enumValueImpl *GongEnumValueImpl) OnAfterUpdate(
 	// get the parent node
 	parentNode := enumValueImpl.nodeCb.map_Children_Parent[stagedNode]
 
-	gongEnumImpl := parentNode.impl.(*GongEnumImpl)
+	gongEnumImpl := parentNode.Impl.(*GongEnumImpl)
 	gongEnum := gongEnumImpl.gongEnum
 
 	// find the classhape in the classdiagram
 	foundClassshape := false
-	var classshape *GongEnumShape
+	var classshape *gongdoc_models.GongEnumShape
 	for _, _classshape := range classdiagram.GongEnumShapes {
-		if IdentifierToShapename(_classshape.Identifier) == gongEnum.Name && !foundClassshape {
+		if gongdoc_models.IdentifierToShapename(_classshape.Identifier) == gongEnum.Name && !foundClassshape {
 			classshape = _classshape
 		}
 	}
@@ -46,9 +49,9 @@ func (enumValueImpl *GongEnumValueImpl) OnAfterUpdate(
 
 		classshape.Heigth = classshape.Heigth + 15
 
-		var field Field
+		var field gongdoc_models.Field
 		field.Name = stagedNode.Name
-		field.Identifier = ShapeAndFieldnameToFieldIdentifier(gongEnum.Name, stagedNode.Name)
+		field.Identifier = gongdoc_models.ShapeAndFieldnameToFieldIdentifier(gongEnum.Name, stagedNode.Name)
 
 		for idx, gongEnum := range gongEnum.GongEnumValues {
 
@@ -63,7 +66,7 @@ func (enumValueImpl *GongEnumValueImpl) OnAfterUpdate(
 		// compute insertionIndex (index where to insert the field to display)
 		insertionIndex := 0
 		for idx, field := range classshape.Fields {
-			value := map_ValueName_Value[IdentifierToFieldName(field.Identifier)]
+			value := map_ValueName_Value[gongdoc_models.IdentifierToFieldName(field.Identifier)]
 			_rankInEnum := map_Value_rankInEnum[value]
 			if rankkInEnum > _rankInEnum {
 				insertionIndex = idx + 1
@@ -79,7 +82,7 @@ func (enumValueImpl *GongEnumValueImpl) OnAfterUpdate(
 			classshape.Fields[insertionIndex] = &field
 		}
 		field.Stage()
-		Stage.Commit()
+		gongdoc_models.Stage.Commit()
 
 	}
 	if stagedNode.IsChecked && !frontNode.IsChecked {
@@ -88,10 +91,10 @@ func (enumValueImpl *GongEnumValueImpl) OnAfterUpdate(
 		stage.Checkout()
 
 		{
-			var field *Field
+			var field *gongdoc_models.Field
 
 			for _, _field := range classshape.Fields {
-				if IdentifierToFieldName(_field.Identifier) == stagedNode.Name {
+				if gongdoc_models.IdentifierToFieldName(_field.Identifier) == stagedNode.Name {
 					field = _field
 				}
 			}
@@ -102,11 +105,11 @@ func (enumValueImpl *GongEnumValueImpl) OnAfterUpdate(
 			}
 		}
 
-		Stage.Commit()
+		gongdoc_models.Stage.Commit()
 	}
 }
 
 func (EnumValueImpl *GongEnumValueImpl) OnAfterDelete(
-	stage *StageStruct,
-	stagedNode, frontNode *Node) {
+	stage *gongdoc_models.StageStruct,
+	stagedNode, frontNode *gongdoc_models.Node) {
 }

@@ -6,8 +6,8 @@ type Node struct {
 
 	Type GongdocNodeType
 
-	// impl is the pointer to the implementation of the node in the models of interest
-	impl NodeImplInterface
+	// Impl is the pointer to the implementation of the node in the models of interest
+	Impl NodeImplInterface
 
 	IsExpanded bool
 

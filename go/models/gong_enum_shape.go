@@ -14,9 +14,6 @@ type GongEnumShape struct {
 	//gong:ident
 	Identifier string
 
-	// gongEnumImpl, at run time, points to the gong object represented by the shape
-	gongEnumImpl *GongEnumImpl
-
 	// models of the composition of Field
 	Fields []*Field
 

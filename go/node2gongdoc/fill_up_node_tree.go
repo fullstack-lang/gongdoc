@@ -1,10 +1,12 @@
-package models
+package node2gongdoc
 
 import (
 	"log"
+
+	gongdoc_models "github.com/fullstack-lang/gongdoc/go/models"
 )
 
-func FillUpNodeTree(diagramPackage *DiagramPackage) {
+func FillUpNodeTree(diagramPackage *gongdoc_models.DiagramPackage) {
 
 	// a node tree is agnostic of the node types it manages
 	// therefore, a callback functiion is necessary
@@ -14,12 +16,12 @@ func FillUpNodeTree(diagramPackage *DiagramPackage) {
 	nodeCb.FillUpDiagramNodeTree(diagramPackage)
 	nodeCb.FillUpTreeOfGongObjects(diagramPackage)
 
-	updateNodesStates(&Stage, nodeCb)
+	updateNodesStates(&gongdoc_models.Stage, nodeCb)
 
 	// set callbacks on node updates
-	Stage.OnAfterNodeUpdateCallback = nodeCb
-	Stage.OnAfterNodeCreateCallback = nodeCb
-	Stage.OnAfterNodeDeleteCallback = nodeCb
+	gongdoc_models.Stage.OnAfterNodeUpdateCallback = nodeCb
+	gongdoc_models.Stage.OnAfterNodeCreateCallback = nodeCb
+	gongdoc_models.Stage.OnAfterNodeDeleteCallback = nodeCb
 
 	log.Printf("Parse found %d diagrams\n", len(diagramPackage.Classdiagrams))
 }

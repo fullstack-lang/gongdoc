@@ -1,12 +1,13 @@
-package models
+package node2gongdoc
 
 import (
 	"log"
 
 	gong_models "github.com/fullstack-lang/gong/go/models"
+	gongdoc_models "github.com/fullstack-lang/gongdoc/go/models"
 )
 
-func updateGongObjectsNodes(stage *StageStruct, nodeCb *NodeCB, classdiagram *Classdiagram) {
+func updateGongObjectsNodes(stage *gongdoc_models.StageStruct, nodeCb *NodeCB, classdiagram *gongdoc_models.Classdiagram) {
 
 	// parse gong object nodes and disable the check box
 	for _, rootNode := range nodeCb.treeOfGongObjects.RootNodes {
@@ -24,7 +25,7 @@ func updateGongObjectsNodes(stage *StageStruct, nodeCb *NodeCB, classdiagram *Cl
 	// 1. gongstructs / gongenum referenced by the classshape
 	for _, gongStructShape := range classdiagram.GongStructShapes {
 
-		var gongStructShapeNode *Node
+		var gongStructShapeNode *gongdoc_models.Node
 		var ok bool
 		gongStructShapeNode, ok = nodeCb.map_Identifier_Node[gongStructShape.Identifier]
 
@@ -34,7 +35,7 @@ func updateGongObjectsNodes(stage *StageStruct, nodeCb *NodeCB, classdiagram *Cl
 		}
 
 		// get the gong object from the identifier
-		gongStructName := IdentifierToShapename(gongStructShape.Identifier)
+		gongStructName := gongdoc_models.IdentifierToShapename(gongStructShape.Identifier)
 		gongStruct, ok :=
 			(*gong_models.GetGongstructInstancesMap[gong_models.GongStruct]())[gongStructName]
 
@@ -90,18 +91,18 @@ func updateGongObjectsNodes(stage *StageStruct, nodeCb *NodeCB, classdiagram *Cl
 	// first, construct map of all gongstructs present in the diagram
 	set_of_classshape_names := make(map[string]bool)
 	for _, classshape := range classdiagram.GongStructShapes {
-		set_of_classshape_names[IdentifierToShapename(classshape.Identifier)] = true
+		set_of_classshape_names[gongdoc_models.IdentifierToShapename(classshape.Identifier)] = true
 	}
 
 	// then iterate over all fields of all gongstructs node
 	for gongStruct := range *gong_models.GetGongstructInstancesSet[gong_models.GongStruct]() {
-		classshapeNode := nodeCb.map_Identifier_Node[ShapenameToIdentifier(gongStruct.Name)]
+		classshapeNode := nodeCb.map_Identifier_Node[gongdoc_models.ShapenameToIdentifier(gongStruct.Name)]
 
 		for _, fieldOfClassshapeNode := range classshapeNode.Children {
 			// then disable the checkbox
-			if fieldOfClassshapeNode.Type == GONG_STRUCT_FIELD {
+			if fieldOfClassshapeNode.Type == gongdoc_models.GONG_STRUCT_FIELD {
 
-				fieldImpl := fieldOfClassshapeNode.impl.(*FieldImpl)
+				fieldImpl := fieldOfClassshapeNode.Impl.(*FieldImpl)
 
 				switch fieldWithRef := fieldImpl.field.(type) {
 				case *gong_models.PointerToGongStructField:
@@ -123,15 +124,15 @@ func updateGongObjectsNodes(stage *StageStruct, nodeCb *NodeCB, classdiagram *Cl
 	// 1. for each note of the model, enable the check button if the class diagram is in draw mode
 	set_of_noteshape_names := make(map[string]bool)
 	for _, noteshape := range classdiagram.NoteShapes {
-		set_of_noteshape_names[IdentifierToShapename(noteshape.Identifier)] = true
+		set_of_noteshape_names[gongdoc_models.IdentifierToShapename(noteshape.Identifier)] = true
 	}
 	for note := range *gong_models.GetGongstructInstancesSet[gong_models.GongNote]() {
-		noteshapeNode := nodeCb.map_Identifier_Node[ShapenameToIdentifier(note.Name)]
+		noteshapeNode := nodeCb.map_Identifier_Node[gongdoc_models.ShapenameToIdentifier(note.Name)]
 		noteshapeNode.IsCheckboxDisabled = !classdiagram.IsInDrawMode
 
 		for _, noteLink := range note.Links {
 
-			noteLinkNode := nodeCb.map_Identifier_Node[ShapeAndFieldnameToFieldIdentifier(note.Name, noteLink.Name)]
+			noteLinkNode := nodeCb.map_Identifier_Node[gongdoc_models.ShapeAndFieldnameToFieldIdentifier(note.Name, noteLink.Name)]
 
 			// disable check box of the note link if the note is not present
 			if _, ok := set_of_noteshape_names[note.Name]; !ok {

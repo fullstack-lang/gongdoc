@@ -1,4 +1,8 @@
-package models
+package node2gongdoc
+
+import (
+	gongdoc_models "github.com/fullstack-lang/gongdoc/go/models"
+)
 
 // updateNodesStates updates the tree of symbols
 // according to the selected diagram
@@ -8,7 +12,7 @@ package models
 // ## For the diagram nodes
 //
 // For the identifiers nodes
-func updateNodesStates(stage *StageStruct, nodeCb *NodeCB) {
+func updateNodesStates(stage *gongdoc_models.StageStruct, nodeCb *NodeCB) {
 
 	nodeCb.treeOfGongObjects.UncheckAndDisable()
 
@@ -18,7 +22,7 @@ func updateNodesStates(stage *StageStruct, nodeCb *NodeCB) {
 	classdiagram := nodeCb.diagramPackage.SelectedClassdiagram
 
 	if classdiagram == nil {
-		Stage.Commit()
+		gongdoc_models.Stage.Commit()
 		return
 	}
 

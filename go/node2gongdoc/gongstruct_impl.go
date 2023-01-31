@@ -1,6 +1,9 @@
-package models
+package node2gongdoc
 
-import gong_models "github.com/fullstack-lang/gong/go/models"
+import (
+	gong_models "github.com/fullstack-lang/gong/go/models"
+	gongdoc_models "github.com/fullstack-lang/gongdoc/go/models"
+)
 
 type GongStructImpl struct {
 	gongStruct *gong_models.GongStruct
@@ -8,8 +11,8 @@ type GongStructImpl struct {
 }
 
 func (gongStructImpl *GongStructImpl) OnAfterUpdate(
-	stage *StageStruct,
-	stagedNode, frontNode *Node) {
+	stage *gongdoc_models.StageStruct,
+	stagedNode, frontNode *gongdoc_models.Node) {
 	// if node is unchecked
 	if stagedNode.IsChecked && !frontNode.IsChecked {
 
@@ -30,13 +33,13 @@ func (gongStructImpl *GongStructImpl) OnAfterUpdate(
 		stage.Checkout()
 
 		classDiagram := gongStructImpl.nodeCb.GetSelectedClassdiagram()
-		classDiagram.AddClassshape(frontNode.Name, REFERENCE_GONG_STRUCT)
+		classDiagram.AddClassshape(frontNode.Name, gongdoc_models.REFERENCE_GONG_STRUCT)
 
 		updateNodesStates(stage, gongStructImpl.nodeCb)
 	}
 }
 
 func (gongStructImpl *GongStructImpl) OnAfterDelete(
-	stage *StageStruct,
-	stagedNode, frontNode *Node) {
+	stage *gongdoc_models.StageStruct,
+	stagedNode, frontNode *gongdoc_models.Node) {
 }

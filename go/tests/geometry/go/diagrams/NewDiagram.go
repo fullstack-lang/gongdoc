@@ -111,13 +111,6 @@ func NewDiagramInjection() {
 	// Declarations of staged instances of Classdiagram
 	__Classdiagram__000000_NewDiagram := (&models.Classdiagram{Name: `NewDiagram`}).Stage()
 
-	// Declarations of staged instances of Classshape
-	__Classshape__000000_NewDiagram_Line := (&models.GongStructShape{Name: `NewDiagram-Line`}).Stage()
-	__Classshape__000001_NewDiagram_LineTypeInt := (&models.GongStructShape{Name: `NewDiagram-LineTypeInt`}).Stage()
-	__Classshape__000002_NewDiagram_Point := (&models.GongStructShape{Name: `NewDiagram-Point`}).Stage()
-	__Classshape__000003_NewDiagram_PointExclusiveSet := (&models.GongStructShape{Name: `NewDiagram-PointExclusiveSet`}).Stage()
-	__Classshape__000004_NewDiagram_PointUse := (&models.GongStructShape{Name: `NewDiagram-PointUse`}).Stage()
-
 	// Declarations of staged instances of DiagramPackage
 
 	// Declarations of staged instances of Field
@@ -125,6 +118,15 @@ func NewDiagramInjection() {
 	__Field__000001_DOTTED_ONE := (&models.Field{Name: `DOTTED_ONE`}).Stage()
 	__Field__000002_JourneyTime := (&models.Field{Name: `JourneyTime`}).Stage()
 	__Field__000003_Name := (&models.Field{Name: `Name`}).Stage()
+
+	// Declarations of staged instances of GongEnumShape
+
+	// Declarations of staged instances of GongStructShape
+	__GongStructShape__000000_NewDiagram_Line := (&models.GongStructShape{Name: `NewDiagram-Line`}).Stage()
+	__GongStructShape__000001_NewDiagram_LineTypeInt := (&models.GongStructShape{Name: `NewDiagram-LineTypeInt`}).Stage()
+	__GongStructShape__000002_NewDiagram_Point := (&models.GongStructShape{Name: `NewDiagram-Point`}).Stage()
+	__GongStructShape__000003_NewDiagram_PointExclusiveSet := (&models.GongStructShape{Name: `NewDiagram-PointExclusiveSet`}).Stage()
+	__GongStructShape__000004_NewDiagram_PointUse := (&models.GongStructShape{Name: `NewDiagram-PointUse`}).Stage()
 
 	// Declarations of staged instances of Link
 	__Link__000000_End := (&models.Link{Name: `End`}).Stage()
@@ -159,74 +161,9 @@ func NewDiagramInjection() {
 	__Classdiagram__000000_NewDiagram.Name = `NewDiagram`
 	__Classdiagram__000000_NewDiagram.IsInDrawMode = true
 
-	// Classshape values setup
-	__Classshape__000000_NewDiagram_Line.Name = `NewDiagram-Line`
-
-	// comment added to overcome the problem with the comment map association
-
-	//gong:ident [ref_models.Line]
-	__Classshape__000000_NewDiagram_Line.Identifier = `ref_models.Line`
-	__Classshape__000000_NewDiagram_Line.ShowNbInstances = false
-	__Classshape__000000_NewDiagram_Line.NbInstances = 0
-	__Classshape__000000_NewDiagram_Line.Width = 240.000000
-	__Classshape__000000_NewDiagram_Line.Heigth = 93.000000
-	__Classshape__000000_NewDiagram_Line.IsSelected = false
-
-	// Classshape values setup
-	__Classshape__000001_NewDiagram_LineTypeInt.Name = `NewDiagram-LineTypeInt`
-
-	// comment added to overcome the problem with the comment map association
-
-	//gong:ident [ref_models.LineTypeInt]
-	__Classshape__000001_NewDiagram_LineTypeInt.Identifier = `ref_models.LineTypeInt`
-	__Classshape__000001_NewDiagram_LineTypeInt.ShowNbInstances = false
-	__Classshape__000001_NewDiagram_LineTypeInt.NbInstances = 0
-	__Classshape__000001_NewDiagram_LineTypeInt.Width = 240.000000
-	__Classshape__000001_NewDiagram_LineTypeInt.Heigth = 93.000000
-	__Classshape__000001_NewDiagram_LineTypeInt.IsSelected = false
-
-	// Classshape values setup
-	__Classshape__000002_NewDiagram_Point.Name = `NewDiagram-Point`
-
-	// comment added to overcome the problem with the comment map association
-
-	//gong:ident [ref_models.Point]
-	__Classshape__000002_NewDiagram_Point.Identifier = `ref_models.Point`
-	__Classshape__000002_NewDiagram_Point.ShowNbInstances = false
-	__Classshape__000002_NewDiagram_Point.NbInstances = 0
-	__Classshape__000002_NewDiagram_Point.Width = 240.000000
-	__Classshape__000002_NewDiagram_Point.Heigth = 63.000000
-	__Classshape__000002_NewDiagram_Point.IsSelected = false
-
-	// Classshape values setup
-	__Classshape__000003_NewDiagram_PointExclusiveSet.Name = `NewDiagram-PointExclusiveSet`
-
-	// comment added to overcome the problem with the comment map association
-
-	//gong:ident [ref_models.PointExclusiveSet]
-	__Classshape__000003_NewDiagram_PointExclusiveSet.Identifier = `ref_models.PointExclusiveSet`
-	__Classshape__000003_NewDiagram_PointExclusiveSet.ShowNbInstances = false
-	__Classshape__000003_NewDiagram_PointExclusiveSet.NbInstances = 0
-	__Classshape__000003_NewDiagram_PointExclusiveSet.Width = 240.000000
-	__Classshape__000003_NewDiagram_PointExclusiveSet.Heigth = 63.000000
-	__Classshape__000003_NewDiagram_PointExclusiveSet.IsSelected = false
-
-	// Classshape values setup
-	__Classshape__000004_NewDiagram_PointUse.Name = `NewDiagram-PointUse`
-
-	// comment added to overcome the problem with the comment map association
-
-	//gong:ident [ref_models.PointUse]
-	__Classshape__000004_NewDiagram_PointUse.Identifier = `ref_models.PointUse`
-	__Classshape__000004_NewDiagram_PointUse.ShowNbInstances = false
-	__Classshape__000004_NewDiagram_PointUse.NbInstances = 0
-	__Classshape__000004_NewDiagram_PointUse.Width = 240.000000
-	__Classshape__000004_NewDiagram_PointUse.Heigth = 63.000000
-	__Classshape__000004_NewDiagram_PointUse.IsSelected = false
-
 	// Field values setup
 	__Field__000000_CONTINUOUS_ZERO.Name = `CONTINUOUS_ZERO`
-
+	
 	// comment added to overcome the problem with the comment map association
 
 	//gong:ident [ref_models.LineTypeInt.CONTINUOUS_ZERO]
@@ -237,7 +174,7 @@ func NewDiagramInjection() {
 
 	// Field values setup
 	__Field__000001_DOTTED_ONE.Name = `DOTTED_ONE`
-
+	
 	// comment added to overcome the problem with the comment map association
 
 	//gong:ident [ref_models.LineTypeInt.DOTTED_ONE]
@@ -248,7 +185,7 @@ func NewDiagramInjection() {
 
 	// Field values setup
 	__Field__000002_JourneyTime.Name = `JourneyTime`
-
+	
 	// comment added to overcome the problem with the comment map association
 
 	//gong:ident [ref_models.Line.JourneyTime]
@@ -259,7 +196,7 @@ func NewDiagramInjection() {
 
 	// Field values setup
 	__Field__000003_Name.Name = `Name`
-
+	
 	// comment added to overcome the problem with the comment map association
 
 	//gong:ident [ref_models.Line.Name]
@@ -268,10 +205,75 @@ func NewDiagramInjection() {
 	__Field__000003_Name.Structname = `Line`
 	__Field__000003_Name.Fieldtypename = `string`
 
+	// GongStructShape values setup
+	__GongStructShape__000000_NewDiagram_Line.Name = `NewDiagram-Line`
+	
+	// comment added to overcome the problem with the comment map association
+
+	//gong:ident [ref_models.Line]
+	__GongStructShape__000000_NewDiagram_Line.Identifier = `ref_models.Line`
+	__GongStructShape__000000_NewDiagram_Line.ShowNbInstances = false
+	__GongStructShape__000000_NewDiagram_Line.NbInstances = 0
+	__GongStructShape__000000_NewDiagram_Line.Width = 240.000000
+	__GongStructShape__000000_NewDiagram_Line.Heigth = 93.000000
+	__GongStructShape__000000_NewDiagram_Line.IsSelected = false
+
+	// GongStructShape values setup
+	__GongStructShape__000001_NewDiagram_LineTypeInt.Name = `NewDiagram-LineTypeInt`
+	
+	// comment added to overcome the problem with the comment map association
+
+	//gong:ident [ref_models.LineTypeInt]
+	__GongStructShape__000001_NewDiagram_LineTypeInt.Identifier = `ref_models.LineTypeInt`
+	__GongStructShape__000001_NewDiagram_LineTypeInt.ShowNbInstances = false
+	__GongStructShape__000001_NewDiagram_LineTypeInt.NbInstances = 0
+	__GongStructShape__000001_NewDiagram_LineTypeInt.Width = 240.000000
+	__GongStructShape__000001_NewDiagram_LineTypeInt.Heigth = 93.000000
+	__GongStructShape__000001_NewDiagram_LineTypeInt.IsSelected = false
+
+	// GongStructShape values setup
+	__GongStructShape__000002_NewDiagram_Point.Name = `NewDiagram-Point`
+	
+	// comment added to overcome the problem with the comment map association
+
+	//gong:ident [ref_models.Point]
+	__GongStructShape__000002_NewDiagram_Point.Identifier = `ref_models.Point`
+	__GongStructShape__000002_NewDiagram_Point.ShowNbInstances = false
+	__GongStructShape__000002_NewDiagram_Point.NbInstances = 0
+	__GongStructShape__000002_NewDiagram_Point.Width = 240.000000
+	__GongStructShape__000002_NewDiagram_Point.Heigth = 63.000000
+	__GongStructShape__000002_NewDiagram_Point.IsSelected = false
+
+	// GongStructShape values setup
+	__GongStructShape__000003_NewDiagram_PointExclusiveSet.Name = `NewDiagram-PointExclusiveSet`
+	
+	// comment added to overcome the problem with the comment map association
+
+	//gong:ident [ref_models.PointExclusiveSet]
+	__GongStructShape__000003_NewDiagram_PointExclusiveSet.Identifier = `ref_models.PointExclusiveSet`
+	__GongStructShape__000003_NewDiagram_PointExclusiveSet.ShowNbInstances = false
+	__GongStructShape__000003_NewDiagram_PointExclusiveSet.NbInstances = 0
+	__GongStructShape__000003_NewDiagram_PointExclusiveSet.Width = 240.000000
+	__GongStructShape__000003_NewDiagram_PointExclusiveSet.Heigth = 63.000000
+	__GongStructShape__000003_NewDiagram_PointExclusiveSet.IsSelected = false
+
+	// GongStructShape values setup
+	__GongStructShape__000004_NewDiagram_PointUse.Name = `NewDiagram-PointUse`
+	
+	// comment added to overcome the problem with the comment map association
+
+	//gong:ident [ref_models.PointUse]
+	__GongStructShape__000004_NewDiagram_PointUse.Identifier = `ref_models.PointUse`
+	__GongStructShape__000004_NewDiagram_PointUse.ShowNbInstances = false
+	__GongStructShape__000004_NewDiagram_PointUse.NbInstances = 0
+	__GongStructShape__000004_NewDiagram_PointUse.Width = 240.000000
+	__GongStructShape__000004_NewDiagram_PointUse.Heigth = 63.000000
+	__GongStructShape__000004_NewDiagram_PointUse.IsSelected = false
+
 	// Link values setup
 	__Link__000000_End.Name = `End`
 	__Link__000000_End.Structname = `Line`
-
+	
 	// comment added to overcome the problem with the comment map association
 
 	//gong:ident [ref_models.Line.End]
@@ -282,7 +284,7 @@ func NewDiagramInjection() {
 
 	// NoteShape values setup
 	__NoteShape__000000_ShortNodeOnModels.Name = `ShortNodeOnModels`
-
+	
 	// comment added to overcome the problem with the comment map association
 
 	//gong:ident [ref_models.ShortNodeOnModels]
@@ -299,7 +301,7 @@ In this case [Line], [Point] and [Line.Start]
 
 	// NoteShapeLink values setup
 	__NoteShapeLink__000000_Line.Name = `Line`
-
+	
 	// comment added to overcome the problem with the comment map association
 
 	//gong:ident [ref_models.ShortNodeOnModels.Line]
@@ -316,8 +318,8 @@ In this case [Line], [Point] and [Line.Start]
 	__Position__000001_Pos_NewDiagram_LineTypeInt.Name = `Pos-NewDiagram-LineTypeInt`
 
 	// Position values setup
-	__Position__000002_Pos_NewDiagram_Point.X = 76.000000
-	__Position__000002_Pos_NewDiagram_Point.Y = 53.000000
+	__Position__000002_Pos_NewDiagram_Point.X = 60.000000
+	__Position__000002_Pos_NewDiagram_Point.Y = 130.000000
 	__Position__000002_Pos_NewDiagram_Point.Name = `Pos-NewDiagram-Point`
 
 	// Position values setup
@@ -326,32 +328,34 @@ In this case [Line], [Point] and [Line.Start]
 	__Position__000003_Pos_NewDiagram_PointExclusiveSet.Name = `Pos-NewDiagram-PointExclusiveSet`
 
 	// Position values setup
-	__Position__000004_Pos_NewDiagram_PointUse.X = 40.000000
-	__Position__000004_Pos_NewDiagram_PointUse.Y = 250.000000
+	__Position__000004_Pos_NewDiagram_PointUse.X = 30.000000
+	__Position__000004_Pos_NewDiagram_PointUse.Y = 330.000000
 	__Position__000004_Pos_NewDiagram_PointUse.Name = `Pos-NewDiagram-PointUse`
 
 	// Vertice values setup
-	__Vertice__000000_Verticle_in_class_diagram_NewDiagram_in_middle_between_NewDiagram_Line_and_NewDiagram_Point.X = 568.000000
-	__Vertice__000000_Verticle_in_class_diagram_NewDiagram_in_middle_between_NewDiagram_Line_and_NewDiagram_Point.Y = 208.000000
+	__Vertice__000000_Verticle_in_class_diagram_NewDiagram_in_middle_between_NewDiagram_Line_and_NewDiagram_Point.X = 548.000000
+	__Vertice__000000_Verticle_in_class_diagram_NewDiagram_in_middle_between_NewDiagram_Line_and_NewDiagram_Point.Y = 108.000000
 	__Vertice__000000_Verticle_in_class_diagram_NewDiagram_in_middle_between_NewDiagram_Line_and_NewDiagram_Point.Name = `Verticle in class diagram NewDiagram in middle between NewDiagram-Line and NewDiagram-Point`
 
 	// Setup of pointers
-	__Classdiagram__000000_NewDiagram.GongStructShapes = append(__Classdiagram__000000_NewDiagram.GongStructShapes, __Classshape__000000_NewDiagram_Line)
-	__Classdiagram__000000_NewDiagram.GongStructShapes = append(__Classdiagram__000000_NewDiagram.GongStructShapes, __Classshape__000001_NewDiagram_LineTypeInt)
-	__Classdiagram__000000_NewDiagram.GongStructShapes = append(__Classdiagram__000000_NewDiagram.GongStructShapes, __Classshape__000003_NewDiagram_PointExclusiveSet)
-	__Classdiagram__000000_NewDiagram.GongStructShapes = append(__Classdiagram__000000_NewDiagram.GongStructShapes, __Classshape__000004_NewDiagram_PointUse)
-	__Classdiagram__000000_NewDiagram.GongStructShapes = append(__Classdiagram__000000_NewDiagram.GongStructShapes, __Classshape__000002_NewDiagram_Point)
+	__Classdiagram__000000_NewDiagram.GongStructShapes = append(__Classdiagram__000000_NewDiagram.GongStructShapes, __GongStructShape__000000_NewDiagram_Line)
+	__Classdiagram__000000_NewDiagram.GongStructShapes = append(__Classdiagram__000000_NewDiagram.GongStructShapes, __GongStructShape__000001_NewDiagram_LineTypeInt)
+	__Classdiagram__000000_NewDiagram.GongStructShapes = append(__Classdiagram__000000_NewDiagram.GongStructShapes, __GongStructShape__000003_NewDiagram_PointExclusiveSet)
+	__Classdiagram__000000_NewDiagram.GongStructShapes = append(__Classdiagram__000000_NewDiagram.GongStructShapes, __GongStructShape__000004_NewDiagram_PointUse)
+	__Classdiagram__000000_NewDiagram.GongStructShapes = append(__Classdiagram__000000_NewDiagram.GongStructShapes, __GongStructShape__000002_NewDiagram_Point)
 	__Classdiagram__000000_NewDiagram.NoteShapes = append(__Classdiagram__000000_NewDiagram.NoteShapes, __NoteShape__000000_ShortNodeOnModels)
-	__Classshape__000000_NewDiagram_Line.Position = __Position__000000_Pos_NewDiagram_Line
-	__Classshape__000000_NewDiagram_Line.Fields = append(__Classshape__000000_NewDiagram_Line.Fields, __Field__000003_Name)
-	__Classshape__000000_NewDiagram_Line.Fields = append(__Classshape__000000_NewDiagram_Line.Fields, __Field__000002_JourneyTime)
-	__Classshape__000000_NewDiagram_Line.Links = append(__Classshape__000000_NewDiagram_Line.Links, __Link__000000_End)
-	__Classshape__000001_NewDiagram_LineTypeInt.Position = __Position__000001_Pos_NewDiagram_LineTypeInt
-	__Classshape__000001_NewDiagram_LineTypeInt.Fields = append(__Classshape__000001_NewDiagram_LineTypeInt.Fields, __Field__000000_CONTINUOUS_ZERO)
-	__Classshape__000001_NewDiagram_LineTypeInt.Fields = append(__Classshape__000001_NewDiagram_LineTypeInt.Fields, __Field__000001_DOTTED_ONE)
-	__Classshape__000002_NewDiagram_Point.Position = __Position__000002_Pos_NewDiagram_Point
-	__Classshape__000003_NewDiagram_PointExclusiveSet.Position = __Position__000003_Pos_NewDiagram_PointExclusiveSet
-	__Classshape__000004_NewDiagram_PointUse.Position = __Position__000004_Pos_NewDiagram_PointUse
+	__GongStructShape__000000_NewDiagram_Line.Position = __Position__000000_Pos_NewDiagram_Line
+	__GongStructShape__000000_NewDiagram_Line.Fields = append(__GongStructShape__000000_NewDiagram_Line.Fields, __Field__000003_Name)
+	__GongStructShape__000000_NewDiagram_Line.Fields = append(__GongStructShape__000000_NewDiagram_Line.Fields, __Field__000002_JourneyTime)
+	__GongStructShape__000000_NewDiagram_Line.Links = append(__GongStructShape__000000_NewDiagram_Line.Links, __Link__000000_End)
+	__GongStructShape__000001_NewDiagram_LineTypeInt.Position = __Position__000001_Pos_NewDiagram_LineTypeInt
+	__GongStructShape__000001_NewDiagram_LineTypeInt.Fields = append(__GongStructShape__000001_NewDiagram_LineTypeInt.Fields, __Field__000000_CONTINUOUS_ZERO)
+	__GongStructShape__000001_NewDiagram_LineTypeInt.Fields = append(__GongStructShape__000001_NewDiagram_LineTypeInt.Fields, __Field__000001_DOTTED_ONE)
+	__GongStructShape__000002_NewDiagram_Point.Position = __Position__000002_Pos_NewDiagram_Point
+	__GongStructShape__000003_NewDiagram_PointExclusiveSet.Position = __Position__000003_Pos_NewDiagram_PointExclusiveSet
+	__GongStructShape__000004_NewDiagram_PointUse.Position = __Position__000004_Pos_NewDiagram_PointUse
 	__Link__000000_End.Middlevertice = __Vertice__000000_Verticle_in_class_diagram_NewDiagram_in_middle_between_NewDiagram_Line_and_NewDiagram_Point
 	__NoteShape__000000_ShortNodeOnModels.NoteShapeLinks = append(__NoteShape__000000_ShortNodeOnModels.NoteShapeLinks, __NoteShapeLink__000000_Line)
 }
+
+

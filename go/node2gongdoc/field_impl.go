@@ -1,10 +1,11 @@
-package models
+package node2gongdoc
 
 import (
 	"log"
 	"strings"
 
 	gong_models "github.com/fullstack-lang/gong/go/models"
+	gongdoc_models "github.com/fullstack-lang/gongdoc/go/models"
 )
 
 type FieldImpl struct {
@@ -13,8 +14,8 @@ type FieldImpl struct {
 }
 
 func (fieldImpl *FieldImpl) OnAfterUpdate(
-	stage *StageStruct,
-	stagedNode, frontNode *Node) {
+	stage *gongdoc_models.StageStruct,
+	stagedNode, frontNode *gongdoc_models.Node) {
 
 	classdiagram := fieldImpl.nodeCb.GetSelectedClassdiagram()
 
@@ -23,15 +24,15 @@ func (fieldImpl *FieldImpl) OnAfterUpdate(
 	// get the parent node
 	parentNode := fieldImpl.nodeCb.map_Children_Parent[stagedNode]
 
-	gongStructImpl := parentNode.impl.(*GongStructImpl)
+	gongStructImpl := parentNode.Impl.(*GongStructImpl)
 	gongStruct := gongStructImpl.gongStruct
 
 	// find the classhape in the classdiagram
 	foundClassshape := false
-	var classshape *GongStructShape
+	var classshape *gongdoc_models.GongStructShape
 	for _, _classshape := range classdiagram.GongStructShapes {
 		// strange behavior when the classshape is remove within the loop
-		if IdentifierToShapename(_classshape.Identifier) ==
+		if gongdoc_models.IdentifierToShapename(_classshape.Identifier) ==
 			gongStruct.Name && !foundClassshape {
 			classshape = _classshape
 		}
@@ -43,10 +44,10 @@ func (fieldImpl *FieldImpl) OnAfterUpdate(
 		stage.Checkout()
 
 		{
-			var field *Field
+			var field *gongdoc_models.Field
 
 			for _, _field := range classshape.Fields {
-				if IdentifierToFieldName(_field.Identifier) == stagedNode.Name {
+				if gongdoc_models.IdentifierToFieldName(_field.Identifier) == stagedNode.Name {
 					field = _field
 				}
 			}
@@ -57,10 +58,10 @@ func (fieldImpl *FieldImpl) OnAfterUpdate(
 			}
 		}
 		{
-			var link *Link
+			var link *gongdoc_models.Link
 
 			for _, _field := range classshape.Links {
-				if IdentifierToFieldName(_field.Identifier) == stagedNode.Name {
+				if gongdoc_models.IdentifierToFieldName(_field.Identifier) == stagedNode.Name {
 					link = _field
 				}
 			}
@@ -70,7 +71,7 @@ func (fieldImpl *FieldImpl) OnAfterUpdate(
 			}
 		}
 
-		Stage.Commit()
+		gongdoc_models.Stage.Commit()
 	}
 	if !stagedNode.IsChecked && frontNode.IsChecked {
 
@@ -80,9 +81,9 @@ func (fieldImpl *FieldImpl) OnAfterUpdate(
 		switch fieldImpl.field.(type) {
 		case *gong_models.GongBasicField, *gong_models.GongTimeField:
 
-			var field Field
+			var field gongdoc_models.Field
 			field.Name = stagedNode.Name
-			field.Identifier = ShapeAndFieldnameToFieldIdentifier(gongStruct.Name, stagedNode.Name)
+			field.Identifier = gongdoc_models.ShapeAndFieldnameToFieldIdentifier(gongStruct.Name, stagedNode.Name)
 
 			switch realField := fieldImpl.field.(type) {
 			case *gong_models.GongBasicField:
@@ -98,7 +99,7 @@ func (fieldImpl *FieldImpl) OnAfterUpdate(
 			case *gong_models.SliceOfPointerToGongStructField:
 			}
 
-			field.Structname = IdentifierToShapename(classshape.Identifier)
+			field.Structname = gongdoc_models.IdentifierToShapename(classshape.Identifier)
 			field.Stage()
 
 			classshape.Heigth = classshape.Heigth + 15
@@ -125,7 +126,7 @@ func (fieldImpl *FieldImpl) OnAfterUpdate(
 			// compute insertionIndex (index where to insert the field to display)
 			insertionIndex := 0
 			for idx, field := range classshape.Fields {
-				gongField := map_Name_Field[IdentifierToFieldName(field.Identifier)]
+				gongField := map_Name_Field[gongdoc_models.IdentifierToFieldName(field.Identifier)]
 				_fieldRank := map_Field_Rank[gongField]
 				if fieldRank > _fieldRank {
 					insertionIndex = idx + 1
@@ -144,25 +145,25 @@ func (fieldImpl *FieldImpl) OnAfterUpdate(
 		case *gong_models.PointerToGongStructField, *gong_models.SliceOfPointerToGongStructField:
 
 			var targetStructName string
-			var sourceMultiplicity MultiplicityType
-			var targetMultiplicity MultiplicityType
+			var sourceMultiplicity gongdoc_models.MultiplicityType
+			var targetMultiplicity gongdoc_models.MultiplicityType
 
 			switch realField := fieldImpl.field.(type) {
 			case *gong_models.PointerToGongStructField:
 				targetStructName = realField.GongStruct.Name
-				sourceMultiplicity = MANY
-				targetMultiplicity = ZERO_ONE
+				sourceMultiplicity = gongdoc_models.MANY
+				targetMultiplicity = gongdoc_models.ZERO_ONE
 			case *gong_models.SliceOfPointerToGongStructField:
 				targetStructName = realField.GongStruct.Name
-				sourceMultiplicity = ZERO_ONE
-				targetMultiplicity = MANY
+				sourceMultiplicity = gongdoc_models.ZERO_ONE
+				targetMultiplicity = gongdoc_models.MANY
 			}
 			targetSourceClassshape := false
-			var targetClassshape *GongStructShape
+			var targetClassshape *gongdoc_models.GongStructShape
 			for _, _classshape := range classdiagram.GongStructShapes {
 
 				// strange behavior when the classshape is remove within the loop
-				if IdentifierToShapename(_classshape.Identifier) == targetStructName && !targetSourceClassshape {
+				if gongdoc_models.IdentifierToShapename(_classshape.Identifier) == targetStructName && !targetSourceClassshape {
 					targetSourceClassshape = true
 					targetClassshape = _classshape
 				}
@@ -172,32 +173,32 @@ func (fieldImpl *FieldImpl) OnAfterUpdate(
 			}
 			_ = targetClassshape
 
-			link := new(Link).Stage()
+			link := new(gongdoc_models.Link).Stage()
 			link.Name = stagedNode.Name
 			link.SourceMultiplicity = sourceMultiplicity
 			link.TargetMultiplicity = targetMultiplicity
 			link.Identifier =
-				ShapeAndFieldnameToFieldIdentifier(gongStruct.Name, stagedNode.Name)
+				gongdoc_models.ShapeAndFieldnameToFieldIdentifier(gongStruct.Name, stagedNode.Name)
 
 			link.Structname = gongStruct.Name
 			link.Fieldtypename = targetStructName
 
 			classshape.Links = append(classshape.Links, link)
-			link.Middlevertice = new(Vertice).Stage()
+			link.Middlevertice = new(gongdoc_models.Vertice).Stage()
 			link.Middlevertice.Name = "Verticle in class diagram " + classdiagram.Name +
 				" in middle between " + classshape.Name + " and " + targetClassshape.Name
 			link.Middlevertice.X = (classshape.Position.X+targetClassshape.Position.X)/2.0 +
 				classshape.Width*1.5
 			link.Middlevertice.Y = (classshape.Position.Y+targetClassshape.Position.Y)/2.0 +
 				classshape.Heigth/2.0
-			Stage.Commit()
+			gongdoc_models.Stage.Commit()
 		}
 
-		Stage.Commit()
+		gongdoc_models.Stage.Commit()
 	}
 }
 
 func (fieldImpl *FieldImpl) OnAfterDelete(
-	stage *StageStruct,
-	stagedNode, frontNode *Node) {
+	stage *gongdoc_models.StageStruct,
+	stagedNode, frontNode *gongdoc_models.Node) {
 }

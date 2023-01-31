@@ -11,6 +11,7 @@ import (
 
 	gong_models "github.com/fullstack-lang/gong/go/models"
 	gongdoc_models "github.com/fullstack-lang/gongdoc/go/models"
+	gongdoc_node2gongdoc "github.com/fullstack-lang/gongdoc/go/node2gongdoc"
 )
 
 // LoadDiagramPackage fill up the stage with the diagrams elements
@@ -64,7 +65,7 @@ func LoadDiagramPackage(pkgPath string, modelPkg *gong_models.ModelPkg, editable
 	diagramPackageAst, ok := pkgsParser["diagrams"]
 	if !ok {
 		diagramPackage.IsEditable = editable
-		gongdoc_models.FillUpNodeTree(diagramPackage)
+		gongdoc_node2gongdoc.FillUpNodeTree(diagramPackage)
 		gongdoc_models.Stage.Commit()
 		return diagramPackage, nil
 	}
@@ -78,7 +79,7 @@ func LoadDiagramPackage(pkgPath string, modelPkg *gong_models.ModelPkg, editable
 	}
 
 	diagramPackage.IsEditable = editable
-	gongdoc_models.FillUpNodeTree(diagramPackage)
+	gongdoc_node2gongdoc.FillUpNodeTree(diagramPackage)
 	gongdoc_models.Stage.Commit()
 	return diagramPackage, nil
 }

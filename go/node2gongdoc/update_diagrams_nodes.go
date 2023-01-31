@@ -1,6 +1,10 @@
-package models
+package node2gongdoc
 
-func updateDiagramsNodes(stage *StageStruct, nodesCb *NodeCB) {
+import (
+	gongdoc_models "github.com/fullstack-lang/gongdoc/go/models"
+)
+
+func updateDiagramsNodes(stage *gongdoc_models.StageStruct, nodesCb *NodeCB) {
 
 	// compute wether one of the diagrams is in draw/edit mode
 	// if so, all diagram check need to be disabled

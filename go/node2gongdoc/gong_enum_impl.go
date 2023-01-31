@@ -1,6 +1,9 @@
-package models
+package node2gongdoc
 
-import gong_models "github.com/fullstack-lang/gong/go/models"
+import (
+	gong_models "github.com/fullstack-lang/gong/go/models"
+	gongdoc_models "github.com/fullstack-lang/gongdoc/go/models"
+)
 
 type GongEnumImpl struct {
 	gongEnum *gong_models.GongEnum
@@ -8,8 +11,8 @@ type GongEnumImpl struct {
 }
 
 func (gongEnumImpl *GongEnumImpl) OnAfterUpdate(
-	stage *StageStruct,
-	stagedNode, frontNode *Node) {
+	stage *gongdoc_models.StageStruct,
+	stagedNode, frontNode *gongdoc_models.Node) {
 
 	// if node is unchecked
 	if stagedNode.IsChecked && !frontNode.IsChecked {
@@ -22,8 +25,8 @@ func (gongEnumImpl *GongEnumImpl) OnAfterUpdate(
 
 		// get the referenced gongstructs
 		for _, classshape := range classDiagram.GongStructShapes {
-			if IdentifierToShapename(classshape.Identifier) == stagedNode.Name {
-				classDiagram.RemoveClassshape(IdentifierToShapename(classshape.Identifier))
+			if gongdoc_models.IdentifierToShapename(classshape.Identifier) == stagedNode.Name {
+				classDiagram.RemoveClassshape(gongdoc_models.IdentifierToShapename(classshape.Identifier))
 			}
 
 		}
@@ -37,13 +40,13 @@ func (gongEnumImpl *GongEnumImpl) OnAfterUpdate(
 		stage.Checkout()
 
 		classDiagram := gongEnumImpl.nodeCb.GetSelectedClassdiagram()
-		classDiagram.AddClassshape(frontNode.Name, REFERENCE_GONG_ENUM)
+		classDiagram.AddClassshape(frontNode.Name, gongdoc_models.REFERENCE_GONG_ENUM)
 		updateNodesStates(stage, gongEnumImpl.nodeCb)
 	}
 
 }
 
 func (gongEnumImpl *GongEnumImpl) OnAfterDelete(
-	stage *StageStruct,
-	stagedNode, frontNode *Node) {
+	stage *gongdoc_models.StageStruct,
+	stagedNode, frontNode *gongdoc_models.Node) {
 }
