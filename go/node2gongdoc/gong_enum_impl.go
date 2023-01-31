@@ -30,7 +30,7 @@ func (gongEnumImpl *GongEnumImpl) OnAfterUpdate(
 			}
 
 		}
-		updateNodesStates(stage, gongEnumImpl.nodeCb)
+
 	}
 
 	// if node is checked, add classshape
@@ -41,7 +41,7 @@ func (gongEnumImpl *GongEnumImpl) OnAfterUpdate(
 
 		classDiagram := gongEnumImpl.nodeCb.GetSelectedClassdiagram()
 		classDiagram.AddClassshape(frontNode.Name, gongdoc_models.REFERENCE_GONG_ENUM)
-		updateNodesStates(stage, gongEnumImpl.nodeCb)
+
 	}
 
 }

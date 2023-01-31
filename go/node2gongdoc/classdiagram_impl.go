@@ -44,10 +44,6 @@ func (classdiagramImpl *ClassdiagramImpl) OnAfterUpdate(
 				otherDiagramNode.IsChecked = false
 			}
 		}
-
-		// update the nodes in the tree of identifiers in order to update
-		// which identifiers are present/absent in the selected diagram
-		updateNodesStates(stage, classdiagramImpl.nodeCb)
 	}
 
 	// node was checked and user wants to uncheck it. This is not possible
@@ -114,14 +110,13 @@ func (classdiagramImpl *ClassdiagramImpl) OnAfterUpdate(
 
 		stagedNode.Name = frontNode.Name
 		stagedNode.IsInEditMode = false
-		updateNodesStates(stage, classdiagramImpl.nodeCb)
 
 	}
 
 	// the end user switch the edit mode
 	if stagedNode.IsInEditMode != frontNode.IsInEditMode {
 		stagedNode.IsInEditMode = frontNode.IsInEditMode
-		updateNodesStates(stage, classdiagramImpl.nodeCb)
+
 	}
 
 	if stagedNode.IsInDrawMode != frontNode.IsInDrawMode {
@@ -129,7 +124,6 @@ func (classdiagramImpl *ClassdiagramImpl) OnAfterUpdate(
 
 		classdiagramImpl.classdiagram.IsInDrawMode = frontNode.IsInDrawMode
 
-		updateNodesStates(stage, classdiagramImpl.nodeCb)
 	}
 
 	// marshall diagram to switch to saved state
@@ -159,7 +153,6 @@ func (classdiagramImpl *ClassdiagramImpl) OnAfterUpdate(
 		stagedNode.IsSaved = false
 		stage.Commit()
 
-		updateNodesStates(stage, classdiagramImpl.nodeCb)
 	}
 }
 
@@ -184,9 +177,6 @@ func (classdiagramImpl *ClassdiagramImpl) OnAfterDelete(
 			log.Println("Error while deleting file " + classdiagramFilePath + " : " + err.Error())
 		}
 	}
-
-	// commit will clean up the stage associations
-	updateNodesStates(stage, classdiagramImpl.nodeCb)
 }
 
 // remove node from slice

@@ -40,7 +40,7 @@ func (gongNoteImpl *GongNoteImpl) OnAfterUpdate(
 		noteShape.Heigth = 63
 
 		classdiagram.NoteShapes = append(classdiagram.NoteShapes, noteShape)
-		updateNodesStates(stage, gongNoteImpl.nodeCb)
+
 	}
 
 	// suppression a note
@@ -68,7 +68,7 @@ func (gongNoteImpl *GongNoteImpl) OnAfterUpdate(
 		}
 		classdiagram.NoteShapes = remove(classdiagram.NoteShapes, noteShape)
 		noteShape.Unstage()
-		updateNodesStates(stage, gongNoteImpl.nodeCb)
+
 	}
 
 }

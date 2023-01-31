@@ -47,7 +47,6 @@ func (gongLinkImpl *GongLinkImpl) OnAfterUpdate(
 
 		noteshape.NoteShapeLinks = append(noteshape.NoteShapeLinks, noteShapeLink)
 
-		updateNodesStates(stage, gongLinkImpl.nodeCb)
 	}
 
 	// removing a note link
@@ -66,7 +65,6 @@ func (gongLinkImpl *GongLinkImpl) OnAfterUpdate(
 		noteLink.Unstage()
 		noteshape.NoteShapeLinks = remove(noteshape.NoteShapeLinks, noteLink)
 
-		updateNodesStates(stage, gongLinkImpl.nodeCb)
 	}
 
 }

@@ -23,7 +23,6 @@ func (gongStructImpl *GongStructImpl) OnAfterUpdate(
 		classDiagram := gongStructImpl.nodeCb.GetSelectedClassdiagram()
 		classDiagram.RemoveClassshape(stagedNode.Name)
 
-		updateNodesStates(stage, gongStructImpl.nodeCb)
 	}
 
 	// if node is checked, add classshape
@@ -35,7 +34,6 @@ func (gongStructImpl *GongStructImpl) OnAfterUpdate(
 		classDiagram := gongStructImpl.nodeCb.GetSelectedClassdiagram()
 		classDiagram.AddClassshape(frontNode.Name, gongdoc_models.REFERENCE_GONG_STRUCT)
 
-		updateNodesStates(stage, gongStructImpl.nodeCb)
 	}
 }
 

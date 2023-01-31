@@ -118,6 +118,8 @@ func NewDiagramInjection() {
 	__Field__000001_DOTTED_ONE := (&models.Field{Name: `DOTTED_ONE`}).Stage()
 	__Field__000002_JourneyTime := (&models.Field{Name: `JourneyTime`}).Stage()
 	__Field__000003_Name := (&models.Field{Name: `Name`}).Stage()
+	__Field__000004_Name := (&models.Field{Name: `Name`}).Stage()
+	__Field__000005_Y := (&models.Field{Name: `Y`}).Stage()
 
 	// Declarations of staged instances of GongEnumShape
 
@@ -199,11 +201,33 @@ func NewDiagramInjection() {
 	
 	// comment added to overcome the problem with the comment map association
 
-	//gong:ident [ref_models.Line.Name]
-	__Field__000003_Name.Identifier = `ref_models.Line.Name`
+	//gong:ident [ref_models.Point.Name]
+	__Field__000003_Name.Identifier = `ref_models.Point.Name`
 	__Field__000003_Name.FieldTypeAsString = ``
-	__Field__000003_Name.Structname = `Line`
+	__Field__000003_Name.Structname = `Point`
 	__Field__000003_Name.Fieldtypename = `string`
+
+	// Field values setup
+	__Field__000004_Name.Name = `Name`
+	
+	// comment added to overcome the problem with the comment map association
+
+	//gong:ident [ref_models.Line.Name]
+	__Field__000004_Name.Identifier = `ref_models.Line.Name`
+	__Field__000004_Name.FieldTypeAsString = ``
+	__Field__000004_Name.Structname = `Line`
+	__Field__000004_Name.Fieldtypename = `string`
+
+	// Field values setup
+	__Field__000005_Y.Name = `Y`
+	
+	// comment added to overcome the problem with the comment map association
+
+	//gong:ident [ref_models.Point.Y]
+	__Field__000005_Y.Identifier = `ref_models.Point.Y`
+	__Field__000005_Y.FieldTypeAsString = ``
+	__Field__000005_Y.Structname = `Point`
+	__Field__000005_Y.Fieldtypename = `float64`
 
 	// GongStructShape values setup
 	__GongStructShape__000000_NewDiagram_Line.Name = `NewDiagram-Line`
@@ -241,7 +265,7 @@ func NewDiagramInjection() {
 	__GongStructShape__000002_NewDiagram_Point.ShowNbInstances = false
 	__GongStructShape__000002_NewDiagram_Point.NbInstances = 0
 	__GongStructShape__000002_NewDiagram_Point.Width = 240.000000
-	__GongStructShape__000002_NewDiagram_Point.Heigth = 63.000000
+	__GongStructShape__000002_NewDiagram_Point.Heigth = 93.000000
 	__GongStructShape__000002_NewDiagram_Point.IsSelected = false
 
 	// GongStructShape values setup
@@ -333,8 +357,8 @@ In this case [Line], [Point] and [Line.Start]
 	__Position__000004_Pos_NewDiagram_PointUse.Name = `Pos-NewDiagram-PointUse`
 
 	// Vertice values setup
-	__Vertice__000000_Verticle_in_class_diagram_NewDiagram_in_middle_between_NewDiagram_Line_and_NewDiagram_Point.X = 548.000000
-	__Vertice__000000_Verticle_in_class_diagram_NewDiagram_in_middle_between_NewDiagram_Line_and_NewDiagram_Point.Y = 108.000000
+	__Vertice__000000_Verticle_in_class_diagram_NewDiagram_in_middle_between_NewDiagram_Line_and_NewDiagram_Point.X = 540.000000
+	__Vertice__000000_Verticle_in_class_diagram_NewDiagram_in_middle_between_NewDiagram_Line_and_NewDiagram_Point.Y = 126.500000
 	__Vertice__000000_Verticle_in_class_diagram_NewDiagram_in_middle_between_NewDiagram_Line_and_NewDiagram_Point.Name = `Verticle in class diagram NewDiagram in middle between NewDiagram-Line and NewDiagram-Point`
 
 	// Setup of pointers
@@ -345,13 +369,15 @@ In this case [Line], [Point] and [Line.Start]
 	__Classdiagram__000000_NewDiagram.GongStructShapes = append(__Classdiagram__000000_NewDiagram.GongStructShapes, __GongStructShape__000002_NewDiagram_Point)
 	__Classdiagram__000000_NewDiagram.NoteShapes = append(__Classdiagram__000000_NewDiagram.NoteShapes, __NoteShape__000000_ShortNodeOnModels)
 	__GongStructShape__000000_NewDiagram_Line.Position = __Position__000000_Pos_NewDiagram_Line
-	__GongStructShape__000000_NewDiagram_Line.Fields = append(__GongStructShape__000000_NewDiagram_Line.Fields, __Field__000003_Name)
+	__GongStructShape__000000_NewDiagram_Line.Fields = append(__GongStructShape__000000_NewDiagram_Line.Fields, __Field__000004_Name)
 	__GongStructShape__000000_NewDiagram_Line.Fields = append(__GongStructShape__000000_NewDiagram_Line.Fields, __Field__000002_JourneyTime)
 	__GongStructShape__000000_NewDiagram_Line.Links = append(__GongStructShape__000000_NewDiagram_Line.Links, __Link__000000_End)
 	__GongStructShape__000001_NewDiagram_LineTypeInt.Position = __Position__000001_Pos_NewDiagram_LineTypeInt
 	__GongStructShape__000001_NewDiagram_LineTypeInt.Fields = append(__GongStructShape__000001_NewDiagram_LineTypeInt.Fields, __Field__000000_CONTINUOUS_ZERO)
 	__GongStructShape__000001_NewDiagram_LineTypeInt.Fields = append(__GongStructShape__000001_NewDiagram_LineTypeInt.Fields, __Field__000001_DOTTED_ONE)
 	__GongStructShape__000002_NewDiagram_Point.Position = __Position__000002_Pos_NewDiagram_Point
+	__GongStructShape__000002_NewDiagram_Point.Fields = append(__GongStructShape__000002_NewDiagram_Point.Fields, __Field__000003_Name)
+	__GongStructShape__000002_NewDiagram_Point.Fields = append(__GongStructShape__000002_NewDiagram_Point.Fields, __Field__000005_Y)
 	__GongStructShape__000003_NewDiagram_PointExclusiveSet.Position = __Position__000003_Pos_NewDiagram_PointExclusiveSet
 	__GongStructShape__000004_NewDiagram_PointUse.Position = __Position__000004_Pos_NewDiagram_PointUse
 	__Link__000000_End.Middlevertice = __Vertice__000000_Verticle_in_class_diagram_NewDiagram_in_middle_between_NewDiagram_Line_and_NewDiagram_Point
