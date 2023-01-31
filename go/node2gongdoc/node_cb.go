@@ -96,8 +96,7 @@ func (nodeCb *NodeCB) OnAfterCreate(
 	node.IsInDrawMode = false
 	node.HasEditButton = false
 
-	nodeCb.diagramPackageNode.Children =
-		append(nodeCb.diagramPackageNode.Children, node)
+	nodeCb.diagramPackageNode.Children = append(nodeCb.diagramPackageNode.Children, node)
 
 	// set up the back pointer from the shape to the node
 	classdiagramImpl := new(ClassdiagramImpl)
@@ -316,6 +315,7 @@ func (nodesCb *NodeCB) updateDiagramsNodes(stage *gongdoc_models.StageStruct) {
 	// gongstructs
 	for _, classdiagramNode := range nodesCb.diagramPackageNode.Children {
 
+		// reset the state of the classdiagram node
 		classdiagramNode.HasEditButton = false
 		classdiagramNode.HasDeleteButton = false
 		classdiagramNode.HasDrawButton = false
@@ -334,7 +334,6 @@ func (nodesCb *NodeCB) updateDiagramsNodes(stage *gongdoc_models.StageStruct) {
 		classdiagramNode.HasEditButton = editable
 		classdiagramNode.HasDeleteButton = editable
 		classdiagramNode.HasDrawButton = editable
-
 	}
 }
 

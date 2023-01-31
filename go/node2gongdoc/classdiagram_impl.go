@@ -29,11 +29,7 @@ func (classdiagramImpl *ClassdiagramImpl) OnAfterUpdate(
 		stagedNode.IsChecked = true
 		classdiagramImpl.nodeCb.diagramPackage.SelectedClassdiagram = classdiagramImpl.classdiagram
 
-		// uncheck all other diagram nodes
-		diagramNodes := append(
-			classdiagramImpl.nodeCb.diagramPackageNode.Children)
-
-		for _, otherDiagramNode := range diagramNodes {
+		for _, otherDiagramNode := range classdiagramImpl.nodeCb.diagramPackageNode.Children {
 			if otherDiagramNode == stagedNode {
 				continue
 			}
