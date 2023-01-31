@@ -53,7 +53,7 @@ func updateGongObjectsNodes(stage *StageStruct, nodeCb *NodeCB, classdiagram *Cl
 		gongStructImpl2 := GetNodeBackPointer(gongStruct)
 		_ = gongStructImpl2
 
-		gongStructImpl.DiagramElt = gongStructShape
+		gongStructImpl.HasDiagramElt = true
 
 		gongStructShapeNode.IsChecked = true
 

@@ -14,9 +14,6 @@ type GongStructShape struct {
 	//gong:ident
 	Identifier string
 
-	// gongStructImpl, at run time, points to the gong object represented by the shape
-	gongStructImpl *GongStructImpl
-
 	// gongdoc can be integrated in a runtime application
 	// the application can then set up the number of instances of Struct
 	ShowNbInstances bool
