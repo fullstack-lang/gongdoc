@@ -98,6 +98,21 @@ func (diagramPackage *DiagramPackage) UnmarshallOneDiagram(diagramName string, i
 		diagramPackage.Classdiagrams = append(diagramPackage.Classdiagrams,
 			classdiagram)
 
+		for gongStructShape := range *GetGongstructInstancesSet[GongStructShape]() {
+
+			_, ok := (*gong_models.GetGongstructInstancesMap[gong_models.GongStruct]())[IdentifierToShapename(gongStructShape.Identifier)]
+
+			if !ok {
+				log.Println("UnmarshallOneDiagram: In diagram", classdiagram.Name, "unknown note related to note shape", gongStructShape.Identifier)
+				gongStructShape.Unstage()
+
+				if contains(classdiagram.GongStructShapes, gongStructShape) {
+					classdiagram.GongStructShapes = remove(classdiagram.GongStructShapes, gongStructShape)
+				}
+				continue
+			}
+		}
+
 		// refresh all notes body from the original gong note in the package models
 		// because, note are not synchronized via the gopls renaming request
 		//

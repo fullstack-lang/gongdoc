@@ -32,18 +32,3 @@ type Node struct {
 
 	Children []*Node
 }
-
-func (node *Node) UncheckAndDisableBranch() {
-
-	node.UncheckAndDisable()
-
-	for _, _node := range node.Children {
-		_node.UncheckAndDisableBranch()
-	}
-}
-
-func (node *Node) UncheckAndDisable() {
-
-	node.IsCheckboxDisabled = true
-	node.IsChecked = false
-}

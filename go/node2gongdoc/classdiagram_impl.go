@@ -1,7 +1,6 @@
 package node2gongdoc
 
 import (
-	"io/ioutil"
 	"log"
 	"os"
 	"path/filepath"
@@ -80,7 +79,7 @@ func (classdiagramImpl *ClassdiagramImpl) OnAfterUpdate(
 			} else {
 				// change the name of the go variable that describes the diagram
 				// in the package
-				input, err := ioutil.ReadFile(newClassdiagramFilePath)
+				input, err := os.ReadFile(newClassdiagramFilePath)
 				if err != nil {
 					log.Fatalln(err)
 				}
@@ -94,7 +93,7 @@ func (classdiagramImpl *ClassdiagramImpl) OnAfterUpdate(
 					}
 				}
 				output := strings.Join(lines, "\n")
-				err = ioutil.WriteFile(newClassdiagramFilePath, []byte(output), 0644)
+				err = os.WriteFile(newClassdiagramFilePath, []byte(output), 0644)
 				if err != nil {
 					log.Fatalln(err)
 				}
