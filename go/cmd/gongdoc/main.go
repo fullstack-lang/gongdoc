@@ -20,6 +20,8 @@ import (
 	"github.com/fullstack-lang/gongdoc/go/models"
 	gongdoc_models "github.com/fullstack-lang/gongdoc/go/models"
 
+	"github.com/fullstack-lang/gongdoc/go/load"
+
 	gongdoc "github.com/fullstack-lang/gongdoc"
 
 	gong_fullstack "github.com/fullstack-lang/gong/go/fullstack"
@@ -119,7 +121,7 @@ func main() {
 		c.Abort()
 	})
 
-	diagramPackage, _ := gongdoc_models.LoadDiagramPackage(*pkgPath, modelPkg, *editable)
+	diagramPackage, _ := load.LoadDiagramPackage(*pkgPath, modelPkg, *editable)
 
 	// to be removed after fix of [issue](https://github.com/golang/go/issues/57559)
 	gongdoc_models.SetupMapDocLinkRenaming()
@@ -167,7 +169,7 @@ func main() {
 	// does not seem to be executed
 	gongdocStage.OnAfterGongStructShapeUpdateCallback = gongStructShapeCallbackSingloton
 
-	diagramPackageCallbackSingloton := new(gongdoc_models.DiagramPackageCallbacksSingloton)
+	diagramPackageCallbackSingloton := new(load.DiagramPackageCallbacksSingloton)
 	gongdocStage.OnAfterDiagramPackageUpdateCallback = diagramPackageCallbackSingloton
 
 	if *marshallOnCommit != "" {

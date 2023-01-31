@@ -11,8 +11,8 @@ func FillUpNodeTree(diagramPackage *DiagramPackage) {
 	nodeCb := new(NodeCB)
 	nodeCb.diagramPackage = diagramPackage
 
-	FillUpDiagramNodeTree(diagramPackage, nodeCb)
-	FillUpTreeOfGongObjects(diagramPackage, nodeCb)
+	nodeCb.FillUpDiagramNodeTree(diagramPackage)
+	nodeCb.FillUpTreeOfGongObjects(diagramPackage)
 
 	updateNodesStates(&Stage, nodeCb)
 

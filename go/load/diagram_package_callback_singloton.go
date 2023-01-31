@@ -1,14 +1,18 @@
-package models
+package load
 
-import "log"
+import (
+	"log"
+
+	gongdoc_models "github.com/fullstack-lang/gongdoc/go/models"
+)
 
 type DiagramPackageCallbacksSingloton struct {
 	DiagramPackageCallback DiagramPackageCallback
 }
 
 func (classshapeCallbacksSingloton *DiagramPackageCallbacksSingloton) OnAfterUpdate(
-	stage *StageStruct,
-	stagedDiagramPackage, frontDiagramPackage *DiagramPackage) {
+	stage *gongdoc_models.StageStruct,
+	stagedDiagramPackage, frontDiagramPackage *gongdoc_models.DiagramPackage) {
 
 	if stagedDiagramPackage.IsReloaded != frontDiagramPackage.IsReloaded {
 
@@ -19,7 +23,7 @@ func (classshapeCallbacksSingloton *DiagramPackageCallbacksSingloton) OnAfterUpd
 
 		log.Println("Reload requested")
 		if stagedDiagramPackage.IsEditable {
-			stagedDiagramPackage.Reload()
+			Reload(stagedDiagramPackage)
 		}
 	}
 }

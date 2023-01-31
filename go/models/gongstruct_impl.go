@@ -30,7 +30,7 @@ func (gongStructImpl *GongStructImpl) OnAfterUpdate(
 		stage.Checkout()
 
 		classDiagram := gongStructImpl.nodeCb.GetSelectedClassdiagram()
-		classDiagram.AddClassshape(gongStructImpl.nodeCb, frontNode.Name, REFERENCE_GONG_STRUCT)
+		classDiagram.AddClassshape(frontNode.Name, REFERENCE_GONG_STRUCT)
 
 		updateNodesStates(stage, gongStructImpl.nodeCb)
 	}

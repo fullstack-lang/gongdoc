@@ -1,4 +1,4 @@
-package models
+package load
 
 import (
 	"go/parser"
@@ -10,15 +10,16 @@ import (
 	"time"
 
 	gong_models "github.com/fullstack-lang/gong/go/models"
+	gongdoc_models "github.com/fullstack-lang/gongdoc/go/models"
 )
 
 // LoadDiagramPackage fill up the stage with the diagrams elements
-func LoadDiagramPackage(pkgPath string, modelPkg *gong_models.ModelPkg, editable bool) (diagramPackage *DiagramPackage, err error) {
+func LoadDiagramPackage(pkgPath string, modelPkg *gong_models.ModelPkg, editable bool) (diagramPackage *gongdoc_models.DiagramPackage, err error) {
 
-	gongdocStage := Stage
+	gongdocStage := gongdoc_models.Stage
 	_ = gongdocStage
 
-	diagramPackage = (&DiagramPackage{}).Stage()
+	diagramPackage = (&gongdoc_models.DiagramPackage{}).Stage()
 	diagramPackage.IsEditable = editable
 	diagramPackage.ModelPkg = modelPkg
 	diagramPackage.Name = modelPkg.Name + "_diagrams"
@@ -32,10 +33,10 @@ func LoadDiagramPackage(pkgPath string, modelPkg *gong_models.ModelPkg, editable
 	// diagram package, when marshalled, will reference identifiers in the
 	// model package. Both of the variable need to be set up for the
 	// generic marshalling/unmarshalling to work
-	Stage.MetaPackageImportAlias = "ref_" + filepath.Base(diagramPackage.GongModelPath)
-	Stage.MetaPackageImportPath = `"` + diagramPackage.GongModelPath + `"`
-	if Stage.Map_DocLink_Renaming == nil {
-		Stage.Map_DocLink_Renaming = make(map[string]GONG__Identifier)
+	gongdoc_models.Stage.MetaPackageImportAlias = "ref_" + filepath.Base(diagramPackage.GongModelPath)
+	gongdoc_models.Stage.MetaPackageImportPath = `"` + diagramPackage.GongModelPath + `"`
+	if gongdoc_models.Stage.Map_DocLink_Renaming == nil {
+		gongdoc_models.Stage.Map_DocLink_Renaming = make(map[string]gongdoc_models.GONG__Identifier)
 	}
 
 	// if diagrams directory does not exist create it
@@ -63,12 +64,12 @@ func LoadDiagramPackage(pkgPath string, modelPkg *gong_models.ModelPkg, editable
 	diagramPackageAst, ok := pkgsParser["diagrams"]
 	if !ok {
 		diagramPackage.IsEditable = editable
-		FillUpNodeTree(diagramPackage)
-		Stage.Commit()
+		gongdoc_models.FillUpNodeTree(diagramPackage)
+		gongdoc_models.Stage.Commit()
 		return diagramPackage, nil
 	}
-	diagramPackage.ast = diagramPackageAst
-	diagramPackage.fset = fset
+	diagramPackage.Ast = diagramPackageAst
+	diagramPackage.Fset = fset
 
 	// load all diagram files
 	for diagramName, inFile := range diagramPackageAst.Files {
@@ -77,7 +78,7 @@ func LoadDiagramPackage(pkgPath string, modelPkg *gong_models.ModelPkg, editable
 	}
 
 	diagramPackage.IsEditable = editable
-	FillUpNodeTree(diagramPackage)
-	Stage.Commit()
+	gongdoc_models.FillUpNodeTree(diagramPackage)
+	gongdoc_models.Stage.Commit()
 	return diagramPackage, nil
 }

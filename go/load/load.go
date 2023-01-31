@@ -55,9 +55,9 @@ func Load(
 		}
 	}
 	if embeddedDiagrams {
-		diagramPackage, _ = gongdoc_models.LoadEmbeddedDiagramPackage(goSourceDirectories, modelPackage)
+		diagramPackage, _ = LoadEmbeddedDiagramPackage(goSourceDirectories, modelPackage)
 	} else {
-		diagramPackage, _ = gongdoc_models.LoadDiagramPackage(filepath.Join("../../diagrams"), modelPackage, true)
+		diagramPackage, _ = LoadDiagramPackage(filepath.Join("../../diagrams"), modelPackage, true)
 	}
 	diagramPackage.GongModelPath = pkgPath
 

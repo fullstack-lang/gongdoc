@@ -1,4 +1,4 @@
-package models
+package load
 
 import (
 	"embed"
@@ -8,11 +8,12 @@ import (
 	"strings"
 
 	gong_models "github.com/fullstack-lang/gong/go/models"
+	gongdoc_models "github.com/fullstack-lang/gongdoc/go/models"
 )
 
-func LoadEmbeddedDiagramPackage(fs embed.FS, modelPkg *gong_models.ModelPkg) (diagramPackage *DiagramPackage, err error) {
+func LoadEmbeddedDiagramPackage(fs embed.FS, modelPkg *gong_models.ModelPkg) (diagramPackage *gongdoc_models.DiagramPackage, err error) {
 
-	diagramPackage = (&DiagramPackage{}).Stage()
+	diagramPackage = (&gongdoc_models.DiagramPackage{}).Stage()
 	diagramPackage.IsEditable = false
 	diagramPackage.ModelPkg = modelPkg
 
@@ -28,13 +29,13 @@ func LoadEmbeddedDiagramPackage(fs embed.FS, modelPkg *gong_models.ModelPkg) (di
 	}
 	diagramPackageAst, ok := pkgsParser["diagrams"]
 	if !ok {
-		FillUpNodeTree(diagramPackage)
-		Stage.Commit()
+		gongdoc_models.FillUpNodeTree(diagramPackage)
+		gongdoc_models.Stage.Commit()
 		return diagramPackage, nil
 	}
 
-	diagramPackage.ast = diagramPackageAst
-	diagramPackage.fset = fset
+	diagramPackage.Ast = diagramPackageAst
+	diagramPackage.Fset = fset
 	// load all diagram files
 	for diagramName, inFile := range diagramPackageAst.Files {
 
@@ -42,6 +43,6 @@ func LoadEmbeddedDiagramPackage(fs embed.FS, modelPkg *gong_models.ModelPkg) (di
 		diagramPackage.UnmarshallOneDiagram(diagramName, inFile, fset)
 	}
 
-	FillUpNodeTree(diagramPackage)
+	gongdoc_models.FillUpNodeTree(diagramPackage)
 	return diagramPackage, nil
 }
