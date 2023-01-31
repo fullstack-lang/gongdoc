@@ -4,8 +4,6 @@ package models
 type Node struct {
 	Name string
 
-	Type GongdocNodeType
-
 	// Impl is the pointer to the implementation of the node in the models of interest
 	Impl NodeImplInterface
 

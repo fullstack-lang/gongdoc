@@ -40,8 +40,7 @@ func (gongEnumImpl *GongEnumImpl) OnAfterUpdate(
 		stage.Checkout()
 
 		classDiagram := gongEnumImpl.nodeCb.GetSelectedClassdiagram()
-		classDiagram.AddClassshape(frontNode.Name, gongdoc_models.REFERENCE_GONG_ENUM)
-
+		classDiagram.AddClassshape(frontNode.Name)
 	}
 
 }

@@ -81,9 +81,6 @@ type NoteShapeLinkDB struct {
 
 	// Declation for basic field noteshapelinkDB.Identifier
 	Identifier_Data sql.NullString
-
-	// Declation for basic field noteshapelinkDB.Type
-	Type_Data sql.NullString
 	// encoding of pointers
 	NoteShapeLinkPointersEnconding
 }
@@ -108,8 +105,6 @@ type NoteShapeLinkWOP struct {
 	Name string `xlsx:"1"`
 
 	Identifier string `xlsx:"2"`
-
-	Type models.ReferenceType `xlsx:"3"`
 	// insertion for WOP pointer fields
 }
 
@@ -118,7 +113,6 @@ var NoteShapeLink_Fields = []string{
 	"ID",
 	"Name",
 	"Identifier",
-	"Type",
 }
 
 type BackRepoNoteShapeLinkStruct struct {
@@ -447,9 +441,6 @@ func (noteshapelinkDB *NoteShapeLinkDB) CopyBasicFieldsFromNoteShapeLink(notesha
 
 	noteshapelinkDB.Identifier_Data.String = noteshapelink.Identifier
 	noteshapelinkDB.Identifier_Data.Valid = true
-
-	noteshapelinkDB.Type_Data.String = noteshapelink.Type.ToString()
-	noteshapelinkDB.Type_Data.Valid = true
 }
 
 // CopyBasicFieldsFromNoteShapeLinkWOP
@@ -461,9 +452,6 @@ func (noteshapelinkDB *NoteShapeLinkDB) CopyBasicFieldsFromNoteShapeLinkWOP(note
 
 	noteshapelinkDB.Identifier_Data.String = noteshapelink.Identifier
 	noteshapelinkDB.Identifier_Data.Valid = true
-
-	noteshapelinkDB.Type_Data.String = noteshapelink.Type.ToString()
-	noteshapelinkDB.Type_Data.Valid = true
 }
 
 // CopyBasicFieldsToNoteShapeLink
@@ -471,7 +459,6 @@ func (noteshapelinkDB *NoteShapeLinkDB) CopyBasicFieldsToNoteShapeLink(noteshape
 	// insertion point for checkout of basic fields (back repo to stage)
 	noteshapelink.Name = noteshapelinkDB.Name_Data.String
 	noteshapelink.Identifier = noteshapelinkDB.Identifier_Data.String
-	noteshapelink.Type.FromString(noteshapelinkDB.Type_Data.String)
 }
 
 // CopyBasicFieldsToNoteShapeLinkWOP
@@ -480,7 +467,6 @@ func (noteshapelinkDB *NoteShapeLinkDB) CopyBasicFieldsToNoteShapeLinkWOP(notesh
 	// insertion point for checkout of basic fields (back repo to stage)
 	noteshapelink.Name = noteshapelinkDB.Name_Data.String
 	noteshapelink.Identifier = noteshapelinkDB.Identifier_Data.String
-	noteshapelink.Type.FromString(noteshapelinkDB.Type_Data.String)
 }
 
 // Backup generates a json file from a slice of all NoteShapeLinkDB instances in the backrepo

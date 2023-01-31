@@ -73,9 +73,6 @@ type NodeDB struct {
 	// Declation for basic field nodeDB.Name
 	Name_Data sql.NullString
 
-	// Declation for basic field nodeDB.Type
-	Type_Data sql.NullString
-
 	// Declation for basic field nodeDB.IsExpanded
 	// provide the sql storage for the boolan
 	IsExpanded_Data sql.NullBool
@@ -146,31 +143,29 @@ type NodeWOP struct {
 
 	Name string `xlsx:"1"`
 
-	Type models.GongdocNodeType `xlsx:"2"`
+	IsExpanded bool `xlsx:"2"`
 
-	IsExpanded bool `xlsx:"3"`
+	HasCheckboxButton bool `xlsx:"3"`
 
-	HasCheckboxButton bool `xlsx:"4"`
+	IsChecked bool `xlsx:"4"`
 
-	IsChecked bool `xlsx:"5"`
+	IsCheckboxDisabled bool `xlsx:"5"`
 
-	IsCheckboxDisabled bool `xlsx:"6"`
+	HasAddChildButton bool `xlsx:"6"`
 
-	HasAddChildButton bool `xlsx:"7"`
+	HasEditButton bool `xlsx:"7"`
 
-	HasEditButton bool `xlsx:"8"`
+	IsInEditMode bool `xlsx:"8"`
 
-	IsInEditMode bool `xlsx:"9"`
+	HasDrawButton bool `xlsx:"9"`
 
-	HasDrawButton bool `xlsx:"10"`
+	HasDrawOffButton bool `xlsx:"10"`
 
-	HasDrawOffButton bool `xlsx:"11"`
+	IsInDrawMode bool `xlsx:"11"`
 
-	IsInDrawMode bool `xlsx:"12"`
+	IsSaved bool `xlsx:"12"`
 
-	IsSaved bool `xlsx:"13"`
-
-	HasDeleteButton bool `xlsx:"14"`
+	HasDeleteButton bool `xlsx:"13"`
 	// insertion for WOP pointer fields
 }
 
@@ -178,7 +173,6 @@ var Node_Fields = []string{
 	// insertion for WOP basic fields
 	"ID",
 	"Name",
-	"Type",
 	"IsExpanded",
 	"HasCheckboxButton",
 	"IsChecked",
@@ -524,9 +518,6 @@ func (nodeDB *NodeDB) CopyBasicFieldsFromNode(node *models.Node) {
 	nodeDB.Name_Data.String = node.Name
 	nodeDB.Name_Data.Valid = true
 
-	nodeDB.Type_Data.String = node.Type.ToString()
-	nodeDB.Type_Data.Valid = true
-
 	nodeDB.IsExpanded_Data.Bool = node.IsExpanded
 	nodeDB.IsExpanded_Data.Valid = true
 
@@ -571,9 +562,6 @@ func (nodeDB *NodeDB) CopyBasicFieldsFromNodeWOP(node *NodeWOP) {
 	nodeDB.Name_Data.String = node.Name
 	nodeDB.Name_Data.Valid = true
 
-	nodeDB.Type_Data.String = node.Type.ToString()
-	nodeDB.Type_Data.Valid = true
-
 	nodeDB.IsExpanded_Data.Bool = node.IsExpanded
 	nodeDB.IsExpanded_Data.Valid = true
 
@@ -615,7 +603,6 @@ func (nodeDB *NodeDB) CopyBasicFieldsFromNodeWOP(node *NodeWOP) {
 func (nodeDB *NodeDB) CopyBasicFieldsToNode(node *models.Node) {
 	// insertion point for checkout of basic fields (back repo to stage)
 	node.Name = nodeDB.Name_Data.String
-	node.Type.FromString(nodeDB.Type_Data.String)
 	node.IsExpanded = nodeDB.IsExpanded_Data.Bool
 	node.HasCheckboxButton = nodeDB.HasCheckboxButton_Data.Bool
 	node.IsChecked = nodeDB.IsChecked_Data.Bool
@@ -635,7 +622,6 @@ func (nodeDB *NodeDB) CopyBasicFieldsToNodeWOP(node *NodeWOP) {
 	node.ID = int(nodeDB.ID)
 	// insertion point for checkout of basic fields (back repo to stage)
 	node.Name = nodeDB.Name_Data.String
-	node.Type.FromString(nodeDB.Type_Data.String)
 	node.IsExpanded = nodeDB.IsExpanded_Data.Bool
 	node.HasCheckboxButton = nodeDB.HasCheckboxButton_Data.Bool
 	node.IsChecked = nodeDB.IsChecked_Data.Bool

@@ -1407,13 +1407,6 @@ func UnmarshallGongstructStaging(cmap *ast.CommentMap, assignStmt *ast.AssignStm
 				case "Node":
 					switch fieldName {
 					// insertion point for enum assign code
-					case "Type":
-						var val GongdocNodeType
-						err := (&val).FromCodeString(enumValue)
-						if err != nil {
-							log.Fatalln(err)
-						}
-						__gong__map_Node[identifier].Type = GongdocNodeType(val)
 					}
 				case "NoteShape":
 					switch fieldName {
@@ -1422,13 +1415,6 @@ func UnmarshallGongstructStaging(cmap *ast.CommentMap, assignStmt *ast.AssignStm
 				case "NoteShapeLink":
 					switch fieldName {
 					// insertion point for enum assign code
-					case "Type":
-						var val ReferenceType
-						err := (&val).FromCodeString(enumValue)
-						if err != nil {
-							log.Fatalln(err)
-						}
-						__gong__map_NoteShapeLink[identifier].Type = ReferenceType(val)
 					}
 				case "Position":
 					switch fieldName {

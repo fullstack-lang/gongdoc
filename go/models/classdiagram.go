@@ -90,7 +90,7 @@ func (classdiagram *Classdiagram) RemoveClassshape(classshapeName string) {
 	// log.Println("RemoveClassshape, after commit, nb ", Stage.BackRepo.GetLastCommitFromBackNb())
 }
 
-func (classdiagram *Classdiagram) AddClassshape(classshapeName string, referenceType ReferenceType) {
+func (classdiagram *Classdiagram) AddClassshape(classshapeName string) {
 
 	var classshape GongStructShape
 	classshape.Name = classdiagram.Name + "-" + classshapeName

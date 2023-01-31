@@ -74,9 +74,6 @@ export class NoteShapeLinksTableComponent implements OnInit {
         case 'Identifier':
           return noteshapelinkDB.Identifier;
 
-        case 'Type':
-          return noteshapelinkDB.Type;
-
         case 'Classshape':
           return (noteshapelinkDB.Classshape ? noteshapelinkDB.Classshape.Name : '');
 
@@ -109,7 +106,6 @@ export class NoteShapeLinksTableComponent implements OnInit {
       // insertion point for merging of fields
       mergedContent += noteshapelinkDB.Name.toLowerCase()
       mergedContent += noteshapelinkDB.Identifier.toLowerCase()
-      mergedContent += noteshapelinkDB.Type.toLowerCase()
       if (noteshapelinkDB.Classshape) {
         mergedContent += noteshapelinkDB.Classshape.Name.toLowerCase()
       }
@@ -175,7 +171,6 @@ export class NoteShapeLinksTableComponent implements OnInit {
       this.displayedColumns = ['ID', 'Edit', 'Delete', // insertion point for columns to display
         "Name",
         "Identifier",
-        "Type",
         "Classshape",
         "Link",
         "Middlevertice",
@@ -185,7 +180,6 @@ export class NoteShapeLinksTableComponent implements OnInit {
       this.displayedColumns = ['select', 'ID', // insertion point for columns to display
         "Name",
         "Identifier",
-        "Type",
         "Classshape",
         "Link",
         "Middlevertice",

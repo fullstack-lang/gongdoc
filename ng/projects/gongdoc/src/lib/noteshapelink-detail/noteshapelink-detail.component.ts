@@ -10,7 +10,6 @@ import { MapOfComponents } from '../map-components'
 import { MapOfSortingComponents } from '../map-components'
 
 // insertion point for imports
-import { ReferenceTypeSelect, ReferenceTypeList } from '../ReferenceType'
 import { NoteShapeDB } from '../noteshape-db'
 
 import { Router, RouterState, ActivatedRoute } from '@angular/router';
@@ -36,7 +35,6 @@ enum NoteShapeLinkDetailComponentState {
 export class NoteShapeLinkDetailComponent implements OnInit {
 
 	// insertion point for declarations
-	ReferenceTypeList: ReferenceTypeSelect[] = []
 
 	// the NoteShapeLinkDB of interest
 	noteshapelink: NoteShapeLinkDB = new NoteShapeLinkDB
@@ -107,7 +105,6 @@ export class NoteShapeLinkDetailComponent implements OnInit {
 		)
 
 		// insertion point for initialisation of enums list
-		this.ReferenceTypeList = ReferenceTypeList
 	}
 
 	getNoteShapeLink(): void {

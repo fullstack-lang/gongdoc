@@ -16,9 +16,6 @@ type NoteShapeLink struct {
 	//gong:ident
 	Identifier string
 
-	// Type indicates wether this is a note link (a dotted line) to classshape
-	Type ReferenceType
-
 	Classshape *GongStructShape
 	Link       *Link
 

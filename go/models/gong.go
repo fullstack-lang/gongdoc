@@ -2655,11 +2655,11 @@ func GetFields[Type Gongstruct]() (res []string) {
 	case Link:
 		res = []string{"Name", "Structname", "Identifier", "Fieldtypename", "TargetMultiplicity", "SourceMultiplicity", "Middlevertice"}
 	case Node:
-		res = []string{"Name", "Type", "IsExpanded", "HasCheckboxButton", "IsChecked", "IsCheckboxDisabled", "HasAddChildButton", "HasEditButton", "IsInEditMode", "HasDrawButton", "HasDrawOffButton", "IsInDrawMode", "IsSaved", "HasDeleteButton", "Children"}
+		res = []string{"Name", "IsExpanded", "HasCheckboxButton", "IsChecked", "IsCheckboxDisabled", "HasAddChildButton", "HasEditButton", "IsInEditMode", "HasDrawButton", "HasDrawOffButton", "IsInDrawMode", "IsSaved", "HasDeleteButton", "Children"}
 	case NoteShape:
 		res = []string{"Name", "Identifier", "Body", "X", "Y", "Width", "Heigth", "Matched", "NoteShapeLinks"}
 	case NoteShapeLink:
-		res = []string{"Name", "Identifier", "Type", "Classshape", "Link", "Middlevertice"}
+		res = []string{"Name", "Identifier", "Classshape", "Link", "Middlevertice"}
 	case Position:
 		res = []string{"X", "Y", "Name"}
 	case Tree:
@@ -2842,9 +2842,6 @@ func GetFieldStringValue[Type Gongstruct](instance Type, fieldName string) (res 
 		// string value of fields
 		case "Name":
 			res = any(instance).(Node).Name
-		case "Type":
-			enum := any(instance).(Node).Type
-			res = enum.ToCodeString()
 		case "IsExpanded":
 			res = fmt.Sprintf("%t", any(instance).(Node).IsExpanded)
 		case "HasCheckboxButton":
@@ -2911,9 +2908,6 @@ func GetFieldStringValue[Type Gongstruct](instance Type, fieldName string) (res 
 			res = any(instance).(NoteShapeLink).Name
 		case "Identifier":
 			res = any(instance).(NoteShapeLink).Identifier
-		case "Type":
-			enum := any(instance).(NoteShapeLink).Type
-			res = enum.ToCodeString()
 		case "Classshape":
 			if any(instance).(NoteShapeLink).Classshape != nil {
 				res = any(instance).(NoteShapeLink).Classshape.Name

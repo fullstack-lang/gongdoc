@@ -32,7 +32,7 @@ func (gongStructImpl *GongStructImpl) OnAfterUpdate(
 		stage.Checkout()
 
 		classDiagram := gongStructImpl.nodeCb.GetSelectedClassdiagram()
-		classDiagram.AddClassshape(frontNode.Name, gongdoc_models.REFERENCE_GONG_STRUCT)
+		classDiagram.AddClassshape(frontNode.Name)
 
 	}
 }

@@ -11,7 +11,6 @@ export class NodeDB {
 
 	// insertion point for basic fields declarations
 	Name: string = ""
-	Type: string = ""
 	IsExpanded: boolean = false
 	HasCheckboxButton: boolean = false
 	IsChecked: boolean = false
