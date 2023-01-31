@@ -34,14 +34,26 @@ func updateGongObjectsNodes(stage *StageStruct, nodeCb *NodeCB, classdiagram *Cl
 		}
 
 		// get the gong object from the identifier
-		gongStruct, ok := (*gong_models.GetGongstructInstancesMap[gong_models.GongStruct]())[gongStructShape.Identifier]
+		gongStructName := IdentifierToShapename(gongStructShape.Identifier)
+		gongStruct, ok :=
+			(*gong_models.GetGongstructInstancesMap[gong_models.GongStruct]())[gongStructName]
 
 		if !ok {
 			log.Println("updateGongObjectsNodes: Unknown gong struct related to identifier:", gongStructShape.Identifier)
 			continue
 		}
-		gongStructShapeNode2, ok := nodeCb.map_gongObject_gongObjectImpl[gongStruct]
-		
+		gongStructImplIF, ok := nodeCb.map_gongObject_gongObjectImpl[gongStruct]
+		if !ok {
+			log.Println("updateGongObjectsNodes: Unknown gong struct impl related to gong struct:", gongStruct.Name)
+			continue
+		}
+		// set up the pointer to the shape
+		gongStructImpl, ok := gongStructImplIF.(*GongStructImpl)
+
+		gongStructImpl2 := GetNodeBackPointer(gongStruct)
+		_ = gongStructImpl2
+
+		gongStructImpl.DiagramElt = gongStructShape
 
 		gongStructShapeNode.IsChecked = true
 

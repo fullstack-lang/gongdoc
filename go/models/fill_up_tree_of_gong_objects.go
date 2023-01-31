@@ -2,6 +2,17 @@ package models
 
 import gong_models "github.com/fullstack-lang/gong/go/models"
 
+func SetNodeBackPointer[T1 gong_models.Gongstruct](gong_instance *T1, backPointer NodeImplInterface) {
+	gong_models.SetBackPointer(&gong_models.Stage, gong_instance, backPointer)
+}
+func GetNodeBackPointer[T1 gong_models.Gongstruct](gong_instance *T1) (backPointer NodeImplInterface) {
+	tmp := gong_models.GetBackPointer(&gong_models.Stage, gong_instance)
+
+	backPointer = tmp.(NodeImplInterface)
+
+	return
+}
+
 func FillUpTreeOfGongObjects(pkgelt *DiagramPackage, nodeCb *NodeCB) {
 
 	// set up the gongTree to display elements
@@ -9,7 +20,7 @@ func FillUpTreeOfGongObjects(pkgelt *DiagramPackage, nodeCb *NodeCB) {
 	nodeCb.treeOfGongObjects = gongTree
 
 	nodeCb.map_Identifier_Node = make(map[string]*Node)
-	nodeCb.map_gongObject_gongObjectImpl = make(map[gong_models.GongStructInterface]NodeImplInterface)
+	nodeCb.map_gongObject_gongObjectImpl = make(map[any]NodeImplInterface)
 
 	gongstructRootNode := (&Node{Name: "gongstructs"}).Stage()
 	gongstructRootNode.IsExpanded = true
@@ -32,6 +43,7 @@ func FillUpTreeOfGongObjects(pkgelt *DiagramPackage, nodeCb *NodeCB) {
 		gongstructRootNode.Children = append(gongstructRootNode.Children, nodeGongstruct)
 		nodeCb.map_Identifier_Node[ShapenameToIdentifier(gongStruct.Name)] = nodeGongstruct
 		nodeCb.map_gongObject_gongObjectImpl[gongStruct] = gongStructImpl
+		SetNodeBackPointer(gongStruct, gongStructImpl)
 
 		for _, field := range gongStruct.Fields {
 			nodeGongField := (&Node{Name: field.GetName()}).Stage()
