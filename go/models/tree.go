@@ -6,10 +6,3 @@ type Tree struct {
 
 	RootNodes []*Node
 }
-
-func (tree *Tree) UncheckAndDisable() {
-
-	for _, _node := range tree.RootNodes {
-		_node.UncheckAndDisableBranch()
-	}
-}

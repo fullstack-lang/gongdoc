@@ -44,15 +44,15 @@ func DiagramUMLduUMLInjection() {
 	__Classdiagram__000000_DiagramUMLduUML := (&models.Classdiagram{Name: `DiagramUMLduUML`}).Stage()
 
 	// Declarations of staged instances of Classshape
-	__Classshape__000000_Classshape0000 := (&models.Classshape{Name: `Classshape0000`}).Stage()
-	__Classshape__000001_Classshape0001 := (&models.Classshape{Name: `Classshape0001`}).Stage()
-	__Classshape__000002_Classshape0002 := (&models.Classshape{Name: `Classshape0002`}).Stage()
-	__Classshape__000003_Classshape0003 := (&models.Classshape{Name: `Classshape0003`}).Stage()
-	__Classshape__000004_Classshape0004 := (&models.Classshape{Name: `Classshape0004`}).Stage()
-	__Classshape__000005_Classshape0005 := (&models.Classshape{Name: `Classshape0005`}).Stage()
-	__Classshape__000006_Classshape0006 := (&models.Classshape{Name: `Classshape0006`}).Stage()
-	__Classshape__000007_Classshape0007 := (&models.Classshape{Name: `Classshape0007`}).Stage()
-	__Classshape__000008_Classshape0008 := (&models.Classshape{Name: `Classshape0008`}).Stage()
+	__Classshape__000000_Classshape0000 := (&models.GongStructShape{Name: `Classshape0000`}).Stage()
+	__Classshape__000001_Classshape0001 := (&models.GongStructShape{Name: `Classshape0001`}).Stage()
+	__Classshape__000002_Classshape0002 := (&models.GongStructShape{Name: `Classshape0002`}).Stage()
+	__Classshape__000003_Classshape0003 := (&models.GongStructShape{Name: `Classshape0003`}).Stage()
+	__Classshape__000004_Classshape0004 := (&models.GongStructShape{Name: `Classshape0004`}).Stage()
+	__Classshape__000005_Classshape0005 := (&models.GongStructShape{Name: `Classshape0005`}).Stage()
+	__Classshape__000006_Classshape0006 := (&models.GongStructShape{Name: `Classshape0006`}).Stage()
+	__Classshape__000007_Classshape0007 := (&models.GongStructShape{Name: `Classshape0007`}).Stage()
+	__Classshape__000008_Classshape0008 := (&models.GongStructShape{Name: `Classshape0008`}).Stage()
 
 	// Declarations of staged instances of DiagramPackage
 
@@ -128,7 +128,7 @@ func DiagramUMLduUMLInjection() {
 
 	// Classshape values setup
 	__Classshape__000000_Classshape0000.Name = `Classshape0000`
-	
+
 	// comment added to overcome the problem with the comment map association
 
 	//gong:ident [ref_models.Classdiagram]
@@ -141,7 +141,7 @@ func DiagramUMLduUMLInjection() {
 
 	// Classshape values setup
 	__Classshape__000001_Classshape0001.Name = `Classshape0001`
-	
+
 	// comment added to overcome the problem with the comment map association
 
 	//gong:ident [ref_models.Classshape]
@@ -154,7 +154,7 @@ func DiagramUMLduUMLInjection() {
 
 	// Classshape values setup
 	__Classshape__000002_Classshape0002.Name = `Classshape0002`
-	
+
 	// comment added to overcome the problem with the comment map association
 
 	//gong:ident [ref_models.Field]
@@ -167,7 +167,7 @@ func DiagramUMLduUMLInjection() {
 
 	// Classshape values setup
 	__Classshape__000003_Classshape0003.Name = `Classshape0003`
-	
+
 	// comment added to overcome the problem with the comment map association
 
 	//gong:ident [ref_models.Link]
@@ -180,7 +180,7 @@ func DiagramUMLduUMLInjection() {
 
 	// Classshape values setup
 	__Classshape__000004_Classshape0004.Name = `Classshape0004`
-	
+
 	// comment added to overcome the problem with the comment map association
 
 	//gong:ident [ref_models.DiagramPackage]
@@ -193,7 +193,7 @@ func DiagramUMLduUMLInjection() {
 
 	// Classshape values setup
 	__Classshape__000005_Classshape0005.Name = `Classshape0005`
-	
+
 	// comment added to overcome the problem with the comment map association
 
 	//gong:ident [ref_models.Position]
@@ -206,7 +206,7 @@ func DiagramUMLduUMLInjection() {
 
 	// Classshape values setup
 	__Classshape__000006_Classshape0006.Name = `Classshape0006`
-	
+
 	// comment added to overcome the problem with the comment map association
 
 	//gong:ident [ref_models.UmlState]
@@ -219,7 +219,7 @@ func DiagramUMLduUMLInjection() {
 
 	// Classshape values setup
 	__Classshape__000007_Classshape0007.Name = `Classshape0007`
-	
+
 	// comment added to overcome the problem with the comment map association
 
 	//gong:ident [ref_models.Umlsc]
@@ -232,7 +232,7 @@ func DiagramUMLduUMLInjection() {
 
 	// Classshape values setup
 	__Classshape__000008_Classshape0008.Name = `Classshape0008`
-	
+
 	// comment added to overcome the problem with the comment map association
 
 	//gong:ident [ref_models.Vertice]
@@ -245,7 +245,7 @@ func DiagramUMLduUMLInjection() {
 
 	// Field values setup
 	__Field__000000_FieldTypeAsString.Name = `FieldTypeAsString`
-	
+
 	// comment added to overcome the problem with the comment map association
 
 	//gong:ident [ref_models.Field.FieldTypeAsString]
@@ -256,7 +256,7 @@ func DiagramUMLduUMLInjection() {
 
 	// Field values setup
 	__Field__000001_Fieldtypename.Name = `Fieldtypename`
-	
+
 	// comment added to overcome the problem with the comment map association
 
 	//gong:ident [ref_models.Field.Fieldtypename]
@@ -267,7 +267,7 @@ func DiagramUMLduUMLInjection() {
 
 	// Field values setup
 	__Field__000002_Fieldtypename.Name = `Fieldtypename`
-	
+
 	// comment added to overcome the problem with the comment map association
 
 	//gong:ident [ref_models.Link.Fieldtypename]
@@ -278,7 +278,7 @@ func DiagramUMLduUMLInjection() {
 
 	// Field values setup
 	__Field__000003_Heigth.Name = `Heigth`
-	
+
 	// comment added to overcome the problem with the comment map association
 
 	//gong:ident [ref_models.Classshape.Heigth]
@@ -289,7 +289,7 @@ func DiagramUMLduUMLInjection() {
 
 	// Field values setup
 	__Field__000004_Name.Name = `Name`
-	
+
 	// comment added to overcome the problem with the comment map association
 
 	//gong:ident [ref_models.Umlsc.Name]
@@ -300,7 +300,7 @@ func DiagramUMLduUMLInjection() {
 
 	// Field values setup
 	__Field__000005_Name.Name = `Name`
-	
+
 	// comment added to overcome the problem with the comment map association
 
 	//gong:ident [ref_models.Classdiagram.Name]
@@ -311,7 +311,7 @@ func DiagramUMLduUMLInjection() {
 
 	// Field values setup
 	__Field__000006_Name.Name = `Name`
-	
+
 	// comment added to overcome the problem with the comment map association
 
 	//gong:ident [ref_models.UmlState.Name]
@@ -322,7 +322,7 @@ func DiagramUMLduUMLInjection() {
 
 	// Field values setup
 	__Field__000007_Name.Name = `Name`
-	
+
 	// comment added to overcome the problem with the comment map association
 
 	//gong:ident [ref_models.DiagramPackage.Name]
@@ -333,7 +333,7 @@ func DiagramUMLduUMLInjection() {
 
 	// Field values setup
 	__Field__000008_Path.Name = `Path`
-	
+
 	// comment added to overcome the problem with the comment map association
 
 	//gong:ident [ref_models.DiagramPackage.Path]
@@ -344,7 +344,7 @@ func DiagramUMLduUMLInjection() {
 
 	// Field values setup
 	__Field__000009_Structname.Name = `Structname`
-	
+
 	// comment added to overcome the problem with the comment map association
 
 	//gong:ident [ref_models.Link.Structname]
@@ -355,7 +355,7 @@ func DiagramUMLduUMLInjection() {
 
 	// Field values setup
 	__Field__000010_Structname.Name = `Structname`
-	
+
 	// comment added to overcome the problem with the comment map association
 
 	//gong:ident [ref_models.Field.Structname]
@@ -366,7 +366,7 @@ func DiagramUMLduUMLInjection() {
 
 	// Field values setup
 	__Field__000011_TargetMultiplicity.Name = `TargetMultiplicity`
-	
+
 	// comment added to overcome the problem with the comment map association
 
 	//gong:ident [ref_models.Link.TargetMultiplicity]
@@ -377,7 +377,7 @@ func DiagramUMLduUMLInjection() {
 
 	// Field values setup
 	__Field__000012_Width.Name = `Width`
-	
+
 	// comment added to overcome the problem with the comment map association
 
 	//gong:ident [ref_models.Classshape.Width]
@@ -388,7 +388,7 @@ func DiagramUMLduUMLInjection() {
 
 	// Field values setup
 	__Field__000013_X.Name = `X`
-	
+
 	// comment added to overcome the problem with the comment map association
 
 	//gong:ident [ref_models.UmlState.X]
@@ -399,7 +399,7 @@ func DiagramUMLduUMLInjection() {
 
 	// Field values setup
 	__Field__000014_X.Name = `X`
-	
+
 	// comment added to overcome the problem with the comment map association
 
 	//gong:ident [ref_models.Position.X]
@@ -410,7 +410,7 @@ func DiagramUMLduUMLInjection() {
 
 	// Field values setup
 	__Field__000015_X.Name = `X`
-	
+
 	// comment added to overcome the problem with the comment map association
 
 	//gong:ident [ref_models.Vertice.X]
@@ -421,7 +421,7 @@ func DiagramUMLduUMLInjection() {
 
 	// Field values setup
 	__Field__000016_Y.Name = `Y`
-	
+
 	// comment added to overcome the problem with the comment map association
 
 	//gong:ident [ref_models.Position.Y]
@@ -432,7 +432,7 @@ func DiagramUMLduUMLInjection() {
 
 	// Field values setup
 	__Field__000017_Y.Name = `Y`
-	
+
 	// comment added to overcome the problem with the comment map association
 
 	//gong:ident [ref_models.UmlState.Y]
@@ -443,7 +443,7 @@ func DiagramUMLduUMLInjection() {
 
 	// Field values setup
 	__Field__000018_Y.Name = `Y`
-	
+
 	// comment added to overcome the problem with the comment map association
 
 	//gong:ident [ref_models.Vertice.Y]
@@ -455,7 +455,7 @@ func DiagramUMLduUMLInjection() {
 	// Link values setup
 	__Link__000000_Classdiagrams.Name = `Classdiagrams`
 	__Link__000000_Classdiagrams.Structname = `DiagramPackage`
-	
+
 	// comment added to overcome the problem with the comment map association
 
 	//gong:ident [ref_models.DiagramPackage.Classdiagrams]
@@ -466,7 +466,7 @@ func DiagramUMLduUMLInjection() {
 	// Link values setup
 	__Link__000001_Classshapes.Name = `Classshapes`
 	__Link__000001_Classshapes.Structname = `Classdiagram`
-	
+
 	// comment added to overcome the problem with the comment map association
 
 	//gong:ident [ref_models.Classdiagram.Classshapes]
@@ -477,7 +477,7 @@ func DiagramUMLduUMLInjection() {
 	// Link values setup
 	__Link__000002_Fields.Name = `Fields`
 	__Link__000002_Fields.Structname = `Classshape`
-	
+
 	// comment added to overcome the problem with the comment map association
 
 	//gong:ident [ref_models.Classshape.Fields]
@@ -488,7 +488,7 @@ func DiagramUMLduUMLInjection() {
 	// Link values setup
 	__Link__000003_Links.Name = `Links`
 	__Link__000003_Links.Structname = `Classshape`
-	
+
 	// comment added to overcome the problem with the comment map association
 
 	//gong:ident [ref_models.Classshape.Links]
@@ -499,7 +499,7 @@ func DiagramUMLduUMLInjection() {
 	// Link values setup
 	__Link__000004_Middlevertice.Name = `Middlevertice`
 	__Link__000004_Middlevertice.Structname = `Link`
-	
+
 	// comment added to overcome the problem with the comment map association
 
 	//gong:ident [ref_models.Link.Middlevertice]
@@ -510,7 +510,7 @@ func DiagramUMLduUMLInjection() {
 	// Link values setup
 	__Link__000005_Position.Name = `Position`
 	__Link__000005_Position.Structname = `Classshape`
-	
+
 	// comment added to overcome the problem with the comment map association
 
 	//gong:ident [ref_models.Classshape.Position]
@@ -521,7 +521,7 @@ func DiagramUMLduUMLInjection() {
 	// Link values setup
 	__Link__000006_States.Name = `States`
 	__Link__000006_States.Structname = `Umlsc`
-	
+
 	// comment added to overcome the problem with the comment map association
 
 	//gong:ident [ref_models.Umlsc.States]
@@ -532,7 +532,7 @@ func DiagramUMLduUMLInjection() {
 	// Link values setup
 	__Link__000007_Umlscs.Name = `Umlscs`
 	__Link__000007_Umlscs.Structname = `DiagramPackage`
-	
+
 	// comment added to overcome the problem with the comment map association
 
 	//gong:ident [ref_models.DiagramPackage.Umlscs]
@@ -626,15 +626,15 @@ func DiagramUMLduUMLInjection() {
 	__Vertice__000007_Vertice_0007.Name = `Vertice-0007`
 
 	// Setup of pointers
-	__Classdiagram__000000_DiagramUMLduUML.Classshapes = append(__Classdiagram__000000_DiagramUMLduUML.Classshapes, __Classshape__000000_Classshape0000)
-	__Classdiagram__000000_DiagramUMLduUML.Classshapes = append(__Classdiagram__000000_DiagramUMLduUML.Classshapes, __Classshape__000001_Classshape0001)
-	__Classdiagram__000000_DiagramUMLduUML.Classshapes = append(__Classdiagram__000000_DiagramUMLduUML.Classshapes, __Classshape__000002_Classshape0002)
-	__Classdiagram__000000_DiagramUMLduUML.Classshapes = append(__Classdiagram__000000_DiagramUMLduUML.Classshapes, __Classshape__000003_Classshape0003)
-	__Classdiagram__000000_DiagramUMLduUML.Classshapes = append(__Classdiagram__000000_DiagramUMLduUML.Classshapes, __Classshape__000004_Classshape0004)
-	__Classdiagram__000000_DiagramUMLduUML.Classshapes = append(__Classdiagram__000000_DiagramUMLduUML.Classshapes, __Classshape__000005_Classshape0005)
-	__Classdiagram__000000_DiagramUMLduUML.Classshapes = append(__Classdiagram__000000_DiagramUMLduUML.Classshapes, __Classshape__000006_Classshape0006)
-	__Classdiagram__000000_DiagramUMLduUML.Classshapes = append(__Classdiagram__000000_DiagramUMLduUML.Classshapes, __Classshape__000007_Classshape0007)
-	__Classdiagram__000000_DiagramUMLduUML.Classshapes = append(__Classdiagram__000000_DiagramUMLduUML.Classshapes, __Classshape__000008_Classshape0008)
+	__Classdiagram__000000_DiagramUMLduUML.GongStructShapes = append(__Classdiagram__000000_DiagramUMLduUML.GongStructShapes, __Classshape__000000_Classshape0000)
+	__Classdiagram__000000_DiagramUMLduUML.GongStructShapes = append(__Classdiagram__000000_DiagramUMLduUML.GongStructShapes, __Classshape__000001_Classshape0001)
+	__Classdiagram__000000_DiagramUMLduUML.GongStructShapes = append(__Classdiagram__000000_DiagramUMLduUML.GongStructShapes, __Classshape__000002_Classshape0002)
+	__Classdiagram__000000_DiagramUMLduUML.GongStructShapes = append(__Classdiagram__000000_DiagramUMLduUML.GongStructShapes, __Classshape__000003_Classshape0003)
+	__Classdiagram__000000_DiagramUMLduUML.GongStructShapes = append(__Classdiagram__000000_DiagramUMLduUML.GongStructShapes, __Classshape__000004_Classshape0004)
+	__Classdiagram__000000_DiagramUMLduUML.GongStructShapes = append(__Classdiagram__000000_DiagramUMLduUML.GongStructShapes, __Classshape__000005_Classshape0005)
+	__Classdiagram__000000_DiagramUMLduUML.GongStructShapes = append(__Classdiagram__000000_DiagramUMLduUML.GongStructShapes, __Classshape__000006_Classshape0006)
+	__Classdiagram__000000_DiagramUMLduUML.GongStructShapes = append(__Classdiagram__000000_DiagramUMLduUML.GongStructShapes, __Classshape__000007_Classshape0007)
+	__Classdiagram__000000_DiagramUMLduUML.GongStructShapes = append(__Classdiagram__000000_DiagramUMLduUML.GongStructShapes, __Classshape__000008_Classshape0008)
 	__Classshape__000000_Classshape0000.Position = __Position__000000_Position_0000
 	__Classshape__000000_Classshape0000.Fields = append(__Classshape__000000_Classshape0000.Fields, __Field__000005_Name)
 	__Classshape__000000_Classshape0000.Links = append(__Classshape__000000_Classshape0000.Links, __Link__000001_Classshapes)
@@ -680,5 +680,3 @@ func DiagramUMLduUMLInjection() {
 	__Link__000006_States.Middlevertice = __Vertice__000007_Vertice_0007
 	__Link__000007_Umlscs.Middlevertice = __Vertice__000006_Vertice_0006
 }
-
-

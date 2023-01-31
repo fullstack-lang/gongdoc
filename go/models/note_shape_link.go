@@ -19,7 +19,7 @@ type NoteShapeLink struct {
 	// Type indicates wether this is a note link (a dotted line) to classshape
 	Type ReferenceType
 
-	Classshape *Classshape
+	Classshape *GongStructShape
 	Link       *Link
 
 	// Vertices at the middle

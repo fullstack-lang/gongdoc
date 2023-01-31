@@ -112,11 +112,11 @@
     </mat-form-field>
 
     <mat-form-field class="detail-full-width">
-        <mat-label>(Classshape) Links</mat-label>
-        <mat-select [compareWith]="compareObjects" [(ngModel)]="link.Classshape_Links_reverse" [ngModelOptions]="{standalone: true}">
+        <mat-label>(GongStructShape) Links</mat-label>
+        <mat-select [compareWith]="compareObjects" [(ngModel)]="link.GongStructShape_Links_reverse" [ngModelOptions]="{standalone: true}">
             <mat-option>None</mat-option>
-            <mat-option *ngFor="let classshape of frontRepo.Classshapes_array" [value]="classshape">
-                {{classshape.Name}}
+            <mat-option *ngFor="let gongstructshape of frontRepo.GongStructShapes_array" [value]="gongstructshape">
+                {{gongstructshape.Name}}
             </mat-option>
         </mat-select>
     </mat-form-field>

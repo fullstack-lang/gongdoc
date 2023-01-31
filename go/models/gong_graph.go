@@ -8,14 +8,17 @@ func IsStaged[Type Gongstruct](stage *StageStruct, instance *Type) (ok bool) {
 	case *Classdiagram:
 		ok = stage.IsStagedClassdiagram(target)
 
-	case *Classshape:
-		ok = stage.IsStagedClassshape(target)
-
 	case *DiagramPackage:
 		ok = stage.IsStagedDiagramPackage(target)
 
 	case *Field:
 		ok = stage.IsStagedField(target)
+
+	case *GongEnumShape:
+		ok = stage.IsStagedGongEnumShape(target)
+
+	case *GongStructShape:
+		ok = stage.IsStagedGongStructShape(target)
 
 	case *Link:
 		ok = stage.IsStagedLink(target)
@@ -56,13 +59,6 @@ func IsStaged[Type Gongstruct](stage *StageStruct, instance *Type) (ok bool) {
 		return
 	}
 
-	func (stage *StageStruct) IsStagedClassshape(classshape *Classshape) (ok bool) {
-
-		_, ok = stage.Classshapes[classshape]
-	
-		return
-	}
-
 	func (stage *StageStruct) IsStagedDiagramPackage(diagrampackage *DiagramPackage) (ok bool) {
 
 		_, ok = stage.DiagramPackages[diagrampackage]
@@ -73,6 +69,20 @@ func IsStaged[Type Gongstruct](stage *StageStruct, instance *Type) (ok bool) {
 	func (stage *StageStruct) IsStagedField(field *Field) (ok bool) {
 
 		_, ok = stage.Fields[field]
+	
+		return
+	}
+
+	func (stage *StageStruct) IsStagedGongEnumShape(gongenumshape *GongEnumShape) (ok bool) {
+
+		_, ok = stage.GongEnumShapes[gongenumshape]
+	
+		return
+	}
+
+	func (stage *StageStruct) IsStagedGongStructShape(gongstructshape *GongStructShape) (ok bool) {
+
+		_, ok = stage.GongStructShapes[gongstructshape]
 	
 		return
 	}
@@ -152,14 +162,17 @@ func StageBranch[Type Gongstruct](stage *StageStruct, instance *Type) {
 	case *Classdiagram:
 		stage.StageBranchClassdiagram(target)
 
-	case *Classshape:
-		stage.StageBranchClassshape(target)
-
 	case *DiagramPackage:
 		stage.StageBranchDiagramPackage(target)
 
 	case *Field:
 		stage.StageBranchField(target)
+
+	case *GongEnumShape:
+		stage.StageBranchGongEnumShape(target)
+
+	case *GongStructShape:
+		stage.StageBranchGongStructShape(target)
 
 	case *Link:
 		stage.StageBranchLink(target)
@@ -204,35 +217,14 @@ func (stage *StageStruct) StageBranchClassdiagram(classdiagram *Classdiagram) {
 	//insertion point for the staging of instances referenced by pointers
 
 	//insertion point for the staging of instances referenced by slice of pointers
-	for _, _classshape := range classdiagram.Classshapes {
-		StageBranch(stage, _classshape)
+	for _, _gongstructshape := range classdiagram.GongStructShapes {
+		StageBranch(stage, _gongstructshape)
+	}
+	for _, _gongenumshape := range classdiagram.GongEnumShapes {
+		StageBranch(stage, _gongenumshape)
 	}
 	for _, _noteshape := range classdiagram.NoteShapes {
 		StageBranch(stage, _noteshape)
-	}
-
-}
-
-func (stage *StageStruct) StageBranchClassshape(classshape *Classshape) {
-
-	// check if instance is already staged
-	if IsStaged(stage, classshape) {
-		return
-	}
-
-	classshape.Stage()
-
-	//insertion point for the staging of instances referenced by pointers
-	if classshape.Position != nil {
-		StageBranch(stage, classshape.Position)
-	}
-
-	//insertion point for the staging of instances referenced by slice of pointers
-	for _, _field := range classshape.Fields {
-		StageBranch(stage, _field)
-	}
-	for _, _link := range classshape.Links {
-		StageBranch(stage, _link)
 	}
 
 }
@@ -273,6 +265,51 @@ func (stage *StageStruct) StageBranchField(field *Field) {
 	//insertion point for the staging of instances referenced by pointers
 
 	//insertion point for the staging of instances referenced by slice of pointers
+
+}
+
+func (stage *StageStruct) StageBranchGongEnumShape(gongenumshape *GongEnumShape) {
+
+	// check if instance is already staged
+	if IsStaged(stage, gongenumshape) {
+		return
+	}
+
+	gongenumshape.Stage()
+
+	//insertion point for the staging of instances referenced by pointers
+	if gongenumshape.Position != nil {
+		StageBranch(stage, gongenumshape.Position)
+	}
+
+	//insertion point for the staging of instances referenced by slice of pointers
+	for _, _field := range gongenumshape.Fields {
+		StageBranch(stage, _field)
+	}
+
+}
+
+func (stage *StageStruct) StageBranchGongStructShape(gongstructshape *GongStructShape) {
+
+	// check if instance is already staged
+	if IsStaged(stage, gongstructshape) {
+		return
+	}
+
+	gongstructshape.Stage()
+
+	//insertion point for the staging of instances referenced by pointers
+	if gongstructshape.Position != nil {
+		StageBranch(stage, gongstructshape.Position)
+	}
+
+	//insertion point for the staging of instances referenced by slice of pointers
+	for _, _field := range gongstructshape.Fields {
+		StageBranch(stage, _field)
+	}
+	for _, _link := range gongstructshape.Links {
+		StageBranch(stage, _link)
+	}
 
 }
 
@@ -447,14 +484,17 @@ func UnstageBranch[Type Gongstruct](stage *StageStruct, instance *Type) {
 	case *Classdiagram:
 		stage.UnstageBranchClassdiagram(target)
 
-	case *Classshape:
-		stage.UnstageBranchClassshape(target)
-
 	case *DiagramPackage:
 		stage.UnstageBranchDiagramPackage(target)
 
 	case *Field:
 		stage.UnstageBranchField(target)
+
+	case *GongEnumShape:
+		stage.UnstageBranchGongEnumShape(target)
+
+	case *GongStructShape:
+		stage.UnstageBranchGongStructShape(target)
 
 	case *Link:
 		stage.UnstageBranchLink(target)
@@ -499,35 +539,14 @@ func (stage *StageStruct) UnstageBranchClassdiagram(classdiagram *Classdiagram) 
 	//insertion point for the staging of instances referenced by pointers
 
 	//insertion point for the staging of instances referenced by slice of pointers
-	for _, _classshape := range classdiagram.Classshapes {
-		UnstageBranch(stage, _classshape)
+	for _, _gongstructshape := range classdiagram.GongStructShapes {
+		UnstageBranch(stage, _gongstructshape)
+	}
+	for _, _gongenumshape := range classdiagram.GongEnumShapes {
+		UnstageBranch(stage, _gongenumshape)
 	}
 	for _, _noteshape := range classdiagram.NoteShapes {
 		UnstageBranch(stage, _noteshape)
-	}
-
-}
-
-func (stage *StageStruct) UnstageBranchClassshape(classshape *Classshape) {
-
-	// check if instance is already staged
-	if ! IsStaged(stage, classshape) {
-		return
-	}
-
-	classshape.Unstage()
-
-	//insertion point for the staging of instances referenced by pointers
-	if classshape.Position != nil {
-		UnstageBranch(stage, classshape.Position)
-	}
-
-	//insertion point for the staging of instances referenced by slice of pointers
-	for _, _field := range classshape.Fields {
-		UnstageBranch(stage, _field)
-	}
-	for _, _link := range classshape.Links {
-		UnstageBranch(stage, _link)
 	}
 
 }
@@ -568,6 +587,51 @@ func (stage *StageStruct) UnstageBranchField(field *Field) {
 	//insertion point for the staging of instances referenced by pointers
 
 	//insertion point for the staging of instances referenced by slice of pointers
+
+}
+
+func (stage *StageStruct) UnstageBranchGongEnumShape(gongenumshape *GongEnumShape) {
+
+	// check if instance is already staged
+	if ! IsStaged(stage, gongenumshape) {
+		return
+	}
+
+	gongenumshape.Unstage()
+
+	//insertion point for the staging of instances referenced by pointers
+	if gongenumshape.Position != nil {
+		UnstageBranch(stage, gongenumshape.Position)
+	}
+
+	//insertion point for the staging of instances referenced by slice of pointers
+	for _, _field := range gongenumshape.Fields {
+		UnstageBranch(stage, _field)
+	}
+
+}
+
+func (stage *StageStruct) UnstageBranchGongStructShape(gongstructshape *GongStructShape) {
+
+	// check if instance is already staged
+	if ! IsStaged(stage, gongstructshape) {
+		return
+	}
+
+	gongstructshape.Unstage()
+
+	//insertion point for the staging of instances referenced by pointers
+	if gongstructshape.Position != nil {
+		UnstageBranch(stage, gongstructshape.Position)
+	}
+
+	//insertion point for the staging of instances referenced by slice of pointers
+	for _, _field := range gongstructshape.Fields {
+		UnstageBranch(stage, _field)
+	}
+	for _, _link := range gongstructshape.Links {
+		UnstageBranch(stage, _link)
+	}
 
 }
 

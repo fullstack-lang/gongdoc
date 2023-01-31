@@ -265,7 +265,7 @@ func (backRepoNoteShapeLink *BackRepoNoteShapeLinkStruct) CommitPhaseTwoInstance
 		// commit pointer value noteshapelink.Classshape translates to updating the noteshapelink.ClassshapeID
 		noteshapelinkDB.ClassshapeID.Valid = true // allow for a 0 value (nil association)
 		if noteshapelink.Classshape != nil {
-			if ClassshapeId, ok := (*backRepo.BackRepoClassshape.Map_ClassshapePtr_ClassshapeDBID)[noteshapelink.Classshape]; ok {
+			if ClassshapeId, ok := (*backRepo.BackRepoGongStructShape.Map_GongStructShapePtr_GongStructShapeDBID)[noteshapelink.Classshape]; ok {
 				noteshapelinkDB.ClassshapeID.Int64 = int64(ClassshapeId)
 				noteshapelinkDB.ClassshapeID.Valid = true
 			}
@@ -398,7 +398,7 @@ func (backRepoNoteShapeLink *BackRepoNoteShapeLinkStruct) CheckoutPhaseTwoInstan
 	// insertion point for checkout of pointer encoding
 	// Classshape field
 	if noteshapelinkDB.ClassshapeID.Int64 != 0 {
-		noteshapelink.Classshape = (*backRepo.BackRepoClassshape.Map_ClassshapeDBID_ClassshapePtr)[uint(noteshapelinkDB.ClassshapeID.Int64)]
+		noteshapelink.Classshape = (*backRepo.BackRepoGongStructShape.Map_GongStructShapeDBID_GongStructShapePtr)[uint(noteshapelinkDB.ClassshapeID.Int64)]
 	}
 	// Link field
 	if noteshapelinkDB.LinkID.Int64 != 0 {
@@ -640,7 +640,7 @@ func (backRepoNoteShapeLink *BackRepoNoteShapeLinkStruct) RestorePhaseTwo() {
 		// insertion point for reindexing pointers encoding
 		// reindexing Classshape field
 		if noteshapelinkDB.ClassshapeID.Int64 != 0 {
-			noteshapelinkDB.ClassshapeID.Int64 = int64(BackRepoClassshapeid_atBckpTime_newID[uint(noteshapelinkDB.ClassshapeID.Int64)])
+			noteshapelinkDB.ClassshapeID.Int64 = int64(BackRepoGongStructShapeid_atBckpTime_newID[uint(noteshapelinkDB.ClassshapeID.Int64)])
 			noteshapelinkDB.ClassshapeID.Valid = true
 		}
 

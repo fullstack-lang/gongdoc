@@ -20,6 +20,8 @@ import (
 	"github.com/fullstack-lang/gongdoc/go/models"
 	gongdoc_models "github.com/fullstack-lang/gongdoc/go/models"
 
+	"github.com/fullstack-lang/gongdoc/go/load"
+
 	gongdoc "github.com/fullstack-lang/gongdoc"
 
 	gong_fullstack "github.com/fullstack-lang/gong/go/fullstack"
@@ -119,7 +121,7 @@ func main() {
 		c.Abort()
 	})
 
-	diagramPackage, _ := gongdoc_models.LoadDiagramPackage(*pkgPath, modelPkg, *editable)
+	diagramPackage, _ := load.LoadDiagramPackage(*pkgPath, modelPkg, *editable)
 
 	// to be removed after fix of [issue](https://github.com/golang/go/issues/57559)
 	gongdoc_models.SetupMapDocLinkRenaming()
@@ -135,9 +137,9 @@ func main() {
 		// parse all classdiagrams and all classshape and put the number
 		// of instances
 		for _, classdiagram := range diagramPackage.Classdiagrams {
-			for _, classshape := range classdiagram.Classshapes {
+			for _, classshape := range classdiagram.GongStructShapes {
 
-				gongStructName := gongdoc_models.IdentifierToShapename(classshape.Identifier)
+				gongStructName := gongdoc_models.IdentifierToGongStructName(classshape.Identifier)
 
 				nbInstances, ok := gongdoc_models.Map_Identifier_NbInstances[gongStructName]
 
@@ -160,14 +162,14 @@ func main() {
 	gongdocStage := &gongdoc_models.Stage
 	_ = gongdocStage
 
-	classshapeCallbackSingloton := new(gongdoc_models.ClassshapeCallbacksSingloton)
+	gongStructShapeCallbackSingloton := new(gongdoc_models.GongStructShapeCallbacksSingloton)
 
 	// very strangely,
 	// gongdoc_models.Stage.OnAfterClassshapeUpdateCallback = classshapeCallbackSingloton
 	// does not seem to be executed
-	gongdocStage.OnAfterClassshapeUpdateCallback = classshapeCallbackSingloton
+	gongdocStage.OnAfterGongStructShapeUpdateCallback = gongStructShapeCallbackSingloton
 
-	diagramPackageCallbackSingloton := new(gongdoc_models.DiagramPackageCallbacksSingloton)
+	diagramPackageCallbackSingloton := new(load.DiagramPackageCallbacksSingloton)
 	gongdocStage.OnAfterDiagramPackageUpdateCallback = diagramPackageCallbackSingloton
 
 	if *marshallOnCommit != "" {

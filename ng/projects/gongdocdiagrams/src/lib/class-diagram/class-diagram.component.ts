@@ -62,7 +62,7 @@ export class ClassDiagramComponent implements OnInit, OnDestroy {
     private positionService: gongdoc.PositionService,
     private noteService: gongdoc.NoteShapeService,
     private verticeService: gongdoc.VerticeService,
-    private classshapeService: gongdoc.ClassshapeService, // for selection of the classshape
+    private gongStructShapeService: gongdoc.GongStructShapeService, // for selection of the classshape
 
     private gongdocFrontRepoService: gongdoc.FrontRepoService,
     private gongdocCommitNbFromBackService: gongdoc.CommitNbFromBackService,
@@ -140,9 +140,9 @@ export class ClassDiagramComponent implements OnInit, OnDestroy {
   //
   // make a jointjs umlclass from a gong Classshape object
   //
-  addClassshapeToGraph(classshape: gongdoc.ClassshapeDB): joint.shapes.uml.Class {
+  addClassshapeToGraph(classshape: gongdoc.GongStructShapeDB): joint.shapes.uml.Class {
 
-    let umlClassShape = newUmlClassShape(classshape, this.positionService, this.classshapeService)
+    let umlClassShape = newUmlClassShape(classshape, this.positionService, this.gongStructShapeService)
     umlClassShape.addTo(this.graph!);
 
     // add a backbone event handler to update the position
@@ -176,8 +176,8 @@ export class ClassDiagramComponent implements OnInit, OnDestroy {
     //
     let diagramWidth = 1000
     if (this.classdiagram != undefined) {
-      if (this.classdiagram.Classshapes != undefined) {
-        diagramWidth = (this.classdiagram.Classshapes.length + 2) * 300
+      if (this.classdiagram.GongStructShapes != undefined) {
+        diagramWidth = (this.classdiagram.GongStructShapes.length + 2) * 300
       }
     }
 
@@ -219,14 +219,14 @@ export class ClassDiagramComponent implements OnInit, OnDestroy {
     }
 
     // draw class shapes from the gong classshapes
-    if (this.classdiagram?.Classshapes != undefined) {
-      for (let classshape of this.classdiagram.Classshapes) {
+    if (this.classdiagram?.GongStructShapes != undefined) {
+      for (let classshape of this.classdiagram.GongStructShapes) {
         let umlClassShape = this.addClassshapeToGraph(classshape)
       }
 
 
       // draw links of the diagram shapes
-      for (let classshape of this.classdiagram.Classshapes) {
+      for (let classshape of this.classdiagram.GongStructShapes) {
         if (classshape.Links != undefined) {
           for (let linkDB of classshape.Links) {
 

@@ -1,12 +1,14 @@
 // insertion point sub template for components imports 
   import { ClassdiagramsTableComponent } from './classdiagrams-table/classdiagrams-table.component'
   import { ClassdiagramSortingComponent } from './classdiagram-sorting/classdiagram-sorting.component'
-  import { ClassshapesTableComponent } from './classshapes-table/classshapes-table.component'
-  import { ClassshapeSortingComponent } from './classshape-sorting/classshape-sorting.component'
   import { DiagramPackagesTableComponent } from './diagrampackages-table/diagrampackages-table.component'
   import { DiagramPackageSortingComponent } from './diagrampackage-sorting/diagrampackage-sorting.component'
   import { FieldsTableComponent } from './fields-table/fields-table.component'
   import { FieldSortingComponent } from './field-sorting/field-sorting.component'
+  import { GongEnumShapesTableComponent } from './gongenumshapes-table/gongenumshapes-table.component'
+  import { GongEnumShapeSortingComponent } from './gongenumshape-sorting/gongenumshape-sorting.component'
+  import { GongStructShapesTableComponent } from './gongstructshapes-table/gongstructshapes-table.component'
+  import { GongStructShapeSortingComponent } from './gongstructshape-sorting/gongstructshape-sorting.component'
   import { LinksTableComponent } from './links-table/links-table.component'
   import { LinkSortingComponent } from './link-sorting/link-sorting.component'
   import { NodesTableComponent } from './nodes-table/nodes-table.component'
@@ -29,12 +31,14 @@
 // insertion point sub template for map of components per struct 
   export const MapOfClassdiagramsComponents: Map<string, any> = new Map([["ClassdiagramsTableComponent", ClassdiagramsTableComponent],])
   export const MapOfClassdiagramSortingComponents: Map<string, any> = new Map([["ClassdiagramSortingComponent", ClassdiagramSortingComponent],])
-  export const MapOfClassshapesComponents: Map<string, any> = new Map([["ClassshapesTableComponent", ClassshapesTableComponent],])
-  export const MapOfClassshapeSortingComponents: Map<string, any> = new Map([["ClassshapeSortingComponent", ClassshapeSortingComponent],])
   export const MapOfDiagramPackagesComponents: Map<string, any> = new Map([["DiagramPackagesTableComponent", DiagramPackagesTableComponent],])
   export const MapOfDiagramPackageSortingComponents: Map<string, any> = new Map([["DiagramPackageSortingComponent", DiagramPackageSortingComponent],])
   export const MapOfFieldsComponents: Map<string, any> = new Map([["FieldsTableComponent", FieldsTableComponent],])
   export const MapOfFieldSortingComponents: Map<string, any> = new Map([["FieldSortingComponent", FieldSortingComponent],])
+  export const MapOfGongEnumShapesComponents: Map<string, any> = new Map([["GongEnumShapesTableComponent", GongEnumShapesTableComponent],])
+  export const MapOfGongEnumShapeSortingComponents: Map<string, any> = new Map([["GongEnumShapeSortingComponent", GongEnumShapeSortingComponent],])
+  export const MapOfGongStructShapesComponents: Map<string, any> = new Map([["GongStructShapesTableComponent", GongStructShapesTableComponent],])
+  export const MapOfGongStructShapeSortingComponents: Map<string, any> = new Map([["GongStructShapeSortingComponent", GongStructShapeSortingComponent],])
   export const MapOfLinksComponents: Map<string, any> = new Map([["LinksTableComponent", LinksTableComponent],])
   export const MapOfLinkSortingComponents: Map<string, any> = new Map([["LinkSortingComponent", LinkSortingComponent],])
   export const MapOfNodesComponents: Map<string, any> = new Map([["NodesTableComponent", NodesTableComponent],])
@@ -60,9 +64,10 @@ export const MapOfComponents: Map<string, any> =
     [
       // insertion point sub template for map of components 
       ["Classdiagram", MapOfClassdiagramsComponents],
-      ["Classshape", MapOfClassshapesComponents],
       ["DiagramPackage", MapOfDiagramPackagesComponents],
       ["Field", MapOfFieldsComponents],
+      ["GongEnumShape", MapOfGongEnumShapesComponents],
+      ["GongStructShape", MapOfGongStructShapesComponents],
       ["Link", MapOfLinksComponents],
       ["Node", MapOfNodesComponents],
       ["NoteShape", MapOfNoteShapesComponents],
@@ -81,9 +86,10 @@ export const MapOfSortingComponents: Map<string, any> =
     [
     // insertion point sub template for map of sorting components 
       ["Classdiagram", MapOfClassdiagramSortingComponents],
-      ["Classshape", MapOfClassshapeSortingComponents],
       ["DiagramPackage", MapOfDiagramPackageSortingComponents],
       ["Field", MapOfFieldSortingComponents],
+      ["GongEnumShape", MapOfGongEnumShapeSortingComponents],
+      ["GongStructShape", MapOfGongStructShapeSortingComponents],
       ["Link", MapOfLinkSortingComponents],
       ["Node", MapOfNodeSortingComponents],
       ["NoteShape", MapOfNoteShapeSortingComponents],

@@ -6,7 +6,6 @@ import (
 	"go/token"
 	"log"
 	"os"
-	"path/filepath"
 	"time"
 
 	gong_models "github.com/fullstack-lang/gong/go/models"
@@ -33,8 +32,8 @@ type DiagramPackage struct {
 
 	// list of files in the "diagrams" directory
 	Files []string
-	ast   *ast.Package
-	fset  *token.FileSet
+	Ast   *ast.Package
+	Fset  *token.FileSet
 
 	// Umlscs stores UML State charts diagrams
 	Umlscs []*Umlsc
@@ -99,13 +98,28 @@ func (diagramPackage *DiagramPackage) UnmarshallOneDiagram(diagramName string, i
 		diagramPackage.Classdiagrams = append(diagramPackage.Classdiagrams,
 			classdiagram)
 
+		for gongStructShape := range *GetGongstructInstancesSet[GongStructShape]() {
+
+			_, ok := (*gong_models.GetGongstructInstancesMap[gong_models.GongStruct]())[IdentifierToGongStructName(gongStructShape.Identifier)]
+
+			if !ok {
+				log.Println("UnmarshallOneDiagram: In diagram", classdiagram.Name, "unknown note related to note shape", gongStructShape.Identifier)
+				gongStructShape.Unstage()
+
+				if contains(classdiagram.GongStructShapes, gongStructShape) {
+					classdiagram.GongStructShapes = remove(classdiagram.GongStructShapes, gongStructShape)
+				}
+				continue
+			}
+		}
+
 		// refresh all notes body from the original gong note in the package models
 		// because, note are not synchronized via the gopls renaming request
 		//
 		// if a can be traced, this is probably for a lack of diagram maintenance
 		for noteShape := range *GetGongstructInstancesSet[NoteShape]() {
 
-			note, ok := (*gong_models.GetGongstructInstancesMap[gong_models.GongNote]())[IdentifierToShapename(noteShape.Identifier)]
+			note, ok := (*gong_models.GetGongstructInstancesMap[gong_models.GongNote]())[IdentifierToGongStructName(noteShape.Identifier)]
 
 			if !ok {
 				log.Println("UnmarshallOneDiagram: In diagram", classdiagram.Name, "unknown note related to note shape", noteShape.Identifier)
@@ -130,33 +144,6 @@ func contains[T comparable](elems []T, v T) bool {
 		}
 	}
 	return false
-}
-
-func (diagramPackage *DiagramPackage) Reload() {
-
-	gong_models.Stage.Checkout()
-	gong_models.Stage.Reset()
-	modelPkg, _ := gong_models.LoadSource(
-		filepath.Join(diagramPackage.AbsolutePathToDiagramPackage, "../models"))
-	gong_models.Stage.Commit()
-
-	Stage.Checkout()
-	Stage.Reset()
-	Stage.Commit()
-
-	diagramPackage.Classdiagrams = nil
-	diagramPackage.Umlscs = nil
-	diagramPackage.ModelPkg = modelPkg
-
-	diagramPackage, _ = LoadDiagramPackage(
-		filepath.Join(diagramPackage.AbsolutePathToDiagramPackage, "../models"),
-		modelPkg, true)
-
-	// to be removed after fix of [issue](https://github.com/golang/go/issues/57559)
-	SetupMapDocLinkRenaming()
-	// end of the be removed
-	FillUpNodeTree(diagramPackage)
-	Stage.Commit()
 }
 
 func closeFile(f *os.File) {

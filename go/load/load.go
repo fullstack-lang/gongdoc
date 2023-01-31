@@ -55,9 +55,9 @@ func Load(
 		}
 	}
 	if embeddedDiagrams {
-		diagramPackage, _ = gongdoc_models.LoadEmbeddedDiagramPackage(goSourceDirectories, modelPackage)
+		diagramPackage, _ = LoadEmbeddedDiagramPackage(goSourceDirectories, modelPackage)
 	} else {
-		diagramPackage, _ = gongdoc_models.LoadDiagramPackage(filepath.Join("../../diagrams"), modelPackage, true)
+		diagramPackage, _ = LoadDiagramPackage(filepath.Join("../../diagrams"), modelPackage, true)
 	}
 	diagramPackage.GongModelPath = pkgPath
 
@@ -75,9 +75,9 @@ func Load(
 		}
 
 		for _, classdiagram := range diagramPackage.Classdiagrams {
-			for _, classshape := range classdiagram.Classshapes {
+			for _, classshape := range classdiagram.GongStructShapes {
 
-				gongStructName := gongdoc_models.IdentifierToShapename(classshape.Identifier)
+				gongStructName := gongdoc_models.IdentifierToGongStructName(classshape.Identifier)
 				nbInstances, ok := gongdoc_models.Map_Identifier_NbInstances[gongStructName]
 
 				if ok {

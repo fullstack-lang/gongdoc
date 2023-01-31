@@ -23,7 +23,7 @@ func SetupMapDocLinkRenaming() {
 	})
 	for _, gongStruct := range gongstructOrdered {
 
-		ident := ShapenameToIdentifier(gongStruct.Name)
+		ident := GongStructNameToIdentifier(gongStruct.Name)
 		var identifier GONG__Identifier
 		identifier.Ident = ident
 		identifier.Type = GONG__STRUCT_INSTANCE
@@ -31,7 +31,7 @@ func SetupMapDocLinkRenaming() {
 		Stage.Map_DocLink_Renaming[ident] = identifier
 
 		for _, field := range gongStruct.Fields {
-			ident := ShapeAndFieldnameToFieldIdentifier(
+			ident := GongstructAndFieldnameToFieldIdentifier(
 				gongStruct.Name, field.GetName())
 
 			var identifier GONG__Identifier
@@ -41,7 +41,7 @@ func SetupMapDocLinkRenaming() {
 		}
 	}
 	for gongEnum := range *gong_models.GetGongstructInstancesSet[gong_models.GongEnum]() {
-		ident := ShapenameToIdentifier(gongEnum.Name)
+		ident := GongStructNameToIdentifier(gongEnum.Name)
 
 		var identifier GONG__Identifier
 		identifier.Ident = ident
@@ -55,7 +55,7 @@ func SetupMapDocLinkRenaming() {
 		Stage.Map_DocLink_Renaming[ident] = identifier
 
 		for _, value := range gongEnum.GongEnumValues {
-			ident := ShapenameToIdentifier(value.Name)
+			ident := GongStructNameToIdentifier(value.Name)
 
 			var identifier GONG__Identifier
 			identifier.Ident = ident
@@ -68,7 +68,7 @@ func SetupMapDocLinkRenaming() {
 	}
 
 	for gongNote := range *gong_models.GetGongstructInstancesSet[gong_models.GongNote]() {
-		ident := ShapenameToIdentifier(gongNote.Name)
+		ident := GongStructNameToIdentifier(gongNote.Name)
 
 		var identifier GONG__Identifier
 		identifier.Ident = ident

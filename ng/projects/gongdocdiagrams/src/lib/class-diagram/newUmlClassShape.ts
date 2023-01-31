@@ -2,9 +2,9 @@ import * as joint from 'jointjs';
 import * as gongdoc from 'gongdoc'
 import { shapeIdentifierToShapeName } from './shape-identifier-to-shape-name';
 
-export function newUmlClassShape(classshape: gongdoc.ClassshapeDB,
+export function newUmlClassShape(classshape: gongdoc.GongStructShapeDB,
     positionService: gongdoc.PositionService,
-    classshapeService: gongdoc.ClassshapeService): joint.shapes.uml.Class {
+    gongStructShapeService: gongdoc.GongStructShapeService): joint.shapes.uml.Class {
 
     // fetch the fields, it must belong to the current diagram
     // and the type must match the classshape type
@@ -13,7 +13,7 @@ export function newUmlClassShape(classshape: gongdoc.ClassshapeDB,
 
         // sort fields according to the index
         classshape.Fields.sort((fieldA: gongdoc.FieldDB, fieldB: gongdoc.FieldDB) => {
-            return fieldA.Classshape_FieldsDBID_Index.Int64 - fieldB.Classshape_FieldsDBID_Index.Int64
+            return fieldA.GongStructShape_FieldsDBID_Index.Int64 - fieldB.GongStructShape_FieldsDBID_Index.Int64
         })
 
         for (let idx = 0; idx < classshape.Fields!.length; idx++) {
@@ -76,7 +76,7 @@ export function newUmlClassShape(classshape: gongdoc.ClassshapeDB,
             // store relevant attributes for working when callback are invoked
             classshape: classshape,
             positionService: positionService,
-            classshapeService: classshapeService
+            gongStructShapeService: gongStructShapeService
         }
     )
 

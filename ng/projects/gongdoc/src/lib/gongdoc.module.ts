@@ -44,11 +44,6 @@ import { ClassdiagramSortingComponent } from './classdiagram-sorting/classdiagra
 import { ClassdiagramDetailComponent } from './classdiagram-detail/classdiagram-detail.component'
 import { ClassdiagramPresentationComponent } from './classdiagram-presentation/classdiagram-presentation.component'
 
-import { ClassshapesTableComponent } from './classshapes-table/classshapes-table.component'
-import { ClassshapeSortingComponent } from './classshape-sorting/classshape-sorting.component'
-import { ClassshapeDetailComponent } from './classshape-detail/classshape-detail.component'
-import { ClassshapePresentationComponent } from './classshape-presentation/classshape-presentation.component'
-
 import { DiagramPackagesTableComponent } from './diagrampackages-table/diagrampackages-table.component'
 import { DiagramPackageSortingComponent } from './diagrampackage-sorting/diagrampackage-sorting.component'
 import { DiagramPackageDetailComponent } from './diagrampackage-detail/diagrampackage-detail.component'
@@ -58,6 +53,16 @@ import { FieldsTableComponent } from './fields-table/fields-table.component'
 import { FieldSortingComponent } from './field-sorting/field-sorting.component'
 import { FieldDetailComponent } from './field-detail/field-detail.component'
 import { FieldPresentationComponent } from './field-presentation/field-presentation.component'
+
+import { GongEnumShapesTableComponent } from './gongenumshapes-table/gongenumshapes-table.component'
+import { GongEnumShapeSortingComponent } from './gongenumshape-sorting/gongenumshape-sorting.component'
+import { GongEnumShapeDetailComponent } from './gongenumshape-detail/gongenumshape-detail.component'
+import { GongEnumShapePresentationComponent } from './gongenumshape-presentation/gongenumshape-presentation.component'
+
+import { GongStructShapesTableComponent } from './gongstructshapes-table/gongstructshapes-table.component'
+import { GongStructShapeSortingComponent } from './gongstructshape-sorting/gongstructshape-sorting.component'
+import { GongStructShapeDetailComponent } from './gongstructshape-detail/gongstructshape-detail.component'
+import { GongStructShapePresentationComponent } from './gongstructshape-presentation/gongstructshape-presentation.component'
 
 import { LinksTableComponent } from './links-table/links-table.component'
 import { LinkSortingComponent } from './link-sorting/link-sorting.component'
@@ -113,11 +118,6 @@ import { VerticePresentationComponent } from './vertice-presentation/vertice-pre
 		ClassdiagramDetailComponent,
 		ClassdiagramPresentationComponent,
 
-		ClassshapesTableComponent,
-		ClassshapeSortingComponent,
-		ClassshapeDetailComponent,
-		ClassshapePresentationComponent,
-
 		DiagramPackagesTableComponent,
 		DiagramPackageSortingComponent,
 		DiagramPackageDetailComponent,
@@ -127,6 +127,16 @@ import { VerticePresentationComponent } from './vertice-presentation/vertice-pre
 		FieldSortingComponent,
 		FieldDetailComponent,
 		FieldPresentationComponent,
+
+		GongEnumShapesTableComponent,
+		GongEnumShapeSortingComponent,
+		GongEnumShapeDetailComponent,
+		GongEnumShapePresentationComponent,
+
+		GongStructShapesTableComponent,
+		GongStructShapeSortingComponent,
+		GongStructShapeDetailComponent,
+		GongStructShapePresentationComponent,
 
 		LinksTableComponent,
 		LinkSortingComponent,
@@ -217,11 +227,6 @@ import { VerticePresentationComponent } from './vertice-presentation/vertice-pre
 		ClassdiagramDetailComponent,
 		ClassdiagramPresentationComponent,
 
-		ClassshapesTableComponent,
-		ClassshapeSortingComponent,
-		ClassshapeDetailComponent,
-		ClassshapePresentationComponent,
-
 		DiagramPackagesTableComponent,
 		DiagramPackageSortingComponent,
 		DiagramPackageDetailComponent,
@@ -231,6 +236,16 @@ import { VerticePresentationComponent } from './vertice-presentation/vertice-pre
 		FieldSortingComponent,
 		FieldDetailComponent,
 		FieldPresentationComponent,
+
+		GongEnumShapesTableComponent,
+		GongEnumShapeSortingComponent,
+		GongEnumShapeDetailComponent,
+		GongEnumShapePresentationComponent,
+
+		GongStructShapesTableComponent,
+		GongStructShapeSortingComponent,
+		GongStructShapeDetailComponent,
+		GongStructShapePresentationComponent,
 
 		LinksTableComponent,
 		LinkSortingComponent,

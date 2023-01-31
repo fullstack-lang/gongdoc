@@ -6,8 +6,8 @@ type Node struct {
 
 	Type GongdocNodeType
 
-	// impl is the pointer to the implementation of the node in the models of interest
-	impl NodeImplInterface
+	// Impl is the pointer to the implementation of the node in the models of interest
+	Impl NodeImplInterface
 
 	IsExpanded bool
 
@@ -31,19 +31,4 @@ type Node struct {
 	HasDeleteButton bool
 
 	Children []*Node
-}
-
-func (node *Node) UncheckAndDisableBranch() {
-
-	node.UncheckAndDisable()
-
-	for _, _node := range node.Children {
-		_node.UncheckAndDisableBranch()
-	}
-}
-
-func (node *Node) UncheckAndDisable() {
-
-	node.IsCheckboxDisabled = true
-	node.IsChecked = false
 }

@@ -308,9 +308,10 @@ var __gong__map_Indentifiers_gongstructName = make(map[string]string)
 
 // insertion point for identifiers maps
 var __gong__map_Classdiagram = make(map[string]*Classdiagram)
-var __gong__map_Classshape = make(map[string]*Classshape)
 var __gong__map_DiagramPackage = make(map[string]*DiagramPackage)
 var __gong__map_Field = make(map[string]*Field)
+var __gong__map_GongEnumShape = make(map[string]*GongEnumShape)
+var __gong__map_GongStructShape = make(map[string]*GongStructShape)
 var __gong__map_Link = make(map[string]*Link)
 var __gong__map_Node = make(map[string]*Node)
 var __gong__map_NoteShape = make(map[string]*NoteShape)
@@ -499,10 +500,6 @@ func UnmarshallGongstructStaging(cmap *ast.CommentMap, assignStmt *ast.AssignStm
 										instanceClassdiagram := (&Classdiagram{Name: instanceName}).Stage()
 										instance = any(instanceClassdiagram)
 										__gong__map_Classdiagram[identifier] = instanceClassdiagram
-									case "Classshape":
-										instanceClassshape := (&Classshape{Name: instanceName}).Stage()
-										instance = any(instanceClassshape)
-										__gong__map_Classshape[identifier] = instanceClassshape
 									case "DiagramPackage":
 										instanceDiagramPackage := (&DiagramPackage{Name: instanceName}).Stage()
 										instance = any(instanceDiagramPackage)
@@ -511,6 +508,14 @@ func UnmarshallGongstructStaging(cmap *ast.CommentMap, assignStmt *ast.AssignStm
 										instanceField := (&Field{Name: instanceName}).Stage()
 										instance = any(instanceField)
 										__gong__map_Field[identifier] = instanceField
+									case "GongEnumShape":
+										instanceGongEnumShape := (&GongEnumShape{Name: instanceName}).Stage()
+										instance = any(instanceGongEnumShape)
+										__gong__map_GongEnumShape[identifier] = instanceGongEnumShape
+									case "GongStructShape":
+										instanceGongStructShape := (&GongStructShape{Name: instanceName}).Stage()
+										instance = any(instanceGongStructShape)
+										__gong__map_GongStructShape[identifier] = instanceGongStructShape
 									case "Link":
 										instanceLink := (&Link{Name: instanceName}).Stage()
 										instance = any(instanceLink)
@@ -587,15 +592,19 @@ func UnmarshallGongstructStaging(cmap *ast.CommentMap, assignStmt *ast.AssignStm
 							switch fieldName {
 							// insertion point for date assign code
 							}
-						case "Classshape":
-							switch fieldName {
-							// insertion point for date assign code
-							}
 						case "DiagramPackage":
 							switch fieldName {
 							// insertion point for date assign code
 							}
 						case "Field":
+							switch fieldName {
+							// insertion point for date assign code
+							}
+						case "GongEnumShape":
+							switch fieldName {
+							// insertion point for date assign code
+							}
+						case "GongStructShape":
 							switch fieldName {
 							// insertion point for date assign code
 							}
@@ -663,34 +672,24 @@ func UnmarshallGongstructStaging(cmap *ast.CommentMap, assignStmt *ast.AssignStm
 					case "Classdiagram":
 						switch fieldName {
 						// insertion point for slice of pointers assign code
-						case "Classshapes":
+						case "GongStructShapes":
 							// remove first and last char
 							targetIdentifier := ident.Name
-							target := __gong__map_Classshape[targetIdentifier]
-							__gong__map_Classdiagram[identifier].Classshapes =
-								append(__gong__map_Classdiagram[identifier].Classshapes, target)
+							target := __gong__map_GongStructShape[targetIdentifier]
+							__gong__map_Classdiagram[identifier].GongStructShapes =
+								append(__gong__map_Classdiagram[identifier].GongStructShapes, target)
+						case "GongEnumShapes":
+							// remove first and last char
+							targetIdentifier := ident.Name
+							target := __gong__map_GongEnumShape[targetIdentifier]
+							__gong__map_Classdiagram[identifier].GongEnumShapes =
+								append(__gong__map_Classdiagram[identifier].GongEnumShapes, target)
 						case "NoteShapes":
 							// remove first and last char
 							targetIdentifier := ident.Name
 							target := __gong__map_NoteShape[targetIdentifier]
 							__gong__map_Classdiagram[identifier].NoteShapes =
 								append(__gong__map_Classdiagram[identifier].NoteShapes, target)
-						}
-					case "Classshape":
-						switch fieldName {
-						// insertion point for slice of pointers assign code
-						case "Fields":
-							// remove first and last char
-							targetIdentifier := ident.Name
-							target := __gong__map_Field[targetIdentifier]
-							__gong__map_Classshape[identifier].Fields =
-								append(__gong__map_Classshape[identifier].Fields, target)
-						case "Links":
-							// remove first and last char
-							targetIdentifier := ident.Name
-							target := __gong__map_Link[targetIdentifier]
-							__gong__map_Classshape[identifier].Links =
-								append(__gong__map_Classshape[identifier].Links, target)
 						}
 					case "DiagramPackage":
 						switch fieldName {
@@ -711,6 +710,32 @@ func UnmarshallGongstructStaging(cmap *ast.CommentMap, assignStmt *ast.AssignStm
 					case "Field":
 						switch fieldName {
 						// insertion point for slice of pointers assign code
+						}
+					case "GongEnumShape":
+						switch fieldName {
+						// insertion point for slice of pointers assign code
+						case "Fields":
+							// remove first and last char
+							targetIdentifier := ident.Name
+							target := __gong__map_Field[targetIdentifier]
+							__gong__map_GongEnumShape[identifier].Fields =
+								append(__gong__map_GongEnumShape[identifier].Fields, target)
+						}
+					case "GongStructShape":
+						switch fieldName {
+						// insertion point for slice of pointers assign code
+						case "Fields":
+							// remove first and last char
+							targetIdentifier := ident.Name
+							target := __gong__map_Field[targetIdentifier]
+							__gong__map_GongStructShape[identifier].Fields =
+								append(__gong__map_GongStructShape[identifier].Fields, target)
+						case "Links":
+							// remove first and last char
+							targetIdentifier := ident.Name
+							target := __gong__map_Link[targetIdentifier]
+							__gong__map_GongStructShape[identifier].Links =
+								append(__gong__map_GongStructShape[identifier].Links, target)
 						}
 					case "Link":
 						switch fieldName {
@@ -816,39 +841,6 @@ func UnmarshallGongstructStaging(cmap *ast.CommentMap, assignStmt *ast.AssignStm
 					fielValue := basicLit.Value[1 : len(basicLit.Value)-1]
 					__gong__map_Classdiagram[identifier].Name = fielValue
 				}
-			case "Classshape":
-				switch fieldName {
-				// insertion point for field dependant code
-				case "Name":
-					// remove first and last char
-					fielValue := basicLit.Value[1 : len(basicLit.Value)-1]
-					__gong__map_Classshape[identifier].Name = fielValue
-				case "Identifier":
-					// remove first and last char
-					fielValue := basicLit.Value[1 : len(basicLit.Value)-1]
-					__gong__map_Classshape[identifier].Identifier = fielValue
-				case "NbInstances":
-					// convert string to int
-					fielValue, err := strconv.ParseInt(basicLit.Value, 10, 64)
-					if err != nil {
-						log.Fatalln(err)
-					}
-					__gong__map_Classshape[identifier].NbInstances = int(fielValue)
-				case "Width":
-					// convert string to float64
-					fielValue, err := strconv.ParseFloat(basicLit.Value, 64)
-					if err != nil {
-						log.Fatalln(err)
-					}
-					__gong__map_Classshape[identifier].Width = fielValue
-				case "Heigth":
-					// convert string to float64
-					fielValue, err := strconv.ParseFloat(basicLit.Value, 64)
-					if err != nil {
-						log.Fatalln(err)
-					}
-					__gong__map_Classshape[identifier].Heigth = fielValue
-				}
 			case "DiagramPackage":
 				switch fieldName {
 				// insertion point for field dependant code
@@ -892,6 +884,65 @@ func UnmarshallGongstructStaging(cmap *ast.CommentMap, assignStmt *ast.AssignStm
 					// remove first and last char
 					fielValue := basicLit.Value[1 : len(basicLit.Value)-1]
 					__gong__map_Field[identifier].Fieldtypename = fielValue
+				}
+			case "GongEnumShape":
+				switch fieldName {
+				// insertion point for field dependant code
+				case "Name":
+					// remove first and last char
+					fielValue := basicLit.Value[1 : len(basicLit.Value)-1]
+					__gong__map_GongEnumShape[identifier].Name = fielValue
+				case "Identifier":
+					// remove first and last char
+					fielValue := basicLit.Value[1 : len(basicLit.Value)-1]
+					__gong__map_GongEnumShape[identifier].Identifier = fielValue
+				case "Width":
+					// convert string to float64
+					fielValue, err := strconv.ParseFloat(basicLit.Value, 64)
+					if err != nil {
+						log.Fatalln(err)
+					}
+					__gong__map_GongEnumShape[identifier].Width = fielValue
+				case "Heigth":
+					// convert string to float64
+					fielValue, err := strconv.ParseFloat(basicLit.Value, 64)
+					if err != nil {
+						log.Fatalln(err)
+					}
+					__gong__map_GongEnumShape[identifier].Heigth = fielValue
+				}
+			case "GongStructShape":
+				switch fieldName {
+				// insertion point for field dependant code
+				case "Name":
+					// remove first and last char
+					fielValue := basicLit.Value[1 : len(basicLit.Value)-1]
+					__gong__map_GongStructShape[identifier].Name = fielValue
+				case "Identifier":
+					// remove first and last char
+					fielValue := basicLit.Value[1 : len(basicLit.Value)-1]
+					__gong__map_GongStructShape[identifier].Identifier = fielValue
+				case "NbInstances":
+					// convert string to int
+					fielValue, err := strconv.ParseInt(basicLit.Value, 10, 64)
+					if err != nil {
+						log.Fatalln(err)
+					}
+					__gong__map_GongStructShape[identifier].NbInstances = int(fielValue)
+				case "Width":
+					// convert string to float64
+					fielValue, err := strconv.ParseFloat(basicLit.Value, 64)
+					if err != nil {
+						log.Fatalln(err)
+					}
+					__gong__map_GongStructShape[identifier].Width = fielValue
+				case "Heigth":
+					// convert string to float64
+					fielValue, err := strconv.ParseFloat(basicLit.Value, 64)
+					if err != nil {
+						log.Fatalln(err)
+					}
+					__gong__map_GongStructShape[identifier].Heigth = fielValue
 				}
 			case "Link":
 				switch fieldName {
@@ -1088,27 +1139,6 @@ func UnmarshallGongstructStaging(cmap *ast.CommentMap, assignStmt *ast.AssignStm
 					}
 					__gong__map_Classdiagram[identifier].IsInDrawMode = fielValue
 				}
-			case "Classshape":
-				switch fieldName {
-				// insertion point for field dependant code
-				case "Position":
-					targetIdentifier := ident.Name
-					__gong__map_Classshape[identifier].Position = __gong__map_Position[targetIdentifier]
-				case "ShowNbInstances":
-					// convert string to boolean
-					fielValue, err := strconv.ParseBool(ident.Name)
-					if err != nil {
-						log.Fatalln(err)
-					}
-					__gong__map_Classshape[identifier].ShowNbInstances = fielValue
-				case "IsSelected":
-					// convert string to boolean
-					fielValue, err := strconv.ParseBool(ident.Name)
-					if err != nil {
-						log.Fatalln(err)
-					}
-					__gong__map_Classshape[identifier].IsSelected = fielValue
-				}
 			case "DiagramPackage":
 				switch fieldName {
 				// insertion point for field dependant code
@@ -1133,6 +1163,34 @@ func UnmarshallGongstructStaging(cmap *ast.CommentMap, assignStmt *ast.AssignStm
 			case "Field":
 				switch fieldName {
 				// insertion point for field dependant code
+				}
+			case "GongEnumShape":
+				switch fieldName {
+				// insertion point for field dependant code
+				case "Position":
+					targetIdentifier := ident.Name
+					__gong__map_GongEnumShape[identifier].Position = __gong__map_Position[targetIdentifier]
+				}
+			case "GongStructShape":
+				switch fieldName {
+				// insertion point for field dependant code
+				case "Position":
+					targetIdentifier := ident.Name
+					__gong__map_GongStructShape[identifier].Position = __gong__map_Position[targetIdentifier]
+				case "ShowNbInstances":
+					// convert string to boolean
+					fielValue, err := strconv.ParseBool(ident.Name)
+					if err != nil {
+						log.Fatalln(err)
+					}
+					__gong__map_GongStructShape[identifier].ShowNbInstances = fielValue
+				case "IsSelected":
+					// convert string to boolean
+					fielValue, err := strconv.ParseBool(ident.Name)
+					if err != nil {
+						log.Fatalln(err)
+					}
+					__gong__map_GongStructShape[identifier].IsSelected = fielValue
 				}
 			case "Link":
 				switch fieldName {
@@ -1245,7 +1303,7 @@ func UnmarshallGongstructStaging(cmap *ast.CommentMap, assignStmt *ast.AssignStm
 				// insertion point for field dependant code
 				case "Classshape":
 					targetIdentifier := ident.Name
-					__gong__map_NoteShapeLink[identifier].Classshape = __gong__map_Classshape[targetIdentifier]
+					__gong__map_NoteShapeLink[identifier].Classshape = __gong__map_GongStructShape[targetIdentifier]
 				case "Link":
 					targetIdentifier := ident.Name
 					__gong__map_NoteShapeLink[identifier].Link = __gong__map_Link[targetIdentifier]
@@ -1312,15 +1370,19 @@ func UnmarshallGongstructStaging(cmap *ast.CommentMap, assignStmt *ast.AssignStm
 					switch fieldName {
 					// insertion point for enum assign code
 					}
-				case "Classshape":
-					switch fieldName {
-					// insertion point for enum assign code
-					}
 				case "DiagramPackage":
 					switch fieldName {
 					// insertion point for enum assign code
 					}
 				case "Field":
+					switch fieldName {
+					// insertion point for enum assign code
+					}
+				case "GongEnumShape":
+					switch fieldName {
+					// insertion point for enum assign code
+					}
+				case "GongStructShape":
 					switch fieldName {
 					// insertion point for enum assign code
 					}
