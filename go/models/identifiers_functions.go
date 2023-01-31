@@ -28,8 +28,8 @@ func IdentifierToFieldName(fieldIdentifier string) (fieldName string) {
 	return
 }
 
-// ShapeAndFieldnameToFieldIdentifier takes "Foo" "Name" and returns "ref_models.Foo.Name"
-func ShapeAndFieldnameToFieldIdentifier(structName string, fieldName string) (fieldIdentifier string) {
+// GongstructAndFieldnameToFieldIdentifier takes "Foo" "Name" and returns "ref_models.Foo.Name"
+func GongstructAndFieldnameToFieldIdentifier(structName string, fieldName string) (fieldIdentifier string) {
 
 	fieldIdentifier = RefPrefixReferencedPackage + RefPackagePlusPeriod +
 		structName + "." + fieldName
@@ -37,16 +37,16 @@ func ShapeAndFieldnameToFieldIdentifier(structName string, fieldName string) (fi
 	return
 }
 
-// IdentifierToShapename take an ident in the forms
+// IdentifierToGongStructName take an ident in the forms
 // "ref_models.Foo" and returns "Foo"
-func IdentifierToShapename(structIdentifier string) (structName string) {
+func IdentifierToGongStructName(structIdentifier string) (structName string) {
 
 	structName = strings.TrimPrefix(structIdentifier, RefPrefixReferencedPackage+"models.")
 
 	return
 }
 
-func ShapenameToIdentifier(structName string) (identifier string) {
+func GongStructNameToIdentifier(structName string) (identifier string) {
 
 	identifier = RefPrefixReferencedPackage + "models." + structName
 	return

@@ -25,8 +25,8 @@ func (gongEnumImpl *GongEnumImpl) OnAfterUpdate(
 
 		// get the referenced gongstructs
 		for _, classshape := range classDiagram.GongStructShapes {
-			if gongdoc_models.IdentifierToShapename(classshape.Identifier) == stagedNode.Name {
-				classDiagram.RemoveClassshape(gongdoc_models.IdentifierToShapename(classshape.Identifier))
+			if gongdoc_models.IdentifierToGongStructName(classshape.Identifier) == stagedNode.Name {
+				classDiagram.RemoveClassshape(gongdoc_models.IdentifierToGongStructName(classshape.Identifier))
 			}
 
 		}

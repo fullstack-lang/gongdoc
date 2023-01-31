@@ -31,7 +31,7 @@ func (gongNoteImpl *GongNoteImpl) OnAfterUpdate(
 			log.Fatal("Unkown note ", noteShape.Name)
 		}
 
-		noteShape.Identifier = gongdoc_models.ShapenameToIdentifier(noteShape.Name)
+		noteShape.Identifier = gongdoc_models.GongStructNameToIdentifier(noteShape.Name)
 
 		noteShape.Body = gongNote.Body
 		noteShape.X = 30
@@ -52,7 +52,7 @@ func (gongNoteImpl *GongNoteImpl) OnAfterUpdate(
 		for _, _noteShape = range classdiagram.NoteShapes {
 
 			// strange behavior when the note is removed within the loop
-			if gongdoc_models.IdentifierToShapename(_noteShape.Identifier) == stagedNode.Name && !foundNote {
+			if gongdoc_models.IdentifierToGongStructName(_noteShape.Identifier) == stagedNode.Name && !foundNote {
 				foundNote = true
 				noteShape = _noteShape
 			}

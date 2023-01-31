@@ -32,7 +32,7 @@ func (fieldImpl *FieldImpl) OnAfterUpdate(
 	var classshape *gongdoc_models.GongStructShape
 	for _, _classshape := range classdiagram.GongStructShapes {
 		// strange behavior when the classshape is remove within the loop
-		if gongdoc_models.IdentifierToShapename(_classshape.Identifier) ==
+		if gongdoc_models.IdentifierToGongStructName(_classshape.Identifier) ==
 			gongStruct.Name && !foundClassshape {
 			classshape = _classshape
 		}
@@ -83,7 +83,7 @@ func (fieldImpl *FieldImpl) OnAfterUpdate(
 
 			var field gongdoc_models.Field
 			field.Name = stagedNode.Name
-			field.Identifier = gongdoc_models.ShapeAndFieldnameToFieldIdentifier(gongStruct.Name, stagedNode.Name)
+			field.Identifier = gongdoc_models.GongstructAndFieldnameToFieldIdentifier(gongStruct.Name, stagedNode.Name)
 
 			switch realField := fieldImpl.field.(type) {
 			case *gong_models.GongBasicField:
@@ -99,7 +99,7 @@ func (fieldImpl *FieldImpl) OnAfterUpdate(
 			case *gong_models.SliceOfPointerToGongStructField:
 			}
 
-			field.Structname = gongdoc_models.IdentifierToShapename(classshape.Identifier)
+			field.Structname = gongdoc_models.IdentifierToGongStructName(classshape.Identifier)
 			field.Stage()
 
 			classshape.Heigth = classshape.Heigth + 15
@@ -163,7 +163,7 @@ func (fieldImpl *FieldImpl) OnAfterUpdate(
 			for _, _classshape := range classdiagram.GongStructShapes {
 
 				// strange behavior when the classshape is remove within the loop
-				if gongdoc_models.IdentifierToShapename(_classshape.Identifier) == targetStructName && !targetSourceClassshape {
+				if gongdoc_models.IdentifierToGongStructName(_classshape.Identifier) == targetStructName && !targetSourceClassshape {
 					targetSourceClassshape = true
 					targetClassshape = _classshape
 				}
@@ -178,7 +178,7 @@ func (fieldImpl *FieldImpl) OnAfterUpdate(
 			link.SourceMultiplicity = sourceMultiplicity
 			link.TargetMultiplicity = targetMultiplicity
 			link.Identifier =
-				gongdoc_models.ShapeAndFieldnameToFieldIdentifier(gongStruct.Name, stagedNode.Name)
+				gongdoc_models.GongstructAndFieldnameToFieldIdentifier(gongStruct.Name, stagedNode.Name)
 
 			link.Structname = gongStruct.Name
 			link.Fieldtypename = targetStructName

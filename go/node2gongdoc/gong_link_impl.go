@@ -31,7 +31,7 @@ func (gongLinkImpl *GongLinkImpl) OnAfterUpdate(
 
 	for _, _noteshape := range classdiagram.NoteShapes {
 		// strange behavior when the classshape is remove within the loop
-		if gongdoc_models.IdentifierToShapename(_noteshape.Identifier) ==
+		if gongdoc_models.IdentifierToGongStructName(_noteshape.Identifier) ==
 			gongNote.Name && !foundNoteshape {
 			noteshape = _noteshape
 		}
@@ -43,7 +43,7 @@ func (gongLinkImpl *GongLinkImpl) OnAfterUpdate(
 
 		noteShapeLink := (&gongdoc_models.NoteShapeLink{Name: stagedNode.GetName()}).Stage()
 		noteShapeLink.Identifier =
-			gongdoc_models.ShapeAndFieldnameToFieldIdentifier(gongNote.Name, stagedNode.Name)
+			gongdoc_models.GongstructAndFieldnameToFieldIdentifier(gongNote.Name, stagedNode.Name)
 
 		noteshape.NoteShapeLinks = append(noteshape.NoteShapeLinks, noteShapeLink)
 

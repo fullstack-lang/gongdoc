@@ -29,7 +29,7 @@ func (enumValueImpl *GongEnumValueImpl) OnAfterUpdate(
 	foundClassshape := false
 	var classshape *gongdoc_models.GongEnumShape
 	for _, _classshape := range classdiagram.GongEnumShapes {
-		if gongdoc_models.IdentifierToShapename(_classshape.Identifier) == gongEnum.Name && !foundClassshape {
+		if gongdoc_models.IdentifierToGongStructName(_classshape.Identifier) == gongEnum.Name && !foundClassshape {
 			classshape = _classshape
 		}
 	}
@@ -51,7 +51,7 @@ func (enumValueImpl *GongEnumValueImpl) OnAfterUpdate(
 
 		var field gongdoc_models.Field
 		field.Name = stagedNode.Name
-		field.Identifier = gongdoc_models.ShapeAndFieldnameToFieldIdentifier(gongEnum.Name, stagedNode.Name)
+		field.Identifier = gongdoc_models.GongstructAndFieldnameToFieldIdentifier(gongEnum.Name, stagedNode.Name)
 
 		for idx, gongEnum := range gongEnum.GongEnumValues {
 

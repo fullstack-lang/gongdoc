@@ -23,16 +23,6 @@ type NodeCB struct {
 	// map_Children_Parent is a map to navigate from a children node to its parent node
 	// it is set up once at the init phase
 	map_Children_Parent map[*gongdoc_models.Node]*gongdoc_models.Node
-
-	// map_Identifier_Node is a map to navigate from identifiers in the package
-	// to nodes, and backforth
-	// identifiers are unique in a package (that's the point of identifiers)
-	// TO BE CHANGED, both a NoteLink and a GongField can have the same identifier
-	// New form, a impl field to navigate from the node to the shape
-	// a node field to navigate from a shape to the corresponding node
-	map_Identifier_Node map[string]*gongdoc_models.Node
-
-	map_gongObject_gongObjectImpl map[any]gongdoc_models.NodeImplInterface
 }
 
 // GetSelectedClassdiagram
@@ -177,9 +167,6 @@ func (nodeCb *NodeCB) FillUpTreeOfGongObjects() {
 	gongTree := (&gongdoc_models.Tree{Name: "gong"}).Stage()
 	nodeCb.treeOfGongObjects = gongTree
 
-	nodeCb.map_Identifier_Node = make(map[string]*gongdoc_models.Node)
-	nodeCb.map_gongObject_gongObjectImpl = make(map[any]gongdoc_models.NodeImplInterface)
-
 	gongstructRootNode := (&gongdoc_models.Node{Name: "gongstructs"}).Stage()
 	gongstructRootNode.IsExpanded = true
 	gongTree.RootNodes = append(gongTree.RootNodes, gongstructRootNode)
@@ -199,8 +186,7 @@ func (nodeCb *NodeCB) FillUpTreeOfGongObjects() {
 
 		// append to the tree
 		gongstructRootNode.Children = append(gongstructRootNode.Children, nodeGongstruct)
-		nodeCb.map_Identifier_Node[gongdoc_models.ShapenameToIdentifier(gongStruct.Name)] = nodeGongstruct
-		nodeCb.map_gongObject_gongObjectImpl[gongStruct] = gongStructImpl
+
 		SetNodeBackPointer(gongStruct, gongStructImpl)
 
 		for _, field := range gongStruct.Fields {
@@ -216,8 +202,6 @@ func (nodeCb *NodeCB) FillUpTreeOfGongObjects() {
 
 			// append to tree
 			nodeGongstruct.Children = append(nodeGongstruct.Children, nodeGongField)
-			nodeCb.map_Identifier_Node[gongdoc_models.ShapeAndFieldnameToFieldIdentifier(gongStruct.Name, field.GetName())] = nodeGongField
-			nodeCb.map_gongObject_gongObjectImpl[field] = fieldImpl
 
 			switch fieldReal := field.(type) {
 			case *gong_models.GongBasicField:
@@ -251,8 +235,7 @@ func (nodeCb *NodeCB) FillUpTreeOfGongObjects() {
 
 		// append to tree
 		gongenumRootNode.Children = append(gongenumRootNode.Children, node)
-		nodeCb.map_Identifier_Node[gongdoc_models.ShapenameToIdentifier(gongEnum.Name)] = node
-		nodeCb.map_gongObject_gongObjectImpl[gongEnum] = gongEnumImpl
+
 		SetNodeBackPointer(gongEnum, gongEnumImpl)
 
 		for _, gongEnumValue := range gongEnum.GongEnumValues {
@@ -268,8 +251,7 @@ func (nodeCb *NodeCB) FillUpTreeOfGongObjects() {
 
 			// append to tree
 			node.Children = append(node.Children, nodeGongEnumValue)
-			nodeCb.map_Identifier_Node[gongdoc_models.ShapeAndFieldnameToFieldIdentifier(gongEnum.Name, gongEnumValue.GetName())] = nodeGongEnumValue
-			nodeCb.map_gongObject_gongObjectImpl[gongEnumValue] = gongEnumValueImpl
+
 			SetNodeBackPointer(gongEnumValue, gongEnumValueImpl)
 		}
 	}
@@ -292,9 +274,6 @@ func (nodeCb *NodeCB) FillUpTreeOfGongObjects() {
 
 		// append to tree
 		gongNotesRootNode.Children = append(gongNotesRootNode.Children, node)
-		nodeCb.map_Identifier_Node[gongdoc_models.ShapenameToIdentifier(gongNote.Name)] = node
-		nodeCb.map_gongObject_gongObjectImpl[gongNote] = gongNoteImpl
-		SetNodeBackPointer(gongNote, gongNoteImpl)
 
 		for _, gongLink := range gongNote.Links {
 			nodeGongLink := (&gongdoc_models.Node{Name: gongLink.Name}).Stage()
@@ -309,8 +288,7 @@ func (nodeCb *NodeCB) FillUpTreeOfGongObjects() {
 
 			// append to tree
 			node.Children = append(node.Children, nodeGongLink)
-			nodeCb.map_Identifier_Node[gongdoc_models.ShapeAndFieldnameToFieldIdentifier(gongNote.Name, gongLink.Name)] = nodeGongLink
-			nodeCb.map_gongObject_gongObjectImpl[gongLink] = gongLinkImpl
+
 			SetNodeBackPointer(gongLink, gongLinkImpl)
 		}
 	}
@@ -386,7 +364,7 @@ func (nodeCb *NodeCB) updateGongObjectsNodes(stage *gongdoc_models.StageStruct, 
 
 	listOfGongStructShapes := make(map[string]bool)
 	for _, gongStructShape := range classdiagram.GongStructShapes {
-		gongStructName := gongdoc_models.IdentifierToShapename(gongStructShape.Identifier)
+		gongStructName := gongdoc_models.IdentifierToGongStructName(gongStructShape.Identifier)
 		listOfGongStructShapes[gongStructName] = true
 	}
 
@@ -425,7 +403,7 @@ func (nodeCb *NodeCB) updateGongObjectsNodes(stage *gongdoc_models.StageStruct, 
 	for _, gongStructShape := range classdiagram.GongStructShapes {
 
 		// get the gong struct related to the gong struct, and set t
-		gongStructName := gongdoc_models.IdentifierToShapename(gongStructShape.Identifier)
+		gongStructName := gongdoc_models.IdentifierToGongStructName(gongStructShape.Identifier)
 		gongStruct := (*gong_models.GetGongstructInstancesMap[gong_models.GongStruct]())[gongStructName]
 		gongStructImpl := GetNodeBackPointer(gongStruct)
 		gongStructImpl.SetHasToBeCheckedValue(true)
@@ -472,7 +450,7 @@ func (nodeCb *NodeCB) updateGongObjectsNodes(stage *gongdoc_models.StageStruct, 
 	for _, gongEnumShape := range classdiagram.GongEnumShapes {
 
 		// get the gong struct related to the gong struct, and set t
-		gongEnumName := gongdoc_models.IdentifierToShapename(gongEnumShape.Identifier)
+		gongEnumName := gongdoc_models.IdentifierToGongStructName(gongEnumShape.Identifier)
 		gongEnum := (*gong_models.GetGongstructInstancesMap[gong_models.GongEnum]())[gongEnumName]
 		gongEnumImpl := GetNodeBackPointer(gongEnum)
 		gongEnumImpl.SetHasToBeCheckedValue(true)
@@ -493,7 +471,7 @@ func (nodeCb *NodeCB) updateGongObjectsNodes(stage *gongdoc_models.StageStruct, 
 	for _, noteShape := range classdiagram.NoteShapes {
 
 		// get the gong struct related to the gong struct, and set t
-		noteShapeName := gongdoc_models.IdentifierToShapename(noteShape.Identifier)
+		noteShapeName := gongdoc_models.IdentifierToGongStructName(noteShape.Identifier)
 		gongNote := (*gong_models.GetGongstructInstancesMap[gong_models.GongNote]())[noteShapeName]
 		gongNodeImpl := GetNodeBackPointer(gongNote)
 		gongNodeImpl.SetHasToBeCheckedValue(true)

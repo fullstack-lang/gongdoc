@@ -139,7 +139,7 @@ func main() {
 		for _, classdiagram := range diagramPackage.Classdiagrams {
 			for _, classshape := range classdiagram.GongStructShapes {
 
-				gongStructName := gongdoc_models.IdentifierToShapename(classshape.Identifier)
+				gongStructName := gongdoc_models.IdentifierToGongStructName(classshape.Identifier)
 
 				nbInstances, ok := gongdoc_models.Map_Identifier_NbInstances[gongStructName]
 

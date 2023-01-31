@@ -30,7 +30,7 @@ func (classdiagram *Classdiagram) RemoveClassshape(classshapeName string) {
 	for _, _classshape := range classdiagram.GongStructShapes {
 
 		// strange behavior when the classshape is remove within the loop
-		if IdentifierToShapename(_classshape.Identifier) == classshapeName && !foundClassshape {
+		if IdentifierToGongStructName(_classshape.Identifier) == classshapeName && !foundClassshape {
 			classshape = _classshape
 		}
 	}
@@ -51,7 +51,7 @@ func (classdiagram *Classdiagram) RemoveClassshape(classshapeName string) {
 
 		newSliceOfLinks := make([]*Link, 0)
 		for _, link := range fromClassshape.Links {
-			if link.Fieldtypename == IdentifierToShapename(classshape.Identifier) {
+			if link.Fieldtypename == IdentifierToGongStructName(classshape.Identifier) {
 				link.Middlevertice.Unstage()
 				link.Unstage()
 			} else {
@@ -94,7 +94,7 @@ func (classdiagram *Classdiagram) AddClassshape(classshapeName string, reference
 
 	var classshape GongStructShape
 	classshape.Name = classdiagram.Name + "-" + classshapeName
-	classshape.Identifier = ShapenameToIdentifier(classshapeName)
+	classshape.Identifier = GongStructNameToIdentifier(classshapeName)
 	classshape.Width = 240
 	classshape.Heigth = 63
 
