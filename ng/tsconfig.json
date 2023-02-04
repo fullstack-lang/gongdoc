@@ -10,9 +10,9 @@
     "module": "es2020",
     "moduleResolution": "node",
     "importHelpers": true,
-    "target": "es2020",
+    "target": "ES2022",
     "strict": true,
-    "skipLibCheck": true, // for compiling jointjs
+    "skipLibCheck": true,
     "typeRoots": [
       "node_modules/@types"
     ],
@@ -21,13 +21,6 @@
       "dom"
     ],
     "paths": {
-      // 
-      // https://angular.io/guide/creating-libraries#use-typescript-path-mapping-for-peer-dependencies
-      //
-      // Angular libraries should list any @angular/* 
-      // dependencies the library depends on as peer dependencies. This ensures that when modules ask for Angular, 
-      // they all get the exact same module. If a library lists @angular/core in dependencies instead of peerDependencies, 
-      // it might get a different Angular module instead, which would cause your application to break.
       "@angular/*": [
         "./node_modules/@angular/*"
       ],
@@ -46,7 +39,6 @@
       "tslib": [
         "./node_modules/tslib"
       ],
-      //
       "gong": [
         "../vendor/github.com/fullstack-lang/gong/ng/projects/gong/src/public-api.ts"
       ],
@@ -56,7 +48,8 @@
       "gongdocdiagrams": [
         "./projects/gongdocdiagrams/src/public-api.ts"
       ]
-    }
+    },
+    "useDefineForClassFields": false
   },
   "angularCompilerOptions": {
     "fullTemplateTypeCheck": true,
