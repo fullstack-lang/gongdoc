@@ -274,6 +274,8 @@ func (nodeCb *NodeCB) FillUpTreeOfGongObjects() {
 		// append to tree
 		gongNotesRootNode.Children = append(gongNotesRootNode.Children, node)
 
+		SetNodeBackPointer(gongNote, gongNoteImpl)
+
 		for _, gongLink := range gongNote.Links {
 			nodeGongLink := (&gongdoc_models.Node{Name: gongLink.Name}).Stage()
 			nodeGongLink.HasCheckboxButton = true
