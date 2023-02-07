@@ -31,7 +31,7 @@ func (gongLinkImpl *GongLinkImpl) OnAfterUpdate(
 
 	for _, _noteshape := range classdiagram.NoteShapes {
 		// strange behavior when the gongstructshape is remove within the loop
-		if gongdoc_models.IdentifierToGongStructName(_noteshape.Identifier) ==
+		if gongdoc_models.IdentifierToGongObjectName(_noteshape.Identifier) ==
 			gongNote.Name && !foundNoteshape {
 			noteshape = _noteshape
 		}

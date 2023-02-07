@@ -53,11 +53,11 @@
 
     <mat-grid-list cols="5" rowHeight="2:1">
         <mat-grid-tile [colspan]="3">
-            <button mat-raised-button (click)="openReverseSelection('Field', 'GongEnumShape_FieldsDBID', 'ONE_MANY_ASSOCIATION_MODE', '', '', '')">Fields</button>
+            <button mat-raised-button (click)="openReverseSelection('GongEnumValueEntry', 'GongEnumShape_GongEnumValueEntrysDBID', 'ONE_MANY_ASSOCIATION_MODE', '', '', '')">GongEnumValueEntrys</button>
         </mat-grid-tile>
         <!-- insertion point for the button of the MANY_MANY association-->
         <mat-grid-tile>
-            <button mat-raised-button (click)="openDragAndDropOrdering('Field', 'GongEnumShape_FieldsDBID')">
+            <button mat-raised-button (click)="openDragAndDropOrdering('GongEnumValueEntry', 'GongEnumShape_GongEnumValueEntrysDBID')">
                 <mat-icon>
                     shuffle
                 </mat-icon>

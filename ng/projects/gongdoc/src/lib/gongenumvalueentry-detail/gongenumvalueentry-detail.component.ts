@@ -2,15 +2,15 @@
 import { Component, OnInit } from '@angular/core';
 import { UntypedFormControl } from '@angular/forms';
 
-import { FieldDB } from '../field-db'
-import { FieldService } from '../field.service'
+import { GongEnumValueEntryDB } from '../gongenumvalueentry-db'
+import { GongEnumValueEntryService } from '../gongenumvalueentry.service'
 
 import { FrontRepoService, FrontRepo, SelectionMode, DialogData } from '../front-repo.service'
 import { MapOfComponents } from '../map-components'
 import { MapOfSortingComponents } from '../map-components'
 
 // insertion point for imports
-import { GongStructShapeDB } from '../gongstructshape-db'
+import { GongEnumShapeDB } from '../gongenumshape-db'
 
 import { Router, ActivatedRoute } from '@angular/router';
 
@@ -18,26 +18,26 @@ import { MatDialog, MAT_DIALOG_DATA, MatDialogRef, MatDialogConfig } from '@angu
 
 import { NullInt64 } from '../null-int64'
 
-// FieldDetailComponent is initilizaed from different routes
-// FieldDetailComponentState detail different cases 
-enum FieldDetailComponentState {
+// GongEnumValueEntryDetailComponent is initilizaed from different routes
+// GongEnumValueEntryDetailComponentState detail different cases 
+enum GongEnumValueEntryDetailComponentState {
 	CREATE_INSTANCE,
 	UPDATE_INSTANCE,
 	// insertion point for declarations of enum values of state
-	CREATE_INSTANCE_WITH_ASSOCIATION_GongStructShape_Fields_SET,
+	CREATE_INSTANCE_WITH_ASSOCIATION_GongEnumShape_GongEnumValueEntrys_SET,
 }
 
 @Component({
-	selector: 'app-field-detail',
-	templateUrl: './field-detail.component.html',
-	styleUrls: ['./field-detail.component.css'],
+	selector: 'app-gongenumvalueentry-detail',
+	templateUrl: './gongenumvalueentry-detail.component.html',
+	styleUrls: ['./gongenumvalueentry-detail.component.css'],
 })
-export class FieldDetailComponent implements OnInit {
+export class GongEnumValueEntryDetailComponent implements OnInit {
 
 	// insertion point for declarations
 
-	// the FieldDB of interest
-	field: FieldDB = new FieldDB
+	// the GongEnumValueEntryDB of interest
+	gongenumvalueentry: GongEnumValueEntryDB = new GongEnumValueEntryDB
 
 	// front repo
 	frontRepo: FrontRepo = new FrontRepo
@@ -48,7 +48,7 @@ export class FieldDetailComponent implements OnInit {
 	mapFields_displayAsTextArea = new Map<string, boolean>()
 
 	// the state at initialization (CREATION, UPDATE or CREATE with one association set)
-	state: FieldDetailComponentState = FieldDetailComponentState.CREATE_INSTANCE
+	state: GongEnumValueEntryDetailComponentState = GongEnumValueEntryDetailComponentState.CREATE_INSTANCE
 
 	// in UDPATE state, if is the id of the instance to update
 	// in CREATE state with one association set, this is the id of the associated instance
@@ -59,7 +59,7 @@ export class FieldDetailComponent implements OnInit {
 	originStructFieldName: string = ""
 
 	constructor(
-		private fieldService: FieldService,
+		private gongenumvalueentryService: GongEnumValueEntryService,
 		private frontRepoService: FrontRepoService,
 		public dialog: MatDialog,
 		private activatedRoute: ActivatedRoute,
@@ -81,16 +81,16 @@ export class FieldDetailComponent implements OnInit {
 
 		const association = this.activatedRoute.snapshot.paramMap.get('association');
 		if (this.id == 0) {
-			this.state = FieldDetailComponentState.CREATE_INSTANCE
+			this.state = GongEnumValueEntryDetailComponentState.CREATE_INSTANCE
 		} else {
 			if (this.originStruct == undefined) {
-				this.state = FieldDetailComponentState.UPDATE_INSTANCE
+				this.state = GongEnumValueEntryDetailComponentState.UPDATE_INSTANCE
 			} else {
 				switch (this.originStructFieldName) {
 					// insertion point for state computation
-					case "Fields":
-						// console.log("Field" + " is instanciated with back pointer to instance " + this.id + " GongStructShape association Fields")
-						this.state = FieldDetailComponentState.CREATE_INSTANCE_WITH_ASSOCIATION_GongStructShape_Fields_SET
+					case "GongEnumValueEntrys":
+						// console.log("GongEnumValueEntry" + " is instanciated with back pointer to instance " + this.id + " GongEnumShape association GongEnumValueEntrys")
+						this.state = GongEnumValueEntryDetailComponentState.CREATE_INSTANCE_WITH_ASSOCIATION_GongEnumShape_GongEnumValueEntrys_SET
 						break;
 					default:
 						console.log(this.originStructFieldName + " is unkown association")
@@ -98,13 +98,13 @@ export class FieldDetailComponent implements OnInit {
 			}
 		}
 
-		this.getField()
+		this.getGongEnumValueEntry()
 
 		// observable for changes in structs
-		this.fieldService.FieldServiceChanged.subscribe(
+		this.gongenumvalueentryService.GongEnumValueEntryServiceChanged.subscribe(
 			message => {
 				if (message == "post" || message == "update" || message == "delete") {
-					this.getField()
+					this.getGongEnumValueEntry()
 				}
 			}
 		)
@@ -112,25 +112,25 @@ export class FieldDetailComponent implements OnInit {
 		// insertion point for initialisation of enums list
 	}
 
-	getField(): void {
+	getGongEnumValueEntry(): void {
 
 		this.frontRepoService.pull().subscribe(
 			frontRepo => {
 				this.frontRepo = frontRepo
 
 				switch (this.state) {
-					case FieldDetailComponentState.CREATE_INSTANCE:
-						this.field = new (FieldDB)
+					case GongEnumValueEntryDetailComponentState.CREATE_INSTANCE:
+						this.gongenumvalueentry = new (GongEnumValueEntryDB)
 						break;
-					case FieldDetailComponentState.UPDATE_INSTANCE:
-						let field = frontRepo.Fields.get(this.id)
-						console.assert(field != undefined, "missing field with id:" + this.id)
-						this.field = field!
+					case GongEnumValueEntryDetailComponentState.UPDATE_INSTANCE:
+						let gongenumvalueentry = frontRepo.GongEnumValueEntrys.get(this.id)
+						console.assert(gongenumvalueentry != undefined, "missing gongenumvalueentry with id:" + this.id)
+						this.gongenumvalueentry = gongenumvalueentry!
 						break;
 					// insertion point for init of association field
-					case FieldDetailComponentState.CREATE_INSTANCE_WITH_ASSOCIATION_GongStructShape_Fields_SET:
-						this.field = new (FieldDB)
-						this.field.GongStructShape_Fields_reverse = frontRepo.GongStructShapes.get(this.id)!
+					case GongEnumValueEntryDetailComponentState.CREATE_INSTANCE_WITH_ASSOCIATION_GongEnumShape_GongEnumValueEntrys_SET:
+						this.gongenumvalueentry = new (GongEnumValueEntryDB)
+						this.gongenumvalueentry.GongEnumShape_GongEnumValueEntrys_reverse = frontRepo.GongEnumShapes.get(this.id)!
 						break;
 					default:
 						console.log(this.state + " is unkown state")
@@ -153,30 +153,30 @@ export class FieldDetailComponent implements OnInit {
 		// save from the front pointer space to the non pointer space for serialization
 
 		// insertion point for translation/nullation of each pointers
-		if (this.field.GongStructShape_Fields_reverse != undefined) {
-			if (this.field.GongStructShape_FieldsDBID == undefined) {
-				this.field.GongStructShape_FieldsDBID = new NullInt64
+		if (this.gongenumvalueentry.GongEnumShape_GongEnumValueEntrys_reverse != undefined) {
+			if (this.gongenumvalueentry.GongEnumShape_GongEnumValueEntrysDBID == undefined) {
+				this.gongenumvalueentry.GongEnumShape_GongEnumValueEntrysDBID = new NullInt64
 			}
-			this.field.GongStructShape_FieldsDBID.Int64 = this.field.GongStructShape_Fields_reverse.ID
-			this.field.GongStructShape_FieldsDBID.Valid = true
-			if (this.field.GongStructShape_FieldsDBID_Index == undefined) {
-				this.field.GongStructShape_FieldsDBID_Index = new NullInt64
+			this.gongenumvalueentry.GongEnumShape_GongEnumValueEntrysDBID.Int64 = this.gongenumvalueentry.GongEnumShape_GongEnumValueEntrys_reverse.ID
+			this.gongenumvalueentry.GongEnumShape_GongEnumValueEntrysDBID.Valid = true
+			if (this.gongenumvalueentry.GongEnumShape_GongEnumValueEntrysDBID_Index == undefined) {
+				this.gongenumvalueentry.GongEnumShape_GongEnumValueEntrysDBID_Index = new NullInt64
 			}
-			this.field.GongStructShape_FieldsDBID_Index.Valid = true
-			this.field.GongStructShape_Fields_reverse = new GongStructShapeDB // very important, otherwise, circular JSON
+			this.gongenumvalueentry.GongEnumShape_GongEnumValueEntrysDBID_Index.Valid = true
+			this.gongenumvalueentry.GongEnumShape_GongEnumValueEntrys_reverse = new GongEnumShapeDB // very important, otherwise, circular JSON
 		}
 
 		switch (this.state) {
-			case FieldDetailComponentState.UPDATE_INSTANCE:
-				this.fieldService.updateField(this.field)
-					.subscribe(field => {
-						this.fieldService.FieldServiceChanged.next("update")
+			case GongEnumValueEntryDetailComponentState.UPDATE_INSTANCE:
+				this.gongenumvalueentryService.updateGongEnumValueEntry(this.gongenumvalueentry)
+					.subscribe(gongenumvalueentry => {
+						this.gongenumvalueentryService.GongEnumValueEntryServiceChanged.next("update")
 					});
 				break;
 			default:
-				this.fieldService.postField(this.field).subscribe(field => {
-					this.fieldService.FieldServiceChanged.next("post")
-					this.field = new (FieldDB) // reset fields
+				this.gongenumvalueentryService.postGongEnumValueEntry(this.gongenumvalueentry).subscribe(gongenumvalueentry => {
+					this.gongenumvalueentryService.GongEnumValueEntryServiceChanged.next("post")
+					this.gongenumvalueentry = new (GongEnumValueEntryDB) // reset fields
 				});
 		}
 	}
@@ -199,7 +199,7 @@ export class FieldDetailComponent implements OnInit {
 		dialogConfig.height = "50%"
 		if (selectionMode == SelectionMode.ONE_MANY_ASSOCIATION_MODE) {
 
-			dialogData.ID = this.field.ID!
+			dialogData.ID = this.gongenumvalueentry.ID!
 			dialogData.ReversePointer = reverseField
 			dialogData.OrderingMode = false
 			dialogData.SelectionMode = selectionMode
@@ -215,13 +215,13 @@ export class FieldDetailComponent implements OnInit {
 			});
 		}
 		if (selectionMode == SelectionMode.MANY_MANY_ASSOCIATION_MODE) {
-			dialogData.ID = this.field.ID!
+			dialogData.ID = this.gongenumvalueentry.ID!
 			dialogData.ReversePointer = reverseField
 			dialogData.OrderingMode = false
 			dialogData.SelectionMode = selectionMode
 
 			// set up the source
-			dialogData.SourceStruct = "Field"
+			dialogData.SourceStruct = "GongEnumValueEntry"
 			dialogData.SourceField = sourceField
 
 			// set up the intermediate struct
@@ -251,7 +251,7 @@ export class FieldDetailComponent implements OnInit {
 		// dialogConfig.disableClose = true;
 		dialogConfig.autoFocus = true;
 		dialogConfig.data = {
-			ID: this.field.ID,
+			ID: this.gongenumvalueentry.ID,
 			ReversePointer: reverseField,
 			OrderingMode: true,
 		};
@@ -267,8 +267,8 @@ export class FieldDetailComponent implements OnInit {
 	}
 
 	fillUpNameIfEmpty(event: { value: { Name: string; }; }) {
-		if (this.field.Name == "") {
-			this.field.Name = event.value.Name
+		if (this.gongenumvalueentry.Name == "") {
+			this.gongenumvalueentry.Name = event.value.Name
 		}
 	}
 

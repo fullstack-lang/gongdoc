@@ -32,7 +32,7 @@ func (fieldImpl *FieldImpl) OnAfterUpdate(
 	var gongStructShape *gongdoc_models.GongStructShape
 	for _, _gongstructshape := range classdiagram.GongStructShapes {
 		// strange behavior when the gongstructshape is remove within the loop
-		if gongdoc_models.IdentifierToGongStructName(_gongstructshape.Identifier) ==
+		if gongdoc_models.IdentifierToGongObjectName(_gongstructshape.Identifier) ==
 			gongStruct.Name && !foundGongStructShape {
 			gongStructShape = _gongstructshape
 		}
@@ -99,7 +99,7 @@ func (fieldImpl *FieldImpl) OnAfterUpdate(
 			case *gong_models.SliceOfPointerToGongStructField:
 			}
 
-			field.Structname = gongdoc_models.IdentifierToGongStructName(gongStructShape.Identifier)
+			field.Structname = gongdoc_models.IdentifierToGongObjectName(gongStructShape.Identifier)
 			field.Stage()
 
 			gongStructShape.Heigth = gongStructShape.Heigth + 15
@@ -163,7 +163,7 @@ func (fieldImpl *FieldImpl) OnAfterUpdate(
 			for _, _gongstructshape := range classdiagram.GongStructShapes {
 
 				// strange behavior when the gongstructshape is remove within the loop
-				if gongdoc_models.IdentifierToGongStructName(_gongstructshape.Identifier) == targetStructName && !targetSourceGongStructShape {
+				if gongdoc_models.IdentifierToGongObjectName(_gongstructshape.Identifier) == targetStructName && !targetSourceGongStructShape {
 					targetSourceGongStructShape = true
 					targetGongStructShape = _gongstructshape
 				}

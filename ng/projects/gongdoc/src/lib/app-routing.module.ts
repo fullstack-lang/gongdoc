@@ -14,6 +14,9 @@ import { FieldDetailComponent } from './field-detail/field-detail.component'
 import { GongEnumShapesTableComponent } from './gongenumshapes-table/gongenumshapes-table.component'
 import { GongEnumShapeDetailComponent } from './gongenumshape-detail/gongenumshape-detail.component'
 
+import { GongEnumValueEntrysTableComponent } from './gongenumvalueentrys-table/gongenumvalueentrys-table.component'
+import { GongEnumValueEntryDetailComponent } from './gongenumvalueentry-detail/gongenumvalueentry-detail.component'
+
 import { GongStructShapesTableComponent } from './gongstructshapes-table/gongstructshapes-table.component'
 import { GongStructShapeDetailComponent } from './gongstructshape-detail/gongstructshape-detail.component'
 
@@ -65,6 +68,11 @@ const routes: Routes = [ // insertion point for routes declarations
 	{ path: 'github_com_fullstack_lang_gongdoc_go-gongenumshape-adder', component: GongEnumShapeDetailComponent, outlet: 'github_com_fullstack_lang_gongdoc_go_editor' },
 	{ path: 'github_com_fullstack_lang_gongdoc_go-gongenumshape-adder/:id/:originStruct/:originStructFieldName', component: GongEnumShapeDetailComponent, outlet: 'github_com_fullstack_lang_gongdoc_go_editor' },
 	{ path: 'github_com_fullstack_lang_gongdoc_go-gongenumshape-detail/:id', component: GongEnumShapeDetailComponent, outlet: 'github_com_fullstack_lang_gongdoc_go_editor' },
+
+	{ path: 'github_com_fullstack_lang_gongdoc_go-gongenumvalueentrys', component: GongEnumValueEntrysTableComponent, outlet: 'github_com_fullstack_lang_gongdoc_go_table' },
+	{ path: 'github_com_fullstack_lang_gongdoc_go-gongenumvalueentry-adder', component: GongEnumValueEntryDetailComponent, outlet: 'github_com_fullstack_lang_gongdoc_go_editor' },
+	{ path: 'github_com_fullstack_lang_gongdoc_go-gongenumvalueentry-adder/:id/:originStruct/:originStructFieldName', component: GongEnumValueEntryDetailComponent, outlet: 'github_com_fullstack_lang_gongdoc_go_editor' },
+	{ path: 'github_com_fullstack_lang_gongdoc_go-gongenumvalueentry-detail/:id', component: GongEnumValueEntryDetailComponent, outlet: 'github_com_fullstack_lang_gongdoc_go_editor' },
 
 	{ path: 'github_com_fullstack_lang_gongdoc_go-gongstructshapes', component: GongStructShapesTableComponent, outlet: 'github_com_fullstack_lang_gongdoc_go_table' },
 	{ path: 'github_com_fullstack_lang_gongdoc_go-gongstructshape-adder', component: GongStructShapeDetailComponent, outlet: 'github_com_fullstack_lang_gongdoc_go_editor' },

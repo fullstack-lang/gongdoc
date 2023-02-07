@@ -30,7 +30,7 @@ func (classdiagram *Classdiagram) RemoveGongStructShape(gongstructshapeName stri
 	for _, _gongstructshape := range classdiagram.GongStructShapes {
 
 		// strange behavior when the gongstructshape is remove within the loop
-		if IdentifierToGongStructName(_gongstructshape.Identifier) == gongstructshapeName && !foundGongStructShape {
+		if IdentifierToGongObjectName(_gongstructshape.Identifier) == gongstructshapeName && !foundGongStructShape {
 			gongstructshape = _gongstructshape
 		}
 	}
@@ -51,7 +51,7 @@ func (classdiagram *Classdiagram) RemoveGongStructShape(gongstructshapeName stri
 
 		newSliceOfLinks := make([]*Link, 0)
 		for _, link := range fromGongStructShape.Links {
-			if link.Fieldtypename == IdentifierToGongStructName(gongstructshape.Identifier) {
+			if link.Fieldtypename == IdentifierToGongObjectName(gongstructshape.Identifier) {
 				link.Middlevertice.Unstage()
 				link.Unstage()
 			} else {
@@ -119,4 +119,69 @@ func (classdiagram *Classdiagram) AddGongStructShape(diagramPackage *DiagramPack
 	Stage.Commit()
 	// log.Println("AddGongStructShape, after commit, nb ", Stage.BackRepo.GetLastCommitFromBackNb())
 
+}
+
+func (classdiagram *Classdiagram) AddGongEnumShape(diagramPackage *DiagramPackage, enumshapeName string) {
+
+	var enumshape GongEnumShape
+	enumshape.Name = classdiagram.Name + "-" + enumshapeName
+	enumshape.Identifier = GongStructNameToIdentifier(enumshapeName)
+	enumshape.Width = 240
+	enumshape.Heigth = 63
+
+	enumshape.Stage()
+
+	var position Position
+	position.Name = "Pos-" + enumshape.Name
+	position.X = float64(int(rand.Float32()*100) + 10)
+	position.Y = float64(int(rand.Float32()*100) + 10)
+	enumshape.Position = &position
+	position.Stage()
+
+	classdiagram.GongEnumShapes = append(classdiagram.GongEnumShapes, &enumshape)
+
+	Stage.Commit()
+}
+
+func (classdiagram *Classdiagram) RemoveGongEnumShape(gongenumshapeName string) {
+
+	foundGongEnumShape := false
+	var gongenumshape *GongEnumShape
+	for _, _gongenumshape := range classdiagram.GongEnumShapes {
+
+		// strange behavior when the gongenumshape is remove within the loop
+		if IdentifierToGongObjectName(_gongenumshape.Identifier) == gongenumshapeName && !foundGongEnumShape {
+			gongenumshape = _gongenumshape
+		}
+	}
+
+	classdiagram.GongEnumShapes = remove(classdiagram.GongEnumShapes, gongenumshape)
+	gongenumshape.Position.Unstage()
+	gongenumshape.Unstage()
+
+	// remove fields of the gongenumshape
+	for _, gongEnumValueEntry := range gongenumshape.GongEnumValueEntrys {
+		gongEnumValueEntry.Unstage()
+	}
+
+	//
+	// remove documentation links that go this gongenumshape
+	//
+	// generate the map to navigate from children to parents
+	fieldName := GetAssociationName[NoteShape]().NoteShapeLinks[0].Name
+	map_NoteShapeLink_NodeShape := GetSliceOfPointersReverseMap[NoteShape, NoteShapeLink](fieldName)
+	for noteShapeLink := range *GetGongstructInstancesSet[NoteShapeLink]() {
+		if noteShapeLink.Name == gongenumshapeName {
+
+			// get the note shape
+			noteShape := map_NoteShapeLink_NodeShape[noteShapeLink]
+
+			// remove it from the slice of links
+			noteShape.NoteShapeLinks = remove(noteShape.NoteShapeLinks, noteShapeLink)
+
+			noteShapeLink.DeleteStageAndCommit()
+		}
+	}
+
+	Stage.Commit()
 }
