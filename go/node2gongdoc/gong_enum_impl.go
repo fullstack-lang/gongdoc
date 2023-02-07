@@ -20,27 +20,27 @@ func (gongEnumImpl *GongEnumImpl) OnAfterUpdate(
 		// get the latest version of the diagram before modifying it
 		stage.Checkout()
 
-		// remove the classshape from the selected diagram
+		// remove the gongstructshape from the selected diagram
 		classDiagram := gongEnumImpl.nodeCb.GetSelectedClassdiagram()
 
 		// get the referenced gongstructs
-		for _, classshape := range classDiagram.GongStructShapes {
-			if gongdoc_models.IdentifierToGongStructName(classshape.Identifier) == stagedNode.Name {
-				classDiagram.RemoveClassshape(gongdoc_models.IdentifierToGongStructName(classshape.Identifier))
+		for _, gongstructshape := range classDiagram.GongStructShapes {
+			if gongdoc_models.IdentifierToGongStructName(gongstructshape.Identifier) == stagedNode.Name {
+				classDiagram.RemoveGongStructShape(gongdoc_models.IdentifierToGongStructName(gongstructshape.Identifier))
 			}
 
 		}
 
 	}
 
-	// if node is checked, add classshape
+	// if node is checked, add gongstructshape
 	if !stagedNode.IsChecked && frontNode.IsChecked {
 
 		// get the latest version of the diagram before modifying it
 		stage.Checkout()
 
 		classDiagram := gongEnumImpl.nodeCb.GetSelectedClassdiagram()
-		classDiagram.AddClassshape(frontNode.Name)
+		classDiagram.AddGongStructShape(frontNode.Name)
 	}
 
 }

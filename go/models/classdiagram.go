@@ -10,7 +10,7 @@ import (
 type Classdiagram struct {
 	Name string
 
-	// list of classshapes in the diagram
+	// list of gongstructshapes in the diagram
 	GongStructShapes []*GongStructShape
 
 	GongEnumShapes []*GongEnumShape
@@ -23,57 +23,57 @@ type Classdiagram struct {
 	IsInDrawMode bool
 }
 
-func (classdiagram *Classdiagram) RemoveClassshape(classshapeName string) {
+func (classdiagram *Classdiagram) RemoveGongStructShape(gongstructshapeName string) {
 
-	foundClassshape := false
-	var classshape *GongStructShape
-	for _, _classshape := range classdiagram.GongStructShapes {
+	foundGongStructShape := false
+	var gongstructshape *GongStructShape
+	for _, _gongstructshape := range classdiagram.GongStructShapes {
 
-		// strange behavior when the classshape is remove within the loop
-		if IdentifierToGongStructName(_classshape.Identifier) == classshapeName && !foundClassshape {
-			classshape = _classshape
+		// strange behavior when the gongstructshape is remove within the loop
+		if IdentifierToGongStructName(_gongstructshape.Identifier) == gongstructshapeName && !foundGongStructShape {
+			gongstructshape = _gongstructshape
 		}
 	}
 
-	classdiagram.GongStructShapes = remove(classdiagram.GongStructShapes, classshape)
-	classshape.Position.Unstage()
-	classshape.Unstage()
+	classdiagram.GongStructShapes = remove(classdiagram.GongStructShapes, gongstructshape)
+	gongstructshape.Position.Unstage()
+	gongstructshape.Unstage()
 
-	// remove links that go from this classshape
-	for _, link := range classshape.Links {
+	// remove links that go from this gongstructshape
+	for _, link := range gongstructshape.Links {
 		link.Middlevertice.Unstage()
 		link.Unstage()
 	}
-	classshape.Links = []*Link{}
+	gongstructshape.Links = []*Link{}
 
-	// remove association links that go to this classshape
-	for _, fromClassshape := range classdiagram.GongStructShapes {
+	// remove association links that go to this gongstructshape
+	for _, fromGongStructShape := range classdiagram.GongStructShapes {
 
 		newSliceOfLinks := make([]*Link, 0)
-		for _, link := range fromClassshape.Links {
-			if link.Fieldtypename == IdentifierToGongStructName(classshape.Identifier) {
+		for _, link := range fromGongStructShape.Links {
+			if link.Fieldtypename == IdentifierToGongStructName(gongstructshape.Identifier) {
 				link.Middlevertice.Unstage()
 				link.Unstage()
 			} else {
 				newSliceOfLinks = append(newSliceOfLinks, link)
 			}
 		}
-		fromClassshape.Links = newSliceOfLinks
+		fromGongStructShape.Links = newSliceOfLinks
 	}
 
-	// remove fields of the classshape
-	for _, field := range classshape.Fields {
+	// remove fields of the gongstructshape
+	for _, field := range gongstructshape.Fields {
 		field.Unstage()
 	}
 
 	//
-	// remove documentation links that go this classshape
+	// remove documentation links that go this gongstructshape
 	//
 	// generate the map to navigate from children to parents
 	fieldName := GetAssociationName[NoteShape]().NoteShapeLinks[0].Name
 	map_NoteShapeLink_NodeShape := GetSliceOfPointersReverseMap[NoteShape, NoteShapeLink](fieldName)
 	for noteShapeLink := range *GetGongstructInstancesSet[NoteShapeLink]() {
-		if noteShapeLink.Name == classshapeName {
+		if noteShapeLink.Name == gongstructshapeName {
 
 			// get the note shape
 			noteShape := map_NoteShapeLink_NodeShape[noteShapeLink]
@@ -85,38 +85,38 @@ func (classdiagram *Classdiagram) RemoveClassshape(classshapeName string) {
 		}
 	}
 
-	// log.Println("RemoveClassshape, before commit, nb ", Stage.BackRepo.GetLastCommitFromBackNb())
+	// log.Println("RemoveGongStructShape, before commit, nb ", Stage.BackRepo.GetLastCommitFromBackNb())
 	Stage.Commit()
-	// log.Println("RemoveClassshape, after commit, nb ", Stage.BackRepo.GetLastCommitFromBackNb())
+	// log.Println("RemoveGongStructShape, after commit, nb ", Stage.BackRepo.GetLastCommitFromBackNb())
 }
 
-func (classdiagram *Classdiagram) AddClassshape(classshapeName string) {
+func (classdiagram *Classdiagram) AddGongStructShape(gongstructshapeName string) {
 
-	var classshape GongStructShape
-	classshape.Name = classdiagram.Name + "-" + classshapeName
-	classshape.Identifier = GongStructNameToIdentifier(classshapeName)
-	classshape.Width = 240
-	classshape.Heigth = 63
+	var gongstructshape GongStructShape
+	gongstructshape.Name = classdiagram.Name + "-" + gongstructshapeName
+	gongstructshape.Identifier = GongStructNameToIdentifier(gongstructshapeName)
+	gongstructshape.Width = 240
+	gongstructshape.Heigth = 63
 
-	// attach GongStruct to classshape
-	nbInstances, ok := Map_Identifier_NbInstances[classshape.Identifier]
+	// attach GongStruct to gongstructshape
+	nbInstances, ok := Map_Identifier_NbInstances[gongstructshape.Identifier]
 	if ok {
-		classshape.ShowNbInstances = true
-		classshape.NbInstances = nbInstances
+		gongstructshape.ShowNbInstances = true
+		gongstructshape.NbInstances = nbInstances
 	}
-	classshape.Stage()
+	gongstructshape.Stage()
 
 	var position Position
-	position.Name = "Pos-" + classshape.Name
+	position.Name = "Pos-" + gongstructshape.Name
 	position.X = float64(int(rand.Float32()*100) + 10)
 	position.Y = float64(int(rand.Float32()*100) + 10)
-	classshape.Position = &position
+	gongstructshape.Position = &position
 	position.Stage()
 
-	classdiagram.GongStructShapes = append(classdiagram.GongStructShapes, &classshape)
+	classdiagram.GongStructShapes = append(classdiagram.GongStructShapes, &gongstructshape)
 
-	// log.Println("AddClassshape, before commit, nb ", Stage.BackRepo.GetLastCommitFromBackNb())
+	// log.Println("AddGongStructShape, before commit, nb ", Stage.BackRepo.GetLastCommitFromBackNb())
 	Stage.Commit()
-	// log.Println("AddClassshape, after commit, nb ", Stage.BackRepo.GetLastCommitFromBackNb())
+	// log.Println("AddGongStructShape, after commit, nb ", Stage.BackRepo.GetLastCommitFromBackNb())
 
 }
