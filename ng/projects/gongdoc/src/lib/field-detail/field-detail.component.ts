@@ -10,7 +10,6 @@ import { MapOfComponents } from '../map-components'
 import { MapOfSortingComponents } from '../map-components'
 
 // insertion point for imports
-import { GongEnumShapeDB } from '../gongenumshape-db'
 import { GongStructShapeDB } from '../gongstructshape-db'
 
 import { Router, ActivatedRoute } from '@angular/router';
@@ -25,7 +24,6 @@ enum FieldDetailComponentState {
 	CREATE_INSTANCE,
 	UPDATE_INSTANCE,
 	// insertion point for declarations of enum values of state
-	CREATE_INSTANCE_WITH_ASSOCIATION_GongEnumShape_Fields_SET,
 	CREATE_INSTANCE_WITH_ASSOCIATION_GongStructShape_Fields_SET,
 }
 
@@ -91,10 +89,6 @@ export class FieldDetailComponent implements OnInit {
 				switch (this.originStructFieldName) {
 					// insertion point for state computation
 					case "Fields":
-						// console.log("Field" + " is instanciated with back pointer to instance " + this.id + " GongEnumShape association Fields")
-						this.state = FieldDetailComponentState.CREATE_INSTANCE_WITH_ASSOCIATION_GongEnumShape_Fields_SET
-						break;
-					case "Fields":
 						// console.log("Field" + " is instanciated with back pointer to instance " + this.id + " GongStructShape association Fields")
 						this.state = FieldDetailComponentState.CREATE_INSTANCE_WITH_ASSOCIATION_GongStructShape_Fields_SET
 						break;
@@ -134,10 +128,6 @@ export class FieldDetailComponent implements OnInit {
 						this.field = field!
 						break;
 					// insertion point for init of association field
-					case FieldDetailComponentState.CREATE_INSTANCE_WITH_ASSOCIATION_GongEnumShape_Fields_SET:
-						this.field = new (FieldDB)
-						this.field.GongEnumShape_Fields_reverse = frontRepo.GongEnumShapes.get(this.id)!
-						break;
 					case FieldDetailComponentState.CREATE_INSTANCE_WITH_ASSOCIATION_GongStructShape_Fields_SET:
 						this.field = new (FieldDB)
 						this.field.GongStructShape_Fields_reverse = frontRepo.GongStructShapes.get(this.id)!
@@ -163,18 +153,6 @@ export class FieldDetailComponent implements OnInit {
 		// save from the front pointer space to the non pointer space for serialization
 
 		// insertion point for translation/nullation of each pointers
-		if (this.field.GongEnumShape_Fields_reverse != undefined) {
-			if (this.field.GongEnumShape_FieldsDBID == undefined) {
-				this.field.GongEnumShape_FieldsDBID = new NullInt64
-			}
-			this.field.GongEnumShape_FieldsDBID.Int64 = this.field.GongEnumShape_Fields_reverse.ID
-			this.field.GongEnumShape_FieldsDBID.Valid = true
-			if (this.field.GongEnumShape_FieldsDBID_Index == undefined) {
-				this.field.GongEnumShape_FieldsDBID_Index = new NullInt64
-			}
-			this.field.GongEnumShape_FieldsDBID_Index.Valid = true
-			this.field.GongEnumShape_Fields_reverse = new GongEnumShapeDB // very important, otherwise, circular JSON
-		}
 		if (this.field.GongStructShape_Fields_reverse != undefined) {
 			if (this.field.GongStructShape_FieldsDBID == undefined) {
 				this.field.GongStructShape_FieldsDBID = new NullInt64

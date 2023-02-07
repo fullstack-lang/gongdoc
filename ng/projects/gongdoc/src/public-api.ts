@@ -39,6 +39,12 @@ export * from './lib/gongenumshapes-table/gongenumshapes-table.component'
 export * from './lib/gongenumshape-db'
 export * from './lib/gongenumshape.service'
 
+export * from './lib/gongenumvalueentry-detail/gongenumvalueentry-detail.component'
+export * from './lib/gongenumvalueentry-sorting/gongenumvalueentry-sorting.component'
+export * from './lib/gongenumvalueentrys-table/gongenumvalueentrys-table.component'
+export * from './lib/gongenumvalueentry-db'
+export * from './lib/gongenumvalueentry.service'
+
 export * from './lib/gongstructshape-detail/gongstructshape-detail.component'
 export * from './lib/gongstructshape-sorting/gongstructshape-sorting.component'
 export * from './lib/gongstructshapes-table/gongstructshapes-table.component'

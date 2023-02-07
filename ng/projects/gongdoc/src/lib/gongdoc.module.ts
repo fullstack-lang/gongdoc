@@ -55,6 +55,10 @@ import { GongEnumShapesTableComponent } from './gongenumshapes-table/gongenumsha
 import { GongEnumShapeSortingComponent } from './gongenumshape-sorting/gongenumshape-sorting.component'
 import { GongEnumShapeDetailComponent } from './gongenumshape-detail/gongenumshape-detail.component'
 
+import { GongEnumValueEntrysTableComponent } from './gongenumvalueentrys-table/gongenumvalueentrys-table.component'
+import { GongEnumValueEntrySortingComponent } from './gongenumvalueentry-sorting/gongenumvalueentry-sorting.component'
+import { GongEnumValueEntryDetailComponent } from './gongenumvalueentry-detail/gongenumvalueentry-detail.component'
+
 import { GongStructShapesTableComponent } from './gongstructshapes-table/gongstructshapes-table.component'
 import { GongStructShapeSortingComponent } from './gongstructshape-sorting/gongstructshape-sorting.component'
 import { GongStructShapeDetailComponent } from './gongstructshape-detail/gongstructshape-detail.component'
@@ -114,6 +118,10 @@ import { VerticeDetailComponent } from './vertice-detail/vertice-detail.componen
 		GongEnumShapesTableComponent,
 		GongEnumShapeSortingComponent,
 		GongEnumShapeDetailComponent,
+
+		GongEnumValueEntrysTableComponent,
+		GongEnumValueEntrySortingComponent,
+		GongEnumValueEntryDetailComponent,
 
 		GongStructShapesTableComponent,
 		GongStructShapeSortingComponent,
@@ -209,6 +217,10 @@ import { VerticeDetailComponent } from './vertice-detail/vertice-detail.componen
 		GongEnumShapesTableComponent,
 		GongEnumShapeSortingComponent,
 		GongEnumShapeDetailComponent,
+
+		GongEnumValueEntrysTableComponent,
+		GongEnumValueEntrySortingComponent,
+		GongEnumValueEntryDetailComponent,
 
 		GongStructShapesTableComponent,
 		GongStructShapeSortingComponent,

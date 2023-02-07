@@ -2,45 +2,40 @@ import * as joint from 'jointjs';
 import * as gongdoc from 'gongdoc'
 import { shapeIdentifierToShapeName } from './shape-identifier-to-shape-name';
 
-export function newUmlClassShape(classshape: gongdoc.GongStructShapeDB,
+export function newUmlClassShapeFromGongEnumShape(gongEnumShape: gongdoc.GongEnumShapeDB,
     positionService: gongdoc.PositionService,
-    gongStructShapeService: gongdoc.GongStructShapeService): joint.shapes.uml.Class {
+    gongEnumShapeService: gongdoc.GongEnumShapeService): joint.shapes.uml.Class {
 
-    // fetch the fields, it must belong to the current diagram
-    // and the type must match the classshape type
     var attributes = new Array<string>()
-    if (classshape.Fields) {
+    if (gongEnumShape.GongEnumValueEntrys) {
 
         // sort fields according to the index
-        classshape.Fields.sort((fieldA: gongdoc.FieldDB, fieldB: gongdoc.FieldDB) => {
-            return fieldA.GongStructShape_FieldsDBID_Index.Int64 - fieldB.GongStructShape_FieldsDBID_Index.Int64
-        })
+        gongEnumShape.GongEnumValueEntrys.sort(
+            (gongEnumValueEntryA: gongdoc.GongEnumValueEntryDB, gongEnumValueEntryB: gongdoc.GongEnumValueEntryDB) => {
+                return gongEnumValueEntryA.GongEnumShape_GongEnumValueEntrysDBID_Index.Int64 -
+                    gongEnumValueEntryB.GongEnumShape_GongEnumValueEntrysDBID_Index.Int64
+            })
 
-        for (let idx = 0; idx < classshape.Fields!.length; idx++) {
-            let field = classshape.Fields![idx]
+        for (let idx = 0; idx < gongEnumShape.GongEnumValueEntrys!.length; idx++) {
+            let field = gongEnumShape.GongEnumValueEntrys![idx]
             // console.log("Adding " + field.Fieldname + " " + field.Structname + " " + field.Fieldtypename)
 
             let parts = field.Identifier.split(".");
             let fieldName = parts[parts.length - 1];
 
-            attributes.push(fieldName + " : " + field.Fieldtypename)
+            attributes.push(fieldName)
         }
     }
 
-    let classShapeTitle = shapeIdentifierToShapeName(classshape.Identifier)
-
-    // show nb of instances if necessary
-    if (classshape.ShowNbInstances) {
-        classShapeTitle += " ( " + classshape.NbInstances + " )"
-    }
+    let classShapeTitle = shapeIdentifierToShapeName(gongEnumShape.Identifier)
 
     return new joint.shapes.uml.Class(
         {
             position: {
-                x: classshape.Position!.X,
-                y: classshape.Position!.Y
+                x: gongEnumShape.Position!.X,
+                y: gongEnumShape.Position!.Y
             },
-            size: { width: classshape.Width, height: classshape.Heigth },
+            size: { width: gongEnumShape.Width, height: gongEnumShape.Heigth },
             name: [classShapeTitle],
             attributes: attributes,
             methods: [],
@@ -74,9 +69,9 @@ export function newUmlClassShape(classshape: gongdoc.GongStructShapeDB,
             },
 
             // store relevant attributes for working when callback are invoked
-            classshape: classshape,
+            classshape: gongEnumShape,
             positionService: positionService,
-            gongStructShapeService: gongStructShapeService
+            gongEnumShapeService: gongEnumShapeService
         }
     )
 

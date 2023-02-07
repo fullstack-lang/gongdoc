@@ -24,9 +24,9 @@ func (gongEnumImpl *GongEnumImpl) OnAfterUpdate(
 		classDiagram := gongEnumImpl.nodeCb.GetSelectedClassdiagram()
 
 		// get the referenced gongstructs
-		for _, gongstructshape := range classDiagram.GongStructShapes {
-			if gongdoc_models.IdentifierToGongStructName(gongstructshape.Identifier) == stagedNode.Name {
-				classDiagram.RemoveGongStructShape(gongdoc_models.IdentifierToGongStructName(gongstructshape.Identifier))
+		for _, gongEnumShape := range classDiagram.GongEnumShapes {
+			if gongdoc_models.IdentifierToGongObjectName(gongEnumShape.Identifier) == stagedNode.Name {
+				classDiagram.RemoveGongStructShape(gongdoc_models.IdentifierToGongObjectName(gongEnumShape.Identifier))
 			}
 
 		}
@@ -40,7 +40,7 @@ func (gongEnumImpl *GongEnumImpl) OnAfterUpdate(
 		stage.Checkout()
 
 		classDiagram := gongEnumImpl.nodeCb.GetSelectedClassdiagram()
-		classDiagram.AddGongStructShape(gongEnumImpl.nodeCb.diagramPackage, frontNode.Name)
+		classDiagram.AddGongEnumShape(gongEnumImpl.nodeCb.diagramPackage, frontNode.Name)
 	}
 
 }
