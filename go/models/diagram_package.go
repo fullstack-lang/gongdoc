@@ -53,6 +53,9 @@ type DiagramPackage struct {
 	// pointer to the model package
 	ModelPkg                     *gong_models.ModelPkg
 	AbsolutePathToDiagramPackage string
+
+	// swagger:ignore
+	Map_Identifier_NbInstances map[string]int
 }
 
 const preludeRef string = `package diagrams

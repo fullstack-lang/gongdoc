@@ -128,12 +128,10 @@ func main() {
 	gongdoc_models.SetupMapDocLinkRenaming()
 	// end of the be removed
 
-	map_ := gongdoc_models.Map_Identifier_NbInstances
-	_ = map_
 	// set up gong structs for diagram package
 	if *setUpRandomNumberOfInstances {
 		for gongStruct := range *gong_models.GetGongstructInstancesSet[gong_models.GongStruct]() {
-			gongdoc_models.Map_Identifier_NbInstances[gongStruct.Name] = rand.Intn(100)
+			diagramPackage.Map_Identifier_NbInstances[gongStruct.Name] = rand.Intn(100)
 		}
 		// parse all classdiagrams and all classshape and put the number
 		// of instances
@@ -142,7 +140,7 @@ func main() {
 
 				gongStructName := gongdoc_models.IdentifierToGongStructName(classshape.Identifier)
 
-				nbInstances, ok := gongdoc_models.Map_Identifier_NbInstances[gongStructName]
+				nbInstances, ok := diagramPackage.Map_Identifier_NbInstances[gongStructName]
 
 				if ok {
 					classshape.ShowNbInstances = true
