@@ -1,9 +1,8 @@
 {
     "name": "gongdocdiagrams",
     "version": "0.0.1",
-    "peerDependencies": {},
+    "peerDependencies": {
+    },
     "dependencies": {
-        "jointjs": "^3.2.0",
-        "tslib": "^2.0.0"
     }
 }

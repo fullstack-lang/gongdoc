@@ -4,9 +4,7 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
-    "build": "ng build",
-    "install-gongdocdiagrams": "npm install --prefix ./projects/gongdocdiagrams",
-    "postinstall": "npm run install-gongdocdiagrams"
+    "build": "ng build"
   },
   "private": true,
   "dependencies": {
@@ -22,11 +20,18 @@
     "@angular/platform-browser-dynamic": "^15.1.3",
     "@angular/router": "^15.1.3",
     "angular-split": "^14.1.0",
+    "@types/jointjs": "^2.0.0",
+    "@types/jquery": "^3.5.14",
+    "@types/leaflet": "^1.9.0",
+    "@types/lodash": "^4.14.188",
     "material-icons": "^1.12.2",
+    "jointjs": "^3.6.2",
+    "jquery": "^3.6.1",
+    "lodash": "^4.17.21",
+    "@fontsource/open-sans": "^4.5.13",
+    "@fontsource/roboto": "^4.5.8",
     "rxjs": "~6.6.3",
     "tslib": "^2.2.0",
-    "typeface-open-sans": "^1.1.13",
-    "typeface-roboto": "^1.1.13",
     "zone.js": "~0.11.4"
   },
   "devDependencies": {
