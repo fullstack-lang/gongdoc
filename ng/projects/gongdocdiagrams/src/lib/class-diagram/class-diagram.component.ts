@@ -56,7 +56,7 @@ export class ClassDiagramComponent implements OnInit, OnDestroy {
   public Map_GongStructName_JointjsUMLClassShape = new Map<string, joint.shapes.uml.Class>();
 
   constructor(
-    private route: ActivatedRoute,
+    private activatedRoute: ActivatedRoute,
     private router: Router,
 
     private positionService: gongdoc.PositionService,
@@ -67,11 +67,6 @@ export class ClassDiagramComponent implements OnInit, OnDestroy {
     private gongdocFrontRepoService: gongdoc.FrontRepoService,
     private gongdocCommitNbFromBackService: gongdoc.CommitNbFromBackService,
   ) {
-    // https://stackoverflow.com/questions/54627478/angular-7-routing-to-same-component-but-different-param-not-working
-    // this is for routerLink on same component when only queryParameter changes
-    this.router.routeReuseStrategy.shouldReuseRoute = function () {
-      return false;
-    };
   }
 
   // Since this component is not reused when a new diagram is selected, there can be many
@@ -88,7 +83,7 @@ export class ClassDiagramComponent implements OnInit, OnDestroy {
     this.gongdocCommitNbFromBackService_getCommitNbFromBack.unsubscribe()
   }
 
-  ngOnInit(): void {
+	ngOnInit(): void {
 
     // check loop for refresh from the back repo
     this.checkGongdocCommitNbFromBackTimerSubscription = this.checkGongdocCommitNbFromBackTimer.subscribe(
