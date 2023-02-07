@@ -302,8 +302,14 @@ func (nodeCb *NodeCB) updateNodesStates(stage *gongdoc_models.StageStruct) {
 
 	nodeCb.updateDiagramsNodes(stage)
 
+	// now manage object nodes accordign to the selected diagram
+
 	// get the the selected diagram
 	classdiagram := nodeCb.diagramPackage.SelectedClassdiagram
+
+	for _, _node := range nodeCb.treeOfGongObjects.RootNodes {
+		UncheckAndDisable(_node, classdiagram)
+	}
 
 	// no selected diagram yet
 	if classdiagram == nil {
@@ -357,10 +363,6 @@ func (nodesCb *NodeCB) updateDiagramsNodes(stage *gongdoc_models.StageStruct) {
 }
 
 func (nodeCb *NodeCB) updateGongObjectsNodes(stage *gongdoc_models.StageStruct, classdiagram *gongdoc_models.Classdiagram) {
-
-	for _, _node := range nodeCb.treeOfGongObjects.RootNodes {
-		UncheckAndDisable(_node, classdiagram)
-	}
 
 	listOfGongStructShapes := make(map[string]bool)
 	for _, gongStructShape := range classdiagram.GongStructShapes {
