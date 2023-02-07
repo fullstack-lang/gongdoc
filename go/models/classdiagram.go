@@ -90,7 +90,7 @@ func (classdiagram *Classdiagram) RemoveGongStructShape(gongstructshapeName stri
 	// log.Println("RemoveGongStructShape, after commit, nb ", Stage.BackRepo.GetLastCommitFromBackNb())
 }
 
-func (classdiagram *Classdiagram) AddGongStructShape(gongstructshapeName string) {
+func (classdiagram *Classdiagram) AddGongStructShape(diagramPackage *DiagramPackage, gongstructshapeName string) {
 
 	var gongstructshape GongStructShape
 	gongstructshape.Name = classdiagram.Name + "-" + gongstructshapeName
@@ -99,7 +99,7 @@ func (classdiagram *Classdiagram) AddGongStructShape(gongstructshapeName string)
 	gongstructshape.Heigth = 63
 
 	// attach GongStruct to gongstructshape
-	nbInstances, ok := Map_Identifier_NbInstances[gongstructshape.Identifier]
+	nbInstances, ok := diagramPackage.Map_Identifier_NbInstances[gongstructshape.Identifier]
 	if ok {
 		gongstructshape.ShowNbInstances = true
 		gongstructshape.NbInstances = nbInstances
