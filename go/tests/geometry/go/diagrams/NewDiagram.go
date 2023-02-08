@@ -162,8 +162,8 @@ func NewDiagramInjection() {
 
 	//gong:ident [ref_models.Line]
 	__GongStructShape__000000_NewDiagram_Line.Identifier = `ref_models.Line`
-	__GongStructShape__000000_NewDiagram_Line.ShowNbInstances = true
-	__GongStructShape__000000_NewDiagram_Line.NbInstances = 81
+	__GongStructShape__000000_NewDiagram_Line.ShowNbInstances = false
+	__GongStructShape__000000_NewDiagram_Line.NbInstances = 0
 	__GongStructShape__000000_NewDiagram_Line.Width = 240.000000
 	__GongStructShape__000000_NewDiagram_Line.Heigth = 63.000000
 	__GongStructShape__000000_NewDiagram_Line.IsSelected = false
@@ -175,8 +175,8 @@ func NewDiagramInjection() {
 
 	//gong:ident [ref_models.Point]
 	__GongStructShape__000001_NewDiagram_Point.Identifier = `ref_models.Point`
-	__GongStructShape__000001_NewDiagram_Point.ShowNbInstances = true
-	__GongStructShape__000001_NewDiagram_Point.NbInstances = 47
+	__GongStructShape__000001_NewDiagram_Point.ShowNbInstances = false
+	__GongStructShape__000001_NewDiagram_Point.NbInstances = 0
 	__GongStructShape__000001_NewDiagram_Point.Width = 240.000000
 	__GongStructShape__000001_NewDiagram_Point.Heigth = 63.000000
 	__GongStructShape__000001_NewDiagram_Point.IsSelected = false
@@ -205,8 +205,8 @@ It uses the DocLink convention for referencing Identifiers
 In this case [models.Line], [models.Point] and [models.Line.Start]
 are referenced in the go code
 `
-	__NoteShape__000000_ShortNodeOnModels.X = 260.000000
-	__NoteShape__000000_ShortNodeOnModels.Y = 90.000000
+	__NoteShape__000000_ShortNodeOnModels.X = 180.000000
+	__NoteShape__000000_ShortNodeOnModels.Y = 300.000000
 	__NoteShape__000000_ShortNodeOnModels.Width = 240.000000
 	__NoteShape__000000_ShortNodeOnModels.Heigth = 63.000000
 	__NoteShape__000000_ShortNodeOnModels.Matched = false
@@ -216,8 +216,8 @@ are referenced in the go code
 	
 	// comment added to overcome the problem with the comment map association
 
-	//gong:ident [ref_models.ShortNodeOnModels.Line]
-	__NoteShapeLink__000000_Line.Identifier = `ref_models.ShortNodeOnModels.Line`
+	//gong:ident [ref_models.Line]
+	__NoteShapeLink__000000_Line.Identifier = `ref_models.Line`
 	__NoteShapeLink__000000_Line.Type = models.NOTE_SHAPE_LINK_TO_GONG_STRUCT_SHAPE
 
 	// NoteShapeLink values setup
@@ -225,8 +225,8 @@ are referenced in the go code
 	
 	// comment added to overcome the problem with the comment map association
 
-	//gong:ident [ref_models.ShortNodeOnModels.Line.Start]
-	__NoteShapeLink__000001_Line_Start.Identifier = `ref_models.ShortNodeOnModels.Line.Start`
+	//gong:ident [ref_models.Line.Start]
+	__NoteShapeLink__000001_Line_Start.Identifier = `ref_models.Line.Start`
 	__NoteShapeLink__000001_Line_Start.Type = models.NOTE_SHAPE_LINK_TO_GONG_FIELD
 
 	// NoteShapeLink values setup
@@ -234,23 +234,23 @@ are referenced in the go code
 	
 	// comment added to overcome the problem with the comment map association
 
-	//gong:ident [ref_models.ShortNodeOnModels.Point]
-	__NoteShapeLink__000002_Point.Identifier = `ref_models.ShortNodeOnModels.Point`
+	//gong:ident [ref_models.Point]
+	__NoteShapeLink__000002_Point.Identifier = `ref_models.Point`
 	__NoteShapeLink__000002_Point.Type = models.NOTE_SHAPE_LINK_TO_GONG_STRUCT_SHAPE
 
 	// Position values setup
-	__Position__000000_Pos_NewDiagram_Line.X = 720.000000
-	__Position__000000_Pos_NewDiagram_Line.Y = 240.000000
+	__Position__000000_Pos_NewDiagram_Line.X = 70.000000
+	__Position__000000_Pos_NewDiagram_Line.Y = 104.000000
 	__Position__000000_Pos_NewDiagram_Line.Name = `Pos-NewDiagram-Line`
 
 	// Position values setup
-	__Position__000001_Pos_NewDiagram_Point.X = 50.000000
-	__Position__000001_Pos_NewDiagram_Point.Y = 250.000000
+	__Position__000001_Pos_NewDiagram_Point.X = 620.000000
+	__Position__000001_Pos_NewDiagram_Point.Y = 80.000000
 	__Position__000001_Pos_NewDiagram_Point.Name = `Pos-NewDiagram-Point`
 
 	// Vertice values setup
-	__Vertice__000000_Verticle_in_class_diagram_NewDiagram_in_middle_between_NewDiagram_Line_and_NewDiagram_Point.X = 503.000000
-	__Vertice__000000_Verticle_in_class_diagram_NewDiagram_in_middle_between_NewDiagram_Line_and_NewDiagram_Point.Y = 438.000000
+	__Vertice__000000_Verticle_in_class_diagram_NewDiagram_in_middle_between_NewDiagram_Line_and_NewDiagram_Point.X = 433.000000
+	__Vertice__000000_Verticle_in_class_diagram_NewDiagram_in_middle_between_NewDiagram_Line_and_NewDiagram_Point.Y = 110.000000
 	__Vertice__000000_Verticle_in_class_diagram_NewDiagram_in_middle_between_NewDiagram_Line_and_NewDiagram_Point.Name = `Verticle in class diagram NewDiagram in middle between NewDiagram-Line and NewDiagram-Point`
 
 	// Setup of pointers
@@ -261,8 +261,8 @@ are referenced in the go code
 	__GongStructShape__000000_NewDiagram_Line.Links = append(__GongStructShape__000000_NewDiagram_Line.Links, __Link__000000_Start)
 	__GongStructShape__000001_NewDiagram_Point.Position = __Position__000001_Pos_NewDiagram_Point
 	__Link__000000_Start.Middlevertice = __Vertice__000000_Verticle_in_class_diagram_NewDiagram_in_middle_between_NewDiagram_Line_and_NewDiagram_Point
-	__NoteShape__000000_ShortNodeOnModels.NoteShapeLinks = append(__NoteShape__000000_ShortNodeOnModels.NoteShapeLinks, __NoteShapeLink__000001_Line_Start)
 	__NoteShape__000000_ShortNodeOnModels.NoteShapeLinks = append(__NoteShape__000000_ShortNodeOnModels.NoteShapeLinks, __NoteShapeLink__000000_Line)
+	__NoteShape__000000_ShortNodeOnModels.NoteShapeLinks = append(__NoteShape__000000_ShortNodeOnModels.NoteShapeLinks, __NoteShapeLink__000001_Line_Start)
 	__NoteShape__000000_ShortNodeOnModels.NoteShapeLinks = append(__NoteShape__000000_ShortNodeOnModels.NoteShapeLinks, __NoteShapeLink__000002_Point)
 }
 

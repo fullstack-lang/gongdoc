@@ -37,12 +37,12 @@ func IdentifierToReceiverAndFieldName(fieldIdentifier string) (receiver, fieldNa
 	structNameWithFieldName := strings.TrimPrefix(fieldIdentifier, RefPrefixReferencedPackage+RefPackagePlusPeriod)
 
 	subStrings := strings.Split(structNameWithFieldName, ".")
-	if len(subStrings) != 3 {
+	if len(subStrings) != 2 {
 		log.Fatalln("IdentifierToReceiverAndFieldName: wrong number of substrings in ", structNameWithFieldName)
 	}
 
-	fieldName = subStrings[2]
-	receiver = subStrings[1]
+	fieldName = subStrings[1]
+	receiver = subStrings[0]
 
 	return
 }

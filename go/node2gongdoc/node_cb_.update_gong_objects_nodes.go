@@ -141,10 +141,10 @@ func (nodeCb *NodeCB) updateGongObjectsNodes(stage *gongdoc_models.StageStruct, 
 
 			switch nodeShapeLink.Type {
 			case gongdoc_models.NOTE_SHAPE_LINK_TO_GONG_STRUCT_SHAPE:
-				fieldName := gongdoc_models.IdentifierToFieldName(nodeShapeLink.Identifier)
+				targetShapeGongStructName := gongdoc_models.IdentifierToGongObjectName(nodeShapeLink.Identifier)
 				// range over gongStruct fields (to be redone)
 				for _, link := range gongNote.Links {
-					if link.GetName() == fieldName {
+					if link.GetName() == targetShapeGongStructName {
 						impl := GetNodeBackPointer(link)
 						impl.SetHasToBeCheckedValue(true)
 					}
