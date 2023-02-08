@@ -46,18 +46,6 @@ type NoteShapeLinkAPI struct {
 type NoteShapeLinkPointersEnconding struct {
 	// insertion for pointer fields encoding declaration
 
-	// field Classshape is a pointer to another Struct (optional or 0..1)
-	// This field is generated into another field to enable AS ONE association
-	ClassshapeID sql.NullInt64
-
-	// field Link is a pointer to another Struct (optional or 0..1)
-	// This field is generated into another field to enable AS ONE association
-	LinkID sql.NullInt64
-
-	// field Middlevertice is a pointer to another Struct (optional or 0..1)
-	// This field is generated into another field to enable AS ONE association
-	MiddleverticeID sql.NullInt64
-
 	// Implementation of a reverse ID for field NoteShape{}.NoteShapeLinks []*NoteShapeLink
 	NoteShape_NoteShapeLinksDBID sql.NullInt64
 
@@ -262,33 +250,6 @@ func (backRepoNoteShapeLink *BackRepoNoteShapeLinkStruct) CommitPhaseTwoInstance
 		noteshapelinkDB.CopyBasicFieldsFromNoteShapeLink(noteshapelink)
 
 		// insertion point for translating pointers encodings into actual pointers
-		// commit pointer value noteshapelink.Classshape translates to updating the noteshapelink.ClassshapeID
-		noteshapelinkDB.ClassshapeID.Valid = true // allow for a 0 value (nil association)
-		if noteshapelink.Classshape != nil {
-			if ClassshapeId, ok := (*backRepo.BackRepoGongStructShape.Map_GongStructShapePtr_GongStructShapeDBID)[noteshapelink.Classshape]; ok {
-				noteshapelinkDB.ClassshapeID.Int64 = int64(ClassshapeId)
-				noteshapelinkDB.ClassshapeID.Valid = true
-			}
-		}
-
-		// commit pointer value noteshapelink.Link translates to updating the noteshapelink.LinkID
-		noteshapelinkDB.LinkID.Valid = true // allow for a 0 value (nil association)
-		if noteshapelink.Link != nil {
-			if LinkId, ok := (*backRepo.BackRepoLink.Map_LinkPtr_LinkDBID)[noteshapelink.Link]; ok {
-				noteshapelinkDB.LinkID.Int64 = int64(LinkId)
-				noteshapelinkDB.LinkID.Valid = true
-			}
-		}
-
-		// commit pointer value noteshapelink.Middlevertice translates to updating the noteshapelink.MiddleverticeID
-		noteshapelinkDB.MiddleverticeID.Valid = true // allow for a 0 value (nil association)
-		if noteshapelink.Middlevertice != nil {
-			if MiddleverticeId, ok := (*backRepo.BackRepoVertice.Map_VerticePtr_VerticeDBID)[noteshapelink.Middlevertice]; ok {
-				noteshapelinkDB.MiddleverticeID.Int64 = int64(MiddleverticeId)
-				noteshapelinkDB.MiddleverticeID.Valid = true
-			}
-		}
-
 		query := backRepoNoteShapeLink.db.Save(&noteshapelinkDB)
 		if query.Error != nil {
 			return query.Error
@@ -396,18 +357,6 @@ func (backRepoNoteShapeLink *BackRepoNoteShapeLinkStruct) CheckoutPhaseTwoInstan
 	_ = noteshapelink // sometimes, there is no code generated. This lines voids the "unused variable" compilation error
 
 	// insertion point for checkout of pointer encoding
-	// Classshape field
-	if noteshapelinkDB.ClassshapeID.Int64 != 0 {
-		noteshapelink.Classshape = (*backRepo.BackRepoGongStructShape.Map_GongStructShapeDBID_GongStructShapePtr)[uint(noteshapelinkDB.ClassshapeID.Int64)]
-	}
-	// Link field
-	if noteshapelinkDB.LinkID.Int64 != 0 {
-		noteshapelink.Link = (*backRepo.BackRepoLink.Map_LinkDBID_LinkPtr)[uint(noteshapelinkDB.LinkID.Int64)]
-	}
-	// Middlevertice field
-	if noteshapelinkDB.MiddleverticeID.Int64 != 0 {
-		noteshapelink.Middlevertice = (*backRepo.BackRepoVertice.Map_VerticeDBID_VerticePtr)[uint(noteshapelinkDB.MiddleverticeID.Int64)]
-	}
 	return
 }
 
@@ -638,24 +587,6 @@ func (backRepoNoteShapeLink *BackRepoNoteShapeLinkStruct) RestorePhaseTwo() {
 		_ = noteshapelinkDB
 
 		// insertion point for reindexing pointers encoding
-		// reindexing Classshape field
-		if noteshapelinkDB.ClassshapeID.Int64 != 0 {
-			noteshapelinkDB.ClassshapeID.Int64 = int64(BackRepoGongStructShapeid_atBckpTime_newID[uint(noteshapelinkDB.ClassshapeID.Int64)])
-			noteshapelinkDB.ClassshapeID.Valid = true
-		}
-
-		// reindexing Link field
-		if noteshapelinkDB.LinkID.Int64 != 0 {
-			noteshapelinkDB.LinkID.Int64 = int64(BackRepoLinkid_atBckpTime_newID[uint(noteshapelinkDB.LinkID.Int64)])
-			noteshapelinkDB.LinkID.Valid = true
-		}
-
-		// reindexing Middlevertice field
-		if noteshapelinkDB.MiddleverticeID.Int64 != 0 {
-			noteshapelinkDB.MiddleverticeID.Int64 = int64(BackRepoVerticeid_atBckpTime_newID[uint(noteshapelinkDB.MiddleverticeID.Int64)])
-			noteshapelinkDB.MiddleverticeID.Valid = true
-		}
-
 		// This reindex noteshapelink.NoteShapeLinks
 		if noteshapelinkDB.NoteShape_NoteShapeLinksDBID.Int64 != 0 {
 			noteshapelinkDB.NoteShape_NoteShapeLinksDBID.Int64 =

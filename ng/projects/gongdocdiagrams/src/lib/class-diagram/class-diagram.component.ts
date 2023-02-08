@@ -55,6 +55,7 @@ export class ClassDiagramComponent implements OnInit, OnDestroy {
   // map for storing which gong struct have a classshape
   // it is important for drawing links between shapes
   public Map_GongStructName_JointjsUMLClassShape = new Map<string, joint.shapes.uml.Class>();
+  public Map_GongStructName_Joint_shapes_standard_Link = new Map<string, joint.shapes.standard.Link>();
 
   constructor(
     private activatedRoute: ActivatedRoute,
@@ -326,6 +327,8 @@ export class ClassDiagramComponent implements OnInit, OnDestroy {
               // add a backbone event handler to update the position
               link.on('change:vertices', onLinkMove)
 
+              this.Map_GongStructName_Joint_shapes_standard_Link.set(linkDB.Structname + "." + linkDB.Name, link)
+
               link.addTo(this.graph);
             }
           }
@@ -353,29 +356,61 @@ export class ClassDiagramComponent implements OnInit, OnDestroy {
           for (let noteShapeLink of noteShape.NoteShapeLinks) {
 
             let fromShape = rectShape
-            var toShape = this.Map_GongStructName_JointjsUMLClassShape.get(noteShapeLink.Name)
 
             let xFrom = fromShape!.get('position')!.x
             let yFrom = fromShape!.get('position')!.y
-            let xTo = toShape!.get('position')!.x
-            let yTo = toShape!.get('position')!.y
-            var strockWidth = 1
 
-            var link = new joint.shapes.standard.Link({
-              source: fromShape,
-              target: toShape,
-              attrs: {
-                line: {
-                  stroke: '#3c4260',
-                  strokeWidth: strockWidth,
-                  strokeDasharray: '2 2',
-                  targetMarker: NONE_TYPE,
-                },
+            switch (noteShapeLink.Type) {
 
-              },
-            })
+              case gongdoc.NoteShapeLinkType.NOTE_SHAPE_LINK_TO_GONG_STRUCT_SHAPE: {
+                var toShape = this.Map_GongStructName_JointjsUMLClassShape.get(noteShapeLink.Name)
+                let xTo = toShape!.get('position')!.x
+                let yTo = toShape!.get('position')!.y
+                var strockWidth = 1
 
-            link.addTo(this.graph);
+                var link = new joint.shapes.standard.Link({
+                  source: fromShape,
+                  target: toShape,
+                  attrs: {
+                    line: {
+                      stroke: '#3c4260',
+                      strokeWidth: strockWidth,
+                      strokeDasharray: '2 2',
+                      targetMarker: NONE_TYPE,
+                    },
+
+                  },
+                })
+
+                link.addTo(this.graph);
+                break
+              }
+              case gongdoc.NoteShapeLinkType.NOTE_SHAPE_LINK_TO_GONG_FIELD: {
+                let toLink = this.Map_GongStructName_Joint_shapes_standard_Link.get(noteShapeLink.Name)
+                if (toLink == undefined) {
+                  break
+                }
+
+                var strockWidth = 1
+
+                var link = new joint.shapes.standard.Link({
+                  source: fromShape,
+                  target: toLink,
+                  attrs: {
+                    line: {
+                      stroke: '#3c4260',
+                      strokeWidth: strockWidth,
+                      strokeDasharray: '2 2',
+                      targetMarker: NONE_TYPE,
+                    },
+
+                  },
+                })
+
+                link.addTo(this.graph);
+                break
+              }
+            }
           }
         }
       }

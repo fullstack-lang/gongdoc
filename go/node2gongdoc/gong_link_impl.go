@@ -61,16 +61,25 @@ func (gongLinkImpl *GongLinkImpl) OnAfterUpdate(
 		stage.Checkout()
 
 		// get the relevant gong note link
-		var noteLink *gongdoc_models.NoteShapeLink
-		for _, _noteLink := range noteshape.NoteShapeLinks {
-			if gongdoc_models.IdentifierToFieldName(_noteLink.Identifier) ==
-				stagedNode.Name {
-				noteLink = _noteLink
+		var noteShapeLink *gongdoc_models.NoteShapeLink
+		for _, _noteShapeLink := range noteshape.NoteShapeLinks {
+
+			switch _noteShapeLink.Type {
+			case gongdoc_models.NOTE_SHAPE_LINK_TO_GONG_STRUCT_SHAPE:
+				if gongdoc_models.IdentifierToFieldName(_noteShapeLink.Identifier) == stagedNode.Name {
+					noteShapeLink = _noteShapeLink
+				}
+			case gongdoc_models.NOTE_SHAPE_LINK_TO_GONG_FIELD:
+				receiver, fieldName := gongdoc_models.IdentifierToReceiverAndFieldName(_noteShapeLink.Identifier)
+
+				if receiver+"."+fieldName == stagedNode.Name {
+					noteShapeLink = _noteShapeLink
+				}
 			}
 		}
 
-		noteLink.Unstage()
-		noteshape.NoteShapeLinks = remove(noteshape.NoteShapeLinks, noteLink)
+		noteShapeLink.Unstage()
+		noteshape.NoteShapeLinks = remove(noteshape.NoteShapeLinks, noteShapeLink)
 
 	}
 

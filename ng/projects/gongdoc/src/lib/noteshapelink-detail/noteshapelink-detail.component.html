@@ -52,36 +52,6 @@
     </mat-form-field>
 
     <mat-form-field class="detail-full-width">
-        <mat-label>Classshape</mat-label>
-        <mat-select [compareWith]="compareObjects" [(value)]="noteshapelink.Classshape" (selectionChange)="fillUpNameIfEmpty($event)">
-            <mat-option>None</mat-option>
-            <mat-option *ngFor="let gongstructshape of frontRepo.GongStructShapes_array" [value]="gongstructshape">
-                {{gongstructshape.Name}}
-            </mat-option>
-        </mat-select>
-    </mat-form-field>
-
-    <mat-form-field class="detail-full-width">
-        <mat-label>Link</mat-label>
-        <mat-select [compareWith]="compareObjects" [(value)]="noteshapelink.Link" (selectionChange)="fillUpNameIfEmpty($event)">
-            <mat-option>None</mat-option>
-            <mat-option *ngFor="let link of frontRepo.Links_array" [value]="link">
-                {{link.Name}}
-            </mat-option>
-        </mat-select>
-    </mat-form-field>
-
-    <mat-form-field class="detail-full-width">
-        <mat-label>Middlevertice</mat-label>
-        <mat-select [compareWith]="compareObjects" [(value)]="noteshapelink.Middlevertice" (selectionChange)="fillUpNameIfEmpty($event)">
-            <mat-option>None</mat-option>
-            <mat-option *ngFor="let vertice of frontRepo.Vertices_array" [value]="vertice">
-                {{vertice.Name}}
-            </mat-option>
-        </mat-select>
-    </mat-form-field>
-
-    <mat-form-field class="detail-full-width">
         <mat-label>(NoteShape) NoteShapeLinks</mat-label>
         <mat-select [compareWith]="compareObjects" [(ngModel)]="noteshapelink.NoteShape_NoteShapeLinks_reverse" [ngModelOptions]="{standalone: true}">
             <mat-option>None</mat-option>

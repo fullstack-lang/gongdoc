@@ -18,10 +18,4 @@ type NoteShapeLink struct {
 
 	// Type of the target shape / link of the note link
 	Type NoteShapeLinkType
-
-	Classshape *GongStructShape
-	Link       *Link
-
-	// Vertices at the middle
-	Middlevertice *Vertice
 }
