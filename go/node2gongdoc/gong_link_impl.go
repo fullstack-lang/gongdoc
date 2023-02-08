@@ -1,6 +1,8 @@
 package node2gongdoc
 
 import (
+	"strings"
+
 	gong_models "github.com/fullstack-lang/gong/go/models"
 	gongdoc_models "github.com/fullstack-lang/gongdoc/go/models"
 )
@@ -45,8 +47,13 @@ func (gongLinkImpl *GongLinkImpl) OnAfterUpdate(
 		noteShapeLink.Identifier =
 			gongdoc_models.GongstructAndFieldnameToFieldIdentifier(gongNote.Name, stagedNode.Name)
 
-		noteshape.NoteShapeLinks = append(noteshape.NoteShapeLinks, noteShapeLink)
+		if strings.ContainsAny(stagedNode.Name, ".") {
+			noteShapeLink.Type = gongdoc_models.NOTE_SHAPE_LINK_TO_GONG_FIELD
+		} else {
+			noteShapeLink.Type = gongdoc_models.NOTE_SHAPE_LINK_TO_GONG_STRUCT_SHAPE
+		}
 
+		noteshape.NoteShapeLinks = append(noteshape.NoteShapeLinks, noteShapeLink)
 	}
 
 	// removing a note link

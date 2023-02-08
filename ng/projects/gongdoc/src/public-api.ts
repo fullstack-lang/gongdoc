@@ -108,3 +108,4 @@ export * from './lib/vertice.service'
 
 export * from './lib/GONG__ExpressionType'
 export * from './lib/MultiplicityType'
+export * from './lib/NoteShapeLinkType'

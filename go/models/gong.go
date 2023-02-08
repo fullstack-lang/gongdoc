@@ -2809,7 +2809,7 @@ func GetFields[Type Gongstruct]() (res []string) {
 	case NoteShape:
 		res = []string{"Name", "Identifier", "Body", "X", "Y", "Width", "Heigth", "Matched", "NoteShapeLinks"}
 	case NoteShapeLink:
-		res = []string{"Name", "Identifier", "Classshape", "Link", "Middlevertice"}
+		res = []string{"Name", "Identifier", "Type", "Classshape", "Link", "Middlevertice"}
 	case Position:
 		res = []string{"X", "Y", "Name"}
 	case Tree:
@@ -3066,6 +3066,9 @@ func GetFieldStringValue[Type Gongstruct](instance Type, fieldName string) (res 
 			res = any(instance).(NoteShapeLink).Name
 		case "Identifier":
 			res = any(instance).(NoteShapeLink).Identifier
+		case "Type":
+			enum := any(instance).(NoteShapeLink).Type
+			res = enum.ToCodeString()
 		case "Classshape":
 			if any(instance).(NoteShapeLink).Classshape != nil {
 				res = any(instance).(NoteShapeLink).Classshape.Name

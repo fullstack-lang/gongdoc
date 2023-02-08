@@ -1448,6 +1448,13 @@ func UnmarshallGongstructStaging(cmap *ast.CommentMap, assignStmt *ast.AssignStm
 				case "NoteShapeLink":
 					switch fieldName {
 					// insertion point for enum assign code
+					case "Type":
+						var val NoteShapeLinkType
+						err := (&val).FromCodeString(enumValue)
+						if err != nil {
+							log.Fatalln(err)
+						}
+						__gong__map_NoteShapeLink[identifier].Type = NoteShapeLinkType(val)
 					}
 				case "Position":
 					switch fieldName {

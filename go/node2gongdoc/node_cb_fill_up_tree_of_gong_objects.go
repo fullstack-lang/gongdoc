@@ -119,7 +119,14 @@ func (nodeCb *NodeCB) FillUpTreeOfGongObjects() {
 		SetNodeBackPointer(gongNote, gongNoteImpl)
 
 		for _, gongLink := range gongNote.Links {
-			nodeGongLink := (&gongdoc_models.Node{Name: gongLink.Name}).Stage()
+
+			gongLinkName := gongLink.Name
+
+			if gongLink.Recv != "" {
+				gongLinkName = gongLink.Recv + "." + gongLinkName
+			}
+
+			nodeGongLink := (&gongdoc_models.Node{Name: gongLinkName}).Stage()
 			nodeGongLink.HasCheckboxButton = true
 
 			gongLinkImpl := new(GongLinkImpl)
