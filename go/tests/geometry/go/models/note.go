@@ -23,5 +23,6 @@ const LongNodeOnModels = ""
 
 // GONGNOTE(ShortNodeOnModels): this is an example of a short note
 // It uses the DocLink convention for referencing Identifiers
-// In this case [Line], [Point] and [Line.Start]
+// In this case [models.Line], [models.Point] and [models.Line.Start]
+// are referenced in the go code
 const ShortNodeOnModels = ""

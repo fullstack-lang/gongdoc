@@ -2309,12 +2309,6 @@ func GetAssociationName[Type Gongstruct]() *Type {
 	case NoteShapeLink:
 		return any(&NoteShapeLink{
 			// Initialisation of associations
-			// field is initialized with an instance of GongStructShape with the name of the field
-			Classshape: &GongStructShape{Name: "Classshape"},
-			// field is initialized with an instance of Link with the name of the field
-			Link: &Link{Name: "Link"},
-			// field is initialized with an instance of Vertice with the name of the field
-			Middlevertice: &Vertice{Name: "Middlevertice"},
 		}).(*Type)
 	case Position:
 		return any(&Position{
@@ -2474,57 +2468,6 @@ func GetPointerReverseMap[Start, End Gongstruct](fieldname string) map[*End][]*S
 	case NoteShapeLink:
 		switch fieldname {
 		// insertion point for per direct association field
-		case "Classshape":
-			res := make(map[*GongStructShape][]*NoteShapeLink)
-			for noteshapelink := range Stage.NoteShapeLinks {
-				if noteshapelink.Classshape != nil {
-					gongstructshape_ := noteshapelink.Classshape
-					var noteshapelinks []*NoteShapeLink
-					_, ok := res[gongstructshape_]
-					if ok {
-						noteshapelinks = res[gongstructshape_]
-					} else {
-						noteshapelinks = make([]*NoteShapeLink, 0)
-					}
-					noteshapelinks = append(noteshapelinks, noteshapelink)
-					res[gongstructshape_] = noteshapelinks
-				}
-			}
-			return any(res).(map[*End][]*Start)
-		case "Link":
-			res := make(map[*Link][]*NoteShapeLink)
-			for noteshapelink := range Stage.NoteShapeLinks {
-				if noteshapelink.Link != nil {
-					link_ := noteshapelink.Link
-					var noteshapelinks []*NoteShapeLink
-					_, ok := res[link_]
-					if ok {
-						noteshapelinks = res[link_]
-					} else {
-						noteshapelinks = make([]*NoteShapeLink, 0)
-					}
-					noteshapelinks = append(noteshapelinks, noteshapelink)
-					res[link_] = noteshapelinks
-				}
-			}
-			return any(res).(map[*End][]*Start)
-		case "Middlevertice":
-			res := make(map[*Vertice][]*NoteShapeLink)
-			for noteshapelink := range Stage.NoteShapeLinks {
-				if noteshapelink.Middlevertice != nil {
-					vertice_ := noteshapelink.Middlevertice
-					var noteshapelinks []*NoteShapeLink
-					_, ok := res[vertice_]
-					if ok {
-						noteshapelinks = res[vertice_]
-					} else {
-						noteshapelinks = make([]*NoteShapeLink, 0)
-					}
-					noteshapelinks = append(noteshapelinks, noteshapelink)
-					res[vertice_] = noteshapelinks
-				}
-			}
-			return any(res).(map[*End][]*Start)
 		}
 	// reverse maps of direct associations of Position
 	case Position:
@@ -2809,7 +2752,7 @@ func GetFields[Type Gongstruct]() (res []string) {
 	case NoteShape:
 		res = []string{"Name", "Identifier", "Body", "X", "Y", "Width", "Heigth", "Matched", "NoteShapeLinks"}
 	case NoteShapeLink:
-		res = []string{"Name", "Identifier", "Classshape", "Link", "Middlevertice"}
+		res = []string{"Name", "Identifier", "Type"}
 	case Position:
 		res = []string{"X", "Y", "Name"}
 	case Tree:
@@ -3066,18 +3009,9 @@ func GetFieldStringValue[Type Gongstruct](instance Type, fieldName string) (res 
 			res = any(instance).(NoteShapeLink).Name
 		case "Identifier":
 			res = any(instance).(NoteShapeLink).Identifier
-		case "Classshape":
-			if any(instance).(NoteShapeLink).Classshape != nil {
-				res = any(instance).(NoteShapeLink).Classshape.Name
-			}
-		case "Link":
-			if any(instance).(NoteShapeLink).Link != nil {
-				res = any(instance).(NoteShapeLink).Link.Name
-			}
-		case "Middlevertice":
-			if any(instance).(NoteShapeLink).Middlevertice != nil {
-				res = any(instance).(NoteShapeLink).Middlevertice.Name
-			}
+		case "Type":
+			enum := any(instance).(NoteShapeLink).Type
+			res = enum.ToCodeString()
 		}
 	case Position:
 		switch fieldName {

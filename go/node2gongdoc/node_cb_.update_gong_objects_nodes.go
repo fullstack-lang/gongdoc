@@ -13,6 +13,15 @@ func (nodeCb *NodeCB) updateGongObjectsNodes(stage *gongdoc_models.StageStruct, 
 		listOfGongStructShapes[gongStructName] = true
 	}
 
+	listOfGongFields := make(map[string]bool)
+	for _, gongStructShape := range classdiagram.GongStructShapes {
+
+		for _, gongFieldShape := range gongStructShape.Links {
+			gongFieldName := gongdoc_models.IdentifierToGongObjectName(gongFieldShape.Identifier)
+			listOfGongFields[gongFieldName] = true
+		}
+	}
+
 	// disable some nodes
 	for gongStruct := range *gong_models.GetGongstructInstancesSet[gong_models.GongStruct]() {
 		for _, gongField := range gongStruct.Fields {
@@ -35,8 +44,15 @@ func (nodeCb *NodeCB) updateGongObjectsNodes(stage *gongdoc_models.StageStruct, 
 	for gongNote := range *gong_models.GetGongstructInstancesSet[gong_models.GongNote]() {
 		for _, gongLink := range gongNote.Links {
 			impl := GetNodeBackPointer(gongLink)
-			if ok := listOfGongStructShapes[gongLink.Name]; !ok {
-				impl.SetHasToBeDisabledValue(true)
+			if gongLink.Recv == "" {
+				if ok := listOfGongStructShapes[gongLink.Name]; !ok {
+					impl.SetHasToBeDisabledValue(true)
+				}
+			} else {
+				fieldName := gongLink.Recv + "." + gongLink.Name
+				if ok := listOfGongFields[fieldName]; !ok {
+					impl.SetHasToBeDisabledValue(true)
+				}
 			}
 		}
 	}
@@ -122,17 +138,31 @@ func (nodeCb *NodeCB) updateGongObjectsNodes(stage *gongdoc_models.StageStruct, 
 		gongNodeImpl.SetHasToBeCheckedValue(true)
 
 		for _, nodeShapeLink := range noteShape.NoteShapeLinks {
-			_ = nodeShapeLink
-			fieldName := gongdoc_models.IdentifierToFieldName(nodeShapeLink.Identifier)
 
-			// range over gongStruct fields (to be redone)
-			for _, link := range gongNote.Links {
-				if link.GetName() == fieldName {
-					impl := GetNodeBackPointer(link)
-					impl.SetHasToBeCheckedValue(true)
+			switch nodeShapeLink.Type {
+			case gongdoc_models.NOTE_SHAPE_LINK_TO_GONG_STRUCT_SHAPE:
+				targetShapeGongStructName := gongdoc_models.IdentifierToGongObjectName(nodeShapeLink.Identifier)
+				// range over gongStruct fields (to be redone)
+				for _, link := range gongNote.Links {
+					if link.GetName() == targetShapeGongStructName {
+						impl := GetNodeBackPointer(link)
+						impl.SetHasToBeCheckedValue(true)
+					}
+					continue
 				}
-				continue
+			case gongdoc_models.NOTE_SHAPE_LINK_TO_GONG_FIELD:
+				receiverName, fieldName :=
+					gongdoc_models.IdentifierToReceiverAndFieldName(nodeShapeLink.Identifier)
+					// range over gongStruct fields (to be redone)
+				for _, link := range gongNote.Links {
+					if link.GetName() == fieldName && link.Recv == receiverName {
+						impl := GetNodeBackPointer(link)
+						impl.SetHasToBeCheckedValue(true)
+					}
+					continue
+				}
 			}
+
 		}
 	}
 

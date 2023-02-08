@@ -1330,15 +1330,6 @@ func UnmarshallGongstructStaging(cmap *ast.CommentMap, assignStmt *ast.AssignStm
 			case "NoteShapeLink":
 				switch fieldName {
 				// insertion point for field dependant code
-				case "Classshape":
-					targetIdentifier := ident.Name
-					__gong__map_NoteShapeLink[identifier].Classshape = __gong__map_GongStructShape[targetIdentifier]
-				case "Link":
-					targetIdentifier := ident.Name
-					__gong__map_NoteShapeLink[identifier].Link = __gong__map_Link[targetIdentifier]
-				case "Middlevertice":
-					targetIdentifier := ident.Name
-					__gong__map_NoteShapeLink[identifier].Middlevertice = __gong__map_Vertice[targetIdentifier]
 				}
 			case "Position":
 				switch fieldName {
@@ -1448,6 +1439,13 @@ func UnmarshallGongstructStaging(cmap *ast.CommentMap, assignStmt *ast.AssignStm
 				case "NoteShapeLink":
 					switch fieldName {
 					// insertion point for enum assign code
+					case "Type":
+						var val NoteShapeLinkType
+						err := (&val).FromCodeString(enumValue)
+						if err != nil {
+							log.Fatalln(err)
+						}
+						__gong__map_NoteShapeLink[identifier].Type = NoteShapeLinkType(val)
 					}
 				case "Position":
 					switch fieldName {

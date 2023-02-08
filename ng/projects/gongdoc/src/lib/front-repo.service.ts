@@ -1008,27 +1008,6 @@ export class FrontRepoService {
             noteshapelinks.forEach(
               noteshapelink => {
                 // insertion point sub sub template for ONE-/ZERO-ONE associations pointers redeeming
-                // insertion point for pointer field Classshape redeeming
-                {
-                  let _gongstructshape = FrontRepoSingloton.GongStructShapes.get(noteshapelink.ClassshapeID.Int64)
-                  if (_gongstructshape) {
-                    noteshapelink.Classshape = _gongstructshape
-                  }
-                }
-                // insertion point for pointer field Link redeeming
-                {
-                  let _link = FrontRepoSingloton.Links.get(noteshapelink.LinkID.Int64)
-                  if (_link) {
-                    noteshapelink.Link = _link
-                  }
-                }
-                // insertion point for pointer field Middlevertice redeeming
-                {
-                  let _vertice = FrontRepoSingloton.Vertices.get(noteshapelink.MiddleverticeID.Int64)
-                  if (_vertice) {
-                    noteshapelink.Middlevertice = _vertice
-                  }
-                }
 
                 // insertion point for redeeming ONE-MANY associations
                 // insertion point for slice of pointer field NoteShape.NoteShapeLinks redeeming
@@ -1747,27 +1726,6 @@ export class FrontRepoService {
                 FrontRepoSingloton.NoteShapeLinks_batch.set(noteshapelink.ID, noteshapelink)
 
                 // insertion point for redeeming ONE/ZERO-ONE associations
-                // insertion point for pointer field Classshape redeeming
-                {
-                  let _gongstructshape = FrontRepoSingloton.GongStructShapes.get(noteshapelink.ClassshapeID.Int64)
-                  if (_gongstructshape) {
-                    noteshapelink.Classshape = _gongstructshape
-                  }
-                }
-                // insertion point for pointer field Link redeeming
-                {
-                  let _link = FrontRepoSingloton.Links.get(noteshapelink.LinkID.Int64)
-                  if (_link) {
-                    noteshapelink.Link = _link
-                  }
-                }
-                // insertion point for pointer field Middlevertice redeeming
-                {
-                  let _vertice = FrontRepoSingloton.Vertices.get(noteshapelink.MiddleverticeID.Int64)
-                  if (_vertice) {
-                    noteshapelink.Middlevertice = _vertice
-                  }
-                }
 
                 // insertion point for redeeming ONE-MANY associations
                 // insertion point for slice of pointer field NoteShape.NoteShapeLinks redeeming

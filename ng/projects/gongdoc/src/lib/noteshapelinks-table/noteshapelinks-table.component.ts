@@ -74,14 +74,8 @@ export class NoteShapeLinksTableComponent implements OnInit {
         case 'Identifier':
           return noteshapelinkDB.Identifier;
 
-        case 'Classshape':
-          return (noteshapelinkDB.Classshape ? noteshapelinkDB.Classshape.Name : '');
-
-        case 'Link':
-          return (noteshapelinkDB.Link ? noteshapelinkDB.Link.Name : '');
-
-        case 'Middlevertice':
-          return (noteshapelinkDB.Middlevertice ? noteshapelinkDB.Middlevertice.Name : '');
+        case 'Type':
+          return noteshapelinkDB.Type;
 
         case 'NoteShape_NoteShapeLinks':
           if (this.frontRepo.NoteShapes.get(noteshapelinkDB.NoteShape_NoteShapeLinksDBID.Int64) != undefined) {
@@ -106,15 +100,7 @@ export class NoteShapeLinksTableComponent implements OnInit {
       // insertion point for merging of fields
       mergedContent += noteshapelinkDB.Name.toLowerCase()
       mergedContent += noteshapelinkDB.Identifier.toLowerCase()
-      if (noteshapelinkDB.Classshape) {
-        mergedContent += noteshapelinkDB.Classshape.Name.toLowerCase()
-      }
-      if (noteshapelinkDB.Link) {
-        mergedContent += noteshapelinkDB.Link.Name.toLowerCase()
-      }
-      if (noteshapelinkDB.Middlevertice) {
-        mergedContent += noteshapelinkDB.Middlevertice.Name.toLowerCase()
-      }
+      mergedContent += noteshapelinkDB.Type.toLowerCase()
       if (noteshapelinkDB.NoteShape_NoteShapeLinksDBID.Int64 != 0) {
         mergedContent += this.frontRepo.NoteShapes.get(noteshapelinkDB.NoteShape_NoteShapeLinksDBID.Int64)!.Name.toLowerCase()
       }
@@ -171,18 +157,14 @@ export class NoteShapeLinksTableComponent implements OnInit {
       this.displayedColumns = ['ID', 'Delete', // insertion point for columns to display
         "Name",
         "Identifier",
-        "Classshape",
-        "Link",
-        "Middlevertice",
+        "Type",
         "NoteShape_NoteShapeLinks",
       ]
     } else {
       this.displayedColumns = ['select', 'ID', // insertion point for columns to display
         "Name",
         "Identifier",
-        "Classshape",
-        "Link",
-        "Middlevertice",
+        "Type",
         "NoteShape_NoteShapeLinks",
       ]
       this.selection = new SelectionModel<NoteShapeLinkDB>(allowMultiSelect, this.initialSelection);

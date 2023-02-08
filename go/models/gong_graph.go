@@ -405,15 +405,6 @@ func (stage *StageStruct) StageBranchNoteShapeLink(noteshapelink *NoteShapeLink)
 	noteshapelink.Stage()
 
 	//insertion point for the staging of instances referenced by pointers
-	if noteshapelink.Classshape != nil {
-		StageBranch(stage, noteshapelink.Classshape)
-	}
-	if noteshapelink.Link != nil {
-		StageBranch(stage, noteshapelink.Link)
-	}
-	if noteshapelink.Middlevertice != nil {
-		StageBranch(stage, noteshapelink.Middlevertice)
-	}
 
 	//insertion point for the staging of instances referenced by slice of pointers
 
@@ -745,15 +736,6 @@ func (stage *StageStruct) UnstageBranchNoteShapeLink(noteshapelink *NoteShapeLin
 	noteshapelink.Unstage()
 
 	//insertion point for the staging of instances referenced by pointers
-	if noteshapelink.Classshape != nil {
-		UnstageBranch(stage, noteshapelink.Classshape)
-	}
-	if noteshapelink.Link != nil {
-		UnstageBranch(stage, noteshapelink.Link)
-	}
-	if noteshapelink.Middlevertice != nil {
-		UnstageBranch(stage, noteshapelink.Middlevertice)
-	}
 
 	//insertion point for the staging of instances referenced by slice of pointers
 

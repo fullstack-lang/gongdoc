@@ -14,9 +14,6 @@ import { catchError, map, tap } from 'rxjs/operators';
 import { NoteShapeLinkDB } from './noteshapelink-db';
 
 // insertion point for imports
-import { GongStructShapeDB } from './gongstructshape-db'
-import { LinkDB } from './link-db'
-import { VerticeDB } from './vertice-db'
 import { NoteShapeDB } from './noteshape-db'
 
 @Injectable({
@@ -74,9 +71,6 @@ export class NoteShapeLinkService {
   postNoteShapeLink(noteshapelinkdb: NoteShapeLinkDB): Observable<NoteShapeLinkDB> {
 
     // insertion point for reset of pointers and reverse pointers (to avoid circular JSON)
-    noteshapelinkdb.Classshape = new GongStructShapeDB
-    noteshapelinkdb.Link = new LinkDB
-    noteshapelinkdb.Middlevertice = new VerticeDB
     let _NoteShape_NoteShapeLinks_reverse = noteshapelinkdb.NoteShape_NoteShapeLinks_reverse
     noteshapelinkdb.NoteShape_NoteShapeLinks_reverse = new NoteShapeDB
 
@@ -107,9 +101,6 @@ export class NoteShapeLinkService {
     const url = `${this.noteshapelinksUrl}/${id}`;
 
     // insertion point for reset of pointers and reverse pointers (to avoid circular JSON)
-    noteshapelinkdb.Classshape = new GongStructShapeDB
-    noteshapelinkdb.Link = new LinkDB
-    noteshapelinkdb.Middlevertice = new VerticeDB
     let _NoteShape_NoteShapeLinks_reverse = noteshapelinkdb.NoteShape_NoteShapeLinks_reverse
     noteshapelinkdb.NoteShape_NoteShapeLinks_reverse = new NoteShapeDB
 

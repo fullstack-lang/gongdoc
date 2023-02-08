@@ -10,6 +10,7 @@ import { MapOfComponents } from '../map-components'
 import { MapOfSortingComponents } from '../map-components'
 
 // insertion point for imports
+import { NoteShapeLinkTypeSelect, NoteShapeLinkTypeList } from '../NoteShapeLinkType'
 import { NoteShapeDB } from '../noteshape-db'
 
 import { Router, ActivatedRoute } from '@angular/router';
@@ -35,6 +36,7 @@ enum NoteShapeLinkDetailComponentState {
 export class NoteShapeLinkDetailComponent implements OnInit {
 
 	// insertion point for declarations
+	NoteShapeLinkTypeList: NoteShapeLinkTypeSelect[] = []
 
 	// the NoteShapeLinkDB of interest
 	noteshapelink: NoteShapeLinkDB = new NoteShapeLinkDB
@@ -110,6 +112,7 @@ export class NoteShapeLinkDetailComponent implements OnInit {
 		)
 
 		// insertion point for initialisation of enums list
+		this.NoteShapeLinkTypeList = NoteShapeLinkTypeList
 	}
 
 	getNoteShapeLink(): void {
@@ -149,36 +152,6 @@ export class NoteShapeLinkDetailComponent implements OnInit {
 		// pointers fields, after the translation, are nulled in order to perform serialization
 
 		// insertion point for translation/nullation of each field
-		if (this.noteshapelink.ClassshapeID == undefined) {
-			this.noteshapelink.ClassshapeID = new NullInt64
-		}
-		if (this.noteshapelink.Classshape != undefined) {
-			this.noteshapelink.ClassshapeID.Int64 = this.noteshapelink.Classshape.ID
-			this.noteshapelink.ClassshapeID.Valid = true
-		} else {
-			this.noteshapelink.ClassshapeID.Int64 = 0
-			this.noteshapelink.ClassshapeID.Valid = true
-		}
-		if (this.noteshapelink.LinkID == undefined) {
-			this.noteshapelink.LinkID = new NullInt64
-		}
-		if (this.noteshapelink.Link != undefined) {
-			this.noteshapelink.LinkID.Int64 = this.noteshapelink.Link.ID
-			this.noteshapelink.LinkID.Valid = true
-		} else {
-			this.noteshapelink.LinkID.Int64 = 0
-			this.noteshapelink.LinkID.Valid = true
-		}
-		if (this.noteshapelink.MiddleverticeID == undefined) {
-			this.noteshapelink.MiddleverticeID = new NullInt64
-		}
-		if (this.noteshapelink.Middlevertice != undefined) {
-			this.noteshapelink.MiddleverticeID.Int64 = this.noteshapelink.Middlevertice.ID
-			this.noteshapelink.MiddleverticeID.Valid = true
-		} else {
-			this.noteshapelink.MiddleverticeID.Int64 = 0
-			this.noteshapelink.MiddleverticeID.Valid = true
-		}
 
 		// save from the front pointer space to the non pointer space for serialization
 
