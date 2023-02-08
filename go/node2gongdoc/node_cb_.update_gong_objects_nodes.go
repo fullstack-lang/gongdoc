@@ -12,6 +12,11 @@ func (nodeCb *NodeCB) updateGongObjectsNodes(stage *gongdoc_models.StageStruct, 
 		gongStructName := gongdoc_models.IdentifierToGongObjectName(gongStructShape.Identifier)
 		listOfGongStructShapes[gongStructName] = true
 	}
+	listOfGongEnumShapes := make(map[string]bool)
+	for _, gongEnumShape := range classdiagram.GongEnumShapes {
+		gongStructName := gongdoc_models.IdentifierToGongObjectName(gongEnumShape.Identifier)
+		listOfGongEnumShapes[gongStructName] = true
+	}
 
 	listOfGongFields := make(map[string]bool)
 	for _, gongStructShape := range classdiagram.GongStructShapes {
@@ -45,7 +50,12 @@ func (nodeCb *NodeCB) updateGongObjectsNodes(stage *gongdoc_models.StageStruct, 
 		for _, gongLink := range gongNote.Links {
 			impl := GetNodeBackPointer(gongLink)
 			if gongLink.Recv == "" {
-				if ok := listOfGongStructShapes[gongLink.Name]; !ok {
+				gongStructShapeWithThisNameIsPresent := listOfGongStructShapes[gongLink.Name]
+				gongEnumShapeWithThisNameIsPresent := listOfGongEnumShapes[gongLink.Name]
+
+				if !gongStructShapeWithThisNameIsPresent && !gongEnumShapeWithThisNameIsPresent {
+
+					// no corresponding gong struct shape, therefore, disable the node
 					impl.SetHasToBeDisabledValue(true)
 				}
 			} else {
@@ -140,7 +150,7 @@ func (nodeCb *NodeCB) updateGongObjectsNodes(stage *gongdoc_models.StageStruct, 
 		for _, nodeShapeLink := range noteShape.NoteShapeLinks {
 
 			switch nodeShapeLink.Type {
-			case gongdoc_models.NOTE_SHAPE_LINK_TO_GONG_STRUCT_SHAPE:
+			case gongdoc_models.NOTE_SHAPE_LINK_TO_GONG_STRUCT_OR_ENUM_SHAPE:
 				targetShapeGongStructName := gongdoc_models.IdentifierToGongObjectName(nodeShapeLink.Identifier)
 				// range over gongStruct fields (to be redone)
 				for _, link := range gongNote.Links {

@@ -162,8 +162,8 @@ func (noteshapelinktype NoteShapeLinkType) ToString() (res string) {
 	// migration of former implementation of enum
 	switch noteshapelinktype {
 	// insertion code per enum code
-	case NOTE_SHAPE_LINK_TO_GONG_STRUCT_SHAPE:
-		res = "NOTE_SHAPE_LINK_TO_GONG_STRUCT_SHAPE"
+	case NOTE_SHAPE_LINK_TO_GONG_STRUCT_OR_ENUM_SHAPE:
+		res = "NOTE_SHAPE_LINK_TO_GONG_STRUCT_OR_ENUM_SHAPE"
 	case NOTE_SHAPE_LINK_TO_GONG_FIELD:
 		res = "NOTE_SHAPE_LINK_TO_GONG_FIELD"
 	}
@@ -174,8 +174,8 @@ func (noteshapelinktype *NoteShapeLinkType) FromString(input string) (err error)
 
 	switch input {
 	// insertion code per enum code
-	case "NOTE_SHAPE_LINK_TO_GONG_STRUCT_SHAPE":
-		*noteshapelinktype = NOTE_SHAPE_LINK_TO_GONG_STRUCT_SHAPE
+	case "NOTE_SHAPE_LINK_TO_GONG_STRUCT_OR_ENUM_SHAPE":
+		*noteshapelinktype = NOTE_SHAPE_LINK_TO_GONG_STRUCT_OR_ENUM_SHAPE
 	case "NOTE_SHAPE_LINK_TO_GONG_FIELD":
 		*noteshapelinktype = NOTE_SHAPE_LINK_TO_GONG_FIELD
 	default:
@@ -188,8 +188,8 @@ func (noteshapelinktype *NoteShapeLinkType) FromCodeString(input string) (err er
 
 	switch input {
 	// insertion code per enum code
-	case "NOTE_SHAPE_LINK_TO_GONG_STRUCT_SHAPE":
-		*noteshapelinktype = NOTE_SHAPE_LINK_TO_GONG_STRUCT_SHAPE
+	case "NOTE_SHAPE_LINK_TO_GONG_STRUCT_OR_ENUM_SHAPE":
+		*noteshapelinktype = NOTE_SHAPE_LINK_TO_GONG_STRUCT_OR_ENUM_SHAPE
 	case "NOTE_SHAPE_LINK_TO_GONG_FIELD":
 		*noteshapelinktype = NOTE_SHAPE_LINK_TO_GONG_FIELD
 	default:
@@ -202,8 +202,8 @@ func (noteshapelinktype *NoteShapeLinkType) ToCodeString() (res string) {
 
 	switch *noteshapelinktype {
 	// insertion code per enum code
-	case NOTE_SHAPE_LINK_TO_GONG_STRUCT_SHAPE:
-		res = "NOTE_SHAPE_LINK_TO_GONG_STRUCT_SHAPE"
+	case NOTE_SHAPE_LINK_TO_GONG_STRUCT_OR_ENUM_SHAPE:
+		res = "NOTE_SHAPE_LINK_TO_GONG_STRUCT_OR_ENUM_SHAPE"
 	case NOTE_SHAPE_LINK_TO_GONG_FIELD:
 		res = "NOTE_SHAPE_LINK_TO_GONG_FIELD"
 	}

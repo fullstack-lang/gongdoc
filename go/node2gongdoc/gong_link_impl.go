@@ -54,7 +54,7 @@ func (gongLinkImpl *GongLinkImpl) OnAfterUpdate(
 				gongdoc_models.GongstructAndFieldnameToFieldIdentifier(subStrings[0], subStrings[1])
 
 		} else {
-			noteShapeLink.Type = gongdoc_models.NOTE_SHAPE_LINK_TO_GONG_STRUCT_SHAPE
+			noteShapeLink.Type = gongdoc_models.NOTE_SHAPE_LINK_TO_GONG_STRUCT_OR_ENUM_SHAPE
 			noteShapeLink.Identifier =
 				gongdoc_models.GongStructNameToIdentifier(stagedNode.Name)
 
@@ -72,7 +72,7 @@ func (gongLinkImpl *GongLinkImpl) OnAfterUpdate(
 		for _, _noteShapeLink := range noteshape.NoteShapeLinks {
 
 			switch _noteShapeLink.Type {
-			case gongdoc_models.NOTE_SHAPE_LINK_TO_GONG_STRUCT_SHAPE:
+			case gongdoc_models.NOTE_SHAPE_LINK_TO_GONG_STRUCT_OR_ENUM_SHAPE:
 				if gongdoc_models.IdentifierToGongObjectName(_noteShapeLink.Identifier) == stagedNode.Name {
 					noteShapeLink = _noteShapeLink
 				}

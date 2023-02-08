@@ -362,7 +362,7 @@ export class ClassDiagramComponent implements OnInit, OnDestroy {
 
             switch (noteShapeLink.Type) {
 
-              case gongdoc.NoteShapeLinkType.NOTE_SHAPE_LINK_TO_GONG_STRUCT_SHAPE: {
+              case gongdoc.NoteShapeLinkType.NOTE_SHAPE_LINK_TO_GONG_STRUCT_OR_ENUM_SHAPE: {
                 var toShape = this.Map_GongStructName_JointjsUMLClassShape.get(noteShapeLink.Name)
                 let xTo = toShape!.get('position')!.x
                 let yTo = toShape!.get('position')!.y

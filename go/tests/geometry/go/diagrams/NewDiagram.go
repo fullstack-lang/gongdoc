@@ -116,7 +116,7 @@ func NewDiagramInjection() {
 	// Declarations of staged instances of Field
 
 	// Declarations of staged instances of GongEnumShape
-	__GongEnumShape__000000_NewDiagram_LineTypeInt := (&models.GongEnumShape{Name: `NewDiagram-LineTypeInt`}).Stage()
+	__GongEnumShape__000000_NewDiagram_LineTypeString := (&models.GongEnumShape{Name: `NewDiagram-LineTypeString`}).Stage()
 
 	// Declarations of staged instances of GongEnumValueEntry
 
@@ -135,11 +135,12 @@ func NewDiagramInjection() {
 	// Declarations of staged instances of NoteShapeLink
 	__NoteShapeLink__000000_Line := (&models.NoteShapeLink{Name: `Line`}).Stage()
 	__NoteShapeLink__000001_Line_Start := (&models.NoteShapeLink{Name: `Line.Start`}).Stage()
-	__NoteShapeLink__000002_Point := (&models.NoteShapeLink{Name: `Point`}).Stage()
+	__NoteShapeLink__000002_LineTypeString := (&models.NoteShapeLink{Name: `LineTypeString`}).Stage()
+	__NoteShapeLink__000003_Point := (&models.NoteShapeLink{Name: `Point`}).Stage()
 
 	// Declarations of staged instances of Position
 	__Position__000000_Pos_NewDiagram_Line := (&models.Position{Name: `Pos-NewDiagram-Line`}).Stage()
-	__Position__000001_Pos_NewDiagram_LineTypeInt := (&models.Position{Name: `Pos-NewDiagram-LineTypeInt`}).Stage()
+	__Position__000001_Pos_NewDiagram_LineTypeString := (&models.Position{Name: `Pos-NewDiagram-LineTypeString`}).Stage()
 	__Position__000002_Pos_NewDiagram_Point := (&models.Position{Name: `Pos-NewDiagram-Point`}).Stage()
 
 	// Declarations of staged instances of Tree
@@ -158,18 +159,18 @@ func NewDiagramInjection() {
 	__Classdiagram__000000_NewDiagram.IsInDrawMode = true
 
 	// GongEnumShape values setup
-	__GongEnumShape__000000_NewDiagram_LineTypeInt.Name = `NewDiagram-LineTypeInt`
-	
+	__GongEnumShape__000000_NewDiagram_LineTypeString.Name = `NewDiagram-LineTypeString`
+
 	// comment added to overcome the problem with the comment map association
 
-	//gong:ident [ref_models.LineTypeInt]
-	__GongEnumShape__000000_NewDiagram_LineTypeInt.Identifier = `ref_models.LineTypeInt`
-	__GongEnumShape__000000_NewDiagram_LineTypeInt.Width = 240.000000
-	__GongEnumShape__000000_NewDiagram_LineTypeInt.Heigth = 63.000000
+	//gong:ident [ref_models.LineTypeString]
+	__GongEnumShape__000000_NewDiagram_LineTypeString.Identifier = `ref_models.LineTypeString`
+	__GongEnumShape__000000_NewDiagram_LineTypeString.Width = 240.000000
+	__GongEnumShape__000000_NewDiagram_LineTypeString.Heigth = 63.000000
 
 	// GongStructShape values setup
 	__GongStructShape__000000_NewDiagram_Line.Name = `NewDiagram-Line`
-	
+
 	// comment added to overcome the problem with the comment map association
 
 	//gong:ident [ref_models.Line]
@@ -182,7 +183,7 @@ func NewDiagramInjection() {
 
 	// GongStructShape values setup
 	__GongStructShape__000001_NewDiagram_Point.Name = `NewDiagram-Point`
-	
+
 	// comment added to overcome the problem with the comment map association
 
 	//gong:ident [ref_models.Point]
@@ -196,7 +197,7 @@ func NewDiagramInjection() {
 	// Link values setup
 	__Link__000000_Start.Name = `Start`
 	__Link__000000_Start.Structname = `Line`
-	
+
 	// comment added to overcome the problem with the comment map association
 
 	//gong:ident [ref_models.Line.Start]
@@ -207,7 +208,7 @@ func NewDiagramInjection() {
 
 	// NoteShape values setup
 	__NoteShape__000000_ShortNodeOnModels.Name = `ShortNodeOnModels`
-	
+
 	// comment added to overcome the problem with the comment map association
 
 	//gong:ident [ref_models.ShortNodeOnModels]
@@ -225,16 +226,16 @@ are referenced in the go code
 
 	// NoteShapeLink values setup
 	__NoteShapeLink__000000_Line.Name = `Line`
-	
+
 	// comment added to overcome the problem with the comment map association
 
 	//gong:ident [ref_models.Line]
 	__NoteShapeLink__000000_Line.Identifier = `ref_models.Line`
-	__NoteShapeLink__000000_Line.Type = models.NOTE_SHAPE_LINK_TO_GONG_STRUCT_SHAPE
+	__NoteShapeLink__000000_Line.Type = models.NOTE_SHAPE_LINK_TO_GONG_STRUCT_OR_ENUM_SHAPE
 
 	// NoteShapeLink values setup
 	__NoteShapeLink__000001_Line_Start.Name = `Line.Start`
-	
+
 	// comment added to overcome the problem with the comment map association
 
 	//gong:ident [ref_models.Line.Start]
@@ -242,13 +243,22 @@ are referenced in the go code
 	__NoteShapeLink__000001_Line_Start.Type = models.NOTE_SHAPE_LINK_TO_GONG_FIELD
 
 	// NoteShapeLink values setup
-	__NoteShapeLink__000002_Point.Name = `Point`
-	
+	__NoteShapeLink__000002_LineTypeString.Name = `LineTypeString`
+
+	// comment added to overcome the problem with the comment map association
+
+	//gong:ident [ref_models.LineTypeString]
+	__NoteShapeLink__000002_LineTypeString.Identifier = `ref_models.LineTypeString`
+	__NoteShapeLink__000002_LineTypeString.Type = models.NOTE_SHAPE_LINK_TO_GONG_STRUCT_OR_ENUM_SHAPE
+
+	// NoteShapeLink values setup
+	__NoteShapeLink__000003_Point.Name = `Point`
+
 	// comment added to overcome the problem with the comment map association
 
 	//gong:ident [ref_models.Point]
-	__NoteShapeLink__000002_Point.Identifier = `ref_models.Point`
-	__NoteShapeLink__000002_Point.Type = models.NOTE_SHAPE_LINK_TO_GONG_STRUCT_SHAPE
+	__NoteShapeLink__000003_Point.Identifier = `ref_models.Point`
+	__NoteShapeLink__000003_Point.Type = models.NOTE_SHAPE_LINK_TO_GONG_STRUCT_OR_ENUM_SHAPE
 
 	// Position values setup
 	__Position__000000_Pos_NewDiagram_Line.X = 180.000000
@@ -256,9 +266,9 @@ are referenced in the go code
 	__Position__000000_Pos_NewDiagram_Line.Name = `Pos-NewDiagram-Line`
 
 	// Position values setup
-	__Position__000001_Pos_NewDiagram_LineTypeInt.X = 50.000000
-	__Position__000001_Pos_NewDiagram_LineTypeInt.Y = 440.000000
-	__Position__000001_Pos_NewDiagram_LineTypeInt.Name = `Pos-NewDiagram-LineTypeInt`
+	__Position__000001_Pos_NewDiagram_LineTypeString.X = 60.000000
+	__Position__000001_Pos_NewDiagram_LineTypeString.Y = 440.000000
+	__Position__000001_Pos_NewDiagram_LineTypeString.Name = `Pos-NewDiagram-LineTypeString`
 
 	// Position values setup
 	__Position__000002_Pos_NewDiagram_Point.X = 540.000000
@@ -273,16 +283,15 @@ are referenced in the go code
 	// Setup of pointers
 	__Classdiagram__000000_NewDiagram.GongStructShapes = append(__Classdiagram__000000_NewDiagram.GongStructShapes, __GongStructShape__000000_NewDiagram_Line)
 	__Classdiagram__000000_NewDiagram.GongStructShapes = append(__Classdiagram__000000_NewDiagram.GongStructShapes, __GongStructShape__000001_NewDiagram_Point)
-	__Classdiagram__000000_NewDiagram.GongEnumShapes = append(__Classdiagram__000000_NewDiagram.GongEnumShapes, __GongEnumShape__000000_NewDiagram_LineTypeInt)
+	__Classdiagram__000000_NewDiagram.GongEnumShapes = append(__Classdiagram__000000_NewDiagram.GongEnumShapes, __GongEnumShape__000000_NewDiagram_LineTypeString)
 	__Classdiagram__000000_NewDiagram.NoteShapes = append(__Classdiagram__000000_NewDiagram.NoteShapes, __NoteShape__000000_ShortNodeOnModels)
-	__GongEnumShape__000000_NewDiagram_LineTypeInt.Position = __Position__000001_Pos_NewDiagram_LineTypeInt
+	__GongEnumShape__000000_NewDiagram_LineTypeString.Position = __Position__000001_Pos_NewDiagram_LineTypeString
 	__GongStructShape__000000_NewDiagram_Line.Position = __Position__000000_Pos_NewDiagram_Line
 	__GongStructShape__000000_NewDiagram_Line.Links = append(__GongStructShape__000000_NewDiagram_Line.Links, __Link__000000_Start)
 	__GongStructShape__000001_NewDiagram_Point.Position = __Position__000002_Pos_NewDiagram_Point
 	__Link__000000_Start.Middlevertice = __Vertice__000000_Verticle_in_class_diagram_NewDiagram_in_middle_between_NewDiagram_Line_and_NewDiagram_Point
 	__NoteShape__000000_ShortNodeOnModels.NoteShapeLinks = append(__NoteShape__000000_ShortNodeOnModels.NoteShapeLinks, __NoteShapeLink__000000_Line)
 	__NoteShape__000000_ShortNodeOnModels.NoteShapeLinks = append(__NoteShape__000000_ShortNodeOnModels.NoteShapeLinks, __NoteShapeLink__000001_Line_Start)
-	__NoteShape__000000_ShortNodeOnModels.NoteShapeLinks = append(__NoteShape__000000_ShortNodeOnModels.NoteShapeLinks, __NoteShapeLink__000002_Point)
+	__NoteShape__000000_ShortNodeOnModels.NoteShapeLinks = append(__NoteShape__000000_ShortNodeOnModels.NoteShapeLinks, __NoteShapeLink__000003_Point)
+	__NoteShape__000000_ShortNodeOnModels.NoteShapeLinks = append(__NoteShape__000000_ShortNodeOnModels.NoteShapeLinks, __NoteShapeLink__000002_LineTypeString)
 }
-
-
