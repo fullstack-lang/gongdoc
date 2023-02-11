@@ -368,6 +368,11 @@ export class ClassDiagramComponent implements OnInit, OnDestroy {
 
               case gongdoc.NoteShapeLinkType.NOTE_SHAPE_LINK_TO_GONG_STRUCT_OR_ENUM_SHAPE: {
                 var toShape = this.Map_GongStructName_JointjsUMLClassShape.get(noteShapeLink.Name)
+
+                if (toShape == undefined) {
+                  console.log("target shape not found: " + noteShapeLink.Name)
+                  continue
+                }
                 let xTo = toShape!.get('position')!.x
                 let yTo = toShape!.get('position')!.y
                 var strockWidth = 1
