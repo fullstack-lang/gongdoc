@@ -196,7 +196,6 @@ func NewDiagramInjection() {
 
 	// Link values setup
 	__Link__000000_Start.Name = `Start`
-	__Link__000000_Start.Structname = `Line`
 
 	// comment added to overcome the problem with the comment map association
 

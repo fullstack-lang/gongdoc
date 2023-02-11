@@ -66,8 +66,7 @@ func DiagramUMLduUMLInjection() {
 	__Field__000006_Name := (&models.Field{Name: `Name`}).Stage()
 	__Field__000007_Name := (&models.Field{Name: `Name`}).Stage()
 	__Field__000008_Path := (&models.Field{Name: `Path`}).Stage()
-	__Field__000009_Structname := (&models.Field{Name: `Structname`}).Stage()
-	__Field__000010_Structname := (&models.Field{Name: `Structname`}).Stage()
+
 	__Field__000011_TargetMultiplicity := (&models.Field{Name: `TargetMultiplicity`}).Stage()
 	__Field__000012_Width := (&models.Field{Name: `Width`}).Stage()
 	__Field__000013_X := (&models.Field{Name: `X`}).Stage()
@@ -251,7 +250,7 @@ func DiagramUMLduUMLInjection() {
 	//gong:ident [ref_models.Field.FieldTypeAsString]
 	__Field__000000_FieldTypeAsString.Identifier = `ref_models.Field.FieldTypeAsString`
 	__Field__000000_FieldTypeAsString.FieldTypeAsString = ``
-	__Field__000000_FieldTypeAsString.Structname = `Field`
+
 	__Field__000000_FieldTypeAsString.Fieldtypename = `string`
 
 	// Field values setup
@@ -262,7 +261,7 @@ func DiagramUMLduUMLInjection() {
 	//gong:ident [ref_models.Field.Fieldtypename]
 	__Field__000001_Fieldtypename.Identifier = `ref_models.Field.Fieldtypename`
 	__Field__000001_Fieldtypename.FieldTypeAsString = ``
-	__Field__000001_Fieldtypename.Structname = `Field`
+
 	__Field__000001_Fieldtypename.Fieldtypename = `string`
 
 	// Field values setup
@@ -273,7 +272,7 @@ func DiagramUMLduUMLInjection() {
 	//gong:ident [ref_models.Link.Fieldtypename]
 	__Field__000002_Fieldtypename.Identifier = `ref_models.Link.Fieldtypename`
 	__Field__000002_Fieldtypename.FieldTypeAsString = ``
-	__Field__000002_Fieldtypename.Structname = `Link`
+
 	__Field__000002_Fieldtypename.Fieldtypename = `string`
 
 	// Field values setup
@@ -284,7 +283,7 @@ func DiagramUMLduUMLInjection() {
 	//gong:ident [ref_models.Classshape.Heigth]
 	__Field__000003_Heigth.Identifier = `ref_models.Classshape.Heigth`
 	__Field__000003_Heigth.FieldTypeAsString = ``
-	__Field__000003_Heigth.Structname = `Classshape`
+
 	__Field__000003_Heigth.Fieldtypename = `float64`
 
 	// Field values setup
@@ -295,7 +294,7 @@ func DiagramUMLduUMLInjection() {
 	//gong:ident [ref_models.Umlsc.Name]
 	__Field__000004_Name.Identifier = `ref_models.Umlsc.Name`
 	__Field__000004_Name.FieldTypeAsString = ``
-	__Field__000004_Name.Structname = `Umlsc`
+
 	__Field__000004_Name.Fieldtypename = `string`
 
 	// Field values setup
@@ -306,7 +305,7 @@ func DiagramUMLduUMLInjection() {
 	//gong:ident [ref_models.Classdiagram.Name]
 	__Field__000005_Name.Identifier = `ref_models.Classdiagram.Name`
 	__Field__000005_Name.FieldTypeAsString = ``
-	__Field__000005_Name.Structname = `Classdiagram`
+
 	__Field__000005_Name.Fieldtypename = `string`
 
 	// Field values setup
@@ -317,7 +316,7 @@ func DiagramUMLduUMLInjection() {
 	//gong:ident [ref_models.UmlState.Name]
 	__Field__000006_Name.Identifier = `ref_models.UmlState.Name`
 	__Field__000006_Name.FieldTypeAsString = ``
-	__Field__000006_Name.Structname = `UmlState`
+
 	__Field__000006_Name.Fieldtypename = `string`
 
 	// Field values setup
@@ -328,7 +327,7 @@ func DiagramUMLduUMLInjection() {
 	//gong:ident [ref_models.DiagramPackage.Name]
 	__Field__000007_Name.Identifier = `ref_models.DiagramPackage.Name`
 	__Field__000007_Name.FieldTypeAsString = ``
-	__Field__000007_Name.Structname = `DiagramPackage`
+
 	__Field__000007_Name.Fieldtypename = `string`
 
 	// Field values setup
@@ -339,30 +338,16 @@ func DiagramUMLduUMLInjection() {
 	//gong:ident [ref_models.DiagramPackage.Path]
 	__Field__000008_Path.Identifier = `ref_models.DiagramPackage.Path`
 	__Field__000008_Path.FieldTypeAsString = ``
-	__Field__000008_Path.Structname = `DiagramPackage`
+
 	__Field__000008_Path.Fieldtypename = `string`
 
 	// Field values setup
-	__Field__000009_Structname.Name = `Structname`
 
 	// comment added to overcome the problem with the comment map association
-
-	//gong:ident [ref_models.Link.Structname]
-	__Field__000009_Structname.Identifier = `ref_models.Link.Structname`
-	__Field__000009_Structname.FieldTypeAsString = ``
-	__Field__000009_Structname.Structname = `Link`
-	__Field__000009_Structname.Fieldtypename = `string`
 
 	// Field values setup
-	__Field__000010_Structname.Name = `Structname`
 
 	// comment added to overcome the problem with the comment map association
-
-	//gong:ident [ref_models.Field.Structname]
-	__Field__000010_Structname.Identifier = `ref_models.Field.Structname`
-	__Field__000010_Structname.FieldTypeAsString = ``
-	__Field__000010_Structname.Structname = `Field`
-	__Field__000010_Structname.Fieldtypename = `string`
 
 	// Field values setup
 	__Field__000011_TargetMultiplicity.Name = `TargetMultiplicity`
@@ -372,7 +357,7 @@ func DiagramUMLduUMLInjection() {
 	//gong:ident [ref_models.Link.TargetMultiplicity]
 	__Field__000011_TargetMultiplicity.Identifier = `ref_models.Link.TargetMultiplicity`
 	__Field__000011_TargetMultiplicity.FieldTypeAsString = ``
-	__Field__000011_TargetMultiplicity.Structname = `Link`
+
 	__Field__000011_TargetMultiplicity.Fieldtypename = `MultiplicityType`
 
 	// Field values setup
@@ -383,7 +368,7 @@ func DiagramUMLduUMLInjection() {
 	//gong:ident [ref_models.Classshape.Width]
 	__Field__000012_Width.Identifier = `ref_models.Classshape.Width`
 	__Field__000012_Width.FieldTypeAsString = ``
-	__Field__000012_Width.Structname = `Classshape`
+
 	__Field__000012_Width.Fieldtypename = `float64`
 
 	// Field values setup
@@ -394,7 +379,7 @@ func DiagramUMLduUMLInjection() {
 	//gong:ident [ref_models.UmlState.X]
 	__Field__000013_X.Identifier = `ref_models.UmlState.X`
 	__Field__000013_X.FieldTypeAsString = ``
-	__Field__000013_X.Structname = `UmlState`
+
 	__Field__000013_X.Fieldtypename = `float64`
 
 	// Field values setup
@@ -405,7 +390,7 @@ func DiagramUMLduUMLInjection() {
 	//gong:ident [ref_models.Position.X]
 	__Field__000014_X.Identifier = `ref_models.Position.X`
 	__Field__000014_X.FieldTypeAsString = ``
-	__Field__000014_X.Structname = `Position`
+
 	__Field__000014_X.Fieldtypename = `float64`
 
 	// Field values setup
@@ -416,7 +401,7 @@ func DiagramUMLduUMLInjection() {
 	//gong:ident [ref_models.Vertice.X]
 	__Field__000015_X.Identifier = `ref_models.Vertice.X`
 	__Field__000015_X.FieldTypeAsString = ``
-	__Field__000015_X.Structname = `Vertice`
+
 	__Field__000015_X.Fieldtypename = `float64`
 
 	// Field values setup
@@ -427,7 +412,7 @@ func DiagramUMLduUMLInjection() {
 	//gong:ident [ref_models.Position.Y]
 	__Field__000016_Y.Identifier = `ref_models.Position.Y`
 	__Field__000016_Y.FieldTypeAsString = ``
-	__Field__000016_Y.Structname = `Position`
+
 	__Field__000016_Y.Fieldtypename = `float64`
 
 	// Field values setup
@@ -438,7 +423,7 @@ func DiagramUMLduUMLInjection() {
 	//gong:ident [ref_models.UmlState.Y]
 	__Field__000017_Y.Identifier = `ref_models.UmlState.Y`
 	__Field__000017_Y.FieldTypeAsString = ``
-	__Field__000017_Y.Structname = `UmlState`
+
 	__Field__000017_Y.Fieldtypename = `float64`
 
 	// Field values setup
@@ -449,12 +434,11 @@ func DiagramUMLduUMLInjection() {
 	//gong:ident [ref_models.Vertice.Y]
 	__Field__000018_Y.Identifier = `ref_models.Vertice.Y`
 	__Field__000018_Y.FieldTypeAsString = ``
-	__Field__000018_Y.Structname = `Vertice`
+
 	__Field__000018_Y.Fieldtypename = `float64`
 
 	// Link values setup
 	__Link__000000_Classdiagrams.Name = `Classdiagrams`
-	__Link__000000_Classdiagrams.Structname = `DiagramPackage`
 
 	// comment added to overcome the problem with the comment map association
 
@@ -465,7 +449,6 @@ func DiagramUMLduUMLInjection() {
 
 	// Link values setup
 	__Link__000001_Classshapes.Name = `Classshapes`
-	__Link__000001_Classshapes.Structname = `Classdiagram`
 
 	// comment added to overcome the problem with the comment map association
 
@@ -476,7 +459,6 @@ func DiagramUMLduUMLInjection() {
 
 	// Link values setup
 	__Link__000002_Fields.Name = `Fields`
-	__Link__000002_Fields.Structname = `Classshape`
 
 	// comment added to overcome the problem with the comment map association
 
@@ -487,7 +469,6 @@ func DiagramUMLduUMLInjection() {
 
 	// Link values setup
 	__Link__000003_Links.Name = `Links`
-	__Link__000003_Links.Structname = `Classshape`
 
 	// comment added to overcome the problem with the comment map association
 
@@ -498,7 +479,6 @@ func DiagramUMLduUMLInjection() {
 
 	// Link values setup
 	__Link__000004_Middlevertice.Name = `Middlevertice`
-	__Link__000004_Middlevertice.Structname = `Link`
 
 	// comment added to overcome the problem with the comment map association
 
@@ -509,7 +489,6 @@ func DiagramUMLduUMLInjection() {
 
 	// Link values setup
 	__Link__000005_Position.Name = `Position`
-	__Link__000005_Position.Structname = `Classshape`
 
 	// comment added to overcome the problem with the comment map association
 
@@ -520,7 +499,6 @@ func DiagramUMLduUMLInjection() {
 
 	// Link values setup
 	__Link__000006_States.Name = `States`
-	__Link__000006_States.Structname = `Umlsc`
 
 	// comment added to overcome the problem with the comment map association
 
@@ -531,7 +509,6 @@ func DiagramUMLduUMLInjection() {
 
 	// Link values setup
 	__Link__000007_Umlscs.Name = `Umlscs`
-	__Link__000007_Umlscs.Structname = `DiagramPackage`
 
 	// comment added to overcome the problem with the comment map association
 
@@ -647,11 +624,11 @@ func DiagramUMLduUMLInjection() {
 	__Classshape__000002_Classshape0002.Position = __Position__000002_Position_0002
 	__Classshape__000002_Classshape0002.Fields = append(__Classshape__000002_Classshape0002.Fields, __Field__000000_FieldTypeAsString)
 	__Classshape__000002_Classshape0002.Fields = append(__Classshape__000002_Classshape0002.Fields, __Field__000001_Fieldtypename)
-	__Classshape__000002_Classshape0002.Fields = append(__Classshape__000002_Classshape0002.Fields, __Field__000010_Structname)
+
 	__Classshape__000003_Classshape0003.Position = __Position__000003_Position_0003
 	__Classshape__000003_Classshape0003.Fields = append(__Classshape__000003_Classshape0003.Fields, __Field__000002_Fieldtypename)
 	__Classshape__000003_Classshape0003.Fields = append(__Classshape__000003_Classshape0003.Fields, __Field__000011_TargetMultiplicity)
-	__Classshape__000003_Classshape0003.Fields = append(__Classshape__000003_Classshape0003.Fields, __Field__000009_Structname)
+
 	__Classshape__000003_Classshape0003.Links = append(__Classshape__000003_Classshape0003.Links, __Link__000004_Middlevertice)
 	__Classshape__000004_Classshape0004.Position = __Position__000004_Position_0004
 	__Classshape__000004_Classshape0004.Fields = append(__Classshape__000004_Classshape0004.Fields, __Field__000007_Name)

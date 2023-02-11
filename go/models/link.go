@@ -7,8 +7,6 @@ package models
 type Link struct {
 	Name string
 
-	Structname string
-
 	// Identifier is the identifier of the struct field referenced by the
 	// UML field of the classshape in the modeled package
 	//gong:ident

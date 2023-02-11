@@ -179,8 +179,6 @@ func (fieldImpl *FieldImpl) OnAfterUpdate(
 			link.TargetMultiplicity = targetMultiplicity
 			link.Identifier =
 				gongdoc_models.GongstructAndFieldnameToFieldIdentifier(gongStruct.Name, stagedNode.Name)
-
-			link.Structname = gongStruct.Name
 			link.Fieldtypename = targetStructName
 
 			gongStructShape.Links = append(gongStructShape.Links, link)

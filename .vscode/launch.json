@@ -194,15 +194,14 @@
             ]
         },
         {
-            "name": "go server on gongproject",
+            "name": "go server on issuerenaming",
             "type": "go",
             "request": "launch",
             "mode": "debug",
             "program": "${workspaceFolder}/go/cmd/gongdoc",
-            "cwd": "${workspaceFolder}/../gongproject",
+            "cwd": "${workspaceFolder}/../issuerenaming",
             "args": [
-                "-pkgPath",
-                "../../models",
+                "go/models",
             ]
         },
         {
