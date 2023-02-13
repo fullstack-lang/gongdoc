@@ -64,6 +64,14 @@ func ParseAstFileFromAst(inFile *ast.File, fset *token.FileSet) error {
 		Stage.MetaPackageImportPath = inFile.Imports[2].Path.Value
 	}
 
+	// Create an ast.CommentMap from the ast.File's comments.
+	// This helps keeping the association between comments
+	// and AST nodes.
+	// startParser := time.Now()
+	// log.Println("ast.NewCommentMap start")
+	cmap := ast.NewCommentMap(fset, inFile, inFile.Comments)
+	// log.Printf(" ast.NewCommentMap took %s", time.Since(startParser))
+
 	// astCoordinate := "File "
 	// log.Println(// astCoordinate)
 	for _, decl := range inFile.Decls {
@@ -106,10 +114,6 @@ func ParseAstFileFromAst(inFile *ast.File, fset *token.FileSet) error {
 							}
 						}
 					case *ast.AssignStmt:
-						// Create an ast.CommentMap from the ast.File's comments.
-						// This helps keeping the association between comments
-						// and AST nodes.
-						cmap := ast.NewCommentMap(fset, inFile, inFile.Comments)
 						astCoordinate := "\tAssignStmt: "
 						// log.Println(// astCoordinate)
 						assignStmt := stmt

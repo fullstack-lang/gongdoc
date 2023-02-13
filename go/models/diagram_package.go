@@ -82,8 +82,6 @@ func (diagramPackage *DiagramPackage) UnmarshallOneDiagram(diagramName string, i
 	if err != nil {
 		log.Fatalln("Unable to parse", diagramName, err.Error())
 	} else {
-		log.Println("Parsed", diagramName)
-
 		// there should be one diagram on the stage and it has to be
 		// appended to the diagram package
 		var ok bool
