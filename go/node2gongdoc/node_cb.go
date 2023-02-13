@@ -3,6 +3,8 @@ package node2gongdoc
 import (
 	"fmt"
 	"log"
+	"os"
+	"path/filepath"
 
 	gong_models "github.com/fullstack-lang/gong/go/models"
 	gongdoc_models "github.com/fullstack-lang/gongdoc/go/models"
@@ -98,6 +100,19 @@ func (nodeCb *NodeCB) OnAfterCreate(
 	classdiagramImpl.classdiagram = classdiagram
 	classdiagramImpl.nodeCb = nodeCb
 	node.Impl = classdiagramImpl
+
+	filepath := filepath.Join(
+		filepath.Join(classdiagramImpl.nodeCb.diagramPackage.AbsolutePathToDiagramPackage,
+			"../diagrams"),
+		classdiagramImpl.classdiagram.Name) + ".go"
+	file, err := os.Create(filepath)
+	if err != nil {
+		log.Fatal("Cannot open diagram file" + err.Error())
+	}
+	defer file.Close()
+
+	// save the diagram
+	gongdoc_models.Stage.Marshall(file, "github.com/fullstack-lang/gongdoc/go/models", "diagrams")
 
 	nodeCb.updateNodesStates(stage)
 
