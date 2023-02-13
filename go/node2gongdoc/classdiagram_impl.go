@@ -4,7 +4,6 @@ import (
 	"log"
 	"os"
 	"path/filepath"
-	"strings"
 
 	gongdoc_models "github.com/fullstack-lang/gongdoc/go/models"
 )
@@ -74,32 +73,19 @@ func (classdiagramImpl *ClassdiagramImpl) OnAfterUpdate(
 		newClassdiagramFilePath := filepath.Join(classdiagramImpl.nodeCb.diagramPackage.Path, "../diagrams", frontNode.Name) + ".go"
 
 		if _, err := os.Stat(oldClassdiagramFilePath); err == nil {
-			if err := os.Rename(oldClassdiagramFilePath, newClassdiagramFilePath); err != nil {
+			if err := os.Remove(oldClassdiagramFilePath); err != nil {
 				log.Println("Error while renaming file " + oldClassdiagramFilePath + " : " + err.Error())
 			} else {
-				// change the name of the go variable that describes the diagram
-				// in the package
-				input, err := os.ReadFile(newClassdiagramFilePath)
+				file, err := os.Create(newClassdiagramFilePath)
 				if err != nil {
-					log.Fatalln(err)
+					log.Fatal("Cannot open diagram file" + err.Error())
 				}
-
-				lines := strings.Split(string(input), "\n")
-
-				for i, line := range lines {
-					if strings.Contains(line, "var "+classdiagramImpl.classdiagram.Name) {
-						lines[i] = strings.Replace(line, classdiagramImpl.classdiagram.Name, frontNode.Name, 1)
-						continue
-					}
-				}
-				output := strings.Join(lines, "\n")
-				err = os.WriteFile(newClassdiagramFilePath, []byte(output), 0644)
-				if err != nil {
-					log.Fatalln(err)
-				}
+				defer file.Close()
 
 				classdiagramImpl.classdiagram.Name = frontNode.Name
-				classdiagramImpl.classdiagram.Commit()
+
+				// save the diagram
+				gongdoc_models.Stage.Marshall(file, "github.com/fullstack-lang/gongdoc/go/models", "diagrams")
 			}
 		}
 
