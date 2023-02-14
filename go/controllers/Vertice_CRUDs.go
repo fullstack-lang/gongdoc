@@ -52,6 +52,19 @@ func GetVertices(c *gin.Context) {
 
 	// source slice
 	var verticeDBs []orm.VerticeDB
+
+	// type Values map[string][]string
+	values := c.Request.URL.Query()
+	if len(values) == 1 {
+		value := values["stack"]
+		if len(value) == 1 {
+			// we have a single parameter
+			// we assume it is the stack
+			stackParam := value[0]
+			log.Println("GET all params", stackParam)
+		}
+	}
+
 	query := db.Find(&verticeDBs)
 	if query.Error != nil {
 		var returnError GenericError
@@ -96,7 +109,6 @@ func GetVertices(c *gin.Context) {
 //	Responses:
 //	  200: nodeDBResponse
 func PostVertice(c *gin.Context) {
-	db := orm.BackRepo.BackRepoVertice.GetDB()
 
 	// Validate input
 	var input orm.VerticeAPI
@@ -116,6 +128,7 @@ func PostVertice(c *gin.Context) {
 	verticeDB.VerticePointersEnconding = input.VerticePointersEnconding
 	verticeDB.CopyBasicFieldsFromVertice(&input.Vertice)
 
+	db := orm.BackRepo.BackRepoVertice.GetDB()
 	query := db.Create(&verticeDB)
 	if query.Error != nil {
 		var returnError GenericError
@@ -152,6 +165,19 @@ func PostVertice(c *gin.Context) {
 //
 //	200: verticeDBResponse
 func GetVertice(c *gin.Context) {
+
+	// type Values map[string][]string
+	values := c.Request.URL.Query()
+	if len(values) == 1 {
+		value := values["stack"]
+		if len(value) == 1 {
+			// we have a single parameter
+			// we assume it is the stack
+			stackParam := value[0]
+			log.Println("GET params", stackParam)
+		}
+	}
+
 	db := orm.BackRepo.BackRepoVertice.GetDB()
 
 	// Get verticeDB in DB
@@ -184,6 +210,15 @@ func GetVertice(c *gin.Context) {
 //
 //	200: verticeDBResponse
 func UpdateVertice(c *gin.Context) {
+
+	// Validate input
+	var input orm.VerticeAPI
+	if err := c.ShouldBindJSON(&input); err != nil {
+		log.Println(err.Error())
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+	
 	db := orm.BackRepo.BackRepoVertice.GetDB()
 
 	// Get model if exist
@@ -198,14 +233,6 @@ func UpdateVertice(c *gin.Context) {
 		returnError.Body.Message = query.Error.Error()
 		log.Println(query.Error.Error())
 		c.JSON(http.StatusBadRequest, returnError.Body)
-		return
-	}
-
-	// Validate input
-	var input orm.VerticeAPI
-	if err := c.ShouldBindJSON(&input); err != nil {
-		log.Println(err.Error())
-		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
 

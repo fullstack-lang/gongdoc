@@ -26,3 +26,16 @@ const LongNodeOnModels = ""
 // In this case [models.Line], [models.Point] and [models.Line.Start] [models.LineTypeString]
 // are referenced in the go code
 const ShortNodeOnModels = ""
+
+// GONGNOTE(MarkdownNodeOnModels): this is an example of an Markdown note
+// It uses the DocLink convention for referencing Identifiers
+// In this case [models.Line], [models.Point] and [models.Line.Start] [models.LineTypeString]
+// are referenced in the go code
+//
+// # This is a title
+//
+// ## This is a sub title
+//
+// - some comment
+// Some comment
+const MarkdownNodeOnModels = ""

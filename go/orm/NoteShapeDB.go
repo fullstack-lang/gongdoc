@@ -73,6 +73,9 @@ type NoteShapeDB struct {
 	// Declation for basic field noteshapeDB.Body
 	Body_Data sql.NullString
 
+	// Declation for basic field noteshapeDB.BodyHTML
+	BodyHTML_Data sql.NullString
+
 	// Declation for basic field noteshapeDB.X
 	X_Data sql.NullFloat64
 
@@ -115,15 +118,17 @@ type NoteShapeWOP struct {
 
 	Body string `xlsx:"3"`
 
-	X float64 `xlsx:"4"`
+	BodyHTML string `xlsx:"4"`
 
-	Y float64 `xlsx:"5"`
+	X float64 `xlsx:"5"`
 
-	Width float64 `xlsx:"6"`
+	Y float64 `xlsx:"6"`
 
-	Heigth float64 `xlsx:"7"`
+	Width float64 `xlsx:"7"`
 
-	Matched bool `xlsx:"8"`
+	Heigth float64 `xlsx:"8"`
+
+	Matched bool `xlsx:"9"`
 	// insertion for WOP pointer fields
 }
 
@@ -133,6 +138,7 @@ var NoteShape_Fields = []string{
 	"Name",
 	"Identifier",
 	"Body",
+	"BodyHTML",
 	"X",
 	"Y",
 	"Width",
@@ -477,6 +483,9 @@ func (noteshapeDB *NoteShapeDB) CopyBasicFieldsFromNoteShape(noteshape *models.N
 	noteshapeDB.Body_Data.String = noteshape.Body
 	noteshapeDB.Body_Data.Valid = true
 
+	noteshapeDB.BodyHTML_Data.String = noteshape.BodyHTML
+	noteshapeDB.BodyHTML_Data.Valid = true
+
 	noteshapeDB.X_Data.Float64 = noteshape.X
 	noteshapeDB.X_Data.Valid = true
 
@@ -506,6 +515,9 @@ func (noteshapeDB *NoteShapeDB) CopyBasicFieldsFromNoteShapeWOP(noteshape *NoteS
 	noteshapeDB.Body_Data.String = noteshape.Body
 	noteshapeDB.Body_Data.Valid = true
 
+	noteshapeDB.BodyHTML_Data.String = noteshape.BodyHTML
+	noteshapeDB.BodyHTML_Data.Valid = true
+
 	noteshapeDB.X_Data.Float64 = noteshape.X
 	noteshapeDB.X_Data.Valid = true
 
@@ -528,6 +540,7 @@ func (noteshapeDB *NoteShapeDB) CopyBasicFieldsToNoteShape(noteshape *models.Not
 	noteshape.Name = noteshapeDB.Name_Data.String
 	noteshape.Identifier = noteshapeDB.Identifier_Data.String
 	noteshape.Body = noteshapeDB.Body_Data.String
+	noteshape.BodyHTML = noteshapeDB.BodyHTML_Data.String
 	noteshape.X = noteshapeDB.X_Data.Float64
 	noteshape.Y = noteshapeDB.Y_Data.Float64
 	noteshape.Width = noteshapeDB.Width_Data.Float64
@@ -542,6 +555,7 @@ func (noteshapeDB *NoteShapeDB) CopyBasicFieldsToNoteShapeWOP(noteshape *NoteSha
 	noteshape.Name = noteshapeDB.Name_Data.String
 	noteshape.Identifier = noteshapeDB.Identifier_Data.String
 	noteshape.Body = noteshapeDB.Body_Data.String
+	noteshape.BodyHTML = noteshapeDB.BodyHTML_Data.String
 	noteshape.X = noteshapeDB.X_Data.Float64
 	noteshape.Y = noteshapeDB.Y_Data.Float64
 	noteshape.Width = noteshapeDB.Width_Data.Float64

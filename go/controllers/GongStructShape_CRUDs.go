@@ -52,6 +52,19 @@ func GetGongStructShapes(c *gin.Context) {
 
 	// source slice
 	var gongstructshapeDBs []orm.GongStructShapeDB
+
+	// type Values map[string][]string
+	values := c.Request.URL.Query()
+	if len(values) == 1 {
+		value := values["stack"]
+		if len(value) == 1 {
+			// we have a single parameter
+			// we assume it is the stack
+			stackParam := value[0]
+			log.Println("GET all params", stackParam)
+		}
+	}
+
 	query := db.Find(&gongstructshapeDBs)
 	if query.Error != nil {
 		var returnError GenericError
@@ -96,7 +109,6 @@ func GetGongStructShapes(c *gin.Context) {
 //	Responses:
 //	  200: nodeDBResponse
 func PostGongStructShape(c *gin.Context) {
-	db := orm.BackRepo.BackRepoGongStructShape.GetDB()
 
 	// Validate input
 	var input orm.GongStructShapeAPI
@@ -116,6 +128,7 @@ func PostGongStructShape(c *gin.Context) {
 	gongstructshapeDB.GongStructShapePointersEnconding = input.GongStructShapePointersEnconding
 	gongstructshapeDB.CopyBasicFieldsFromGongStructShape(&input.GongStructShape)
 
+	db := orm.BackRepo.BackRepoGongStructShape.GetDB()
 	query := db.Create(&gongstructshapeDB)
 	if query.Error != nil {
 		var returnError GenericError
@@ -152,6 +165,19 @@ func PostGongStructShape(c *gin.Context) {
 //
 //	200: gongstructshapeDBResponse
 func GetGongStructShape(c *gin.Context) {
+
+	// type Values map[string][]string
+	values := c.Request.URL.Query()
+	if len(values) == 1 {
+		value := values["stack"]
+		if len(value) == 1 {
+			// we have a single parameter
+			// we assume it is the stack
+			stackParam := value[0]
+			log.Println("GET params", stackParam)
+		}
+	}
+
 	db := orm.BackRepo.BackRepoGongStructShape.GetDB()
 
 	// Get gongstructshapeDB in DB
@@ -184,6 +210,15 @@ func GetGongStructShape(c *gin.Context) {
 //
 //	200: gongstructshapeDBResponse
 func UpdateGongStructShape(c *gin.Context) {
+
+	// Validate input
+	var input orm.GongStructShapeAPI
+	if err := c.ShouldBindJSON(&input); err != nil {
+		log.Println(err.Error())
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+	
 	db := orm.BackRepo.BackRepoGongStructShape.GetDB()
 
 	// Get model if exist
@@ -198,14 +233,6 @@ func UpdateGongStructShape(c *gin.Context) {
 		returnError.Body.Message = query.Error.Error()
 		log.Println(query.Error.Error())
 		c.JSON(http.StatusBadRequest, returnError.Body)
-		return
-	}
-
-	// Validate input
-	var input orm.GongStructShapeAPI
-	if err := c.ShouldBindJSON(&input); err != nil {
-		log.Println(err.Error())
-		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
 

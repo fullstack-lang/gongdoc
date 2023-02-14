@@ -52,6 +52,19 @@ func GetGongEnumValueEntrys(c *gin.Context) {
 
 	// source slice
 	var gongenumvalueentryDBs []orm.GongEnumValueEntryDB
+
+	// type Values map[string][]string
+	values := c.Request.URL.Query()
+	if len(values) == 1 {
+		value := values["stack"]
+		if len(value) == 1 {
+			// we have a single parameter
+			// we assume it is the stack
+			stackParam := value[0]
+			log.Println("GET all params", stackParam)
+		}
+	}
+
 	query := db.Find(&gongenumvalueentryDBs)
 	if query.Error != nil {
 		var returnError GenericError
@@ -96,7 +109,6 @@ func GetGongEnumValueEntrys(c *gin.Context) {
 //	Responses:
 //	  200: nodeDBResponse
 func PostGongEnumValueEntry(c *gin.Context) {
-	db := orm.BackRepo.BackRepoGongEnumValueEntry.GetDB()
 
 	// Validate input
 	var input orm.GongEnumValueEntryAPI
@@ -116,6 +128,7 @@ func PostGongEnumValueEntry(c *gin.Context) {
 	gongenumvalueentryDB.GongEnumValueEntryPointersEnconding = input.GongEnumValueEntryPointersEnconding
 	gongenumvalueentryDB.CopyBasicFieldsFromGongEnumValueEntry(&input.GongEnumValueEntry)
 
+	db := orm.BackRepo.BackRepoGongEnumValueEntry.GetDB()
 	query := db.Create(&gongenumvalueentryDB)
 	if query.Error != nil {
 		var returnError GenericError
@@ -152,6 +165,19 @@ func PostGongEnumValueEntry(c *gin.Context) {
 //
 //	200: gongenumvalueentryDBResponse
 func GetGongEnumValueEntry(c *gin.Context) {
+
+	// type Values map[string][]string
+	values := c.Request.URL.Query()
+	if len(values) == 1 {
+		value := values["stack"]
+		if len(value) == 1 {
+			// we have a single parameter
+			// we assume it is the stack
+			stackParam := value[0]
+			log.Println("GET params", stackParam)
+		}
+	}
+
 	db := orm.BackRepo.BackRepoGongEnumValueEntry.GetDB()
 
 	// Get gongenumvalueentryDB in DB
@@ -184,6 +210,15 @@ func GetGongEnumValueEntry(c *gin.Context) {
 //
 //	200: gongenumvalueentryDBResponse
 func UpdateGongEnumValueEntry(c *gin.Context) {
+
+	// Validate input
+	var input orm.GongEnumValueEntryAPI
+	if err := c.ShouldBindJSON(&input); err != nil {
+		log.Println(err.Error())
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+	
 	db := orm.BackRepo.BackRepoGongEnumValueEntry.GetDB()
 
 	// Get model if exist
@@ -198,14 +233,6 @@ func UpdateGongEnumValueEntry(c *gin.Context) {
 		returnError.Body.Message = query.Error.Error()
 		log.Println(query.Error.Error())
 		c.JSON(http.StatusBadRequest, returnError.Body)
-		return
-	}
-
-	// Validate input
-	var input orm.GongEnumValueEntryAPI
-	if err := c.ShouldBindJSON(&input); err != nil {
-		log.Println(err.Error())
-		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
 

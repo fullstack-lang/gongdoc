@@ -52,6 +52,19 @@ func GetUmlStates(c *gin.Context) {
 
 	// source slice
 	var umlstateDBs []orm.UmlStateDB
+
+	// type Values map[string][]string
+	values := c.Request.URL.Query()
+	if len(values) == 1 {
+		value := values["stack"]
+		if len(value) == 1 {
+			// we have a single parameter
+			// we assume it is the stack
+			stackParam := value[0]
+			log.Println("GET all params", stackParam)
+		}
+	}
+
 	query := db.Find(&umlstateDBs)
 	if query.Error != nil {
 		var returnError GenericError
@@ -96,7 +109,6 @@ func GetUmlStates(c *gin.Context) {
 //	Responses:
 //	  200: nodeDBResponse
 func PostUmlState(c *gin.Context) {
-	db := orm.BackRepo.BackRepoUmlState.GetDB()
 
 	// Validate input
 	var input orm.UmlStateAPI
@@ -116,6 +128,7 @@ func PostUmlState(c *gin.Context) {
 	umlstateDB.UmlStatePointersEnconding = input.UmlStatePointersEnconding
 	umlstateDB.CopyBasicFieldsFromUmlState(&input.UmlState)
 
+	db := orm.BackRepo.BackRepoUmlState.GetDB()
 	query := db.Create(&umlstateDB)
 	if query.Error != nil {
 		var returnError GenericError
@@ -152,6 +165,19 @@ func PostUmlState(c *gin.Context) {
 //
 //	200: umlstateDBResponse
 func GetUmlState(c *gin.Context) {
+
+	// type Values map[string][]string
+	values := c.Request.URL.Query()
+	if len(values) == 1 {
+		value := values["stack"]
+		if len(value) == 1 {
+			// we have a single parameter
+			// we assume it is the stack
+			stackParam := value[0]
+			log.Println("GET params", stackParam)
+		}
+	}
+
 	db := orm.BackRepo.BackRepoUmlState.GetDB()
 
 	// Get umlstateDB in DB
@@ -184,6 +210,15 @@ func GetUmlState(c *gin.Context) {
 //
 //	200: umlstateDBResponse
 func UpdateUmlState(c *gin.Context) {
+
+	// Validate input
+	var input orm.UmlStateAPI
+	if err := c.ShouldBindJSON(&input); err != nil {
+		log.Println(err.Error())
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+	
 	db := orm.BackRepo.BackRepoUmlState.GetDB()
 
 	// Get model if exist
@@ -198,14 +233,6 @@ func UpdateUmlState(c *gin.Context) {
 		returnError.Body.Message = query.Error.Error()
 		log.Println(query.Error.Error())
 		c.JSON(http.StatusBadRequest, returnError.Body)
-		return
-	}
-
-	// Validate input
-	var input orm.UmlStateAPI
-	if err := c.ShouldBindJSON(&input); err != nil {
-		log.Println(err.Error())
-		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
 

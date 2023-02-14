@@ -15,6 +15,7 @@ import (
 
 var dummy_strconv_import strconv.NumError
 
+// swagger:ignore
 type GONG__ExpressionType string
 
 const (
@@ -64,14 +65,6 @@ func ParseAstFileFromAst(inFile *ast.File, fset *token.FileSet) error {
 		Stage.MetaPackageImportPath = inFile.Imports[2].Path.Value
 	}
 
-	// Create an ast.CommentMap from the ast.File's comments.
-	// This helps keeping the association between comments
-	// and AST nodes.
-	// startParser := time.Now()
-	// log.Println("ast.NewCommentMap start")
-	cmap := ast.NewCommentMap(fset, inFile, inFile.Comments)
-	// log.Printf(" ast.NewCommentMap took %s", time.Since(startParser))
-
 	// astCoordinate := "File "
 	// log.Println(// astCoordinate)
 	for _, decl := range inFile.Decls {
@@ -114,6 +107,10 @@ func ParseAstFileFromAst(inFile *ast.File, fset *token.FileSet) error {
 							}
 						}
 					case *ast.AssignStmt:
+						// Create an ast.CommentMap from the ast.File's comments.
+						// This helps keeping the association between comments
+						// and AST nodes.
+						cmap := ast.NewCommentMap(fset, inFile, inFile.Comments)
 						astCoordinate := "\tAssignStmt: "
 						// log.Println(// astCoordinate)
 						assignStmt := stmt
@@ -1012,6 +1009,10 @@ func UnmarshallGongstructStaging(cmap *ast.CommentMap, assignStmt *ast.AssignStm
 					// remove first and last char
 					fielValue := basicLit.Value[1 : len(basicLit.Value)-1]
 					__gong__map_NoteShape[identifier].Body = fielValue
+				case "BodyHTML":
+					// remove first and last char
+					fielValue := basicLit.Value[1 : len(basicLit.Value)-1]
+					__gong__map_NoteShape[identifier].BodyHTML = fielValue
 				case "X":
 					// convert string to float64
 					fielValue, err := strconv.ParseFloat(basicLit.Value, 64)

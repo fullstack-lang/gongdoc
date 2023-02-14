@@ -77,6 +77,9 @@ export class NoteShapesTableComponent implements OnInit {
         case 'Body':
           return noteshapeDB.Body;
 
+        case 'BodyHTML':
+          return noteshapeDB.BodyHTML;
+
         case 'X':
           return noteshapeDB.X;
 
@@ -116,6 +119,7 @@ export class NoteShapesTableComponent implements OnInit {
       mergedContent += noteshapeDB.Name.toLowerCase()
       mergedContent += noteshapeDB.Identifier.toLowerCase()
       mergedContent += noteshapeDB.Body.toLowerCase()
+      mergedContent += noteshapeDB.BodyHTML.toLowerCase()
       mergedContent += noteshapeDB.X.toString()
       mergedContent += noteshapeDB.Y.toString()
       mergedContent += noteshapeDB.Width.toString()
@@ -177,6 +181,7 @@ export class NoteShapesTableComponent implements OnInit {
         "Name",
         "Identifier",
         "Body",
+        "BodyHTML",
         "X",
         "Y",
         "Width",
@@ -189,6 +194,7 @@ export class NoteShapesTableComponent implements OnInit {
         "Name",
         "Identifier",
         "Body",
+        "BodyHTML",
         "X",
         "Y",
         "Width",
