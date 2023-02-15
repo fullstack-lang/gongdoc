@@ -12,7 +12,9 @@ type Link struct {
 	//gong:ident
 	Identifier string
 
-	Fieldtypename      string
+	//gong:ident
+	Fieldtypename string
+
 	TargetMultiplicity MultiplicityType
 	SourceMultiplicity MultiplicityType
 

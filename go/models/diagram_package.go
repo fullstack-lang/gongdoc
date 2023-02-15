@@ -134,7 +134,6 @@ func (diagramPackage *DiagramPackage) UnmarshallOneDiagram(diagramName string, i
 
 			noteShape.Body = note.Body
 			noteShape.BodyHTML = note.BodyHTML
-
 		}
 	}
 	return

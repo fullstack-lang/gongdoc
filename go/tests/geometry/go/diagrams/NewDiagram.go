@@ -201,7 +201,9 @@ func NewDiagramInjection() {
 
 	//gong:ident [ref_models.Line.Start]
 	__Link__000000_Start.Identifier = `ref_models.Line.Start`
-	__Link__000000_Start.Fieldtypename = `Point`
+
+	//gong:ident [ref_models.Point]
+	__Link__000000_Start.Fieldtypename = `ref_models.Point`
 	__Link__000000_Start.TargetMultiplicity = models.ZERO_ONE
 	__Link__000000_Start.SourceMultiplicity = models.MANY
 
