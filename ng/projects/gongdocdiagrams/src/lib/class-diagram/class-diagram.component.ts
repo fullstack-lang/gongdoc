@@ -17,7 +17,7 @@ import { shapeIdentifierToShapeName } from './shape-identifier-to-shape-name';
 import { informBackEndOfSelection } from './on-pointer-down-function';
 import { ClassdiagramDB } from 'gongdoc';
 import { newUmlClassShapeFromGongEnumShape } from './newUmlClassShapeFromGongEnumShape';
-import { IdentifierToReceiverAndFieldName } from './identifier-function';
+import { IdentifierToReceiverAndFieldName, IdentifierToStructname } from './identifier-function';
 
 @Component({
   selector: 'lib-class-diagram',
@@ -251,7 +251,9 @@ export class ClassDiagramComponent implements OnInit, OnDestroy {
             let id: { receiver: string, fieldName: string }
             id = IdentifierToReceiverAndFieldName(linkDB.Identifier)
             var fromShape = this.Map_GongStructName_JointjsUMLClassShape.get(id.receiver)
-            var toShape = this.Map_GongStructName_JointjsUMLClassShape.get(linkDB.Fieldtypename)
+
+            let toShapeName = IdentifierToStructname( linkDB.Fieldtypename)
+            var toShape = this.Map_GongStructName_JointjsUMLClassShape.get(toShapeName)
 
             var strockWidth = 2
 

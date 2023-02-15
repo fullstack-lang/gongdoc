@@ -6,6 +6,7 @@ import (
 	"go/token"
 	"log"
 	"os"
+	"strings"
 	"time"
 
 	gong_models "github.com/fullstack-lang/gong/go/models"
@@ -134,8 +135,17 @@ func (diagramPackage *DiagramPackage) UnmarshallOneDiagram(diagramName string, i
 
 			noteShape.Body = note.Body
 			noteShape.BodyHTML = note.BodyHTML
-
 		}
+
+		// legacy diagram file may have Fieldtypename without the ident `Point`
+		// the following will turn it into `ref_models.Point`
+		for link := range *GetGongstructInstancesSet[Link]() {
+
+			if !strings.ContainsAny(link.Fieldtypename, ".") {
+				link.Fieldtypename = GongStructNameToIdentifier(link.Fieldtypename)
+			}
+		}
+
 	}
 	return
 }

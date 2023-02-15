@@ -15,3 +15,12 @@ export function IdentifierToReceiverAndFieldName(fieldIdentifier: string): { rec
 
     return { receiver: receiver, fieldName: fieldName }
 }
+
+export function IdentifierToStructname(fieldIdentifier: string): string {
+
+    let prefix = RefPrefixReferencedPackage + RefPackagePlusPeriod
+
+    let structName = fieldIdentifier.replace(prefix, "")
+
+    return structName
+}

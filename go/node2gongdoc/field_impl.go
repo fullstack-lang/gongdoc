@@ -179,7 +179,7 @@ func (fieldImpl *FieldImpl) OnAfterUpdate(
 			link.TargetMultiplicity = targetMultiplicity
 			link.Identifier =
 				gongdoc_models.GongstructAndFieldnameToFieldIdentifier(gongStruct.Name, stagedNode.Name)
-			link.Fieldtypename = targetStructName
+			link.Fieldtypename = gongdoc_models.GongStructNameToIdentifier(targetStructName)
 
 			gongStructShape.Links = append(gongStructShape.Links, link)
 			link.Middlevertice = new(gongdoc_models.Vertice).Stage()
