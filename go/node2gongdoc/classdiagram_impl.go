@@ -14,7 +14,7 @@ type ClassdiagramImpl struct {
 }
 
 func (classdiagramImpl *ClassdiagramImpl) OnAfterUpdate(
-	stage *gongdoc_models.StageStruct,
+	gongdocStage *gongdoc_models.StageStruct,
 	stagedNode, frontNode *gongdoc_models.Node) {
 
 	// node has been checked by the end user
@@ -86,16 +86,16 @@ func (classdiagramImpl *ClassdiagramImpl) OnAfterUpdate(
 
 				// checkout in order to get the latest version of the diagram before
 				// modifying it updated by the front
-				gongdoc_models.Stage.Checkout()
-				gongdoc_models.Stage.Unstage()
-				gongdoc_models.StageBranch(&gongdoc_models.Stage, classdiagramImpl.classdiagram)
+				gongdocStage.Checkout()
+				gongdocStage.Unstage()
+				gongdoc_models.StageBranch(gongdocStage, classdiagramImpl.classdiagram)
 
 				// save the diagram
-				gongdoc_models.Stage.Marshall(file, "github.com/fullstack-lang/gongdoc/go/models", "diagrams")
+				gongdocStage.Marshall(file, "github.com/fullstack-lang/gongdoc/go/models", "diagrams")
 
 				// restore the original stage
-				gongdoc_models.Stage.Unstage()
-				gongdoc_models.Stage.Checkout()
+				gongdocStage.Unstage()
+				gongdocStage.Checkout()
 			}
 		}
 
@@ -122,9 +122,9 @@ func (classdiagramImpl *ClassdiagramImpl) OnAfterUpdate(
 
 		// checkout in order to get the latest version of the diagram before
 		// modifying it updated by the front
-		gongdoc_models.Stage.Checkout()
-		gongdoc_models.Stage.Unstage()
-		gongdoc_models.StageBranch(&gongdoc_models.Stage, classdiagramImpl.classdiagram)
+		gongdocStage.Checkout()
+		gongdocStage.Unstage()
+		gongdoc_models.StageBranch(gongdocStage, classdiagramImpl.classdiagram)
 
 		filepath := filepath.Join(
 			filepath.Join(classdiagramImpl.nodeCb.diagramPackage.AbsolutePathToDiagramPackage,
@@ -136,16 +136,16 @@ func (classdiagramImpl *ClassdiagramImpl) OnAfterUpdate(
 		}
 		defer file.Close()
 
-		mapDocLinkRemaping := stage.Map_DocLink_Renaming
+		mapDocLinkRemaping := gongdocStage.Map_DocLink_Renaming
 		_ = mapDocLinkRemaping
 
-		gongdoc_models.Stage.Marshall(file, "github.com/fullstack-lang/gongdoc/go/models", "diagrams")
+		gongdocStage.Marshall(file, "github.com/fullstack-lang/gongdoc/go/models", "diagrams")
 
 		// restore the original stage
-		gongdoc_models.Stage.Unstage()
-		gongdoc_models.Stage.Checkout()
+		gongdocStage.Unstage()
+		gongdocStage.Checkout()
 		stagedNode.IsSaved = false
-		stage.Commit()
+		gongdocStage.Commit()
 
 	}
 }
