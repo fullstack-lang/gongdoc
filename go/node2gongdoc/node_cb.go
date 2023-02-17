@@ -114,14 +114,15 @@ func (nodeCb *NodeCB) OnAfterCreate(
 	// save the diagram
 	// checkout in order to get the latest version of the diagram before
 	// modifying it updated by the front
+	nodeCb.updateNodesStates(gongDocStage)
 	gongDocStage.Commit()
+
+	// now save the diagram
 	gongDocStage.Checkout()
 	gongDocStage.Unstage()
 	gongdoc_models.StageBranch(gongDocStage, classdiagramImpl.classdiagram)
 
 	gongDocStage.Marshall(file, "github.com/fullstack-lang/gongdoc/go/models", "diagrams")
-
-	nodeCb.updateNodesStates(gongDocStage)
 
 	// restore the original stage
 	gongDocStage.Unstage()
