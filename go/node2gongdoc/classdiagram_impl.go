@@ -84,8 +84,18 @@ func (classdiagramImpl *ClassdiagramImpl) OnAfterUpdate(
 
 				classdiagramImpl.classdiagram.Name = frontNode.Name
 
+				// checkout in order to get the latest version of the diagram before
+				// modifying it updated by the front
+				gongdoc_models.Stage.Checkout()
+				gongdoc_models.Stage.Unstage()
+				gongdoc_models.StageBranch(&gongdoc_models.Stage, classdiagramImpl.classdiagram)
+
 				// save the diagram
 				gongdoc_models.Stage.Marshall(file, "github.com/fullstack-lang/gongdoc/go/models", "diagrams")
+
+				// restore the original stage
+				gongdoc_models.Stage.Unstage()
+				gongdoc_models.Stage.Checkout()
 			}
 		}
 
@@ -113,7 +123,6 @@ func (classdiagramImpl *ClassdiagramImpl) OnAfterUpdate(
 		// checkout in order to get the latest version of the diagram before
 		// modifying it updated by the front
 		gongdoc_models.Stage.Checkout()
-
 		gongdoc_models.Stage.Unstage()
 		gongdoc_models.StageBranch(&gongdoc_models.Stage, classdiagramImpl.classdiagram)
 
@@ -126,6 +135,10 @@ func (classdiagramImpl *ClassdiagramImpl) OnAfterUpdate(
 			log.Fatal("Cannot open diagram file" + err.Error())
 		}
 		defer file.Close()
+
+		mapDocLinkRemaping := stage.Map_DocLink_Renaming
+		_ = mapDocLinkRemaping
+
 		gongdoc_models.Stage.Marshall(file, "github.com/fullstack-lang/gongdoc/go/models", "diagrams")
 
 		// restore the original stage

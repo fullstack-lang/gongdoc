@@ -60,7 +60,7 @@ func (nodeCb *NodeCB) OnAfterUpdate(
 
 // OnAfterCreate is another callback
 func (nodeCb *NodeCB) OnAfterCreate(
-	stage *gongdoc_models.StageStruct,
+	gongDocStage *gongdoc_models.StageStruct,
 	node *gongdoc_models.Node) {
 
 	log.Println("Node " + node.Name + " is created")
@@ -112,9 +112,20 @@ func (nodeCb *NodeCB) OnAfterCreate(
 	defer file.Close()
 
 	// save the diagram
-	gongdoc_models.Stage.Marshall(file, "github.com/fullstack-lang/gongdoc/go/models", "diagrams")
+	// checkout in order to get the latest version of the diagram before
+	// modifying it updated by the front
+	gongDocStage.Commit()
+	gongDocStage.Checkout()
+	gongDocStage.Unstage()
+	gongdoc_models.StageBranch(gongDocStage, classdiagramImpl.classdiagram)
 
-	nodeCb.updateNodesStates(stage)
+	gongDocStage.Marshall(file, "github.com/fullstack-lang/gongdoc/go/models", "diagrams")
+
+	nodeCb.updateNodesStates(gongDocStage)
+
+	// restore the original stage
+	gongDocStage.Unstage()
+	gongDocStage.Checkout()
 
 }
 
