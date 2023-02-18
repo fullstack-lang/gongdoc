@@ -2067,41 +2067,48 @@ type GongstructMapString interface {
 
 // GongGetSet returns the set staged GongstructType instances
 // it is usefull because it allows refactoring of gong struct identifier
-func GongGetSet[Type GongstructSet]() *Type {
+func GongGetSet[Type GongstructSet](stages ...*StageStruct) *Type {
 	var ret Type
+
+	var stage *StageStruct
+	if len(stages) > 0 {
+		stage = stages[0]
+	} else {
+		stage = &Stage
+	}
 
 	switch any(ret).(type) {
 	// insertion point for generic get functions
 	case map[*Classdiagram]any:
-		return any(&Stage.Classdiagrams).(*Type)
+		return any(&stage.Classdiagrams).(*Type)
 	case map[*DiagramPackage]any:
-		return any(&Stage.DiagramPackages).(*Type)
+		return any(&stage.DiagramPackages).(*Type)
 	case map[*Field]any:
-		return any(&Stage.Fields).(*Type)
+		return any(&stage.Fields).(*Type)
 	case map[*GongEnumShape]any:
-		return any(&Stage.GongEnumShapes).(*Type)
+		return any(&stage.GongEnumShapes).(*Type)
 	case map[*GongEnumValueEntry]any:
-		return any(&Stage.GongEnumValueEntrys).(*Type)
+		return any(&stage.GongEnumValueEntrys).(*Type)
 	case map[*GongStructShape]any:
-		return any(&Stage.GongStructShapes).(*Type)
+		return any(&stage.GongStructShapes).(*Type)
 	case map[*Link]any:
-		return any(&Stage.Links).(*Type)
+		return any(&stage.Links).(*Type)
 	case map[*Node]any:
-		return any(&Stage.Nodes).(*Type)
+		return any(&stage.Nodes).(*Type)
 	case map[*NoteShape]any:
-		return any(&Stage.NoteShapes).(*Type)
+		return any(&stage.NoteShapes).(*Type)
 	case map[*NoteShapeLink]any:
-		return any(&Stage.NoteShapeLinks).(*Type)
+		return any(&stage.NoteShapeLinks).(*Type)
 	case map[*Position]any:
-		return any(&Stage.Positions).(*Type)
+		return any(&stage.Positions).(*Type)
 	case map[*Tree]any:
-		return any(&Stage.Trees).(*Type)
+		return any(&stage.Trees).(*Type)
 	case map[*UmlState]any:
-		return any(&Stage.UmlStates).(*Type)
+		return any(&stage.UmlStates).(*Type)
 	case map[*Umlsc]any:
-		return any(&Stage.Umlscs).(*Type)
+		return any(&stage.Umlscs).(*Type)
 	case map[*Vertice]any:
-		return any(&Stage.Vertices).(*Type)
+		return any(&stage.Vertices).(*Type)
 	default:
 		return nil
 	}
@@ -2109,41 +2116,48 @@ func GongGetSet[Type GongstructSet]() *Type {
 
 // GongGetMap returns the map of staged GongstructType instances
 // it is usefull because it allows refactoring of gong struct identifier
-func GongGetMap[Type GongstructMapString]() *Type {
+func GongGetMap[Type GongstructMapString](stages ...*StageStruct) *Type {
 	var ret Type
+
+	var stage *StageStruct
+	if len(stages) > 0 {
+		stage = stages[0]
+	} else {
+		stage = &Stage
+	}
 
 	switch any(ret).(type) {
 	// insertion point for generic get functions
 	case map[string]*Classdiagram:
-		return any(&Stage.Classdiagrams_mapString).(*Type)
+		return any(&stage.Classdiagrams_mapString).(*Type)
 	case map[string]*DiagramPackage:
-		return any(&Stage.DiagramPackages_mapString).(*Type)
+		return any(&stage.DiagramPackages_mapString).(*Type)
 	case map[string]*Field:
-		return any(&Stage.Fields_mapString).(*Type)
+		return any(&stage.Fields_mapString).(*Type)
 	case map[string]*GongEnumShape:
-		return any(&Stage.GongEnumShapes_mapString).(*Type)
+		return any(&stage.GongEnumShapes_mapString).(*Type)
 	case map[string]*GongEnumValueEntry:
-		return any(&Stage.GongEnumValueEntrys_mapString).(*Type)
+		return any(&stage.GongEnumValueEntrys_mapString).(*Type)
 	case map[string]*GongStructShape:
-		return any(&Stage.GongStructShapes_mapString).(*Type)
+		return any(&stage.GongStructShapes_mapString).(*Type)
 	case map[string]*Link:
-		return any(&Stage.Links_mapString).(*Type)
+		return any(&stage.Links_mapString).(*Type)
 	case map[string]*Node:
-		return any(&Stage.Nodes_mapString).(*Type)
+		return any(&stage.Nodes_mapString).(*Type)
 	case map[string]*NoteShape:
-		return any(&Stage.NoteShapes_mapString).(*Type)
+		return any(&stage.NoteShapes_mapString).(*Type)
 	case map[string]*NoteShapeLink:
-		return any(&Stage.NoteShapeLinks_mapString).(*Type)
+		return any(&stage.NoteShapeLinks_mapString).(*Type)
 	case map[string]*Position:
-		return any(&Stage.Positions_mapString).(*Type)
+		return any(&stage.Positions_mapString).(*Type)
 	case map[string]*Tree:
-		return any(&Stage.Trees_mapString).(*Type)
+		return any(&stage.Trees_mapString).(*Type)
 	case map[string]*UmlState:
-		return any(&Stage.UmlStates_mapString).(*Type)
+		return any(&stage.UmlStates_mapString).(*Type)
 	case map[string]*Umlsc:
-		return any(&Stage.Umlscs_mapString).(*Type)
+		return any(&stage.Umlscs_mapString).(*Type)
 	case map[string]*Vertice:
-		return any(&Stage.Vertices_mapString).(*Type)
+		return any(&stage.Vertices_mapString).(*Type)
 	default:
 		return nil
 	}
@@ -2151,41 +2165,48 @@ func GongGetMap[Type GongstructMapString]() *Type {
 
 // GetGongstructInstancesSet returns the set staged GongstructType instances
 // it is usefull because it allows refactoring of gongstruct identifier
-func GetGongstructInstancesSet[Type Gongstruct]() *map[*Type]any {
+func GetGongstructInstancesSet[Type Gongstruct](stages ...*StageStruct) *map[*Type]any {
 	var ret Type
+
+	var stage *StageStruct
+	if len(stages) > 0 {
+		stage = stages[0]
+	} else {
+		stage = &Stage
+	}
 
 	switch any(ret).(type) {
 	// insertion point for generic get functions
 	case Classdiagram:
-		return any(&Stage.Classdiagrams).(*map[*Type]any)
+		return any(&stage.Classdiagrams).(*map[*Type]any)
 	case DiagramPackage:
-		return any(&Stage.DiagramPackages).(*map[*Type]any)
+		return any(&stage.DiagramPackages).(*map[*Type]any)
 	case Field:
-		return any(&Stage.Fields).(*map[*Type]any)
+		return any(&stage.Fields).(*map[*Type]any)
 	case GongEnumShape:
-		return any(&Stage.GongEnumShapes).(*map[*Type]any)
+		return any(&stage.GongEnumShapes).(*map[*Type]any)
 	case GongEnumValueEntry:
-		return any(&Stage.GongEnumValueEntrys).(*map[*Type]any)
+		return any(&stage.GongEnumValueEntrys).(*map[*Type]any)
 	case GongStructShape:
-		return any(&Stage.GongStructShapes).(*map[*Type]any)
+		return any(&stage.GongStructShapes).(*map[*Type]any)
 	case Link:
-		return any(&Stage.Links).(*map[*Type]any)
+		return any(&stage.Links).(*map[*Type]any)
 	case Node:
-		return any(&Stage.Nodes).(*map[*Type]any)
+		return any(&stage.Nodes).(*map[*Type]any)
 	case NoteShape:
-		return any(&Stage.NoteShapes).(*map[*Type]any)
+		return any(&stage.NoteShapes).(*map[*Type]any)
 	case NoteShapeLink:
-		return any(&Stage.NoteShapeLinks).(*map[*Type]any)
+		return any(&stage.NoteShapeLinks).(*map[*Type]any)
 	case Position:
-		return any(&Stage.Positions).(*map[*Type]any)
+		return any(&stage.Positions).(*map[*Type]any)
 	case Tree:
-		return any(&Stage.Trees).(*map[*Type]any)
+		return any(&stage.Trees).(*map[*Type]any)
 	case UmlState:
-		return any(&Stage.UmlStates).(*map[*Type]any)
+		return any(&stage.UmlStates).(*map[*Type]any)
 	case Umlsc:
-		return any(&Stage.Umlscs).(*map[*Type]any)
+		return any(&stage.Umlscs).(*map[*Type]any)
 	case Vertice:
-		return any(&Stage.Vertices).(*map[*Type]any)
+		return any(&stage.Vertices).(*map[*Type]any)
 	default:
 		return nil
 	}
@@ -2193,41 +2214,48 @@ func GetGongstructInstancesSet[Type Gongstruct]() *map[*Type]any {
 
 // GetGongstructInstancesMap returns the map of staged GongstructType instances
 // it is usefull because it allows refactoring of gong struct identifier
-func GetGongstructInstancesMap[Type Gongstruct]() *map[string]*Type {
+func GetGongstructInstancesMap[Type Gongstruct](stages ...*StageStruct) *map[string]*Type {
 	var ret Type
+
+	var stage *StageStruct
+	if len(stages) > 0 {
+		stage = stages[0]
+	} else {
+		stage = &Stage
+	}
 
 	switch any(ret).(type) {
 	// insertion point for generic get functions
 	case Classdiagram:
-		return any(&Stage.Classdiagrams_mapString).(*map[string]*Type)
+		return any(&stage.Classdiagrams_mapString).(*map[string]*Type)
 	case DiagramPackage:
-		return any(&Stage.DiagramPackages_mapString).(*map[string]*Type)
+		return any(&stage.DiagramPackages_mapString).(*map[string]*Type)
 	case Field:
-		return any(&Stage.Fields_mapString).(*map[string]*Type)
+		return any(&stage.Fields_mapString).(*map[string]*Type)
 	case GongEnumShape:
-		return any(&Stage.GongEnumShapes_mapString).(*map[string]*Type)
+		return any(&stage.GongEnumShapes_mapString).(*map[string]*Type)
 	case GongEnumValueEntry:
-		return any(&Stage.GongEnumValueEntrys_mapString).(*map[string]*Type)
+		return any(&stage.GongEnumValueEntrys_mapString).(*map[string]*Type)
 	case GongStructShape:
-		return any(&Stage.GongStructShapes_mapString).(*map[string]*Type)
+		return any(&stage.GongStructShapes_mapString).(*map[string]*Type)
 	case Link:
-		return any(&Stage.Links_mapString).(*map[string]*Type)
+		return any(&stage.Links_mapString).(*map[string]*Type)
 	case Node:
-		return any(&Stage.Nodes_mapString).(*map[string]*Type)
+		return any(&stage.Nodes_mapString).(*map[string]*Type)
 	case NoteShape:
-		return any(&Stage.NoteShapes_mapString).(*map[string]*Type)
+		return any(&stage.NoteShapes_mapString).(*map[string]*Type)
 	case NoteShapeLink:
-		return any(&Stage.NoteShapeLinks_mapString).(*map[string]*Type)
+		return any(&stage.NoteShapeLinks_mapString).(*map[string]*Type)
 	case Position:
-		return any(&Stage.Positions_mapString).(*map[string]*Type)
+		return any(&stage.Positions_mapString).(*map[string]*Type)
 	case Tree:
-		return any(&Stage.Trees_mapString).(*map[string]*Type)
+		return any(&stage.Trees_mapString).(*map[string]*Type)
 	case UmlState:
-		return any(&Stage.UmlStates_mapString).(*map[string]*Type)
+		return any(&stage.UmlStates_mapString).(*map[string]*Type)
 	case Umlsc:
-		return any(&Stage.Umlscs_mapString).(*map[string]*Type)
+		return any(&stage.Umlscs_mapString).(*map[string]*Type)
 	case Vertice:
-		return any(&Stage.Vertices_mapString).(*map[string]*Type)
+		return any(&stage.Vertices_mapString).(*map[string]*Type)
 	default:
 		return nil
 	}

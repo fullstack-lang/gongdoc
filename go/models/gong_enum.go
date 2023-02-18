@@ -2,6 +2,62 @@
 package models
 
 // insertion point of enum utility functions
+// Utility function for GongEnumShapeType
+// if enum values are string, it is stored with the value
+// if enum values are int, they are stored with the code of the value
+func (gongenumshapetype GongEnumShapeType) ToInt() (res int) {
+
+	// migration of former implementation of enum
+	switch gongenumshapetype {
+	// insertion code per enum code
+	case Int:
+		res = 0
+	case String:
+		res = 1
+	}
+	return
+}
+
+func (gongenumshapetype *GongEnumShapeType) FromInt(input int) (err error) {
+
+	switch input {
+	// insertion code per enum code
+	case 0:
+		*gongenumshapetype = Int
+	case 1:
+		*gongenumshapetype = String
+	default:
+		return errUnkownEnum
+	}
+	return
+}
+
+func (gongenumshapetype *GongEnumShapeType) FromCodeString(input string) (err error) {
+
+	switch input {
+	// insertion code per enum code
+	case "Int":
+		*gongenumshapetype = Int
+	case "String":
+		*gongenumshapetype = String
+	default:
+		return errUnkownEnum
+	}
+	return
+}
+
+func (gongenumshapetype *GongEnumShapeType) ToCodeString() (res string) {
+
+	switch *gongenumshapetype {
+	// insertion code per enum code
+	case Int:
+		res = "Int"
+	case String:
+		res = "String"
+	}
+	return
+}
+
 // Utility function for MultiplicityType
 // if enum values are string, it is stored with the value
 // if enum values are int, they are stored with the code of the value

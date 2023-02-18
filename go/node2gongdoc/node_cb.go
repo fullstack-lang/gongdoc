@@ -60,7 +60,7 @@ func (nodeCb *NodeCB) OnAfterUpdate(
 
 // OnAfterCreate is another callback
 func (nodeCb *NodeCB) OnAfterCreate(
-	gongDocStage *gongdoc_models.StageStruct,
+	gongdocStage *gongdoc_models.StageStruct,
 	node *gongdoc_models.Node) {
 
 	log.Println("Node " + node.Name + " is created")
@@ -114,19 +114,21 @@ func (nodeCb *NodeCB) OnAfterCreate(
 	// save the diagram
 	// checkout in order to get the latest version of the diagram before
 	// modifying it updated by the front
-	nodeCb.updateNodesStates(gongDocStage)
-	gongDocStage.Commit()
+	nodeCb.updateNodesStates(gongdocStage)
+	gongdocStage.Commit()
 
 	// now save the diagram
-	gongDocStage.Checkout()
-	gongDocStage.Unstage()
-	gongdoc_models.StageBranch(gongDocStage, classdiagramImpl.classdiagram)
+	gongdocStage.Checkout()
+	gongdocStage.Unstage()
+	gongdoc_models.StageBranch(gongdocStage, classdiagramImpl.classdiagram)
 
-	gongDocStage.Marshall(file, "github.com/fullstack-lang/gongdoc/go/models", "diagrams")
+	gongdoc_models.SetupMapDocLinkRenamingNew(gongdocStage, nodeCb.diagramPackage)
+
+	gongdocStage.Marshall(file, "github.com/fullstack-lang/gongdoc/go/models", "diagrams")
 
 	// restore the original stage
-	gongDocStage.Unstage()
-	gongDocStage.Checkout()
+	gongdocStage.Unstage()
+	gongdocStage.Checkout()
 
 }
 

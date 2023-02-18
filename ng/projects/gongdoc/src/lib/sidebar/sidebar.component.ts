@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { Router, RouterState } from '@angular/router';
 
 import { BehaviorSubject, Subscription } from 'rxjs';
@@ -176,6 +176,8 @@ export class SidebarComponent implements OnInit {
 
   subscription: Subscription = new Subscription
 
+  @Input() GONG__StackPath: string = ""
+
   constructor(
     private router: Router,
     private frontRepoService: FrontRepoService,
@@ -206,6 +208,8 @@ export class SidebarComponent implements OnInit {
   }
 
   ngOnInit(): void {
+
+    console.log("Sidebar init: " + this.GONG__StackPath)
 
     this.subscription = this.gongstructSelectionService.gongtructSelected$.subscribe(
       gongstructName => {
@@ -1595,7 +1599,7 @@ export class SidebarComponent implements OnInit {
     if (type == GongNodeType.STRUCT) {
       this.router.navigate([{
         outlets: {
-          github_com_fullstack_lang_gongdoc_go_table: ["github_com_fullstack_lang_gongdoc_go-" + path.toLowerCase()]
+          github_com_fullstack_lang_gongdoc_go_table: ["github_com_fullstack_lang_gongdoc_go-" + path.toLowerCase(), this.GONG__StackPath]
         }
       }]);
     }
@@ -1612,7 +1616,7 @@ export class SidebarComponent implements OnInit {
   setEditorRouterOutlet(path: string) {
     this.router.navigate([{
       outlets: {
-        github_com_fullstack_lang_gongdoc_go_editor: ["github_com_fullstack_lang_gongdoc_go-" + path.toLowerCase()]
+        github_com_fullstack_lang_gongdoc_go_editor: ["github_com_fullstack_lang_gongdoc_go-" + path.toLowerCase(), this.GONG__StackPath]
       }
     }]);
   }
@@ -1620,7 +1624,7 @@ export class SidebarComponent implements OnInit {
   setEditorSpecialRouterOutlet(node: GongFlatNode) {
     this.router.navigate([{
       outlets: {
-        github_com_fullstack_lang_gongdoc_go_editor: ["github_com_fullstack_lang_gongdoc_go-" + node.associatedStructName.toLowerCase() + "-adder", node.id, node.structName, node.associationField]
+        github_com_fullstack_lang_gongdoc_go_editor: ["github_com_fullstack_lang_gongdoc_go-" + node.associatedStructName.toLowerCase() + "-adder", node.id, node.structName, node.associationField, this.GONG__StackPath]
       }
     }]);
   }

@@ -27,73 +27,15 @@ var ___dummy__ref_models_NewDiagram ref_models.StageStruct
 var map_DocLink_Identifier_NewDiagram map[string]any = map[string]any{
 	// injection point for docLink to identifiers
 
-	"ref_models.AFTER": ref_models.AFTER,
-
-	"ref_models.BEFORE": ref_models.BEFORE,
-
-	"ref_models.CONTINUOUS": ref_models.CONTINUOUS,
-
-	"ref_models.CONTINUOUS_ZERO": ref_models.CONTINUOUS_ZERO,
-
-	"ref_models.DOTTED": ref_models.DOTTED,
-
-	"ref_models.DOTTED_ONE": ref_models.DOTTED_ONE,
-
 	"ref_models.Line": &(ref_models.Line{}),
-
-	"ref_models.Line.CreationDate": (ref_models.Line{}).CreationDate,
-
-	"ref_models.Line.End": (ref_models.Line{}).End,
-
-	"ref_models.Line.JourneyTime": (ref_models.Line{}).JourneyTime,
-
-	"ref_models.Line.Name": (ref_models.Line{}).Name,
 
 	"ref_models.Line.Start": (ref_models.Line{}).Start,
 
-	"ref_models.Line.Type": (ref_models.Line{}).Type,
-
-	"ref_models.Line.VeryLongLongLongLongLongLongField": (ref_models.Line{}).VeryLongLongLongLongLongLongField,
-
-	"ref_models.LineTypeInt": ref_models.LineTypeInt(0),
-
 	"ref_models.LineTypeString": ref_models.LineTypeString(""),
-
-	"ref_models.LongNodeOnModels": ref_models.LongNodeOnModels,
 
 	"ref_models.Point": &(ref_models.Point{}),
 
-	"ref_models.Point.CreatedAt": (ref_models.Point{}).CreatedAt,
-
-	"ref_models.Point.Name": (ref_models.Point{}).Name,
-
-	"ref_models.Point.X": (ref_models.Point{}).X,
-
-	"ref_models.Point.Y": (ref_models.Point{}).Y,
-
-	"ref_models.Point.Z": (ref_models.Point{}).Z,
-
-	"ref_models.PointExclusiveSet": &(ref_models.PointExclusiveSet{}),
-
-	"ref_models.PointExclusiveSet.Name": (ref_models.PointExclusiveSet{}).Name,
-
-	"ref_models.PointExclusiveSet.Points": (ref_models.PointExclusiveSet{}).Points,
-
-	"ref_models.PointNonExclusiveSet": &(ref_models.PointNonExclusiveSet{}),
-
-	"ref_models.PointNonExclusiveSet.Name": (ref_models.PointNonExclusiveSet{}).Name,
-
-	"ref_models.PointNonExclusiveSet.Points": (ref_models.PointNonExclusiveSet{}).Points,
-
-	"ref_models.PointUse": &(ref_models.PointUse{}),
-
-	"ref_models.PointUse.Name": (ref_models.PointUse{}).Name,
-
-	"ref_models.PointUse.Points": (ref_models.PointUse{}).Points,
-
 	"ref_models.ShortNodeOnModels": ref_models.ShortNodeOnModels,
-
-	"ref_models.SimulationStage": ref_models.SimulationStage(""),
 }
 
 // init might be handy if one want to have the data embedded in the binary
@@ -160,7 +102,7 @@ func NewDiagramInjection() {
 
 	// GongEnumShape values setup
 	__GongEnumShape__000000_NewDiagram_LineTypeString.Name = `NewDiagram-LineTypeString`
-
+	
 	// comment added to overcome the problem with the comment map association
 
 	//gong:ident [ref_models.LineTypeString]
@@ -170,7 +112,7 @@ func NewDiagramInjection() {
 
 	// GongStructShape values setup
 	__GongStructShape__000000_NewDiagram_Line.Name = `NewDiagram-Line`
-
+	
 	// comment added to overcome the problem with the comment map association
 
 	//gong:ident [ref_models.Line]
@@ -183,7 +125,7 @@ func NewDiagramInjection() {
 
 	// GongStructShape values setup
 	__GongStructShape__000001_NewDiagram_Point.Name = `NewDiagram-Point`
-
+	
 	// comment added to overcome the problem with the comment map association
 
 	//gong:ident [ref_models.Point]
@@ -196,11 +138,13 @@ func NewDiagramInjection() {
 
 	// Link values setup
 	__Link__000000_Start.Name = `Start`
-
+	
 	// comment added to overcome the problem with the comment map association
 
 	//gong:ident [ref_models.Line.Start]
 	__Link__000000_Start.Identifier = `ref_models.Line.Start`
+	
+	// comment added to overcome the problem with the comment map association
 
 	//gong:ident [ref_models.Point]
 	__Link__000000_Start.Fieldtypename = `ref_models.Point`
@@ -209,7 +153,7 @@ func NewDiagramInjection() {
 
 	// NoteShape values setup
 	__NoteShape__000000_ShortNodeOnModels.Name = `ShortNodeOnModels`
-
+	
 	// comment added to overcome the problem with the comment map association
 
 	//gong:ident [ref_models.ShortNodeOnModels]
@@ -217,6 +161,11 @@ func NewDiagramInjection() {
 	__NoteShape__000000_ShortNodeOnModels.Body = `this is an example of a short note
 It uses the DocLink convention for referencing Identifiers
 In this case [models.Line], [models.Point] and [models.Line.Start] [models.LineTypeString]
+are referenced in the go code
+`
+	__NoteShape__000000_ShortNodeOnModels.BodyHTML = `<p>this is an example of a short note
+It uses the DocLink convention for referencing Identifiers
+In this case <a href="/models#Line">models.Line</a>, <a href="/models#Point">models.Point</a> and <a href="/models#Line.Start">models.Line.Start</a> <a href="/models#LineTypeString">models.LineTypeString</a>
 are referenced in the go code
 `
 	__NoteShape__000000_ShortNodeOnModels.X = 180.000000
@@ -227,7 +176,7 @@ are referenced in the go code
 
 	// NoteShapeLink values setup
 	__NoteShapeLink__000000_Line.Name = `Line`
-
+	
 	// comment added to overcome the problem with the comment map association
 
 	//gong:ident [ref_models.Line]
@@ -236,7 +185,7 @@ are referenced in the go code
 
 	// NoteShapeLink values setup
 	__NoteShapeLink__000001_Line_Start.Name = `Line.Start`
-
+	
 	// comment added to overcome the problem with the comment map association
 
 	//gong:ident [ref_models.Line.Start]
@@ -245,7 +194,7 @@ are referenced in the go code
 
 	// NoteShapeLink values setup
 	__NoteShapeLink__000002_LineTypeString.Name = `LineTypeString`
-
+	
 	// comment added to overcome the problem with the comment map association
 
 	//gong:ident [ref_models.LineTypeString]
@@ -254,7 +203,7 @@ are referenced in the go code
 
 	// NoteShapeLink values setup
 	__NoteShapeLink__000003_Point.Name = `Point`
-
+	
 	// comment added to overcome the problem with the comment map association
 
 	//gong:ident [ref_models.Point]
@@ -296,3 +245,5 @@ are referenced in the go code
 	__NoteShape__000000_ShortNodeOnModels.NoteShapeLinks = append(__NoteShape__000000_ShortNodeOnModels.NoteShapeLinks, __NoteShapeLink__000003_Point)
 	__NoteShape__000000_ShortNodeOnModels.NoteShapeLinks = append(__NoteShape__000000_ShortNodeOnModels.NoteShapeLinks, __NoteShapeLink__000002_LineTypeString)
 }
+
+
