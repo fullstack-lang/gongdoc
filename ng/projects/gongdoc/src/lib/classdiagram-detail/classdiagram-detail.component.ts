@@ -59,6 +59,8 @@ export class ClassdiagramDetailComponent implements OnInit {
 	originStruct: string = ""
 	originStructFieldName: string = ""
 
+	GONG__StackPath: string = ""
+
 	constructor(
 		private classdiagramService: ClassdiagramService,
 		private frontRepoService: FrontRepoService,
@@ -69,6 +71,8 @@ export class ClassdiagramDetailComponent implements OnInit {
 	}
 
 	ngOnInit(): void {
+		this.GONG__StackPath = this.activatedRoute.snapshot.paramMap.get('GONG__StackPath')!;
+
 		this.activatedRoute.params.subscribe(params => {
 			this.onChangedActivatedRoute()
 		});
@@ -79,6 +83,8 @@ export class ClassdiagramDetailComponent implements OnInit {
 		this.id = +this.activatedRoute.snapshot.paramMap.get('id')!;
 		this.originStruct = this.activatedRoute.snapshot.paramMap.get('originStruct')!;
 		this.originStructFieldName = this.activatedRoute.snapshot.paramMap.get('originStructFieldName')!;
+
+		this.GONG__StackPath = this.activatedRoute.snapshot.paramMap.get('GONG__StackPath')!;
 
 		const association = this.activatedRoute.snapshot.paramMap.get('association');
 		if (this.id == 0) {
@@ -257,6 +263,7 @@ export class ClassdiagramDetailComponent implements OnInit {
 			ID: this.classdiagram.ID,
 			ReversePointer: reverseField,
 			OrderingMode: true,
+			GONG__StackPath: this.GONG__StackPath,
 		};
 		const dialogRef: MatDialogRef<string, any> = this.dialog.open(
 			MapOfSortingComponents.get(AssociatedStruct).get(
