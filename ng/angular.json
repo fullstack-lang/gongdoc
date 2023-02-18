@@ -128,14 +128,16 @@
                     "builder": "@angular-devkit/build-angular:browser",
                     "options": {
                         "tsConfig": "projects/gongdoc/tsconfig.lib.json",
-                        "project": "projects/gongdoc/ng-package.json",
                         "aot": false,
                         "vendorChunk": true,
                         "extractLicenses": false,
                         "buildOptimizer": false,
                         "sourceMap": true,
                         "optimization": false,
-                        "namedChunks": true
+                        "namedChunks": true,
+                        "allowedCommonJsDependencies": [
+                            "lodash"
+                        ]
                     },
                     "configurations": {
                         "production": {
@@ -164,14 +166,16 @@
                     "builder": "@angular-devkit/build-angular:browser",
                     "options": {
                         "tsConfig": "projects/gongdocdiagrams/tsconfig.lib.json",
-                        "project": "projects/gongdocdiagrams/ng-package.json",
                         "aot": false,
                         "vendorChunk": true,
                         "extractLicenses": false,
                         "buildOptimizer": false,
                         "sourceMap": true,
                         "optimization": false,
-                        "namedChunks": true
+                        "namedChunks": true,
+                        "allowedCommonJsDependencies": [
+                            "lodash"
+                        ]
                     },
                     "configurations": {
                         "production": {
