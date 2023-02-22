@@ -52,77 +52,77 @@ const routes: Routes = [ // insertion point for routes declarations
 	{ path: 'github_com_fullstack_lang_gongdoc_go-classdiagrams/:GONG__StackPath', component: ClassdiagramsTableComponent, outlet: 'github_com_fullstack_lang_gongdoc_go_table' },
 	{ path: 'github_com_fullstack_lang_gongdoc_go-classdiagram-adder/:GONG__StackPath', component: ClassdiagramDetailComponent, outlet: 'github_com_fullstack_lang_gongdoc_go_editor' },
 	{ path: 'github_com_fullstack_lang_gongdoc_go-classdiagram-adder/:id/:originStruct/:originStructFieldName/:GONG__StackPath', component: ClassdiagramDetailComponent, outlet: 'github_com_fullstack_lang_gongdoc_go_editor' },
-	{ path: 'github_com_fullstack_lang_gongdoc_go-classdiagram-detail/:id', component: ClassdiagramDetailComponent, outlet: 'github_com_fullstack_lang_gongdoc_go_editor' },
+	{ path: 'github_com_fullstack_lang_gongdoc_go-classdiagram-detail/:id/:GONG__StackPath', component: ClassdiagramDetailComponent, outlet: 'github_com_fullstack_lang_gongdoc_go_editor' },
 
 	{ path: 'github_com_fullstack_lang_gongdoc_go-diagrampackages/:GONG__StackPath', component: DiagramPackagesTableComponent, outlet: 'github_com_fullstack_lang_gongdoc_go_table' },
 	{ path: 'github_com_fullstack_lang_gongdoc_go-diagrampackage-adder/:GONG__StackPath', component: DiagramPackageDetailComponent, outlet: 'github_com_fullstack_lang_gongdoc_go_editor' },
 	{ path: 'github_com_fullstack_lang_gongdoc_go-diagrampackage-adder/:id/:originStruct/:originStructFieldName/:GONG__StackPath', component: DiagramPackageDetailComponent, outlet: 'github_com_fullstack_lang_gongdoc_go_editor' },
-	{ path: 'github_com_fullstack_lang_gongdoc_go-diagrampackage-detail/:id', component: DiagramPackageDetailComponent, outlet: 'github_com_fullstack_lang_gongdoc_go_editor' },
+	{ path: 'github_com_fullstack_lang_gongdoc_go-diagrampackage-detail/:id/:GONG__StackPath', component: DiagramPackageDetailComponent, outlet: 'github_com_fullstack_lang_gongdoc_go_editor' },
 
 	{ path: 'github_com_fullstack_lang_gongdoc_go-fields/:GONG__StackPath', component: FieldsTableComponent, outlet: 'github_com_fullstack_lang_gongdoc_go_table' },
 	{ path: 'github_com_fullstack_lang_gongdoc_go-field-adder/:GONG__StackPath', component: FieldDetailComponent, outlet: 'github_com_fullstack_lang_gongdoc_go_editor' },
 	{ path: 'github_com_fullstack_lang_gongdoc_go-field-adder/:id/:originStruct/:originStructFieldName/:GONG__StackPath', component: FieldDetailComponent, outlet: 'github_com_fullstack_lang_gongdoc_go_editor' },
-	{ path: 'github_com_fullstack_lang_gongdoc_go-field-detail/:id', component: FieldDetailComponent, outlet: 'github_com_fullstack_lang_gongdoc_go_editor' },
+	{ path: 'github_com_fullstack_lang_gongdoc_go-field-detail/:id/:GONG__StackPath', component: FieldDetailComponent, outlet: 'github_com_fullstack_lang_gongdoc_go_editor' },
 
 	{ path: 'github_com_fullstack_lang_gongdoc_go-gongenumshapes/:GONG__StackPath', component: GongEnumShapesTableComponent, outlet: 'github_com_fullstack_lang_gongdoc_go_table' },
 	{ path: 'github_com_fullstack_lang_gongdoc_go-gongenumshape-adder/:GONG__StackPath', component: GongEnumShapeDetailComponent, outlet: 'github_com_fullstack_lang_gongdoc_go_editor' },
 	{ path: 'github_com_fullstack_lang_gongdoc_go-gongenumshape-adder/:id/:originStruct/:originStructFieldName/:GONG__StackPath', component: GongEnumShapeDetailComponent, outlet: 'github_com_fullstack_lang_gongdoc_go_editor' },
-	{ path: 'github_com_fullstack_lang_gongdoc_go-gongenumshape-detail/:id', component: GongEnumShapeDetailComponent, outlet: 'github_com_fullstack_lang_gongdoc_go_editor' },
+	{ path: 'github_com_fullstack_lang_gongdoc_go-gongenumshape-detail/:id/:GONG__StackPath', component: GongEnumShapeDetailComponent, outlet: 'github_com_fullstack_lang_gongdoc_go_editor' },
 
 	{ path: 'github_com_fullstack_lang_gongdoc_go-gongenumvalueentrys/:GONG__StackPath', component: GongEnumValueEntrysTableComponent, outlet: 'github_com_fullstack_lang_gongdoc_go_table' },
 	{ path: 'github_com_fullstack_lang_gongdoc_go-gongenumvalueentry-adder/:GONG__StackPath', component: GongEnumValueEntryDetailComponent, outlet: 'github_com_fullstack_lang_gongdoc_go_editor' },
 	{ path: 'github_com_fullstack_lang_gongdoc_go-gongenumvalueentry-adder/:id/:originStruct/:originStructFieldName/:GONG__StackPath', component: GongEnumValueEntryDetailComponent, outlet: 'github_com_fullstack_lang_gongdoc_go_editor' },
-	{ path: 'github_com_fullstack_lang_gongdoc_go-gongenumvalueentry-detail/:id', component: GongEnumValueEntryDetailComponent, outlet: 'github_com_fullstack_lang_gongdoc_go_editor' },
+	{ path: 'github_com_fullstack_lang_gongdoc_go-gongenumvalueentry-detail/:id/:GONG__StackPath', component: GongEnumValueEntryDetailComponent, outlet: 'github_com_fullstack_lang_gongdoc_go_editor' },
 
 	{ path: 'github_com_fullstack_lang_gongdoc_go-gongstructshapes/:GONG__StackPath', component: GongStructShapesTableComponent, outlet: 'github_com_fullstack_lang_gongdoc_go_table' },
 	{ path: 'github_com_fullstack_lang_gongdoc_go-gongstructshape-adder/:GONG__StackPath', component: GongStructShapeDetailComponent, outlet: 'github_com_fullstack_lang_gongdoc_go_editor' },
 	{ path: 'github_com_fullstack_lang_gongdoc_go-gongstructshape-adder/:id/:originStruct/:originStructFieldName/:GONG__StackPath', component: GongStructShapeDetailComponent, outlet: 'github_com_fullstack_lang_gongdoc_go_editor' },
-	{ path: 'github_com_fullstack_lang_gongdoc_go-gongstructshape-detail/:id', component: GongStructShapeDetailComponent, outlet: 'github_com_fullstack_lang_gongdoc_go_editor' },
+	{ path: 'github_com_fullstack_lang_gongdoc_go-gongstructshape-detail/:id/:GONG__StackPath', component: GongStructShapeDetailComponent, outlet: 'github_com_fullstack_lang_gongdoc_go_editor' },
 
 	{ path: 'github_com_fullstack_lang_gongdoc_go-links/:GONG__StackPath', component: LinksTableComponent, outlet: 'github_com_fullstack_lang_gongdoc_go_table' },
 	{ path: 'github_com_fullstack_lang_gongdoc_go-link-adder/:GONG__StackPath', component: LinkDetailComponent, outlet: 'github_com_fullstack_lang_gongdoc_go_editor' },
 	{ path: 'github_com_fullstack_lang_gongdoc_go-link-adder/:id/:originStruct/:originStructFieldName/:GONG__StackPath', component: LinkDetailComponent, outlet: 'github_com_fullstack_lang_gongdoc_go_editor' },
-	{ path: 'github_com_fullstack_lang_gongdoc_go-link-detail/:id', component: LinkDetailComponent, outlet: 'github_com_fullstack_lang_gongdoc_go_editor' },
+	{ path: 'github_com_fullstack_lang_gongdoc_go-link-detail/:id/:GONG__StackPath', component: LinkDetailComponent, outlet: 'github_com_fullstack_lang_gongdoc_go_editor' },
 
 	{ path: 'github_com_fullstack_lang_gongdoc_go-nodes/:GONG__StackPath', component: NodesTableComponent, outlet: 'github_com_fullstack_lang_gongdoc_go_table' },
 	{ path: 'github_com_fullstack_lang_gongdoc_go-node-adder/:GONG__StackPath', component: NodeDetailComponent, outlet: 'github_com_fullstack_lang_gongdoc_go_editor' },
 	{ path: 'github_com_fullstack_lang_gongdoc_go-node-adder/:id/:originStruct/:originStructFieldName/:GONG__StackPath', component: NodeDetailComponent, outlet: 'github_com_fullstack_lang_gongdoc_go_editor' },
-	{ path: 'github_com_fullstack_lang_gongdoc_go-node-detail/:id', component: NodeDetailComponent, outlet: 'github_com_fullstack_lang_gongdoc_go_editor' },
+	{ path: 'github_com_fullstack_lang_gongdoc_go-node-detail/:id/:GONG__StackPath', component: NodeDetailComponent, outlet: 'github_com_fullstack_lang_gongdoc_go_editor' },
 
 	{ path: 'github_com_fullstack_lang_gongdoc_go-noteshapes/:GONG__StackPath', component: NoteShapesTableComponent, outlet: 'github_com_fullstack_lang_gongdoc_go_table' },
 	{ path: 'github_com_fullstack_lang_gongdoc_go-noteshape-adder/:GONG__StackPath', component: NoteShapeDetailComponent, outlet: 'github_com_fullstack_lang_gongdoc_go_editor' },
 	{ path: 'github_com_fullstack_lang_gongdoc_go-noteshape-adder/:id/:originStruct/:originStructFieldName/:GONG__StackPath', component: NoteShapeDetailComponent, outlet: 'github_com_fullstack_lang_gongdoc_go_editor' },
-	{ path: 'github_com_fullstack_lang_gongdoc_go-noteshape-detail/:id', component: NoteShapeDetailComponent, outlet: 'github_com_fullstack_lang_gongdoc_go_editor' },
+	{ path: 'github_com_fullstack_lang_gongdoc_go-noteshape-detail/:id/:GONG__StackPath', component: NoteShapeDetailComponent, outlet: 'github_com_fullstack_lang_gongdoc_go_editor' },
 
 	{ path: 'github_com_fullstack_lang_gongdoc_go-noteshapelinks/:GONG__StackPath', component: NoteShapeLinksTableComponent, outlet: 'github_com_fullstack_lang_gongdoc_go_table' },
 	{ path: 'github_com_fullstack_lang_gongdoc_go-noteshapelink-adder/:GONG__StackPath', component: NoteShapeLinkDetailComponent, outlet: 'github_com_fullstack_lang_gongdoc_go_editor' },
 	{ path: 'github_com_fullstack_lang_gongdoc_go-noteshapelink-adder/:id/:originStruct/:originStructFieldName/:GONG__StackPath', component: NoteShapeLinkDetailComponent, outlet: 'github_com_fullstack_lang_gongdoc_go_editor' },
-	{ path: 'github_com_fullstack_lang_gongdoc_go-noteshapelink-detail/:id', component: NoteShapeLinkDetailComponent, outlet: 'github_com_fullstack_lang_gongdoc_go_editor' },
+	{ path: 'github_com_fullstack_lang_gongdoc_go-noteshapelink-detail/:id/:GONG__StackPath', component: NoteShapeLinkDetailComponent, outlet: 'github_com_fullstack_lang_gongdoc_go_editor' },
 
 	{ path: 'github_com_fullstack_lang_gongdoc_go-positions/:GONG__StackPath', component: PositionsTableComponent, outlet: 'github_com_fullstack_lang_gongdoc_go_table' },
 	{ path: 'github_com_fullstack_lang_gongdoc_go-position-adder/:GONG__StackPath', component: PositionDetailComponent, outlet: 'github_com_fullstack_lang_gongdoc_go_editor' },
 	{ path: 'github_com_fullstack_lang_gongdoc_go-position-adder/:id/:originStruct/:originStructFieldName/:GONG__StackPath', component: PositionDetailComponent, outlet: 'github_com_fullstack_lang_gongdoc_go_editor' },
-	{ path: 'github_com_fullstack_lang_gongdoc_go-position-detail/:id', component: PositionDetailComponent, outlet: 'github_com_fullstack_lang_gongdoc_go_editor' },
+	{ path: 'github_com_fullstack_lang_gongdoc_go-position-detail/:id/:GONG__StackPath', component: PositionDetailComponent, outlet: 'github_com_fullstack_lang_gongdoc_go_editor' },
 
 	{ path: 'github_com_fullstack_lang_gongdoc_go-trees/:GONG__StackPath', component: TreesTableComponent, outlet: 'github_com_fullstack_lang_gongdoc_go_table' },
 	{ path: 'github_com_fullstack_lang_gongdoc_go-tree-adder/:GONG__StackPath', component: TreeDetailComponent, outlet: 'github_com_fullstack_lang_gongdoc_go_editor' },
 	{ path: 'github_com_fullstack_lang_gongdoc_go-tree-adder/:id/:originStruct/:originStructFieldName/:GONG__StackPath', component: TreeDetailComponent, outlet: 'github_com_fullstack_lang_gongdoc_go_editor' },
-	{ path: 'github_com_fullstack_lang_gongdoc_go-tree-detail/:id', component: TreeDetailComponent, outlet: 'github_com_fullstack_lang_gongdoc_go_editor' },
+	{ path: 'github_com_fullstack_lang_gongdoc_go-tree-detail/:id/:GONG__StackPath', component: TreeDetailComponent, outlet: 'github_com_fullstack_lang_gongdoc_go_editor' },
 
 	{ path: 'github_com_fullstack_lang_gongdoc_go-umlstates/:GONG__StackPath', component: UmlStatesTableComponent, outlet: 'github_com_fullstack_lang_gongdoc_go_table' },
 	{ path: 'github_com_fullstack_lang_gongdoc_go-umlstate-adder/:GONG__StackPath', component: UmlStateDetailComponent, outlet: 'github_com_fullstack_lang_gongdoc_go_editor' },
 	{ path: 'github_com_fullstack_lang_gongdoc_go-umlstate-adder/:id/:originStruct/:originStructFieldName/:GONG__StackPath', component: UmlStateDetailComponent, outlet: 'github_com_fullstack_lang_gongdoc_go_editor' },
-	{ path: 'github_com_fullstack_lang_gongdoc_go-umlstate-detail/:id', component: UmlStateDetailComponent, outlet: 'github_com_fullstack_lang_gongdoc_go_editor' },
+	{ path: 'github_com_fullstack_lang_gongdoc_go-umlstate-detail/:id/:GONG__StackPath', component: UmlStateDetailComponent, outlet: 'github_com_fullstack_lang_gongdoc_go_editor' },
 
 	{ path: 'github_com_fullstack_lang_gongdoc_go-umlscs/:GONG__StackPath', component: UmlscsTableComponent, outlet: 'github_com_fullstack_lang_gongdoc_go_table' },
 	{ path: 'github_com_fullstack_lang_gongdoc_go-umlsc-adder/:GONG__StackPath', component: UmlscDetailComponent, outlet: 'github_com_fullstack_lang_gongdoc_go_editor' },
 	{ path: 'github_com_fullstack_lang_gongdoc_go-umlsc-adder/:id/:originStruct/:originStructFieldName/:GONG__StackPath', component: UmlscDetailComponent, outlet: 'github_com_fullstack_lang_gongdoc_go_editor' },
-	{ path: 'github_com_fullstack_lang_gongdoc_go-umlsc-detail/:id', component: UmlscDetailComponent, outlet: 'github_com_fullstack_lang_gongdoc_go_editor' },
+	{ path: 'github_com_fullstack_lang_gongdoc_go-umlsc-detail/:id/:GONG__StackPath', component: UmlscDetailComponent, outlet: 'github_com_fullstack_lang_gongdoc_go_editor' },
 
 	{ path: 'github_com_fullstack_lang_gongdoc_go-vertices/:GONG__StackPath', component: VerticesTableComponent, outlet: 'github_com_fullstack_lang_gongdoc_go_table' },
 	{ path: 'github_com_fullstack_lang_gongdoc_go-vertice-adder/:GONG__StackPath', component: VerticeDetailComponent, outlet: 'github_com_fullstack_lang_gongdoc_go_editor' },
 	{ path: 'github_com_fullstack_lang_gongdoc_go-vertice-adder/:id/:originStruct/:originStructFieldName/:GONG__StackPath', component: VerticeDetailComponent, outlet: 'github_com_fullstack_lang_gongdoc_go_editor' },
-	{ path: 'github_com_fullstack_lang_gongdoc_go-vertice-detail/:id', component: VerticeDetailComponent, outlet: 'github_com_fullstack_lang_gongdoc_go_editor' },
+	{ path: 'github_com_fullstack_lang_gongdoc_go-vertice-detail/:id/:GONG__StackPath', component: VerticeDetailComponent, outlet: 'github_com_fullstack_lang_gongdoc_go_editor' },
 
 ];
 

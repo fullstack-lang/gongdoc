@@ -118,6 +118,7 @@ export class TreesTableComponent implements OnInit {
     if (dialogData == undefined) {
       this.mode = TableComponentMode.DISPLAY_MODE
     } else {
+      this.GONG__StackPath = dialogData.GONG__StackPath
       switch (dialogData.SelectionMode) {
         case SelectionMode.ONE_MANY_ASSOCIATION_MODE:
           this.mode = TableComponentMode.ONE_MANY_ASSOCIATION_MODE
@@ -151,7 +152,10 @@ export class TreesTableComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.GONG__StackPath = this.activatedRoute.snapshot.paramMap.get('GONG__StackPath')!;
+    let stackPath = this.activatedRoute.snapshot.paramMap.get('GONG__StackPath')
+    if ( stackPath != undefined) {
+      this.GONG__StackPath = stackPath
+    }
 
     this.getTrees()
 
@@ -159,7 +163,7 @@ export class TreesTableComponent implements OnInit {
   }
 
   getTrees(): void {
-    this.frontRepoService.pull().subscribe(
+    this.frontRepoService.pull(this.GONG__StackPath).subscribe(
       frontRepo => {
         this.frontRepo = frontRepo
 
@@ -229,7 +233,7 @@ export class TreesTableComponent implements OnInit {
   setEditorRouterOutlet(treeID: number) {
     this.router.navigate([{
       outlets: {
-        github_com_fullstack_lang_gongdoc_go_editor: ["github_com_fullstack_lang_gongdoc_go-" + "tree-detail", treeID]
+        github_com_fullstack_lang_gongdoc_go_editor: ["github_com_fullstack_lang_gongdoc_go-" + "tree-detail", treeID, this.GONG__StackPath]
       }
     }]);
   }

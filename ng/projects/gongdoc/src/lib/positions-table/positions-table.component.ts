@@ -126,6 +126,7 @@ export class PositionsTableComponent implements OnInit {
     if (dialogData == undefined) {
       this.mode = TableComponentMode.DISPLAY_MODE
     } else {
+      this.GONG__StackPath = dialogData.GONG__StackPath
       switch (dialogData.SelectionMode) {
         case SelectionMode.ONE_MANY_ASSOCIATION_MODE:
           this.mode = TableComponentMode.ONE_MANY_ASSOCIATION_MODE
@@ -163,7 +164,10 @@ export class PositionsTableComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.GONG__StackPath = this.activatedRoute.snapshot.paramMap.get('GONG__StackPath')!;
+    let stackPath = this.activatedRoute.snapshot.paramMap.get('GONG__StackPath')
+    if ( stackPath != undefined) {
+      this.GONG__StackPath = stackPath
+    }
 
     this.getPositions()
 
@@ -171,7 +175,7 @@ export class PositionsTableComponent implements OnInit {
   }
 
   getPositions(): void {
-    this.frontRepoService.pull().subscribe(
+    this.frontRepoService.pull(this.GONG__StackPath).subscribe(
       frontRepo => {
         this.frontRepo = frontRepo
 
@@ -241,7 +245,7 @@ export class PositionsTableComponent implements OnInit {
   setEditorRouterOutlet(positionID: number) {
     this.router.navigate([{
       outlets: {
-        github_com_fullstack_lang_gongdoc_go_editor: ["github_com_fullstack_lang_gongdoc_go-" + "position-detail", positionID]
+        github_com_fullstack_lang_gongdoc_go_editor: ["github_com_fullstack_lang_gongdoc_go-" + "position-detail", positionID, this.GONG__StackPath]
       }
     }]);
   }
