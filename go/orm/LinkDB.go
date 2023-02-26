@@ -136,6 +136,8 @@ type BackRepoLinkStruct struct {
 	Map_LinkDBID_LinkPtr *map[uint]*models.Link
 
 	db *gorm.DB
+
+	stage *models.StageStruct
 }
 
 func (backRepoLink *BackRepoLinkStruct) GetDB() *gorm.DB {
@@ -150,7 +152,7 @@ func (backRepoLink *BackRepoLinkStruct) GetLinkDBFromLinkPtr(link *models.Link) 
 }
 
 // BackRepoLink.Init set up the BackRepo of the Link
-func (backRepoLink *BackRepoLinkStruct) Init(db *gorm.DB) (Error error) {
+func (backRepoLink *BackRepoLinkStruct) Init(stage *models.StageStruct, db *gorm.DB) (Error error) {
 
 	if backRepoLink.Map_LinkDBID_LinkPtr != nil {
 		err := errors.New("In Init, backRepoLink.Map_LinkDBID_LinkPtr should be nil")
@@ -177,6 +179,7 @@ func (backRepoLink *BackRepoLinkStruct) Init(db *gorm.DB) (Error error) {
 	backRepoLink.Map_LinkPtr_LinkDBID = &tmpID
 
 	backRepoLink.db = db
+	backRepoLink.stage = stage
 	return
 }
 
@@ -304,7 +307,7 @@ func (backRepoLink *BackRepoLinkStruct) CheckoutPhaseOne() (Error error) {
 	// list of instances to be removed
 	// start from the initial map on the stage and remove instances that have been checked out
 	linkInstancesToBeRemovedFromTheStage := make(map[*models.Link]any)
-	for key, value := range models.Stage.Links {
+	for key, value := range backRepoLink.stage.Links {
 		linkInstancesToBeRemovedFromTheStage[key] = value
 	}
 

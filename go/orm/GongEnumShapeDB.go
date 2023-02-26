@@ -130,6 +130,8 @@ type BackRepoGongEnumShapeStruct struct {
 	Map_GongEnumShapeDBID_GongEnumShapePtr *map[uint]*models.GongEnumShape
 
 	db *gorm.DB
+
+	stage *models.StageStruct
 }
 
 func (backRepoGongEnumShape *BackRepoGongEnumShapeStruct) GetDB() *gorm.DB {
@@ -144,7 +146,7 @@ func (backRepoGongEnumShape *BackRepoGongEnumShapeStruct) GetGongEnumShapeDBFrom
 }
 
 // BackRepoGongEnumShape.Init set up the BackRepo of the GongEnumShape
-func (backRepoGongEnumShape *BackRepoGongEnumShapeStruct) Init(db *gorm.DB) (Error error) {
+func (backRepoGongEnumShape *BackRepoGongEnumShapeStruct) Init(stage *models.StageStruct, db *gorm.DB) (Error error) {
 
 	if backRepoGongEnumShape.Map_GongEnumShapeDBID_GongEnumShapePtr != nil {
 		err := errors.New("In Init, backRepoGongEnumShape.Map_GongEnumShapeDBID_GongEnumShapePtr should be nil")
@@ -171,6 +173,7 @@ func (backRepoGongEnumShape *BackRepoGongEnumShapeStruct) Init(db *gorm.DB) (Err
 	backRepoGongEnumShape.Map_GongEnumShapePtr_GongEnumShapeDBID = &tmpID
 
 	backRepoGongEnumShape.db = db
+	backRepoGongEnumShape.stage = stage
 	return
 }
 
@@ -317,7 +320,7 @@ func (backRepoGongEnumShape *BackRepoGongEnumShapeStruct) CheckoutPhaseOne() (Er
 	// list of instances to be removed
 	// start from the initial map on the stage and remove instances that have been checked out
 	gongenumshapeInstancesToBeRemovedFromTheStage := make(map[*models.GongEnumShape]any)
-	for key, value := range models.Stage.GongEnumShapes {
+	for key, value := range backRepoGongEnumShape.stage.GongEnumShapes {
 		gongenumshapeInstancesToBeRemovedFromTheStage[key] = value
 	}
 

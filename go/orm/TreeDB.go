@@ -102,6 +102,8 @@ type BackRepoTreeStruct struct {
 	Map_TreeDBID_TreePtr *map[uint]*models.Tree
 
 	db *gorm.DB
+
+	stage *models.StageStruct
 }
 
 func (backRepoTree *BackRepoTreeStruct) GetDB() *gorm.DB {
@@ -116,7 +118,7 @@ func (backRepoTree *BackRepoTreeStruct) GetTreeDBFromTreePtr(tree *models.Tree) 
 }
 
 // BackRepoTree.Init set up the BackRepo of the Tree
-func (backRepoTree *BackRepoTreeStruct) Init(db *gorm.DB) (Error error) {
+func (backRepoTree *BackRepoTreeStruct) Init(stage *models.StageStruct, db *gorm.DB) (Error error) {
 
 	if backRepoTree.Map_TreeDBID_TreePtr != nil {
 		err := errors.New("In Init, backRepoTree.Map_TreeDBID_TreePtr should be nil")
@@ -143,6 +145,7 @@ func (backRepoTree *BackRepoTreeStruct) Init(db *gorm.DB) (Error error) {
 	backRepoTree.Map_TreePtr_TreeDBID = &tmpID
 
 	backRepoTree.db = db
+	backRepoTree.stage = stage
 	return
 }
 
@@ -280,7 +283,7 @@ func (backRepoTree *BackRepoTreeStruct) CheckoutPhaseOne() (Error error) {
 	// list of instances to be removed
 	// start from the initial map on the stage and remove instances that have been checked out
 	treeInstancesToBeRemovedFromTheStage := make(map[*models.Tree]any)
-	for key, value := range models.Stage.Trees {
+	for key, value := range backRepoTree.stage.Trees {
 		treeInstancesToBeRemovedFromTheStage[key] = value
 	}
 

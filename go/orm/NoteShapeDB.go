@@ -157,6 +157,8 @@ type BackRepoNoteShapeStruct struct {
 	Map_NoteShapeDBID_NoteShapePtr *map[uint]*models.NoteShape
 
 	db *gorm.DB
+
+	stage *models.StageStruct
 }
 
 func (backRepoNoteShape *BackRepoNoteShapeStruct) GetDB() *gorm.DB {
@@ -171,7 +173,7 @@ func (backRepoNoteShape *BackRepoNoteShapeStruct) GetNoteShapeDBFromNoteShapePtr
 }
 
 // BackRepoNoteShape.Init set up the BackRepo of the NoteShape
-func (backRepoNoteShape *BackRepoNoteShapeStruct) Init(db *gorm.DB) (Error error) {
+func (backRepoNoteShape *BackRepoNoteShapeStruct) Init(stage *models.StageStruct, db *gorm.DB) (Error error) {
 
 	if backRepoNoteShape.Map_NoteShapeDBID_NoteShapePtr != nil {
 		err := errors.New("In Init, backRepoNoteShape.Map_NoteShapeDBID_NoteShapePtr should be nil")
@@ -198,6 +200,7 @@ func (backRepoNoteShape *BackRepoNoteShapeStruct) Init(db *gorm.DB) (Error error
 	backRepoNoteShape.Map_NoteShapePtr_NoteShapeDBID = &tmpID
 
 	backRepoNoteShape.db = db
+	backRepoNoteShape.stage = stage
 	return
 }
 
@@ -335,7 +338,7 @@ func (backRepoNoteShape *BackRepoNoteShapeStruct) CheckoutPhaseOne() (Error erro
 	// list of instances to be removed
 	// start from the initial map on the stage and remove instances that have been checked out
 	noteshapeInstancesToBeRemovedFromTheStage := make(map[*models.NoteShape]any)
-	for key, value := range models.Stage.NoteShapes {
+	for key, value := range backRepoNoteShape.stage.NoteShapes {
 		noteshapeInstancesToBeRemovedFromTheStage[key] = value
 	}
 

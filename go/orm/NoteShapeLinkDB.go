@@ -120,6 +120,8 @@ type BackRepoNoteShapeLinkStruct struct {
 	Map_NoteShapeLinkDBID_NoteShapeLinkPtr *map[uint]*models.NoteShapeLink
 
 	db *gorm.DB
+
+	stage *models.StageStruct
 }
 
 func (backRepoNoteShapeLink *BackRepoNoteShapeLinkStruct) GetDB() *gorm.DB {
@@ -134,7 +136,7 @@ func (backRepoNoteShapeLink *BackRepoNoteShapeLinkStruct) GetNoteShapeLinkDBFrom
 }
 
 // BackRepoNoteShapeLink.Init set up the BackRepo of the NoteShapeLink
-func (backRepoNoteShapeLink *BackRepoNoteShapeLinkStruct) Init(db *gorm.DB) (Error error) {
+func (backRepoNoteShapeLink *BackRepoNoteShapeLinkStruct) Init(stage *models.StageStruct, db *gorm.DB) (Error error) {
 
 	if backRepoNoteShapeLink.Map_NoteShapeLinkDBID_NoteShapeLinkPtr != nil {
 		err := errors.New("In Init, backRepoNoteShapeLink.Map_NoteShapeLinkDBID_NoteShapeLinkPtr should be nil")
@@ -161,6 +163,7 @@ func (backRepoNoteShapeLink *BackRepoNoteShapeLinkStruct) Init(db *gorm.DB) (Err
 	backRepoNoteShapeLink.Map_NoteShapeLinkPtr_NoteShapeLinkDBID = &tmpID
 
 	backRepoNoteShapeLink.db = db
+	backRepoNoteShapeLink.stage = stage
 	return
 }
 
@@ -279,7 +282,7 @@ func (backRepoNoteShapeLink *BackRepoNoteShapeLinkStruct) CheckoutPhaseOne() (Er
 	// list of instances to be removed
 	// start from the initial map on the stage and remove instances that have been checked out
 	noteshapelinkInstancesToBeRemovedFromTheStage := make(map[*models.NoteShapeLink]any)
-	for key, value := range models.Stage.NoteShapeLinks {
+	for key, value := range backRepoNoteShapeLink.stage.NoteShapeLinks {
 		noteshapelinkInstancesToBeRemovedFromTheStage[key] = value
 	}
 

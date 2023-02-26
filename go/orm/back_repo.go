@@ -52,6 +52,8 @@ type BackRepoStruct struct {
 	CommitFromBackNb uint // this ng is updated at the BackRepo level but also at the BackRepo<GongStruct> level
 
 	PushFromFrontNb uint // records increments from push from front
+
+	stage *models.StageStruct
 }
 
 func (backRepo *BackRepoStruct) GetLastCommitFromBackNb() uint {
@@ -63,47 +65,48 @@ func (backRepo *BackRepoStruct) GetLastPushFromFrontNb() uint {
 }
 
 func (backRepo *BackRepoStruct) IncrementCommitFromBackNb() uint {
-	if models.Stage.OnInitCommitCallback != nil {
-		models.Stage.OnInitCommitCallback.BeforeCommit(&models.Stage)
+	if backRepo.stage.OnInitCommitCallback != nil {
+		backRepo.stage.OnInitCommitCallback.BeforeCommit(backRepo.stage)
 	}
-	if models.Stage.OnInitCommitFromBackCallback != nil {
-		models.Stage.OnInitCommitFromBackCallback.BeforeCommit(&models.Stage)
+	if backRepo.stage.OnInitCommitFromBackCallback != nil {
+		backRepo.stage.OnInitCommitFromBackCallback.BeforeCommit(backRepo.stage)
 	}
 	backRepo.CommitFromBackNb = backRepo.CommitFromBackNb + 1
 	return backRepo.CommitFromBackNb
 }
 
 func (backRepo *BackRepoStruct) IncrementPushFromFrontNb() uint {
-	if models.Stage.OnInitCommitCallback != nil {
-		models.Stage.OnInitCommitCallback.BeforeCommit(&models.Stage)
+	if backRepo.stage.OnInitCommitCallback != nil {
+		backRepo.stage.OnInitCommitCallback.BeforeCommit(backRepo.stage)
 	}
-	if models.Stage.OnInitCommitFromFrontCallback != nil {
-		models.Stage.OnInitCommitFromFrontCallback.BeforeCommit(&models.Stage)
+	if backRepo.stage.OnInitCommitFromFrontCallback != nil {
+		backRepo.stage.OnInitCommitFromFrontCallback.BeforeCommit(backRepo.stage)
 	}
 	backRepo.PushFromFrontNb = backRepo.PushFromFrontNb + 1
 	return backRepo.CommitFromBackNb
 }
 
 // Init the BackRepoStruct inner variables and link to the database
-func (backRepo *BackRepoStruct) init(db *gorm.DB) {
+func (backRepo *BackRepoStruct) init(stage *models.StageStruct, db *gorm.DB) {
 	// insertion point for per struct back repo declarations
-	backRepo.BackRepoClassdiagram.Init(db)
-	backRepo.BackRepoDiagramPackage.Init(db)
-	backRepo.BackRepoField.Init(db)
-	backRepo.BackRepoGongEnumShape.Init(db)
-	backRepo.BackRepoGongEnumValueEntry.Init(db)
-	backRepo.BackRepoGongStructShape.Init(db)
-	backRepo.BackRepoLink.Init(db)
-	backRepo.BackRepoNode.Init(db)
-	backRepo.BackRepoNoteShape.Init(db)
-	backRepo.BackRepoNoteShapeLink.Init(db)
-	backRepo.BackRepoPosition.Init(db)
-	backRepo.BackRepoTree.Init(db)
-	backRepo.BackRepoUmlState.Init(db)
-	backRepo.BackRepoUmlsc.Init(db)
-	backRepo.BackRepoVertice.Init(db)
+	backRepo.BackRepoClassdiagram.Init(stage, db)
+	backRepo.BackRepoDiagramPackage.Init(stage, db)
+	backRepo.BackRepoField.Init(stage, db)
+	backRepo.BackRepoGongEnumShape.Init(stage, db)
+	backRepo.BackRepoGongEnumValueEntry.Init(stage, db)
+	backRepo.BackRepoGongStructShape.Init(stage, db)
+	backRepo.BackRepoLink.Init(stage, db)
+	backRepo.BackRepoNode.Init(stage, db)
+	backRepo.BackRepoNoteShape.Init(stage, db)
+	backRepo.BackRepoNoteShapeLink.Init(stage, db)
+	backRepo.BackRepoPosition.Init(stage, db)
+	backRepo.BackRepoTree.Init(stage, db)
+	backRepo.BackRepoUmlState.Init(stage, db)
+	backRepo.BackRepoUmlsc.Init(stage, db)
+	backRepo.BackRepoVertice.Init(stage, db)
 
-	models.Stage.BackRepo = backRepo
+	stage.BackRepo = backRepo
+	backRepo.stage = stage
 }
 
 // Commit the BackRepoStruct inner variables and link to the database
@@ -252,9 +255,9 @@ func (backRepo *BackRepoStruct) BackupXL(stage *models.StageStruct, dirPath stri
 
 // Restore the database into the back repo
 func (backRepo *BackRepoStruct) Restore(stage *models.StageStruct, dirPath string) {
-	models.Stage.Commit()
-	models.Stage.Reset()
-	models.Stage.Checkout()
+	backRepo.stage.Commit()
+	backRepo.stage.Reset()
+	backRepo.stage.Checkout()
 
 	//
 	// restauration first phase (create DB instance with new IDs)
@@ -298,17 +301,17 @@ func (backRepo *BackRepoStruct) Restore(stage *models.StageStruct, dirPath strin
 	backRepo.BackRepoUmlsc.RestorePhaseTwo()
 	backRepo.BackRepoVertice.RestorePhaseTwo()
 
-	models.Stage.Checkout()
+	backRepo.stage.Checkout()
 }
 
 // Restore the database into the back repo
 func (backRepo *BackRepoStruct) RestoreXL(stage *models.StageStruct, dirPath string) {
 
 	// clean the stage
-	models.Stage.Reset()
+	backRepo.stage.Reset()
 
 	// commit the cleaned stage
-	models.Stage.Commit()
+	backRepo.stage.Commit()
 
 	// open an existing file
 	filename := filepath.Join(dirPath, "bckp.xlsx")
@@ -340,5 +343,5 @@ func (backRepo *BackRepoStruct) RestoreXL(stage *models.StageStruct, dirPath str
 	backRepo.BackRepoVertice.RestoreXLPhaseOne(file)
 
 	// commit the restored stage
-	models.Stage.Commit()
+	backRepo.stage.Commit()
 }

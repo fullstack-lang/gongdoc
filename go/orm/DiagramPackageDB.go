@@ -138,6 +138,8 @@ type BackRepoDiagramPackageStruct struct {
 	Map_DiagramPackageDBID_DiagramPackagePtr *map[uint]*models.DiagramPackage
 
 	db *gorm.DB
+
+	stage *models.StageStruct
 }
 
 func (backRepoDiagramPackage *BackRepoDiagramPackageStruct) GetDB() *gorm.DB {
@@ -152,7 +154,7 @@ func (backRepoDiagramPackage *BackRepoDiagramPackageStruct) GetDiagramPackageDBF
 }
 
 // BackRepoDiagramPackage.Init set up the BackRepo of the DiagramPackage
-func (backRepoDiagramPackage *BackRepoDiagramPackageStruct) Init(db *gorm.DB) (Error error) {
+func (backRepoDiagramPackage *BackRepoDiagramPackageStruct) Init(stage *models.StageStruct, db *gorm.DB) (Error error) {
 
 	if backRepoDiagramPackage.Map_DiagramPackageDBID_DiagramPackagePtr != nil {
 		err := errors.New("In Init, backRepoDiagramPackage.Map_DiagramPackageDBID_DiagramPackagePtr should be nil")
@@ -179,6 +181,7 @@ func (backRepoDiagramPackage *BackRepoDiagramPackageStruct) Init(db *gorm.DB) (E
 	backRepoDiagramPackage.Map_DiagramPackagePtr_DiagramPackageDBID = &tmpID
 
 	backRepoDiagramPackage.db = db
+	backRepoDiagramPackage.stage = stage
 	return
 }
 
@@ -344,7 +347,7 @@ func (backRepoDiagramPackage *BackRepoDiagramPackageStruct) CheckoutPhaseOne() (
 	// list of instances to be removed
 	// start from the initial map on the stage and remove instances that have been checked out
 	diagrampackageInstancesToBeRemovedFromTheStage := make(map[*models.DiagramPackage]any)
-	for key, value := range models.Stage.DiagramPackages {
+	for key, value := range backRepoDiagramPackage.stage.DiagramPackages {
 		diagrampackageInstancesToBeRemovedFromTheStage[key] = value
 	}
 

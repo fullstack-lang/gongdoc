@@ -114,6 +114,8 @@ type BackRepoPositionStruct struct {
 	Map_PositionDBID_PositionPtr *map[uint]*models.Position
 
 	db *gorm.DB
+
+	stage *models.StageStruct
 }
 
 func (backRepoPosition *BackRepoPositionStruct) GetDB() *gorm.DB {
@@ -128,7 +130,7 @@ func (backRepoPosition *BackRepoPositionStruct) GetPositionDBFromPositionPtr(pos
 }
 
 // BackRepoPosition.Init set up the BackRepo of the Position
-func (backRepoPosition *BackRepoPositionStruct) Init(db *gorm.DB) (Error error) {
+func (backRepoPosition *BackRepoPositionStruct) Init(stage *models.StageStruct, db *gorm.DB) (Error error) {
 
 	if backRepoPosition.Map_PositionDBID_PositionPtr != nil {
 		err := errors.New("In Init, backRepoPosition.Map_PositionDBID_PositionPtr should be nil")
@@ -155,6 +157,7 @@ func (backRepoPosition *BackRepoPositionStruct) Init(db *gorm.DB) (Error error) 
 	backRepoPosition.Map_PositionPtr_PositionDBID = &tmpID
 
 	backRepoPosition.db = db
+	backRepoPosition.stage = stage
 	return
 }
 
@@ -273,7 +276,7 @@ func (backRepoPosition *BackRepoPositionStruct) CheckoutPhaseOne() (Error error)
 	// list of instances to be removed
 	// start from the initial map on the stage and remove instances that have been checked out
 	positionInstancesToBeRemovedFromTheStage := make(map[*models.Position]any)
-	for key, value := range models.Stage.Positions {
+	for key, value := range backRepoPosition.stage.Positions {
 		positionInstancesToBeRemovedFromTheStage[key] = value
 	}
 

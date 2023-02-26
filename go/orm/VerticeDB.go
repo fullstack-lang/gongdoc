@@ -114,6 +114,8 @@ type BackRepoVerticeStruct struct {
 	Map_VerticeDBID_VerticePtr *map[uint]*models.Vertice
 
 	db *gorm.DB
+
+	stage *models.StageStruct
 }
 
 func (backRepoVertice *BackRepoVerticeStruct) GetDB() *gorm.DB {
@@ -128,7 +130,7 @@ func (backRepoVertice *BackRepoVerticeStruct) GetVerticeDBFromVerticePtr(vertice
 }
 
 // BackRepoVertice.Init set up the BackRepo of the Vertice
-func (backRepoVertice *BackRepoVerticeStruct) Init(db *gorm.DB) (Error error) {
+func (backRepoVertice *BackRepoVerticeStruct) Init(stage *models.StageStruct, db *gorm.DB) (Error error) {
 
 	if backRepoVertice.Map_VerticeDBID_VerticePtr != nil {
 		err := errors.New("In Init, backRepoVertice.Map_VerticeDBID_VerticePtr should be nil")
@@ -155,6 +157,7 @@ func (backRepoVertice *BackRepoVerticeStruct) Init(db *gorm.DB) (Error error) {
 	backRepoVertice.Map_VerticePtr_VerticeDBID = &tmpID
 
 	backRepoVertice.db = db
+	backRepoVertice.stage = stage
 	return
 }
 
@@ -273,7 +276,7 @@ func (backRepoVertice *BackRepoVerticeStruct) CheckoutPhaseOne() (Error error) {
 	// list of instances to be removed
 	// start from the initial map on the stage and remove instances that have been checked out
 	verticeInstancesToBeRemovedFromTheStage := make(map[*models.Vertice]any)
-	for key, value := range models.Stage.Vertices {
+	for key, value := range backRepoVertice.stage.Vertices {
 		verticeInstancesToBeRemovedFromTheStage[key] = value
 	}
 

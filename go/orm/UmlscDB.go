@@ -121,6 +121,8 @@ type BackRepoUmlscStruct struct {
 	Map_UmlscDBID_UmlscPtr *map[uint]*models.Umlsc
 
 	db *gorm.DB
+
+	stage *models.StageStruct
 }
 
 func (backRepoUmlsc *BackRepoUmlscStruct) GetDB() *gorm.DB {
@@ -135,7 +137,7 @@ func (backRepoUmlsc *BackRepoUmlscStruct) GetUmlscDBFromUmlscPtr(umlsc *models.U
 }
 
 // BackRepoUmlsc.Init set up the BackRepo of the Umlsc
-func (backRepoUmlsc *BackRepoUmlscStruct) Init(db *gorm.DB) (Error error) {
+func (backRepoUmlsc *BackRepoUmlscStruct) Init(stage *models.StageStruct, db *gorm.DB) (Error error) {
 
 	if backRepoUmlsc.Map_UmlscDBID_UmlscPtr != nil {
 		err := errors.New("In Init, backRepoUmlsc.Map_UmlscDBID_UmlscPtr should be nil")
@@ -162,6 +164,7 @@ func (backRepoUmlsc *BackRepoUmlscStruct) Init(db *gorm.DB) (Error error) {
 	backRepoUmlsc.Map_UmlscPtr_UmlscDBID = &tmpID
 
 	backRepoUmlsc.db = db
+	backRepoUmlsc.stage = stage
 	return
 }
 
@@ -299,7 +302,7 @@ func (backRepoUmlsc *BackRepoUmlscStruct) CheckoutPhaseOne() (Error error) {
 	// list of instances to be removed
 	// start from the initial map on the stage and remove instances that have been checked out
 	umlscInstancesToBeRemovedFromTheStage := make(map[*models.Umlsc]any)
-	for key, value := range models.Stage.Umlscs {
+	for key, value := range backRepoUmlsc.stage.Umlscs {
 		umlscInstancesToBeRemovedFromTheStage[key] = value
 	}
 
