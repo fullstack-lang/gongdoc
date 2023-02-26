@@ -53,15 +53,12 @@ func GetLinks(c *gin.Context) {
 	// source slice
 	var linkDBs []orm.LinkDB
 
-	// type Values map[string][]string
 	values := c.Request.URL.Query()
 	if len(values) == 1 {
 		value := values["GONG__StackPath"]
 		if len(value) == 1 {
-			// we have a single parameter
-			// we assume it is the stack
 			stackParam := value[0]
-			log.Println("GONG__StackPath", stackParam)
+			log.Println("GetLinks", "GONG__StackPath", stackParam)
 		}
 	}
 
@@ -109,6 +106,15 @@ func GetLinks(c *gin.Context) {
 //	Responses:
 //	  200: nodeDBResponse
 func PostLink(c *gin.Context) {
+
+	values := c.Request.URL.Query()
+	if len(values) == 1 {
+		value := values["GONG__StackPath"]
+		if len(value) == 1 {
+			stackParam := value[0]
+			log.Println("PostLinks", "GONG__StackPath", stackParam)
+		}
+	}
 
 	// Validate input
 	var input orm.LinkAPI
@@ -166,15 +172,12 @@ func PostLink(c *gin.Context) {
 //	200: linkDBResponse
 func GetLink(c *gin.Context) {
 
-	// type Values map[string][]string
 	values := c.Request.URL.Query()
 	if len(values) == 1 {
-		value := values["stack"]
+		value := values["GONG__StackPath"]
 		if len(value) == 1 {
-			// we have a single parameter
-			// we assume it is the stack
 			stackParam := value[0]
-			log.Println("GET params", stackParam)
+			log.Println("GetLink", "GONG__StackPath", stackParam)
 		}
 	}
 
@@ -210,6 +213,15 @@ func GetLink(c *gin.Context) {
 //
 //	200: linkDBResponse
 func UpdateLink(c *gin.Context) {
+
+	values := c.Request.URL.Query()
+	if len(values) == 1 {
+		value := values["GONG__StackPath"]
+		if len(value) == 1 {
+			stackParam := value[0]
+			log.Println("UpdateLink", "GONG__StackPath", stackParam)
+		}
+	}
 
 	// Validate input
 	var input orm.LinkAPI
@@ -280,6 +292,16 @@ func UpdateLink(c *gin.Context) {
 //
 //	200: linkDBResponse
 func DeleteLink(c *gin.Context) {
+
+	values := c.Request.URL.Query()
+	if len(values) == 1 {
+		value := values["GONG__StackPath"]
+		if len(value) == 1 {
+			stackParam := value[0]
+			log.Println("DeleteLink", "GONG__StackPath", stackParam)
+		}
+	}
+
 	db := orm.BackRepo.BackRepoLink.GetDB()
 
 	// Get model if exist

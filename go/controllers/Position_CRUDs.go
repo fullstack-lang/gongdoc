@@ -53,15 +53,12 @@ func GetPositions(c *gin.Context) {
 	// source slice
 	var positionDBs []orm.PositionDB
 
-	// type Values map[string][]string
 	values := c.Request.URL.Query()
 	if len(values) == 1 {
 		value := values["GONG__StackPath"]
 		if len(value) == 1 {
-			// we have a single parameter
-			// we assume it is the stack
 			stackParam := value[0]
-			log.Println("GONG__StackPath", stackParam)
+			log.Println("GetPositions", "GONG__StackPath", stackParam)
 		}
 	}
 
@@ -109,6 +106,15 @@ func GetPositions(c *gin.Context) {
 //	Responses:
 //	  200: nodeDBResponse
 func PostPosition(c *gin.Context) {
+
+	values := c.Request.URL.Query()
+	if len(values) == 1 {
+		value := values["GONG__StackPath"]
+		if len(value) == 1 {
+			stackParam := value[0]
+			log.Println("PostPositions", "GONG__StackPath", stackParam)
+		}
+	}
 
 	// Validate input
 	var input orm.PositionAPI
@@ -166,15 +172,12 @@ func PostPosition(c *gin.Context) {
 //	200: positionDBResponse
 func GetPosition(c *gin.Context) {
 
-	// type Values map[string][]string
 	values := c.Request.URL.Query()
 	if len(values) == 1 {
-		value := values["stack"]
+		value := values["GONG__StackPath"]
 		if len(value) == 1 {
-			// we have a single parameter
-			// we assume it is the stack
 			stackParam := value[0]
-			log.Println("GET params", stackParam)
+			log.Println("GetPosition", "GONG__StackPath", stackParam)
 		}
 	}
 
@@ -210,6 +213,15 @@ func GetPosition(c *gin.Context) {
 //
 //	200: positionDBResponse
 func UpdatePosition(c *gin.Context) {
+
+	values := c.Request.URL.Query()
+	if len(values) == 1 {
+		value := values["GONG__StackPath"]
+		if len(value) == 1 {
+			stackParam := value[0]
+			log.Println("UpdatePosition", "GONG__StackPath", stackParam)
+		}
+	}
 
 	// Validate input
 	var input orm.PositionAPI
@@ -280,6 +292,16 @@ func UpdatePosition(c *gin.Context) {
 //
 //	200: positionDBResponse
 func DeletePosition(c *gin.Context) {
+
+	values := c.Request.URL.Query()
+	if len(values) == 1 {
+		value := values["GONG__StackPath"]
+		if len(value) == 1 {
+			stackParam := value[0]
+			log.Println("DeletePosition", "GONG__StackPath", stackParam)
+		}
+	}
+
 	db := orm.BackRepo.BackRepoPosition.GetDB()
 
 	// Get model if exist

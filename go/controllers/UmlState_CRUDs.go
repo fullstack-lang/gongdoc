@@ -53,15 +53,12 @@ func GetUmlStates(c *gin.Context) {
 	// source slice
 	var umlstateDBs []orm.UmlStateDB
 
-	// type Values map[string][]string
 	values := c.Request.URL.Query()
 	if len(values) == 1 {
 		value := values["GONG__StackPath"]
 		if len(value) == 1 {
-			// we have a single parameter
-			// we assume it is the stack
 			stackParam := value[0]
-			log.Println("GONG__StackPath", stackParam)
+			log.Println("GetUmlStates", "GONG__StackPath", stackParam)
 		}
 	}
 
@@ -109,6 +106,15 @@ func GetUmlStates(c *gin.Context) {
 //	Responses:
 //	  200: nodeDBResponse
 func PostUmlState(c *gin.Context) {
+
+	values := c.Request.URL.Query()
+	if len(values) == 1 {
+		value := values["GONG__StackPath"]
+		if len(value) == 1 {
+			stackParam := value[0]
+			log.Println("PostUmlStates", "GONG__StackPath", stackParam)
+		}
+	}
 
 	// Validate input
 	var input orm.UmlStateAPI
@@ -166,15 +172,12 @@ func PostUmlState(c *gin.Context) {
 //	200: umlstateDBResponse
 func GetUmlState(c *gin.Context) {
 
-	// type Values map[string][]string
 	values := c.Request.URL.Query()
 	if len(values) == 1 {
-		value := values["stack"]
+		value := values["GONG__StackPath"]
 		if len(value) == 1 {
-			// we have a single parameter
-			// we assume it is the stack
 			stackParam := value[0]
-			log.Println("GET params", stackParam)
+			log.Println("GetUmlState", "GONG__StackPath", stackParam)
 		}
 	}
 
@@ -210,6 +213,15 @@ func GetUmlState(c *gin.Context) {
 //
 //	200: umlstateDBResponse
 func UpdateUmlState(c *gin.Context) {
+
+	values := c.Request.URL.Query()
+	if len(values) == 1 {
+		value := values["GONG__StackPath"]
+		if len(value) == 1 {
+			stackParam := value[0]
+			log.Println("UpdateUmlState", "GONG__StackPath", stackParam)
+		}
+	}
 
 	// Validate input
 	var input orm.UmlStateAPI
@@ -280,6 +292,16 @@ func UpdateUmlState(c *gin.Context) {
 //
 //	200: umlstateDBResponse
 func DeleteUmlState(c *gin.Context) {
+
+	values := c.Request.URL.Query()
+	if len(values) == 1 {
+		value := values["GONG__StackPath"]
+		if len(value) == 1 {
+			stackParam := value[0]
+			log.Println("DeleteUmlState", "GONG__StackPath", stackParam)
+		}
+	}
+
 	db := orm.BackRepo.BackRepoUmlState.GetDB()
 
 	// Get model if exist

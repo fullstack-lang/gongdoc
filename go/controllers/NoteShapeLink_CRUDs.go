@@ -53,15 +53,12 @@ func GetNoteShapeLinks(c *gin.Context) {
 	// source slice
 	var noteshapelinkDBs []orm.NoteShapeLinkDB
 
-	// type Values map[string][]string
 	values := c.Request.URL.Query()
 	if len(values) == 1 {
 		value := values["GONG__StackPath"]
 		if len(value) == 1 {
-			// we have a single parameter
-			// we assume it is the stack
 			stackParam := value[0]
-			log.Println("GONG__StackPath", stackParam)
+			log.Println("GetNoteShapeLinks", "GONG__StackPath", stackParam)
 		}
 	}
 
@@ -109,6 +106,15 @@ func GetNoteShapeLinks(c *gin.Context) {
 //	Responses:
 //	  200: nodeDBResponse
 func PostNoteShapeLink(c *gin.Context) {
+
+	values := c.Request.URL.Query()
+	if len(values) == 1 {
+		value := values["GONG__StackPath"]
+		if len(value) == 1 {
+			stackParam := value[0]
+			log.Println("PostNoteShapeLinks", "GONG__StackPath", stackParam)
+		}
+	}
 
 	// Validate input
 	var input orm.NoteShapeLinkAPI
@@ -166,15 +172,12 @@ func PostNoteShapeLink(c *gin.Context) {
 //	200: noteshapelinkDBResponse
 func GetNoteShapeLink(c *gin.Context) {
 
-	// type Values map[string][]string
 	values := c.Request.URL.Query()
 	if len(values) == 1 {
-		value := values["stack"]
+		value := values["GONG__StackPath"]
 		if len(value) == 1 {
-			// we have a single parameter
-			// we assume it is the stack
 			stackParam := value[0]
-			log.Println("GET params", stackParam)
+			log.Println("GetNoteShapeLink", "GONG__StackPath", stackParam)
 		}
 	}
 
@@ -210,6 +213,15 @@ func GetNoteShapeLink(c *gin.Context) {
 //
 //	200: noteshapelinkDBResponse
 func UpdateNoteShapeLink(c *gin.Context) {
+
+	values := c.Request.URL.Query()
+	if len(values) == 1 {
+		value := values["GONG__StackPath"]
+		if len(value) == 1 {
+			stackParam := value[0]
+			log.Println("UpdateNoteShapeLink", "GONG__StackPath", stackParam)
+		}
+	}
 
 	// Validate input
 	var input orm.NoteShapeLinkAPI
@@ -280,6 +292,16 @@ func UpdateNoteShapeLink(c *gin.Context) {
 //
 //	200: noteshapelinkDBResponse
 func DeleteNoteShapeLink(c *gin.Context) {
+
+	values := c.Request.URL.Query()
+	if len(values) == 1 {
+		value := values["GONG__StackPath"]
+		if len(value) == 1 {
+			stackParam := value[0]
+			log.Println("DeleteNoteShapeLink", "GONG__StackPath", stackParam)
+		}
+	}
+
 	db := orm.BackRepo.BackRepoNoteShapeLink.GetDB()
 
 	// Get model if exist

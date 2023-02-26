@@ -53,15 +53,12 @@ func GetUmlscs(c *gin.Context) {
 	// source slice
 	var umlscDBs []orm.UmlscDB
 
-	// type Values map[string][]string
 	values := c.Request.URL.Query()
 	if len(values) == 1 {
 		value := values["GONG__StackPath"]
 		if len(value) == 1 {
-			// we have a single parameter
-			// we assume it is the stack
 			stackParam := value[0]
-			log.Println("GONG__StackPath", stackParam)
+			log.Println("GetUmlscs", "GONG__StackPath", stackParam)
 		}
 	}
 
@@ -109,6 +106,15 @@ func GetUmlscs(c *gin.Context) {
 //	Responses:
 //	  200: nodeDBResponse
 func PostUmlsc(c *gin.Context) {
+
+	values := c.Request.URL.Query()
+	if len(values) == 1 {
+		value := values["GONG__StackPath"]
+		if len(value) == 1 {
+			stackParam := value[0]
+			log.Println("PostUmlscs", "GONG__StackPath", stackParam)
+		}
+	}
 
 	// Validate input
 	var input orm.UmlscAPI
@@ -166,15 +172,12 @@ func PostUmlsc(c *gin.Context) {
 //	200: umlscDBResponse
 func GetUmlsc(c *gin.Context) {
 
-	// type Values map[string][]string
 	values := c.Request.URL.Query()
 	if len(values) == 1 {
-		value := values["stack"]
+		value := values["GONG__StackPath"]
 		if len(value) == 1 {
-			// we have a single parameter
-			// we assume it is the stack
 			stackParam := value[0]
-			log.Println("GET params", stackParam)
+			log.Println("GetUmlsc", "GONG__StackPath", stackParam)
 		}
 	}
 
@@ -210,6 +213,15 @@ func GetUmlsc(c *gin.Context) {
 //
 //	200: umlscDBResponse
 func UpdateUmlsc(c *gin.Context) {
+
+	values := c.Request.URL.Query()
+	if len(values) == 1 {
+		value := values["GONG__StackPath"]
+		if len(value) == 1 {
+			stackParam := value[0]
+			log.Println("UpdateUmlsc", "GONG__StackPath", stackParam)
+		}
+	}
 
 	// Validate input
 	var input orm.UmlscAPI
@@ -280,6 +292,16 @@ func UpdateUmlsc(c *gin.Context) {
 //
 //	200: umlscDBResponse
 func DeleteUmlsc(c *gin.Context) {
+
+	values := c.Request.URL.Query()
+	if len(values) == 1 {
+		value := values["GONG__StackPath"]
+		if len(value) == 1 {
+			stackParam := value[0]
+			log.Println("DeleteUmlsc", "GONG__StackPath", stackParam)
+		}
+	}
+
 	db := orm.BackRepo.BackRepoUmlsc.GetDB()
 
 	// Get model if exist

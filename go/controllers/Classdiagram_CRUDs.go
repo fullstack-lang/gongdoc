@@ -53,15 +53,12 @@ func GetClassdiagrams(c *gin.Context) {
 	// source slice
 	var classdiagramDBs []orm.ClassdiagramDB
 
-	// type Values map[string][]string
 	values := c.Request.URL.Query()
 	if len(values) == 1 {
 		value := values["GONG__StackPath"]
 		if len(value) == 1 {
-			// we have a single parameter
-			// we assume it is the stack
 			stackParam := value[0]
-			log.Println("GONG__StackPath", stackParam)
+			log.Println("GetClassdiagrams", "GONG__StackPath", stackParam)
 		}
 	}
 
@@ -109,6 +106,15 @@ func GetClassdiagrams(c *gin.Context) {
 //	Responses:
 //	  200: nodeDBResponse
 func PostClassdiagram(c *gin.Context) {
+
+	values := c.Request.URL.Query()
+	if len(values) == 1 {
+		value := values["GONG__StackPath"]
+		if len(value) == 1 {
+			stackParam := value[0]
+			log.Println("PostClassdiagrams", "GONG__StackPath", stackParam)
+		}
+	}
 
 	// Validate input
 	var input orm.ClassdiagramAPI
@@ -166,15 +172,12 @@ func PostClassdiagram(c *gin.Context) {
 //	200: classdiagramDBResponse
 func GetClassdiagram(c *gin.Context) {
 
-	// type Values map[string][]string
 	values := c.Request.URL.Query()
 	if len(values) == 1 {
-		value := values["stack"]
+		value := values["GONG__StackPath"]
 		if len(value) == 1 {
-			// we have a single parameter
-			// we assume it is the stack
 			stackParam := value[0]
-			log.Println("GET params", stackParam)
+			log.Println("GetClassdiagram", "GONG__StackPath", stackParam)
 		}
 	}
 
@@ -210,6 +213,15 @@ func GetClassdiagram(c *gin.Context) {
 //
 //	200: classdiagramDBResponse
 func UpdateClassdiagram(c *gin.Context) {
+
+	values := c.Request.URL.Query()
+	if len(values) == 1 {
+		value := values["GONG__StackPath"]
+		if len(value) == 1 {
+			stackParam := value[0]
+			log.Println("UpdateClassdiagram", "GONG__StackPath", stackParam)
+		}
+	}
 
 	// Validate input
 	var input orm.ClassdiagramAPI
@@ -280,6 +292,16 @@ func UpdateClassdiagram(c *gin.Context) {
 //
 //	200: classdiagramDBResponse
 func DeleteClassdiagram(c *gin.Context) {
+
+	values := c.Request.URL.Query()
+	if len(values) == 1 {
+		value := values["GONG__StackPath"]
+		if len(value) == 1 {
+			stackParam := value[0]
+			log.Println("DeleteClassdiagram", "GONG__StackPath", stackParam)
+		}
+	}
+
 	db := orm.BackRepo.BackRepoClassdiagram.GetDB()
 
 	// Get model if exist

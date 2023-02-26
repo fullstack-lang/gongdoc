@@ -69,7 +69,7 @@ import (
 
 `
 
-func (diagramPackage *DiagramPackage) UnmarshallOneDiagram(diagramName string, inFile *ast.File, fset *token.FileSet) (classdiagram *Classdiagram) {
+func (diagramPackage *DiagramPackage) UnmarshallOneDiagram(stage *StageStruct, diagramName string, inFile *ast.File, fset *token.FileSet) (classdiagram *Classdiagram) {
 
 	// for debug purposes
 	gongdocStage := Stage
@@ -77,7 +77,7 @@ func (diagramPackage *DiagramPackage) UnmarshallOneDiagram(diagramName string, i
 
 	var err error
 	startParser := time.Now()
-	err = ParseAstFileFromAst(inFile, fset)
+	err = ParseAstFileFromAst(stage, inFile, fset)
 	log.Printf("Parsing of %s took %s", diagramName, time.Since(startParser))
 
 	if err != nil {
