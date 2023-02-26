@@ -53,15 +53,12 @@ func GetGongEnumValueEntrys(c *gin.Context) {
 	// source slice
 	var gongenumvalueentryDBs []orm.GongEnumValueEntryDB
 
-	// type Values map[string][]string
 	values := c.Request.URL.Query()
 	if len(values) == 1 {
 		value := values["GONG__StackPath"]
 		if len(value) == 1 {
-			// we have a single parameter
-			// we assume it is the stack
 			stackParam := value[0]
-			log.Println("GONG__StackPath", stackParam)
+			log.Println("GetGongEnumValueEntrys", "GONG__StackPath", stackParam)
 		}
 	}
 
@@ -109,6 +106,15 @@ func GetGongEnumValueEntrys(c *gin.Context) {
 //	Responses:
 //	  200: nodeDBResponse
 func PostGongEnumValueEntry(c *gin.Context) {
+
+	values := c.Request.URL.Query()
+	if len(values) == 1 {
+		value := values["GONG__StackPath"]
+		if len(value) == 1 {
+			stackParam := value[0]
+			log.Println("PostGongEnumValueEntrys", "GONG__StackPath", stackParam)
+		}
+	}
 
 	// Validate input
 	var input orm.GongEnumValueEntryAPI
@@ -166,15 +172,12 @@ func PostGongEnumValueEntry(c *gin.Context) {
 //	200: gongenumvalueentryDBResponse
 func GetGongEnumValueEntry(c *gin.Context) {
 
-	// type Values map[string][]string
 	values := c.Request.URL.Query()
 	if len(values) == 1 {
-		value := values["stack"]
+		value := values["GONG__StackPath"]
 		if len(value) == 1 {
-			// we have a single parameter
-			// we assume it is the stack
 			stackParam := value[0]
-			log.Println("GET params", stackParam)
+			log.Println("GetGongEnumValueEntry", "GONG__StackPath", stackParam)
 		}
 	}
 
@@ -210,6 +213,15 @@ func GetGongEnumValueEntry(c *gin.Context) {
 //
 //	200: gongenumvalueentryDBResponse
 func UpdateGongEnumValueEntry(c *gin.Context) {
+
+	values := c.Request.URL.Query()
+	if len(values) == 1 {
+		value := values["GONG__StackPath"]
+		if len(value) == 1 {
+			stackParam := value[0]
+			log.Println("UpdateGongEnumValueEntry", "GONG__StackPath", stackParam)
+		}
+	}
 
 	// Validate input
 	var input orm.GongEnumValueEntryAPI
@@ -280,6 +292,16 @@ func UpdateGongEnumValueEntry(c *gin.Context) {
 //
 //	200: gongenumvalueentryDBResponse
 func DeleteGongEnumValueEntry(c *gin.Context) {
+
+	values := c.Request.URL.Query()
+	if len(values) == 1 {
+		value := values["GONG__StackPath"]
+		if len(value) == 1 {
+			stackParam := value[0]
+			log.Println("DeleteGongEnumValueEntry", "GONG__StackPath", stackParam)
+		}
+	}
+
 	db := orm.BackRepo.BackRepoGongEnumValueEntry.GetDB()
 
 	// Get model if exist

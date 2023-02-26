@@ -53,15 +53,12 @@ func GetVertices(c *gin.Context) {
 	// source slice
 	var verticeDBs []orm.VerticeDB
 
-	// type Values map[string][]string
 	values := c.Request.URL.Query()
 	if len(values) == 1 {
 		value := values["GONG__StackPath"]
 		if len(value) == 1 {
-			// we have a single parameter
-			// we assume it is the stack
 			stackParam := value[0]
-			log.Println("GONG__StackPath", stackParam)
+			log.Println("GetVertices", "GONG__StackPath", stackParam)
 		}
 	}
 
@@ -109,6 +106,15 @@ func GetVertices(c *gin.Context) {
 //	Responses:
 //	  200: nodeDBResponse
 func PostVertice(c *gin.Context) {
+
+	values := c.Request.URL.Query()
+	if len(values) == 1 {
+		value := values["GONG__StackPath"]
+		if len(value) == 1 {
+			stackParam := value[0]
+			log.Println("PostVertices", "GONG__StackPath", stackParam)
+		}
+	}
 
 	// Validate input
 	var input orm.VerticeAPI
@@ -166,15 +172,12 @@ func PostVertice(c *gin.Context) {
 //	200: verticeDBResponse
 func GetVertice(c *gin.Context) {
 
-	// type Values map[string][]string
 	values := c.Request.URL.Query()
 	if len(values) == 1 {
-		value := values["stack"]
+		value := values["GONG__StackPath"]
 		if len(value) == 1 {
-			// we have a single parameter
-			// we assume it is the stack
 			stackParam := value[0]
-			log.Println("GET params", stackParam)
+			log.Println("GetVertice", "GONG__StackPath", stackParam)
 		}
 	}
 
@@ -210,6 +213,15 @@ func GetVertice(c *gin.Context) {
 //
 //	200: verticeDBResponse
 func UpdateVertice(c *gin.Context) {
+
+	values := c.Request.URL.Query()
+	if len(values) == 1 {
+		value := values["GONG__StackPath"]
+		if len(value) == 1 {
+			stackParam := value[0]
+			log.Println("UpdateVertice", "GONG__StackPath", stackParam)
+		}
+	}
 
 	// Validate input
 	var input orm.VerticeAPI
@@ -280,6 +292,16 @@ func UpdateVertice(c *gin.Context) {
 //
 //	200: verticeDBResponse
 func DeleteVertice(c *gin.Context) {
+
+	values := c.Request.URL.Query()
+	if len(values) == 1 {
+		value := values["GONG__StackPath"]
+		if len(value) == 1 {
+			stackParam := value[0]
+			log.Println("DeleteVertice", "GONG__StackPath", stackParam)
+		}
+	}
+
 	db := orm.BackRepo.BackRepoVertice.GetDB()
 
 	// Get model if exist

@@ -53,15 +53,12 @@ func GetGongStructShapes(c *gin.Context) {
 	// source slice
 	var gongstructshapeDBs []orm.GongStructShapeDB
 
-	// type Values map[string][]string
 	values := c.Request.URL.Query()
 	if len(values) == 1 {
 		value := values["GONG__StackPath"]
 		if len(value) == 1 {
-			// we have a single parameter
-			// we assume it is the stack
 			stackParam := value[0]
-			log.Println("GONG__StackPath", stackParam)
+			log.Println("GetGongStructShapes", "GONG__StackPath", stackParam)
 		}
 	}
 
@@ -109,6 +106,15 @@ func GetGongStructShapes(c *gin.Context) {
 //	Responses:
 //	  200: nodeDBResponse
 func PostGongStructShape(c *gin.Context) {
+
+	values := c.Request.URL.Query()
+	if len(values) == 1 {
+		value := values["GONG__StackPath"]
+		if len(value) == 1 {
+			stackParam := value[0]
+			log.Println("PostGongStructShapes", "GONG__StackPath", stackParam)
+		}
+	}
 
 	// Validate input
 	var input orm.GongStructShapeAPI
@@ -166,15 +172,12 @@ func PostGongStructShape(c *gin.Context) {
 //	200: gongstructshapeDBResponse
 func GetGongStructShape(c *gin.Context) {
 
-	// type Values map[string][]string
 	values := c.Request.URL.Query()
 	if len(values) == 1 {
-		value := values["stack"]
+		value := values["GONG__StackPath"]
 		if len(value) == 1 {
-			// we have a single parameter
-			// we assume it is the stack
 			stackParam := value[0]
-			log.Println("GET params", stackParam)
+			log.Println("GetGongStructShape", "GONG__StackPath", stackParam)
 		}
 	}
 
@@ -210,6 +213,15 @@ func GetGongStructShape(c *gin.Context) {
 //
 //	200: gongstructshapeDBResponse
 func UpdateGongStructShape(c *gin.Context) {
+
+	values := c.Request.URL.Query()
+	if len(values) == 1 {
+		value := values["GONG__StackPath"]
+		if len(value) == 1 {
+			stackParam := value[0]
+			log.Println("UpdateGongStructShape", "GONG__StackPath", stackParam)
+		}
+	}
 
 	// Validate input
 	var input orm.GongStructShapeAPI
@@ -280,6 +292,16 @@ func UpdateGongStructShape(c *gin.Context) {
 //
 //	200: gongstructshapeDBResponse
 func DeleteGongStructShape(c *gin.Context) {
+
+	values := c.Request.URL.Query()
+	if len(values) == 1 {
+		value := values["GONG__StackPath"]
+		if len(value) == 1 {
+			stackParam := value[0]
+			log.Println("DeleteGongStructShape", "GONG__StackPath", stackParam)
+		}
+	}
+
 	db := orm.BackRepo.BackRepoGongStructShape.GetDB()
 
 	// Get model if exist

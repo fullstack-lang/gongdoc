@@ -53,15 +53,12 @@ func GetDiagramPackages(c *gin.Context) {
 	// source slice
 	var diagrampackageDBs []orm.DiagramPackageDB
 
-	// type Values map[string][]string
 	values := c.Request.URL.Query()
 	if len(values) == 1 {
 		value := values["GONG__StackPath"]
 		if len(value) == 1 {
-			// we have a single parameter
-			// we assume it is the stack
 			stackParam := value[0]
-			log.Println("GONG__StackPath", stackParam)
+			log.Println("GetDiagramPackages", "GONG__StackPath", stackParam)
 		}
 	}
 
@@ -109,6 +106,15 @@ func GetDiagramPackages(c *gin.Context) {
 //	Responses:
 //	  200: nodeDBResponse
 func PostDiagramPackage(c *gin.Context) {
+
+	values := c.Request.URL.Query()
+	if len(values) == 1 {
+		value := values["GONG__StackPath"]
+		if len(value) == 1 {
+			stackParam := value[0]
+			log.Println("PostDiagramPackages", "GONG__StackPath", stackParam)
+		}
+	}
 
 	// Validate input
 	var input orm.DiagramPackageAPI
@@ -166,15 +172,12 @@ func PostDiagramPackage(c *gin.Context) {
 //	200: diagrampackageDBResponse
 func GetDiagramPackage(c *gin.Context) {
 
-	// type Values map[string][]string
 	values := c.Request.URL.Query()
 	if len(values) == 1 {
-		value := values["stack"]
+		value := values["GONG__StackPath"]
 		if len(value) == 1 {
-			// we have a single parameter
-			// we assume it is the stack
 			stackParam := value[0]
-			log.Println("GET params", stackParam)
+			log.Println("GetDiagramPackage", "GONG__StackPath", stackParam)
 		}
 	}
 
@@ -210,6 +213,15 @@ func GetDiagramPackage(c *gin.Context) {
 //
 //	200: diagrampackageDBResponse
 func UpdateDiagramPackage(c *gin.Context) {
+
+	values := c.Request.URL.Query()
+	if len(values) == 1 {
+		value := values["GONG__StackPath"]
+		if len(value) == 1 {
+			stackParam := value[0]
+			log.Println("UpdateDiagramPackage", "GONG__StackPath", stackParam)
+		}
+	}
 
 	// Validate input
 	var input orm.DiagramPackageAPI
@@ -280,6 +292,16 @@ func UpdateDiagramPackage(c *gin.Context) {
 //
 //	200: diagrampackageDBResponse
 func DeleteDiagramPackage(c *gin.Context) {
+
+	values := c.Request.URL.Query()
+	if len(values) == 1 {
+		value := values["GONG__StackPath"]
+		if len(value) == 1 {
+			stackParam := value[0]
+			log.Println("DeleteDiagramPackage", "GONG__StackPath", stackParam)
+		}
+	}
+
 	db := orm.BackRepo.BackRepoDiagramPackage.GetDB()
 
 	// Get model if exist

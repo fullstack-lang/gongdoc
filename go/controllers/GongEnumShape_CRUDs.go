@@ -53,15 +53,12 @@ func GetGongEnumShapes(c *gin.Context) {
 	// source slice
 	var gongenumshapeDBs []orm.GongEnumShapeDB
 
-	// type Values map[string][]string
 	values := c.Request.URL.Query()
 	if len(values) == 1 {
 		value := values["GONG__StackPath"]
 		if len(value) == 1 {
-			// we have a single parameter
-			// we assume it is the stack
 			stackParam := value[0]
-			log.Println("GONG__StackPath", stackParam)
+			log.Println("GetGongEnumShapes", "GONG__StackPath", stackParam)
 		}
 	}
 
@@ -109,6 +106,15 @@ func GetGongEnumShapes(c *gin.Context) {
 //	Responses:
 //	  200: nodeDBResponse
 func PostGongEnumShape(c *gin.Context) {
+
+	values := c.Request.URL.Query()
+	if len(values) == 1 {
+		value := values["GONG__StackPath"]
+		if len(value) == 1 {
+			stackParam := value[0]
+			log.Println("PostGongEnumShapes", "GONG__StackPath", stackParam)
+		}
+	}
 
 	// Validate input
 	var input orm.GongEnumShapeAPI
@@ -166,15 +172,12 @@ func PostGongEnumShape(c *gin.Context) {
 //	200: gongenumshapeDBResponse
 func GetGongEnumShape(c *gin.Context) {
 
-	// type Values map[string][]string
 	values := c.Request.URL.Query()
 	if len(values) == 1 {
-		value := values["stack"]
+		value := values["GONG__StackPath"]
 		if len(value) == 1 {
-			// we have a single parameter
-			// we assume it is the stack
 			stackParam := value[0]
-			log.Println("GET params", stackParam)
+			log.Println("GetGongEnumShape", "GONG__StackPath", stackParam)
 		}
 	}
 
@@ -210,6 +213,15 @@ func GetGongEnumShape(c *gin.Context) {
 //
 //	200: gongenumshapeDBResponse
 func UpdateGongEnumShape(c *gin.Context) {
+
+	values := c.Request.URL.Query()
+	if len(values) == 1 {
+		value := values["GONG__StackPath"]
+		if len(value) == 1 {
+			stackParam := value[0]
+			log.Println("UpdateGongEnumShape", "GONG__StackPath", stackParam)
+		}
+	}
 
 	// Validate input
 	var input orm.GongEnumShapeAPI
@@ -280,6 +292,16 @@ func UpdateGongEnumShape(c *gin.Context) {
 //
 //	200: gongenumshapeDBResponse
 func DeleteGongEnumShape(c *gin.Context) {
+
+	values := c.Request.URL.Query()
+	if len(values) == 1 {
+		value := values["GONG__StackPath"]
+		if len(value) == 1 {
+			stackParam := value[0]
+			log.Println("DeleteGongEnumShape", "GONG__StackPath", stackParam)
+		}
+	}
+
 	db := orm.BackRepo.BackRepoGongEnumShape.GetDB()
 
 	// Get model if exist

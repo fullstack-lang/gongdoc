@@ -53,15 +53,12 @@ func GetNoteShapes(c *gin.Context) {
 	// source slice
 	var noteshapeDBs []orm.NoteShapeDB
 
-	// type Values map[string][]string
 	values := c.Request.URL.Query()
 	if len(values) == 1 {
 		value := values["GONG__StackPath"]
 		if len(value) == 1 {
-			// we have a single parameter
-			// we assume it is the stack
 			stackParam := value[0]
-			log.Println("GONG__StackPath", stackParam)
+			log.Println("GetNoteShapes", "GONG__StackPath", stackParam)
 		}
 	}
 
@@ -109,6 +106,15 @@ func GetNoteShapes(c *gin.Context) {
 //	Responses:
 //	  200: nodeDBResponse
 func PostNoteShape(c *gin.Context) {
+
+	values := c.Request.URL.Query()
+	if len(values) == 1 {
+		value := values["GONG__StackPath"]
+		if len(value) == 1 {
+			stackParam := value[0]
+			log.Println("PostNoteShapes", "GONG__StackPath", stackParam)
+		}
+	}
 
 	// Validate input
 	var input orm.NoteShapeAPI
@@ -166,15 +172,12 @@ func PostNoteShape(c *gin.Context) {
 //	200: noteshapeDBResponse
 func GetNoteShape(c *gin.Context) {
 
-	// type Values map[string][]string
 	values := c.Request.URL.Query()
 	if len(values) == 1 {
-		value := values["stack"]
+		value := values["GONG__StackPath"]
 		if len(value) == 1 {
-			// we have a single parameter
-			// we assume it is the stack
 			stackParam := value[0]
-			log.Println("GET params", stackParam)
+			log.Println("GetNoteShape", "GONG__StackPath", stackParam)
 		}
 	}
 
@@ -210,6 +213,15 @@ func GetNoteShape(c *gin.Context) {
 //
 //	200: noteshapeDBResponse
 func UpdateNoteShape(c *gin.Context) {
+
+	values := c.Request.URL.Query()
+	if len(values) == 1 {
+		value := values["GONG__StackPath"]
+		if len(value) == 1 {
+			stackParam := value[0]
+			log.Println("UpdateNoteShape", "GONG__StackPath", stackParam)
+		}
+	}
 
 	// Validate input
 	var input orm.NoteShapeAPI
@@ -280,6 +292,16 @@ func UpdateNoteShape(c *gin.Context) {
 //
 //	200: noteshapeDBResponse
 func DeleteNoteShape(c *gin.Context) {
+
+	values := c.Request.URL.Query()
+	if len(values) == 1 {
+		value := values["GONG__StackPath"]
+		if len(value) == 1 {
+			stackParam := value[0]
+			log.Println("DeleteNoteShape", "GONG__StackPath", stackParam)
+		}
+	}
+
 	db := orm.BackRepo.BackRepoNoteShape.GetDB()
 
 	// Get model if exist
