@@ -76,7 +76,7 @@ func LoadDiagramPackage(pkgPath string, modelPkg *gong_models.ModelPkg, editable
 	// load all diagram files
 	for diagramName, inFile := range diagramPackageAst.Files {
 		diagramName := strings.TrimSuffix(filepath.Base(diagramName), ".go")
-		diagramPackage.UnmarshallOneDiagram(diagramName, inFile, fset)
+		diagramPackage.UnmarshallOneDiagram(&gongdoc_models.Stage, diagramName, inFile, fset)
 	}
 
 	diagramPackage.IsEditable = editable

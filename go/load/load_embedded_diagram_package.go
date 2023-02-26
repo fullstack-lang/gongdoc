@@ -42,7 +42,7 @@ func LoadEmbeddedDiagramPackage(fs embed.FS, modelPkg *gong_models.ModelPkg) (di
 	for diagramName, inFile := range diagramPackageAst.Files {
 
 		diagramName := strings.TrimSuffix(filepath.Base(diagramName), ".go")
-		diagramPackage.UnmarshallOneDiagram(diagramName, inFile, fset)
+		diagramPackage.UnmarshallOneDiagram(&gongdoc_models.Stage, diagramName, inFile, fset)
 	}
 
 	gongdoc_node2gongdoc.FillUpNodeTree(diagramPackage)
