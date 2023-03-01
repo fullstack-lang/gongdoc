@@ -47,20 +47,22 @@ type FieldInput struct {
 // default: genericError
 //
 //	200: fieldDBResponse
-func GetFields(c *gin.Context) {
-	db := orm.BackRepo.BackRepoField.GetDB()
+func (controller *Controller) GetFields(c *gin.Context) {
 
 	// source slice
 	var fieldDBs []orm.FieldDB
 
 	values := c.Request.URL.Query()
+	stackPath := ""
 	if len(values) == 1 {
 		value := values["GONG__StackPath"]
 		if len(value) == 1 {
-			stackParam := value[0]
-			log.Println("GetFields", "GONG__StackPath", stackParam)
+			stackPath = value[0]
+			log.Println("GetFields", "GONG__StackPath", stackPath)
 		}
 	}
+	backRepo := controller.Map_BackRepos[stackPath]
+	db := backRepo.BackRepoField.GetDB()
 
 	query := db.Find(&fieldDBs)
 	if query.Error != nil {
@@ -105,16 +107,19 @@ func GetFields(c *gin.Context) {
 //
 //	Responses:
 //	  200: nodeDBResponse
-func PostField(c *gin.Context) {
+func (controller *Controller) PostField(c *gin.Context) {
 
 	values := c.Request.URL.Query()
+	stackPath := ""
 	if len(values) == 1 {
 		value := values["GONG__StackPath"]
 		if len(value) == 1 {
-			stackParam := value[0]
-			log.Println("PostFields", "GONG__StackPath", stackParam)
+			stackPath = value[0]
+			log.Println("PostFields", "GONG__StackPath", stackPath)
 		}
 	}
+	backRepo := controller.Map_BackRepos[stackPath]
+	db := backRepo.BackRepoField.GetDB()
 
 	// Validate input
 	var input orm.FieldAPI
@@ -134,7 +139,6 @@ func PostField(c *gin.Context) {
 	fieldDB.FieldPointersEnconding = input.FieldPointersEnconding
 	fieldDB.CopyBasicFieldsFromField(&input.Field)
 
-	db := orm.BackRepo.BackRepoField.GetDB()
 	query := db.Create(&fieldDB)
 	if query.Error != nil {
 		var returnError GenericError
@@ -146,8 +150,8 @@ func PostField(c *gin.Context) {
 	}
 
 	// get an instance (not staged) from DB instance, and call callback function
-	orm.BackRepo.BackRepoField.CheckoutPhaseOneInstance(&fieldDB)
-	field := (*orm.BackRepo.BackRepoField.Map_FieldDBID_FieldPtr)[fieldDB.ID]
+	backRepo.BackRepoField.CheckoutPhaseOneInstance(&fieldDB)
+	field := (*backRepo.BackRepoField.Map_FieldDBID_FieldPtr)[fieldDB.ID]
 
 	if field != nil {
 		models.AfterCreateFromFront(&models.Stage, field)
@@ -155,7 +159,7 @@ func PostField(c *gin.Context) {
 
 	// a POST is equivalent to a back repo commit increase
 	// (this will be improved with implementation of unit of work design pattern)
-	orm.BackRepo.IncrementPushFromFrontNb()
+	backRepo.IncrementPushFromFrontNb()
 
 	c.JSON(http.StatusOK, fieldDB)
 }
@@ -170,18 +174,19 @@ func PostField(c *gin.Context) {
 // default: genericError
 //
 //	200: fieldDBResponse
-func GetField(c *gin.Context) {
+func (controller *Controller) GetField(c *gin.Context) {
 
 	values := c.Request.URL.Query()
+	stackPath := ""
 	if len(values) == 1 {
 		value := values["GONG__StackPath"]
 		if len(value) == 1 {
-			stackParam := value[0]
-			log.Println("GetField", "GONG__StackPath", stackParam)
+			stackPath = value[0]
+			log.Println("GetField", "GONG__StackPath", stackPath)
 		}
 	}
-
-	db := orm.BackRepo.BackRepoField.GetDB()
+	backRepo := controller.Map_BackRepos[stackPath]
+	db := backRepo.BackRepoField.GetDB()
 
 	// Get fieldDB in DB
 	var fieldDB orm.FieldDB
@@ -212,16 +217,19 @@ func GetField(c *gin.Context) {
 // default: genericError
 //
 //	200: fieldDBResponse
-func UpdateField(c *gin.Context) {
+func (controller *Controller) UpdateField(c *gin.Context) {
 
 	values := c.Request.URL.Query()
+	stackPath := ""
 	if len(values) == 1 {
 		value := values["GONG__StackPath"]
 		if len(value) == 1 {
-			stackParam := value[0]
-			log.Println("UpdateField", "GONG__StackPath", stackParam)
+			stackPath = value[0]
+			log.Println("UpdateField", "GONG__StackPath", stackPath)
 		}
 	}
+	backRepo := controller.Map_BackRepos[stackPath]
+	db := backRepo.BackRepoField.GetDB()
 
 	// Validate input
 	var input orm.FieldAPI
@@ -230,8 +238,6 @@ func UpdateField(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
-
-	db := orm.BackRepo.BackRepoField.GetDB()
 
 	// Get model if exist
 	var fieldDB orm.FieldDB
@@ -267,7 +273,7 @@ func UpdateField(c *gin.Context) {
 	fieldDB.CopyBasicFieldsToField(fieldNew)
 
 	// get stage instance from DB instance, and call callback function
-	fieldOld := (*orm.BackRepo.BackRepoField.Map_FieldDBID_FieldPtr)[fieldDB.ID]
+	fieldOld := (*backRepo.BackRepoField.Map_FieldDBID_FieldPtr)[fieldDB.ID]
 	if fieldOld != nil {
 		models.AfterUpdateFromFront(&models.Stage, fieldOld, fieldNew)
 	}
@@ -276,7 +282,7 @@ func UpdateField(c *gin.Context) {
 	// (this will be improved with implementation of unit of work design pattern)
 	// in some cases, with the marshalling of the stage, this operation might
 	// generates a checkout
-	orm.BackRepo.IncrementPushFromFrontNb()
+	backRepo.IncrementPushFromFrontNb()
 
 	// return status OK with the marshalling of the the fieldDB
 	c.JSON(http.StatusOK, fieldDB)
@@ -291,18 +297,19 @@ func UpdateField(c *gin.Context) {
 // default: genericError
 //
 //	200: fieldDBResponse
-func DeleteField(c *gin.Context) {
+func (controller *Controller) DeleteField(c *gin.Context) {
 
 	values := c.Request.URL.Query()
+	stackPath := ""
 	if len(values) == 1 {
 		value := values["GONG__StackPath"]
 		if len(value) == 1 {
-			stackParam := value[0]
-			log.Println("DeleteField", "GONG__StackPath", stackParam)
+			stackPath = value[0]
+			log.Println("DeleteField", "GONG__StackPath", stackPath)
 		}
 	}
-
-	db := orm.BackRepo.BackRepoField.GetDB()
+	backRepo := controller.Map_BackRepos[stackPath]
+	db := backRepo.BackRepoField.GetDB()
 
 	// Get model if exist
 	var fieldDB orm.FieldDB
@@ -323,14 +330,14 @@ func DeleteField(c *gin.Context) {
 	fieldDB.CopyBasicFieldsToField(fieldDeleted)
 
 	// get stage instance from DB instance, and call callback function
-	fieldStaged := (*orm.BackRepo.BackRepoField.Map_FieldDBID_FieldPtr)[fieldDB.ID]
+	fieldStaged := (*backRepo.BackRepoField.Map_FieldDBID_FieldPtr)[fieldDB.ID]
 	if fieldStaged != nil {
 		models.AfterDeleteFromFront(&models.Stage, fieldStaged, fieldDeleted)
 	}
 
 	// a DELETE generates a back repo commit increase
 	// (this will be improved with implementation of unit of work design pattern)
-	orm.BackRepo.IncrementPushFromFrontNb()
+	backRepo.IncrementPushFromFrontNb()
 
 	c.JSON(http.StatusOK, gin.H{"data": true})
 }

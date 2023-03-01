@@ -2071,6 +2071,7 @@ func GongGetSet[Type GongstructSet](stages ...*StageStruct) *Type {
 	var ret Type
 
 	var stage *StageStruct
+	_ = stage
 	if len(stages) > 0 {
 		stage = stages[0]
 	} else {
@@ -2120,6 +2121,7 @@ func GongGetMap[Type GongstructMapString](stages ...*StageStruct) *Type {
 	var ret Type
 
 	var stage *StageStruct
+	_ = stage
 	if len(stages) > 0 {
 		stage = stages[0]
 	} else {
@@ -2169,6 +2171,7 @@ func GetGongstructInstancesSet[Type Gongstruct](stages ...*StageStruct) *map[*Ty
 	var ret Type
 
 	var stage *StageStruct
+	_ = stage
 	if len(stages) > 0 {
 		stage = stages[0]
 	} else {
@@ -2218,6 +2221,7 @@ func GetGongstructInstancesMap[Type Gongstruct](stages ...*StageStruct) *map[str
 	var ret Type
 
 	var stage *StageStruct
+	_ = stage
 	if len(stages) > 0 {
 		stage = stages[0]
 	} else {

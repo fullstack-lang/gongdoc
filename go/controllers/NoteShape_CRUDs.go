@@ -47,20 +47,22 @@ type NoteShapeInput struct {
 // default: genericError
 //
 //	200: noteshapeDBResponse
-func GetNoteShapes(c *gin.Context) {
-	db := orm.BackRepo.BackRepoNoteShape.GetDB()
+func (controller *Controller) GetNoteShapes(c *gin.Context) {
 
 	// source slice
 	var noteshapeDBs []orm.NoteShapeDB
 
 	values := c.Request.URL.Query()
+	stackPath := ""
 	if len(values) == 1 {
 		value := values["GONG__StackPath"]
 		if len(value) == 1 {
-			stackParam := value[0]
-			log.Println("GetNoteShapes", "GONG__StackPath", stackParam)
+			stackPath = value[0]
+			log.Println("GetNoteShapes", "GONG__StackPath", stackPath)
 		}
 	}
+	backRepo := controller.Map_BackRepos[stackPath]
+	db := backRepo.BackRepoNoteShape.GetDB()
 
 	query := db.Find(&noteshapeDBs)
 	if query.Error != nil {
@@ -105,16 +107,19 @@ func GetNoteShapes(c *gin.Context) {
 //
 //	Responses:
 //	  200: nodeDBResponse
-func PostNoteShape(c *gin.Context) {
+func (controller *Controller) PostNoteShape(c *gin.Context) {
 
 	values := c.Request.URL.Query()
+	stackPath := ""
 	if len(values) == 1 {
 		value := values["GONG__StackPath"]
 		if len(value) == 1 {
-			stackParam := value[0]
-			log.Println("PostNoteShapes", "GONG__StackPath", stackParam)
+			stackPath = value[0]
+			log.Println("PostNoteShapes", "GONG__StackPath", stackPath)
 		}
 	}
+	backRepo := controller.Map_BackRepos[stackPath]
+	db := backRepo.BackRepoNoteShape.GetDB()
 
 	// Validate input
 	var input orm.NoteShapeAPI
@@ -134,7 +139,6 @@ func PostNoteShape(c *gin.Context) {
 	noteshapeDB.NoteShapePointersEnconding = input.NoteShapePointersEnconding
 	noteshapeDB.CopyBasicFieldsFromNoteShape(&input.NoteShape)
 
-	db := orm.BackRepo.BackRepoNoteShape.GetDB()
 	query := db.Create(&noteshapeDB)
 	if query.Error != nil {
 		var returnError GenericError
@@ -146,8 +150,8 @@ func PostNoteShape(c *gin.Context) {
 	}
 
 	// get an instance (not staged) from DB instance, and call callback function
-	orm.BackRepo.BackRepoNoteShape.CheckoutPhaseOneInstance(&noteshapeDB)
-	noteshape := (*orm.BackRepo.BackRepoNoteShape.Map_NoteShapeDBID_NoteShapePtr)[noteshapeDB.ID]
+	backRepo.BackRepoNoteShape.CheckoutPhaseOneInstance(&noteshapeDB)
+	noteshape := (*backRepo.BackRepoNoteShape.Map_NoteShapeDBID_NoteShapePtr)[noteshapeDB.ID]
 
 	if noteshape != nil {
 		models.AfterCreateFromFront(&models.Stage, noteshape)
@@ -155,7 +159,7 @@ func PostNoteShape(c *gin.Context) {
 
 	// a POST is equivalent to a back repo commit increase
 	// (this will be improved with implementation of unit of work design pattern)
-	orm.BackRepo.IncrementPushFromFrontNb()
+	backRepo.IncrementPushFromFrontNb()
 
 	c.JSON(http.StatusOK, noteshapeDB)
 }
@@ -170,18 +174,19 @@ func PostNoteShape(c *gin.Context) {
 // default: genericError
 //
 //	200: noteshapeDBResponse
-func GetNoteShape(c *gin.Context) {
+func (controller *Controller) GetNoteShape(c *gin.Context) {
 
 	values := c.Request.URL.Query()
+	stackPath := ""
 	if len(values) == 1 {
 		value := values["GONG__StackPath"]
 		if len(value) == 1 {
-			stackParam := value[0]
-			log.Println("GetNoteShape", "GONG__StackPath", stackParam)
+			stackPath = value[0]
+			log.Println("GetNoteShape", "GONG__StackPath", stackPath)
 		}
 	}
-
-	db := orm.BackRepo.BackRepoNoteShape.GetDB()
+	backRepo := controller.Map_BackRepos[stackPath]
+	db := backRepo.BackRepoNoteShape.GetDB()
 
 	// Get noteshapeDB in DB
 	var noteshapeDB orm.NoteShapeDB
@@ -212,16 +217,19 @@ func GetNoteShape(c *gin.Context) {
 // default: genericError
 //
 //	200: noteshapeDBResponse
-func UpdateNoteShape(c *gin.Context) {
+func (controller *Controller) UpdateNoteShape(c *gin.Context) {
 
 	values := c.Request.URL.Query()
+	stackPath := ""
 	if len(values) == 1 {
 		value := values["GONG__StackPath"]
 		if len(value) == 1 {
-			stackParam := value[0]
-			log.Println("UpdateNoteShape", "GONG__StackPath", stackParam)
+			stackPath = value[0]
+			log.Println("UpdateNoteShape", "GONG__StackPath", stackPath)
 		}
 	}
+	backRepo := controller.Map_BackRepos[stackPath]
+	db := backRepo.BackRepoNoteShape.GetDB()
 
 	// Validate input
 	var input orm.NoteShapeAPI
@@ -230,8 +238,6 @@ func UpdateNoteShape(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
-
-	db := orm.BackRepo.BackRepoNoteShape.GetDB()
 
 	// Get model if exist
 	var noteshapeDB orm.NoteShapeDB
@@ -267,7 +273,7 @@ func UpdateNoteShape(c *gin.Context) {
 	noteshapeDB.CopyBasicFieldsToNoteShape(noteshapeNew)
 
 	// get stage instance from DB instance, and call callback function
-	noteshapeOld := (*orm.BackRepo.BackRepoNoteShape.Map_NoteShapeDBID_NoteShapePtr)[noteshapeDB.ID]
+	noteshapeOld := (*backRepo.BackRepoNoteShape.Map_NoteShapeDBID_NoteShapePtr)[noteshapeDB.ID]
 	if noteshapeOld != nil {
 		models.AfterUpdateFromFront(&models.Stage, noteshapeOld, noteshapeNew)
 	}
@@ -276,7 +282,7 @@ func UpdateNoteShape(c *gin.Context) {
 	// (this will be improved with implementation of unit of work design pattern)
 	// in some cases, with the marshalling of the stage, this operation might
 	// generates a checkout
-	orm.BackRepo.IncrementPushFromFrontNb()
+	backRepo.IncrementPushFromFrontNb()
 
 	// return status OK with the marshalling of the the noteshapeDB
 	c.JSON(http.StatusOK, noteshapeDB)
@@ -291,18 +297,19 @@ func UpdateNoteShape(c *gin.Context) {
 // default: genericError
 //
 //	200: noteshapeDBResponse
-func DeleteNoteShape(c *gin.Context) {
+func (controller *Controller) DeleteNoteShape(c *gin.Context) {
 
 	values := c.Request.URL.Query()
+	stackPath := ""
 	if len(values) == 1 {
 		value := values["GONG__StackPath"]
 		if len(value) == 1 {
-			stackParam := value[0]
-			log.Println("DeleteNoteShape", "GONG__StackPath", stackParam)
+			stackPath = value[0]
+			log.Println("DeleteNoteShape", "GONG__StackPath", stackPath)
 		}
 	}
-
-	db := orm.BackRepo.BackRepoNoteShape.GetDB()
+	backRepo := controller.Map_BackRepos[stackPath]
+	db := backRepo.BackRepoNoteShape.GetDB()
 
 	// Get model if exist
 	var noteshapeDB orm.NoteShapeDB
@@ -323,14 +330,14 @@ func DeleteNoteShape(c *gin.Context) {
 	noteshapeDB.CopyBasicFieldsToNoteShape(noteshapeDeleted)
 
 	// get stage instance from DB instance, and call callback function
-	noteshapeStaged := (*orm.BackRepo.BackRepoNoteShape.Map_NoteShapeDBID_NoteShapePtr)[noteshapeDB.ID]
+	noteshapeStaged := (*backRepo.BackRepoNoteShape.Map_NoteShapeDBID_NoteShapePtr)[noteshapeDB.ID]
 	if noteshapeStaged != nil {
 		models.AfterDeleteFromFront(&models.Stage, noteshapeStaged, noteshapeDeleted)
 	}
 
 	// a DELETE generates a back repo commit increase
 	// (this will be improved with implementation of unit of work design pattern)
-	orm.BackRepo.IncrementPushFromFrontNb()
+	backRepo.IncrementPushFromFrontNb()
 
 	c.JSON(http.StatusOK, gin.H{"data": true})
 }
