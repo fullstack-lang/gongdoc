@@ -47,20 +47,22 @@ type UmlStateInput struct {
 // default: genericError
 //
 //	200: umlstateDBResponse
-func GetUmlStates(c *gin.Context) {
-	db := orm.BackRepo.BackRepoUmlState.GetDB()
+func (controller *Controller) GetUmlStates(c *gin.Context) {
 
 	// source slice
 	var umlstateDBs []orm.UmlStateDB
 
 	values := c.Request.URL.Query()
+	stackPath := ""
 	if len(values) == 1 {
 		value := values["GONG__StackPath"]
 		if len(value) == 1 {
-			stackParam := value[0]
-			log.Println("GetUmlStates", "GONG__StackPath", stackParam)
+			stackPath = value[0]
+			log.Println("GetUmlStates", "GONG__StackPath", stackPath)
 		}
 	}
+	backRepo := controller.Map_BackRepos[stackPath]
+	db := backRepo.BackRepoUmlState.GetDB()
 
 	query := db.Find(&umlstateDBs)
 	if query.Error != nil {
@@ -105,16 +107,19 @@ func GetUmlStates(c *gin.Context) {
 //
 //	Responses:
 //	  200: nodeDBResponse
-func PostUmlState(c *gin.Context) {
+func (controller *Controller) PostUmlState(c *gin.Context) {
 
 	values := c.Request.URL.Query()
+	stackPath := ""
 	if len(values) == 1 {
 		value := values["GONG__StackPath"]
 		if len(value) == 1 {
-			stackParam := value[0]
-			log.Println("PostUmlStates", "GONG__StackPath", stackParam)
+			stackPath = value[0]
+			log.Println("PostUmlStates", "GONG__StackPath", stackPath)
 		}
 	}
+	backRepo := controller.Map_BackRepos[stackPath]
+	db := backRepo.BackRepoUmlState.GetDB()
 
 	// Validate input
 	var input orm.UmlStateAPI
@@ -134,7 +139,6 @@ func PostUmlState(c *gin.Context) {
 	umlstateDB.UmlStatePointersEnconding = input.UmlStatePointersEnconding
 	umlstateDB.CopyBasicFieldsFromUmlState(&input.UmlState)
 
-	db := orm.BackRepo.BackRepoUmlState.GetDB()
 	query := db.Create(&umlstateDB)
 	if query.Error != nil {
 		var returnError GenericError
@@ -146,16 +150,16 @@ func PostUmlState(c *gin.Context) {
 	}
 
 	// get an instance (not staged) from DB instance, and call callback function
-	orm.BackRepo.BackRepoUmlState.CheckoutPhaseOneInstance(&umlstateDB)
-	umlstate := (*orm.BackRepo.BackRepoUmlState.Map_UmlStateDBID_UmlStatePtr)[umlstateDB.ID]
+	backRepo.BackRepoUmlState.CheckoutPhaseOneInstance(&umlstateDB)
+	umlstate := (*backRepo.BackRepoUmlState.Map_UmlStateDBID_UmlStatePtr)[umlstateDB.ID]
 
 	if umlstate != nil {
-		models.AfterCreateFromFront(&models.Stage, umlstate)
+		models.AfterCreateFromFront(backRepo.GetStage(), umlstate)
 	}
 
 	// a POST is equivalent to a back repo commit increase
 	// (this will be improved with implementation of unit of work design pattern)
-	orm.BackRepo.IncrementPushFromFrontNb()
+	backRepo.IncrementPushFromFrontNb()
 
 	c.JSON(http.StatusOK, umlstateDB)
 }
@@ -170,18 +174,19 @@ func PostUmlState(c *gin.Context) {
 // default: genericError
 //
 //	200: umlstateDBResponse
-func GetUmlState(c *gin.Context) {
+func (controller *Controller) GetUmlState(c *gin.Context) {
 
 	values := c.Request.URL.Query()
+	stackPath := ""
 	if len(values) == 1 {
 		value := values["GONG__StackPath"]
 		if len(value) == 1 {
-			stackParam := value[0]
-			log.Println("GetUmlState", "GONG__StackPath", stackParam)
+			stackPath = value[0]
+			log.Println("GetUmlState", "GONG__StackPath", stackPath)
 		}
 	}
-
-	db := orm.BackRepo.BackRepoUmlState.GetDB()
+	backRepo := controller.Map_BackRepos[stackPath]
+	db := backRepo.BackRepoUmlState.GetDB()
 
 	// Get umlstateDB in DB
 	var umlstateDB orm.UmlStateDB
@@ -212,16 +217,19 @@ func GetUmlState(c *gin.Context) {
 // default: genericError
 //
 //	200: umlstateDBResponse
-func UpdateUmlState(c *gin.Context) {
+func (controller *Controller) UpdateUmlState(c *gin.Context) {
 
 	values := c.Request.URL.Query()
+	stackPath := ""
 	if len(values) == 1 {
 		value := values["GONG__StackPath"]
 		if len(value) == 1 {
-			stackParam := value[0]
-			log.Println("UpdateUmlState", "GONG__StackPath", stackParam)
+			stackPath = value[0]
+			log.Println("UpdateUmlState", "GONG__StackPath", stackPath)
 		}
 	}
+	backRepo := controller.Map_BackRepos[stackPath]
+	db := backRepo.BackRepoUmlState.GetDB()
 
 	// Validate input
 	var input orm.UmlStateAPI
@@ -230,8 +238,6 @@ func UpdateUmlState(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
-
-	db := orm.BackRepo.BackRepoUmlState.GetDB()
 
 	// Get model if exist
 	var umlstateDB orm.UmlStateDB
@@ -267,16 +273,16 @@ func UpdateUmlState(c *gin.Context) {
 	umlstateDB.CopyBasicFieldsToUmlState(umlstateNew)
 
 	// get stage instance from DB instance, and call callback function
-	umlstateOld := (*orm.BackRepo.BackRepoUmlState.Map_UmlStateDBID_UmlStatePtr)[umlstateDB.ID]
+	umlstateOld := (*backRepo.BackRepoUmlState.Map_UmlStateDBID_UmlStatePtr)[umlstateDB.ID]
 	if umlstateOld != nil {
-		models.AfterUpdateFromFront(&models.Stage, umlstateOld, umlstateNew)
+		models.AfterUpdateFromFront(backRepo.GetStage(), umlstateOld, umlstateNew)
 	}
 
 	// an UPDATE generates a back repo commit increase
 	// (this will be improved with implementation of unit of work design pattern)
 	// in some cases, with the marshalling of the stage, this operation might
 	// generates a checkout
-	orm.BackRepo.IncrementPushFromFrontNb()
+	backRepo.IncrementPushFromFrontNb()
 
 	// return status OK with the marshalling of the the umlstateDB
 	c.JSON(http.StatusOK, umlstateDB)
@@ -291,18 +297,19 @@ func UpdateUmlState(c *gin.Context) {
 // default: genericError
 //
 //	200: umlstateDBResponse
-func DeleteUmlState(c *gin.Context) {
+func (controller *Controller) DeleteUmlState(c *gin.Context) {
 
 	values := c.Request.URL.Query()
+	stackPath := ""
 	if len(values) == 1 {
 		value := values["GONG__StackPath"]
 		if len(value) == 1 {
-			stackParam := value[0]
-			log.Println("DeleteUmlState", "GONG__StackPath", stackParam)
+			stackPath = value[0]
+			log.Println("DeleteUmlState", "GONG__StackPath", stackPath)
 		}
 	}
-
-	db := orm.BackRepo.BackRepoUmlState.GetDB()
+	backRepo := controller.Map_BackRepos[stackPath]
+	db := backRepo.BackRepoUmlState.GetDB()
 
 	// Get model if exist
 	var umlstateDB orm.UmlStateDB
@@ -323,14 +330,14 @@ func DeleteUmlState(c *gin.Context) {
 	umlstateDB.CopyBasicFieldsToUmlState(umlstateDeleted)
 
 	// get stage instance from DB instance, and call callback function
-	umlstateStaged := (*orm.BackRepo.BackRepoUmlState.Map_UmlStateDBID_UmlStatePtr)[umlstateDB.ID]
+	umlstateStaged := (*backRepo.BackRepoUmlState.Map_UmlStateDBID_UmlStatePtr)[umlstateDB.ID]
 	if umlstateStaged != nil {
-		models.AfterDeleteFromFront(&models.Stage, umlstateStaged, umlstateDeleted)
+		models.AfterDeleteFromFront(backRepo.GetStage(), umlstateStaged, umlstateDeleted)
 	}
 
 	// a DELETE generates a back repo commit increase
 	// (this will be improved with implementation of unit of work design pattern)
-	orm.BackRepo.IncrementPushFromFrontNb()
+	backRepo.IncrementPushFromFrontNb()
 
 	c.JSON(http.StatusOK, gin.H{"data": true})
 }

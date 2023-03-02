@@ -106,6 +106,11 @@ type BackRepoTreeStruct struct {
 	stage *models.StageStruct
 }
 
+func (backRepoTree *BackRepoTreeStruct) GetStage() (stage *models.StageStruct) {
+	stage = backRepoTree.stage
+	return
+}
+
 func (backRepoTree *BackRepoTreeStruct) GetDB() *gorm.DB {
 	return backRepoTree.db
 }
@@ -301,7 +306,7 @@ func (backRepoTree *BackRepoTreeStruct) CheckoutPhaseOne() (Error error) {
 
 	// remove from stage and back repo's 3 maps all trees that are not in the checkout
 	for tree := range treeInstancesToBeRemovedFromTheStage {
-		tree.Unstage()
+		tree.Unstage(backRepoTree.GetStage())
 
 		// remove instance from the back repo 3 maps
 		treeID := (*backRepoTree.Map_TreePtr_TreeDBID)[tree]
@@ -326,12 +331,12 @@ func (backRepoTree *BackRepoTreeStruct) CheckoutPhaseOneInstance(treeDB *TreeDB)
 
 		// append model store with the new element
 		tree.Name = treeDB.Name_Data.String
-		tree.Stage()
+		tree.Stage(backRepoTree.GetStage())
 	}
 	treeDB.CopyBasicFieldsToTree(tree)
 
 	// in some cases, the instance might have been unstaged. It is necessary to stage it again
-	tree.Stage()
+	tree.Stage(backRepoTree.GetStage())
 
 	// preserve pointer to treeDB. Otherwise, pointer will is recycled and the map of pointers
 	// Map_TreeDBID_TreeDB)[treeDB hold variable pointers

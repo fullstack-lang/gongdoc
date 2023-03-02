@@ -47,20 +47,22 @@ type ClassdiagramInput struct {
 // default: genericError
 //
 //	200: classdiagramDBResponse
-func GetClassdiagrams(c *gin.Context) {
-	db := orm.BackRepo.BackRepoClassdiagram.GetDB()
+func (controller *Controller) GetClassdiagrams(c *gin.Context) {
 
 	// source slice
 	var classdiagramDBs []orm.ClassdiagramDB
 
 	values := c.Request.URL.Query()
+	stackPath := ""
 	if len(values) == 1 {
 		value := values["GONG__StackPath"]
 		if len(value) == 1 {
-			stackParam := value[0]
-			log.Println("GetClassdiagrams", "GONG__StackPath", stackParam)
+			stackPath = value[0]
+			log.Println("GetClassdiagrams", "GONG__StackPath", stackPath)
 		}
 	}
+	backRepo := controller.Map_BackRepos[stackPath]
+	db := backRepo.BackRepoClassdiagram.GetDB()
 
 	query := db.Find(&classdiagramDBs)
 	if query.Error != nil {
@@ -105,16 +107,19 @@ func GetClassdiagrams(c *gin.Context) {
 //
 //	Responses:
 //	  200: nodeDBResponse
-func PostClassdiagram(c *gin.Context) {
+func (controller *Controller) PostClassdiagram(c *gin.Context) {
 
 	values := c.Request.URL.Query()
+	stackPath := ""
 	if len(values) == 1 {
 		value := values["GONG__StackPath"]
 		if len(value) == 1 {
-			stackParam := value[0]
-			log.Println("PostClassdiagrams", "GONG__StackPath", stackParam)
+			stackPath = value[0]
+			log.Println("PostClassdiagrams", "GONG__StackPath", stackPath)
 		}
 	}
+	backRepo := controller.Map_BackRepos[stackPath]
+	db := backRepo.BackRepoClassdiagram.GetDB()
 
 	// Validate input
 	var input orm.ClassdiagramAPI
@@ -134,7 +139,6 @@ func PostClassdiagram(c *gin.Context) {
 	classdiagramDB.ClassdiagramPointersEnconding = input.ClassdiagramPointersEnconding
 	classdiagramDB.CopyBasicFieldsFromClassdiagram(&input.Classdiagram)
 
-	db := orm.BackRepo.BackRepoClassdiagram.GetDB()
 	query := db.Create(&classdiagramDB)
 	if query.Error != nil {
 		var returnError GenericError
@@ -146,16 +150,16 @@ func PostClassdiagram(c *gin.Context) {
 	}
 
 	// get an instance (not staged) from DB instance, and call callback function
-	orm.BackRepo.BackRepoClassdiagram.CheckoutPhaseOneInstance(&classdiagramDB)
-	classdiagram := (*orm.BackRepo.BackRepoClassdiagram.Map_ClassdiagramDBID_ClassdiagramPtr)[classdiagramDB.ID]
+	backRepo.BackRepoClassdiagram.CheckoutPhaseOneInstance(&classdiagramDB)
+	classdiagram := (*backRepo.BackRepoClassdiagram.Map_ClassdiagramDBID_ClassdiagramPtr)[classdiagramDB.ID]
 
 	if classdiagram != nil {
-		models.AfterCreateFromFront(&models.Stage, classdiagram)
+		models.AfterCreateFromFront(backRepo.GetStage(), classdiagram)
 	}
 
 	// a POST is equivalent to a back repo commit increase
 	// (this will be improved with implementation of unit of work design pattern)
-	orm.BackRepo.IncrementPushFromFrontNb()
+	backRepo.IncrementPushFromFrontNb()
 
 	c.JSON(http.StatusOK, classdiagramDB)
 }
@@ -170,18 +174,19 @@ func PostClassdiagram(c *gin.Context) {
 // default: genericError
 //
 //	200: classdiagramDBResponse
-func GetClassdiagram(c *gin.Context) {
+func (controller *Controller) GetClassdiagram(c *gin.Context) {
 
 	values := c.Request.URL.Query()
+	stackPath := ""
 	if len(values) == 1 {
 		value := values["GONG__StackPath"]
 		if len(value) == 1 {
-			stackParam := value[0]
-			log.Println("GetClassdiagram", "GONG__StackPath", stackParam)
+			stackPath = value[0]
+			log.Println("GetClassdiagram", "GONG__StackPath", stackPath)
 		}
 	}
-
-	db := orm.BackRepo.BackRepoClassdiagram.GetDB()
+	backRepo := controller.Map_BackRepos[stackPath]
+	db := backRepo.BackRepoClassdiagram.GetDB()
 
 	// Get classdiagramDB in DB
 	var classdiagramDB orm.ClassdiagramDB
@@ -212,16 +217,19 @@ func GetClassdiagram(c *gin.Context) {
 // default: genericError
 //
 //	200: classdiagramDBResponse
-func UpdateClassdiagram(c *gin.Context) {
+func (controller *Controller) UpdateClassdiagram(c *gin.Context) {
 
 	values := c.Request.URL.Query()
+	stackPath := ""
 	if len(values) == 1 {
 		value := values["GONG__StackPath"]
 		if len(value) == 1 {
-			stackParam := value[0]
-			log.Println("UpdateClassdiagram", "GONG__StackPath", stackParam)
+			stackPath = value[0]
+			log.Println("UpdateClassdiagram", "GONG__StackPath", stackPath)
 		}
 	}
+	backRepo := controller.Map_BackRepos[stackPath]
+	db := backRepo.BackRepoClassdiagram.GetDB()
 
 	// Validate input
 	var input orm.ClassdiagramAPI
@@ -230,8 +238,6 @@ func UpdateClassdiagram(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
-
-	db := orm.BackRepo.BackRepoClassdiagram.GetDB()
 
 	// Get model if exist
 	var classdiagramDB orm.ClassdiagramDB
@@ -267,16 +273,16 @@ func UpdateClassdiagram(c *gin.Context) {
 	classdiagramDB.CopyBasicFieldsToClassdiagram(classdiagramNew)
 
 	// get stage instance from DB instance, and call callback function
-	classdiagramOld := (*orm.BackRepo.BackRepoClassdiagram.Map_ClassdiagramDBID_ClassdiagramPtr)[classdiagramDB.ID]
+	classdiagramOld := (*backRepo.BackRepoClassdiagram.Map_ClassdiagramDBID_ClassdiagramPtr)[classdiagramDB.ID]
 	if classdiagramOld != nil {
-		models.AfterUpdateFromFront(&models.Stage, classdiagramOld, classdiagramNew)
+		models.AfterUpdateFromFront(backRepo.GetStage(), classdiagramOld, classdiagramNew)
 	}
 
 	// an UPDATE generates a back repo commit increase
 	// (this will be improved with implementation of unit of work design pattern)
 	// in some cases, with the marshalling of the stage, this operation might
 	// generates a checkout
-	orm.BackRepo.IncrementPushFromFrontNb()
+	backRepo.IncrementPushFromFrontNb()
 
 	// return status OK with the marshalling of the the classdiagramDB
 	c.JSON(http.StatusOK, classdiagramDB)
@@ -291,18 +297,19 @@ func UpdateClassdiagram(c *gin.Context) {
 // default: genericError
 //
 //	200: classdiagramDBResponse
-func DeleteClassdiagram(c *gin.Context) {
+func (controller *Controller) DeleteClassdiagram(c *gin.Context) {
 
 	values := c.Request.URL.Query()
+	stackPath := ""
 	if len(values) == 1 {
 		value := values["GONG__StackPath"]
 		if len(value) == 1 {
-			stackParam := value[0]
-			log.Println("DeleteClassdiagram", "GONG__StackPath", stackParam)
+			stackPath = value[0]
+			log.Println("DeleteClassdiagram", "GONG__StackPath", stackPath)
 		}
 	}
-
-	db := orm.BackRepo.BackRepoClassdiagram.GetDB()
+	backRepo := controller.Map_BackRepos[stackPath]
+	db := backRepo.BackRepoClassdiagram.GetDB()
 
 	// Get model if exist
 	var classdiagramDB orm.ClassdiagramDB
@@ -323,14 +330,14 @@ func DeleteClassdiagram(c *gin.Context) {
 	classdiagramDB.CopyBasicFieldsToClassdiagram(classdiagramDeleted)
 
 	// get stage instance from DB instance, and call callback function
-	classdiagramStaged := (*orm.BackRepo.BackRepoClassdiagram.Map_ClassdiagramDBID_ClassdiagramPtr)[classdiagramDB.ID]
+	classdiagramStaged := (*backRepo.BackRepoClassdiagram.Map_ClassdiagramDBID_ClassdiagramPtr)[classdiagramDB.ID]
 	if classdiagramStaged != nil {
-		models.AfterDeleteFromFront(&models.Stage, classdiagramStaged, classdiagramDeleted)
+		models.AfterDeleteFromFront(backRepo.GetStage(), classdiagramStaged, classdiagramDeleted)
 	}
 
 	// a DELETE generates a back repo commit increase
 	// (this will be improved with implementation of unit of work design pattern)
-	orm.BackRepo.IncrementPushFromFrontNb()
+	backRepo.IncrementPushFromFrontNb()
 
 	c.JSON(http.StatusOK, gin.H{"data": true})
 }

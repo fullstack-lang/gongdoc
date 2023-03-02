@@ -118,6 +118,11 @@ type BackRepoGongEnumValueEntryStruct struct {
 	stage *models.StageStruct
 }
 
+func (backRepoGongEnumValueEntry *BackRepoGongEnumValueEntryStruct) GetStage() (stage *models.StageStruct) {
+	stage = backRepoGongEnumValueEntry.stage
+	return
+}
+
 func (backRepoGongEnumValueEntry *BackRepoGongEnumValueEntryStruct) GetDB() *gorm.DB {
 	return backRepoGongEnumValueEntry.db
 }
@@ -294,7 +299,7 @@ func (backRepoGongEnumValueEntry *BackRepoGongEnumValueEntryStruct) CheckoutPhas
 
 	// remove from stage and back repo's 3 maps all gongenumvalueentrys that are not in the checkout
 	for gongenumvalueentry := range gongenumvalueentryInstancesToBeRemovedFromTheStage {
-		gongenumvalueentry.Unstage()
+		gongenumvalueentry.Unstage(backRepoGongEnumValueEntry.GetStage())
 
 		// remove instance from the back repo 3 maps
 		gongenumvalueentryID := (*backRepoGongEnumValueEntry.Map_GongEnumValueEntryPtr_GongEnumValueEntryDBID)[gongenumvalueentry]
@@ -319,12 +324,12 @@ func (backRepoGongEnumValueEntry *BackRepoGongEnumValueEntryStruct) CheckoutPhas
 
 		// append model store with the new element
 		gongenumvalueentry.Name = gongenumvalueentryDB.Name_Data.String
-		gongenumvalueentry.Stage()
+		gongenumvalueentry.Stage(backRepoGongEnumValueEntry.GetStage())
 	}
 	gongenumvalueentryDB.CopyBasicFieldsToGongEnumValueEntry(gongenumvalueentry)
 
 	// in some cases, the instance might have been unstaged. It is necessary to stage it again
-	gongenumvalueentry.Stage()
+	gongenumvalueentry.Stage(backRepoGongEnumValueEntry.GetStage())
 
 	// preserve pointer to gongenumvalueentryDB. Otherwise, pointer will is recycled and the map of pointers
 	// Map_GongEnumValueEntryDBID_GongEnumValueEntryDB)[gongenumvalueentryDB hold variable pointers

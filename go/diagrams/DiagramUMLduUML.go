@@ -36,55 +36,55 @@ var map_DocLink_Identifier_DiagramUMLduUML map[string]any = map[string]any{
 // }
 
 // DiagramUMLduUMLInjection will stage objects of database "DiagramUMLduUML"
-func DiagramUMLduUMLInjection() {
+func DiagramUMLduUMLInjection(stage *models.StageStruct) {
 
 	// Declaration of instances to stage
 
 	// Declarations of staged instances of Classdiagram
-	__Classdiagram__000000_DiagramUMLduUML := (&models.Classdiagram{Name: `DiagramUMLduUML`}).Stage()
+	__Classdiagram__000000_DiagramUMLduUML := (&models.Classdiagram{Name: `DiagramUMLduUML`}).Stage(stage)
 
 	// Declarations of staged instances of Classshape
-	__Classshape__000000_Classshape0000 := (&models.GongStructShape{Name: `Classshape0000`}).Stage()
-	__Classshape__000001_Classshape0001 := (&models.GongStructShape{Name: `Classshape0001`}).Stage()
-	__Classshape__000002_Classshape0002 := (&models.GongStructShape{Name: `Classshape0002`}).Stage()
-	__Classshape__000003_Classshape0003 := (&models.GongStructShape{Name: `Classshape0003`}).Stage()
-	__Classshape__000004_Classshape0004 := (&models.GongStructShape{Name: `Classshape0004`}).Stage()
-	__Classshape__000005_Classshape0005 := (&models.GongStructShape{Name: `Classshape0005`}).Stage()
-	__Classshape__000006_Classshape0006 := (&models.GongStructShape{Name: `Classshape0006`}).Stage()
-	__Classshape__000007_Classshape0007 := (&models.GongStructShape{Name: `Classshape0007`}).Stage()
-	__Classshape__000008_Classshape0008 := (&models.GongStructShape{Name: `Classshape0008`}).Stage()
+	__Classshape__000000_Classshape0000 := (&models.GongStructShape{Name: `Classshape0000`}).Stage(stage)
+	__Classshape__000001_Classshape0001 := (&models.GongStructShape{Name: `Classshape0001`}).Stage(stage)
+	__Classshape__000002_Classshape0002 := (&models.GongStructShape{Name: `Classshape0002`}).Stage(stage)
+	__Classshape__000003_Classshape0003 := (&models.GongStructShape{Name: `Classshape0003`}).Stage(stage)
+	__Classshape__000004_Classshape0004 := (&models.GongStructShape{Name: `Classshape0004`}).Stage(stage)
+	__Classshape__000005_Classshape0005 := (&models.GongStructShape{Name: `Classshape0005`}).Stage(stage)
+	__Classshape__000006_Classshape0006 := (&models.GongStructShape{Name: `Classshape0006`}).Stage(stage)
+	__Classshape__000007_Classshape0007 := (&models.GongStructShape{Name: `Classshape0007`}).Stage(stage)
+	__Classshape__000008_Classshape0008 := (&models.GongStructShape{Name: `Classshape0008`}).Stage(stage)
 
 	// Declarations of staged instances of DiagramPackage
 
 	// Declarations of staged instances of Field
-	__Field__000000_FieldTypeAsString := (&models.Field{Name: `FieldTypeAsString`}).Stage()
-	__Field__000001_Fieldtypename := (&models.Field{Name: `Fieldtypename`}).Stage()
-	__Field__000002_Fieldtypename := (&models.Field{Name: `Fieldtypename`}).Stage()
-	__Field__000003_Heigth := (&models.Field{Name: `Heigth`}).Stage()
-	__Field__000004_Name := (&models.Field{Name: `Name`}).Stage()
-	__Field__000005_Name := (&models.Field{Name: `Name`}).Stage()
-	__Field__000006_Name := (&models.Field{Name: `Name`}).Stage()
-	__Field__000007_Name := (&models.Field{Name: `Name`}).Stage()
-	__Field__000008_Path := (&models.Field{Name: `Path`}).Stage()
+	__Field__000000_FieldTypeAsString := (&models.Field{Name: `FieldTypeAsString`}).Stage(stage)
+	__Field__000001_Fieldtypename := (&models.Field{Name: `Fieldtypename`}).Stage(stage)
+	__Field__000002_Fieldtypename := (&models.Field{Name: `Fieldtypename`}).Stage(stage)
+	__Field__000003_Heigth := (&models.Field{Name: `Heigth`}).Stage(stage)
+	__Field__000004_Name := (&models.Field{Name: `Name`}).Stage(stage)
+	__Field__000005_Name := (&models.Field{Name: `Name`}).Stage(stage)
+	__Field__000006_Name := (&models.Field{Name: `Name`}).Stage(stage)
+	__Field__000007_Name := (&models.Field{Name: `Name`}).Stage(stage)
+	__Field__000008_Path := (&models.Field{Name: `Path`}).Stage(stage)
 
-	__Field__000011_TargetMultiplicity := (&models.Field{Name: `TargetMultiplicity`}).Stage()
-	__Field__000012_Width := (&models.Field{Name: `Width`}).Stage()
-	__Field__000013_X := (&models.Field{Name: `X`}).Stage()
-	__Field__000014_X := (&models.Field{Name: `X`}).Stage()
-	__Field__000015_X := (&models.Field{Name: `X`}).Stage()
-	__Field__000016_Y := (&models.Field{Name: `Y`}).Stage()
-	__Field__000017_Y := (&models.Field{Name: `Y`}).Stage()
-	__Field__000018_Y := (&models.Field{Name: `Y`}).Stage()
+	__Field__000011_TargetMultiplicity := (&models.Field{Name: `TargetMultiplicity`}).Stage(stage)
+	__Field__000012_Width := (&models.Field{Name: `Width`}).Stage(stage)
+	__Field__000013_X := (&models.Field{Name: `X`}).Stage(stage)
+	__Field__000014_X := (&models.Field{Name: `X`}).Stage(stage)
+	__Field__000015_X := (&models.Field{Name: `X`}).Stage(stage)
+	__Field__000016_Y := (&models.Field{Name: `Y`}).Stage(stage)
+	__Field__000017_Y := (&models.Field{Name: `Y`}).Stage(stage)
+	__Field__000018_Y := (&models.Field{Name: `Y`}).Stage(stage)
 
 	// Declarations of staged instances of Link
-	__Link__000000_Classdiagrams := (&models.Link{Name: `Classdiagrams`}).Stage()
-	__Link__000001_Classshapes := (&models.Link{Name: `Classshapes`}).Stage()
-	__Link__000002_Fields := (&models.Link{Name: `Fields`}).Stage()
-	__Link__000003_Links := (&models.Link{Name: `Links`}).Stage()
-	__Link__000004_Middlevertice := (&models.Link{Name: `Middlevertice`}).Stage()
-	__Link__000005_Position := (&models.Link{Name: `Position`}).Stage()
-	__Link__000006_States := (&models.Link{Name: `States`}).Stage()
-	__Link__000007_Umlscs := (&models.Link{Name: `Umlscs`}).Stage()
+	__Link__000000_Classdiagrams := (&models.Link{Name: `Classdiagrams`}).Stage(stage)
+	__Link__000001_Classshapes := (&models.Link{Name: `Classshapes`}).Stage(stage)
+	__Link__000002_Fields := (&models.Link{Name: `Fields`}).Stage(stage)
+	__Link__000003_Links := (&models.Link{Name: `Links`}).Stage(stage)
+	__Link__000004_Middlevertice := (&models.Link{Name: `Middlevertice`}).Stage(stage)
+	__Link__000005_Position := (&models.Link{Name: `Position`}).Stage(stage)
+	__Link__000006_States := (&models.Link{Name: `States`}).Stage(stage)
+	__Link__000007_Umlscs := (&models.Link{Name: `Umlscs`}).Stage(stage)
 
 	// Declarations of staged instances of Node
 
@@ -93,15 +93,15 @@ func DiagramUMLduUMLInjection() {
 	// Declarations of staged instances of NoteShape
 
 	// Declarations of staged instances of Position
-	__Position__000000_Position_0000 := (&models.Position{Name: `Position-0000`}).Stage()
-	__Position__000001_Position_0001 := (&models.Position{Name: `Position-0001`}).Stage()
-	__Position__000002_Position_0002 := (&models.Position{Name: `Position-0002`}).Stage()
-	__Position__000003_Position_0003 := (&models.Position{Name: `Position-0003`}).Stage()
-	__Position__000004_Position_0004 := (&models.Position{Name: `Position-0004`}).Stage()
-	__Position__000005_Position_0005 := (&models.Position{Name: `Position-0005`}).Stage()
-	__Position__000006_Position_0006 := (&models.Position{Name: `Position-0006`}).Stage()
-	__Position__000007_Position_0007 := (&models.Position{Name: `Position-0007`}).Stage()
-	__Position__000008_Position_0008 := (&models.Position{Name: `Position-0008`}).Stage()
+	__Position__000000_Position_0000 := (&models.Position{Name: `Position-0000`}).Stage(stage)
+	__Position__000001_Position_0001 := (&models.Position{Name: `Position-0001`}).Stage(stage)
+	__Position__000002_Position_0002 := (&models.Position{Name: `Position-0002`}).Stage(stage)
+	__Position__000003_Position_0003 := (&models.Position{Name: `Position-0003`}).Stage(stage)
+	__Position__000004_Position_0004 := (&models.Position{Name: `Position-0004`}).Stage(stage)
+	__Position__000005_Position_0005 := (&models.Position{Name: `Position-0005`}).Stage(stage)
+	__Position__000006_Position_0006 := (&models.Position{Name: `Position-0006`}).Stage(stage)
+	__Position__000007_Position_0007 := (&models.Position{Name: `Position-0007`}).Stage(stage)
+	__Position__000008_Position_0008 := (&models.Position{Name: `Position-0008`}).Stage(stage)
 
 	// Declarations of staged instances of Tree
 
@@ -110,14 +110,14 @@ func DiagramUMLduUMLInjection() {
 	// Declarations of staged instances of Umlsc
 
 	// Declarations of staged instances of Vertice
-	__Vertice__000000_Vertice_0000 := (&models.Vertice{Name: `Vertice-0000`}).Stage()
-	__Vertice__000001_Vertice_0001 := (&models.Vertice{Name: `Vertice-0001`}).Stage()
-	__Vertice__000002_Vertice_0002 := (&models.Vertice{Name: `Vertice-0002`}).Stage()
-	__Vertice__000003_Vertice_0003 := (&models.Vertice{Name: `Vertice-0003`}).Stage()
-	__Vertice__000004_Vertice_0004 := (&models.Vertice{Name: `Vertice-0004`}).Stage()
-	__Vertice__000005_Vertice_0005 := (&models.Vertice{Name: `Vertice-0005`}).Stage()
-	__Vertice__000006_Vertice_0006 := (&models.Vertice{Name: `Vertice-0006`}).Stage()
-	__Vertice__000007_Vertice_0007 := (&models.Vertice{Name: `Vertice-0007`}).Stage()
+	__Vertice__000000_Vertice_0000 := (&models.Vertice{Name: `Vertice-0000`}).Stage(stage)
+	__Vertice__000001_Vertice_0001 := (&models.Vertice{Name: `Vertice-0001`}).Stage(stage)
+	__Vertice__000002_Vertice_0002 := (&models.Vertice{Name: `Vertice-0002`}).Stage(stage)
+	__Vertice__000003_Vertice_0003 := (&models.Vertice{Name: `Vertice-0003`}).Stage(stage)
+	__Vertice__000004_Vertice_0004 := (&models.Vertice{Name: `Vertice-0004`}).Stage(stage)
+	__Vertice__000005_Vertice_0005 := (&models.Vertice{Name: `Vertice-0005`}).Stage(stage)
+	__Vertice__000006_Vertice_0006 := (&models.Vertice{Name: `Vertice-0006`}).Stage(stage)
+	__Vertice__000007_Vertice_0007 := (&models.Vertice{Name: `Vertice-0007`}).Stage(stage)
 
 	// Setup of values
 

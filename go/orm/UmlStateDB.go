@@ -124,6 +124,11 @@ type BackRepoUmlStateStruct struct {
 	stage *models.StageStruct
 }
 
+func (backRepoUmlState *BackRepoUmlStateStruct) GetStage() (stage *models.StageStruct) {
+	stage = backRepoUmlState.stage
+	return
+}
+
 func (backRepoUmlState *BackRepoUmlStateStruct) GetDB() *gorm.DB {
 	return backRepoUmlState.db
 }
@@ -300,7 +305,7 @@ func (backRepoUmlState *BackRepoUmlStateStruct) CheckoutPhaseOne() (Error error)
 
 	// remove from stage and back repo's 3 maps all umlstates that are not in the checkout
 	for umlstate := range umlstateInstancesToBeRemovedFromTheStage {
-		umlstate.Unstage()
+		umlstate.Unstage(backRepoUmlState.GetStage())
 
 		// remove instance from the back repo 3 maps
 		umlstateID := (*backRepoUmlState.Map_UmlStatePtr_UmlStateDBID)[umlstate]
@@ -325,12 +330,12 @@ func (backRepoUmlState *BackRepoUmlStateStruct) CheckoutPhaseOneInstance(umlstat
 
 		// append model store with the new element
 		umlstate.Name = umlstateDB.Name_Data.String
-		umlstate.Stage()
+		umlstate.Stage(backRepoUmlState.GetStage())
 	}
 	umlstateDB.CopyBasicFieldsToUmlState(umlstate)
 
 	// in some cases, the instance might have been unstaged. It is necessary to stage it again
-	umlstate.Stage()
+	umlstate.Stage(backRepoUmlState.GetStage())
 
 	// preserve pointer to umlstateDB. Otherwise, pointer will is recycled and the map of pointers
 	// Map_UmlStateDBID_UmlStateDB)[umlstateDB hold variable pointers

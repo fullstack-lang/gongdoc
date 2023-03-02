@@ -154,6 +154,11 @@ type BackRepoGongStructShapeStruct struct {
 	stage *models.StageStruct
 }
 
+func (backRepoGongStructShape *BackRepoGongStructShapeStruct) GetStage() (stage *models.StageStruct) {
+	stage = backRepoGongStructShape.stage
+	return
+}
+
 func (backRepoGongStructShape *BackRepoGongStructShapeStruct) GetDB() *gorm.DB {
 	return backRepoGongStructShape.db
 }
@@ -377,7 +382,7 @@ func (backRepoGongStructShape *BackRepoGongStructShapeStruct) CheckoutPhaseOne()
 
 	// remove from stage and back repo's 3 maps all gongstructshapes that are not in the checkout
 	for gongstructshape := range gongstructshapeInstancesToBeRemovedFromTheStage {
-		gongstructshape.Unstage()
+		gongstructshape.Unstage(backRepoGongStructShape.GetStage())
 
 		// remove instance from the back repo 3 maps
 		gongstructshapeID := (*backRepoGongStructShape.Map_GongStructShapePtr_GongStructShapeDBID)[gongstructshape]
@@ -402,12 +407,12 @@ func (backRepoGongStructShape *BackRepoGongStructShapeStruct) CheckoutPhaseOneIn
 
 		// append model store with the new element
 		gongstructshape.Name = gongstructshapeDB.Name_Data.String
-		gongstructshape.Stage()
+		gongstructshape.Stage(backRepoGongStructShape.GetStage())
 	}
 	gongstructshapeDB.CopyBasicFieldsToGongStructShape(gongstructshape)
 
 	// in some cases, the instance might have been unstaged. It is necessary to stage it again
-	gongstructshape.Stage()
+	gongstructshape.Stage(backRepoGongStructShape.GetStage())
 
 	// preserve pointer to gongstructshapeDB. Otherwise, pointer will is recycled and the map of pointers
 	// Map_GongStructShapeDBID_GongStructShapeDB)[gongstructshapeDB hold variable pointers

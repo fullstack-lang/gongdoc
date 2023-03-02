@@ -124,6 +124,11 @@ type BackRepoNoteShapeLinkStruct struct {
 	stage *models.StageStruct
 }
 
+func (backRepoNoteShapeLink *BackRepoNoteShapeLinkStruct) GetStage() (stage *models.StageStruct) {
+	stage = backRepoNoteShapeLink.stage
+	return
+}
+
 func (backRepoNoteShapeLink *BackRepoNoteShapeLinkStruct) GetDB() *gorm.DB {
 	return backRepoNoteShapeLink.db
 }
@@ -300,7 +305,7 @@ func (backRepoNoteShapeLink *BackRepoNoteShapeLinkStruct) CheckoutPhaseOne() (Er
 
 	// remove from stage and back repo's 3 maps all noteshapelinks that are not in the checkout
 	for noteshapelink := range noteshapelinkInstancesToBeRemovedFromTheStage {
-		noteshapelink.Unstage()
+		noteshapelink.Unstage(backRepoNoteShapeLink.GetStage())
 
 		// remove instance from the back repo 3 maps
 		noteshapelinkID := (*backRepoNoteShapeLink.Map_NoteShapeLinkPtr_NoteShapeLinkDBID)[noteshapelink]
@@ -325,12 +330,12 @@ func (backRepoNoteShapeLink *BackRepoNoteShapeLinkStruct) CheckoutPhaseOneInstan
 
 		// append model store with the new element
 		noteshapelink.Name = noteshapelinkDB.Name_Data.String
-		noteshapelink.Stage()
+		noteshapelink.Stage(backRepoNoteShapeLink.GetStage())
 	}
 	noteshapelinkDB.CopyBasicFieldsToNoteShapeLink(noteshapelink)
 
 	// in some cases, the instance might have been unstaged. It is necessary to stage it again
-	noteshapelink.Stage()
+	noteshapelink.Stage(backRepoNoteShapeLink.GetStage())
 
 	// preserve pointer to noteshapelinkDB. Otherwise, pointer will is recycled and the map of pointers
 	// Map_NoteShapeLinkDBID_NoteShapeLinkDB)[noteshapelinkDB hold variable pointers

@@ -161,6 +161,11 @@ type BackRepoNoteShapeStruct struct {
 	stage *models.StageStruct
 }
 
+func (backRepoNoteShape *BackRepoNoteShapeStruct) GetStage() (stage *models.StageStruct) {
+	stage = backRepoNoteShape.stage
+	return
+}
+
 func (backRepoNoteShape *BackRepoNoteShapeStruct) GetDB() *gorm.DB {
 	return backRepoNoteShape.db
 }
@@ -356,7 +361,7 @@ func (backRepoNoteShape *BackRepoNoteShapeStruct) CheckoutPhaseOne() (Error erro
 
 	// remove from stage and back repo's 3 maps all noteshapes that are not in the checkout
 	for noteshape := range noteshapeInstancesToBeRemovedFromTheStage {
-		noteshape.Unstage()
+		noteshape.Unstage(backRepoNoteShape.GetStage())
 
 		// remove instance from the back repo 3 maps
 		noteshapeID := (*backRepoNoteShape.Map_NoteShapePtr_NoteShapeDBID)[noteshape]
@@ -381,12 +386,12 @@ func (backRepoNoteShape *BackRepoNoteShapeStruct) CheckoutPhaseOneInstance(notes
 
 		// append model store with the new element
 		noteshape.Name = noteshapeDB.Name_Data.String
-		noteshape.Stage()
+		noteshape.Stage(backRepoNoteShape.GetStage())
 	}
 	noteshapeDB.CopyBasicFieldsToNoteShape(noteshape)
 
 	// in some cases, the instance might have been unstaged. It is necessary to stage it again
-	noteshape.Stage()
+	noteshape.Stage(backRepoNoteShape.GetStage())
 
 	// preserve pointer to noteshapeDB. Otherwise, pointer will is recycled and the map of pointers
 	// Map_NoteShapeDBID_NoteShapeDB)[noteshapeDB hold variable pointers

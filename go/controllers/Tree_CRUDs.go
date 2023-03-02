@@ -47,20 +47,22 @@ type TreeInput struct {
 // default: genericError
 //
 //	200: treeDBResponse
-func GetTrees(c *gin.Context) {
-	db := orm.BackRepo.BackRepoTree.GetDB()
+func (controller *Controller) GetTrees(c *gin.Context) {
 
 	// source slice
 	var treeDBs []orm.TreeDB
 
 	values := c.Request.URL.Query()
+	stackPath := ""
 	if len(values) == 1 {
 		value := values["GONG__StackPath"]
 		if len(value) == 1 {
-			stackParam := value[0]
-			log.Println("GetTrees", "GONG__StackPath", stackParam)
+			stackPath = value[0]
+			log.Println("GetTrees", "GONG__StackPath", stackPath)
 		}
 	}
+	backRepo := controller.Map_BackRepos[stackPath]
+	db := backRepo.BackRepoTree.GetDB()
 
 	query := db.Find(&treeDBs)
 	if query.Error != nil {
@@ -105,16 +107,19 @@ func GetTrees(c *gin.Context) {
 //
 //	Responses:
 //	  200: nodeDBResponse
-func PostTree(c *gin.Context) {
+func (controller *Controller) PostTree(c *gin.Context) {
 
 	values := c.Request.URL.Query()
+	stackPath := ""
 	if len(values) == 1 {
 		value := values["GONG__StackPath"]
 		if len(value) == 1 {
-			stackParam := value[0]
-			log.Println("PostTrees", "GONG__StackPath", stackParam)
+			stackPath = value[0]
+			log.Println("PostTrees", "GONG__StackPath", stackPath)
 		}
 	}
+	backRepo := controller.Map_BackRepos[stackPath]
+	db := backRepo.BackRepoTree.GetDB()
 
 	// Validate input
 	var input orm.TreeAPI
@@ -134,7 +139,6 @@ func PostTree(c *gin.Context) {
 	treeDB.TreePointersEnconding = input.TreePointersEnconding
 	treeDB.CopyBasicFieldsFromTree(&input.Tree)
 
-	db := orm.BackRepo.BackRepoTree.GetDB()
 	query := db.Create(&treeDB)
 	if query.Error != nil {
 		var returnError GenericError
@@ -146,16 +150,16 @@ func PostTree(c *gin.Context) {
 	}
 
 	// get an instance (not staged) from DB instance, and call callback function
-	orm.BackRepo.BackRepoTree.CheckoutPhaseOneInstance(&treeDB)
-	tree := (*orm.BackRepo.BackRepoTree.Map_TreeDBID_TreePtr)[treeDB.ID]
+	backRepo.BackRepoTree.CheckoutPhaseOneInstance(&treeDB)
+	tree := (*backRepo.BackRepoTree.Map_TreeDBID_TreePtr)[treeDB.ID]
 
 	if tree != nil {
-		models.AfterCreateFromFront(&models.Stage, tree)
+		models.AfterCreateFromFront(backRepo.GetStage(), tree)
 	}
 
 	// a POST is equivalent to a back repo commit increase
 	// (this will be improved with implementation of unit of work design pattern)
-	orm.BackRepo.IncrementPushFromFrontNb()
+	backRepo.IncrementPushFromFrontNb()
 
 	c.JSON(http.StatusOK, treeDB)
 }
@@ -170,18 +174,19 @@ func PostTree(c *gin.Context) {
 // default: genericError
 //
 //	200: treeDBResponse
-func GetTree(c *gin.Context) {
+func (controller *Controller) GetTree(c *gin.Context) {
 
 	values := c.Request.URL.Query()
+	stackPath := ""
 	if len(values) == 1 {
 		value := values["GONG__StackPath"]
 		if len(value) == 1 {
-			stackParam := value[0]
-			log.Println("GetTree", "GONG__StackPath", stackParam)
+			stackPath = value[0]
+			log.Println("GetTree", "GONG__StackPath", stackPath)
 		}
 	}
-
-	db := orm.BackRepo.BackRepoTree.GetDB()
+	backRepo := controller.Map_BackRepos[stackPath]
+	db := backRepo.BackRepoTree.GetDB()
 
 	// Get treeDB in DB
 	var treeDB orm.TreeDB
@@ -212,16 +217,19 @@ func GetTree(c *gin.Context) {
 // default: genericError
 //
 //	200: treeDBResponse
-func UpdateTree(c *gin.Context) {
+func (controller *Controller) UpdateTree(c *gin.Context) {
 
 	values := c.Request.URL.Query()
+	stackPath := ""
 	if len(values) == 1 {
 		value := values["GONG__StackPath"]
 		if len(value) == 1 {
-			stackParam := value[0]
-			log.Println("UpdateTree", "GONG__StackPath", stackParam)
+			stackPath = value[0]
+			log.Println("UpdateTree", "GONG__StackPath", stackPath)
 		}
 	}
+	backRepo := controller.Map_BackRepos[stackPath]
+	db := backRepo.BackRepoTree.GetDB()
 
 	// Validate input
 	var input orm.TreeAPI
@@ -230,8 +238,6 @@ func UpdateTree(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
-
-	db := orm.BackRepo.BackRepoTree.GetDB()
 
 	// Get model if exist
 	var treeDB orm.TreeDB
@@ -267,16 +273,16 @@ func UpdateTree(c *gin.Context) {
 	treeDB.CopyBasicFieldsToTree(treeNew)
 
 	// get stage instance from DB instance, and call callback function
-	treeOld := (*orm.BackRepo.BackRepoTree.Map_TreeDBID_TreePtr)[treeDB.ID]
+	treeOld := (*backRepo.BackRepoTree.Map_TreeDBID_TreePtr)[treeDB.ID]
 	if treeOld != nil {
-		models.AfterUpdateFromFront(&models.Stage, treeOld, treeNew)
+		models.AfterUpdateFromFront(backRepo.GetStage(), treeOld, treeNew)
 	}
 
 	// an UPDATE generates a back repo commit increase
 	// (this will be improved with implementation of unit of work design pattern)
 	// in some cases, with the marshalling of the stage, this operation might
 	// generates a checkout
-	orm.BackRepo.IncrementPushFromFrontNb()
+	backRepo.IncrementPushFromFrontNb()
 
 	// return status OK with the marshalling of the the treeDB
 	c.JSON(http.StatusOK, treeDB)
@@ -291,18 +297,19 @@ func UpdateTree(c *gin.Context) {
 // default: genericError
 //
 //	200: treeDBResponse
-func DeleteTree(c *gin.Context) {
+func (controller *Controller) DeleteTree(c *gin.Context) {
 
 	values := c.Request.URL.Query()
+	stackPath := ""
 	if len(values) == 1 {
 		value := values["GONG__StackPath"]
 		if len(value) == 1 {
-			stackParam := value[0]
-			log.Println("DeleteTree", "GONG__StackPath", stackParam)
+			stackPath = value[0]
+			log.Println("DeleteTree", "GONG__StackPath", stackPath)
 		}
 	}
-
-	db := orm.BackRepo.BackRepoTree.GetDB()
+	backRepo := controller.Map_BackRepos[stackPath]
+	db := backRepo.BackRepoTree.GetDB()
 
 	// Get model if exist
 	var treeDB orm.TreeDB
@@ -323,14 +330,14 @@ func DeleteTree(c *gin.Context) {
 	treeDB.CopyBasicFieldsToTree(treeDeleted)
 
 	// get stage instance from DB instance, and call callback function
-	treeStaged := (*orm.BackRepo.BackRepoTree.Map_TreeDBID_TreePtr)[treeDB.ID]
+	treeStaged := (*backRepo.BackRepoTree.Map_TreeDBID_TreePtr)[treeDB.ID]
 	if treeStaged != nil {
-		models.AfterDeleteFromFront(&models.Stage, treeStaged, treeDeleted)
+		models.AfterDeleteFromFront(backRepo.GetStage(), treeStaged, treeDeleted)
 	}
 
 	// a DELETE generates a back repo commit increase
 	// (this will be improved with implementation of unit of work design pattern)
-	orm.BackRepo.IncrementPushFromFrontNb()
+	backRepo.IncrementPushFromFrontNb()
 
 	c.JSON(http.StatusOK, gin.H{"data": true})
 }
