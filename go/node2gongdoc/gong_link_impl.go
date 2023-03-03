@@ -13,7 +13,7 @@ type GongLinkImpl struct {
 }
 
 func (gongLinkImpl *GongLinkImpl) OnAfterUpdate(
-	stage *gongdoc_models.StageStruct,
+	gongdocStage *gongdoc_models.StageStruct,
 	stagedNode, frontNode *gongdoc_models.Node) {
 
 	classdiagram := gongLinkImpl.nodeCb.GetSelectedClassdiagram()
@@ -41,9 +41,9 @@ func (gongLinkImpl *GongLinkImpl) OnAfterUpdate(
 
 	// adding a note link
 	if !stagedNode.IsChecked && frontNode.IsChecked {
-		stage.Checkout()
+		gongdocStage.Checkout()
 
-		noteShapeLink := (&gongdoc_models.NoteShapeLink{Name: stagedNode.GetName()}).Stage()
+		noteShapeLink := (&gongdoc_models.NoteShapeLink{Name: stagedNode.GetName()}).Stage(gongdocStage)
 
 		if strings.ContainsAny(stagedNode.Name, ".") {
 
@@ -65,7 +65,7 @@ func (gongLinkImpl *GongLinkImpl) OnAfterUpdate(
 
 	// removing a note link
 	if stagedNode.IsChecked && !frontNode.IsChecked {
-		stage.Checkout()
+		gongdocStage.Checkout()
 
 		// get the relevant gong note link
 		var noteShapeLink *gongdoc_models.NoteShapeLink
@@ -85,7 +85,7 @@ func (gongLinkImpl *GongLinkImpl) OnAfterUpdate(
 			}
 		}
 
-		noteShapeLink.Unstage()
+		noteShapeLink.Unstage(gongdocStage)
 		noteshape.NoteShapeLinks = remove(noteshape.NoteShapeLinks, noteShapeLink)
 
 	}

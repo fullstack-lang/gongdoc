@@ -14,7 +14,7 @@ import (
 
 func LoadEmbeddedDiagramPackage(fs embed.FS, modelPkg *gong_models.ModelPkg) (diagramPackage *gongdoc_models.DiagramPackage, err error) {
 
-	diagramPackage = (&gongdoc_models.DiagramPackage{}).Stage()
+	diagramPackage = (&gongdoc_models.DiagramPackage{}).Stage(diagramPackage.Stage_)
 	diagramPackage.Map_Identifier_NbInstances = make(map[string]int)
 	diagramPackage.IsEditable = false
 	diagramPackage.ModelPkg = modelPkg
