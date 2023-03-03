@@ -136,6 +136,11 @@ type BackRepoFieldStruct struct {
 	stage *models.StageStruct
 }
 
+func (backRepoField *BackRepoFieldStruct) GetStage() (stage *models.StageStruct) {
+	stage = backRepoField.stage
+	return
+}
+
 func (backRepoField *BackRepoFieldStruct) GetDB() *gorm.DB {
 	return backRepoField.db
 }
@@ -312,7 +317,7 @@ func (backRepoField *BackRepoFieldStruct) CheckoutPhaseOne() (Error error) {
 
 	// remove from stage and back repo's 3 maps all fields that are not in the checkout
 	for field := range fieldInstancesToBeRemovedFromTheStage {
-		field.Unstage()
+		field.Unstage(backRepoField.GetStage())
 
 		// remove instance from the back repo 3 maps
 		fieldID := (*backRepoField.Map_FieldPtr_FieldDBID)[field]
@@ -337,12 +342,12 @@ func (backRepoField *BackRepoFieldStruct) CheckoutPhaseOneInstance(fieldDB *Fiel
 
 		// append model store with the new element
 		field.Name = fieldDB.Name_Data.String
-		field.Stage()
+		field.Stage(backRepoField.GetStage())
 	}
 	fieldDB.CopyBasicFieldsToField(field)
 
 	// in some cases, the instance might have been unstaged. It is necessary to stage it again
-	field.Stage()
+	field.Stage(backRepoField.GetStage())
 
 	// preserve pointer to fieldDB. Otherwise, pointer will is recycled and the map of pointers
 	// Map_FieldDBID_FieldDB)[fieldDB hold variable pointers

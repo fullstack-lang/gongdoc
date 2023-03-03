@@ -19,6 +19,9 @@ const LegacyDiagramUmarshalling = false
 type DiagramPackage struct {
 	Name string
 
+	// Stage_ where the DiagamPackage lives
+	Stage_ *StageStruct
+
 	// Path to the "diagrams" directory
 	Path string
 
@@ -106,7 +109,7 @@ func (diagramPackage *DiagramPackage) UnmarshallOneDiagram(stage *StageStruct, d
 
 			if !ok {
 				log.Println("UnmarshallOneDiagram: In diagram", classdiagram.Name, "unknown note related to note shape", gongStructShape.Identifier)
-				gongStructShape.Unstage()
+				gongStructShape.Unstage(diagramPackage.Stage_)
 
 				if contains(classdiagram.GongStructShapes, gongStructShape) {
 					classdiagram.GongStructShapes = remove(classdiagram.GongStructShapes, gongStructShape)
@@ -125,7 +128,7 @@ func (diagramPackage *DiagramPackage) UnmarshallOneDiagram(stage *StageStruct, d
 
 			if !ok {
 				log.Println("UnmarshallOneDiagram: In diagram", classdiagram.Name, "unknown note related to note shape", noteShape.Identifier)
-				noteShape.Unstage()
+				noteShape.Unstage(diagramPackage.Stage_)
 
 				if contains(classdiagram.NoteShapes, noteShape) {
 					classdiagram.NoteShapes = remove(classdiagram.NoteShapes, noteShape)

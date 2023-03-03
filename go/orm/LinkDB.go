@@ -140,6 +140,11 @@ type BackRepoLinkStruct struct {
 	stage *models.StageStruct
 }
 
+func (backRepoLink *BackRepoLinkStruct) GetStage() (stage *models.StageStruct) {
+	stage = backRepoLink.stage
+	return
+}
+
 func (backRepoLink *BackRepoLinkStruct) GetDB() *gorm.DB {
 	return backRepoLink.db
 }
@@ -325,7 +330,7 @@ func (backRepoLink *BackRepoLinkStruct) CheckoutPhaseOne() (Error error) {
 
 	// remove from stage and back repo's 3 maps all links that are not in the checkout
 	for link := range linkInstancesToBeRemovedFromTheStage {
-		link.Unstage()
+		link.Unstage(backRepoLink.GetStage())
 
 		// remove instance from the back repo 3 maps
 		linkID := (*backRepoLink.Map_LinkPtr_LinkDBID)[link]
@@ -350,12 +355,12 @@ func (backRepoLink *BackRepoLinkStruct) CheckoutPhaseOneInstance(linkDB *LinkDB)
 
 		// append model store with the new element
 		link.Name = linkDB.Name_Data.String
-		link.Stage()
+		link.Stage(backRepoLink.GetStage())
 	}
 	linkDB.CopyBasicFieldsToLink(link)
 
 	// in some cases, the instance might have been unstaged. It is necessary to stage it again
-	link.Stage()
+	link.Stage(backRepoLink.GetStage())
 
 	// preserve pointer to linkDB. Otherwise, pointer will is recycled and the map of pointers
 	// Map_LinkDBID_LinkDB)[linkDB hold variable pointers

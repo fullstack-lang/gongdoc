@@ -118,6 +118,11 @@ type BackRepoVerticeStruct struct {
 	stage *models.StageStruct
 }
 
+func (backRepoVertice *BackRepoVerticeStruct) GetStage() (stage *models.StageStruct) {
+	stage = backRepoVertice.stage
+	return
+}
+
 func (backRepoVertice *BackRepoVerticeStruct) GetDB() *gorm.DB {
 	return backRepoVertice.db
 }
@@ -294,7 +299,7 @@ func (backRepoVertice *BackRepoVerticeStruct) CheckoutPhaseOne() (Error error) {
 
 	// remove from stage and back repo's 3 maps all vertices that are not in the checkout
 	for vertice := range verticeInstancesToBeRemovedFromTheStage {
-		vertice.Unstage()
+		vertice.Unstage(backRepoVertice.GetStage())
 
 		// remove instance from the back repo 3 maps
 		verticeID := (*backRepoVertice.Map_VerticePtr_VerticeDBID)[vertice]
@@ -319,12 +324,12 @@ func (backRepoVertice *BackRepoVerticeStruct) CheckoutPhaseOneInstance(verticeDB
 
 		// append model store with the new element
 		vertice.Name = verticeDB.Name_Data.String
-		vertice.Stage()
+		vertice.Stage(backRepoVertice.GetStage())
 	}
 	verticeDB.CopyBasicFieldsToVertice(vertice)
 
 	// in some cases, the instance might have been unstaged. It is necessary to stage it again
-	vertice.Stage()
+	vertice.Stage(backRepoVertice.GetStage())
 
 	// preserve pointer to verticeDB. Otherwise, pointer will is recycled and the map of pointers
 	// Map_VerticeDBID_VerticeDB)[verticeDB hold variable pointers

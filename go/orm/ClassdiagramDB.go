@@ -119,6 +119,11 @@ type BackRepoClassdiagramStruct struct {
 	stage *models.StageStruct
 }
 
+func (backRepoClassdiagram *BackRepoClassdiagramStruct) GetStage() (stage *models.StageStruct) {
+	stage = backRepoClassdiagram.stage
+	return
+}
+
 func (backRepoClassdiagram *BackRepoClassdiagramStruct) GetDB() *gorm.DB {
 	return backRepoClassdiagram.db
 }
@@ -352,7 +357,7 @@ func (backRepoClassdiagram *BackRepoClassdiagramStruct) CheckoutPhaseOne() (Erro
 
 	// remove from stage and back repo's 3 maps all classdiagrams that are not in the checkout
 	for classdiagram := range classdiagramInstancesToBeRemovedFromTheStage {
-		classdiagram.Unstage()
+		classdiagram.Unstage(backRepoClassdiagram.GetStage())
 
 		// remove instance from the back repo 3 maps
 		classdiagramID := (*backRepoClassdiagram.Map_ClassdiagramPtr_ClassdiagramDBID)[classdiagram]
@@ -377,12 +382,12 @@ func (backRepoClassdiagram *BackRepoClassdiagramStruct) CheckoutPhaseOneInstance
 
 		// append model store with the new element
 		classdiagram.Name = classdiagramDB.Name_Data.String
-		classdiagram.Stage()
+		classdiagram.Stage(backRepoClassdiagram.GetStage())
 	}
 	classdiagramDB.CopyBasicFieldsToClassdiagram(classdiagram)
 
 	// in some cases, the instance might have been unstaged. It is necessary to stage it again
-	classdiagram.Stage()
+	classdiagram.Stage(backRepoClassdiagram.GetStage())
 
 	// preserve pointer to classdiagramDB. Otherwise, pointer will is recycled and the map of pointers
 	// Map_ClassdiagramDBID_ClassdiagramDB)[classdiagramDB hold variable pointers

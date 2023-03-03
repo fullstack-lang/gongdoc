@@ -154,7 +154,7 @@ func (controller *Controller) PostUmlsc(c *gin.Context) {
 	umlsc := (*backRepo.BackRepoUmlsc.Map_UmlscDBID_UmlscPtr)[umlscDB.ID]
 
 	if umlsc != nil {
-		models.AfterCreateFromFront(&models.Stage, umlsc)
+		models.AfterCreateFromFront(backRepo.GetStage(), umlsc)
 	}
 
 	// a POST is equivalent to a back repo commit increase
@@ -275,7 +275,7 @@ func (controller *Controller) UpdateUmlsc(c *gin.Context) {
 	// get stage instance from DB instance, and call callback function
 	umlscOld := (*backRepo.BackRepoUmlsc.Map_UmlscDBID_UmlscPtr)[umlscDB.ID]
 	if umlscOld != nil {
-		models.AfterUpdateFromFront(&models.Stage, umlscOld, umlscNew)
+		models.AfterUpdateFromFront(backRepo.GetStage(), umlscOld, umlscNew)
 	}
 
 	// an UPDATE generates a back repo commit increase
@@ -332,7 +332,7 @@ func (controller *Controller) DeleteUmlsc(c *gin.Context) {
 	// get stage instance from DB instance, and call callback function
 	umlscStaged := (*backRepo.BackRepoUmlsc.Map_UmlscDBID_UmlscPtr)[umlscDB.ID]
 	if umlscStaged != nil {
-		models.AfterDeleteFromFront(&models.Stage, umlscStaged, umlscDeleted)
+		models.AfterDeleteFromFront(backRepo.GetStage(), umlscStaged, umlscDeleted)
 	}
 
 	// a DELETE generates a back repo commit increase

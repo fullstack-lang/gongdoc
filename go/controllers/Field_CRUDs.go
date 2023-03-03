@@ -154,7 +154,7 @@ func (controller *Controller) PostField(c *gin.Context) {
 	field := (*backRepo.BackRepoField.Map_FieldDBID_FieldPtr)[fieldDB.ID]
 
 	if field != nil {
-		models.AfterCreateFromFront(&models.Stage, field)
+		models.AfterCreateFromFront(backRepo.GetStage(), field)
 	}
 
 	// a POST is equivalent to a back repo commit increase
@@ -275,7 +275,7 @@ func (controller *Controller) UpdateField(c *gin.Context) {
 	// get stage instance from DB instance, and call callback function
 	fieldOld := (*backRepo.BackRepoField.Map_FieldDBID_FieldPtr)[fieldDB.ID]
 	if fieldOld != nil {
-		models.AfterUpdateFromFront(&models.Stage, fieldOld, fieldNew)
+		models.AfterUpdateFromFront(backRepo.GetStage(), fieldOld, fieldNew)
 	}
 
 	// an UPDATE generates a back repo commit increase
@@ -332,7 +332,7 @@ func (controller *Controller) DeleteField(c *gin.Context) {
 	// get stage instance from DB instance, and call callback function
 	fieldStaged := (*backRepo.BackRepoField.Map_FieldDBID_FieldPtr)[fieldDB.ID]
 	if fieldStaged != nil {
-		models.AfterDeleteFromFront(&models.Stage, fieldStaged, fieldDeleted)
+		models.AfterDeleteFromFront(backRepo.GetStage(), fieldStaged, fieldDeleted)
 	}
 
 	// a DELETE generates a back repo commit increase

@@ -154,7 +154,7 @@ func (controller *Controller) PostGongEnumShape(c *gin.Context) {
 	gongenumshape := (*backRepo.BackRepoGongEnumShape.Map_GongEnumShapeDBID_GongEnumShapePtr)[gongenumshapeDB.ID]
 
 	if gongenumshape != nil {
-		models.AfterCreateFromFront(&models.Stage, gongenumshape)
+		models.AfterCreateFromFront(backRepo.GetStage(), gongenumshape)
 	}
 
 	// a POST is equivalent to a back repo commit increase
@@ -275,7 +275,7 @@ func (controller *Controller) UpdateGongEnumShape(c *gin.Context) {
 	// get stage instance from DB instance, and call callback function
 	gongenumshapeOld := (*backRepo.BackRepoGongEnumShape.Map_GongEnumShapeDBID_GongEnumShapePtr)[gongenumshapeDB.ID]
 	if gongenumshapeOld != nil {
-		models.AfterUpdateFromFront(&models.Stage, gongenumshapeOld, gongenumshapeNew)
+		models.AfterUpdateFromFront(backRepo.GetStage(), gongenumshapeOld, gongenumshapeNew)
 	}
 
 	// an UPDATE generates a back repo commit increase
@@ -332,7 +332,7 @@ func (controller *Controller) DeleteGongEnumShape(c *gin.Context) {
 	// get stage instance from DB instance, and call callback function
 	gongenumshapeStaged := (*backRepo.BackRepoGongEnumShape.Map_GongEnumShapeDBID_GongEnumShapePtr)[gongenumshapeDB.ID]
 	if gongenumshapeStaged != nil {
-		models.AfterDeleteFromFront(&models.Stage, gongenumshapeStaged, gongenumshapeDeleted)
+		models.AfterDeleteFromFront(backRepo.GetStage(), gongenumshapeStaged, gongenumshapeDeleted)
 	}
 
 	// a DELETE generates a back repo commit increase

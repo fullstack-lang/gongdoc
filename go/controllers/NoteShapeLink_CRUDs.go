@@ -154,7 +154,7 @@ func (controller *Controller) PostNoteShapeLink(c *gin.Context) {
 	noteshapelink := (*backRepo.BackRepoNoteShapeLink.Map_NoteShapeLinkDBID_NoteShapeLinkPtr)[noteshapelinkDB.ID]
 
 	if noteshapelink != nil {
-		models.AfterCreateFromFront(&models.Stage, noteshapelink)
+		models.AfterCreateFromFront(backRepo.GetStage(), noteshapelink)
 	}
 
 	// a POST is equivalent to a back repo commit increase
@@ -275,7 +275,7 @@ func (controller *Controller) UpdateNoteShapeLink(c *gin.Context) {
 	// get stage instance from DB instance, and call callback function
 	noteshapelinkOld := (*backRepo.BackRepoNoteShapeLink.Map_NoteShapeLinkDBID_NoteShapeLinkPtr)[noteshapelinkDB.ID]
 	if noteshapelinkOld != nil {
-		models.AfterUpdateFromFront(&models.Stage, noteshapelinkOld, noteshapelinkNew)
+		models.AfterUpdateFromFront(backRepo.GetStage(), noteshapelinkOld, noteshapelinkNew)
 	}
 
 	// an UPDATE generates a back repo commit increase
@@ -332,7 +332,7 @@ func (controller *Controller) DeleteNoteShapeLink(c *gin.Context) {
 	// get stage instance from DB instance, and call callback function
 	noteshapelinkStaged := (*backRepo.BackRepoNoteShapeLink.Map_NoteShapeLinkDBID_NoteShapeLinkPtr)[noteshapelinkDB.ID]
 	if noteshapelinkStaged != nil {
-		models.AfterDeleteFromFront(&models.Stage, noteshapelinkStaged, noteshapelinkDeleted)
+		models.AfterDeleteFromFront(backRepo.GetStage(), noteshapelinkStaged, noteshapelinkDeleted)
 	}
 
 	// a DELETE generates a back repo commit increase

@@ -45,7 +45,7 @@ func (classdiagramImpl *ClassdiagramImpl) OnAfterUpdate(
 	// on need to commit the staged node for the front to reconstruct
 	// the node as checked and overides the unchecking action
 	if stagedNode.IsChecked && !frontNode.IsChecked {
-		stagedNode.Commit()
+		stagedNode.Commit(gongdocStage)
 	}
 
 	// in case the front change the name of the diagram
@@ -62,7 +62,7 @@ func (classdiagramImpl *ClassdiagramImpl) OnAfterUpdate(
 				continue
 			} else {
 				log.Println("The name of the diagram is not a correct identifier in go: " + frontNode.Name)
-				stagedNode.Commit()
+				stagedNode.Commit(gongdocStage)
 				return
 			}
 		}

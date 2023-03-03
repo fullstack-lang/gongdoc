@@ -154,7 +154,7 @@ func (controller *Controller) PostGongStructShape(c *gin.Context) {
 	gongstructshape := (*backRepo.BackRepoGongStructShape.Map_GongStructShapeDBID_GongStructShapePtr)[gongstructshapeDB.ID]
 
 	if gongstructshape != nil {
-		models.AfterCreateFromFront(&models.Stage, gongstructshape)
+		models.AfterCreateFromFront(backRepo.GetStage(), gongstructshape)
 	}
 
 	// a POST is equivalent to a back repo commit increase
@@ -275,7 +275,7 @@ func (controller *Controller) UpdateGongStructShape(c *gin.Context) {
 	// get stage instance from DB instance, and call callback function
 	gongstructshapeOld := (*backRepo.BackRepoGongStructShape.Map_GongStructShapeDBID_GongStructShapePtr)[gongstructshapeDB.ID]
 	if gongstructshapeOld != nil {
-		models.AfterUpdateFromFront(&models.Stage, gongstructshapeOld, gongstructshapeNew)
+		models.AfterUpdateFromFront(backRepo.GetStage(), gongstructshapeOld, gongstructshapeNew)
 	}
 
 	// an UPDATE generates a back repo commit increase
@@ -332,7 +332,7 @@ func (controller *Controller) DeleteGongStructShape(c *gin.Context) {
 	// get stage instance from DB instance, and call callback function
 	gongstructshapeStaged := (*backRepo.BackRepoGongStructShape.Map_GongStructShapeDBID_GongStructShapePtr)[gongstructshapeDB.ID]
 	if gongstructshapeStaged != nil {
-		models.AfterDeleteFromFront(&models.Stage, gongstructshapeStaged, gongstructshapeDeleted)
+		models.AfterDeleteFromFront(backRepo.GetStage(), gongstructshapeStaged, gongstructshapeDeleted)
 	}
 
 	// a DELETE generates a back repo commit increase

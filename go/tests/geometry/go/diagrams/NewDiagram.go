@@ -46,44 +46,44 @@ var map_DocLink_Identifier_NewDiagram map[string]any = map[string]any{
 // }
 
 // NewDiagramInjection will stage objects of database "NewDiagram"
-func NewDiagramInjection() {
+func NewDiagramInjection(stage *models.StageStruct) {
 
 	// Declaration of instances to stage
 
 	// Declarations of staged instances of Classdiagram
-	__Classdiagram__000000_NewDiagram := (&models.Classdiagram{Name: `NewDiagram`}).Stage()
+	__Classdiagram__000000_NewDiagram := (&models.Classdiagram{Name: `NewDiagram`}).Stage(stage)
 
 	// Declarations of staged instances of DiagramPackage
 
 	// Declarations of staged instances of Field
 
 	// Declarations of staged instances of GongEnumShape
-	__GongEnumShape__000000_NewDiagram_LineTypeString := (&models.GongEnumShape{Name: `NewDiagram-LineTypeString`}).Stage()
+	__GongEnumShape__000000_NewDiagram_LineTypeString := (&models.GongEnumShape{Name: `NewDiagram-LineTypeString`}).Stage(stage)
 
 	// Declarations of staged instances of GongEnumValueEntry
 
 	// Declarations of staged instances of GongStructShape
-	__GongStructShape__000000_NewDiagram_Line := (&models.GongStructShape{Name: `NewDiagram-Line`}).Stage()
-	__GongStructShape__000001_NewDiagram_Point := (&models.GongStructShape{Name: `NewDiagram-Point`}).Stage()
+	__GongStructShape__000000_NewDiagram_Line := (&models.GongStructShape{Name: `NewDiagram-Line`}).Stage(stage)
+	__GongStructShape__000001_NewDiagram_Point := (&models.GongStructShape{Name: `NewDiagram-Point`}).Stage(stage)
 
 	// Declarations of staged instances of Link
-	__Link__000000_Start := (&models.Link{Name: `Start`}).Stage()
+	__Link__000000_Start := (&models.Link{Name: `Start`}).Stage(stage)
 
 	// Declarations of staged instances of Node
 
 	// Declarations of staged instances of NoteShape
-	__NoteShape__000000_ShortNodeOnModels := (&models.NoteShape{Name: `ShortNodeOnModels`}).Stage()
+	__NoteShape__000000_ShortNodeOnModels := (&models.NoteShape{Name: `ShortNodeOnModels`}).Stage(stage)
 
 	// Declarations of staged instances of NoteShapeLink
-	__NoteShapeLink__000000_Line := (&models.NoteShapeLink{Name: `Line`}).Stage()
-	__NoteShapeLink__000001_Line_Start := (&models.NoteShapeLink{Name: `Line.Start`}).Stage()
-	__NoteShapeLink__000002_LineTypeString := (&models.NoteShapeLink{Name: `LineTypeString`}).Stage()
-	__NoteShapeLink__000003_Point := (&models.NoteShapeLink{Name: `Point`}).Stage()
+	__NoteShapeLink__000000_Line := (&models.NoteShapeLink{Name: `Line`}).Stage(stage)
+	__NoteShapeLink__000001_Line_Start := (&models.NoteShapeLink{Name: `Line.Start`}).Stage(stage)
+	__NoteShapeLink__000002_LineTypeString := (&models.NoteShapeLink{Name: `LineTypeString`}).Stage(stage)
+	__NoteShapeLink__000003_Point := (&models.NoteShapeLink{Name: `Point`}).Stage(stage)
 
 	// Declarations of staged instances of Position
-	__Position__000000_Pos_NewDiagram_Line := (&models.Position{Name: `Pos-NewDiagram-Line`}).Stage()
-	__Position__000001_Pos_NewDiagram_LineTypeString := (&models.Position{Name: `Pos-NewDiagram-LineTypeString`}).Stage()
-	__Position__000002_Pos_NewDiagram_Point := (&models.Position{Name: `Pos-NewDiagram-Point`}).Stage()
+	__Position__000000_Pos_NewDiagram_Line := (&models.Position{Name: `Pos-NewDiagram-Line`}).Stage(stage)
+	__Position__000001_Pos_NewDiagram_LineTypeString := (&models.Position{Name: `Pos-NewDiagram-LineTypeString`}).Stage(stage)
+	__Position__000002_Pos_NewDiagram_Point := (&models.Position{Name: `Pos-NewDiagram-Point`}).Stage(stage)
 
 	// Declarations of staged instances of Tree
 
@@ -92,7 +92,7 @@ func NewDiagramInjection() {
 	// Declarations of staged instances of Umlsc
 
 	// Declarations of staged instances of Vertice
-	__Vertice__000000_Verticle_in_class_diagram_NewDiagram_in_middle_between_NewDiagram_Line_and_NewDiagram_Point := (&models.Vertice{Name: `Verticle in class diagram NewDiagram in middle between NewDiagram-Line and NewDiagram-Point`}).Stage()
+	__Vertice__000000_Verticle_in_class_diagram_NewDiagram_in_middle_between_NewDiagram_Line_and_NewDiagram_Point := (&models.Vertice{Name: `Verticle in class diagram NewDiagram in middle between NewDiagram-Line and NewDiagram-Point`}).Stage(stage)
 
 	// Setup of values
 
@@ -102,7 +102,7 @@ func NewDiagramInjection() {
 
 	// GongEnumShape values setup
 	__GongEnumShape__000000_NewDiagram_LineTypeString.Name = `NewDiagram-LineTypeString`
-	
+
 	// comment added to overcome the problem with the comment map association
 
 	//gong:ident [ref_models.LineTypeString]
@@ -112,7 +112,7 @@ func NewDiagramInjection() {
 
 	// GongStructShape values setup
 	__GongStructShape__000000_NewDiagram_Line.Name = `NewDiagram-Line`
-	
+
 	// comment added to overcome the problem with the comment map association
 
 	//gong:ident [ref_models.Line]
@@ -125,7 +125,7 @@ func NewDiagramInjection() {
 
 	// GongStructShape values setup
 	__GongStructShape__000001_NewDiagram_Point.Name = `NewDiagram-Point`
-	
+
 	// comment added to overcome the problem with the comment map association
 
 	//gong:ident [ref_models.Point]
@@ -138,12 +138,12 @@ func NewDiagramInjection() {
 
 	// Link values setup
 	__Link__000000_Start.Name = `Start`
-	
+
 	// comment added to overcome the problem with the comment map association
 
 	//gong:ident [ref_models.Line.Start]
 	__Link__000000_Start.Identifier = `ref_models.Line.Start`
-	
+
 	// comment added to overcome the problem with the comment map association
 
 	//gong:ident [ref_models.Point]
@@ -153,7 +153,7 @@ func NewDiagramInjection() {
 
 	// NoteShape values setup
 	__NoteShape__000000_ShortNodeOnModels.Name = `ShortNodeOnModels`
-	
+
 	// comment added to overcome the problem with the comment map association
 
 	//gong:ident [ref_models.ShortNodeOnModels]
@@ -176,7 +176,7 @@ are referenced in the go code
 
 	// NoteShapeLink values setup
 	__NoteShapeLink__000000_Line.Name = `Line`
-	
+
 	// comment added to overcome the problem with the comment map association
 
 	//gong:ident [ref_models.Line]
@@ -185,7 +185,7 @@ are referenced in the go code
 
 	// NoteShapeLink values setup
 	__NoteShapeLink__000001_Line_Start.Name = `Line.Start`
-	
+
 	// comment added to overcome the problem with the comment map association
 
 	//gong:ident [ref_models.Line.Start]
@@ -194,7 +194,7 @@ are referenced in the go code
 
 	// NoteShapeLink values setup
 	__NoteShapeLink__000002_LineTypeString.Name = `LineTypeString`
-	
+
 	// comment added to overcome the problem with the comment map association
 
 	//gong:ident [ref_models.LineTypeString]
@@ -203,7 +203,7 @@ are referenced in the go code
 
 	// NoteShapeLink values setup
 	__NoteShapeLink__000003_Point.Name = `Point`
-	
+
 	// comment added to overcome the problem with the comment map association
 
 	//gong:ident [ref_models.Point]
@@ -211,8 +211,8 @@ are referenced in the go code
 	__NoteShapeLink__000003_Point.Type = models.NOTE_SHAPE_LINK_TO_GONG_STRUCT_OR_ENUM_SHAPE
 
 	// Position values setup
-	__Position__000000_Pos_NewDiagram_Line.X = 180.000000
-	__Position__000000_Pos_NewDiagram_Line.Y = 190.000000
+	__Position__000000_Pos_NewDiagram_Line.X = 170.000000
+	__Position__000000_Pos_NewDiagram_Line.Y = 200.000000
 	__Position__000000_Pos_NewDiagram_Line.Name = `Pos-NewDiagram-Line`
 
 	// Position values setup

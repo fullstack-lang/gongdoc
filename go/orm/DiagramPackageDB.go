@@ -142,6 +142,11 @@ type BackRepoDiagramPackageStruct struct {
 	stage *models.StageStruct
 }
 
+func (backRepoDiagramPackage *BackRepoDiagramPackageStruct) GetStage() (stage *models.StageStruct) {
+	stage = backRepoDiagramPackage.stage
+	return
+}
+
 func (backRepoDiagramPackage *BackRepoDiagramPackageStruct) GetDB() *gorm.DB {
 	return backRepoDiagramPackage.db
 }
@@ -365,7 +370,7 @@ func (backRepoDiagramPackage *BackRepoDiagramPackageStruct) CheckoutPhaseOne() (
 
 	// remove from stage and back repo's 3 maps all diagrampackages that are not in the checkout
 	for diagrampackage := range diagrampackageInstancesToBeRemovedFromTheStage {
-		diagrampackage.Unstage()
+		diagrampackage.Unstage(backRepoDiagramPackage.GetStage())
 
 		// remove instance from the back repo 3 maps
 		diagrampackageID := (*backRepoDiagramPackage.Map_DiagramPackagePtr_DiagramPackageDBID)[diagrampackage]
@@ -390,12 +395,12 @@ func (backRepoDiagramPackage *BackRepoDiagramPackageStruct) CheckoutPhaseOneInst
 
 		// append model store with the new element
 		diagrampackage.Name = diagrampackageDB.Name_Data.String
-		diagrampackage.Stage()
+		diagrampackage.Stage(backRepoDiagramPackage.GetStage())
 	}
 	diagrampackageDB.CopyBasicFieldsToDiagramPackage(diagrampackage)
 
 	// in some cases, the instance might have been unstaged. It is necessary to stage it again
-	diagrampackage.Stage()
+	diagrampackage.Stage(backRepoDiagramPackage.GetStage())
 
 	// preserve pointer to diagrampackageDB. Otherwise, pointer will is recycled and the map of pointers
 	// Map_DiagramPackageDBID_DiagramPackageDB)[diagrampackageDB hold variable pointers

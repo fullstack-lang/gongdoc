@@ -154,7 +154,7 @@ func (controller *Controller) PostPosition(c *gin.Context) {
 	position := (*backRepo.BackRepoPosition.Map_PositionDBID_PositionPtr)[positionDB.ID]
 
 	if position != nil {
-		models.AfterCreateFromFront(&models.Stage, position)
+		models.AfterCreateFromFront(backRepo.GetStage(), position)
 	}
 
 	// a POST is equivalent to a back repo commit increase
@@ -275,7 +275,7 @@ func (controller *Controller) UpdatePosition(c *gin.Context) {
 	// get stage instance from DB instance, and call callback function
 	positionOld := (*backRepo.BackRepoPosition.Map_PositionDBID_PositionPtr)[positionDB.ID]
 	if positionOld != nil {
-		models.AfterUpdateFromFront(&models.Stage, positionOld, positionNew)
+		models.AfterUpdateFromFront(backRepo.GetStage(), positionOld, positionNew)
 	}
 
 	// an UPDATE generates a back repo commit increase
@@ -332,7 +332,7 @@ func (controller *Controller) DeletePosition(c *gin.Context) {
 	// get stage instance from DB instance, and call callback function
 	positionStaged := (*backRepo.BackRepoPosition.Map_PositionDBID_PositionPtr)[positionDB.ID]
 	if positionStaged != nil {
-		models.AfterDeleteFromFront(&models.Stage, positionStaged, positionDeleted)
+		models.AfterDeleteFromFront(backRepo.GetStage(), positionStaged, positionDeleted)
 	}
 
 	// a DELETE generates a back repo commit increase

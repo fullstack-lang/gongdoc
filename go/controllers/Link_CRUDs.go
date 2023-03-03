@@ -154,7 +154,7 @@ func (controller *Controller) PostLink(c *gin.Context) {
 	link := (*backRepo.BackRepoLink.Map_LinkDBID_LinkPtr)[linkDB.ID]
 
 	if link != nil {
-		models.AfterCreateFromFront(&models.Stage, link)
+		models.AfterCreateFromFront(backRepo.GetStage(), link)
 	}
 
 	// a POST is equivalent to a back repo commit increase
@@ -275,7 +275,7 @@ func (controller *Controller) UpdateLink(c *gin.Context) {
 	// get stage instance from DB instance, and call callback function
 	linkOld := (*backRepo.BackRepoLink.Map_LinkDBID_LinkPtr)[linkDB.ID]
 	if linkOld != nil {
-		models.AfterUpdateFromFront(&models.Stage, linkOld, linkNew)
+		models.AfterUpdateFromFront(backRepo.GetStage(), linkOld, linkNew)
 	}
 
 	// an UPDATE generates a back repo commit increase
@@ -332,7 +332,7 @@ func (controller *Controller) DeleteLink(c *gin.Context) {
 	// get stage instance from DB instance, and call callback function
 	linkStaged := (*backRepo.BackRepoLink.Map_LinkDBID_LinkPtr)[linkDB.ID]
 	if linkStaged != nil {
-		models.AfterDeleteFromFront(&models.Stage, linkStaged, linkDeleted)
+		models.AfterDeleteFromFront(backRepo.GetStage(), linkStaged, linkDeleted)
 	}
 
 	// a DELETE generates a back repo commit increase

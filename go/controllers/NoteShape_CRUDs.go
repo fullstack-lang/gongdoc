@@ -154,7 +154,7 @@ func (controller *Controller) PostNoteShape(c *gin.Context) {
 	noteshape := (*backRepo.BackRepoNoteShape.Map_NoteShapeDBID_NoteShapePtr)[noteshapeDB.ID]
 
 	if noteshape != nil {
-		models.AfterCreateFromFront(&models.Stage, noteshape)
+		models.AfterCreateFromFront(backRepo.GetStage(), noteshape)
 	}
 
 	// a POST is equivalent to a back repo commit increase
@@ -275,7 +275,7 @@ func (controller *Controller) UpdateNoteShape(c *gin.Context) {
 	// get stage instance from DB instance, and call callback function
 	noteshapeOld := (*backRepo.BackRepoNoteShape.Map_NoteShapeDBID_NoteShapePtr)[noteshapeDB.ID]
 	if noteshapeOld != nil {
-		models.AfterUpdateFromFront(&models.Stage, noteshapeOld, noteshapeNew)
+		models.AfterUpdateFromFront(backRepo.GetStage(), noteshapeOld, noteshapeNew)
 	}
 
 	// an UPDATE generates a back repo commit increase
@@ -332,7 +332,7 @@ func (controller *Controller) DeleteNoteShape(c *gin.Context) {
 	// get stage instance from DB instance, and call callback function
 	noteshapeStaged := (*backRepo.BackRepoNoteShape.Map_NoteShapeDBID_NoteShapePtr)[noteshapeDB.ID]
 	if noteshapeStaged != nil {
-		models.AfterDeleteFromFront(&models.Stage, noteshapeStaged, noteshapeDeleted)
+		models.AfterDeleteFromFront(backRepo.GetStage(), noteshapeStaged, noteshapeDeleted)
 	}
 
 	// a DELETE generates a back repo commit increase

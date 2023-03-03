@@ -154,7 +154,7 @@ func (controller *Controller) PostClassdiagram(c *gin.Context) {
 	classdiagram := (*backRepo.BackRepoClassdiagram.Map_ClassdiagramDBID_ClassdiagramPtr)[classdiagramDB.ID]
 
 	if classdiagram != nil {
-		models.AfterCreateFromFront(&models.Stage, classdiagram)
+		models.AfterCreateFromFront(backRepo.GetStage(), classdiagram)
 	}
 
 	// a POST is equivalent to a back repo commit increase
@@ -275,7 +275,7 @@ func (controller *Controller) UpdateClassdiagram(c *gin.Context) {
 	// get stage instance from DB instance, and call callback function
 	classdiagramOld := (*backRepo.BackRepoClassdiagram.Map_ClassdiagramDBID_ClassdiagramPtr)[classdiagramDB.ID]
 	if classdiagramOld != nil {
-		models.AfterUpdateFromFront(&models.Stage, classdiagramOld, classdiagramNew)
+		models.AfterUpdateFromFront(backRepo.GetStage(), classdiagramOld, classdiagramNew)
 	}
 
 	// an UPDATE generates a back repo commit increase
@@ -332,7 +332,7 @@ func (controller *Controller) DeleteClassdiagram(c *gin.Context) {
 	// get stage instance from DB instance, and call callback function
 	classdiagramStaged := (*backRepo.BackRepoClassdiagram.Map_ClassdiagramDBID_ClassdiagramPtr)[classdiagramDB.ID]
 	if classdiagramStaged != nil {
-		models.AfterDeleteFromFront(&models.Stage, classdiagramStaged, classdiagramDeleted)
+		models.AfterDeleteFromFront(backRepo.GetStage(), classdiagramStaged, classdiagramDeleted)
 	}
 
 	// a DELETE generates a back repo commit increase

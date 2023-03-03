@@ -154,7 +154,7 @@ func (controller *Controller) PostVertice(c *gin.Context) {
 	vertice := (*backRepo.BackRepoVertice.Map_VerticeDBID_VerticePtr)[verticeDB.ID]
 
 	if vertice != nil {
-		models.AfterCreateFromFront(&models.Stage, vertice)
+		models.AfterCreateFromFront(backRepo.GetStage(), vertice)
 	}
 
 	// a POST is equivalent to a back repo commit increase
@@ -275,7 +275,7 @@ func (controller *Controller) UpdateVertice(c *gin.Context) {
 	// get stage instance from DB instance, and call callback function
 	verticeOld := (*backRepo.BackRepoVertice.Map_VerticeDBID_VerticePtr)[verticeDB.ID]
 	if verticeOld != nil {
-		models.AfterUpdateFromFront(&models.Stage, verticeOld, verticeNew)
+		models.AfterUpdateFromFront(backRepo.GetStage(), verticeOld, verticeNew)
 	}
 
 	// an UPDATE generates a back repo commit increase
@@ -332,7 +332,7 @@ func (controller *Controller) DeleteVertice(c *gin.Context) {
 	// get stage instance from DB instance, and call callback function
 	verticeStaged := (*backRepo.BackRepoVertice.Map_VerticeDBID_VerticePtr)[verticeDB.ID]
 	if verticeStaged != nil {
-		models.AfterDeleteFromFront(&models.Stage, verticeStaged, verticeDeleted)
+		models.AfterDeleteFromFront(backRepo.GetStage(), verticeStaged, verticeDeleted)
 	}
 
 	// a DELETE generates a back repo commit increase

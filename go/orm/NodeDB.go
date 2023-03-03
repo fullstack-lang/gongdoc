@@ -202,6 +202,11 @@ type BackRepoNodeStruct struct {
 	stage *models.StageStruct
 }
 
+func (backRepoNode *BackRepoNodeStruct) GetStage() (stage *models.StageStruct) {
+	stage = backRepoNode.stage
+	return
+}
+
 func (backRepoNode *BackRepoNodeStruct) GetDB() *gorm.DB {
 	return backRepoNode.db
 }
@@ -397,7 +402,7 @@ func (backRepoNode *BackRepoNodeStruct) CheckoutPhaseOne() (Error error) {
 
 	// remove from stage and back repo's 3 maps all nodes that are not in the checkout
 	for node := range nodeInstancesToBeRemovedFromTheStage {
-		node.Unstage()
+		node.Unstage(backRepoNode.GetStage())
 
 		// remove instance from the back repo 3 maps
 		nodeID := (*backRepoNode.Map_NodePtr_NodeDBID)[node]
@@ -422,12 +427,12 @@ func (backRepoNode *BackRepoNodeStruct) CheckoutPhaseOneInstance(nodeDB *NodeDB)
 
 		// append model store with the new element
 		node.Name = nodeDB.Name_Data.String
-		node.Stage()
+		node.Stage(backRepoNode.GetStage())
 	}
 	nodeDB.CopyBasicFieldsToNode(node)
 
 	// in some cases, the instance might have been unstaged. It is necessary to stage it again
-	node.Stage()
+	node.Stage(backRepoNode.GetStage())
 
 	// preserve pointer to nodeDB. Otherwise, pointer will is recycled and the map of pointers
 	// Map_NodeDBID_NodeDB)[nodeDB hold variable pointers

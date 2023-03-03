@@ -154,7 +154,7 @@ func (controller *Controller) PostDiagramPackage(c *gin.Context) {
 	diagrampackage := (*backRepo.BackRepoDiagramPackage.Map_DiagramPackageDBID_DiagramPackagePtr)[diagrampackageDB.ID]
 
 	if diagrampackage != nil {
-		models.AfterCreateFromFront(&models.Stage, diagrampackage)
+		models.AfterCreateFromFront(backRepo.GetStage(), diagrampackage)
 	}
 
 	// a POST is equivalent to a back repo commit increase
@@ -275,7 +275,7 @@ func (controller *Controller) UpdateDiagramPackage(c *gin.Context) {
 	// get stage instance from DB instance, and call callback function
 	diagrampackageOld := (*backRepo.BackRepoDiagramPackage.Map_DiagramPackageDBID_DiagramPackagePtr)[diagrampackageDB.ID]
 	if diagrampackageOld != nil {
-		models.AfterUpdateFromFront(&models.Stage, diagrampackageOld, diagrampackageNew)
+		models.AfterUpdateFromFront(backRepo.GetStage(), diagrampackageOld, diagrampackageNew)
 	}
 
 	// an UPDATE generates a back repo commit increase
@@ -332,7 +332,7 @@ func (controller *Controller) DeleteDiagramPackage(c *gin.Context) {
 	// get stage instance from DB instance, and call callback function
 	diagrampackageStaged := (*backRepo.BackRepoDiagramPackage.Map_DiagramPackageDBID_DiagramPackagePtr)[diagrampackageDB.ID]
 	if diagrampackageStaged != nil {
-		models.AfterDeleteFromFront(&models.Stage, diagrampackageStaged, diagrampackageDeleted)
+		models.AfterDeleteFromFront(backRepo.GetStage(), diagrampackageStaged, diagrampackageDeleted)
 	}
 
 	// a DELETE generates a back repo commit increase

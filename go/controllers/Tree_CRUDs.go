@@ -154,7 +154,7 @@ func (controller *Controller) PostTree(c *gin.Context) {
 	tree := (*backRepo.BackRepoTree.Map_TreeDBID_TreePtr)[treeDB.ID]
 
 	if tree != nil {
-		models.AfterCreateFromFront(&models.Stage, tree)
+		models.AfterCreateFromFront(backRepo.GetStage(), tree)
 	}
 
 	// a POST is equivalent to a back repo commit increase
@@ -275,7 +275,7 @@ func (controller *Controller) UpdateTree(c *gin.Context) {
 	// get stage instance from DB instance, and call callback function
 	treeOld := (*backRepo.BackRepoTree.Map_TreeDBID_TreePtr)[treeDB.ID]
 	if treeOld != nil {
-		models.AfterUpdateFromFront(&models.Stage, treeOld, treeNew)
+		models.AfterUpdateFromFront(backRepo.GetStage(), treeOld, treeNew)
 	}
 
 	// an UPDATE generates a back repo commit increase
@@ -332,7 +332,7 @@ func (controller *Controller) DeleteTree(c *gin.Context) {
 	// get stage instance from DB instance, and call callback function
 	treeStaged := (*backRepo.BackRepoTree.Map_TreeDBID_TreePtr)[treeDB.ID]
 	if treeStaged != nil {
-		models.AfterDeleteFromFront(&models.Stage, treeStaged, treeDeleted)
+		models.AfterDeleteFromFront(backRepo.GetStage(), treeStaged, treeDeleted)
 	}
 
 	// a DELETE generates a back repo commit increase

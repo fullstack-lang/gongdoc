@@ -154,7 +154,7 @@ func (controller *Controller) PostUmlState(c *gin.Context) {
 	umlstate := (*backRepo.BackRepoUmlState.Map_UmlStateDBID_UmlStatePtr)[umlstateDB.ID]
 
 	if umlstate != nil {
-		models.AfterCreateFromFront(&models.Stage, umlstate)
+		models.AfterCreateFromFront(backRepo.GetStage(), umlstate)
 	}
 
 	// a POST is equivalent to a back repo commit increase
@@ -275,7 +275,7 @@ func (controller *Controller) UpdateUmlState(c *gin.Context) {
 	// get stage instance from DB instance, and call callback function
 	umlstateOld := (*backRepo.BackRepoUmlState.Map_UmlStateDBID_UmlStatePtr)[umlstateDB.ID]
 	if umlstateOld != nil {
-		models.AfterUpdateFromFront(&models.Stage, umlstateOld, umlstateNew)
+		models.AfterUpdateFromFront(backRepo.GetStage(), umlstateOld, umlstateNew)
 	}
 
 	// an UPDATE generates a back repo commit increase
@@ -332,7 +332,7 @@ func (controller *Controller) DeleteUmlState(c *gin.Context) {
 	// get stage instance from DB instance, and call callback function
 	umlstateStaged := (*backRepo.BackRepoUmlState.Map_UmlStateDBID_UmlStatePtr)[umlstateDB.ID]
 	if umlstateStaged != nil {
-		models.AfterDeleteFromFront(&models.Stage, umlstateStaged, umlstateDeleted)
+		models.AfterDeleteFromFront(backRepo.GetStage(), umlstateStaged, umlstateDeleted)
 	}
 
 	// a DELETE generates a back repo commit increase

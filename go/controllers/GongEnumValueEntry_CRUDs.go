@@ -154,7 +154,7 @@ func (controller *Controller) PostGongEnumValueEntry(c *gin.Context) {
 	gongenumvalueentry := (*backRepo.BackRepoGongEnumValueEntry.Map_GongEnumValueEntryDBID_GongEnumValueEntryPtr)[gongenumvalueentryDB.ID]
 
 	if gongenumvalueentry != nil {
-		models.AfterCreateFromFront(&models.Stage, gongenumvalueentry)
+		models.AfterCreateFromFront(backRepo.GetStage(), gongenumvalueentry)
 	}
 
 	// a POST is equivalent to a back repo commit increase
@@ -275,7 +275,7 @@ func (controller *Controller) UpdateGongEnumValueEntry(c *gin.Context) {
 	// get stage instance from DB instance, and call callback function
 	gongenumvalueentryOld := (*backRepo.BackRepoGongEnumValueEntry.Map_GongEnumValueEntryDBID_GongEnumValueEntryPtr)[gongenumvalueentryDB.ID]
 	if gongenumvalueentryOld != nil {
-		models.AfterUpdateFromFront(&models.Stage, gongenumvalueentryOld, gongenumvalueentryNew)
+		models.AfterUpdateFromFront(backRepo.GetStage(), gongenumvalueentryOld, gongenumvalueentryNew)
 	}
 
 	// an UPDATE generates a back repo commit increase
@@ -332,7 +332,7 @@ func (controller *Controller) DeleteGongEnumValueEntry(c *gin.Context) {
 	// get stage instance from DB instance, and call callback function
 	gongenumvalueentryStaged := (*backRepo.BackRepoGongEnumValueEntry.Map_GongEnumValueEntryDBID_GongEnumValueEntryPtr)[gongenumvalueentryDB.ID]
 	if gongenumvalueentryStaged != nil {
-		models.AfterDeleteFromFront(&models.Stage, gongenumvalueentryStaged, gongenumvalueentryDeleted)
+		models.AfterDeleteFromFront(backRepo.GetStage(), gongenumvalueentryStaged, gongenumvalueentryDeleted)
 	}
 
 	// a DELETE generates a back repo commit increase

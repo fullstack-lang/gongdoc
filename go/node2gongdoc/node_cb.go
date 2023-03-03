@@ -86,7 +86,7 @@ func (nodeCb *NodeCB) OnAfterCreate(
 		}
 	}
 
-	classdiagram := (&gongdoc_models.Classdiagram{Name: node.Name}).Stage()
+	classdiagram := (&gongdoc_models.Classdiagram{Name: node.Name}).Stage(nodeCb.diagramPackage.Stage_)
 	nodeCb.diagramPackage.Classdiagrams = append(nodeCb.diagramPackage.Classdiagrams, classdiagram)
 	node.IsInEditMode = false
 	node.IsInDrawMode = false
@@ -150,17 +150,17 @@ func (nodeCb *NodeCB) OnAfterDelete(
 func (nodeCb *NodeCB) FillUpDiagramNodeTree(diagramPackage *gongdoc_models.DiagramPackage) {
 
 	// generate tree of diagrams
-	gongdocTree := (&gongdoc_models.Tree{Name: "gongdoc"}).Stage()
+	gongdocTree := (&gongdoc_models.Tree{Name: "gongdoc"}).Stage(nodeCb.diagramPackage.Stage_)
 
 	// add the root of class diagrams
-	diagramPackageNode := (&gongdoc_models.Node{Name: "class diagrams"}).Stage()
+	diagramPackageNode := (&gongdoc_models.Node{Name: "class diagrams"}).Stage(nodeCb.diagramPackage.Stage_)
 	diagramPackageNode.IsExpanded = true
 	diagramPackageNode.HasAddChildButton = diagramPackage.IsEditable
 	gongdocTree.RootNodes = append(gongdocTree.RootNodes, diagramPackageNode)
 
 	// add one node per class diagram
 	for classdiagram := range *gongdoc_models.GetGongstructInstancesSet[gongdoc_models.Classdiagram]() {
-		node := (&gongdoc_models.Node{Name: classdiagram.Name}).Stage()
+		node := (&gongdoc_models.Node{Name: classdiagram.Name}).Stage(nodeCb.diagramPackage.Stage_)
 
 		node.HasCheckboxButton = true
 		node.HasDeleteButton = true
