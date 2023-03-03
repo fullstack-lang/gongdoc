@@ -211,8 +211,8 @@ are referenced in the go code
 	__NoteShapeLink__000003_Point.Type = models.NOTE_SHAPE_LINK_TO_GONG_STRUCT_OR_ENUM_SHAPE
 
 	// Position values setup
-	__Position__000000_Pos_NewDiagram_Line.X = 180.000000
-	__Position__000000_Pos_NewDiagram_Line.Y = 190.000000
+	__Position__000000_Pos_NewDiagram_Line.X = 170.000000
+	__Position__000000_Pos_NewDiagram_Line.Y = 200.000000
 	__Position__000000_Pos_NewDiagram_Line.Name = `Pos-NewDiagram-Line`
 
 	// Position values setup
@@ -245,3 +245,5 @@ are referenced in the go code
 	__NoteShape__000000_ShortNodeOnModels.NoteShapeLinks = append(__NoteShape__000000_ShortNodeOnModels.NoteShapeLinks, __NoteShapeLink__000003_Point)
 	__NoteShape__000000_ShortNodeOnModels.NoteShapeLinks = append(__NoteShape__000000_ShortNodeOnModels.NoteShapeLinks, __NoteShapeLink__000002_LineTypeString)
 }
+
+
