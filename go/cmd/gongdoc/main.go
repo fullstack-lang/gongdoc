@@ -124,7 +124,7 @@ func main() {
 	diagramPackage, _ := load.LoadDiagramPackage(*pkgPath, modelPkg, *editable)
 
 	// to be removed after fix of [issue](https://github.com/golang/go/issues/57559)
-	gongdoc_models.SetupMapDocLinkRenaming()
+	gongdoc_models.SetupMapDocLinkRenaming(diagramPackage.Stage_)
 	// end of the be removed
 
 	// set up gong structs for diagram package

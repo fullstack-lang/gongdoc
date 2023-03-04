@@ -16,9 +16,9 @@ func Reload(diagramPackage *gongdoc_models.DiagramPackage) {
 		filepath.Join(diagramPackage.AbsolutePathToDiagramPackage, "../models"))
 	gong_models.Stage.Commit()
 
-	gongdoc_models.Stage.Checkout()
-	gongdoc_models.Stage.Reset()
-	gongdoc_models.Stage.Commit()
+	diagramPackage.Stage_.Checkout()
+	diagramPackage.Stage_.Reset()
+	diagramPackage.Stage_.Commit()
 
 	diagramPackage.Classdiagrams = nil
 	diagramPackage.Umlscs = nil
@@ -29,8 +29,8 @@ func Reload(diagramPackage *gongdoc_models.DiagramPackage) {
 		modelPkg, true)
 
 	// to be removed after fix of [issue](https://github.com/golang/go/issues/57559)
-	gongdoc_models.SetupMapDocLinkRenaming()
+	gongdoc_models.SetupMapDocLinkRenaming(diagramPackage.Stage_)
 	// end of the be removed
 	gongdoc_node2gongdoc.FillUpNodeTree(diagramPackage)
-	gongdoc_models.Stage.Commit()
+	diagramPackage.Stage_.Commit()
 }

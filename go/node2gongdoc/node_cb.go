@@ -194,9 +194,9 @@ func GetNodeBackPointer[T1 gong_models.Gongstruct](gong_instance *T1) (backPoint
 	return
 }
 
-func (nodeCb *NodeCB) updateNodesStates(stage *gongdoc_models.StageStruct) {
+func (nodeCb *NodeCB) updateNodesStates(gongdocStage *gongdoc_models.StageStruct) {
 
-	nodeCb.updateDiagramsNodes(stage)
+	nodeCb.updateDiagramsNodes(gongdocStage)
 
 	// now manage object nodes accordign to the selected diagram
 
@@ -209,14 +209,14 @@ func (nodeCb *NodeCB) updateNodesStates(stage *gongdoc_models.StageStruct) {
 
 	// no selected diagram yet
 	if classdiagram == nil {
-		gongdoc_models.Stage.Commit()
+		gongdocStage.Commit()
 		return
 	}
 
-	nodeCb.updateGongObjectsNodes(stage, classdiagram)
+	nodeCb.updateGongObjectsNodes(gongdocStage, classdiagram)
 
 	// log.Println("UpdateNodeStates, before commit, nb ", stage.BackRepo.GetLastCommitFromBackNb())
-	stage.Commit()
+	gongdocStage.Commit()
 	// log.Println("UpdateNodeStates, after  commit, nb ", stage.BackRepo.GetLastCommitFromBackNb())
 
 }
