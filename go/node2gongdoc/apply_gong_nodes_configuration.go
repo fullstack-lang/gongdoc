@@ -2,17 +2,12 @@ package node2gongdoc
 
 import gongdoc_models "github.com/fullstack-lang/gongdoc/go/models"
 
-func UncheckAndDisable(node *gongdoc_models.Node, classdiagram *gongdoc_models.Classdiagram) {
+func applyGongNodesConfiguration(node *gongdoc_models.Node, isCheckboxDisabled, isChecked, hasToBeDisabledValue bool) {
 
-	node.IsCheckboxDisabled = true
-	node.IsChecked = false
+	node.IsCheckboxDisabled = isCheckboxDisabled
+	node.IsChecked = isChecked
 
 	nodeImpl := node.Impl
-
-	hasToBeDisabledValue := true
-	if classdiagram != nil {
-		hasToBeDisabledValue = !classdiagram.IsInDrawMode
-	}
 
 	if nodeImpl != nil {
 		nodeImpl.SetHasToBeCheckedValue(false)
@@ -20,6 +15,6 @@ func UncheckAndDisable(node *gongdoc_models.Node, classdiagram *gongdoc_models.C
 	}
 
 	for _, _node := range node.Children {
-		UncheckAndDisable(_node, classdiagram)
+		applyGongNodesConfiguration(_node, isCheckboxDisabled, isChecked, hasToBeDisabledValue)
 	}
 }

@@ -13,7 +13,7 @@ func FillUpNodeTree(diagramPackage *gongdoc_models.DiagramPackage) {
 
 	nodeCb.FillUpDiagramNodeTree(diagramPackage)
 	nodeCb.FillUpTreeOfGongObjects()
-	nodeCb.updateNodesStates(diagramPackage.Stage_)
+	nodeCb.computeNodesConfiguration(diagramPackage.Stage_)
 
 	// set callbacks on node updates
 	diagramPackage.Stage_.OnAfterNodeUpdateCallback = nodeCb

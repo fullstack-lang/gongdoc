@@ -53,7 +53,7 @@ func (nodeCb *NodeCB) OnAfterUpdate(
 
 	if stagedNode.Impl != nil {
 		stagedNode.Impl.OnAfterUpdate(stage, stagedNode, frontNode)
-		nodeCb.updateNodesStates(stage)
+		nodeCb.computeNodesConfiguration(stage)
 	}
 
 }
@@ -114,7 +114,7 @@ func (nodeCb *NodeCB) OnAfterCreate(
 	// save the diagram
 	// checkout in order to get the latest version of the diagram before
 	// modifying it updated by the front
-	nodeCb.updateNodesStates(gongdocStage)
+	nodeCb.computeNodesConfiguration(gongdocStage)
 	gongdocStage.Commit()
 
 	// now save the diagram
@@ -144,7 +144,7 @@ func (nodeCb *NodeCB) OnAfterDelete(
 		impl.OnAfterDelete(stage, stagedNode, frontNode)
 	}
 
-	nodeCb.updateNodesStates(stage)
+	nodeCb.computeNodesConfiguration(stage)
 }
 
 func (nodeCb *NodeCB) FillUpDiagramNodeTree(diagramPackage *gongdoc_models.DiagramPackage) {
@@ -193,17 +193,28 @@ func GetNodeBackPointer[T1 gong_models.Gongstruct](gong_instance *T1) (backPoint
 	return
 }
 
-func (nodeCb *NodeCB) updateNodesStates(gongdocStage *gongdoc_models.StageStruct) {
+// computeNodesConfiguration computes both trees
+func (nodeCb *NodeCB) computeNodesConfiguration(gongdocStage *gongdoc_models.StageStruct) {
 
-	nodeCb.updateDiagramsNodes(gongdocStage)
+	nodeCb.computeDiagramNodesConfigurations(gongdocStage)
 
 	// now manage object nodes accordign to the selected diagram
 
 	// get the the selected diagram
 	classdiagram := nodeCb.diagramPackage.SelectedClassdiagram
 
+	// if no diagram is selected, all gong nodes are to be disabled
+	hasToBeDisabledValue := true
+
+	// is the classdiagram is not in drawing mode, all gong nodes are to be disabled
+	// otherwise gong nodes are enabled by default
+	if classdiagram != nil {
+		hasToBeDisabledValue = !classdiagram.IsInDrawMode
+	}
+
+	// now, compute wether each gong node to be checked / disabled
 	for _, _node := range nodeCb.treeOfGongObjects.RootNodes {
-		UncheckAndDisable(_node, classdiagram)
+		applyGongNodesConfiguration(_node, true, false, hasToBeDisabledValue)
 	}
 
 	// no selected diagram yet
@@ -220,7 +231,7 @@ func (nodeCb *NodeCB) updateNodesStates(gongdocStage *gongdoc_models.StageStruct
 
 }
 
-func (nodesCb *NodeCB) updateDiagramsNodes(stage *gongdoc_models.StageStruct) {
+func (nodesCb *NodeCB) computeDiagramNodesConfigurations(stage *gongdoc_models.StageStruct) {
 
 	// compute wether one of the diagrams is in draw/edit mode
 	// if so, all diagram check need to be disabled
