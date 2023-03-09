@@ -102,19 +102,19 @@ func (nodeCb *NodeCB) FillUpTreeOfGongObjects() {
 	gongTree.RootNodes = append(gongTree.RootNodes, gongNotesRootNode)
 	for gongNote := range *gong_models.GetGongstructInstancesSet[gong_models.GongNote]() {
 
-		node := (&gongdoc_models.Node{Name: gongNote.Name}).Stage(nodeCb.diagramPackage.Stage_)
-		node.HasCheckboxButton = true
+		nodeGongNote := (&gongdoc_models.Node{Name: gongNote.Name}).Stage(nodeCb.diagramPackage.Stage_)
+		nodeGongNote.HasCheckboxButton = true
 
-		node.IsExpanded = true
+		nodeGongNote.IsExpanded = true
 
 		gongNoteImpl := new(GongNoteImpl)
-		gongNoteImpl.node = node
+		gongNoteImpl.node = nodeGongNote
 		gongNoteImpl.gongNote = gongNote
 		gongNoteImpl.nodeCb = nodeCb
-		node.Impl = gongNoteImpl
+		nodeGongNote.Impl = gongNoteImpl
 
 		// append to tree
-		gongNotesRootNode.Children = append(gongNotesRootNode.Children, node)
+		gongNotesRootNode.Children = append(gongNotesRootNode.Children, nodeGongNote)
 
 		SetNodeBackPointer(gongNote, gongNoteImpl)
 
@@ -136,7 +136,7 @@ func (nodeCb *NodeCB) FillUpTreeOfGongObjects() {
 			nodeGongLink.Impl = gongLinkImpl
 
 			// append to tree
-			node.Children = append(node.Children, nodeGongLink)
+			nodeGongNote.Children = append(nodeGongNote.Children, nodeGongLink)
 
 			SetNodeBackPointer(gongLink, gongLinkImpl)
 		}
