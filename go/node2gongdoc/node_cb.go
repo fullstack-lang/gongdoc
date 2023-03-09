@@ -223,7 +223,7 @@ func (nodeCb *NodeCB) computeNodesConfiguration(gongdocStage *gongdoc_models.Sta
 		return
 	}
 
-	nodeCb.updateGongObjectsNodes(gongdocStage, classdiagram)
+	nodeCb.computeGongNodesConfiguration(gongdocStage, classdiagram)
 
 	// log.Println("UpdateNodeStates, before commit, nb ", stage.BackRepo.GetLastCommitFromBackNb())
 	gongdocStage.Commit()
