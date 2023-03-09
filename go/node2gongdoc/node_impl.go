@@ -10,21 +10,10 @@ type NodeImpl struct {
 	canHaveRelatedDiagramElt bool
 }
 
-// HasToBeChecked implements the interface needed by the tree/node package
-// a gong node is checked if the related diagramming element is present
-func (nodeImpl *NodeImpl) HasToBeChecked() bool {
-	return nodeImpl.hasRelatedDiagramElt
+func (nodeImpl *NodeImpl) DisableNodeCheckbox() {
+	nodeImpl.node.IsCheckboxDisabled = false
 }
 
-func (nodeImpl *NodeImpl) SetHasToBeCheckedValue(value bool) {
-	nodeImpl.hasRelatedDiagramElt = value
-}
-
-// HasToBeDisabled implements the interface needed by the tree/node package
-func (nodeImpl *NodeImpl) HasToBeDisabled() bool {
-	return nodeImpl.canHaveRelatedDiagramElt
-}
-
-func (nodeImpl *NodeImpl) SetHasToBeDisabledValue(value bool) {
-	nodeImpl.canHaveRelatedDiagramElt = value
+func (nodeImpl *NodeImpl) CheckNode() {
+	nodeImpl.node.IsChecked = true
 }

@@ -178,17 +178,17 @@ func (nodeCb *NodeCB) FillUpDiagramNodeTree(diagramPackage *gongdoc_models.Diagr
 	nodeCb.diagramPackageNode = diagramPackageNode
 }
 
-func SetNodeBackPointer[T1 gong_models.Gongstruct](gong_instance *T1, backPointer gongdoc_models.NodeImplInterface) {
+func SetNodeBackPointer[T1 gong_models.Gongstruct](gong_instance *T1, backPointer BackPointerInterface) {
 	gong_models.SetBackPointer(&gong_models.Stage, gong_instance, backPointer)
 }
-func GetNodeBackPointer[T1 gong_models.Gongstruct](gong_instance *T1) (backPointer gongdoc_models.NodeImplInterface) {
+func GetNodeBackPointer[T1 gong_models.Gongstruct](gong_instance *T1) (backPointer BackPointerInterface) {
 	tmp := gong_models.GetBackPointer(&gong_models.Stage, gong_instance)
 
 	if tmp == nil {
 		log.Fatal("backPointer is nil", gong_instance)
 	}
 
-	backPointer = tmp.(gongdoc_models.NodeImplInterface)
+	backPointer = tmp.(BackPointerInterface)
 
 	return
 }
@@ -204,17 +204,17 @@ func (nodeCb *NodeCB) computeNodesConfiguration(gongdocStage *gongdoc_models.Sta
 	classdiagram := nodeCb.diagramPackage.SelectedClassdiagram
 
 	// if no diagram is selected, all gong nodes are to be disabled
-	hasToBeDisabledValue := true
+	isCheckboxDisabled := true
 
 	// is the classdiagram is not in drawing mode, all gong nodes are to be disabled
 	// otherwise gong nodes are enabled by default
 	if classdiagram != nil {
-		hasToBeDisabledValue = !classdiagram.IsInDrawMode
+		isCheckboxDisabled = !classdiagram.IsInDrawMode
 	}
 
 	// now, compute wether each gong node to be checked / disabled
 	for _, _node := range nodeCb.treeOfGongObjects.RootNodes {
-		applyGongNodesConfiguration(_node, true, false, hasToBeDisabledValue)
+		applyGongNodesConfiguration(_node, isCheckboxDisabled, false)
 	}
 
 	// no selected diagram yet
