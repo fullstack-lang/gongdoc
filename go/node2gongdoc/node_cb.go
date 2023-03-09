@@ -155,7 +155,6 @@ func (nodeCb *NodeCB) FillUpDiagramNodeTree(diagramPackage *gongdoc_models.Diagr
 	// add the root of class diagrams
 	diagramPackageNode := (&gongdoc_models.Node{Name: "class diagrams"}).Stage(nodeCb.diagramPackage.Stage_)
 	diagramPackageNode.IsExpanded = true
-	diagramPackageNode.HasAddChildButton = diagramPackage.IsEditable
 	gongdocTree.RootNodes = append(gongdocTree.RootNodes, diagramPackageNode)
 
 	// add one node per class diagram
@@ -231,6 +230,8 @@ func (nodesCb *NodeCB) updateDiagramsNodes(stage *gongdoc_models.StageStruct) {
 			inModificationMode = true
 		}
 	}
+
+	nodesCb.diagramPackageNode.HasAddChildButton = !inModificationMode && nodesCb.diagramPackage.IsEditable
 
 	// get the selected diagram and collect what are its referenced
 	// gongstructs
