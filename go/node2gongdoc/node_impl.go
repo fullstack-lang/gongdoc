@@ -11,6 +11,7 @@ type NodeImpl struct {
 }
 
 // HasToBeChecked implements the interface needed by the tree/node package
+// a gong node is checked if the related diagramming element is present
 func (nodeImpl *NodeImpl) HasToBeChecked() bool {
 	return nodeImpl.hasRelatedDiagramElt
 }
