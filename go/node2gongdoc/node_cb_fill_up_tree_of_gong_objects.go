@@ -39,7 +39,7 @@ func (nodeCb *NodeCB) FillUpTreeOfGongObjects() {
 			nodeGongField.HasCheckboxButton = true
 
 			fieldImpl := new(FieldImpl)
-			fieldImpl.node = nodeGongstruct
+			fieldImpl.node = nodeGongField
 			fieldImpl.field = field
 			fieldImpl.nodeCb = nodeCb
 			nodeGongField.Impl = fieldImpl
@@ -86,7 +86,7 @@ func (nodeCb *NodeCB) FillUpTreeOfGongObjects() {
 			nodeGongEnumValue.HasCheckboxButton = true
 
 			gongEnumValueImpl := new(GongEnumValueImpl)
-			gongEnumValueImpl.node = nodeGongEnum
+			gongEnumValueImpl.node = nodeGongEnumValue
 			gongEnumValueImpl.gongEnumValue = gongEnumValue
 			gongEnumValueImpl.nodeCb = nodeCb
 			nodeGongEnumValue.Impl = gongEnumValueImpl
@@ -130,7 +130,7 @@ func (nodeCb *NodeCB) FillUpTreeOfGongObjects() {
 			nodeGongLink.HasCheckboxButton = true
 
 			gongLinkImpl := new(GongLinkImpl)
-			gongLinkImpl.node = node
+			gongLinkImpl.node = nodeGongLink
 			gongLinkImpl.gongLink = gongLink
 			gongLinkImpl.nodeCb = nodeCb
 			nodeGongLink.Impl = gongLinkImpl
