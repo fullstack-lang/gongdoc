@@ -8,7 +8,7 @@ type NodeImpl struct {
 }
 
 func (nodeImpl *NodeImpl) DisableNodeCheckbox() {
-	nodeImpl.node.IsCheckboxDisabled = false
+	nodeImpl.node.IsCheckboxDisabled = true
 }
 
 func (nodeImpl *NodeImpl) CheckNode() {
