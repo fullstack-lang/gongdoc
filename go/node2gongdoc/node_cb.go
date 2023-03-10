@@ -6,7 +6,6 @@ import (
 	"os"
 	"path/filepath"
 
-	gong_models "github.com/fullstack-lang/gong/go/models"
 	gongdoc_models "github.com/fullstack-lang/gongdoc/go/models"
 )
 
@@ -176,21 +175,6 @@ func (nodeCb *NodeCB) FillUpDiagramNodeTree(diagramPackage *gongdoc_models.Diagr
 
 	// set callbacks on node updates
 	nodeCb.diagramPackageNode = diagramPackageNode
-}
-
-func SetNodeBackPointer[T1 gong_models.Gongstruct](gong_instance *T1, backPointer BackPointerInterface) {
-	gong_models.SetBackPointer(&gong_models.Stage, gong_instance, backPointer)
-}
-func GetNodeBackPointer[T1 gong_models.Gongstruct](gong_instance *T1) (backPointer BackPointerInterface) {
-	tmp := gong_models.GetBackPointer(&gong_models.Stage, gong_instance)
-
-	if tmp == nil {
-		log.Fatal("backPointer is nil", gong_instance)
-	}
-
-	backPointer = tmp.(BackPointerInterface)
-
-	return
 }
 
 // computeNodesConfiguration computes both trees

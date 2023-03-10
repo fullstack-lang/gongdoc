@@ -31,8 +31,6 @@ func (nodeCb *NodeCB) FillUpTreeOfGongObjects() {
 		// append to the tree
 		gongstructRootNode.Children = append(gongstructRootNode.Children, nodeGongstruct)
 
-		SetNodeBackPointer(gongStruct, gongStructImpl)
-
 		for _, field := range gongStruct.Fields {
 			nodeGongField := (&gongdoc_models.Node{Name: field.GetName()}).Stage(nodeCb.diagramPackage.Stage_)
 
@@ -46,18 +44,6 @@ func (nodeCb *NodeCB) FillUpTreeOfGongObjects() {
 
 			// append to tree
 			nodeGongstruct.Children = append(nodeGongstruct.Children, nodeGongField)
-
-			switch fieldReal := field.(type) {
-			case *gong_models.GongBasicField:
-				SetNodeBackPointer(fieldReal, fieldImpl)
-			case *gong_models.GongTimeField:
-				SetNodeBackPointer(fieldReal, fieldImpl)
-			case *gong_models.PointerToGongStructField:
-				SetNodeBackPointer(fieldReal, fieldImpl)
-			case *gong_models.SliceOfPointerToGongStructField:
-				SetNodeBackPointer(fieldReal, fieldImpl)
-			default:
-			}
 		}
 	}
 
@@ -78,7 +64,6 @@ func (nodeCb *NodeCB) FillUpTreeOfGongObjects() {
 
 		// append to tree
 		gongenumRootNode.Children = append(gongenumRootNode.Children, nodeGongEnum)
-		SetNodeBackPointer(gongEnum, gongEnumImpl)
 
 		for _, gongEnumValue := range gongEnum.GongEnumValues {
 			nodeGongEnumValue := (&gongdoc_models.Node{Name: gongEnumValue.GetName()}).Stage(nodeCb.diagramPackage.Stage_)
@@ -93,7 +78,7 @@ func (nodeCb *NodeCB) FillUpTreeOfGongObjects() {
 
 			// append to tree
 			nodeGongEnum.Children = append(nodeGongEnum.Children, nodeGongEnumValue)
-			SetNodeBackPointer(gongEnumValue, gongEnumValueImpl)
+
 		}
 	}
 
@@ -116,8 +101,6 @@ func (nodeCb *NodeCB) FillUpTreeOfGongObjects() {
 		// append to tree
 		gongNotesRootNode.Children = append(gongNotesRootNode.Children, nodeGongNote)
 
-		SetNodeBackPointer(gongNote, gongNoteImpl)
-
 		for _, gongLink := range gongNote.Links {
 
 			gongLinkName := gongLink.Name
@@ -138,7 +121,6 @@ func (nodeCb *NodeCB) FillUpTreeOfGongObjects() {
 			// append to tree
 			nodeGongNote.Children = append(nodeGongNote.Children, nodeGongLink)
 
-			SetNodeBackPointer(gongLink, gongLinkImpl)
 		}
 	}
 
