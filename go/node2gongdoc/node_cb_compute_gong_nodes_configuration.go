@@ -14,26 +14,25 @@ func (nodeCb *NodeCB) computeGongNodesConfiguration(stage *gongdoc_models.StageS
 	// compute maps of displayed gong objects
 	//
 	namesOfDisplayedGongstructs := make(map[string]bool)
+	namesOfDisplayedGongfields := make(map[string]bool)
+	namesOfDisplayedGongenums := make(map[string]bool)
+	namesOfDisplayedGongnotes := make(map[string]bool)
+
 	for _, gongStructShape := range classdiagram.GongStructShapes {
 		gongStructName := gongdoc_models.IdentifierToGongObjectName(gongStructShape.Identifier)
 		namesOfDisplayedGongstructs[gongStructName] = true
-	}
 
-	namesOfDisplayedGongenums := make(map[string]bool)
-	for _, gongEnumShape := range classdiagram.GongEnumShapes {
-		gongStructName := gongdoc_models.IdentifierToGongObjectName(gongEnumShape.Identifier)
-		namesOfDisplayedGongenums[gongStructName] = true
-	}
-
-	namesOfDisplayedGongfields := make(map[string]bool)
-	for _, gongStructShape := range classdiagram.GongStructShapes {
 		for _, gongFieldShape := range gongStructShape.Links {
 			gongFieldName := gongdoc_models.IdentifierToGongObjectName(gongFieldShape.Identifier)
 			namesOfDisplayedGongfields[gongFieldName] = true
 		}
 	}
 
-	namesOfDisplayedGongnotes := make(map[string]bool)
+	for _, gongEnumShape := range classdiagram.GongEnumShapes {
+		gongStructName := gongdoc_models.IdentifierToGongObjectName(gongEnumShape.Identifier)
+		namesOfDisplayedGongenums[gongStructName] = true
+	}
+
 	for _, noteShape := range classdiagram.NoteShapes {
 		gongNoteName := gongdoc_models.IdentifierToGongObjectName(noteShape.Identifier)
 		namesOfDisplayedGongnotes[gongNoteName] = true
@@ -50,10 +49,13 @@ func (nodeCb *NodeCB) computeGongNodesConfiguration(stage *gongdoc_models.StageS
 					namesOfDisplayedGongenums[_node.Name] ||
 					namesOfDisplayedGongnotes[_node.Name]
 
+			_node.IsChecked = isDSLShapePresent
+
 			for _, _node := range _node.Children {
 				if !isDSLShapePresent {
 					_node.IsCheckboxDisabled = true
 				}
+
 				switch nodeImpl := _node.Impl.(type) {
 				case *FieldImpl:
 					gongField := nodeImpl.field
