@@ -1,6 +1,8 @@
 package node2gongdoc
 
 import (
+	"log"
+
 	gong_models "github.com/fullstack-lang/gong/go/models"
 	gongdoc_models "github.com/fullstack-lang/gongdoc/go/models"
 )
@@ -40,117 +42,57 @@ func (nodeCb *NodeCB) computeGongNodesConfiguration(stage *gongdoc_models.StageS
 	// disable nodes of fields objects when
 	// - the DSL is not displayed
 	// - the gongstruct type of the field is not displayed
-	for gongStruct := range *gong_models.GetGongstructInstancesSet[gong_models.GongStruct]() {
+	for _, _node := range nodeCb.treeOfGongObjects.RootNodes {
+		for _, _node := range _node.Children {
 
-		isPresent := namesOfDisplayedGongstructs[gongStruct.Name]
-		_ = isPresent
+			isDSLShapePresent :=
+				namesOfDisplayedGongstructs[_node.Name] ||
+					namesOfDisplayedGongenums[_node.Name] ||
+					namesOfDisplayedGongnotes[_node.Name]
 
-		for _, gongField := range gongStruct.Fields {
-			switch fieldReal := gongField.(type) {
-			case *gong_models.PointerToGongStructField:
-				impl := GetNodeBackPointer(fieldReal)
-				if !isPresent {
-					impl.DisableNodeCheckbox()
+			for _, _node := range _node.Children {
+				if !isDSLShapePresent {
+					_node.IsCheckboxDisabled = true
 				}
-				if ok := namesOfDisplayedGongstructs[fieldReal.GongStruct.Name]; !ok {
-					impl.DisableNodeCheckbox()
-				}
-			case *gong_models.SliceOfPointerToGongStructField:
-				impl := GetNodeBackPointer(fieldReal)
-				if !isPresent {
-					impl.DisableNodeCheckbox()
-				}
-				if ok := namesOfDisplayedGongstructs[fieldReal.GongStruct.Name]; !ok {
-					impl.DisableNodeCheckbox()
-				}
-			case *gong_models.GongBasicField:
-				impl := GetNodeBackPointer(fieldReal)
-				if !isPresent {
-					impl.DisableNodeCheckbox()
-				}
-			case *gong_models.GongTimeField:
-				impl := GetNodeBackPointer(fieldReal)
-				if !isPresent {
-					impl.DisableNodeCheckbox()
-				}
-			default:
+				switch nodeImpl := _node.Impl.(type) {
+				case *FieldImpl:
+					gongField := nodeImpl.field
+					switch fieldReal := gongField.(type) {
+					case *gong_models.PointerToGongStructField:
+						if ok := namesOfDisplayedGongstructs[fieldReal.GongStruct.Name]; !ok {
+							nodeImpl.DisableNodeCheckbox()
+						}
+					case *gong_models.SliceOfPointerToGongStructField:
+						if ok := namesOfDisplayedGongstructs[fieldReal.GongStruct.Name]; !ok {
+							nodeImpl.DisableNodeCheckbox()
+						}
+					default:
+					}
+				case *GongLinkImpl:
+					gongLink := nodeImpl.gongLink
+					if gongLink.Recv == "" {
+						gongStructShapeWithThisNameIsPresent := namesOfDisplayedGongstructs[gongLink.Name]
+						gongEnumShapeWithThisNameIsPresent := namesOfDisplayedGongenums[gongLink.Name]
 
-			}
-		}
-	}
+						if !gongStructShapeWithThisNameIsPresent && !gongEnumShapeWithThisNameIsPresent {
 
-	for gongEnum := range *gong_models.GetGongstructInstancesSet[gong_models.GongEnum]() {
-		isPresent := namesOfDisplayedGongenums[gongEnum.Name]
-		_ = isPresent
-
-		for _, gongEnumValue := range gongEnum.GongEnumValues {
-			impl := GetNodeBackPointer(gongEnumValue)
-			if !isPresent {
-				impl.DisableNodeCheckbox()
-			}
-		}
-	}
-
-	// disable link of notes to gongstruct / gongfields that are not displayed
-	for gongNote := range *gong_models.GetGongstructInstancesSet[gong_models.GongNote]() {
-
-		isPresent := namesOfDisplayedGongnotes[gongNote.Name]
-		_ = isPresent
-
-		for _, gongLink := range gongNote.Links {
-			impl := GetNodeBackPointer(gongLink)
-			if !isPresent {
-				impl.DisableNodeCheckbox()
-			}
-			if gongLink.Recv == "" {
-				gongStructShapeWithThisNameIsPresent := namesOfDisplayedGongstructs[gongLink.Name]
-				gongEnumShapeWithThisNameIsPresent := namesOfDisplayedGongenums[gongLink.Name]
-
-				if !gongStructShapeWithThisNameIsPresent && !gongEnumShapeWithThisNameIsPresent {
-
-					// no corresponding gong struct shape, therefore, disable the node
-					impl.DisableNodeCheckbox()
-				}
-			} else {
-				fieldName := gongLink.Recv + "." + gongLink.Name
-				if ok := namesOfDisplayedGongfields[fieldName]; !ok {
-					impl.DisableNodeCheckbox()
+							// no corresponding gong struct shape, therefore, disable the node
+							_node.IsCheckboxDisabled = true
+						}
+					} else {
+						fieldName := gongLink.Recv + "." + gongLink.Name
+						if ok := namesOfDisplayedGongfields[fieldName]; !ok {
+							_node.IsCheckboxDisabled = true
+						}
+					}
+				case *GongEnumValueImpl:
+				default:
+					_ = nodeImpl
+					log.Panic("No known implementation")
 				}
 			}
 		}
 	}
-
-	// alternative :
-	// parses all DSL object node,
-	// get their implementation
-	// get the DSL object, computes if disabling he checkbox is necessay , performs DisableNodeCheckbox on the DSL object node
-
-	// for _, _node := range nodeCb.treeOfGongObjects.RootNodes {
-	// 	for _, _node := range _node.Children {
-	// 		for _, _node := range _node.Children {
-	// 			switch nodeImpl := _node.Impl.(type) {
-	// 			case *FieldImpl:
-	// 				gongField := nodeImpl.field
-	// 				switch fieldReal := gongField.(type) {
-	// 				case *gong_models.PointerToGongStructField:
-	// 					if ok := namesOfDisplayedGongstructs[fieldReal.GongStruct.Name]; !ok {
-	// 						nodeImpl.DisableNodeCheckbox()
-	// 					}
-	// 				case *gong_models.SliceOfPointerToGongStructField:
-	// 					if ok := namesOfDisplayedGongstructs[fieldReal.GongStruct.Name]; !ok {
-	// 						nodeImpl.DisableNodeCheckbox()
-	// 					}
-	// 				default:
-	// 				}
-	// 			case *GongEnumValueImpl:
-	// 			case *GongLinkImpl:
-	// 			default:
-	// 				_ = nodeImpl
-	// 				log.Panic("No known implementation")
-	// 			}
-	// 		}
-	// 	}
-	// }
 
 	// parse the tree of diagram elements and
 	// get the corresponding gong object
