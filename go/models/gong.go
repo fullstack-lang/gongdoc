@@ -4,6 +4,7 @@ package models
 import (
 	"errors"
 	"fmt"
+	"sync"
 )
 
 // errUnkownEnum is returns when a value cannot match enum values
@@ -167,17 +168,6 @@ type StageStruct struct { // insertion point for definition of arrays registerin
 	MetaPackageImportPath  string
 	MetaPackageImportAlias string
 	Map_DocLink_Renaming   map[string]GONG__Identifier
-
-	// map_Gongstruct_BackPointer is storage of back pointers
-	map_Gongstruct_BackPointer map[any]any
-}
-
-func SetBackPointer[T Gongstruct](stageStruct *StageStruct, instance *T, backPointer any) {
-	stageStruct.map_Gongstruct_BackPointer[instance] = backPointer
-}
-func GetBackPointer[T Gongstruct](stageStruct *StageStruct, instance *T) (backPointer any) {
-	backPointer, _ = stageStruct.map_Gongstruct_BackPointer[instance]
-	return
 }
 
 type GONG__Identifier struct {
@@ -254,56 +244,70 @@ type BackRepoInterface interface {
 	GetLastPushFromFrontNb() uint
 }
 
-// swagger:ignore instructs the gong compiler (gongc) to avoid this particular struct
-var Stage StageStruct = StageStruct{ // insertion point for array initiatialisation
-	Classdiagrams:           make(map[*Classdiagram]any),
-	Classdiagrams_mapString: make(map[string]*Classdiagram),
+var _stage *StageStruct
 
-	DiagramPackages:           make(map[*DiagramPackage]any),
-	DiagramPackages_mapString: make(map[string]*DiagramPackage),
+var once sync.Once
 
-	Fields:           make(map[*Field]any),
-	Fields_mapString: make(map[string]*Field),
+func GetDefaultStage() *StageStruct {
+	once.Do(func() {
+		_stage = NewStage()
+	})
+	return _stage
+}
 
-	GongEnumShapes:           make(map[*GongEnumShape]any),
-	GongEnumShapes_mapString: make(map[string]*GongEnumShape),
+func NewStage() (stage *StageStruct) {
 
-	GongEnumValueEntrys:           make(map[*GongEnumValueEntry]any),
-	GongEnumValueEntrys_mapString: make(map[string]*GongEnumValueEntry),
+	stage = &StageStruct{ // insertion point for array initiatialisation
+		Classdiagrams:           make(map[*Classdiagram]any),
+		Classdiagrams_mapString: make(map[string]*Classdiagram),
 
-	GongStructShapes:           make(map[*GongStructShape]any),
-	GongStructShapes_mapString: make(map[string]*GongStructShape),
+		DiagramPackages:           make(map[*DiagramPackage]any),
+		DiagramPackages_mapString: make(map[string]*DiagramPackage),
 
-	Links:           make(map[*Link]any),
-	Links_mapString: make(map[string]*Link),
+		Fields:           make(map[*Field]any),
+		Fields_mapString: make(map[string]*Field),
 
-	Nodes:           make(map[*Node]any),
-	Nodes_mapString: make(map[string]*Node),
+		GongEnumShapes:           make(map[*GongEnumShape]any),
+		GongEnumShapes_mapString: make(map[string]*GongEnumShape),
 
-	NoteShapes:           make(map[*NoteShape]any),
-	NoteShapes_mapString: make(map[string]*NoteShape),
+		GongEnumValueEntrys:           make(map[*GongEnumValueEntry]any),
+		GongEnumValueEntrys_mapString: make(map[string]*GongEnumValueEntry),
 
-	NoteShapeLinks:           make(map[*NoteShapeLink]any),
-	NoteShapeLinks_mapString: make(map[string]*NoteShapeLink),
+		GongStructShapes:           make(map[*GongStructShape]any),
+		GongStructShapes_mapString: make(map[string]*GongStructShape),
 
-	Positions:           make(map[*Position]any),
-	Positions_mapString: make(map[string]*Position),
+		Links:           make(map[*Link]any),
+		Links_mapString: make(map[string]*Link),
 
-	Trees:           make(map[*Tree]any),
-	Trees_mapString: make(map[string]*Tree),
+		Nodes:           make(map[*Node]any),
+		Nodes_mapString: make(map[string]*Node),
 
-	UmlStates:           make(map[*UmlState]any),
-	UmlStates_mapString: make(map[string]*UmlState),
+		NoteShapes:           make(map[*NoteShape]any),
+		NoteShapes_mapString: make(map[string]*NoteShape),
 
-	Umlscs:           make(map[*Umlsc]any),
-	Umlscs_mapString: make(map[string]*Umlsc),
+		NoteShapeLinks:           make(map[*NoteShapeLink]any),
+		NoteShapeLinks_mapString: make(map[string]*NoteShapeLink),
 
-	Vertices:           make(map[*Vertice]any),
-	Vertices_mapString: make(map[string]*Vertice),
+		Positions:           make(map[*Position]any),
+		Positions_mapString: make(map[string]*Position),
 
-	// end of insertion point
-	Map_GongStructName_InstancesNb: make(map[string]int),
-	map_Gongstruct_BackPointer:     make(map[any]any),
+		Trees:           make(map[*Tree]any),
+		Trees_mapString: make(map[string]*Tree),
+
+		UmlStates:           make(map[*UmlState]any),
+		UmlStates_mapString: make(map[string]*UmlState),
+
+		Umlscs:           make(map[*Umlsc]any),
+		Umlscs_mapString: make(map[string]*Umlsc),
+
+		Vertices:           make(map[*Vertice]any),
+		Vertices_mapString: make(map[string]*Vertice),
+
+		// end of insertion point
+		Map_GongStructName_InstancesNb: make(map[string]int),
+	}
+
+	return
 }
 
 func (stage *StageStruct) Commit() {
@@ -1250,41 +1254,41 @@ func GongGetSet[Type GongstructSet](stages ...*StageStruct) *Type {
 	if len(stages) > 0 {
 		stage = stages[0]
 	} else {
-		stage = &Stage
+		stage = _stage
 	}
 
 	switch any(ret).(type) {
 	// insertion point for generic get functions
 	case map[*Classdiagram]any:
-		return any(&stage.Classdiagrams).(*Type)
+		return any(stage.Classdiagrams).(*Type)
 	case map[*DiagramPackage]any:
-		return any(&stage.DiagramPackages).(*Type)
+		return any(stage.DiagramPackages).(*Type)
 	case map[*Field]any:
-		return any(&stage.Fields).(*Type)
+		return any(stage.Fields).(*Type)
 	case map[*GongEnumShape]any:
-		return any(&stage.GongEnumShapes).(*Type)
+		return any(stage.GongEnumShapes).(*Type)
 	case map[*GongEnumValueEntry]any:
-		return any(&stage.GongEnumValueEntrys).(*Type)
+		return any(stage.GongEnumValueEntrys).(*Type)
 	case map[*GongStructShape]any:
-		return any(&stage.GongStructShapes).(*Type)
+		return any(stage.GongStructShapes).(*Type)
 	case map[*Link]any:
-		return any(&stage.Links).(*Type)
+		return any(stage.Links).(*Type)
 	case map[*Node]any:
-		return any(&stage.Nodes).(*Type)
+		return any(stage.Nodes).(*Type)
 	case map[*NoteShape]any:
-		return any(&stage.NoteShapes).(*Type)
+		return any(stage.NoteShapes).(*Type)
 	case map[*NoteShapeLink]any:
-		return any(&stage.NoteShapeLinks).(*Type)
+		return any(stage.NoteShapeLinks).(*Type)
 	case map[*Position]any:
-		return any(&stage.Positions).(*Type)
+		return any(stage.Positions).(*Type)
 	case map[*Tree]any:
-		return any(&stage.Trees).(*Type)
+		return any(stage.Trees).(*Type)
 	case map[*UmlState]any:
-		return any(&stage.UmlStates).(*Type)
+		return any(stage.UmlStates).(*Type)
 	case map[*Umlsc]any:
-		return any(&stage.Umlscs).(*Type)
+		return any(stage.Umlscs).(*Type)
 	case map[*Vertice]any:
-		return any(&stage.Vertices).(*Type)
+		return any(stage.Vertices).(*Type)
 	default:
 		return nil
 	}
@@ -1300,41 +1304,41 @@ func GongGetMap[Type GongstructMapString](stages ...*StageStruct) *Type {
 	if len(stages) > 0 {
 		stage = stages[0]
 	} else {
-		stage = &Stage
+		stage = _stage
 	}
 
 	switch any(ret).(type) {
 	// insertion point for generic get functions
 	case map[string]*Classdiagram:
-		return any(&stage.Classdiagrams_mapString).(*Type)
+		return any(stage.Classdiagrams_mapString).(*Type)
 	case map[string]*DiagramPackage:
-		return any(&stage.DiagramPackages_mapString).(*Type)
+		return any(stage.DiagramPackages_mapString).(*Type)
 	case map[string]*Field:
-		return any(&stage.Fields_mapString).(*Type)
+		return any(stage.Fields_mapString).(*Type)
 	case map[string]*GongEnumShape:
-		return any(&stage.GongEnumShapes_mapString).(*Type)
+		return any(stage.GongEnumShapes_mapString).(*Type)
 	case map[string]*GongEnumValueEntry:
-		return any(&stage.GongEnumValueEntrys_mapString).(*Type)
+		return any(stage.GongEnumValueEntrys_mapString).(*Type)
 	case map[string]*GongStructShape:
-		return any(&stage.GongStructShapes_mapString).(*Type)
+		return any(stage.GongStructShapes_mapString).(*Type)
 	case map[string]*Link:
-		return any(&stage.Links_mapString).(*Type)
+		return any(stage.Links_mapString).(*Type)
 	case map[string]*Node:
-		return any(&stage.Nodes_mapString).(*Type)
+		return any(stage.Nodes_mapString).(*Type)
 	case map[string]*NoteShape:
-		return any(&stage.NoteShapes_mapString).(*Type)
+		return any(stage.NoteShapes_mapString).(*Type)
 	case map[string]*NoteShapeLink:
-		return any(&stage.NoteShapeLinks_mapString).(*Type)
+		return any(stage.NoteShapeLinks_mapString).(*Type)
 	case map[string]*Position:
-		return any(&stage.Positions_mapString).(*Type)
+		return any(stage.Positions_mapString).(*Type)
 	case map[string]*Tree:
-		return any(&stage.Trees_mapString).(*Type)
+		return any(stage.Trees_mapString).(*Type)
 	case map[string]*UmlState:
-		return any(&stage.UmlStates_mapString).(*Type)
+		return any(stage.UmlStates_mapString).(*Type)
 	case map[string]*Umlsc:
-		return any(&stage.Umlscs_mapString).(*Type)
+		return any(stage.Umlscs_mapString).(*Type)
 	case map[string]*Vertice:
-		return any(&stage.Vertices_mapString).(*Type)
+		return any(stage.Vertices_mapString).(*Type)
 	default:
 		return nil
 	}
@@ -1350,7 +1354,7 @@ func GetGongstructInstancesSet[Type Gongstruct](stages ...*StageStruct) *map[*Ty
 	if len(stages) > 0 {
 		stage = stages[0]
 	} else {
-		stage = &Stage
+		stage = _stage
 	}
 
 	switch any(ret).(type) {
@@ -1400,7 +1404,7 @@ func GetGongstructInstancesMap[Type Gongstruct](stages ...*StageStruct) *map[str
 	if len(stages) > 0 {
 		stage = stages[0]
 	} else {
-		stage = &Stage
+		stage = _stage
 	}
 
 	switch any(ret).(type) {
@@ -1560,7 +1564,7 @@ func GetPointerReverseMap[Start, End Gongstruct](fieldname string, stages ...*St
 	if len(stages) > 0 {
 		stage = stages[0]
 	} else {
-		stage = &Stage
+		stage = _stage
 	}
 
 	var ret Start
@@ -1727,7 +1731,7 @@ func GetSliceOfPointersReverseMap[Start, End Gongstruct](fieldname string, stage
 	if len(stages) > 0 {
 		stage = stages[0]
 	} else {
-		stage = &Stage
+		stage = _stage
 	}
 
 	var ret Start

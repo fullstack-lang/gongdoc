@@ -35,6 +35,8 @@ var map_DocLink_Identifier_NewDiagram_1 map[string]any = map[string]any{
 
 	"ref_models.Line.Type": (ref_models.Line{}).Type,
 
+	"ref_models.Line.VeryLongLongLongLongLongLongField": (ref_models.Line{}).VeryLongLongLongLongLongLongField,
+
 	"ref_models.LineTypeInt": ref_models.LineTypeInt(0),
 
 	"ref_models.LineTypeString": ref_models.LineTypeString(""),
@@ -67,6 +69,7 @@ func NewDiagram_1Injection(stage *models.StageStruct) {
 	__Field__000000_Name := (&models.Field{Name: `Name`}).Stage(stage)
 	__Field__000001_Name := (&models.Field{Name: `Name`}).Stage(stage)
 	__Field__000002_Type := (&models.Field{Name: `Type`}).Stage(stage)
+	__Field__000003_VeryLongLongLongLongLongLongField := (&models.Field{Name: `VeryLongLongLongLongLongLongField`}).Stage(stage)
 
 	// Declarations of staged instances of GongEnumShape
 	__GongEnumShape__000000_NewDiagram_1_LineTypeInt := (&models.GongEnumShape{Name: `NewDiagram_1-LineTypeInt`}).Stage(stage)
@@ -147,6 +150,17 @@ func NewDiagram_1Injection(stage *models.StageStruct) {
 	__Field__000002_Type.Structname = `Line`
 	__Field__000002_Type.Fieldtypename = `LineTypeString`
 
+	// Field values setup
+	__Field__000003_VeryLongLongLongLongLongLongField.Name = `VeryLongLongLongLongLongLongField`
+
+	// comment added to overcome the problem with the comment map association
+
+	//gong:ident [ref_models.Line.VeryLongLongLongLongLongLongField]
+	__Field__000003_VeryLongLongLongLongLongLongField.Identifier = `ref_models.Line.VeryLongLongLongLongLongLongField`
+	__Field__000003_VeryLongLongLongLongLongLongField.FieldTypeAsString = ``
+	__Field__000003_VeryLongLongLongLongLongLongField.Structname = `Line`
+	__Field__000003_VeryLongLongLongLongLongLongField.Fieldtypename = `string`
+
 	// GongEnumShape values setup
 	__GongEnumShape__000000_NewDiagram_1_LineTypeInt.Name = `NewDiagram_1-LineTypeInt`
 
@@ -209,7 +223,7 @@ func NewDiagram_1Injection(stage *models.StageStruct) {
 	__GongStructShape__000000_NewDiagram_1_Line.ShowNbInstances = false
 	__GongStructShape__000000_NewDiagram_1_Line.NbInstances = 0
 	__GongStructShape__000000_NewDiagram_1_Line.Width = 240.000000
-	__GongStructShape__000000_NewDiagram_1_Line.Heigth = 93.000000
+	__GongStructShape__000000_NewDiagram_1_Line.Heigth = 108.000000
 	__GongStructShape__000000_NewDiagram_1_Line.IsSelected = false
 
 	// GongStructShape values setup
@@ -283,8 +297,8 @@ are referenced in the go code
 	__Position__000001_Pos_NewDiagram_1_LineTypeInt.Name = `Pos-NewDiagram_1-LineTypeInt`
 
 	// Position values setup
-	__Position__000002_Pos_NewDiagram_1_LineTypeString.X = 430.000000
-	__Position__000002_Pos_NewDiagram_1_LineTypeString.Y = 410.000000
+	__Position__000002_Pos_NewDiagram_1_LineTypeString.X = 420.000000
+	__Position__000002_Pos_NewDiagram_1_LineTypeString.Y = 370.000000
 	__Position__000002_Pos_NewDiagram_1_LineTypeString.Name = `Pos-NewDiagram_1-LineTypeString`
 
 	// Position values setup
@@ -312,9 +326,12 @@ are referenced in the go code
 	__GongStructShape__000000_NewDiagram_1_Line.Position = __Position__000000_Pos_NewDiagram_1_Line
 	__GongStructShape__000000_NewDiagram_1_Line.Fields = append(__GongStructShape__000000_NewDiagram_1_Line.Fields, __Field__000000_Name)
 	__GongStructShape__000000_NewDiagram_1_Line.Fields = append(__GongStructShape__000000_NewDiagram_1_Line.Fields, __Field__000002_Type)
+	__GongStructShape__000000_NewDiagram_1_Line.Fields = append(__GongStructShape__000000_NewDiagram_1_Line.Fields, __Field__000003_VeryLongLongLongLongLongLongField)
 	__GongStructShape__000000_NewDiagram_1_Line.Links = append(__GongStructShape__000000_NewDiagram_1_Line.Links, __Link__000000_Start)
 	__GongStructShape__000001_NewDiagram_1_Point.Position = __Position__000003_Pos_NewDiagram_1_Point
 	__GongStructShape__000001_NewDiagram_1_Point.Fields = append(__GongStructShape__000001_NewDiagram_1_Point.Fields, __Field__000001_Name)
 	__Link__000000_Start.Middlevertice = __Vertice__000000_Verticle_in_class_diagram_NewDiagram_1_in_middle_between_NewDiagram_1_Line_and_NewDiagram_1_Point
 	__NoteShape__000000_ShortNodeOnModels.NoteShapeLinks = append(__NoteShape__000000_ShortNodeOnModels.NoteShapeLinks, __NoteShapeLink__000000_Line)
 }
+
+

@@ -78,8 +78,8 @@ func (impl *BeforeCommitImplementation) BeforeCommit(stage *gongdoc_models.Stage
 	}
 	defer file.Close()
 
-	gongdoc_models.Stage.Checkout()
-	gongdoc_models.Stage.Marshall(file, "github.com/fullstack-lang/gongdoc/go/models", "diagrams")
+	gongdoc_models.GetDefaultStage().Checkout()
+	gongdoc_models.GetDefaultStage().Marshall(file, "github.com/fullstack-lang/gongdoc/go/models", "diagrams")
 }
 
 func main() {
@@ -104,8 +104,9 @@ func main() {
 	r.Use(cors.Default())
 
 	// setup stacks
-	gongdoc_fullstack.Init(r)
-	gong_fullstack.Init(r)
+	gongdoc_fullstack.NewStackInstance(r, "")
+	gongStage := gong_fullstack.NewStackInstance(r, "")
+	_ = gongStage
 
 	// compute absolute path
 	absPkgPath, _ := filepath.Abs(*pkgPath)
@@ -157,13 +158,12 @@ func main() {
 		os.Exit(0)
 	}
 
-	gongdocStage := &gongdoc_models.Stage
-	_ = gongdocStage
+	gongdocStage := gongdoc_models.GetDefaultStage()
 
 	gongStructShapeCallbackSingloton := new(node2gongdoc.GongStructShapeCallbacksSingloton)
 
 	// very strangely,
-	// gongdoc_models.Stage.OnAfterClassshapeUpdateCallback = classshapeCallbackSingloton
+	// gongdoc_models.GetDefaultStage().OnAfterClassshapeUpdateCallback = classshapeCallbackSingloton
 	// does not seem to be executed
 	gongdocStage.OnAfterGongStructShapeUpdateCallback = gongStructShapeCallbackSingloton
 
@@ -172,8 +172,8 @@ func main() {
 
 	if *marshallOnCommit != "" {
 		hook := new(BeforeCommitImplementation)
-		models.Stage.OnInitCommitFromFrontCallback = hook
-		models.Stage.OnInitCommitFromBackCallback = hook
+		models.GetDefaultStage().OnInitCommitFromFrontCallback = hook
+		models.GetDefaultStage().OnInitCommitFromBackCallback = hook
 	}
 
 	log.Printf("Server ready to serve on http://localhost:" + strconv.Itoa(*port) + "/")
