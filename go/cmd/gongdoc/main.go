@@ -1,28 +1,20 @@
 package main
 
 import (
-	"embed"
 	"flag"
 	"fmt"
-	"io/fs"
 	"log"
 	"math/rand"
-	"net/http"
 	"os"
 	"path/filepath"
 	"strconv"
 
-	"github.com/gin-contrib/cors"
-	"github.com/gin-contrib/static"
-	"github.com/gin-gonic/gin"
-
-	"github.com/fullstack-lang/gongdoc"
 	gongdoc_fullstack "github.com/fullstack-lang/gongdoc/go/fullstack"
-	"github.com/fullstack-lang/gongdoc/go/models"
 	gongdoc_models "github.com/fullstack-lang/gongdoc/go/models"
-	"github.com/fullstack-lang/gongdoc/go/node2gongdoc"
+	gongdoc_static "github.com/fullstack-lang/gongdoc/go/static"
 
 	"github.com/fullstack-lang/gongdoc/go/load"
+	"github.com/fullstack-lang/gongdoc/go/node2gongdoc"
 
 	gong_fullstack "github.com/fullstack-lang/gong/go/fullstack"
 	gong_models "github.com/fullstack-lang/gong/go/models"
@@ -47,25 +39,6 @@ var (
 
 	port = flag.Int("port", 8080, "port server")
 )
-
-type embedFileSystem struct {
-	http.FileSystem
-}
-
-func (e embedFileSystem) Exists(prefix string, path string) bool {
-	_, err := e.Open(path)
-	return err == nil
-}
-
-func EmbedFolder(fsEmbed embed.FS, targetPath string) static.ServeFileSystem {
-	fsys, err := fs.Sub(fsEmbed, targetPath)
-	if err != nil {
-		panic(err)
-	}
-	return embedFileSystem{
-		FileSystem: http.FS(fsys),
-	}
-}
 
 // hook marhalling to stage
 type BeforeCommitImplementation struct {
@@ -93,15 +66,7 @@ func main() {
 		*pkgPath = flag.Arg(0)
 	}
 
-	// setup controlers
-	if !*logGINFlag {
-		myfile, _ := os.Create("/tmp/server.log")
-		gin.DefaultWriter = myfile
-	}
-
-	// setup controlers
-	r := gin.Default()
-	r.Use(cors.Default())
+	r := gongdoc_static.ServeStaticFiles(*logGINFlag)
 
 	// setup stacks
 	gongdoc_fullstack.NewStackInstance(r, "")
@@ -114,13 +79,6 @@ func main() {
 
 	// load package to analyse
 	modelPkg, _ := gong_models.LoadSource(*pkgPath)
-
-	r.Use(static.Serve("/", EmbedFolder(gongdoc.NgDistNg, "ng/dist/ng")))
-	r.NoRoute(func(c *gin.Context) {
-		fmt.Println(c.Request.URL.Path, "doesn't exists, redirect on /")
-		c.Redirect(http.StatusMovedPermanently, "/")
-		c.Abort()
-	})
 
 	diagramPackage, _ := load.LoadDiagramPackage(*pkgPath, modelPkg, *editable)
 
@@ -172,8 +130,8 @@ func main() {
 
 	if *marshallOnCommit != "" {
 		hook := new(BeforeCommitImplementation)
-		models.GetDefaultStage().OnInitCommitFromFrontCallback = hook
-		models.GetDefaultStage().OnInitCommitFromBackCallback = hook
+		gongdoc_models.GetDefaultStage().OnInitCommitFromFrontCallback = hook
+		gongdoc_models.GetDefaultStage().OnInitCommitFromBackCallback = hook
 	}
 
 	log.Printf("Server ready to serve on http://localhost:" + strconv.Itoa(*port) + "/")

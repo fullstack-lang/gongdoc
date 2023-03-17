@@ -9,8 +9,6 @@ import (
 	"github.com/tdewolff/canvas"
 	"github.com/tdewolff/canvas/renderers/rasterizer"
 	"github.com/tdewolff/canvas/renderers/svg"
-
-	"github.com/fullstack-lang/gongdoc/go/static"
 )
 
 const DiagramMarginX = 10.0
@@ -91,9 +89,10 @@ func (classdiagram *Classdiagram) OutputSVG(path string) {
 	}
 
 	dejaVuSerif := canvas.NewFontFamily("dejavu-serif")
-	staticFontFile := []byte(static.Files["../gongdoc/DejaVuSerif.ttf"])
+	// staticFontFile := []byte(static.Files["../gongdoc/DejaVuSerif.ttf"])
+
 	if err := dejaVuSerif.LoadFont(
-		staticFontFile,
+		nil, // staticFontFile, // temporary, to be replace by the embed command
 		0,
 		canvas.FontRegular); err != nil { // TTF, OTF, WOFF, or WOFF2
 		log.Panic("cannot load font", err.Error())
