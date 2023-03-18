@@ -24,8 +24,6 @@ var (
 	logBBFlag  = flag.Bool("logDB", false, "log mode for db")
 	logGINFlag = flag.Bool("logGIN", false, "log mode for gin")
 
-	svg = flag.Bool("svg", false, "generate svg output and exits")
-
 	pkgPath = flag.String("pkgPath", ".", "path to the models package")
 
 	setUpRandomNumberOfInstances = flag.Bool("setUpRandomNumberOfInstances", false,
@@ -107,13 +105,6 @@ func main() {
 			}
 		}
 
-	}
-
-	if *svg {
-		for _, classDiagram := range diagramPackage.Classdiagrams {
-			classDiagram.OutputSVG(filepath.Join(*pkgPath, "../diagrams"))
-		}
-		os.Exit(0)
 	}
 
 	gongdocStage := gongdoc_models.GetDefaultStage()
