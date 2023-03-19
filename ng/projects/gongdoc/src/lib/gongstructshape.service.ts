@@ -50,7 +50,7 @@ export class GongStructShapeService {
 
     return this.http.get<GongStructShapeDB[]>(this.gongstructshapesUrl, { params: params })
       .pipe(
-        tap(_ => this.log('fetched gongstructshapes')),
+        tap(),
         catchError(this.handleError<GongStructShapeDB[]>('getGongStructShapes', []))
       );
   }
@@ -145,7 +145,7 @@ export class GongStructShapeService {
     return (error: any): Observable<T> => {
 
       // TODO: send the error to remote logging infrastructure
-      console.error("operation in GongStructShapeService" + error); // log to console instead
+      console.error("GongStructShapeService" + error); // log to console instead
 
       // TODO: better job of transforming error for user consumption
       this.log(`${operation} failed: ${error.message}`);
@@ -156,6 +156,6 @@ export class GongStructShapeService {
   }
 
   private log(message: string) {
-
+      console.log(message)
   }
 }

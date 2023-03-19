@@ -1575,7 +1575,7 @@ export class SidebarComponent implements OnInit {
           }
         }
       )
-    });
+    })
   }
 
   /**
@@ -1621,10 +1621,8 @@ export class SidebarComponent implements OnInit {
   setEditorRouterOutlet(path: string) {
     let outletName = this.routeService.getEditorOutlet(this.GONG__StackPath)
     let fullPath = this.routeService.getPathRoot() + "-" + path.toLowerCase()
-
-    let outletConf: any = {}
+    let outletConf : any = {}
     outletConf[outletName] = [fullPath, this.GONG__StackPath]
-
     this.router.navigate([{ outlets: outletConf }]);
   }
 

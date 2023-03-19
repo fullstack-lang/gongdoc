@@ -6,9 +6,9 @@ import { DOCUMENT, Location } from '@angular/common'
 /*
  * Behavior subject
  */
-import { BehaviorSubject, interval } from 'rxjs';
-import { Observable, of } from 'rxjs';
-import { catchError, map, switchMap, tap } from 'rxjs/operators';
+import { BehaviorSubject, interval } from 'rxjs'
+import { Observable, of } from 'rxjs'
+import { catchError, map, switchMap, tap } from 'rxjs/operators'
 
 @Injectable({
     providedIn: 'root'
@@ -39,8 +39,17 @@ export class CommitNbFromBackService {
 
     getCommitNbFromBack(intervalMs: number): Observable<number> {
         return interval(intervalMs).pipe(
-            switchMap(() => this.http.get<number>(this.commitNbFromBackUrl))
-        );
+            switchMap(() => this.http.get<number>(this.commitNbFromBackUrl).pipe(
+                catchError(error => {
+                    // Handle the error here, e.g. log it, show a notification, etc.
+                    console.error('Error fetching commit number:', error);
+
+                    // Return a default value, a new Observable, or rethrow the error
+                    return of(0); // Here, we return 0 as a default value
+                })
+            )
+            )
+        )
     }
 
     /**
@@ -53,7 +62,7 @@ export class CommitNbFromBackService {
         return (error: any): Observable<T> => {
 
             // TODO: send the error to remote logging infrastructure
-            console.error(operation + " " + error + " in CommitNbFromBackService") // log to console instead
+            console.error("in CommitNbFromBackService" + error); // log to console instead
 
             // TODO: better job of transforming error for user consumption
             this.log('${operation} failed: ${error.message}');
