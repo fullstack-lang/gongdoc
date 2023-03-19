@@ -29,8 +29,6 @@ var map_DocLink_Identifier_DiagramUMLduUML map[string]any = map[string]any{
 
 	"ref_models.Classdiagram": &(ref_models.Classdiagram{}),
 
-	"ref_models.Classdiagram.Classshapes": (ref_models.Classdiagram{}).Classshapes,
-
 	"ref_models.Classdiagram.GongStructShapes": (ref_models.Classdiagram{}).GongStructShapes,
 
 	"ref_models.Classdiagram.Name": (ref_models.Classdiagram{}).Name,
@@ -738,5 +736,3 @@ func DiagramUMLduUMLInjection(stage *models.StageStruct) {
 	__Link__000006_States.Middlevertice = __Vertice__000004_Vertice_0007
 	__Link__000007_Umlscs.Middlevertice = __Vertice__000003_Vertice_0006
 }
-
-
