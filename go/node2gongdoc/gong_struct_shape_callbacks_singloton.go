@@ -12,7 +12,7 @@ type GongStructShapeCallbacksSingloton struct {
 
 func (gongStructShapeCallbacksSingloton *GongStructShapeCallbacksSingloton) OnAfterUpdate(
 	gongdocStage *gongdoc_models.StageStruct,
-	stagedGongStructShape, frontGongStructShape *gongdoc_models.GongStructShape) {
+	stagedGongStructShape, frontGongStructShape *gongdoc_models.GongShape) {
 
 	if stagedGongStructShape.IsSelected != frontGongStructShape.IsSelected {
 

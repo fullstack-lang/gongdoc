@@ -3,9 +3,9 @@ package models
 const GongStructShapeDefaultWidth = 240.0
 const GongStructShapeDefaultHeigth = 48.0
 
-// GongStructShape mirrors joint.shapes.uml.Class
-// swagger:model GongStructShape
-type GongStructShape struct {
+// GongShape mirrors joint.shapes.uml.Class
+// swagger:model GongShape
+type GongShape struct {
 	Name string
 
 	Position *Position
@@ -34,4 +34,4 @@ type GongStructShape struct {
 	IsSelected bool
 }
 
-func (gongStructShape *GongStructShape) diagramElt() {}
+func (gongStructShape *GongShape) diagramElt() {}

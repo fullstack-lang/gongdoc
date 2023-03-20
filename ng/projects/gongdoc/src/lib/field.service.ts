@@ -14,7 +14,7 @@ import { catchError, map, tap } from 'rxjs/operators';
 import { FieldDB } from './field-db';
 
 // insertion point for imports
-import { GongStructShapeDB } from './gongstructshape-db'
+import { GongShapeDB } from './gongshape-db'
 
 @Injectable({
   providedIn: 'root'
@@ -45,11 +45,12 @@ export class FieldService {
   /** GET fields from the server */
   getFields(GONG__StackPath: string = ""): Observable<FieldDB[]> {
 
-	let params = new HttpParams().set("GONG__StackPath", GONG__StackPath)
+    let params = new HttpParams().set("GONG__StackPath", GONG__StackPath)
 
     return this.http.get<FieldDB[]>(this.fieldsUrl, { params: params })
       .pipe(
-        tap(_ => this.log('fetched fields')),
+        tap(),
+		// tap(_ => this.log('fetched fields')),
         catchError(this.handleError<FieldDB[]>('getFields', []))
       );
   }
@@ -67,8 +68,8 @@ export class FieldService {
   postField(fielddb: FieldDB, GONG__StackPath: string): Observable<FieldDB> {
 
     // insertion point for reset of pointers and reverse pointers (to avoid circular JSON)
-    let _GongStructShape_Fields_reverse = fielddb.GongStructShape_Fields_reverse
-    fielddb.GongStructShape_Fields_reverse = new GongStructShapeDB
+    let _GongShape_Fields_reverse = fielddb.GongShape_Fields_reverse
+    fielddb.GongShape_Fields_reverse = new GongShapeDB
 
     let params = new HttpParams().set("GONG__StackPath", GONG__StackPath)
     let httpOptions = {
@@ -76,10 +77,10 @@ export class FieldService {
       params: params
     }
 
-	return this.http.post<FieldDB>(this.fieldsUrl, fielddb, httpOptions).pipe(
+    return this.http.post<FieldDB>(this.fieldsUrl, fielddb, httpOptions).pipe(
       tap(_ => {
         // insertion point for restoration of reverse pointers
-        fielddb.GongStructShape_Fields_reverse = _GongStructShape_Fields_reverse
+        fielddb.GongShape_Fields_reverse = _GongShape_Fields_reverse
         this.log(`posted fielddb id=${fielddb.ID}`)
       }),
       catchError(this.handleError<FieldDB>('postField'))
@@ -109,8 +110,8 @@ export class FieldService {
     const url = `${this.fieldsUrl}/${id}`;
 
     // insertion point for reset of pointers and reverse pointers (to avoid circular JSON)
-    let _GongStructShape_Fields_reverse = fielddb.GongStructShape_Fields_reverse
-    fielddb.GongStructShape_Fields_reverse = new GongStructShapeDB
+    let _GongShape_Fields_reverse = fielddb.GongShape_Fields_reverse
+    fielddb.GongShape_Fields_reverse = new GongShapeDB
 
     let params = new HttpParams().set("GONG__StackPath", GONG__StackPath)
     let httpOptions = {
@@ -121,7 +122,7 @@ export class FieldService {
     return this.http.put<FieldDB>(url, fielddb, httpOptions).pipe(
       tap(_ => {
         // insertion point for restoration of reverse pointers
-        fielddb.GongStructShape_Fields_reverse = _GongStructShape_Fields_reverse
+        fielddb.GongShape_Fields_reverse = _GongShape_Fields_reverse
         this.log(`updated fielddb id=${fielddb.ID}`)
       }),
       catchError(this.handleError<FieldDB>('updateField'))
@@ -134,11 +135,11 @@ export class FieldService {
    * @param operation - name of the operation that failed
    * @param result - optional value to return as the observable result
    */
-  private handleError<T>(operation = 'operation', result?: T) {
+  private handleError<T>(operation = 'operation in FieldService', result?: T) {
     return (error: any): Observable<T> => {
 
       // TODO: send the error to remote logging infrastructure
-      console.error(error); // log to console instead
+      console.error("FieldService" + error); // log to console instead
 
       // TODO: better job of transforming error for user consumption
       this.log(`${operation} failed: ${error.message}`);
@@ -149,6 +150,6 @@ export class FieldService {
   }
 
   private log(message: string) {
-
+      console.log(message)
   }
 }

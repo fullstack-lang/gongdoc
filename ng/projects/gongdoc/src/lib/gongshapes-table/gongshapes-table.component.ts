@@ -14,8 +14,8 @@ import { SelectionModel } from '@angular/cdk/collections';
 const allowMultiSelect = true;
 
 import { ActivatedRoute, Router, RouterState } from '@angular/router';
-import { FieldDB } from '../field-db'
-import { FieldService } from '../field.service'
+import { GongShapeDB } from '../gongshape-db'
+import { GongShapeService } from '../gongshape.service'
 
 // insertion point for additional imports
 
@@ -31,26 +31,26 @@ enum TableComponentMode {
 
 // generated table component
 @Component({
-  selector: 'app-fieldstable',
-  templateUrl: './fields-table.component.html',
-  styleUrls: ['./fields-table.component.css'],
+  selector: 'app-gongshapestable',
+  templateUrl: './gongshapes-table.component.html',
+  styleUrls: ['./gongshapes-table.component.css'],
 })
-export class FieldsTableComponent implements OnInit {
+export class GongShapesTableComponent implements OnInit {
 
   @Input() GONG__StackPath: string = ""
 
   // mode at invocation
   mode: TableComponentMode = TableComponentMode.DISPLAY_MODE
 
-  // used if the component is called as a selection component of Field instances
-  selection: SelectionModel<FieldDB> = new (SelectionModel)
-  initialSelection = new Array<FieldDB>()
+  // used if the component is called as a selection component of GongShape instances
+  selection: SelectionModel<GongShapeDB> = new (SelectionModel)
+  initialSelection = new Array<GongShapeDB>()
 
   // the data source for the table
-  fields: FieldDB[] = []
-  matTableDataSource: MatTableDataSource<FieldDB> = new (MatTableDataSource)
+  gongshapes: GongShapeDB[] = []
+  matTableDataSource: MatTableDataSource<GongShapeDB> = new (MatTableDataSource)
 
-  // front repo, that will be referenced by this.fields
+  // front repo, that will be referenced by this.gongshapes
   frontRepo: FrontRepo = new (FrontRepo)
 
   // displayedColumns is referenced by the MatTable component for specify what columns
@@ -66,30 +66,39 @@ export class FieldsTableComponent implements OnInit {
   ngAfterViewInit() {
 
     // enable sorting on all fields (including pointers and reverse pointer)
-    this.matTableDataSource.sortingDataAccessor = (fieldDB: FieldDB, property: string) => {
+    this.matTableDataSource.sortingDataAccessor = (gongshapeDB: GongShapeDB, property: string) => {
       switch (property) {
         case 'ID':
-          return fieldDB.ID
+          return gongshapeDB.ID
 
         // insertion point for specific sorting accessor
         case 'Name':
-          return fieldDB.Name;
+          return gongshapeDB.Name;
+
+        case 'Position':
+          return (gongshapeDB.Position ? gongshapeDB.Position.Name : '');
 
         case 'Identifier':
-          return fieldDB.Identifier;
+          return gongshapeDB.Identifier;
 
-        case 'FieldTypeAsString':
-          return fieldDB.FieldTypeAsString;
+        case 'ShowNbInstances':
+          return gongshapeDB.ShowNbInstances ? "true" : "false";
 
-        case 'Structname':
-          return fieldDB.Structname;
+        case 'NbInstances':
+          return gongshapeDB.NbInstances;
 
-        case 'Fieldtypename':
-          return fieldDB.Fieldtypename;
+        case 'Width':
+          return gongshapeDB.Width;
 
-        case 'GongShape_Fields':
-          if (this.frontRepo.GongShapes.get(fieldDB.GongShape_FieldsDBID.Int64) != undefined) {
-            return this.frontRepo.GongShapes.get(fieldDB.GongShape_FieldsDBID.Int64)!.Name
+        case 'Heigth':
+          return gongshapeDB.Heigth;
+
+        case 'IsSelected':
+          return gongshapeDB.IsSelected ? "true" : "false";
+
+        case 'Classdiagram_GongStructShapes':
+          if (this.frontRepo.Classdiagrams.get(gongshapeDB.Classdiagram_GongStructShapesDBID.Int64) != undefined) {
+            return this.frontRepo.Classdiagrams.get(gongshapeDB.Classdiagram_GongStructShapesDBID.Int64)!.Name
           } else {
             return ""
           }
@@ -101,20 +110,23 @@ export class FieldsTableComponent implements OnInit {
     };
 
     // enable filtering on all fields (including pointers and reverse pointer, which is not done by default)
-    this.matTableDataSource.filterPredicate = (fieldDB: FieldDB, filter: string) => {
+    this.matTableDataSource.filterPredicate = (gongshapeDB: GongShapeDB, filter: string) => {
 
       // filtering is based on finding a lower case filter into a concatenated string
-      // the fieldDB properties
+      // the gongshapeDB properties
       let mergedContent = ""
 
       // insertion point for merging of fields
-      mergedContent += fieldDB.Name.toLowerCase()
-      mergedContent += fieldDB.Identifier.toLowerCase()
-      mergedContent += fieldDB.FieldTypeAsString.toLowerCase()
-      mergedContent += fieldDB.Structname.toLowerCase()
-      mergedContent += fieldDB.Fieldtypename.toLowerCase()
-      if (fieldDB.GongShape_FieldsDBID.Int64 != 0) {
-        mergedContent += this.frontRepo.GongShapes.get(fieldDB.GongShape_FieldsDBID.Int64)!.Name.toLowerCase()
+      mergedContent += gongshapeDB.Name.toLowerCase()
+      if (gongshapeDB.Position) {
+        mergedContent += gongshapeDB.Position.Name.toLowerCase()
+      }
+      mergedContent += gongshapeDB.Identifier.toLowerCase()
+      mergedContent += gongshapeDB.NbInstances.toString()
+      mergedContent += gongshapeDB.Width.toString()
+      mergedContent += gongshapeDB.Heigth.toString()
+      if (gongshapeDB.Classdiagram_GongStructShapesDBID.Int64 != 0) {
+        mergedContent += this.frontRepo.Classdiagrams.get(gongshapeDB.Classdiagram_GongStructShapesDBID.Int64)!.Name.toLowerCase()
       }
 
 
@@ -132,11 +144,11 @@ export class FieldsTableComponent implements OnInit {
   }
 
   constructor(
-    private fieldService: FieldService,
+    private gongshapeService: GongShapeService,
     private frontRepoService: FrontRepoService,
 
-    // not null if the component is called as a selection component of field instances
-    public dialogRef: MatDialogRef<FieldsTableComponent>,
+    // not null if the component is called as a selection component of gongshape instances
+    public dialogRef: MatDialogRef<GongShapesTableComponent>,
     @Optional() @Inject(MAT_DIALOG_DATA) public dialogData: DialogData,
 
     private router: Router,
@@ -162,32 +174,38 @@ export class FieldsTableComponent implements OnInit {
     }
 
     // observable for changes in structs
-    this.fieldService.FieldServiceChanged.subscribe(
+    this.gongshapeService.GongShapeServiceChanged.subscribe(
       message => {
         if (message == "post" || message == "update" || message == "delete") {
-          this.getFields()
+          this.getGongShapes()
         }
       }
     )
     if (this.mode == TableComponentMode.DISPLAY_MODE) {
       this.displayedColumns = ['ID', 'Delete', // insertion point for columns to display
         "Name",
+        "Position",
         "Identifier",
-        "FieldTypeAsString",
-        "Structname",
-        "Fieldtypename",
-        "GongShape_Fields",
+        "ShowNbInstances",
+        "NbInstances",
+        "Width",
+        "Heigth",
+        "IsSelected",
+        "Classdiagram_GongStructShapes",
       ]
     } else {
       this.displayedColumns = ['select', 'ID', // insertion point for columns to display
         "Name",
+        "Position",
         "Identifier",
-        "FieldTypeAsString",
-        "Structname",
-        "Fieldtypename",
-        "GongShape_Fields",
+        "ShowNbInstances",
+        "NbInstances",
+        "Width",
+        "Heigth",
+        "IsSelected",
+        "Classdiagram_GongStructShapes",
       ]
-      this.selection = new SelectionModel<FieldDB>(allowMultiSelect, this.initialSelection);
+      this.selection = new SelectionModel<GongShapeDB>(allowMultiSelect, this.initialSelection);
     }
 
   }
@@ -198,84 +216,84 @@ export class FieldsTableComponent implements OnInit {
       this.GONG__StackPath = stackPath
     }
 
-    this.getFields()
+    this.getGongShapes()
 
-    this.matTableDataSource = new MatTableDataSource(this.fields)
+    this.matTableDataSource = new MatTableDataSource(this.gongshapes)
   }
 
-  getFields(): void {
+  getGongShapes(): void {
     this.frontRepoService.pull(this.GONG__StackPath).subscribe(
       frontRepo => {
         this.frontRepo = frontRepo
 
-        this.fields = this.frontRepo.Fields_array;
+        this.gongshapes = this.frontRepo.GongShapes_array;
 
         // insertion point for time duration Recoveries
         // insertion point for enum int Recoveries
 
         // in case the component is called as a selection component
         if (this.mode == TableComponentMode.ONE_MANY_ASSOCIATION_MODE) {
-          for (let field of this.fields) {
+          for (let gongshape of this.gongshapes) {
             let ID = this.dialogData.ID
-            let revPointer = field[this.dialogData.ReversePointer as keyof FieldDB] as unknown as NullInt64
+            let revPointer = gongshape[this.dialogData.ReversePointer as keyof GongShapeDB] as unknown as NullInt64
             if (revPointer.Int64 == ID) {
-              this.initialSelection.push(field)
+              this.initialSelection.push(gongshape)
             }
-            this.selection = new SelectionModel<FieldDB>(allowMultiSelect, this.initialSelection);
+            this.selection = new SelectionModel<GongShapeDB>(allowMultiSelect, this.initialSelection);
           }
         }
 
         if (this.mode == TableComponentMode.MANY_MANY_ASSOCIATION_MODE) {
 
-          let mapOfSourceInstances = this.frontRepo[this.dialogData.SourceStruct + "s" as keyof FrontRepo] as Map<number, FieldDB>
+          let mapOfSourceInstances = this.frontRepo[this.dialogData.SourceStruct + "s" as keyof FrontRepo] as Map<number, GongShapeDB>
           let sourceInstance = mapOfSourceInstances.get(this.dialogData.ID)!
 
-          // we associates on sourceInstance of type SourceStruct with a MANY MANY associations to FieldDB
+          // we associates on sourceInstance of type SourceStruct with a MANY MANY associations to GongShapeDB
           // the field name is sourceField
-          let sourceFieldArray = sourceInstance[this.dialogData.SourceField as keyof typeof sourceInstance]! as unknown as FieldDB[]
+          let sourceFieldArray = sourceInstance[this.dialogData.SourceField as keyof typeof sourceInstance]! as unknown as GongShapeDB[]
           if (sourceFieldArray != null) {
             for (let associationInstance of sourceFieldArray) {
-              let field = associationInstance[this.dialogData.IntermediateStructField as keyof typeof associationInstance] as unknown as FieldDB
-              this.initialSelection.push(field)
+              let gongshape = associationInstance[this.dialogData.IntermediateStructField as keyof typeof associationInstance] as unknown as GongShapeDB
+              this.initialSelection.push(gongshape)
             }
           }
 
-          this.selection = new SelectionModel<FieldDB>(allowMultiSelect, this.initialSelection);
+          this.selection = new SelectionModel<GongShapeDB>(allowMultiSelect, this.initialSelection);
         }
 
         // update the mat table data source
-        this.matTableDataSource.data = this.fields
+        this.matTableDataSource.data = this.gongshapes
       }
     )
   }
 
-  // newField initiate a new field
-  // create a new Field objet
-  newField() {
+  // newGongShape initiate a new gongshape
+  // create a new GongShape objet
+  newGongShape() {
   }
 
-  deleteField(fieldID: number, field: FieldDB) {
-    // list of fields is truncated of field before the delete
-    this.fields = this.fields.filter(h => h !== field);
+  deleteGongShape(gongshapeID: number, gongshape: GongShapeDB) {
+    // list of gongshapes is truncated of gongshape before the delete
+    this.gongshapes = this.gongshapes.filter(h => h !== gongshape);
 
-    this.fieldService.deleteField(fieldID, this.GONG__StackPath).subscribe(
-      field => {
-        this.fieldService.FieldServiceChanged.next("delete")
+    this.gongshapeService.deleteGongShape(gongshapeID, this.GONG__StackPath).subscribe(
+      gongshape => {
+        this.gongshapeService.GongShapeServiceChanged.next("delete")
       }
     );
   }
 
-  editField(fieldID: number, field: FieldDB) {
+  editGongShape(gongshapeID: number, gongshape: GongShapeDB) {
 
   }
 
   // set editor outlet
-  setEditorRouterOutlet(fieldID: number) {
+  setEditorRouterOutlet(gongshapeID: number) {
     let outletName = this.routeService.getEditorOutlet(this.GONG__StackPath)
-    let fullPath = this.routeService.getPathRoot() + "-" + "field" + "-detail"
+    let fullPath = this.routeService.getPathRoot() + "-" + "gongshape" + "-detail"
 
     let outletConf: any = {}
-    outletConf[outletName] = [fullPath, fieldID, this.GONG__StackPath]
+    outletConf[outletName] = [fullPath, gongshapeID, this.GONG__StackPath]
 
     this.router.navigate([{ outlets: outletConf }])
   }
@@ -283,7 +301,7 @@ export class FieldsTableComponent implements OnInit {
   /** Whether the number of selected elements matches the total number of rows. */
   isAllSelected() {
     const numSelected = this.selection.selected.length;
-    const numRows = this.fields.length;
+    const numRows = this.gongshapes.length;
     return numSelected === numRows;
   }
 
@@ -291,39 +309,39 @@ export class FieldsTableComponent implements OnInit {
   masterToggle() {
     this.isAllSelected() ?
       this.selection.clear() :
-      this.fields.forEach(row => this.selection.select(row));
+      this.gongshapes.forEach(row => this.selection.select(row));
   }
 
   save() {
 
     if (this.mode == TableComponentMode.ONE_MANY_ASSOCIATION_MODE) {
 
-      let toUpdate = new Set<FieldDB>()
+      let toUpdate = new Set<GongShapeDB>()
 
-      // reset all initial selection of field that belong to field
-      for (let field of this.initialSelection) {
-        let index = field[this.dialogData.ReversePointer as keyof FieldDB] as unknown as NullInt64
+      // reset all initial selection of gongshape that belong to gongshape
+      for (let gongshape of this.initialSelection) {
+        let index = gongshape[this.dialogData.ReversePointer as keyof GongShapeDB] as unknown as NullInt64
         index.Int64 = 0
         index.Valid = true
-        toUpdate.add(field)
+        toUpdate.add(gongshape)
 
       }
 
-      // from selection, set field that belong to field
-      for (let field of this.selection.selected) {
+      // from selection, set gongshape that belong to gongshape
+      for (let gongshape of this.selection.selected) {
         let ID = this.dialogData.ID as number
-        let reversePointer = field[this.dialogData.ReversePointer as keyof FieldDB] as unknown as NullInt64
+        let reversePointer = gongshape[this.dialogData.ReversePointer as keyof GongShapeDB] as unknown as NullInt64
         reversePointer.Int64 = ID
         reversePointer.Valid = true
-        toUpdate.add(field)
+        toUpdate.add(gongshape)
       }
 
 
-      // update all field (only update selection & initial selection)
-      for (let field of toUpdate) {
-        this.fieldService.updateField(field, this.GONG__StackPath)
-          .subscribe(field => {
-            this.fieldService.FieldServiceChanged.next("update")
+      // update all gongshape (only update selection & initial selection)
+      for (let gongshape of toUpdate) {
+        this.gongshapeService.updateGongShape(gongshape, this.GONG__StackPath)
+          .subscribe(gongshape => {
+            this.gongshapeService.GongShapeServiceChanged.next("update")
           });
       }
     }
@@ -331,26 +349,26 @@ export class FieldsTableComponent implements OnInit {
     if (this.mode == TableComponentMode.MANY_MANY_ASSOCIATION_MODE) {
 
       // get the source instance via the map of instances in the front repo
-      let mapOfSourceInstances = this.frontRepo[this.dialogData.SourceStruct + "s" as keyof FrontRepo] as Map<number, FieldDB>
+      let mapOfSourceInstances = this.frontRepo[this.dialogData.SourceStruct + "s" as keyof FrontRepo] as Map<number, GongShapeDB>
       let sourceInstance = mapOfSourceInstances.get(this.dialogData.ID)!
 
       // First, parse all instance of the association struct and remove the instance
       // that have unselect
-      let unselectedField = new Set<number>()
-      for (let field of this.initialSelection) {
-        if (this.selection.selected.includes(field)) {
-          // console.log("field " + field.Name + " is still selected")
+      let unselectedGongShape = new Set<number>()
+      for (let gongshape of this.initialSelection) {
+        if (this.selection.selected.includes(gongshape)) {
+          // console.log("gongshape " + gongshape.Name + " is still selected")
         } else {
-          console.log("field " + field.Name + " has been unselected")
-          unselectedField.add(field.ID)
-          console.log("is unselected " + unselectedField.has(field.ID))
+          console.log("gongshape " + gongshape.Name + " has been unselected")
+          unselectedGongShape.add(gongshape.ID)
+          console.log("is unselected " + unselectedGongShape.has(gongshape.ID))
         }
       }
 
       // delete the association instance
       let associationInstance = sourceInstance[this.dialogData.SourceField as keyof typeof sourceInstance]
-      let field = associationInstance![this.dialogData.IntermediateStructField as keyof typeof associationInstance] as unknown as FieldDB
-      if (unselectedField.has(field.ID)) {
+      let gongshape = associationInstance![this.dialogData.IntermediateStructField as keyof typeof associationInstance] as unknown as GongShapeDB
+      if (unselectedGongShape.has(gongshape.ID)) {
         this.frontRepoService.deleteService(this.dialogData.IntermediateStruct, associationInstance)
 
 
@@ -358,38 +376,38 @@ export class FieldsTableComponent implements OnInit {
 
       // is the source array is empty create it
       if (sourceInstance[this.dialogData.SourceField as keyof typeof sourceInstance] == undefined) {
-        (sourceInstance[this.dialogData.SourceField as keyof typeof sourceInstance] as unknown as Array<FieldDB>) = new Array<FieldDB>()
+        (sourceInstance[this.dialogData.SourceField as keyof typeof sourceInstance] as unknown as Array<GongShapeDB>) = new Array<GongShapeDB>()
       }
 
       // second, parse all instance of the selected
       if (sourceInstance[this.dialogData.SourceField as keyof typeof sourceInstance]) {
         this.selection.selected.forEach(
-          field => {
-            if (!this.initialSelection.includes(field)) {
-              // console.log("field " + field.Name + " has been added to the selection")
+          gongshape => {
+            if (!this.initialSelection.includes(gongshape)) {
+              // console.log("gongshape " + gongshape.Name + " has been added to the selection")
 
               let associationInstance = {
-                Name: sourceInstance["Name"] + "-" + field.Name,
+                Name: sourceInstance["Name"] + "-" + gongshape.Name,
               }
 
               let index = associationInstance[this.dialogData.IntermediateStructField + "ID" as keyof typeof associationInstance] as unknown as NullInt64
-              index.Int64 = field.ID
+              index.Int64 = gongshape.ID
               index.Valid = true
 
               let indexDB = associationInstance[this.dialogData.IntermediateStructField + "DBID" as keyof typeof associationInstance] as unknown as NullInt64
-              indexDB.Int64 = field.ID
+              indexDB.Int64 = gongshape.ID
               index.Valid = true
 
               this.frontRepoService.postService(this.dialogData.IntermediateStruct, associationInstance)
 
             } else {
-              // console.log("field " + field.Name + " is still selected")
+              // console.log("gongshape " + gongshape.Name + " is still selected")
             }
           }
         )
       }
 
-      // this.selection = new SelectionModel<FieldDB>(allowMultiSelect, this.initialSelection);
+      // this.selection = new SelectionModel<GongShapeDB>(allowMultiSelect, this.initialSelection);
     }
 
     // why pizza ?

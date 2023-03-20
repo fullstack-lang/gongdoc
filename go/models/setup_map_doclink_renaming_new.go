@@ -38,7 +38,7 @@ func SetupMapDocLinkRenamingNew(gongdocStage *StageStruct, diagramPackage *Diagr
 		map_DocLink_Renaming[gongEnumShape.Identifier] = identifier
 	}
 
-	for gongStructShape := range *GetGongstructInstancesSet[GongStructShape](gongdocStage) {
+	for gongStructShape := range *GetGongstructInstancesSet[GongShape](gongdocStage) {
 
 		var identifier GONG__Identifier
 		identifier.Ident = gongStructShape.Identifier

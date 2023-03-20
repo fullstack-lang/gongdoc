@@ -18,7 +18,7 @@ func SerializeStage(filename string) {
 		SerializeExcelize[Field](f)
 		SerializeExcelize[GongEnumShape](f)
 		SerializeExcelize[GongEnumValueEntry](f)
-		SerializeExcelize[GongStructShape](f)
+		SerializeExcelize[GongShape](f)
 		SerializeExcelize[Link](f)
 		SerializeExcelize[Node](f)
 		SerializeExcelize[NoteShape](f)

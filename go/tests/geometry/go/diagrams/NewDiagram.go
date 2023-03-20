@@ -63,8 +63,8 @@ func NewDiagramInjection(stage *models.StageStruct) {
 	// Declarations of staged instances of GongEnumValueEntry
 
 	// Declarations of staged instances of GongStructShape
-	__GongStructShape__000000_NewDiagram_Line := (&models.GongStructShape{Name: `NewDiagram-Line`}).Stage(stage)
-	__GongStructShape__000001_NewDiagram_Point := (&models.GongStructShape{Name: `NewDiagram-Point`}).Stage(stage)
+	__GongStructShape__000000_NewDiagram_Line := (&models.GongShape{Name: `NewDiagram-Line`}).Stage(stage)
+	__GongStructShape__000001_NewDiagram_Point := (&models.GongShape{Name: `NewDiagram-Point`}).Stage(stage)
 
 	// Declarations of staged instances of Link
 	__Link__000000_Start := (&models.Link{Name: `Start`}).Stage(stage)
@@ -245,5 +245,3 @@ are referenced in the go code
 	__NoteShape__000000_ShortNodeOnModels.NoteShapeLinks = append(__NoteShape__000000_ShortNodeOnModels.NoteShapeLinks, __NoteShapeLink__000003_Point)
 	__NoteShape__000000_ShortNodeOnModels.NoteShapeLinks = append(__NoteShape__000000_ShortNodeOnModels.NoteShapeLinks, __NoteShapeLink__000002_LineTypeString)
 }
-
-
