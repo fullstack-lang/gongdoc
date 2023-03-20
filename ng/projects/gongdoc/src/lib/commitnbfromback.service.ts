@@ -3,6 +3,8 @@ import { HttpClientModule } from '@angular/common/http';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { DOCUMENT, Location } from '@angular/common'
 
+import { environment } from '../../../../src/environments/environment';
+
 /*
  * Behavior subject
  */
@@ -34,7 +36,7 @@ export class CommitNbFromBackService {
         origin = origin.replace("4200", "8080")
 
         // compute path to the service
-        this.commitNbFromBackUrl = origin + '/api/github.com/fullstack-lang/gongdoc/go/v1/commitfrombacknb';
+        this.commitNbFromBackUrl = environment.apiBaseUrl + '/api/github.com/fullstack-lang/gongdoc/go/v1/commitfrombacknb';
     }
 
     getCommitNbFromBack(intervalMs: number): Observable<number> {

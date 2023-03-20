@@ -126,7 +126,7 @@ func main() {
 	}
 
 	log.Printf("Server ready to serve on http://localhost:" + strconv.Itoa(*port) + "/")
-	err := r.Run(":" + strconv.Itoa(*port))
+	err := r.RunTLS(":443", "cert.pem", "key-no-pass.pem")
 	if err != nil {
 		log.Fatalln(err.Error())
 	}
