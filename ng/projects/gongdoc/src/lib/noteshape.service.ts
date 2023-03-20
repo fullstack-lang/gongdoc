@@ -49,7 +49,7 @@ export class NoteShapeService {
 
     return this.http.get<NoteShapeDB[]>(this.noteshapesUrl, { params: params })
       .pipe(
-        tap(),
+        tap(_ => this.log('fetched noteshapes')),
         catchError(this.handleError<NoteShapeDB[]>('getNoteShapes', []))
       );
   }

@@ -49,7 +49,7 @@ export class DiagramPackageService {
 
     return this.http.get<DiagramPackageDB[]>(this.diagrampackagesUrl, { params: params })
       .pipe(
-        tap(),
+        tap(_ => this.log('fetched diagrampackages')),
         catchError(this.handleError<DiagramPackageDB[]>('getDiagramPackages', []))
       );
   }

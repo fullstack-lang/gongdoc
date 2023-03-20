@@ -50,7 +50,7 @@ export class GongStructShapeService {
 
     return this.http.get<GongStructShapeDB[]>(this.gongstructshapesUrl, { params: params })
       .pipe(
-        tap(),
+        tap(_ => this.log('fetched gongstructshapes')),
         catchError(this.handleError<GongStructShapeDB[]>('getGongStructShapes', []))
       );
   }

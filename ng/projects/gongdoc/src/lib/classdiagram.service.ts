@@ -49,7 +49,7 @@ export class ClassdiagramService {
 
     return this.http.get<ClassdiagramDB[]>(this.classdiagramsUrl, { params: params })
       .pipe(
-        tap(),
+        tap(_ => this.log('fetched classdiagrams')),
         catchError(this.handleError<ClassdiagramDB[]>('getClassdiagrams', []))
       );
   }

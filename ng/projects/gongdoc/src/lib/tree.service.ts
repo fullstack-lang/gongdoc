@@ -48,7 +48,7 @@ export class TreeService {
 
     return this.http.get<TreeDB[]>(this.treesUrl, { params: params })
       .pipe(
-        tap(),
+        tap(_ => this.log('fetched trees')),
         catchError(this.handleError<TreeDB[]>('getTrees', []))
       );
   }

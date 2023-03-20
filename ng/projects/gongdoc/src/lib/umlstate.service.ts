@@ -49,7 +49,7 @@ export class UmlStateService {
 
     return this.http.get<UmlStateDB[]>(this.umlstatesUrl, { params: params })
       .pipe(
-        tap(),
+        tap(_ => this.log('fetched umlstates')),
         catchError(this.handleError<UmlStateDB[]>('getUmlStates', []))
       );
   }

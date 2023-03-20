@@ -50,7 +50,7 @@ export class GongEnumShapeService {
 
     return this.http.get<GongEnumShapeDB[]>(this.gongenumshapesUrl, { params: params })
       .pipe(
-        tap(),
+        tap(_ => this.log('fetched gongenumshapes')),
         catchError(this.handleError<GongEnumShapeDB[]>('getGongEnumShapes', []))
       );
   }
