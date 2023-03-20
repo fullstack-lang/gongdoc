@@ -49,7 +49,8 @@ export class NodeService {
 
     return this.http.get<NodeDB[]>(this.nodesUrl, { params: params })
       .pipe(
-        tap(_ => this.log('fetched nodes')),
+        tap(),
+		// tap(_ => this.log('fetched nodes')),
         catchError(this.handleError<NodeDB[]>('getNodes', []))
       );
   }

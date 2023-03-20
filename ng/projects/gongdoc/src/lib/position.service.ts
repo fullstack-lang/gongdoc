@@ -48,7 +48,8 @@ export class PositionService {
 
     return this.http.get<PositionDB[]>(this.positionsUrl, { params: params })
       .pipe(
-        tap(_ => this.log('fetched positions')),
+        tap(),
+		// tap(_ => this.log('fetched positions')),
         catchError(this.handleError<PositionDB[]>('getPositions', []))
       );
   }

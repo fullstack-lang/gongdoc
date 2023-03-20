@@ -50,7 +50,8 @@ export class GongShapeService {
 
     return this.http.get<GongShapeDB[]>(this.gongshapesUrl, { params: params })
       .pipe(
-        tap(_ => this.log('fetched gongshapes')),
+        tap(),
+		// tap(_ => this.log('fetched gongshapes')),
         catchError(this.handleError<GongShapeDB[]>('getGongShapes', []))
       );
   }

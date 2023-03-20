@@ -48,7 +48,8 @@ export class VerticeService {
 
     return this.http.get<VerticeDB[]>(this.verticesUrl, { params: params })
       .pipe(
-        tap(_ => this.log('fetched vertices')),
+        tap(),
+		// tap(_ => this.log('fetched vertices')),
         catchError(this.handleError<VerticeDB[]>('getVertices', []))
       );
   }

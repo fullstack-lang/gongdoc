@@ -49,7 +49,8 @@ export class GongEnumValueEntryService {
 
     return this.http.get<GongEnumValueEntryDB[]>(this.gongenumvalueentrysUrl, { params: params })
       .pipe(
-        tap(_ => this.log('fetched gongenumvalueentrys')),
+        tap(),
+		// tap(_ => this.log('fetched gongenumvalueentrys')),
         catchError(this.handleError<GongEnumValueEntryDB[]>('getGongEnumValueEntrys', []))
       );
   }

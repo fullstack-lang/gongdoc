@@ -49,7 +49,8 @@ export class NoteShapeLinkService {
 
     return this.http.get<NoteShapeLinkDB[]>(this.noteshapelinksUrl, { params: params })
       .pipe(
-        tap(_ => this.log('fetched noteshapelinks')),
+        tap(),
+		// tap(_ => this.log('fetched noteshapelinks')),
         catchError(this.handleError<NoteShapeLinkDB[]>('getNoteShapeLinks', []))
       );
   }

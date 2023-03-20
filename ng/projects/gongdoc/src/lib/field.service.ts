@@ -49,7 +49,8 @@ export class FieldService {
 
     return this.http.get<FieldDB[]>(this.fieldsUrl, { params: params })
       .pipe(
-        tap(_ => this.log('fetched fields')),
+        tap(),
+		// tap(_ => this.log('fetched fields')),
         catchError(this.handleError<FieldDB[]>('getFields', []))
       );
   }

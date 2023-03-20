@@ -49,7 +49,8 @@ export class UmlscService {
 
     return this.http.get<UmlscDB[]>(this.umlscsUrl, { params: params })
       .pipe(
-        tap(_ => this.log('fetched umlscs')),
+        tap(),
+		// tap(_ => this.log('fetched umlscs')),
         catchError(this.handleError<UmlscDB[]>('getUmlscs', []))
       );
   }

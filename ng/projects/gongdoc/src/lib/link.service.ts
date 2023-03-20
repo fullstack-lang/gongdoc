@@ -50,7 +50,8 @@ export class LinkService {
 
     return this.http.get<LinkDB[]>(this.linksUrl, { params: params })
       .pipe(
-        tap(_ => this.log('fetched links')),
+        tap(),
+		// tap(_ => this.log('fetched links')),
         catchError(this.handleError<LinkDB[]>('getLinks', []))
       );
   }
