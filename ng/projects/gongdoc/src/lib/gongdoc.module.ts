@@ -4,9 +4,6 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { Routes, RouterModule } from '@angular/router';
 
-import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
-import { LoggingInterceptorService } from './logging-interceptor.service';
-
 // for angular material
 import { MatSliderModule } from '@angular/material/slider';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -177,7 +174,6 @@ import { VerticeDetailComponent } from './vertice-detail/vertice-detail.componen
 		RouterModule,
 
 		AppRoutingModule,
-		HttpClientModule,
 
 		MatSliderModule,
 		MatSelectModule,
@@ -276,11 +272,6 @@ import { VerticeDetailComponent } from './vertice-detail/vertice-detail.componen
 		{
 			provide: MatDialogRef,
 			useValue: {}
-		},
-		{
-			provide: HTTP_INTERCEPTORS,
-			useClass: LoggingInterceptorService,
-			multi: true,
 		},
 	],
 })
