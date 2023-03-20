@@ -102,11 +102,11 @@
     </mat-form-field>
 
     <mat-form-field class="detail-full-width">
-        <mat-label>(GongStructShape) Fields</mat-label>
-        <mat-select [compareWith]="compareObjects" [(ngModel)]="field.GongStructShape_Fields_reverse" [ngModelOptions]="{standalone: true}">
+        <mat-label>(GongShape) Fields</mat-label>
+        <mat-select [compareWith]="compareObjects" [(ngModel)]="field.GongShape_Fields_reverse" [ngModelOptions]="{standalone: true}">
             <mat-option>None</mat-option>
-            <mat-option *ngFor="let gongstructshape of frontRepo.GongStructShapes_array" [value]="gongstructshape">
-                {{gongstructshape.Name}}
+            <mat-option *ngFor="let gongshape of frontRepo.GongShapes_array" [value]="gongshape">
+                {{gongshape.Name}}
             </mat-option>
         </mat-select>
     </mat-form-field>

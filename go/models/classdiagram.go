@@ -11,7 +11,7 @@ type Classdiagram struct {
 	Name string
 
 	// list of gongstructshapes in the diagram
-	GongStructShapes []*GongStructShape
+	GongStructShapes []*GongShape
 
 	GongEnumShapes []*GongEnumShape
 
@@ -26,7 +26,7 @@ type Classdiagram struct {
 func (classdiagram *Classdiagram) RemoveGongStructShape(stage *StageStruct, gongstructshapeName string) {
 
 	foundGongStructShape := false
-	var gongstructshape *GongStructShape
+	var gongstructshape *GongShape
 	for _, _gongstructshape := range classdiagram.GongStructShapes {
 
 		// strange behavior when the gongstructshape is remove within the loop
@@ -92,7 +92,7 @@ func (classdiagram *Classdiagram) RemoveGongStructShape(stage *StageStruct, gong
 
 func (classdiagram *Classdiagram) AddGongStructShape(stage *StageStruct, diagramPackage *DiagramPackage, gongstructshapeName string) {
 
-	var gongstructshape GongStructShape
+	var gongstructshape GongShape
 	gongstructshape.Name = classdiagram.Name + "-" + gongstructshapeName
 	gongstructshape.Identifier = GongStructNameToIdentifier(gongstructshapeName)
 	gongstructshape.Width = 240

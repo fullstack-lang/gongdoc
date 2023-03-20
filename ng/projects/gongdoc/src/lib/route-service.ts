@@ -17,8 +17,8 @@ import { GongEnumShapeDetailComponent } from './gongenumshape-detail/gongenumsha
 import { GongEnumValueEntrysTableComponent } from './gongenumvalueentrys-table/gongenumvalueentrys-table.component'
 import { GongEnumValueEntryDetailComponent } from './gongenumvalueentry-detail/gongenumvalueentry-detail.component'
 
-import { GongStructShapesTableComponent } from './gongstructshapes-table/gongstructshapes-table.component'
-import { GongStructShapeDetailComponent } from './gongstructshape-detail/gongstructshape-detail.component'
+import { GongShapesTableComponent } from './gongshapes-table/gongshapes-table.component'
+import { GongShapeDetailComponent } from './gongshape-detail/gongshape-detail.component'
 
 import { LinksTableComponent } from './links-table/links-table.component'
 import { LinkDetailComponent } from './link-detail/link-detail.component'
@@ -243,36 +243,36 @@ export class RouteService {
         return route
     }
 
-    getGongStructShapeTablePath(): string {
-        return this.getPathRoot() + '-gongstructshapes/:GONG__StackPath'
+    getGongShapeTablePath(): string {
+        return this.getPathRoot() + '-gongshapes/:GONG__StackPath'
     }
-    getGongStructShapeTableRoute(stackPath: string): Route {
+    getGongShapeTableRoute(stackPath: string): Route {
         let route: Route =
-            { path: this.getGongStructShapeTablePath(), component: GongStructShapesTableComponent, outlet: this.getTableOutlet(stackPath) }
+            { path: this.getGongShapeTablePath(), component: GongShapesTableComponent, outlet: this.getTableOutlet(stackPath) }
         return route
     }
-    getGongStructShapeAdderPath(): string {
-        return this.getPathRoot() + '-gongstructshape-adder/:GONG__StackPath'
+    getGongShapeAdderPath(): string {
+        return this.getPathRoot() + '-gongshape-adder/:GONG__StackPath'
     }
-    getGongStructShapeAdderRoute(stackPath: string): Route {
+    getGongShapeAdderRoute(stackPath: string): Route {
         let route: Route =
-            { path: this.getGongStructShapeAdderPath(), component: GongStructShapeDetailComponent, outlet: this.getEditorOutlet(stackPath) }
+            { path: this.getGongShapeAdderPath(), component: GongShapeDetailComponent, outlet: this.getEditorOutlet(stackPath) }
         return route
     }
-    getGongStructShapeAdderForUsePath(): string {
-        return this.getPathRoot() + '-gongstructshape-adder/:id/:originStruct/:originStructFieldName/:GONG__StackPath'
+    getGongShapeAdderForUsePath(): string {
+        return this.getPathRoot() + '-gongshape-adder/:id/:originStruct/:originStructFieldName/:GONG__StackPath'
     }
-    getGongStructShapeAdderForUseRoute(stackPath: string): Route {
+    getGongShapeAdderForUseRoute(stackPath: string): Route {
         let route: Route =
-            { path: this.getGongStructShapeAdderForUsePath(), component: GongStructShapeDetailComponent, outlet: this.getEditorOutlet(stackPath) }
+            { path: this.getGongShapeAdderForUsePath(), component: GongShapeDetailComponent, outlet: this.getEditorOutlet(stackPath) }
         return route
     }
-    getGongStructShapeDetailPath(): string {
-        return this.getPathRoot() + '-gongstructshape-detail/:id/:GONG__StackPath'
+    getGongShapeDetailPath(): string {
+        return this.getPathRoot() + '-gongshape-detail/:id/:GONG__StackPath'
     }
-    getGongStructShapeDetailRoute(stackPath: string): Route {
+    getGongShapeDetailRoute(stackPath: string): Route {
         let route: Route =
-            { path: this.getGongStructShapeDetailPath(), component: GongStructShapeDetailComponent, outlet: this.getEditorOutlet(stackPath) }
+            { path: this.getGongShapeDetailPath(), component: GongShapeDetailComponent, outlet: this.getEditorOutlet(stackPath) }
         return route
     }
 
@@ -604,10 +604,10 @@ export class RouteService {
             this.getGongEnumValueEntryAdderForUseRoute(stackPath),
             this.getGongEnumValueEntryDetailRoute(stackPath),
 
-            this.getGongStructShapeTableRoute(stackPath),
-            this.getGongStructShapeAdderRoute(stackPath),
-            this.getGongStructShapeAdderForUseRoute(stackPath),
-            this.getGongStructShapeDetailRoute(stackPath),
+            this.getGongShapeTableRoute(stackPath),
+            this.getGongShapeAdderRoute(stackPath),
+            this.getGongShapeAdderForUseRoute(stackPath),
+            this.getGongShapeDetailRoute(stackPath),
 
             this.getLinkTableRoute(stackPath),
             this.getLinkAdderRoute(stackPath),

@@ -2,8 +2,8 @@
 import { Component, OnInit } from '@angular/core';
 import { UntypedFormControl } from '@angular/forms';
 
-import { GongStructShapeDB } from '../gongstructshape-db'
-import { GongStructShapeService } from '../gongstructshape.service'
+import { GongShapeDB } from '../gongshape-db'
+import { GongShapeService } from '../gongshape.service'
 
 import { FrontRepoService, FrontRepo, SelectionMode, DialogData } from '../front-repo.service'
 import { MapOfComponents } from '../map-components'
@@ -18,9 +18,9 @@ import { MatDialog, MAT_DIALOG_DATA, MatDialogRef, MatDialogConfig } from '@angu
 
 import { NullInt64 } from '../null-int64'
 
-// GongStructShapeDetailComponent is initilizaed from different routes
-// GongStructShapeDetailComponentState detail different cases 
-enum GongStructShapeDetailComponentState {
+// GongShapeDetailComponent is initilizaed from different routes
+// GongShapeDetailComponentState detail different cases 
+enum GongShapeDetailComponentState {
 	CREATE_INSTANCE,
 	UPDATE_INSTANCE,
 	// insertion point for declarations of enum values of state
@@ -28,18 +28,18 @@ enum GongStructShapeDetailComponentState {
 }
 
 @Component({
-	selector: 'app-gongstructshape-detail',
-	templateUrl: './gongstructshape-detail.component.html',
-	styleUrls: ['./gongstructshape-detail.component.css'],
+	selector: 'app-gongshape-detail',
+	templateUrl: './gongshape-detail.component.html',
+	styleUrls: ['./gongshape-detail.component.css'],
 })
-export class GongStructShapeDetailComponent implements OnInit {
+export class GongShapeDetailComponent implements OnInit {
 
 	// insertion point for declarations
 	ShowNbInstancesFormControl: UntypedFormControl = new UntypedFormControl(false);
 	IsSelectedFormControl: UntypedFormControl = new UntypedFormControl(false);
 
-	// the GongStructShapeDB of interest
-	gongstructshape: GongStructShapeDB = new GongStructShapeDB
+	// the GongShapeDB of interest
+	gongshape: GongShapeDB = new GongShapeDB
 
 	// front repo
 	frontRepo: FrontRepo = new FrontRepo
@@ -50,7 +50,7 @@ export class GongStructShapeDetailComponent implements OnInit {
 	mapFields_displayAsTextArea = new Map<string, boolean>()
 
 	// the state at initialization (CREATION, UPDATE or CREATE with one association set)
-	state: GongStructShapeDetailComponentState = GongStructShapeDetailComponentState.CREATE_INSTANCE
+	state: GongShapeDetailComponentState = GongShapeDetailComponentState.CREATE_INSTANCE
 
 	// in UDPATE state, if is the id of the instance to update
 	// in CREATE state with one association set, this is the id of the associated instance
@@ -63,7 +63,7 @@ export class GongStructShapeDetailComponent implements OnInit {
 	GONG__StackPath: string = ""
 
 	constructor(
-		private gongstructshapeService: GongStructShapeService,
+		private gongshapeService: GongShapeService,
 		private frontRepoService: FrontRepoService,
 		public dialog: MatDialog,
 		private activatedRoute: ActivatedRoute,
@@ -89,16 +89,16 @@ export class GongStructShapeDetailComponent implements OnInit {
 
 		const association = this.activatedRoute.snapshot.paramMap.get('association');
 		if (this.id == 0) {
-			this.state = GongStructShapeDetailComponentState.CREATE_INSTANCE
+			this.state = GongShapeDetailComponentState.CREATE_INSTANCE
 		} else {
 			if (this.originStruct == undefined) {
-				this.state = GongStructShapeDetailComponentState.UPDATE_INSTANCE
+				this.state = GongShapeDetailComponentState.UPDATE_INSTANCE
 			} else {
 				switch (this.originStructFieldName) {
 					// insertion point for state computation
 					case "GongStructShapes":
-						// console.log("GongStructShape" + " is instanciated with back pointer to instance " + this.id + " Classdiagram association GongStructShapes")
-						this.state = GongStructShapeDetailComponentState.CREATE_INSTANCE_WITH_ASSOCIATION_Classdiagram_GongStructShapes_SET
+						// console.log("GongShape" + " is instanciated with back pointer to instance " + this.id + " Classdiagram association GongStructShapes")
+						this.state = GongShapeDetailComponentState.CREATE_INSTANCE_WITH_ASSOCIATION_Classdiagram_GongStructShapes_SET
 						break;
 					default:
 						console.log(this.originStructFieldName + " is unkown association")
@@ -106,13 +106,13 @@ export class GongStructShapeDetailComponent implements OnInit {
 			}
 		}
 
-		this.getGongStructShape()
+		this.getGongShape()
 
 		// observable for changes in structs
-		this.gongstructshapeService.GongStructShapeServiceChanged.subscribe(
+		this.gongshapeService.GongShapeServiceChanged.subscribe(
 			message => {
 				if (message == "post" || message == "update" || message == "delete") {
-					this.getGongStructShape()
+					this.getGongShape()
 				}
 			}
 		)
@@ -120,33 +120,33 @@ export class GongStructShapeDetailComponent implements OnInit {
 		// insertion point for initialisation of enums list
 	}
 
-	getGongStructShape(): void {
+	getGongShape(): void {
 
 		this.frontRepoService.pull(this.GONG__StackPath).subscribe(
 			frontRepo => {
 				this.frontRepo = frontRepo
 
 				switch (this.state) {
-					case GongStructShapeDetailComponentState.CREATE_INSTANCE:
-						this.gongstructshape = new (GongStructShapeDB)
+					case GongShapeDetailComponentState.CREATE_INSTANCE:
+						this.gongshape = new (GongShapeDB)
 						break;
-					case GongStructShapeDetailComponentState.UPDATE_INSTANCE:
-						let gongstructshape = frontRepo.GongStructShapes.get(this.id)
-						console.assert(gongstructshape != undefined, "missing gongstructshape with id:" + this.id)
-						this.gongstructshape = gongstructshape!
+					case GongShapeDetailComponentState.UPDATE_INSTANCE:
+						let gongshape = frontRepo.GongShapes.get(this.id)
+						console.assert(gongshape != undefined, "missing gongshape with id:" + this.id)
+						this.gongshape = gongshape!
 						break;
 					// insertion point for init of association field
-					case GongStructShapeDetailComponentState.CREATE_INSTANCE_WITH_ASSOCIATION_Classdiagram_GongStructShapes_SET:
-						this.gongstructshape = new (GongStructShapeDB)
-						this.gongstructshape.Classdiagram_GongStructShapes_reverse = frontRepo.Classdiagrams.get(this.id)!
+					case GongShapeDetailComponentState.CREATE_INSTANCE_WITH_ASSOCIATION_Classdiagram_GongStructShapes_SET:
+						this.gongshape = new (GongShapeDB)
+						this.gongshape.Classdiagram_GongStructShapes_reverse = frontRepo.Classdiagrams.get(this.id)!
 						break;
 					default:
 						console.log(this.state + " is unkown state")
 				}
 
 				// insertion point for recovery of form controls value for bool fields
-				this.ShowNbInstancesFormControl.setValue(this.gongstructshape.ShowNbInstances)
-				this.IsSelectedFormControl.setValue(this.gongstructshape.IsSelected)
+				this.ShowNbInstancesFormControl.setValue(this.gongshape.ShowNbInstances)
+				this.IsSelectedFormControl.setValue(this.gongshape.IsSelected)
 			}
 		)
 
@@ -159,46 +159,46 @@ export class GongStructShapeDetailComponent implements OnInit {
 		// pointers fields, after the translation, are nulled in order to perform serialization
 
 		// insertion point for translation/nullation of each field
-		if (this.gongstructshape.PositionID == undefined) {
-			this.gongstructshape.PositionID = new NullInt64
+		if (this.gongshape.PositionID == undefined) {
+			this.gongshape.PositionID = new NullInt64
 		}
-		if (this.gongstructshape.Position != undefined) {
-			this.gongstructshape.PositionID.Int64 = this.gongstructshape.Position.ID
-			this.gongstructshape.PositionID.Valid = true
+		if (this.gongshape.Position != undefined) {
+			this.gongshape.PositionID.Int64 = this.gongshape.Position.ID
+			this.gongshape.PositionID.Valid = true
 		} else {
-			this.gongstructshape.PositionID.Int64 = 0
-			this.gongstructshape.PositionID.Valid = true
+			this.gongshape.PositionID.Int64 = 0
+			this.gongshape.PositionID.Valid = true
 		}
-		this.gongstructshape.ShowNbInstances = this.ShowNbInstancesFormControl.value
-		this.gongstructshape.IsSelected = this.IsSelectedFormControl.value
+		this.gongshape.ShowNbInstances = this.ShowNbInstancesFormControl.value
+		this.gongshape.IsSelected = this.IsSelectedFormControl.value
 
 		// save from the front pointer space to the non pointer space for serialization
 
 		// insertion point for translation/nullation of each pointers
-		if (this.gongstructshape.Classdiagram_GongStructShapes_reverse != undefined) {
-			if (this.gongstructshape.Classdiagram_GongStructShapesDBID == undefined) {
-				this.gongstructshape.Classdiagram_GongStructShapesDBID = new NullInt64
+		if (this.gongshape.Classdiagram_GongStructShapes_reverse != undefined) {
+			if (this.gongshape.Classdiagram_GongStructShapesDBID == undefined) {
+				this.gongshape.Classdiagram_GongStructShapesDBID = new NullInt64
 			}
-			this.gongstructshape.Classdiagram_GongStructShapesDBID.Int64 = this.gongstructshape.Classdiagram_GongStructShapes_reverse.ID
-			this.gongstructshape.Classdiagram_GongStructShapesDBID.Valid = true
-			if (this.gongstructshape.Classdiagram_GongStructShapesDBID_Index == undefined) {
-				this.gongstructshape.Classdiagram_GongStructShapesDBID_Index = new NullInt64
+			this.gongshape.Classdiagram_GongStructShapesDBID.Int64 = this.gongshape.Classdiagram_GongStructShapes_reverse.ID
+			this.gongshape.Classdiagram_GongStructShapesDBID.Valid = true
+			if (this.gongshape.Classdiagram_GongStructShapesDBID_Index == undefined) {
+				this.gongshape.Classdiagram_GongStructShapesDBID_Index = new NullInt64
 			}
-			this.gongstructshape.Classdiagram_GongStructShapesDBID_Index.Valid = true
-			this.gongstructshape.Classdiagram_GongStructShapes_reverse = new ClassdiagramDB // very important, otherwise, circular JSON
+			this.gongshape.Classdiagram_GongStructShapesDBID_Index.Valid = true
+			this.gongshape.Classdiagram_GongStructShapes_reverse = new ClassdiagramDB // very important, otherwise, circular JSON
 		}
 
 		switch (this.state) {
-			case GongStructShapeDetailComponentState.UPDATE_INSTANCE:
-				this.gongstructshapeService.updateGongStructShape(this.gongstructshape, this.GONG__StackPath)
-					.subscribe(gongstructshape => {
-						this.gongstructshapeService.GongStructShapeServiceChanged.next("update")
+			case GongShapeDetailComponentState.UPDATE_INSTANCE:
+				this.gongshapeService.updateGongShape(this.gongshape, this.GONG__StackPath)
+					.subscribe(gongshape => {
+						this.gongshapeService.GongShapeServiceChanged.next("update")
 					});
 				break;
 			default:
-				this.gongstructshapeService.postGongStructShape(this.gongstructshape, this.GONG__StackPath).subscribe(gongstructshape => {
-					this.gongstructshapeService.GongStructShapeServiceChanged.next("post")
-					this.gongstructshape = new (GongStructShapeDB) // reset fields
+				this.gongshapeService.postGongShape(this.gongshape, this.GONG__StackPath).subscribe(gongshape => {
+					this.gongshapeService.GongShapeServiceChanged.next("post")
+					this.gongshape = new (GongShapeDB) // reset fields
 				});
 		}
 	}
@@ -221,7 +221,7 @@ export class GongStructShapeDetailComponent implements OnInit {
 		dialogConfig.height = "50%"
 		if (selectionMode == SelectionMode.ONE_MANY_ASSOCIATION_MODE) {
 
-			dialogData.ID = this.gongstructshape.ID!
+			dialogData.ID = this.gongshape.ID!
 			dialogData.ReversePointer = reverseField
 			dialogData.OrderingMode = false
 			dialogData.SelectionMode = selectionMode
@@ -238,14 +238,14 @@ export class GongStructShapeDetailComponent implements OnInit {
 			});
 		}
 		if (selectionMode == SelectionMode.MANY_MANY_ASSOCIATION_MODE) {
-			dialogData.ID = this.gongstructshape.ID!
+			dialogData.ID = this.gongshape.ID!
 			dialogData.ReversePointer = reverseField
 			dialogData.OrderingMode = false
 			dialogData.SelectionMode = selectionMode
 			dialogData.GONG__StackPath = this.GONG__StackPath
 
 			// set up the source
-			dialogData.SourceStruct = "GongStructShape"
+			dialogData.SourceStruct = "GongShape"
 			dialogData.SourceField = sourceField
 
 			// set up the intermediate struct
@@ -275,7 +275,7 @@ export class GongStructShapeDetailComponent implements OnInit {
 		// dialogConfig.disableClose = true;
 		dialogConfig.autoFocus = true;
 		dialogConfig.data = {
-			ID: this.gongstructshape.ID,
+			ID: this.gongshape.ID,
 			ReversePointer: reverseField,
 			OrderingMode: true,
 			GONG__StackPath: this.GONG__StackPath,
@@ -292,8 +292,8 @@ export class GongStructShapeDetailComponent implements OnInit {
 	}
 
 	fillUpNameIfEmpty(event: { value: { Name: string; }; }) {
-		if (this.gongstructshape.Name == "") {
-			this.gongstructshape.Name = event.value.Name
+		if (this.gongshape.Name == "") {
+			this.gongshape.Name = event.value.Name
 		}
 	}
 

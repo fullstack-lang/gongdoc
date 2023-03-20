@@ -114,7 +114,7 @@ func main() {
 	// very strangely,
 	// gongdoc_models.GetDefaultStage().OnAfterClassshapeUpdateCallback = classshapeCallbackSingloton
 	// does not seem to be executed
-	gongdocStage.OnAfterGongStructShapeUpdateCallback = gongStructShapeCallbackSingloton
+	gongdocStage.OnAfterGongShapeUpdateCallback = gongStructShapeCallbackSingloton
 
 	diagramPackageCallbackSingloton := new(load.DiagramPackageCallbacksSingloton)
 	gongdocStage.OnAfterDiagramPackageUpdateCallback = diagramPackageCallbackSingloton

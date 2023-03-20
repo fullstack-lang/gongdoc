@@ -29,7 +29,7 @@ func (fieldImpl *FieldImpl) OnAfterUpdate(
 
 	// find the classhape in the classdiagram
 	foundGongStructShape := false
-	var gongStructShape *gongdoc_models.GongStructShape
+	var gongStructShape *gongdoc_models.GongShape
 	for _, _gongstructshape := range classdiagram.GongStructShapes {
 		// strange behavior when the gongstructshape is remove within the loop
 		if gongdoc_models.IdentifierToGongObjectName(_gongstructshape.Identifier) ==
@@ -159,7 +159,7 @@ func (fieldImpl *FieldImpl) OnAfterUpdate(
 				targetMultiplicity = gongdoc_models.MANY
 			}
 			targetSourceGongStructShape := false
-			var targetGongStructShape *gongdoc_models.GongStructShape
+			var targetGongStructShape *gongdoc_models.GongShape
 			for _, _gongstructshape := range classdiagram.GongStructShapes {
 
 				// strange behavior when the gongstructshape is remove within the loop

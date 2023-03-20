@@ -10,7 +10,7 @@ import { MapOfComponents } from '../map-components'
 import { MapOfSortingComponents } from '../map-components'
 
 // insertion point for imports
-import { GongStructShapeDB } from '../gongstructshape-db'
+import { GongShapeDB } from '../gongshape-db'
 
 import { Router, ActivatedRoute } from '@angular/router';
 
@@ -24,7 +24,7 @@ enum FieldDetailComponentState {
 	CREATE_INSTANCE,
 	UPDATE_INSTANCE,
 	// insertion point for declarations of enum values of state
-	CREATE_INSTANCE_WITH_ASSOCIATION_GongStructShape_Fields_SET,
+	CREATE_INSTANCE_WITH_ASSOCIATION_GongShape_Fields_SET,
 }
 
 @Component({
@@ -95,8 +95,8 @@ export class FieldDetailComponent implements OnInit {
 				switch (this.originStructFieldName) {
 					// insertion point for state computation
 					case "Fields":
-						// console.log("Field" + " is instanciated with back pointer to instance " + this.id + " GongStructShape association Fields")
-						this.state = FieldDetailComponentState.CREATE_INSTANCE_WITH_ASSOCIATION_GongStructShape_Fields_SET
+						// console.log("Field" + " is instanciated with back pointer to instance " + this.id + " GongShape association Fields")
+						this.state = FieldDetailComponentState.CREATE_INSTANCE_WITH_ASSOCIATION_GongShape_Fields_SET
 						break;
 					default:
 						console.log(this.originStructFieldName + " is unkown association")
@@ -134,9 +134,9 @@ export class FieldDetailComponent implements OnInit {
 						this.field = field!
 						break;
 					// insertion point for init of association field
-					case FieldDetailComponentState.CREATE_INSTANCE_WITH_ASSOCIATION_GongStructShape_Fields_SET:
+					case FieldDetailComponentState.CREATE_INSTANCE_WITH_ASSOCIATION_GongShape_Fields_SET:
 						this.field = new (FieldDB)
-						this.field.GongStructShape_Fields_reverse = frontRepo.GongStructShapes.get(this.id)!
+						this.field.GongShape_Fields_reverse = frontRepo.GongShapes.get(this.id)!
 						break;
 					default:
 						console.log(this.state + " is unkown state")
@@ -159,17 +159,17 @@ export class FieldDetailComponent implements OnInit {
 		// save from the front pointer space to the non pointer space for serialization
 
 		// insertion point for translation/nullation of each pointers
-		if (this.field.GongStructShape_Fields_reverse != undefined) {
-			if (this.field.GongStructShape_FieldsDBID == undefined) {
-				this.field.GongStructShape_FieldsDBID = new NullInt64
+		if (this.field.GongShape_Fields_reverse != undefined) {
+			if (this.field.GongShape_FieldsDBID == undefined) {
+				this.field.GongShape_FieldsDBID = new NullInt64
 			}
-			this.field.GongStructShape_FieldsDBID.Int64 = this.field.GongStructShape_Fields_reverse.ID
-			this.field.GongStructShape_FieldsDBID.Valid = true
-			if (this.field.GongStructShape_FieldsDBID_Index == undefined) {
-				this.field.GongStructShape_FieldsDBID_Index = new NullInt64
+			this.field.GongShape_FieldsDBID.Int64 = this.field.GongShape_Fields_reverse.ID
+			this.field.GongShape_FieldsDBID.Valid = true
+			if (this.field.GongShape_FieldsDBID_Index == undefined) {
+				this.field.GongShape_FieldsDBID_Index = new NullInt64
 			}
-			this.field.GongStructShape_FieldsDBID_Index.Valid = true
-			this.field.GongStructShape_Fields_reverse = new GongStructShapeDB // very important, otherwise, circular JSON
+			this.field.GongShape_FieldsDBID_Index.Valid = true
+			this.field.GongShape_Fields_reverse = new GongShapeDB // very important, otherwise, circular JSON
 		}
 
 		switch (this.state) {

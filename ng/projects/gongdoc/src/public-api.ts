@@ -46,11 +46,11 @@ export * from './lib/gongenumvalueentrys-table/gongenumvalueentrys-table.compone
 export * from './lib/gongenumvalueentry-db'
 export * from './lib/gongenumvalueentry.service'
 
-export * from './lib/gongstructshape-detail/gongstructshape-detail.component'
-export * from './lib/gongstructshape-sorting/gongstructshape-sorting.component'
-export * from './lib/gongstructshapes-table/gongstructshapes-table.component'
-export * from './lib/gongstructshape-db'
-export * from './lib/gongstructshape.service'
+export * from './lib/gongshape-detail/gongshape-detail.component'
+export * from './lib/gongshape-sorting/gongshape-sorting.component'
+export * from './lib/gongshapes-table/gongshapes-table.component'
+export * from './lib/gongshape-db'
+export * from './lib/gongshape.service'
 
 export * from './lib/link-detail/link-detail.component'
 export * from './lib/link-sorting/link-sorting.component'
