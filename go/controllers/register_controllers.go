@@ -77,12 +77,12 @@ func registerControllers(r *gin.Engine) {
 		v1.PUT("/v1/gongenumvalueentrys/:id", GetController().UpdateGongEnumValueEntry)
 		v1.DELETE("/v1/gongenumvalueentrys/:id", GetController().DeleteGongEnumValueEntry)
 
-		v1.GET("/v1/gongshapes", GetController().GetGongShapes)
-		v1.GET("/v1/gongshapes/:id", GetController().GetGongShape)
-		v1.POST("/v1/gongshapes", GetController().PostGongShape)
-		v1.PATCH("/v1/gongshapes/:id", GetController().UpdateGongShape)
-		v1.PUT("/v1/gongshapes/:id", GetController().UpdateGongShape)
-		v1.DELETE("/v1/gongshapes/:id", GetController().DeleteGongShape)
+		v1.GET("/v1/gongstructshapes", GetController().GetGongStructShapes)
+		v1.GET("/v1/gongstructshapes/:id", GetController().GetGongStructShape)
+		v1.POST("/v1/gongstructshapes", GetController().PostGongStructShape)
+		v1.PATCH("/v1/gongstructshapes/:id", GetController().UpdateGongStructShape)
+		v1.PUT("/v1/gongstructshapes/:id", GetController().UpdateGongStructShape)
+		v1.DELETE("/v1/gongstructshapes/:id", GetController().DeleteGongStructShape)
 
 		v1.GET("/v1/links", GetController().GetLinks)
 		v1.GET("/v1/links/:id", GetController().GetLink)

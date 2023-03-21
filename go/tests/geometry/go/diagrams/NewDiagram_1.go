@@ -82,8 +82,8 @@ func NewDiagram_1Injection(stage *models.StageStruct) {
 	__GongEnumValueEntry__000003_DOTTED_ONE := (&models.GongEnumValueEntry{Name: `DOTTED_ONE`}).Stage(stage)
 
 	// Declarations of staged instances of GongStructShape
-	__GongStructShape__000000_NewDiagram_1_Line := (&models.GongShape{Name: `NewDiagram_1-Line`}).Stage(stage)
-	__GongStructShape__000001_NewDiagram_1_Point := (&models.GongShape{Name: `NewDiagram_1-Point`}).Stage(stage)
+	__GongStructShape__000000_NewDiagram_1_Line := (&models.GongStructShape{Name: `NewDiagram_1-Line`}).Stage(stage)
+	__GongStructShape__000001_NewDiagram_1_Point := (&models.GongStructShape{Name: `NewDiagram_1-Point`}).Stage(stage)
 
 	// Declarations of staged instances of Link
 	__Link__000000_Start := (&models.Link{Name: `Start`}).Stage(stage)

@@ -14,7 +14,7 @@ import { catchError, map, tap } from 'rxjs/operators';
 import { FieldDB } from './field-db';
 
 // insertion point for imports
-import { GongShapeDB } from './gongshape-db'
+import { GongStructShapeDB } from './gongstructshape-db'
 
 @Injectable({
   providedIn: 'root'
@@ -68,8 +68,8 @@ export class FieldService {
   postField(fielddb: FieldDB, GONG__StackPath: string): Observable<FieldDB> {
 
     // insertion point for reset of pointers and reverse pointers (to avoid circular JSON)
-    let _GongShape_Fields_reverse = fielddb.GongShape_Fields_reverse
-    fielddb.GongShape_Fields_reverse = new GongShapeDB
+    let _GongStructShape_Fields_reverse = fielddb.GongStructShape_Fields_reverse
+    fielddb.GongStructShape_Fields_reverse = new GongStructShapeDB
 
     let params = new HttpParams().set("GONG__StackPath", GONG__StackPath)
     let httpOptions = {
@@ -80,7 +80,7 @@ export class FieldService {
     return this.http.post<FieldDB>(this.fieldsUrl, fielddb, httpOptions).pipe(
       tap(_ => {
         // insertion point for restoration of reverse pointers
-        fielddb.GongShape_Fields_reverse = _GongShape_Fields_reverse
+        fielddb.GongStructShape_Fields_reverse = _GongStructShape_Fields_reverse
         this.log(`posted fielddb id=${fielddb.ID}`)
       }),
       catchError(this.handleError<FieldDB>('postField'))
@@ -110,8 +110,8 @@ export class FieldService {
     const url = `${this.fieldsUrl}/${id}`;
 
     // insertion point for reset of pointers and reverse pointers (to avoid circular JSON)
-    let _GongShape_Fields_reverse = fielddb.GongShape_Fields_reverse
-    fielddb.GongShape_Fields_reverse = new GongShapeDB
+    let _GongStructShape_Fields_reverse = fielddb.GongStructShape_Fields_reverse
+    fielddb.GongStructShape_Fields_reverse = new GongStructShapeDB
 
     let params = new HttpParams().set("GONG__StackPath", GONG__StackPath)
     let httpOptions = {
@@ -122,7 +122,7 @@ export class FieldService {
     return this.http.put<FieldDB>(url, fielddb, httpOptions).pipe(
       tap(_ => {
         // insertion point for restoration of reverse pointers
-        fielddb.GongShape_Fields_reverse = _GongShape_Fields_reverse
+        fielddb.GongStructShape_Fields_reverse = _GongStructShape_Fields_reverse
         this.log(`updated fielddb id=${fielddb.ID}`)
       }),
       catchError(this.handleError<FieldDB>('updateField'))

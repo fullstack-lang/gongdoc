@@ -49,13 +49,13 @@ var map_DocLink_Identifier_DiagramUMLduUML map[string]any = map[string]any{
 
 	"ref_models.Field.Fieldtypename": (ref_models.Field{}).Fieldtypename,
 
-	"ref_models.GongStructShape": &(ref_models.GongShape{}),
+	"ref_models.GongStructShape": &(ref_models.GongStructShape{}),
 
-	"ref_models.GongStructShape.Fields": (ref_models.GongShape{}).Fields,
+	"ref_models.GongStructShape.Fields": (ref_models.GongStructShape{}).Fields,
 
-	"ref_models.GongStructShape.Links": (ref_models.GongShape{}).Links,
+	"ref_models.GongStructShape.Links": (ref_models.GongStructShape{}).Links,
 
-	"ref_models.GongStructShape.Name": (ref_models.GongShape{}).Name,
+	"ref_models.GongStructShape.Name": (ref_models.GongStructShape{}).Name,
 
 	"ref_models.Link": &(ref_models.Link{}),
 
@@ -132,15 +132,15 @@ func DiagramUMLduUMLInjection(stage *models.StageStruct) {
 	// Declarations of staged instances of GongEnumValueEntry
 
 	// Declarations of staged instances of GongStructShape
-	__GongStructShape__000000_Classshape0000 := (&models.GongShape{Name: `Classshape0000`}).Stage(stage)
-	__GongStructShape__000001_Classshape0002 := (&models.GongShape{Name: `Classshape0002`}).Stage(stage)
-	__GongStructShape__000002_Classshape0003 := (&models.GongShape{Name: `Classshape0003`}).Stage(stage)
-	__GongStructShape__000003_Classshape0004 := (&models.GongShape{Name: `Classshape0004`}).Stage(stage)
-	__GongStructShape__000004_Classshape0005 := (&models.GongShape{Name: `Classshape0005`}).Stage(stage)
-	__GongStructShape__000005_Classshape0006 := (&models.GongShape{Name: `Classshape0006`}).Stage(stage)
-	__GongStructShape__000006_Classshape0007 := (&models.GongShape{Name: `Classshape0007`}).Stage(stage)
-	__GongStructShape__000007_Classshape0008 := (&models.GongShape{Name: `Classshape0008`}).Stage(stage)
-	__GongStructShape__000008_DiagramUMLduUML_GongStructShape := (&models.GongShape{Name: `DiagramUMLduUML-GongStructShape`}).Stage(stage)
+	__GongStructShape__000000_Classshape0000 := (&models.GongStructShape{Name: `Classshape0000`}).Stage(stage)
+	__GongStructShape__000001_Classshape0002 := (&models.GongStructShape{Name: `Classshape0002`}).Stage(stage)
+	__GongStructShape__000002_Classshape0003 := (&models.GongStructShape{Name: `Classshape0003`}).Stage(stage)
+	__GongStructShape__000003_Classshape0004 := (&models.GongStructShape{Name: `Classshape0004`}).Stage(stage)
+	__GongStructShape__000004_Classshape0005 := (&models.GongStructShape{Name: `Classshape0005`}).Stage(stage)
+	__GongStructShape__000005_Classshape0006 := (&models.GongStructShape{Name: `Classshape0006`}).Stage(stage)
+	__GongStructShape__000006_Classshape0007 := (&models.GongStructShape{Name: `Classshape0007`}).Stage(stage)
+	__GongStructShape__000007_Classshape0008 := (&models.GongStructShape{Name: `Classshape0008`}).Stage(stage)
+	__GongStructShape__000008_DiagramUMLduUML_GongStructShape := (&models.GongStructShape{Name: `DiagramUMLduUML-GongStructShape`}).Stage(stage)
 
 	// Declarations of staged instances of Link
 	__Link__000000_Classdiagrams := (&models.Link{Name: `Classdiagrams`}).Stage(stage)

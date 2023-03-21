@@ -8,30 +8,30 @@ import { DialogData } from '../front-repo.service'
 import { SelectionModel } from '@angular/cdk/collections';
 
 import { Router, RouterState } from '@angular/router';
-import { GongShapeDB } from '../gongshape-db'
-import { GongShapeService } from '../gongshape.service'
+import { GongStructShapeDB } from '../gongstructshape-db'
+import { GongStructShapeService } from '../gongstructshape.service'
 
 import { FrontRepoService, FrontRepo } from '../front-repo.service'
 import { NullInt64 } from '../null-int64'
 
 @Component({
-  selector: 'lib-gongshape-sorting',
-  templateUrl: './gongshape-sorting.component.html',
-  styleUrls: ['./gongshape-sorting.component.css']
+  selector: 'lib-gongstructshape-sorting',
+  templateUrl: './gongstructshape-sorting.component.html',
+  styleUrls: ['./gongstructshape-sorting.component.css']
 })
-export class GongShapeSortingComponent implements OnInit {
+export class GongStructShapeSortingComponent implements OnInit {
 
   frontRepo: FrontRepo = new (FrontRepo)
 
-  // array of GongShape instances that are in the association
-  associatedGongShapes = new Array<GongShapeDB>();
+  // array of GongStructShape instances that are in the association
+  associatedGongStructShapes = new Array<GongStructShapeDB>();
 
   constructor(
-    private gongshapeService: GongShapeService,
+    private gongstructshapeService: GongStructShapeService,
     private frontRepoService: FrontRepoService,
 
-    // not null if the component is called as a selection component of gongshape instances
-    public dialogRef: MatDialogRef<GongShapeSortingComponent>,
+    // not null if the component is called as a selection component of gongstructshape instances
+    public dialogRef: MatDialogRef<GongStructShapeSortingComponent>,
     @Optional() @Inject(MAT_DIALOG_DATA) public dialogData: DialogData,
 
     private router: Router,
@@ -42,31 +42,31 @@ export class GongShapeSortingComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.getGongShapes()
+    this.getGongStructShapes()
   }
 
-  getGongShapes(): void {
+  getGongStructShapes(): void {
     this.frontRepoService.pull(this.dialogData.GONG__StackPath).subscribe(
       frontRepo => {
         this.frontRepo = frontRepo
 
         let index = 0
-        for (let gongshape of this.frontRepo.GongShapes_array) {
+        for (let gongstructshape of this.frontRepo.GongStructShapes_array) {
           let ID = this.dialogData.ID
-          let revPointerID = gongshape[this.dialogData.ReversePointer as keyof GongShapeDB] as unknown as NullInt64
-          let revPointerID_Index = gongshape[this.dialogData.ReversePointer + "_Index" as keyof GongShapeDB] as unknown as NullInt64
+          let revPointerID = gongstructshape[this.dialogData.ReversePointer as keyof GongStructShapeDB] as unknown as NullInt64
+          let revPointerID_Index = gongstructshape[this.dialogData.ReversePointer + "_Index" as keyof GongStructShapeDB] as unknown as NullInt64
           if (revPointerID.Int64 == ID) {
             if (revPointerID_Index == undefined) {
               revPointerID_Index = new NullInt64
               revPointerID_Index.Valid = true
               revPointerID_Index.Int64 = index++
             }
-            this.associatedGongShapes.push(gongshape)
+            this.associatedGongStructShapes.push(gongstructshape)
           }
         }
 
-        // sort associated gongshape according to order
-        this.associatedGongShapes.sort((t1, t2) => {
+        // sort associated gongstructshape according to order
+        this.associatedGongStructShapes.sort((t1, t2) => {
           let t1_revPointerID_Index = t1[this.dialogData.ReversePointer + "_Index" as keyof typeof t1] as unknown as NullInt64
           let t2_revPointerID_Index = t2[this.dialogData.ReversePointer + "_Index" as keyof typeof t2] as unknown as NullInt64
           if (t1_revPointerID_Index && t2_revPointerID_Index) {
@@ -84,13 +84,13 @@ export class GongShapeSortingComponent implements OnInit {
   }
 
   drop(event: CdkDragDrop<string[]>) {
-    moveItemInArray(this.associatedGongShapes, event.previousIndex, event.currentIndex);
+    moveItemInArray(this.associatedGongStructShapes, event.previousIndex, event.currentIndex);
 
-    // set the order of GongShape instances
+    // set the order of GongStructShape instances
     let index = 0
 
-    for (let gongshape of this.associatedGongShapes) {
-      let revPointerID_Index = gongshape[this.dialogData.ReversePointer + "_Index" as keyof GongShapeDB] as unknown as NullInt64
+    for (let gongstructshape of this.associatedGongStructShapes) {
+      let revPointerID_Index = gongstructshape[this.dialogData.ReversePointer + "_Index" as keyof GongStructShapeDB] as unknown as NullInt64
       revPointerID_Index.Valid = true
       revPointerID_Index.Int64 = index++
     }
@@ -98,11 +98,11 @@ export class GongShapeSortingComponent implements OnInit {
 
   save() {
 
-    this.associatedGongShapes.forEach(
-      gongshape => {
-        this.gongshapeService.updateGongShape(gongshape, this.dialogData.GONG__StackPath)
-          .subscribe(gongshape => {
-            this.gongshapeService.GongShapeServiceChanged.next("update")
+    this.associatedGongStructShapes.forEach(
+      gongstructshape => {
+        this.gongstructshapeService.updateGongStructShape(gongstructshape, this.dialogData.GONG__StackPath)
+          .subscribe(gongstructshape => {
+            this.gongstructshapeService.GongStructShapeServiceChanged.next("update")
           });
       }
     )

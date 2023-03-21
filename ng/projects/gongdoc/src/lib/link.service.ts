@@ -15,7 +15,7 @@ import { LinkDB } from './link-db';
 
 // insertion point for imports
 import { VerticeDB } from './vertice-db'
-import { GongShapeDB } from './gongshape-db'
+import { GongStructShapeDB } from './gongstructshape-db'
 
 @Injectable({
   providedIn: 'root'
@@ -70,8 +70,8 @@ export class LinkService {
 
     // insertion point for reset of pointers and reverse pointers (to avoid circular JSON)
     linkdb.Middlevertice = new VerticeDB
-    let _GongShape_Links_reverse = linkdb.GongShape_Links_reverse
-    linkdb.GongShape_Links_reverse = new GongShapeDB
+    let _GongStructShape_Links_reverse = linkdb.GongStructShape_Links_reverse
+    linkdb.GongStructShape_Links_reverse = new GongStructShapeDB
 
     let params = new HttpParams().set("GONG__StackPath", GONG__StackPath)
     let httpOptions = {
@@ -82,7 +82,7 @@ export class LinkService {
     return this.http.post<LinkDB>(this.linksUrl, linkdb, httpOptions).pipe(
       tap(_ => {
         // insertion point for restoration of reverse pointers
-        linkdb.GongShape_Links_reverse = _GongShape_Links_reverse
+        linkdb.GongStructShape_Links_reverse = _GongStructShape_Links_reverse
         this.log(`posted linkdb id=${linkdb.ID}`)
       }),
       catchError(this.handleError<LinkDB>('postLink'))
@@ -113,8 +113,8 @@ export class LinkService {
 
     // insertion point for reset of pointers and reverse pointers (to avoid circular JSON)
     linkdb.Middlevertice = new VerticeDB
-    let _GongShape_Links_reverse = linkdb.GongShape_Links_reverse
-    linkdb.GongShape_Links_reverse = new GongShapeDB
+    let _GongStructShape_Links_reverse = linkdb.GongStructShape_Links_reverse
+    linkdb.GongStructShape_Links_reverse = new GongStructShapeDB
 
     let params = new HttpParams().set("GONG__StackPath", GONG__StackPath)
     let httpOptions = {
@@ -125,7 +125,7 @@ export class LinkService {
     return this.http.put<LinkDB>(url, linkdb, httpOptions).pipe(
       tap(_ => {
         // insertion point for restoration of reverse pointers
-        linkdb.GongShape_Links_reverse = _GongShape_Links_reverse
+        linkdb.GongStructShape_Links_reverse = _GongStructShape_Links_reverse
         this.log(`updated linkdb id=${linkdb.ID}`)
       }),
       catchError(this.handleError<LinkDB>('updateLink'))

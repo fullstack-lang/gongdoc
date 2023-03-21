@@ -4,8 +4,8 @@ export function informBackEndOfSelection(cellView: joint.dia.CellView) {
 
     let umlClassShape = cellView.model
 
-    let gongStructShape = umlClassShape.attributes['classshape'] as gongdoc.GongShapeDB
-    let gongStructShapeService = umlClassShape.attributes['gongStructShapeService'] as gongdoc.GongShapeService
+    let gongStructShape = umlClassShape.attributes['classshape'] as gongdoc.GongStructShapeDB
+    let gongStructShapeService = umlClassShape.attributes['gongStructShapeService'] as gongdoc.GongStructShapeService
 
     // if selected object is not a classshape, move on
     if (gongStructShape == undefined) {
@@ -13,7 +13,7 @@ export function informBackEndOfSelection(cellView: joint.dia.CellView) {
     }
 
     gongStructShape.IsSelected = true
-    gongStructShapeService.updateGongShape(gongStructShape, "").subscribe(
+    gongStructShapeService.updateGongStructShape(gongStructShape, "").subscribe(
         classhape => {
             console.log("gongStructShape updated")
         }

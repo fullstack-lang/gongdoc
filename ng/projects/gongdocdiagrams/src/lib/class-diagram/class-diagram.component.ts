@@ -65,7 +65,7 @@ export class ClassDiagramComponent implements OnInit, OnDestroy {
     private positionService: gongdoc.PositionService,
     private noteService: gongdoc.NoteShapeService,
     private verticeService: gongdoc.VerticeService,
-    private gongStructShapeService: gongdoc.GongShapeService, // for selection of the classshape
+    private gongStructShapeService: gongdoc.GongStructShapeService, // for selection of the classshape
     private gongEnumShapeService: gongdoc.GongEnumShapeService, // for selection of the classshape
 
     private gongdocFrontRepoService: gongdoc.FrontRepoService,
@@ -133,7 +133,7 @@ export class ClassDiagramComponent implements OnInit, OnDestroy {
   //
   // make a jointjs umlclass from a gong Classshape object
   //
-  addGongStructShapeToGraph(gongStructShape: gongdoc.GongShapeDB): joint.shapes.uml.Class {
+  addGongStructShapeToGraph(gongStructShape: gongdoc.GongStructShapeDB): joint.shapes.uml.Class {
 
     let umlClassShape = newUmlClassShapeFromGongStructShape(gongStructShape, this.positionService, this.gongStructShapeService)
     umlClassShape.addTo(this.graph!);

@@ -99,7 +99,7 @@ func (diagramPackage *DiagramPackage) UnmarshallOneDiagram(stage *StageStruct, d
 		diagramPackage.Classdiagrams = append(diagramPackage.Classdiagrams,
 			classdiagram)
 
-		for gongStructShape := range *GetGongstructInstancesSet[GongShape]() {
+		for gongStructShape := range *GetGongstructInstancesSet[GongStructShape]() {
 
 			_, ok := (*gong_models.GetGongstructInstancesMap[gong_models.GongStruct]())[IdentifierToGongObjectName(gongStructShape.Identifier)]
 

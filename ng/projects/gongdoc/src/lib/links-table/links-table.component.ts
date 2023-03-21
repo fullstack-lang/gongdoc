@@ -90,9 +90,9 @@ export class LinksTableComponent implements OnInit {
         case 'Middlevertice':
           return (linkDB.Middlevertice ? linkDB.Middlevertice.Name : '');
 
-        case 'GongShape_Links':
-          if (this.frontRepo.GongShapes.get(linkDB.GongShape_LinksDBID.Int64) != undefined) {
-            return this.frontRepo.GongShapes.get(linkDB.GongShape_LinksDBID.Int64)!.Name
+        case 'GongStructShape_Links':
+          if (this.frontRepo.GongStructShapes.get(linkDB.GongStructShape_LinksDBID.Int64) != undefined) {
+            return this.frontRepo.GongStructShapes.get(linkDB.GongStructShape_LinksDBID.Int64)!.Name
           } else {
             return ""
           }
@@ -119,8 +119,8 @@ export class LinksTableComponent implements OnInit {
       if (linkDB.Middlevertice) {
         mergedContent += linkDB.Middlevertice.Name.toLowerCase()
       }
-      if (linkDB.GongShape_LinksDBID.Int64 != 0) {
-        mergedContent += this.frontRepo.GongShapes.get(linkDB.GongShape_LinksDBID.Int64)!.Name.toLowerCase()
+      if (linkDB.GongStructShape_LinksDBID.Int64 != 0) {
+        mergedContent += this.frontRepo.GongStructShapes.get(linkDB.GongStructShape_LinksDBID.Int64)!.Name.toLowerCase()
       }
 
 
@@ -183,7 +183,7 @@ export class LinksTableComponent implements OnInit {
         "TargetMultiplicity",
         "SourceMultiplicity",
         "Middlevertice",
-        "GongShape_Links",
+        "GongStructShape_Links",
       ]
     } else {
       this.displayedColumns = ['select', 'ID', // insertion point for columns to display
@@ -193,7 +193,7 @@ export class LinksTableComponent implements OnInit {
         "TargetMultiplicity",
         "SourceMultiplicity",
         "Middlevertice",
-        "GongShape_Links",
+        "GongStructShape_Links",
       ]
       this.selection = new SelectionModel<LinkDB>(allowMultiSelect, this.initialSelection);
     }

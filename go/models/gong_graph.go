@@ -20,8 +20,8 @@ func IsStaged[Type Gongstruct](stage *StageStruct, instance *Type) (ok bool) {
 	case *GongEnumValueEntry:
 		ok = stage.IsStagedGongEnumValueEntry(target)
 
-	case *GongShape:
-		ok = stage.IsStagedGongShape(target)
+	case *GongStructShape:
+		ok = stage.IsStagedGongStructShape(target)
 
 	case *Link:
 		ok = stage.IsStagedLink(target)
@@ -92,9 +92,9 @@ func IsStaged[Type Gongstruct](stage *StageStruct, instance *Type) (ok bool) {
 		return
 	}
 
-	func (stage *StageStruct) IsStagedGongShape(gongshape *GongShape) (ok bool) {
+	func (stage *StageStruct) IsStagedGongStructShape(gongstructshape *GongStructShape) (ok bool) {
 
-		_, ok = stage.GongShapes[gongshape]
+		_, ok = stage.GongStructShapes[gongstructshape]
 	
 		return
 	}
@@ -186,8 +186,8 @@ func StageBranch[Type Gongstruct](stage *StageStruct, instance *Type) {
 	case *GongEnumValueEntry:
 		stage.StageBranchGongEnumValueEntry(target)
 
-	case *GongShape:
-		stage.StageBranchGongShape(target)
+	case *GongStructShape:
+		stage.StageBranchGongStructShape(target)
 
 	case *Link:
 		stage.StageBranchLink(target)
@@ -234,8 +234,8 @@ func (stage *StageStruct) StageBranchClassdiagram(classdiagram *Classdiagram) {
 	//insertion point for the staging of instances referenced by pointers
 
 	//insertion point for the staging of instances referenced by slice of pointers
-	for _, _gongshape := range classdiagram.GongStructShapes {
-		StageBranch(stage, _gongshape)
+	for _, _gongstructshape := range classdiagram.GongStructShapes {
+		StageBranch(stage, _gongstructshape)
 	}
 	for _, _gongenumshape := range classdiagram.GongEnumShapes {
 		StageBranch(stage, _gongenumshape)
@@ -321,25 +321,25 @@ func (stage *StageStruct) StageBranchGongEnumValueEntry(gongenumvalueentry *Gong
 
 }
 
-func (stage *StageStruct) StageBranchGongShape(gongshape *GongShape) {
+func (stage *StageStruct) StageBranchGongStructShape(gongstructshape *GongStructShape) {
 
 	// check if instance is already staged
-	if IsStaged(stage, gongshape) {
+	if IsStaged(stage, gongstructshape) {
 		return
 	}
 
-	gongshape.Stage(stage)
+	gongstructshape.Stage(stage)
 
 	//insertion point for the staging of instances referenced by pointers
-	if gongshape.Position != nil {
-		StageBranch(stage, gongshape.Position)
+	if gongstructshape.Position != nil {
+		StageBranch(stage, gongstructshape.Position)
 	}
 
 	//insertion point for the staging of instances referenced by slice of pointers
-	for _, _field := range gongshape.Fields {
+	for _, _field := range gongstructshape.Fields {
 		StageBranch(stage, _field)
 	}
-	for _, _link := range gongshape.Links {
+	for _, _link := range gongstructshape.Links {
 		StageBranch(stage, _link)
 	}
 
@@ -519,8 +519,8 @@ func UnstageBranch[Type Gongstruct](stage *StageStruct, instance *Type) {
 	case *GongEnumValueEntry:
 		stage.UnstageBranchGongEnumValueEntry(target)
 
-	case *GongShape:
-		stage.UnstageBranchGongShape(target)
+	case *GongStructShape:
+		stage.UnstageBranchGongStructShape(target)
 
 	case *Link:
 		stage.UnstageBranchLink(target)
@@ -567,8 +567,8 @@ func (stage *StageStruct) UnstageBranchClassdiagram(classdiagram *Classdiagram) 
 	//insertion point for the staging of instances referenced by pointers
 
 	//insertion point for the staging of instances referenced by slice of pointers
-	for _, _gongshape := range classdiagram.GongStructShapes {
-		UnstageBranch(stage, _gongshape)
+	for _, _gongstructshape := range classdiagram.GongStructShapes {
+		UnstageBranch(stage, _gongstructshape)
 	}
 	for _, _gongenumshape := range classdiagram.GongEnumShapes {
 		UnstageBranch(stage, _gongenumshape)
@@ -654,25 +654,25 @@ func (stage *StageStruct) UnstageBranchGongEnumValueEntry(gongenumvalueentry *Go
 
 }
 
-func (stage *StageStruct) UnstageBranchGongShape(gongshape *GongShape) {
+func (stage *StageStruct) UnstageBranchGongStructShape(gongstructshape *GongStructShape) {
 
 	// check if instance is already staged
-	if ! IsStaged(stage, gongshape) {
+	if ! IsStaged(stage, gongstructshape) {
 		return
 	}
 
-	gongshape.Unstage(stage)
+	gongstructshape.Unstage(stage)
 
 	//insertion point for the staging of instances referenced by pointers
-	if gongshape.Position != nil {
-		UnstageBranch(stage, gongshape.Position)
+	if gongstructshape.Position != nil {
+		UnstageBranch(stage, gongstructshape.Position)
 	}
 
 	//insertion point for the staging of instances referenced by slice of pointers
-	for _, _field := range gongshape.Fields {
+	for _, _field := range gongstructshape.Fields {
 		UnstageBranch(stage, _field)
 	}
-	for _, _link := range gongshape.Links {
+	for _, _link := range gongstructshape.Links {
 		UnstageBranch(stage, _link)
 	}
 

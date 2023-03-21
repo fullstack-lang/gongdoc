@@ -5,7 +5,7 @@ import * as gongdoc from 'gongdoc'
 export function onClassshapeMove(umlClassShape: joint.shapes.uml.Class) {
     // console.log(umlClassShape.id, ':', umlClassShape.get('position'));
 
-    let classhape = umlClassShape.attributes['classshape'] as gongdoc.GongShapeDB
+    let classhape = umlClassShape.attributes['classshape'] as gongdoc.GongStructShapeDB
     let positionService = umlClassShape.attributes['positionService'] as gongdoc.PositionService
     let position = classhape.Position
     position!.X = umlClassShape.get('position')!.x

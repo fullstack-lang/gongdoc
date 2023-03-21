@@ -1,5 +1,5 @@
 // insertion point for imports
-import { GongShapeDB } from './gongshape-db'
+import { GongStructShapeDB } from './gongstructshape-db'
 import { GongEnumShapeDB } from './gongenumshape-db'
 import { NoteShapeDB } from './noteshape-db'
 import { DiagramPackageDB } from './diagrampackage-db'
@@ -17,7 +17,7 @@ export class ClassdiagramDB {
 	IsInDrawMode: boolean = false
 
 	// insertion point for other declarations
-	GongStructShapes?: Array<GongShapeDB>
+	GongStructShapes?: Array<GongStructShapeDB>
 	GongEnumShapes?: Array<GongEnumShapeDB>
 	NoteShapes?: Array<NoteShapeDB>
 	DiagramPackage_ClassdiagramsDBID: NullInt64 = new NullInt64
