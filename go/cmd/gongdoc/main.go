@@ -36,6 +36,9 @@ var (
 			"(must be lowercased without spaces). If marshall arg is '', no marshalling")
 
 	port = flag.Int("port", 8080, "port server")
+
+	// transport secure layer
+	tls = flag.Bool("tls", false, "serve on https//localhost:443/")
 )
 
 // hook marhalling to stage
@@ -126,8 +129,17 @@ func main() {
 	}
 
 	log.Printf("Server ready to serve on http://localhost:" + strconv.Itoa(*port) + "/")
-	err := r.RunTLS(":443", "cert.pem", "key-no-pass.pem")
-	if err != nil {
-		log.Fatalln(err.Error())
+
+	if *tls {
+		err := r.RunTLS(":443", "cert.pem", "key-no-pass.pem")
+		if err != nil {
+			log.Fatalln(err.Error())
+		}
+	} else {
+		err := r.Run(":" + strconv.Itoa(*port))
+		if err != nil {
+			log.Fatalln(err.Error())
+		}
+
 	}
 }
