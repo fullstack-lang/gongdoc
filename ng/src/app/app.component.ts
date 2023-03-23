@@ -1,12 +1,13 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 
 import * as gongdoc from 'gongdoc';
+import { StackConfigs, StacksService } from './stacks.service';
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
 })
-export class AppComponent {
+export class AppComponent implements OnInit {
 
   // choices for the top radio button
   view = 'Default view'
@@ -19,7 +20,22 @@ export class AppComponent {
 
   constructor(
     private diagramPackageService: gongdoc.DiagramPackageService,
+    private stacksService: StacksService
   ) {
+
+  }
+
+  ngOnInit(): void {
+
+    // get all stacks to analyse
+    this.stacksService.getStacks().subscribe(
+      (stacks : string[]) => {
+        for (let stack of stacks) {
+          console.log( "Gongdoc component Stack ", stack)
+        } 
+      }
+    )
+
     // create a new GongDoc instance
     this.diagramPackageService.getDiagramPackages().subscribe(diagramPackages => {
       this.diagramPackage = diagramPackages[0];
