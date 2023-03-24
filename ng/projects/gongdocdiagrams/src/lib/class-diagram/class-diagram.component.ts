@@ -164,7 +164,11 @@ export class ClassDiagramComponent implements OnInit, OnDestroy {
 
   addGongEnumShapeToGraph(gongEnumShape: gongdoc.GongEnumShapeDB): joint.shapes.uml.Class {
 
-    let umlClassShape = newUmlClassShapeFromGongEnumShape(gongEnumShape, this.positionService, this.gongEnumShapeService)
+    let umlClassShape = newUmlClassShapeFromGongEnumShape(
+      gongEnumShape, 
+      this.positionService, 
+      this.gongEnumShapeService,
+      this.GONG__StackPath)
     umlClassShape.addTo(this.graph!);
 
     // add a backbone event handler to update the position
