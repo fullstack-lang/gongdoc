@@ -186,7 +186,7 @@ export class ClassDiagramComponent implements OnInit, OnDestroy {
   //
   addNoteToGraph(note: gongdoc.NoteShapeDB): joint.shapes.basic.Rect {
 
-    let umlNote = newUmlNote(note, this.noteService)
+    let umlNote = newUmlNote(note, this.noteService, this.GONG__StackPath)
     umlNote.addTo(this.graph!);
     return umlNote
   }

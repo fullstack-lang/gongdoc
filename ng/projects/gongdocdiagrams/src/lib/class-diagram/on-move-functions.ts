@@ -27,9 +27,11 @@ export function onNoteMove(umlNote: joint.shapes.standard.Rectangle) {
 
     let note = umlNote.attributes['note'] as gongdoc.NoteShapeDB
     let noteService = umlNote.attributes['noteService'] as gongdoc.NoteShapeService
+    let GONG__StackPath = umlNote.attributes['GONG__StackPath'] 
+
     note.X = umlNote.get('position')!.x
     note.Y = umlNote.get('position')!.y
-    noteService.updateNoteShape(note!, "").subscribe(
+    noteService.updateNoteShape(note!, GONG__StackPath).subscribe(
         note => {
 
         }
