@@ -30,7 +30,7 @@ func Reload(gongdocStage *gongdoc_models.StageStruct, diagramPackage *gongdoc_mo
 		modelPkg, true)
 
 	// to be removed after fix of [issue](https://github.com/golang/go/issues/57559)
-	gongdoc_models.SetupMapDocLinkRenaming(diagramPackage.Stage_)
+	gongdoc_models.SetupMapDocLinkRenaming(gong_models.GetDefaultStage(), diagramPackage.Stage_)
 	// end of the be removed
 	gongdoc_node2gongdoc.FillUpNodeTree(diagramPackage)
 	diagramPackage.Stage_.Commit()
