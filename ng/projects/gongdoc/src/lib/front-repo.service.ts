@@ -246,7 +246,6 @@ export class FrontRepoService {
   pull(GONG__StackPath: string = ""): Observable<FrontRepo> {
 
     this.GONG__StackPath = GONG__StackPath
-    console.log( "Front Repo service : Pull() GONG__StackPath : ", this.GONG__StackPath)
 
     this.observableFrontRepo = [ // insertion point sub template
       this.classdiagramService.getClassdiagrams(this.GONG__StackPath),
