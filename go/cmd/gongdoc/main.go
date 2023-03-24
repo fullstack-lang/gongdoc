@@ -84,7 +84,7 @@ func main() {
 		absPkgPath, _ := filepath.Abs(modelPath)
 
 		// load package to analyse
-		modelPkg, _ := gong_models.LoadSource(absPkgPath)
+		modelPkg, _ := gong_models.LoadSource(gongStage, absPkgPath)
 		diagramPackage, _ := load.LoadDiagramPackage(absPkgPath, modelPkg, *editable)
 
 		// to be removed after fix of [issue](https://github.com/golang/go/issues/57559)
