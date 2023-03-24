@@ -26,7 +26,7 @@ import { IdentifierToReceiverAndFieldName, IdentifierToStructname } from './iden
 })
 export class ClassDiagramComponent implements OnInit, OnDestroy {
 
-  @Input() GONG__StackPath: string = ""
+  GONG__StackPath: string = ""
   
   /**
    * the class diagram component is refreshed both by direct input when the user moves vertices or positions
@@ -76,6 +76,12 @@ export class ClassDiagramComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
+
+    let stackPath = this.activatedRoute.snapshot.paramMap.get('GONG__StackPath')
+    if (stackPath != undefined) {
+      this.GONG__StackPath = stackPath
+    }
+
     console.log( "Class Diagram Component: GONG_StackPath is ", this.GONG__StackPath)
 
     this.startAutoRefresh(500); // Refresh every 500 ms (half second)
