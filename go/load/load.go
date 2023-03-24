@@ -32,7 +32,7 @@ func Load(
 	map_StructName_InstanceNb *map[string]int) {
 
 	gongStage := gong_fullstack.NewStackInstance(r, "")
-	gongdoc_fullstack.NewStackInstance(r, "")
+	gongdocStage := gongdoc_fullstack.NewStackInstance(r, "")
 	modelPackage, _ := gong_models.LoadEmbedded(gongStage, goSourceDirectories)
 	modelPackage.Name = stackName
 	modelPackage.PkgPath = pkgPath
@@ -47,7 +47,7 @@ func Load(
 	if embeddedDiagrams {
 		diagramPackage, _ = LoadEmbeddedDiagramPackage(goSourceDirectories, modelPackage)
 	} else {
-		diagramPackage, _ = LoadDiagramPackage(filepath.Join("../../diagrams"), modelPackage, true)
+		diagramPackage, _ = LoadDiagramPackage(gongdocStage, filepath.Join("../../diagrams"), modelPackage, true)
 	}
 	diagramPackage.GongModelPath = pkgPath
 

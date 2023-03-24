@@ -72,20 +72,21 @@ func main() {
 	stacksConfig := new(StackConfigs)
 	for _, modelPath := range flag.Args() {
 
-		// gongdocStage := gongdoc_fullstack.NewStackInstance(r, modelPkg.PkgPath)
-		// gongStage := gong_fullstack.NewStackInstance(r, modelPkg.PkgPath)
-		// stacksConfig.Stacks = append(stacksConfig.Stacks, modelPkg.PkgPath)
-
-		gongdocStage := gongdoc_fullstack.NewStackInstance(r, "")
-		gongStage := gong_fullstack.NewStackInstance(r, "")
-		stacksConfig.Stacks = append(stacksConfig.Stacks, "")
-
 		// compute absolute path
 		absPkgPath, _ := filepath.Abs(modelPath)
 
+		_, fullPkgPath := gong_models.ComputePkgPathFromGoModFile(absPkgPath)
+		gongdocStage := gongdoc_fullstack.NewStackInstance(r, fullPkgPath)
+		gongStage := gong_fullstack.NewStackInstance(r, fullPkgPath)
+		stacksConfig.Stacks = append(stacksConfig.Stacks, fullPkgPath)
+
+		// gongdocStage := gongdoc_fullstack.NewStackInstance(r, "")
+		// gongStage := gong_fullstack.NewStackInstance(r, "")
+		// stacksConfig.Stacks = append(stacksConfig.Stacks, "")
+
 		// load package to analyse
 		modelPkg, _ := gong_models.LoadSource(gongStage, absPkgPath)
-		diagramPackage, _ := load.LoadDiagramPackage(absPkgPath, modelPkg, *editable)
+		diagramPackage, _ := load.LoadDiagramPackage(gongdocStage, absPkgPath, modelPkg, *editable)
 
 		// to be removed after fix of [issue](https://github.com/golang/go/issues/57559)
 		gongdoc_models.SetupMapDocLinkRenaming(diagramPackage.Stage_)

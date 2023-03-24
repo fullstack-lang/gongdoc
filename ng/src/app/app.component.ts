@@ -16,7 +16,14 @@ export class AppComponent implements OnInit {
   gong = 'Gong view'
   views: string[] = [this.default, this.meta, this.gong];
 
+  stacks: string[] = []
+  // soloStack : string = "fullstack-lang/gongdoc/go/tests/geometry/go/models"
+  soloStack : string = ""
+  
+
   diagramPackage: gongdoc.DiagramPackageDB = new (gongdoc.DiagramPackageDB);
+
+  loading = true
 
   constructor(
     private diagramPackageService: gongdoc.DiagramPackageService,
@@ -32,7 +39,11 @@ export class AppComponent implements OnInit {
       (stacks : string[]) => {
         for (let stack of stacks) {
           console.log( "Gongdoc component Stack ", stack)
-        } 
+        }
+        this.stacks = stacks
+        this.soloStack = this.stacks[0]
+        console.log( "Gongdoc AppComponent solo stack ", this.soloStack)
+        this.loading = false
       }
     )
 
