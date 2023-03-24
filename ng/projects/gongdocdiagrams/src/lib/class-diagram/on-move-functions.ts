@@ -45,11 +45,12 @@ export function onLinkMove(standardLink: joint.shapes.standard.Link) {
 
     let middleVertice = standardLink.attributes['middleVertice'] as gongdoc.VerticeDB
     let verticeService = standardLink.attributes['verticeService'] as gongdoc.VerticeService
+    let GONG__StackPath = standardLink.attributes['GONG__StackPath'] 
 
     middleVertice!.X = standardLink.get('vertices')![0].x
     middleVertice!.Y = standardLink.get('vertices')![0].y
 
-    verticeService.updateVertice(middleVertice!, "").subscribe(
+    verticeService.updateVertice(middleVertice!, GONG__StackPath).subscribe(
         middleVertice => {
             // console.log("middleVertice updated")
         }

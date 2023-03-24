@@ -340,6 +340,7 @@ export class ClassDiagramComponent implements OnInit, OnDestroy {
                 // store relevant attributes for working when callback are invoked
                 middleVertice: linkDB.Middlevertice,
                 verticeService: this.verticeService,
+                GONG__StackPath: this.GONG__StackPath,
               })
 
               // add a backbone event handler to update the position
