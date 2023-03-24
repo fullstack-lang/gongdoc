@@ -94,7 +94,7 @@ export class ClassDiagramComponent implements OnInit, OnDestroy {
 
   startAutoRefresh(intervalMs: number): void {
     this.commutNbFromBackSubscription = this.gongdocCommitNbFromBackService
-      .getCommitNbFromBack(intervalMs)
+      .getCommitNbFromBack(intervalMs, this.GONG__StackPath)
       .subscribe((commitNbFromBack: number) => {
 
         // console.log("last commit nb " + this.lastCommitNbFromBack + " new: " + commitNbFromBack)
@@ -115,7 +115,7 @@ export class ClassDiagramComponent implements OnInit, OnDestroy {
    * pullGongdocAndDrawDiagram refresh the front repo and calls redraw
    */
   pullGongdocAndDrawDiagram() {
-    this.gongdocFrontRepoService.pull().subscribe(
+    this.gongdocFrontRepoService.pull(this.GONG__StackPath).subscribe(
       frontRepo => {
         this.gongdocFrontRepo = frontRepo
         console.log("gongdoc front repo pull returned")

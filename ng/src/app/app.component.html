@@ -18,7 +18,7 @@
 
     </as-split-area>
     <as-split-area [size]=95>
-        <lib-pkgelt-docs *ngIf="!loading" [GONG__StackPath]="soloStack"></lib-pkgelt-docs>
+        <lib-pkgelt-docs *ngIf="!loading" [GONG__StackPath]="GONG__StackPath"></lib-pkgelt-docs>
     </as-split-area>
 </as-split>
 
@@ -32,7 +32,7 @@
         </mat-radio-group>
     </as-split-area>
     <as-split-area [size]=95>
-        <app-gongdoc-splitter [GONG__StackPath]="soloStack"></app-gongdoc-splitter>
+        <app-gongdoc-splitter [GONG__StackPath]="GONG__StackPath"></app-gongdoc-splitter>
     </as-split-area>
 </as-split>
 
@@ -47,6 +47,6 @@
         </mat-radio-group>
     </as-split-area>
     <as-split-area [size]=95>
-        <app-gong-splitter [GONG__StackPath]="soloStack"></app-gong-splitter>
+        <app-gong-splitter [GONG__StackPath]="GONG__StackPath"></app-gong-splitter>
     </as-split-area>
 </as-split>

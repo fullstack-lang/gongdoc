@@ -17,9 +17,8 @@ export class AppComponent implements OnInit {
   views: string[] = [this.default, this.meta, this.gong];
 
   stacks: string[] = []
-  // soloStack : string = "fullstack-lang/gongdoc/go/tests/geometry/go/models"
-  soloStack : string = ""
-  
+
+  GONG__StackPath: string = ""
 
   diagramPackage: gongdoc.DiagramPackageDB = new (gongdoc.DiagramPackageDB);
 
@@ -36,22 +35,24 @@ export class AppComponent implements OnInit {
 
     // get all stacks to analyse
     this.stacksService.getStacks().subscribe(
-      (stacks : string[]) => {
+      (stacks: string[]) => {
         for (let stack of stacks) {
-          console.log( "Gongdoc component Stack ", stack)
+          console.log("Gongdoc component Stack ", stack)
         }
         this.stacks = stacks
-        this.soloStack = this.stacks[0]
-        console.log( "Gongdoc AppComponent solo stack ", this.soloStack)
+        this.GONG__StackPath = this.stacks[0]
+        console.log("Gongdoc AppComponent solo stack ", this.GONG__StackPath)
         this.loading = false
+
+        // create a new GongDoc instance
+        this.diagramPackageService.getDiagramPackages(this.GONG__StackPath).subscribe(diagramPackages => {
+          this.diagramPackage = diagramPackages[0];
+        }
+        )
       }
     )
 
-    // create a new GongDoc instance
-    this.diagramPackageService.getDiagramPackages().subscribe(diagramPackages => {
-      this.diagramPackage = diagramPackages[0];
-    }
-    )
+
   }
 
   refresh() {

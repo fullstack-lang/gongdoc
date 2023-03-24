@@ -8,7 +8,7 @@ import (
 	"github.com/xuri/excelize/v2"
 )
 
-func (stage *StageStruct) SerializeStage(filename string) {
+func SerializeStage(stage *StageStruct, filename string) {
 
 	f := excelize.NewFile()
 	{
