@@ -50,7 +50,6 @@
             "mode": "debug",
             "program": "${workspaceFolder}/go/cmd/gongdoc",
             "args": [
-                "-pkgPath",
                 "../../tests/geometry/go/models",
                 "-setUpRandomNumberOfInstances"
             ]
@@ -62,7 +61,6 @@
             "mode": "debug",
             "program": "${workspaceFolder}/go/cmd/gongdoc",
             "args": [
-                "-pkgPath",
                 "../../tests/geometry/go/models",
             ]
         },
@@ -73,7 +71,6 @@
             "mode": "debug",
             "program": "${workspaceFolder}/go/cmd/gongdoc",
             "args": [
-                "-pkgPath",
                 "../../tests/geometry/go/models",
                 "-tls"
             ]
@@ -85,7 +82,6 @@
             "mode": "debug",
             "program": "${workspaceFolder}/go/cmd/gongdoc",
             "args": [
-                "-pkgPath",
                 "../../models",
             ]
         },
@@ -97,7 +93,6 @@
             "program": "${workspaceFolder}/go/cmd/gongdoc",
             "cwd": "${workspaceFolder}/go/tests/geometry/go/diagrams",
             "args": [
-                "-pkgPath",
                 "../models",
                 "-marshallOnCommit=stage_out"
             ]
@@ -109,7 +104,6 @@
             "mode": "debug",
             "program": "${workspaceFolder}/go/cmd/gongdoc",
             "args": [
-                "-pkgPath",
                 "D:/MOSS-Users/peugeot/go/src/r/DEV_COHERENCE/ppstdb/go/models",
             ]
         },
@@ -120,7 +114,6 @@
             "mode": "debug",
             "program": "${workspaceFolder}/go/cmd/gongdoc",
             "args": [
-                "-pkgPath",
                 "../../tests/geometry/go/models",
                 "-setUpRandomNumberOfInstances",
                 "-port=8082"
@@ -133,7 +126,6 @@
             "mode": "debug",
             "program": "${workspaceFolder}/go/cmd/gongdoc",
             "args": [
-                "-pkgPath",
                 "../../tests/geometry/go/models",
                 "-setUpRandomNumberOfInstances",
                 "-editable=false"
@@ -146,7 +138,6 @@
             "mode": "debug",
             "program": "${workspaceFolder}/go/cmd/gongdoc",
             "args": [
-                "-pkgPath",
                 "../../tests/geometry/go/models",
                 "-editable=false"
             ]
@@ -176,7 +167,6 @@
             "mode": "debug",
             "program": "${workspaceFolder}/go/cmd/gongdoc",
             "args": [
-                "-pkgPath",
                 "../../tests/dummy/go/models",
                 "-setUpRandomNumberOfInstances",
                 "-editable=false"
@@ -189,7 +179,6 @@
             "mode": "debug",
             "program": "${workspaceFolder}/go/cmd/gongdoc",
             "args": [
-                "-pkgPath",
                 "../../tests/dummy/go/models",
             ]
         },
@@ -201,7 +190,6 @@
             "program": "${workspaceFolder}/go/cmd/gongdoc",
             "cwd": "${workspaceFolder}/../../../../gongsvg",
             "args": [
-                "-pkgPath",
                 "../../models",
             ]
         },
@@ -244,7 +232,6 @@
             "program": "${workspaceFolder}/go/cmd/gongdoc",
             "cwd": "/tmp/helloworld",
             "args": [
-                "-pkgPath",
                 "go/models",
             ]
         },
@@ -257,7 +244,6 @@
             "cwd": "${workspaceFolder}/../gongsvg",
             "args": [
                 "-genDefaultDiagram",
-                "-pkgPath",
                 "../../models",
             ]
         },
@@ -269,7 +255,6 @@
             "program": "${workspaceFolder}/go/cmd/gongdoc",
             "cwd": "${workspaceFolder}/../gongsvg",
             "args": [
-                "-pkgPath",
                 "../../models",
             ]
         },

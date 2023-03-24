@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"log"
 	"math/rand"
+	"net/http"
 	"os"
 	"path/filepath"
 	"strconv"
@@ -12,6 +13,8 @@ import (
 	gongdoc_fullstack "github.com/fullstack-lang/gongdoc/go/fullstack"
 	gongdoc_models "github.com/fullstack-lang/gongdoc/go/models"
 	gongdoc_static "github.com/fullstack-lang/gongdoc/go/static"
+
+	"github.com/gin-gonic/gin"
 
 	"github.com/fullstack-lang/gongdoc/go/load"
 	"github.com/fullstack-lang/gongdoc/go/node2gongdoc"
@@ -23,8 +26,6 @@ import (
 var (
 	logBBFlag  = flag.Bool("logDB", false, "log mode for db")
 	logGINFlag = flag.Bool("logGIN", false, "log mode for gin")
-
-	pkgPath = flag.String("pkgPath", ".", "path to the models package")
 
 	setUpRandomNumberOfInstances = flag.Bool("setUpRandomNumberOfInstances", false,
 		"set up random number of instance (between 0 and 100)")
@@ -60,75 +61,85 @@ func main() {
 	log.SetPrefix("gongdoc: ")
 	log.SetFlags(0)
 	flag.Parse()
-	if len(flag.Args()) > 1 {
-		log.Fatal("too many non-flag arguments to the gongdoc command")
-	}
-	if len(flag.Args()) == 1 {
-		*pkgPath = flag.Arg(0)
+	if len(flag.Args()) < 1 {
+		log.Fatal("usage : gongdoc <flags> <path to models 1> <path to models 2> ...")
 	}
 
 	r := gongdoc_static.ServeStaticFiles(*logGINFlag)
 
-	// setup stacks
-	gongdoc_fullstack.NewStackInstance(r, "")
-	gongStage := gong_fullstack.NewStackInstance(r, "")
-	_ = gongStage
+	// setup one gongdoc stack per model to analyse
+	// list of stack configs
+	stacksConfig := new(StackConfigs)
+	for _, modelPath := range flag.Args() {
 
-	// compute absolute path
-	absPkgPath, _ := filepath.Abs(*pkgPath)
-	*pkgPath = absPkgPath
+		// compute absolute path
+		absPkgPath, _ := filepath.Abs(modelPath)
 
-	// load package to analyse
-	modelPkg, _ := gong_models.LoadSource(*pkgPath)
+		_, fullPkgPath := gong_models.ComputePkgPathFromGoModFile(absPkgPath)
+		gongdocStage := gongdoc_fullstack.NewStackInstance(r, fullPkgPath)
+		gongStage := gong_fullstack.NewStackInstance(r, fullPkgPath)
+		stacksConfig.Stacks = append(stacksConfig.Stacks, fullPkgPath)
 
-	diagramPackage, _ := load.LoadDiagramPackage(*pkgPath, modelPkg, *editable)
+		// gongdocStage := gongdoc_fullstack.NewStackInstance(r, "")
+		// gongStage := gong_fullstack.NewStackInstance(r, "")
+		// stacksConfig.Stacks = append(stacksConfig.Stacks, "")
 
-	// to be removed after fix of [issue](https://github.com/golang/go/issues/57559)
-	gongdoc_models.SetupMapDocLinkRenaming(diagramPackage.Stage_)
-	// end of the be removed
+		// load package to analyse
+		modelPkg, _ := gong_models.LoadSource(gongStage, absPkgPath)
+		diagramPackage, _ := load.LoadDiagramPackage(gongdocStage, absPkgPath, modelPkg, *editable)
 
-	// set up gong structs for diagram package
-	if *setUpRandomNumberOfInstances {
-		for gongStruct := range *gong_models.GetGongstructInstancesSet[gong_models.GongStruct]() {
-			diagramPackage.Map_Identifier_NbInstances[gongStruct.Name] = rand.Intn(100)
-		}
-		// parse all classdiagrams and all classshape and put the number
-		// of instances
-		for _, classdiagram := range diagramPackage.Classdiagrams {
-			for _, classshape := range classdiagram.GongStructShapes {
+		// to be removed after fix of [issue](https://github.com/golang/go/issues/57559)
+		gongdoc_models.SetupMapDocLinkRenaming(gongStage, diagramPackage.Stage_)
+		// end of the be removed
 
-				gongStructName := gongdoc_models.IdentifierToGongObjectName(classshape.Identifier)
+		// set up gong structs for diagram package
+		if *setUpRandomNumberOfInstances {
+			for gongStruct := range *gong_models.GetGongstructInstancesSet[gong_models.GongStruct](gongStage) {
+				diagramPackage.Map_Identifier_NbInstances[gongStruct.Name] = rand.Intn(100)
+			}
+			// parse all classdiagrams and all classshape and put the number
+			// of instances
+			for _, classdiagram := range diagramPackage.Classdiagrams {
+				for _, classshape := range classdiagram.GongStructShapes {
 
-				nbInstances, ok := diagramPackage.Map_Identifier_NbInstances[gongStructName]
+					gongStructName := gongdoc_models.IdentifierToGongObjectName(classshape.Identifier)
 
-				if ok {
-					classshape.ShowNbInstances = true
-					classshape.NbInstances = nbInstances
+					nbInstances, ok := diagramPackage.Map_Identifier_NbInstances[gongStructName]
+
+					if ok {
+						classshape.ShowNbInstances = true
+						classshape.NbInstances = nbInstances
+					}
 				}
 			}
 		}
 
-	}
+		gongStructShapeCallbackSingloton := new(node2gongdoc.GongStructShapeCallbacksSingloton)
 
-	gongdocStage := gongdoc_models.GetDefaultStage()
+		// very strangely,
+		// gongdoc_models.GetDefaultStage().OnAfterClassshapeUpdateCallback = classshapeCallbackSingloton
+		// does not seem to be executed
+		gongdocStage.OnAfterGongStructShapeUpdateCallback = gongStructShapeCallbackSingloton
 
-	gongStructShapeCallbackSingloton := new(node2gongdoc.GongStructShapeCallbacksSingloton)
+		diagramPackageCallbackSingloton := new(load.DiagramPackageCallbacksSingloton)
+		gongdocStage.OnAfterDiagramPackageUpdateCallback = diagramPackageCallbackSingloton
 
-	// very strangely,
-	// gongdoc_models.GetDefaultStage().OnAfterClassshapeUpdateCallback = classshapeCallbackSingloton
-	// does not seem to be executed
-	gongdocStage.OnAfterGongStructShapeUpdateCallback = gongStructShapeCallbackSingloton
+		gongStage.Commit()
+		gongdocStage.Commit()
 
-	diagramPackageCallbackSingloton := new(load.DiagramPackageCallbacksSingloton)
-	gongdocStage.OnAfterDiagramPackageUpdateCallback = diagramPackageCallbackSingloton
-
-	if *marshallOnCommit != "" {
-		hook := new(BeforeCommitImplementation)
-		gongdoc_models.GetDefaultStage().OnInitCommitFromFrontCallback = hook
-		gongdoc_models.GetDefaultStage().OnInitCommitFromBackCallback = hook
+		if *marshallOnCommit != "" {
+			hook := new(BeforeCommitImplementation)
+			gongdocStage.OnInitCommitFromFrontCallback = hook
+			gongdocStage.OnInitCommitFromBackCallback = hook
+		}
 	}
 
 	log.Printf("Server ready to serve on http://localhost:" + strconv.Itoa(*port) + "/")
+
+	// the client will fetch the list of stacks
+	r.GET("/api/stacks", func(c *gin.Context) {
+		c.JSON(http.StatusOK, stacksConfig.Stacks)
+	})
 
 	if *tls {
 		err := r.RunTLS(":443", "cert.pem", "key-no-pass.pem")
