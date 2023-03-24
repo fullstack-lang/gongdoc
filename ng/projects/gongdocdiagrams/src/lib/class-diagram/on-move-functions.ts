@@ -7,11 +7,14 @@ export function onClassshapeMove(umlClassShape: joint.shapes.uml.Class) {
 
     let classhape = umlClassShape.attributes['classshape'] as gongdoc.GongStructShapeDB
     let positionService = umlClassShape.attributes['positionService'] as gongdoc.PositionService
+    let GONG__StackPath = umlClassShape.attributes['GONG__StackPath'] 
+
     let position = classhape.Position
+
     position!.X = umlClassShape.get('position')!.x
     position!.Y = umlClassShape.get('position')!.y
 
-    positionService.updatePosition(position!, "").subscribe(
+    positionService.updatePosition(position!, GONG__StackPath).subscribe(
         position => {
             // console.log("position updated")
         }
