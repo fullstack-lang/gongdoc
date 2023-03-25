@@ -1,5 +1,5 @@
-<as-split *ngIf="view==default" direction="vertical">
-    <as-split-area [size]=05>
+<as-split unit="pixel" *ngIf="view==default" direction="vertical">
+    <as-split-area size=40>
         <div class="align-items-container">
             <mat-radio-group class="radio-group" aria-label="Select an option" [(ngModel)]="view">
                 <mat-radio-button *ngFor="let view of views" [value]="view">{{view}}</mat-radio-button>
@@ -11,39 +11,47 @@
                 Reload
             </button>
         </div>
-
-
     </as-split-area>
-    <as-split-area [size]=95>
+    <as-split-area size="*">
         <lib-pkgelt-docs [GONG__StackPath]="GONG__StackPath"></lib-pkgelt-docs>
     </as-split-area>
 </as-split>
 
-<as-split *ngIf="view==meta" direction="vertical">
-    <as-split-area [size]=05>
-        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-        <mat-radio-group aria-label="Select an option" [(ngModel)]="view">
-            <mat-radio-button *ngFor="let view of views" [value]="view">
-                {{view}}&nbsp;&nbsp;&nbsp;
-            </mat-radio-button>
-        </mat-radio-group>
+<as-split unit="pixel" *ngIf="view==meta" direction="vertical">
+    <as-split-area size=40>
+        <div class="align-items-container">
+            <mat-radio-group class="radio-group" aria-label="Select an option" [(ngModel)]="view">
+                <mat-radio-button *ngFor="let view of views" [value]="view">{{view}}</mat-radio-button>
+            </mat-radio-group>
+
+            <!-- Use mat-button with mat-icon inside -->
+            <button mat-button class="reload-button" (click)="refresh()">
+                <mat-icon class="icon-text reload-icon">refresh</mat-icon>
+                Reload
+            </button>
+        </div>
     </as-split-area>
-    <as-split-area [size]=95>
+    <as-split-area size="*">
         <app-gongdoc-splitter [GONG__StackPath]="GONG__StackPath"></app-gongdoc-splitter>
     </as-split-area>
 </as-split>
 
 
-<as-split *ngIf="view==gong" direction="vertical">
-    <as-split-area [size]=05>
-        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-        <mat-radio-group aria-label="Select an option" [(ngModel)]="view">
-            <mat-radio-button *ngFor="let view of views" [value]="view">
-                {{view}}&nbsp;&nbsp;&nbsp;
-            </mat-radio-button>
-        </mat-radio-group>
+<as-split unit="pixel" *ngIf="view==gong" direction="vertical">
+    <as-split-area size=40>
+        <div class="align-items-container">
+            <mat-radio-group class="radio-group" aria-label="Select an option" [(ngModel)]="view">
+                <mat-radio-button *ngFor="let view of views" [value]="view">{{view}}</mat-radio-button>
+            </mat-radio-group>
+
+            <!-- Use mat-button with mat-icon inside -->
+            <button mat-button class="reload-button" (click)="refresh()">
+                <mat-icon class="icon-text reload-icon">refresh</mat-icon>
+                Reload
+            </button>
+        </div>
     </as-split-area>
-    <as-split-area [size]=95>
+    <as-split-area size="*">
         <app-gong-splitter [GONG__StackPath]="GONG__StackPath"></app-gong-splitter>
     </as-split-area>
 </as-split>
