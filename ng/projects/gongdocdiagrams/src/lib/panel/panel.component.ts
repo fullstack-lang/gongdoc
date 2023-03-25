@@ -18,6 +18,8 @@ export class PanelComponent implements OnInit {
 
   stacks: string[] = []
 
+  loading = true
+
   @Input() GONG__StackPath: string = ""
 
   diagramPackage: gongdoc.DiagramPackageDB = new (gongdoc.DiagramPackageDB);
@@ -33,6 +35,7 @@ export class PanelComponent implements OnInit {
     this.diagramPackageService.getDiagramPackages(this.GONG__StackPath).subscribe(
       diagramPackages => {
         this.diagramPackage = diagramPackages[0];
+        this.loading = false
       })
   }
 
