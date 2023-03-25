@@ -1,0 +1,9 @@
+.icon-text {
+    display: flex;
+    align-items: center;
+}
+
+.align-items-container {
+    display: flex;
+    align-items: center;
+}

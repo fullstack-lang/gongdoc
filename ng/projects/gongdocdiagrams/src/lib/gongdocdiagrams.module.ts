@@ -23,6 +23,7 @@ import { MatToolbarModule } from '@angular/material/toolbar'
 import { MatListModule } from '@angular/material/list'
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MatTreeModule } from '@angular/material/tree';
+import { MatRadioModule } from '@angular/material/radio';
 import { DragDropModule } from '@angular/cdk/drag-drop';
 
 import { AngularSplitModule } from 'angular-split';
@@ -66,6 +67,7 @@ import { PanelComponent } from './panel/panel.component'
     MatToolbarModule,
     MatExpansionModule,
     MatListModule,
+    MatRadioModule,
     MatTreeModule,
     DragDropModule,
 
