@@ -32,7 +32,8 @@ import { ClassDiagramComponent } from './class-diagram/class-diagram.component';
 import { PkgeltDocsComponent } from './pkgelt-docs/pkgelt-docs.component';
 
 import { ClassdiagramDetailComponent } from './classdiagram-detail/classdiagram-detail.component';
-import { TreeComponent } from './tree/tree.component'
+import { TreeComponent } from './tree/tree.component';
+import { PanelComponent } from './panel/panel.component'
 
 @NgModule({
   declarations: [
@@ -40,7 +41,8 @@ import { TreeComponent } from './tree/tree.component'
     ClassDiagramComponent,
     PkgeltDocsComponent,
     ClassdiagramDetailComponent,
-    TreeComponent
+    TreeComponent,
+    PanelComponent
   ],
   imports: [
 
@@ -77,7 +79,8 @@ import { TreeComponent } from './tree/tree.component'
   exports: [
     PkgeltDocsComponent,
     ClassDiagramComponent,
-    ClassdiagramDetailComponent
+    ClassdiagramDetailComponent,
+    PanelComponent
   ],
 })
 export class GongdocdiagramsModule { }
