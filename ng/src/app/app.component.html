@@ -1,2 +1,6 @@
-<lib-panel [GONG__StackPath]="GONG__StackPath">
-</lib-panel>
+<as-split direction="hoyzontal">
+    <as-split-area *ngFor="let stack of stacks" [size]="sizePerStack">
+        <lib-panel [GONG__StackPath]="stack">
+        </lib-panel>
+    </as-split-area>
+</as-split>

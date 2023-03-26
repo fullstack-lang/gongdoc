@@ -24,6 +24,8 @@ export class AppComponent implements OnInit {
 
   loading = true
 
+  sizePerStack = 100
+
   constructor(
     private diagramPackageService: gongdoc.DiagramPackageService,
     private stacksService: StacksService
@@ -42,24 +44,9 @@ export class AppComponent implements OnInit {
         this.stacks = stacks
         this.GONG__StackPath = this.stacks[0]
         console.log("Gongdoc AppComponent solo stack ", this.GONG__StackPath)
+        this.sizePerStack = 100 / this.stacks.length
         this.loading = false
-
-        // create a new GongDoc instance
-        this.diagramPackageService.getDiagramPackages(this.GONG__StackPath).subscribe(diagramPackages => {
-          this.diagramPackage = diagramPackages[0];
-        }
-        )
       }
     )
-
-
-  }
-
-  refresh() {
-    // refresh the view
-    this.diagramPackage.IsReloaded = true
-    this.diagramPackageService.updateDiagramPackage(this.diagramPackage, "").subscribe(diagramPackage => {
-      console.log('diagram package refreshed')
-    })
   }
 }

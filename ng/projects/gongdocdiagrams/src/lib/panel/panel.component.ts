@@ -33,8 +33,12 @@ export class PanelComponent implements OnInit {
   ngOnInit(): void {
     // create a new GongDoc instance
     this.diagramPackageService.getDiagramPackages(this.GONG__StackPath).subscribe(
+
       diagramPackages => {
+
         this.diagramPackage = diagramPackages[0];
+        console.log("PanelComponent", this.diagramPackage.Name)
+
         this.loading = false
       })
   }
