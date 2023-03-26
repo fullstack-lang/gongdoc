@@ -217,7 +217,7 @@ export class ClassDiagramComponent implements OnInit, OnDestroy {
     );
 
     let paperOptions: joint.dia.Paper.Options = {}
-    paperOptions.el = document.getElementById('jointjs-holder')!
+    paperOptions.el = document.getElementById(this.GONG__StackPath)!
     paperOptions.model = this.graph
     paperOptions.width = diagramWidth
     paperOptions.height = 1000

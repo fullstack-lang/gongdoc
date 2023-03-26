@@ -121,8 +121,8 @@ export class TreeComponent implements OnInit {
 
         if (this.lastCommitNbFromBack < commitNbFromBack) {
           const d = new Date()
-          console.log("TreeComponent, " + d.toLocaleTimeString() + `.${d.getMilliseconds()}` +
-            ", last commit increased nb " + this.lastCommitNbFromBack + " new: " + commitNbFromBack + " " + this.name)
+          console.log("TreeComponent, ", this.GONG__StackPath, " name ", this.name + d.toLocaleTimeString() + `.${d.getMilliseconds()}` +
+            ", last commit increased nb " + this.lastCommitNbFromBack + " new: " + commitNbFromBack)
           this.lastCommitNbFromBack = commitNbFromBack
           this.refresh()
         }
@@ -213,7 +213,7 @@ export class TreeComponent implements OnInit {
   toggleNodeCheckbox(node: FlatNode): void {
 
     const d = new Date()
-    console.log("TreeComponent, toggleNodeCheckbox, " + d.toLocaleTimeString() + `.${d.getMilliseconds()}` + " " + this.name)
+    console.log("TreeComponent ", this.GONG__StackPath, " name ", this.name, " toggleNodeCheckbox, " + d.toLocaleTimeString() + `.${d.getMilliseconds()}` + " " + this.name)
     node.gongNode.IsChecked = !node.gongNode.IsChecked
     this.gongdocNodeService.updateNode(node.gongNode, this.GONG__StackPath).subscribe(
       gongdocNode => {
@@ -226,6 +226,10 @@ export class TreeComponent implements OnInit {
   addNewItem(node: FlatNode) {
 
     var gongNode: gongdoc.NodeDB = new (gongdoc.NodeDB)
+
+    const d = new Date()
+    console.log("TreeComponent ", this.GONG__StackPath, " name ", this.name, " addNewItem, " + d.toLocaleTimeString() + `.${d.getMilliseconds()}` + " " + this.name)
+
     gongNode.Name = "NewDiagram"
     gongNode.HasEditButton = true
     gongNode.IsInEditMode = true
