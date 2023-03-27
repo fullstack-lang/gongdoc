@@ -3,20 +3,17 @@ package main
 import (
 	"embed"
 	"flag"
-	"fmt"
 	"io/fs"
 	"log"
 	"net/http"
 	"os"
 	"strconv"
 
-	"github.com/gin-contrib/cors"
 	"github.com/gin-contrib/static"
 	"github.com/gin-gonic/gin"
 
-	"github.com/fullstack-lang/gongdoc"
-
 	gongdoc_load "github.com/fullstack-lang/gongdoc/go/load"
+	gongdoc_static "github.com/fullstack-lang/gongdoc/go/static"
 
 	geometry "github.com/fullstack-lang/gongdoc/go/tests/geometry"
 )
@@ -58,8 +55,7 @@ func main() {
 		gin.DefaultWriter = myfile
 	}
 
-	r := gin.Default()
-	r.Use(cors.Default())
+	r := gongdoc_static.ServeStaticFiles(*logGINFlag)
 
 	gongdoc_load.Load(
 		"geometry",
@@ -69,11 +65,12 @@ func main() {
 		*embeddedDiagrams,
 		&map_StructName_InstanceNb)
 
-	r.Use(static.Serve("/", EmbedFolder(gongdoc.NgDistNg, "ng/dist/ng")))
-	r.NoRoute(func(c *gin.Context) {
-		fmt.Println(c.Request.URL.Path, "doesn't exists, redirect on /")
-		c.Redirect(http.StatusMovedPermanently, "/")
-		c.Abort()
+	myArray := []string{"github.com/fullstack-lang/gongdoc/go/tests/geometry/go/models"}
+	r.GET("/api/stacks", func(c *gin.Context) {
+
+		log.Println("answering the stacks request")
+
+		c.JSON(http.StatusOK, myArray)
 	})
 
 	log.Printf("Server ready to serve on http://localhost:" + strconv.Itoa(*port) + "/")
@@ -81,4 +78,5 @@ func main() {
 	if err != nil {
 		log.Fatalln(err.Error())
 	}
+
 }
