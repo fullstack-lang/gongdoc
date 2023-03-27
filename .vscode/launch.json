@@ -44,7 +44,7 @@
             ],
         },
         {
-            "name": "go server on geometry -setUpRandomNumberOfInstances",
+            "name": "gongdoc on geometry -setUpRandomNumberOfInstances",
             "type": "go",
             "request": "launch",
             "mode": "debug",
@@ -77,7 +77,7 @@
             ]
         },
         {
-            "name": "go server on gongdoc",
+            "name": "gongdoc on gongdoc",
             "type": "go",
             "request": "launch",
             "mode": "debug",
@@ -87,7 +87,7 @@
             ]
         },
         {
-            "name": "go server on geometry -marshallOnCommit=stage_out",
+            "name": "gongdoc on geometry -marshallOnCommit=stage_out",
             "type": "go",
             "request": "launch",
             "mode": "debug",
@@ -99,7 +99,7 @@
             ]
         },
         {
-            "name": "go server on tdb",
+            "name": "gongdoc on tdb",
             "type": "go",
             "request": "launch",
             "mode": "debug",
@@ -109,7 +109,7 @@
             ]
         },
         {
-            "name": "go server on geometry -port=8082 -setUpRandomNumberOfInstances",
+            "name": "gongdoc on geometry -port=8082 -setUpRandomNumberOfInstances",
             "type": "go",
             "request": "launch",
             "mode": "debug",
@@ -121,7 +121,7 @@
             ]
         },
         {
-            "name": "go server on geometry -setUpRandomNumberOfInstances -editable=false",
+            "name": "gongdoc on geometry -setUpRandomNumberOfInstances -editable=false",
             "type": "go",
             "request": "launch",
             "mode": "debug",
@@ -133,7 +133,7 @@
             ]
         },
         {
-            "name": "go server on geometry -editable=false",
+            "name": "gongdoc on geometry -editable=false",
             "type": "go",
             "request": "launch",
             "mode": "debug",
@@ -162,7 +162,7 @@
             ]
         },
         {
-            "name": "go server on dummy -setUpRandomNumberOfInstances -editable=false",
+            "name": "gongdoc on dummy -setUpRandomNumberOfInstances -editable=false",
             "type": "go",
             "request": "launch",
             "mode": "debug",
@@ -174,7 +174,7 @@
             ]
         },
         {
-            "name": "go server on dummy",
+            "name": "gongdoc on dummy",
             "type": "go",
             "request": "launch",
             "mode": "debug",
@@ -184,7 +184,7 @@
             ]
         },
         {
-            "name": "go server on gongsvg",
+            "name": "gongdoc on gongsvg",
             "type": "go",
             "request": "launch",
             "mode": "debug",
@@ -195,7 +195,7 @@
             ]
         },
         {
-            "name": "go server on issuerenaming",
+            "name": "gongdoc on issuerenaming",
             "type": "go",
             "request": "launch",
             "mode": "debug",
@@ -206,7 +206,7 @@
             ]
         },
         {
-            "name": "go server on /tmp/helloworld",
+            "name": "gongdoc on /tmp/helloworld",
             "type": "go",
             "request": "launch",
             "mode": "debug",
@@ -215,7 +215,7 @@
             "args": []
         },
         {
-            "name": "go server on sv3",
+            "name": "gongdoc on sv3",
             "type": "go",
             "request": "launch",
             "mode": "debug",
@@ -226,7 +226,7 @@
             ]
         },
         {
-            "name": "go server on /tmp/helloworld from /tmp/hellowold",
+            "name": "gongdoc on /tmp/helloworld from /tmp/hellowold",
             "type": "go",
             "request": "launch",
             "mode": "debug",
@@ -237,7 +237,7 @@
             ]
         },
         {
-            "name": "go server on gongsvg",
+            "name": "gongdoc on gongsvg",
             "type": "go",
             "request": "launch",
             "mode": "debug",
