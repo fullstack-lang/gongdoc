@@ -50,8 +50,8 @@
             "mode": "debug",
             "program": "${workspaceFolder}/go/cmd/gongdoc",
             "args": [
+                "-setUpRandomNumberOfInstances",
                 "../../tests/geometry/go/models",
-                "-setUpRandomNumberOfInstances"
             ]
         },
         {
@@ -72,8 +72,8 @@
             "mode": "debug",
             "program": "${workspaceFolder}/go/cmd/gongdoc",
             "args": [
+                "-tls",
                 "../../tests/geometry/go/models",
-                "-tls"
             ]
         },
         {
@@ -115,9 +115,9 @@
             "mode": "debug",
             "program": "${workspaceFolder}/go/cmd/gongdoc",
             "args": [
-                "../../tests/geometry/go/models",
                 "-setUpRandomNumberOfInstances",
-                "-port=8082"
+                "-port=8082",
+                "../../tests/geometry/go/models",
             ]
         },
         {
@@ -127,9 +127,9 @@
             "mode": "debug",
             "program": "${workspaceFolder}/go/cmd/gongdoc",
             "args": [
-                "../../tests/geometry/go/models",
                 "-setUpRandomNumberOfInstances",
-                "-editable=false"
+                "-editable=false",
+                "../../tests/geometry/go/models",
             ]
         },
         {
@@ -168,9 +168,9 @@
             "mode": "debug",
             "program": "${workspaceFolder}/go/cmd/gongdoc",
             "args": [
-                "../../tests/dummy/go/models",
                 "-setUpRandomNumberOfInstances",
-                "-editable=false"
+                "-editable=false",
+                "../../tests/dummy/go/models",
             ]
         },
         {
@@ -237,18 +237,6 @@
             ]
         },
         {
-            "name": "go server on gongsvg -genDefaultDiagram",
-            "type": "go",
-            "request": "launch",
-            "mode": "debug",
-            "program": "${workspaceFolder}/go/cmd/gongdoc",
-            "cwd": "${workspaceFolder}/../gongsvg",
-            "args": [
-                "-genDefaultDiagram",
-                "../../models",
-            ]
-        },
-        {
             "name": "go server on gongsvg",
             "type": "go",
             "request": "launch",
@@ -258,15 +246,6 @@
             "args": [
                 "../../models",
             ]
-        },
-        {
-            "name": "go server on ed153",
-            "type": "go",
-            "request": "launch",
-            "mode": "debug",
-            "program": "${workspaceFolder}/go/cmd/gongdoc",
-            "cwd": "${workspaceFolder}/../ed153",
-            "args": []
         },
     ]
 }
