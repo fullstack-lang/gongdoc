@@ -235,7 +235,7 @@ export class TreeComponent implements OnInit {
     gongNode.IsInEditMode = true
     gongNode.Node_ChildrenDBID.Valid = true
     gongNode.Node_ChildrenDBID.Int64 = node.gongNode.ID
-    this.gongdocNodeService.postNode(gongNode, "").subscribe(
+    this.gongdocNodeService.postNode(gongNode, this.GONG__StackPath).subscribe(
       gongdocNode => {
         console.log("post node")
       }
@@ -327,7 +327,7 @@ export class TreeComponent implements OnInit {
   }
 
   deleteNode(node: FlatNode) {
-    this.gongdocNodeService.deleteNode(node.gongNode, "").subscribe(
+    this.gongdocNodeService.deleteNode(node.gongNode, this.GONG__StackPath).subscribe(
       gongdocNode => {
         console.log("delete node")
       }
