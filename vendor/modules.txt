@@ -1,7 +1,7 @@
 # github.com/frankban/quicktest v1.13.1
 ## explicit; go 1.13
 github.com/frankban/quicktest
-# github.com/fullstack-lang/gong v0.0.0-20230324150346-1843f25c0a25
+# github.com/fullstack-lang/gong v0.0.0-20230330134148-4b806fc91c4c
 ## explicit; go 1.19
 github.com/fullstack-lang/gong/go/controllers
 github.com/fullstack-lang/gong/go/fullstack
