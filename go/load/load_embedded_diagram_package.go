@@ -12,12 +12,13 @@ import (
 	gongdoc_node2gongdoc "github.com/fullstack-lang/gongdoc/go/node2gongdoc"
 )
 
-func LoadEmbeddedDiagramPackage(fs embed.FS, modelPkg *gong_models.ModelPkg) (diagramPackage *gongdoc_models.DiagramPackage, err error) {
+func LoadEmbeddedDiagramPackage(gongdocStage *gongdoc_models.StageStruct, goModelsDir embed.FS, modelPkg *gong_models.ModelPkg) (diagramPackage *gongdoc_models.DiagramPackage, err error) {
 
-	diagramPackage = (&gongdoc_models.DiagramPackage{}).Stage(diagramPackage.Stage_)
+	diagramPackage = (&gongdoc_models.DiagramPackage{}).Stage(gongdocStage)
 	diagramPackage.Map_Identifier_NbInstances = make(map[string]int)
 	diagramPackage.IsEditable = false
 	diagramPackage.ModelPkg = modelPkg
+	diagramPackage.Stage_ = gongdocStage
 
 	diagramPkgPath := filepath.Join(modelPkg.PkgPath, "../diagrams")
 	diagramPackage.AbsolutePathToDiagramPackage = "go/models"
@@ -25,7 +26,7 @@ func LoadEmbeddedDiagramPackage(fs embed.FS, modelPkg *gong_models.ModelPkg) (di
 	diagramPackage.GongModelPath = modelPkg.PkgPath
 
 	fset := new(token.FileSet)
-	pkgsParser := gong_models.ParseEmbedModel(fs, "diagrams")
+	pkgsParser := gong_models.ParseEmbedModel(goModelsDir, "diagrams")
 	if len(pkgsParser) != 1 {
 		log.Panic("Unable to parser, wrong number of parsers ", len(pkgsParser))
 	}

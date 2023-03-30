@@ -46,7 +46,7 @@ func Load(
 	gongdoc_models.GetDefaultStage().MetaPackageImportPath = pkgPath
 
 	if embeddedDiagrams {
-		diagramPackage, _ = LoadEmbeddedDiagramPackage(goDiagramsDir, modelPackage)
+		diagramPackage, _ = LoadEmbeddedDiagramPackage(gongdocStage, goDiagramsDir, modelPackage)
 	} else {
 		diagramPackage, _ = LoadDiagramPackage(gongdocStage, filepath.Join("../../diagrams"), modelPackage, true)
 	}
