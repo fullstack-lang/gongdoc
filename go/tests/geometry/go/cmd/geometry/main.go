@@ -15,7 +15,7 @@ import (
 	gongdoc_load "github.com/fullstack-lang/gongdoc/go/load"
 	gongdoc_static "github.com/fullstack-lang/gongdoc/go/static"
 
-	geometry "github.com/fullstack-lang/gongdoc/go/tests/geometry"
+	geometry_go "github.com/fullstack-lang/gongdoc/go/tests/geometry/go"
 )
 
 var (
@@ -60,7 +60,8 @@ func main() {
 	gongdoc_load.Load(
 		"geometry",
 		"github.com/fullstack-lang/gongdoc/go/tests/geometry/go/models",
-		geometry.GoDir,
+		geometry_go.GoModelsDir,
+		geometry_go.GoDiagramsDir,
 		r,
 		*embeddedDiagrams,
 		&map_StructName_InstanceNb)
