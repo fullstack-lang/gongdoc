@@ -42,7 +42,7 @@ func LoadEmbedded(stage *StageStruct, dir embed.FS) (modelPkg *ModelPkg, err err
 
 	// since the source is embedded, one needs to
 	// compute the Abstract syntax tree in a special manner
-	pkgs := ParseEmbedModel(dir, "go/models")
+	pkgs := ParseEmbedModel(dir, "models")
 
 	WalkParser(pkgs, modelPkg)
 	// fetch meta information
