@@ -49,7 +49,7 @@ export class GongNoteService {
     return this.http.get<GongNoteDB[]>(this.gongnotesUrl, { params: params })
       .pipe(
         tap(),
-        // tap(_ => this.log('fetched gongnotes')),
+		// tap(_ => this.log('fetched gongnotes')),
         catchError(this.handleError<GongNoteDB[]>('getGongNotes', []))
       );
   }
@@ -145,6 +145,6 @@ export class GongNoteService {
   }
 
   private log(message: string) {
-    console.log(message)
+      console.log(message)
   }
 }

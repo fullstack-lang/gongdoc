@@ -121,7 +121,7 @@ func (nodeCb *NodeCB) OnAfterCreate(
 	gongdocStage.Unstage()
 	gongdoc_models.StageBranch(gongdocStage, classdiagramImpl.classdiagram)
 
-	gongdoc_models.SetupMapDocLinkRenamingNew(gongdocStage, nodeCb.diagramPackage)
+	gongdoc_models.SetupMapDocLinkRenaming(nodeCb.diagramPackage.ModelPkg.Stage_, gongdocStage)
 
 	gongdocStage.Marshall(file, "github.com/fullstack-lang/gongdoc/go/models", "diagrams")
 

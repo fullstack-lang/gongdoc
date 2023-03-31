@@ -90,7 +90,7 @@ func (classdiagramImpl *ClassdiagramImpl) OnAfterUpdate(
 				gongdocStage.Unstage()
 				gongdoc_models.StageBranch(gongdocStage, classdiagramImpl.classdiagram)
 
-				gongdoc_models.SetupMapDocLinkRenamingNew(gongdocStage, classdiagramImpl.nodeCb.diagramPackage)
+				gongdoc_models.SetupMapDocLinkRenaming(classdiagramImpl.nodeCb.diagramPackage.ModelPkg.Stage_, gongdocStage)
 
 				// save the diagram
 				gongdocStage.Marshall(file, "github.com/fullstack-lang/gongdoc/go/models", "diagrams")
@@ -141,7 +141,7 @@ func (classdiagramImpl *ClassdiagramImpl) OnAfterUpdate(
 		mapDocLinkRemaping := &gongdocStage.Map_DocLink_Renaming
 		_ = mapDocLinkRemaping
 
-		gongdoc_models.SetupMapDocLinkRenamingNew(gongdocStage, classdiagramImpl.nodeCb.diagramPackage)
+		gongdoc_models.SetupMapDocLinkRenaming(classdiagramImpl.nodeCb.diagramPackage.ModelPkg.Stage_, gongdocStage)
 
 		gongdocStage.Marshall(file, "github.com/fullstack-lang/gongdoc/go/models", "diagrams")
 
