@@ -43,7 +43,7 @@ export class NodeService {
   }
 
   /** GET nodes from the server */
-  getNodes(GONG__StackPath: string = ""): Observable<NodeDB[]> {
+  getNodes(GONG__StackPath: string): Observable<NodeDB[]> {
 
     let params = new HttpParams().set("GONG__StackPath", GONG__StackPath)
 
@@ -56,10 +56,13 @@ export class NodeService {
   }
 
   /** GET node by id. Will 404 if id not found */
-  getNode(id: number): Observable<NodeDB> {
+  getNode(id: number, GONG__StackPath: string): Observable<NodeDB> {
+
+    let params = new HttpParams().set("GONG__StackPath", GONG__StackPath)
+
     const url = `${this.nodesUrl}/${id}`;
-    return this.http.get<NodeDB>(url).pipe(
-      tap(_ => this.log(`fetched node id=${id}`)),
+    return this.http.get<NodeDB>(url, { params: params }).pipe(
+      // tap(_ => this.log(`fetched node id=${id}`)),
       catchError(this.handleError<NodeDB>(`getNode id=${id}`))
     );
   }
@@ -85,7 +88,7 @@ export class NodeService {
         // insertion point for restoration of reverse pointers
         nodedb.Node_Children_reverse = _Node_Children_reverse
         nodedb.Tree_RootNodes_reverse = _Tree_RootNodes_reverse
-        this.log(`posted nodedb id=${nodedb.ID}`)
+        // this.log(`posted nodedb id=${nodedb.ID}`)
       }),
       catchError(this.handleError<NodeDB>('postNode'))
     );

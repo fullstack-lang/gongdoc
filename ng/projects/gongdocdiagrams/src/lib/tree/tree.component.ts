@@ -273,7 +273,7 @@ export class TreeComponent implements OnInit {
   cancelEditMode(node: FlatNode) {
 
     // fetch the value from the server
-    this.gongdocNodeService.getNode(node.gongNode.ID).subscribe(
+    this.gongdocNodeService.getNode(node.gongNode.ID, this.GONG__StackPath).subscribe(
       gongdocNode => {
         node.gongNode.Name = gongdocNode.Name
 

@@ -1127,7 +1127,7 @@ export class FrontRepoService {
     return new Observable<FrontRepo>(
       (observer) => {
         combineLatest([
-          this.classdiagramService.getClassdiagrams()
+          this.classdiagramService.getClassdiagrams(this.GONG__StackPath)
         ]).subscribe(
           ([ // insertion point sub template 
             classdiagrams,
@@ -1191,7 +1191,7 @@ export class FrontRepoService {
     return new Observable<FrontRepo>(
       (observer) => {
         combineLatest([
-          this.diagrampackageService.getDiagramPackages()
+          this.diagrampackageService.getDiagramPackages(this.GONG__StackPath)
         ]).subscribe(
           ([ // insertion point sub template 
             diagrampackages,
@@ -1249,7 +1249,7 @@ export class FrontRepoService {
     return new Observable<FrontRepo>(
       (observer) => {
         combineLatest([
-          this.fieldService.getFields()
+          this.fieldService.getFields(this.GONG__StackPath)
         ]).subscribe(
           ([ // insertion point sub template 
             fields,
@@ -1313,7 +1313,7 @@ export class FrontRepoService {
     return new Observable<FrontRepo>(
       (observer) => {
         combineLatest([
-          this.gongenumshapeService.getGongEnumShapes()
+          this.gongenumshapeService.getGongEnumShapes(this.GONG__StackPath)
         ]).subscribe(
           ([ // insertion point sub template 
             gongenumshapes,
@@ -1384,7 +1384,7 @@ export class FrontRepoService {
     return new Observable<FrontRepo>(
       (observer) => {
         combineLatest([
-          this.gongenumvalueentryService.getGongEnumValueEntrys()
+          this.gongenumvalueentryService.getGongEnumValueEntrys(this.GONG__StackPath)
         ]).subscribe(
           ([ // insertion point sub template 
             gongenumvalueentrys,
@@ -1448,7 +1448,7 @@ export class FrontRepoService {
     return new Observable<FrontRepo>(
       (observer) => {
         combineLatest([
-          this.gongstructshapeService.getGongStructShapes()
+          this.gongstructshapeService.getGongStructShapes(this.GONG__StackPath)
         ]).subscribe(
           ([ // insertion point sub template 
             gongstructshapes,
@@ -1519,7 +1519,7 @@ export class FrontRepoService {
     return new Observable<FrontRepo>(
       (observer) => {
         combineLatest([
-          this.linkService.getLinks()
+          this.linkService.getLinks(this.GONG__StackPath)
         ]).subscribe(
           ([ // insertion point sub template 
             links,
@@ -1590,7 +1590,7 @@ export class FrontRepoService {
     return new Observable<FrontRepo>(
       (observer) => {
         combineLatest([
-          this.nodeService.getNodes()
+          this.nodeService.getNodes(this.GONG__StackPath)
         ]).subscribe(
           ([ // insertion point sub template 
             nodes,
@@ -1667,7 +1667,7 @@ export class FrontRepoService {
     return new Observable<FrontRepo>(
       (observer) => {
         combineLatest([
-          this.noteshapeService.getNoteShapes()
+          this.noteshapeService.getNoteShapes(this.GONG__StackPath)
         ]).subscribe(
           ([ // insertion point sub template 
             noteshapes,
@@ -1731,7 +1731,7 @@ export class FrontRepoService {
     return new Observable<FrontRepo>(
       (observer) => {
         combineLatest([
-          this.noteshapelinkService.getNoteShapeLinks()
+          this.noteshapelinkService.getNoteShapeLinks(this.GONG__StackPath)
         ]).subscribe(
           ([ // insertion point sub template 
             noteshapelinks,
@@ -1795,7 +1795,7 @@ export class FrontRepoService {
     return new Observable<FrontRepo>(
       (observer) => {
         combineLatest([
-          this.positionService.getPositions()
+          this.positionService.getPositions(this.GONG__StackPath)
         ]).subscribe(
           ([ // insertion point sub template 
             positions,
@@ -1846,7 +1846,7 @@ export class FrontRepoService {
     return new Observable<FrontRepo>(
       (observer) => {
         combineLatest([
-          this.treeService.getTrees()
+          this.treeService.getTrees(this.GONG__StackPath)
         ]).subscribe(
           ([ // insertion point sub template 
             trees,
@@ -1897,7 +1897,7 @@ export class FrontRepoService {
     return new Observable<FrontRepo>(
       (observer) => {
         combineLatest([
-          this.umlstateService.getUmlStates()
+          this.umlstateService.getUmlStates(this.GONG__StackPath)
         ]).subscribe(
           ([ // insertion point sub template 
             umlstates,
@@ -1961,7 +1961,7 @@ export class FrontRepoService {
     return new Observable<FrontRepo>(
       (observer) => {
         combineLatest([
-          this.umlscService.getUmlscs()
+          this.umlscService.getUmlscs(this.GONG__StackPath)
         ]).subscribe(
           ([ // insertion point sub template 
             umlscs,
@@ -2025,7 +2025,7 @@ export class FrontRepoService {
     return new Observable<FrontRepo>(
       (observer) => {
         combineLatest([
-          this.verticeService.getVertices()
+          this.verticeService.getVertices(this.GONG__StackPath)
         ]).subscribe(
           ([ // insertion point sub template 
             vertices,
