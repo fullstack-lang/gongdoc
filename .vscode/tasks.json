@@ -2,9 +2,15 @@
 	"version": "2.0.0",
 	"tasks": [
 		{
-			"label": "03 - lsof -i tcp:8080 ",
+			"label": "03 - lsof -ti :4200 | xargs kill",
 			"type": "shell",
-			"command": "lsof -i tcp:8080 ",
+			"command": "lsof -ti :4200 | xargs kill",
+			"group": "build"
+		},
+		{
+			"label": "03 - lsof -ti :8080 | xargs kill",
+			"type": "shell",
+			"command": "lsof -ti :8080 | xargs kill",
 			"group": "build"
 		},
 		{
