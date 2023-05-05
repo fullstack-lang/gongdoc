@@ -126,7 +126,7 @@ export class GongEnumValueEntryService {
       tap(_ => {
         // insertion point for restoration of reverse pointers
         gongenumvalueentrydb.GongEnumShape_GongEnumValueEntrys_reverse = _GongEnumShape_GongEnumValueEntrys_reverse
-        this.log(`updated gongenumvalueentrydb id=${gongenumvalueentrydb.ID}`)
+        // this.log(`updated gongenumvalueentrydb id=${gongenumvalueentrydb.ID}`)
       }),
       catchError(this.handleError<GongEnumValueEntryDB>('updateGongEnumValueEntry'))
     );

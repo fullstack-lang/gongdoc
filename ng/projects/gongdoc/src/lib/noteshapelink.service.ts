@@ -126,7 +126,7 @@ export class NoteShapeLinkService {
       tap(_ => {
         // insertion point for restoration of reverse pointers
         noteshapelinkdb.NoteShape_NoteShapeLinks_reverse = _NoteShape_NoteShapeLinks_reverse
-        this.log(`updated noteshapelinkdb id=${noteshapelinkdb.ID}`)
+        // this.log(`updated noteshapelinkdb id=${noteshapelinkdb.ID}`)
       }),
       catchError(this.handleError<NoteShapeLinkDB>('updateNoteShapeLink'))
     );

@@ -21,6 +21,8 @@ import (
 
 	gong_fullstack "github.com/fullstack-lang/gong/go/fullstack"
 	gong_models "github.com/fullstack-lang/gong/go/models"
+
+	gongsvg_fullstack "github.com/fullstack-lang/gongsvg/go/fullstack"
 )
 
 var (
@@ -82,6 +84,7 @@ func main() {
 		_, fullPkgPath := gong_models.ComputePkgPathFromGoModFile(absPkgPath)
 		gongdocStage := gongdoc_fullstack.NewStackInstance(r, fullPkgPath)
 		gongStage := gong_fullstack.NewStackInstance(r, fullPkgPath)
+		gongsvgStage := gongsvg_fullstack.NewStackInstance(r, fullPkgPath)
 		stacksConfig.Stacks = append(stacksConfig.Stacks, fullPkgPath)
 
 		// gongdocStage := gongdoc_fullstack.NewStackInstance(r, "")
@@ -130,6 +133,7 @@ func main() {
 
 		gongStage.Commit()
 		gongdocStage.Commit()
+		gongsvgStage.Commit()
 
 		if *marshallOnCommit != "" {
 			hook := new(BeforeCommitImplementation)

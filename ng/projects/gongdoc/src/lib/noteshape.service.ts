@@ -128,7 +128,7 @@ export class NoteShapeService {
       tap(_ => {
         // insertion point for restoration of reverse pointers
         noteshapedb.Classdiagram_NoteShapes_reverse = _Classdiagram_NoteShapes_reverse
-        this.log(`updated noteshapedb id=${noteshapedb.ID}`)
+        // this.log(`updated noteshapedb id=${noteshapedb.ID}`)
       }),
       catchError(this.handleError<NoteShapeDB>('updateNoteShape'))
     );

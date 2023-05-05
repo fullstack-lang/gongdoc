@@ -8,6 +8,8 @@ import { AppRoutingModule } from './app-routing.module'
 import { GongdocModule } from 'gongdoc'
 import { GongModule } from 'gong'
 
+import { GongsvgModule } from 'gongsvg'
+
 // for angular material
 import { MatSliderModule } from '@angular/material/slider';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle'
@@ -75,7 +77,10 @@ import { PanelComponent } from './panel/panel.component'
     ReactiveFormsModule,
 
     GongdocModule,
-    GongModule
+    GongModule,
+
+    GongsvgModule,
+
 
   ],
   exports: [

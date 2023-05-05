@@ -134,7 +134,7 @@ export class NodeService {
         // insertion point for restoration of reverse pointers
         nodedb.Node_Children_reverse = _Node_Children_reverse
         nodedb.Tree_RootNodes_reverse = _Tree_RootNodes_reverse
-        this.log(`updated nodedb id=${nodedb.ID}`)
+        // this.log(`updated nodedb id=${nodedb.ID}`)
       }),
       catchError(this.handleError<NodeDB>('updateNode'))
     );

@@ -132,7 +132,7 @@ export class ClassdiagramService {
       tap(_ => {
         // insertion point for restoration of reverse pointers
         classdiagramdb.DiagramPackage_Classdiagrams_reverse = _DiagramPackage_Classdiagrams_reverse
-        this.log(`updated classdiagramdb id=${classdiagramdb.ID}`)
+        // this.log(`updated classdiagramdb id=${classdiagramdb.ID}`)
       }),
       catchError(this.handleError<ClassdiagramDB>('updateClassdiagram'))
     );

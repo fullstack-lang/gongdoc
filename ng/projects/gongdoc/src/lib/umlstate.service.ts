@@ -126,7 +126,7 @@ export class UmlStateService {
       tap(_ => {
         // insertion point for restoration of reverse pointers
         umlstatedb.Umlsc_States_reverse = _Umlsc_States_reverse
-        this.log(`updated umlstatedb id=${umlstatedb.ID}`)
+        // this.log(`updated umlstatedb id=${umlstatedb.ID}`)
       }),
       catchError(this.handleError<UmlStateDB>('updateUmlState'))
     );

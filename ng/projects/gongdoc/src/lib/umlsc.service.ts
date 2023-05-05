@@ -128,7 +128,7 @@ export class UmlscService {
       tap(_ => {
         // insertion point for restoration of reverse pointers
         umlscdb.DiagramPackage_Umlscs_reverse = _DiagramPackage_Umlscs_reverse
-        this.log(`updated umlscdb id=${umlscdb.ID}`)
+        // this.log(`updated umlscdb id=${umlscdb.ID}`)
       }),
       catchError(this.handleError<UmlscDB>('updateUmlsc'))
     );

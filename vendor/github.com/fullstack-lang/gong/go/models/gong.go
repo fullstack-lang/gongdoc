@@ -143,7 +143,11 @@ type StageStruct struct { // insertion point for definition of arrays registerin
 	// store meta package import
 	MetaPackageImportPath  string
 	MetaPackageImportAlias string
-	Map_DocLink_Renaming   map[string]GONG__Identifier
+
+	// to be removed after fix of [issue](https://github.com/golang/go/issues/57559)
+	// map to enable docLink renaming when an identifier is renamed
+	Map_DocLink_Renaming map[string]GONG__Identifier
+	// the to be removed stops here
 }
 
 type GONG__Identifier struct {
@@ -266,6 +270,10 @@ func NewStage() (stage *StageStruct) {
 
 		// end of insertion point
 		Map_GongStructName_InstancesNb: make(map[string]int),
+
+		// to be removed after fix of [issue](https://github.com/golang/go/issues/57559)
+		Map_DocLink_Renaming: make(map[string]GONG__Identifier),
+		// the to be removed stops here
 	}
 
 	return
@@ -1041,7 +1049,7 @@ type GongstructMapString interface {
 // it is usefull because it allows refactoring of gong struct identifier
 func GongGetSet[Type GongstructSet](stage *StageStruct) *Type {
 	var ret Type
-	
+
 	switch any(ret).(type) {
 	// insertion point for generic get functions
 	case map[*GongBasicField]any:
@@ -1577,7 +1585,7 @@ func GetFields[Type Gongstruct]() (res []string) {
 	case GongNote:
 		res = []string{"Name", "Body", "BodyHTML", "Links"}
 	case GongStruct:
-		res = []string{"Name", "GongBasicFields", "GongTimeFields", "PointerToGongStructFields", "SliceOfPointerToGongStructFields"}
+		res = []string{"Name", "GongBasicFields", "GongTimeFields", "PointerToGongStructFields", "SliceOfPointerToGongStructFields", "HasOnAfterUpdateSignature"}
 	case GongTimeField:
 		res = []string{"Name", "Index", "CompositeStructName"}
 	case Meta:
@@ -1703,6 +1711,8 @@ func GetFieldStringValue[Type Gongstruct](instance Type, fieldName string) (res 
 				}
 				res += __instance__.Name
 			}
+		case "HasOnAfterUpdateSignature":
+			res = fmt.Sprintf("%t", any(instance).(GongStruct).HasOnAfterUpdateSignature)
 		}
 	case GongTimeField:
 		switch fieldName {
