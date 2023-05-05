@@ -14,12 +14,12 @@
 			"group": "build"
 		},
 		{
-			"label": "03 - ng serve",
+			"label": "03 - ng serve --host=127.0.0.1",
 			"type": "shell",
 			"options": {
 				"cwd": "ng"
 			},
-			"command": "ng serve",
+			"command": "ng serve --host=127.0.0.1",
 			"group": "build"
 		},
 		{
@@ -54,7 +54,6 @@
 			"args": [
 				"run",
 				"main.go",
-				"-pkgPath",
 				"../../tests/geometry/go/models",
 			],
 			"group": "build"
@@ -304,6 +303,36 @@
 				"build",
 				"-gcflags",
 				"-N -l"
+			],
+			"group": "build"
+		},
+		{
+			"label": "00 - go work edit -use gongdoc",
+			"type": "shell",
+			"options": {
+				"cwd": "./"
+			},
+			"command": "go",
+			"args": [
+				"work",
+				"edit",
+				"-use",
+				"gongdoc"
+			],
+			"group": "build"
+		},
+		{
+			"label": "00 - go work edit -dropuse gongdoc",
+			"type": "shell",
+			"options": {
+				"cwd": "./"
+			},
+			"command": "go",
+			"args": [
+				"work",
+				"edit",
+				"-dropuse",
+				"gongdoc"
 			],
 			"group": "build"
 		},
