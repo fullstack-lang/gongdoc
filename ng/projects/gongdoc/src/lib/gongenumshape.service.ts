@@ -131,7 +131,7 @@ export class GongEnumShapeService {
       tap(_ => {
         // insertion point for restoration of reverse pointers
         gongenumshapedb.Classdiagram_GongEnumShapes_reverse = _Classdiagram_GongEnumShapes_reverse
-        this.log(`updated gongenumshapedb id=${gongenumshapedb.ID}`)
+        // this.log(`updated gongenumshapedb id=${gongenumshapedb.ID}`)
       }),
       catchError(this.handleError<GongEnumShapeDB>('updateGongEnumShape'))
     );

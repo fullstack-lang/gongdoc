@@ -14,7 +14,8 @@ export class PanelComponent implements OnInit {
   diagrams = 'Diagrams'
   diagrams_data = 'Diagrams data'
   model_data = 'Model data'
-  views: string[] = [this.diagrams, this.diagrams_data, this.model_data];
+  svg_data = 'SVG data'
+  views: string[] = [this.diagrams, this.diagrams_data, this.model_data, this.svg_data];
 
   stacks: string[] = []
 

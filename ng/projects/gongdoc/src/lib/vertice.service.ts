@@ -119,7 +119,7 @@ export class VerticeService {
     return this.http.put<VerticeDB>(url, verticedb, httpOptions).pipe(
       tap(_ => {
         // insertion point for restoration of reverse pointers
-        this.log(`updated verticedb id=${verticedb.ID}`)
+        // this.log(`updated verticedb id=${verticedb.ID}`)
       }),
       catchError(this.handleError<VerticeDB>('updateVertice'))
     );

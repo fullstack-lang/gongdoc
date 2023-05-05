@@ -129,7 +129,7 @@ export class LinkService {
       tap(_ => {
         // insertion point for restoration of reverse pointers
         linkdb.GongStructShape_Links_reverse = _GongStructShape_Links_reverse
-        this.log(`updated linkdb id=${linkdb.ID}`)
+        // this.log(`updated linkdb id=${linkdb.ID}`)
       }),
       catchError(this.handleError<LinkDB>('updateLink'))
     );

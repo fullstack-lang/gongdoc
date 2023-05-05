@@ -126,7 +126,7 @@ export class DiagramPackageService {
     return this.http.put<DiagramPackageDB>(url, diagrampackagedb, httpOptions).pipe(
       tap(_ => {
         // insertion point for restoration of reverse pointers
-        this.log(`updated diagrampackagedb id=${diagrampackagedb.ID}`)
+        // this.log(`updated diagrampackagedb id=${diagrampackagedb.ID}`)
       }),
       catchError(this.handleError<DiagramPackageDB>('updateDiagramPackage'))
     );

@@ -121,7 +121,7 @@ export class TreeService {
     return this.http.put<TreeDB>(url, treedb, httpOptions).pipe(
       tap(_ => {
         // insertion point for restoration of reverse pointers
-        this.log(`updated treedb id=${treedb.ID}`)
+        // this.log(`updated treedb id=${treedb.ID}`)
       }),
       catchError(this.handleError<TreeDB>('updateTree'))
     );

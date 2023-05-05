@@ -119,7 +119,7 @@ export class PositionService {
     return this.http.put<PositionDB>(url, positiondb, httpOptions).pipe(
       tap(_ => {
         // insertion point for restoration of reverse pointers
-        this.log(`updated positiondb id=${positiondb.ID}`)
+        // this.log(`updated positiondb id=${positiondb.ID}`)
       }),
       catchError(this.handleError<PositionDB>('updatePosition'))
     );

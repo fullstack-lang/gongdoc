@@ -133,7 +133,7 @@ export class GongStructShapeService {
       tap(_ => {
         // insertion point for restoration of reverse pointers
         gongstructshapedb.Classdiagram_GongStructShapes_reverse = _Classdiagram_GongStructShapes_reverse
-        this.log(`updated gongstructshapedb id=${gongstructshapedb.ID}`)
+        // this.log(`updated gongstructshapedb id=${gongstructshapedb.ID}`)
       }),
       catchError(this.handleError<GongStructShapeDB>('updateGongStructShape'))
     );

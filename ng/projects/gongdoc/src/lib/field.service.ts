@@ -126,7 +126,7 @@ export class FieldService {
       tap(_ => {
         // insertion point for restoration of reverse pointers
         fielddb.GongStructShape_Fields_reverse = _GongStructShape_Fields_reverse
-        this.log(`updated fielddb id=${fielddb.ID}`)
+        // this.log(`updated fielddb id=${fielddb.ID}`)
       }),
       catchError(this.handleError<FieldDB>('updateField'))
     );
