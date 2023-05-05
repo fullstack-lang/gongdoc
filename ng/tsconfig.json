@@ -51,6 +51,12 @@
       "gongsvg": [
         "../vendor/github.com/fullstack-lang/gongsvg/ng/projects/gongsvg/src/public-api.ts"
       ],
+      "gongsvgspecific": [
+        "../vendor/github.com/fullstack-lang/gongsvg/ng/projects/gongsvgspecific/src/public-api.ts"
+      ],
+      "gongsvgdatamodel": [
+        "../vendor/github.com/fullstack-lang/gongsvg/ng/projects/gongsvgdatamodel/src/public-api.ts"
+      ],
     },
     "useDefineForClassFields": false
   },
