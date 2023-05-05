@@ -13,19 +13,10 @@
             "webRoot": "${workspaceFolder}/ng",
         },
         {
-            "name": "Front on 8080",
-            "type": "chrome",
-            // "runtimeExecutable": "D:/MOSS-Users/peugeot/dev/tools/chrome/GoogleChromePortable64ll/Chrome.exe",
+            "name": "Launch Chrome",
             "request": "launch",
-            "url": "http://localhost:8080/",
-            "webRoot": "${workspaceFolder}/ng",
-        },
-        {
-            "name": "Attach chrome",
             "type": "chrome",
-            "request": "attach",
-            "port": 9222,
-            "url": "http://localhost:4200/",
+            "url": "http://localhost:4200",
             "webRoot": "${workspaceFolder}/ng"
         },
         {

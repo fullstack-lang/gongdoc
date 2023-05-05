@@ -57,6 +57,10 @@ func (impl *BeforeCommitImplementation) BeforeCommit(stage *gongdoc_models.Stage
 	gongdoc_models.GetDefaultStage().Marshall(file, "github.com/fullstack-lang/gongdoc/go/models", "diagrams")
 }
 
+type StackConfigs struct {
+	Stacks []string
+}
+
 func main() {
 	log.SetPrefix("gongdoc: ")
 	log.SetFlags(0)
