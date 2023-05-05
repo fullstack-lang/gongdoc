@@ -38,6 +38,8 @@ import { ClassdiagramDetailComponent } from './classdiagram-detail/classdiagram-
 import { TreeComponent } from './tree/tree.component';
 import { PanelComponent } from './panel/panel.component'
 
+import { GongsvgspecificModule } from 'gongsvgspecific'
+
 @NgModule({
   declarations: [
     GongdocdiagramsComponent,
@@ -80,8 +82,7 @@ import { PanelComponent } from './panel/panel.component'
     GongModule,
 
     GongsvgModule,
-
-
+    GongsvgspecificModule
   ],
   exports: [
     PkgeltDocsComponent,
