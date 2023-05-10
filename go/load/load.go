@@ -11,6 +11,8 @@ import (
 	gongdoc_fullstack "github.com/fullstack-lang/gongdoc/go/fullstack"
 	gongdoc_models "github.com/fullstack-lang/gongdoc/go/models"
 
+	gongsvg_fullstack "github.com/fullstack-lang/gongsvg/go/fullstack"
+
 	"github.com/gin-gonic/gin"
 )
 
@@ -34,7 +36,10 @@ func Load(
 
 	gongStage := gong_fullstack.NewStackInstance(r, pkgPath)
 	gongdocStage := gongdoc_fullstack.NewStackInstance(r, pkgPath)
+	gongsvgStage := gongsvg_fullstack.NewStackInstance(r, pkgPath)
+	_ = gongsvgStage
 	modelPackage, _ := gong_models.LoadEmbedded(gongStage, goModelsDir)
+
 	modelPackage.Name = stackName
 	modelPackage.PkgPath = pkgPath
 
