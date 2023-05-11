@@ -18,6 +18,8 @@ github.com/fullstack-lang/gongsvg v0.0.0-20230510070848-76ff94a93e97 h1:PYIqsUpR
 github.com/fullstack-lang/gongsvg v0.0.0-20230510070848-76ff94a93e97/go.mod h1:/UA7qolJDYupNq9Wg93wHZz0cgtRPAJmZwXGOvAqIfs=
 github.com/fullstack-lang/gongsvg v0.0.0-20230511052208-f22d4bca06e3 h1:nf6QA8olHxst1nTJHU6ArECjZkfScb7v9AMDQCiHf7I=
 github.com/fullstack-lang/gongsvg v0.0.0-20230511052208-f22d4bca06e3/go.mod h1:/UA7qolJDYupNq9Wg93wHZz0cgtRPAJmZwXGOvAqIfs=
+github.com/fullstack-lang/gongsvg v0.0.0-20230511122100-eb1e6c67ede9 h1:eYJ2NftLfUn5R5Q0W/X4nBI+EHh3sCFY8H3gj6Wms/M=
+github.com/fullstack-lang/gongsvg v0.0.0-20230511122100-eb1e6c67ede9/go.mod h1:/UA7qolJDYupNq9Wg93wHZz0cgtRPAJmZwXGOvAqIfs=
 github.com/gin-contrib/cors v1.4.0 h1:oJ6gwtUl3lqV0WEIwM/LxPF1QZ5qe2lGWdY2+bz7y0g=
 github.com/gin-contrib/cors v1.4.0/go.mod h1:bs9pNM0x/UsmHPBWT2xZz9ROh8xYjYkiURUfmBoMlcs=
 github.com/gin-contrib/sse v0.1.0 h1:Y/yl/+YNO8GZSjAhjMsSuLt29uWRFHdHYUb5lYOV9qE=

@@ -6,7 +6,7 @@ import { LinkEventService } from '../link-event.service';
 import { Subscription } from 'rxjs';
 import { ShapeMouseEvent } from '../shape.mouse.event';
 import { MouseEventService } from '../mouse-event.service';
-import { compareTopLevelProperties } from '../compare.top.level.properties'
+import { compareRectGeometries } from '../compare.rect.geometries'
 
 @Component({
   selector: 'lib-link',
@@ -359,9 +359,9 @@ export class LinkComponent implements OnInit, AfterViewInit, DoCheck {
 
   ngDoCheck(): void {
 
-    if (
-      !compareTopLevelProperties(this.previousStart!, this.Link!.Start!) ||
-      !compareTopLevelProperties(this.previousEnd!, this.Link!.End!)) {
+    let hasStartChanged = !compareRectGeometries(this.previousStart!, this.Link!.Start!)
+    let hasEndChanged = !compareRectGeometries(this.previousEnd!, this.Link!.End!)
+    if (hasStartChanged || hasEndChanged) {
       this.drawSegments()
       this.resetPreviousState()
     }
