@@ -137,7 +137,7 @@ func (docSVGMapper *DocSVGMapper) GenerateSvg(
 			link.EndOrientation = gongsvg_models.ORIENTATION_HORIZONTAL
 			link.EndRatio = 0.5
 
-			link.CornerOffsetRatio = (endRect.X - startRect.X) / startRect.Width
+			link.CornerOffsetRatio = (endRect.X - startRect.X - 80) / startRect.Width
 
 			link.CornerRadius = 3
 
@@ -150,7 +150,7 @@ func (docSVGMapper *DocSVGMapper) GenerateSvg(
 			targetMulitplicity.Name = docLink.TargetMultiplicity.ToString()
 			targetMulitplicity.Content = targetMulitplicity.Name
 			targetMulitplicity.Y_Offset = 16
-			targetMulitplicity.X_Offset = 10
+			targetMulitplicity.X_Offset = -50
 			targetMulitplicity.Stroke = gongsvg_models.Black.ToString()
 			targetMulitplicity.StrokeWidth = 1
 
@@ -159,7 +159,7 @@ func (docSVGMapper *DocSVGMapper) GenerateSvg(
 			fieldName.Name = docLink.GetName()
 			fieldName.Content = fieldName.Name
 			fieldName.Y_Offset = -16
-			fieldName.X_Offset = 10
+			fieldName.X_Offset = -50
 			fieldName.Stroke = gongsvg_models.Black.ToString()
 			fieldName.StrokeWidth = 1
 
