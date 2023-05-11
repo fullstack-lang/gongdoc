@@ -1522,6 +1522,118 @@ func (positiononarrowtype *PositionOnArrowType) ToCodeString() (res string) {
 	return
 }
 
+// Utility function for RectAnchorType
+// if enum values are string, it is stored with the value
+// if enum values are int, they are stored with the code of the value
+func (rectanchortype RectAnchorType) ToString() (res string) {
+
+	// migration of former implementation of enum
+	switch rectanchortype {
+	// insertion code per enum code
+	case RECT_ANCHOR_TOP:
+		res = "RECT_ANCHOR_TOP"
+	case RECT_ANCHOR_TOP_LEFT:
+		res = "RECT_ANCHOR_TOP_LEFT"
+	case RECT_ANCHOR_TOP_RIGHT:
+		res = "RECT_ANCHOR_TOP_RIGHT"
+	case RECT_ANCHOR_BOTTOM:
+		res = "RECT_ANCHOR_BOTTOM"
+	case RECT_ANCHOR_BOTTOM_LEFT:
+		res = "RECT_ANCHOR_BOTTOM_LEFT"
+	case RECT_ANCHOR_BOTTOM_RIGHT:
+		res = "RECT_ANCHOR_BOTTOM_RIGHT"
+	case RECT_ANCHOR_LEFT:
+		res = "RECT_ANCHOR_LEFT"
+	case RECT_ANCHOR_RIGHT:
+		res = "RECT_ANCHOR_RIGHT"
+	case RECT_ANCHOR_CENTER:
+		res = "RECT_ANCHOR_CENTER"
+	}
+	return
+}
+
+func (rectanchortype *RectAnchorType) FromString(input string) (err error) {
+
+	switch input {
+	// insertion code per enum code
+	case "RECT_ANCHOR_TOP":
+		*rectanchortype = RECT_ANCHOR_TOP
+	case "RECT_ANCHOR_TOP_LEFT":
+		*rectanchortype = RECT_ANCHOR_TOP_LEFT
+	case "RECT_ANCHOR_TOP_RIGHT":
+		*rectanchortype = RECT_ANCHOR_TOP_RIGHT
+	case "RECT_ANCHOR_BOTTOM":
+		*rectanchortype = RECT_ANCHOR_BOTTOM
+	case "RECT_ANCHOR_BOTTOM_LEFT":
+		*rectanchortype = RECT_ANCHOR_BOTTOM_LEFT
+	case "RECT_ANCHOR_BOTTOM_RIGHT":
+		*rectanchortype = RECT_ANCHOR_BOTTOM_RIGHT
+	case "RECT_ANCHOR_LEFT":
+		*rectanchortype = RECT_ANCHOR_LEFT
+	case "RECT_ANCHOR_RIGHT":
+		*rectanchortype = RECT_ANCHOR_RIGHT
+	case "RECT_ANCHOR_CENTER":
+		*rectanchortype = RECT_ANCHOR_CENTER
+	default:
+		return errUnkownEnum
+	}
+	return
+}
+
+func (rectanchortype *RectAnchorType) FromCodeString(input string) (err error) {
+
+	switch input {
+	// insertion code per enum code
+	case "RECT_ANCHOR_TOP":
+		*rectanchortype = RECT_ANCHOR_TOP
+	case "RECT_ANCHOR_TOP_LEFT":
+		*rectanchortype = RECT_ANCHOR_TOP_LEFT
+	case "RECT_ANCHOR_TOP_RIGHT":
+		*rectanchortype = RECT_ANCHOR_TOP_RIGHT
+	case "RECT_ANCHOR_BOTTOM":
+		*rectanchortype = RECT_ANCHOR_BOTTOM
+	case "RECT_ANCHOR_BOTTOM_LEFT":
+		*rectanchortype = RECT_ANCHOR_BOTTOM_LEFT
+	case "RECT_ANCHOR_BOTTOM_RIGHT":
+		*rectanchortype = RECT_ANCHOR_BOTTOM_RIGHT
+	case "RECT_ANCHOR_LEFT":
+		*rectanchortype = RECT_ANCHOR_LEFT
+	case "RECT_ANCHOR_RIGHT":
+		*rectanchortype = RECT_ANCHOR_RIGHT
+	case "RECT_ANCHOR_CENTER":
+		*rectanchortype = RECT_ANCHOR_CENTER
+	default:
+		return errUnkownEnum
+	}
+	return
+}
+
+func (rectanchortype *RectAnchorType) ToCodeString() (res string) {
+
+	switch *rectanchortype {
+	// insertion code per enum code
+	case RECT_ANCHOR_TOP:
+		res = "RECT_ANCHOR_TOP"
+	case RECT_ANCHOR_TOP_LEFT:
+		res = "RECT_ANCHOR_TOP_LEFT"
+	case RECT_ANCHOR_TOP_RIGHT:
+		res = "RECT_ANCHOR_TOP_RIGHT"
+	case RECT_ANCHOR_BOTTOM:
+		res = "RECT_ANCHOR_BOTTOM"
+	case RECT_ANCHOR_BOTTOM_LEFT:
+		res = "RECT_ANCHOR_BOTTOM_LEFT"
+	case RECT_ANCHOR_BOTTOM_RIGHT:
+		res = "RECT_ANCHOR_BOTTOM_RIGHT"
+	case RECT_ANCHOR_LEFT:
+		res = "RECT_ANCHOR_LEFT"
+	case RECT_ANCHOR_RIGHT:
+		res = "RECT_ANCHOR_RIGHT"
+	case RECT_ANCHOR_CENTER:
+		res = "RECT_ANCHOR_CENTER"
+	}
+	return
+}
+
 // Utility function for SideType
 // if enum values are string, it is stored with the value
 // if enum values are int, they are stored with the code of the value
@@ -1590,6 +1702,70 @@ func (sidetype *SideType) ToCodeString() (res string) {
 		res = "SIDE_LEFT"
 	case SIDE_RIGHT:
 		res = "SIDE_RIGHT"
+	}
+	return
+}
+
+// Utility function for TextAnchorType
+// if enum values are string, it is stored with the value
+// if enum values are int, they are stored with the code of the value
+func (textanchortype TextAnchorType) ToString() (res string) {
+
+	// migration of former implementation of enum
+	switch textanchortype {
+	// insertion code per enum code
+	case TEXT_ANCHOR_LEFT:
+		res = "left"
+	case TEXT_ANCHOR_RIGHT:
+		res = "right"
+	case TEXT_ANCHOR_CENTER:
+		res = "middle"
+	}
+	return
+}
+
+func (textanchortype *TextAnchorType) FromString(input string) (err error) {
+
+	switch input {
+	// insertion code per enum code
+	case "left":
+		*textanchortype = TEXT_ANCHOR_LEFT
+	case "right":
+		*textanchortype = TEXT_ANCHOR_RIGHT
+	case "middle":
+		*textanchortype = TEXT_ANCHOR_CENTER
+	default:
+		return errUnkownEnum
+	}
+	return
+}
+
+func (textanchortype *TextAnchorType) FromCodeString(input string) (err error) {
+
+	switch input {
+	// insertion code per enum code
+	case "TEXT_ANCHOR_LEFT":
+		*textanchortype = TEXT_ANCHOR_LEFT
+	case "TEXT_ANCHOR_RIGHT":
+		*textanchortype = TEXT_ANCHOR_RIGHT
+	case "TEXT_ANCHOR_CENTER":
+		*textanchortype = TEXT_ANCHOR_CENTER
+	default:
+		return errUnkownEnum
+	}
+	return
+}
+
+func (textanchortype *TextAnchorType) ToCodeString() (res string) {
+
+	switch *textanchortype {
+	// insertion code per enum code
+	case TEXT_ANCHOR_LEFT:
+		res = "TEXT_ANCHOR_LEFT"
+	case TEXT_ANCHOR_RIGHT:
+		res = "TEXT_ANCHOR_RIGHT"
+	case TEXT_ANCHOR_CENTER:
+		res = "TEXT_ANCHOR_CENTER"
 	}
 	return
 }

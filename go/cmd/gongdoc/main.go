@@ -44,6 +44,9 @@ var (
 
 	// transport secure layer
 	tls = flag.Bool("tls", false, "serve on https//localhost:443/")
+
+	selectedDiagramOnLoad = flag.String("selectedDiagramOnLoad", "",
+		"load diagram at startup, if empty, no diagram is loaded")
 )
 
 // hook marhalling to stage
@@ -156,6 +159,17 @@ func main() {
 
 		gongdocStage.OnInitCommitFromFrontCallback = beforeCommitImplementation
 		gongdocStage.OnInitCommitFromBackCallback = beforeCommitImplementation
+
+		// load diagram at startup if requested
+		if *selectedDiagramOnLoad != "" {
+			for _, classDiagram := range diagramPackage.Classdiagrams {
+				if classDiagram.Name == *selectedDiagramOnLoad {
+					diagramPackage.SelectedClassdiagram = classDiagram
+					gongdocStage.Commit()
+					// docSVGMapper.GenerateSvg(gongdocStage, gongsvgStage)
+				}
+			}
+		}
 
 	}
 

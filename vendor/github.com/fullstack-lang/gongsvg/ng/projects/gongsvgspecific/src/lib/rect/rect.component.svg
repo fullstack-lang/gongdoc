@@ -13,7 +13,7 @@
                 [attr.stroke-width]="Rect.StrokeWidth"
                 [attr.stroke-dasharray]="Rect.IsSelected ? Rect.StrokeDashArrayWhenSelected : Rect.StrokeDashArray"
                 [attr.transform]="Rect.Transform"
-                (click)="onRectClick($event)"
+
                 (mousedown)="rectMouseDown($event)"
                 (mousemove)="rectMouseMove($event)"
                 (mouseup)="rectMouseUp($event)">
@@ -27,6 +27,33 @@
 
         </rect>
 
+        <ng-container *ngFor='let text of Rect.RectAnchoredTexts!; let i = index'>
+                <ng-container *ngIf="text.RectAnchorType == RectAnchorType.RECT_ANCHOR_TOP" 
+                        [ngTemplateOutlet]="anchoredText" 
+                        [ngTemplateOutletContext]="{ 
+                                text: text, 
+                                anchorX: Rect.X + Rect.Width/2 + text.X_Offset, 
+                                anchorY: Rect.Y + text.Y_Offset }
+                        ">
+                </ng-container>
+                <ng-container *ngIf="text.RectAnchorType == RectAnchorType.RECT_ANCHOR_TOP_LEFT" 
+                        [ngTemplateOutlet]="anchoredText" 
+                        [ngTemplateOutletContext]="{ 
+                                text: text, 
+                                anchorX: Rect.X + text.X_Offset, 
+                                anchorY: Rect.Y + text.Y_Offset }
+                        ">
+                </ng-container>
+                <ng-container *ngIf="text.RectAnchorType == RectAnchorType.RECT_ANCHOR_BOTTOM" 
+                        [ngTemplateOutlet]="anchoredText" 
+                        [ngTemplateOutletContext]="{ 
+                                text: text, 
+                                anchorX: Rect.X + Rect.Width/2 + text.X_Offset, 
+                                anchorY: Rect.Y + Rect.Height + text.Y_Offset }
+                        ">
+                </ng-container>
+        </ng-container>
+
         <!-- Left anchor -->
         <circle
                 class="overlay"
@@ -35,10 +62,10 @@
                 [attr.cy]="Rect.Y + Rect.Height / 2"
                 [attr.r]="anchorRadius"
                 [attr.fill]="(anchorDragging && activeAnchor === 'left') ? draggingAnchorFillColor : anchorFillColor"
+
                 (mousedown)="anchorMouseDown($event, 'left')"
                 (mousemove)="anchorMouseMove($event, 'left')"
-                (mouseup)="anchorMouseUp($event)"
-                (mouseleave)="anchorMouseUp($event)" />
+                (mouseup)="anchorMouseUp($event)"/>
 
         <!-- Right anchor -->
         <circle
@@ -50,8 +77,7 @@
                 [attr.fill]="(anchorDragging && activeAnchor === 'right') ? draggingAnchorFillColor : anchorFillColor"
                 (mousedown)="anchorMouseDown($event, 'right')"
                 (mousemove)="anchorMouseMove($event, 'right')"
-                (mouseup)="anchorMouseUp($event)"
-                (mouseleave)="anchorMouseUp($event)" />
+                (mouseup)="anchorMouseUp($event)"/>
 
         <!-- Top anchor -->
         <circle
@@ -63,8 +89,7 @@
                 [attr.fill]="(anchorDragging && activeAnchor === 'top') ? draggingAnchorFillColor : anchorFillColor"
                 (mousedown)="anchorMouseDown($event, 'top')"
                 (mousemove)="anchorMouseMove($event, 'top')"
-                (mouseup)="anchorMouseUp($event)"
-                (mouseleave)="anchorMouseUp($event)" />
+                (mouseup)="anchorMouseUp($event)" />
 
         <!-- Bottom anchor -->
         <circle
@@ -76,7 +101,22 @@
                 [attr.fill]="(anchorDragging && activeAnchor === 'bottom') ? draggingAnchorFillColor : anchorFillColor"
                 (mousedown)="anchorMouseDown($event, 'bottom')"
                 (mousemove)="anchorMouseMove($event, 'bottom')"
-                (mouseup)="anchorMouseUp($event)"
-                (mouseleave)="anchorMouseUp($event)" />
+                (mouseup)="anchorMouseUp($event)"/>
     </g>
 </svg>
+
+<ng-template #anchoredText let-text="text" let-anchorX="anchorX" let-anchorY="anchorY">
+    <svg:text class="anchored-text"
+    [attr.x]="anchorX" 
+    [attr.y]="anchorY" 
+    [attr.fill]="text.Color"    
+    [attr.fill-opacity]="text.FillOpacity"
+    [attr.stroke]="text.Stroke"
+    [attr.stroke-width]="text.StrokeWidth != 0 ? text.StrokeWidth : null"
+    [attr.stroke-dasharray]="text.StrokeDashArray"
+    [attr.transform]="text.Transform"
+    [attr.text-anchor]="text.TextAnchorType"
+    [attr.font-weight]="text.FontWeight"
+    [attr.font-size]="text.FontSize !== 0 ? text.FontSize + 'px' : null"
+    >{{text.Content}}</text>
+</ng-template>

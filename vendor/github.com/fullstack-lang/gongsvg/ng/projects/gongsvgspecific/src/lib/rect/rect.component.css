@@ -9,3 +9,7 @@ svg {
 .overlay {
     pointer-events: auto;
 }
+
+.anchored-text {
+    pointer-events: none;
+}

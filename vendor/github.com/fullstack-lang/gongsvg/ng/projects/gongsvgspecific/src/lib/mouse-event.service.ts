@@ -9,6 +9,13 @@ export class MouseEventService {
 
   constructor() { }
 
+  private mouseMouseDownEventSource = new Subject<ShapeMouseEvent>();
+  mouseMouseDownEvent$ = this.mouseMouseDownEventSource.asObservable();
+  emitMouseDownEvent(ShapeMouseEvent: ShapeMouseEvent) {
+    // console.log('LinkEventService, mouse Down event', ShapeMouseEvent.shapeID)
+    this.mouseMouseDownEventSource.next(ShapeMouseEvent);
+  }
+
   private mouseMouseMoveEventSource = new Subject<ShapeMouseEvent>();
   mouseMouseMoveEvent$ = this.mouseMouseMoveEventSource.asObservable();
   emitMouseMoveEvent(ShapeMouseEvent: ShapeMouseEvent) {

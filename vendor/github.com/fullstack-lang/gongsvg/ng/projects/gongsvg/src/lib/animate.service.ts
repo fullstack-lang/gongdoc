@@ -22,6 +22,7 @@ import { PathDB } from './path-db'
 import { PolygoneDB } from './polygone-db'
 import { PolylineDB } from './polyline-db'
 import { RectDB } from './rect-db'
+import { RectAnchoredTextDB } from './rectanchoredtext-db'
 import { TextDB } from './text-db'
 
 @Injectable({
@@ -95,6 +96,8 @@ export class AnimateService {
     animatedb.Polyline_Animates_reverse = new PolylineDB
     let _Rect_Animations_reverse = animatedb.Rect_Animations_reverse
     animatedb.Rect_Animations_reverse = new RectDB
+    let _RectAnchoredText_Animates_reverse = animatedb.RectAnchoredText_Animates_reverse
+    animatedb.RectAnchoredText_Animates_reverse = new RectAnchoredTextDB
     let _Text_Animates_reverse = animatedb.Text_Animates_reverse
     animatedb.Text_Animates_reverse = new TextDB
 
@@ -115,6 +118,7 @@ export class AnimateService {
         animatedb.Polygone_Animates_reverse = _Polygone_Animates_reverse
         animatedb.Polyline_Animates_reverse = _Polyline_Animates_reverse
         animatedb.Rect_Animations_reverse = _Rect_Animations_reverse
+        animatedb.RectAnchoredText_Animates_reverse = _RectAnchoredText_Animates_reverse
         animatedb.Text_Animates_reverse = _Text_Animates_reverse
         // this.log(`posted animatedb id=${animatedb.ID}`)
       }),
@@ -161,6 +165,8 @@ export class AnimateService {
     animatedb.Polyline_Animates_reverse = new PolylineDB
     let _Rect_Animations_reverse = animatedb.Rect_Animations_reverse
     animatedb.Rect_Animations_reverse = new RectDB
+    let _RectAnchoredText_Animates_reverse = animatedb.RectAnchoredText_Animates_reverse
+    animatedb.RectAnchoredText_Animates_reverse = new RectAnchoredTextDB
     let _Text_Animates_reverse = animatedb.Text_Animates_reverse
     animatedb.Text_Animates_reverse = new TextDB
 
@@ -181,6 +187,7 @@ export class AnimateService {
         animatedb.Polygone_Animates_reverse = _Polygone_Animates_reverse
         animatedb.Polyline_Animates_reverse = _Polyline_Animates_reverse
         animatedb.Rect_Animations_reverse = _Rect_Animations_reverse
+        animatedb.RectAnchoredText_Animates_reverse = _RectAnchoredText_Animates_reverse
         animatedb.Text_Animates_reverse = _Text_Animates_reverse
         // this.log(`updated animatedb id=${animatedb.ID}`)
       }),

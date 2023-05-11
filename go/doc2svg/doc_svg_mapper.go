@@ -41,19 +41,37 @@ func (docSVGMapper *DocSVGMapper) GenerateSvg(
 			rect.Width = gongstructShape.Width
 			rect.Height = gongstructShape.Heigth
 
-			rect.Stroke = "black"
-			rect.StrokeWidth = 1
+			rect.Stroke = "transparant"
+			rect.StrokeWidth = 0
+
 			rect.FillOpacity = 100
 			rect.Color = gongsvg_models.Lightsalmon.ToString()
 
-			text := new(gongsvg_models.Text).Stage(gongsvgStage)
-			text.Name = gongdoc_models.IdentifierToGongObjectName(gongstructShape.Identifier)
-			text.Content = text.Name
-			text.X = rect.X + 10
-			text.Y = rect.Y + 10
-			text.Color = "black"
-			text.FillOpacity = 1.0
-			rectLayer.Texts = append(rectLayer.Texts, text)
+			// moveability
+			rect.CanMoveHorizontaly = true
+			rect.CanMoveVerticaly = true
+
+			rect.CanHaveBottomHandle = true
+			rect.CanHaveLeftHandle = true
+			rect.CanHaveTopHandle = true
+			rect.CanHaveRightHandle = true
+
+			title := new(gongsvg_models.RectAnchoredText).Stage(gongsvgStage)
+			title.Name = gongdoc_models.IdentifierToGongObjectName(gongstructShape.Identifier)
+			title.Content = title.Name
+
+			// title position
+			title.X_Offset = 0
+			title.Y_Offset = 20
+			title.RectAnchorType = gongsvg_models.RECT_ANCHOR_TOP
+			title.TextAnchorType = gongsvg_models.TEXT_ANCHOR_CENTER
+			title.FontWeight = "bold"
+
+			//
+
+			title.Color = "black"
+			title.FillOpacity = 1.0
+			rect.RectAnchoredTexts = append(rect.RectAnchoredTexts, title)
 		}
 	}
 

@@ -389,6 +389,25 @@ func (backRepoRect *BackRepoRectStruct) CommitPhaseTwoInstance(backRepo *BackRep
 			}
 		}
 
+		// This loop encodes the slice of pointers rect.RectAnchoredTexts into the back repo.
+		// Each back repo instance at the end of the association encode the ID of the association start
+		// into a dedicated field for coding the association. The back repo instance is then saved to the db
+		for idx, rectanchoredtextAssocEnd := range rect.RectAnchoredTexts {
+
+			// get the back repo instance at the association end
+			rectanchoredtextAssocEnd_DB :=
+				backRepo.BackRepoRectAnchoredText.GetRectAnchoredTextDBFromRectAnchoredTextPtr(rectanchoredtextAssocEnd)
+
+			// encode reverse pointer in the association end back repo instance
+			rectanchoredtextAssocEnd_DB.Rect_RectAnchoredTextsDBID.Int64 = int64(rectDB.ID)
+			rectanchoredtextAssocEnd_DB.Rect_RectAnchoredTextsDBID.Valid = true
+			rectanchoredtextAssocEnd_DB.Rect_RectAnchoredTextsDBID_Index.Int64 = int64(idx)
+			rectanchoredtextAssocEnd_DB.Rect_RectAnchoredTextsDBID_Index.Valid = true
+			if q := backRepoRect.db.Save(rectanchoredtextAssocEnd_DB); q.Error != nil {
+				return q.Error
+			}
+		}
+
 		query := backRepoRect.db.Save(&rectDB)
 		if query.Error != nil {
 			return query.Error
@@ -521,6 +540,33 @@ func (backRepoRect *BackRepoRectStruct) CheckoutPhaseTwoInstance(backRepo *BackR
 		animateDB_j := backRepo.BackRepoAnimate.Map_AnimateDBID_AnimateDB[animateDB_j_ID]
 
 		return animateDB_i.Rect_AnimationsDBID_Index.Int64 < animateDB_j.Rect_AnimationsDBID_Index.Int64
+	})
+
+	// This loop redeem rect.RectAnchoredTexts in the stage from the encode in the back repo
+	// It parses all RectAnchoredTextDB in the back repo and if the reverse pointer encoding matches the back repo ID
+	// it appends the stage instance
+	// 1. reset the slice
+	rect.RectAnchoredTexts = rect.RectAnchoredTexts[:0]
+	// 2. loop all instances in the type in the association end
+	for _, rectanchoredtextDB_AssocEnd := range backRepo.BackRepoRectAnchoredText.Map_RectAnchoredTextDBID_RectAnchoredTextDB {
+		// 3. Does the ID encoding at the end and the ID at the start matches ?
+		if rectanchoredtextDB_AssocEnd.Rect_RectAnchoredTextsDBID.Int64 == int64(rectDB.ID) {
+			// 4. fetch the associated instance in the stage
+			rectanchoredtext_AssocEnd := backRepo.BackRepoRectAnchoredText.Map_RectAnchoredTextDBID_RectAnchoredTextPtr[rectanchoredtextDB_AssocEnd.ID]
+			// 5. append it the association slice
+			rect.RectAnchoredTexts = append(rect.RectAnchoredTexts, rectanchoredtext_AssocEnd)
+		}
+	}
+
+	// sort the array according to the order
+	sort.Slice(rect.RectAnchoredTexts, func(i, j int) bool {
+		rectanchoredtextDB_i_ID := backRepo.BackRepoRectAnchoredText.Map_RectAnchoredTextPtr_RectAnchoredTextDBID[rect.RectAnchoredTexts[i]]
+		rectanchoredtextDB_j_ID := backRepo.BackRepoRectAnchoredText.Map_RectAnchoredTextPtr_RectAnchoredTextDBID[rect.RectAnchoredTexts[j]]
+
+		rectanchoredtextDB_i := backRepo.BackRepoRectAnchoredText.Map_RectAnchoredTextDBID_RectAnchoredTextDB[rectanchoredtextDB_i_ID]
+		rectanchoredtextDB_j := backRepo.BackRepoRectAnchoredText.Map_RectAnchoredTextDBID_RectAnchoredTextDB[rectanchoredtextDB_j_ID]
+
+		return rectanchoredtextDB_i.Rect_RectAnchoredTextsDBID_Index.Int64 < rectanchoredtextDB_j.Rect_RectAnchoredTextsDBID_Index.Int64
 	})
 
 	return

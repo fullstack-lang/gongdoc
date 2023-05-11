@@ -40,6 +40,9 @@ import { PolylineService } from './polyline.service'
 import { RectDB } from './rect-db'
 import { RectService } from './rect.service'
 
+import { RectAnchoredTextDB } from './rectanchoredtext-db'
+import { RectAnchoredTextService } from './rectanchoredtext.service'
+
 import { SVGDB } from './svg-db'
 import { SVGService } from './svg.service'
 
@@ -85,6 +88,9 @@ export class FrontRepo { // insertion point sub template
   Rects_array = new Array<RectDB>(); // array of repo instances
   Rects = new Map<number, RectDB>(); // map of repo instances
   Rects_batch = new Map<number, RectDB>(); // same but only in last GET (for finding repo instances to delete)
+  RectAnchoredTexts_array = new Array<RectAnchoredTextDB>(); // array of repo instances
+  RectAnchoredTexts = new Map<number, RectAnchoredTextDB>(); // map of repo instances
+  RectAnchoredTexts_batch = new Map<number, RectAnchoredTextDB>(); // same but only in last GET (for finding repo instances to delete)
   SVGs_array = new Array<SVGDB>(); // array of repo instances
   SVGs = new Map<number, SVGDB>(); // map of repo instances
   SVGs_batch = new Map<number, SVGDB>(); // same but only in last GET (for finding repo instances to delete)
@@ -165,6 +171,7 @@ export class FrontRepoService {
     private polygoneService: PolygoneService,
     private polylineService: PolylineService,
     private rectService: RectService,
+    private rectanchoredtextService: RectAnchoredTextService,
     private svgService: SVGService,
     private textService: TextService,
   ) { }
@@ -209,6 +216,7 @@ export class FrontRepoService {
     Observable<PolygoneDB[]>,
     Observable<PolylineDB[]>,
     Observable<RectDB[]>,
+    Observable<RectAnchoredTextDB[]>,
     Observable<SVGDB[]>,
     Observable<TextDB[]>,
   ] = [ // insertion point sub template
@@ -224,6 +232,7 @@ export class FrontRepoService {
       this.polygoneService.getPolygones(this.GONG__StackPath),
       this.polylineService.getPolylines(this.GONG__StackPath),
       this.rectService.getRects(this.GONG__StackPath),
+      this.rectanchoredtextService.getRectAnchoredTexts(this.GONG__StackPath),
       this.svgService.getSVGs(this.GONG__StackPath),
       this.textService.getTexts(this.GONG__StackPath),
     ];
@@ -251,6 +260,7 @@ export class FrontRepoService {
       this.polygoneService.getPolygones(this.GONG__StackPath),
       this.polylineService.getPolylines(this.GONG__StackPath),
       this.rectService.getRects(this.GONG__StackPath),
+      this.rectanchoredtextService.getRectAnchoredTexts(this.GONG__StackPath),
       this.svgService.getSVGs(this.GONG__StackPath),
       this.textService.getTexts(this.GONG__StackPath),
     ]
@@ -273,6 +283,7 @@ export class FrontRepoService {
             polygones_,
             polylines_,
             rects_,
+            rectanchoredtexts_,
             svgs_,
             texts_,
           ]) => {
@@ -302,6 +313,8 @@ export class FrontRepoService {
             polylines = polylines_ as PolylineDB[]
             var rects: RectDB[]
             rects = rects_ as RectDB[]
+            var rectanchoredtexts: RectAnchoredTextDB[]
+            rectanchoredtexts = rectanchoredtexts_ as RectAnchoredTextDB[]
             var svgs: SVGDB[]
             svgs = svgs_ as SVGDB[]
             var texts: TextDB[]
@@ -707,6 +720,39 @@ export class FrontRepoService {
             });
 
             // init the array
+            this.frontRepo.RectAnchoredTexts_array = rectanchoredtexts
+
+            // clear the map that counts RectAnchoredText in the GET
+            this.frontRepo.RectAnchoredTexts_batch.clear()
+
+            rectanchoredtexts.forEach(
+              rectanchoredtext => {
+                this.frontRepo.RectAnchoredTexts.set(rectanchoredtext.ID, rectanchoredtext)
+                this.frontRepo.RectAnchoredTexts_batch.set(rectanchoredtext.ID, rectanchoredtext)
+              }
+            )
+
+            // clear rectanchoredtexts that are absent from the batch
+            this.frontRepo.RectAnchoredTexts.forEach(
+              rectanchoredtext => {
+                if (this.frontRepo.RectAnchoredTexts_batch.get(rectanchoredtext.ID) == undefined) {
+                  this.frontRepo.RectAnchoredTexts.delete(rectanchoredtext.ID)
+                }
+              }
+            )
+
+            // sort RectAnchoredTexts_array array
+            this.frontRepo.RectAnchoredTexts_array.sort((t1, t2) => {
+              if (t1.Name > t2.Name) {
+                return 1;
+              }
+              if (t1.Name < t2.Name) {
+                return -1;
+              }
+              return 0;
+            });
+
+            // init the array
             this.frontRepo.SVGs_array = svgs
 
             // clear the map that counts SVG in the GET
@@ -915,6 +961,19 @@ export class FrontRepoService {
                     _rect.Animations.push(animate)
                     if (animate.Rect_Animations_reverse == undefined) {
                       animate.Rect_Animations_reverse = _rect
+                    }
+                  }
+                }
+                // insertion point for slice of pointer field RectAnchoredText.Animates redeeming
+                {
+                  let _rectanchoredtext = this.frontRepo.RectAnchoredTexts.get(animate.RectAnchoredText_AnimatesDBID.Int64)
+                  if (_rectanchoredtext) {
+                    if (_rectanchoredtext.Animates == undefined) {
+                      _rectanchoredtext.Animates = new Array<AnimateDB>()
+                    }
+                    _rectanchoredtext.Animates.push(animate)
+                    if (animate.RectAnchoredText_Animates_reverse == undefined) {
+                      animate.RectAnchoredText_Animates_reverse = _rectanchoredtext
                     }
                   }
                 }
@@ -1142,6 +1201,26 @@ export class FrontRepoService {
                     _layer.Rects.push(rect)
                     if (rect.Layer_Rects_reverse == undefined) {
                       rect.Layer_Rects_reverse = _layer
+                    }
+                  }
+                }
+              }
+            )
+            rectanchoredtexts.forEach(
+              rectanchoredtext => {
+                // insertion point sub sub template for ONE-/ZERO-ONE associations pointers redeeming
+
+                // insertion point for redeeming ONE-MANY associations
+                // insertion point for slice of pointer field Rect.RectAnchoredTexts redeeming
+                {
+                  let _rect = this.frontRepo.Rects.get(rectanchoredtext.Rect_RectAnchoredTextsDBID.Int64)
+                  if (_rect) {
+                    if (_rect.RectAnchoredTexts == undefined) {
+                      _rect.RectAnchoredTexts = new Array<RectAnchoredTextDB>()
+                    }
+                    _rect.RectAnchoredTexts.push(rectanchoredtext)
+                    if (rectanchoredtext.Rect_RectAnchoredTexts_reverse == undefined) {
+                      rectanchoredtext.Rect_RectAnchoredTexts_reverse = _rect
                     }
                   }
                 }
@@ -1404,6 +1483,19 @@ export class FrontRepoService {
                     _rect.Animations.push(animate)
                     if (animate.Rect_Animations_reverse == undefined) {
                       animate.Rect_Animations_reverse = _rect
+                    }
+                  }
+                }
+                // insertion point for slice of pointer field RectAnchoredText.Animates redeeming
+                {
+                  let _rectanchoredtext = this.frontRepo.RectAnchoredTexts.get(animate.RectAnchoredText_AnimatesDBID.Int64)
+                  if (_rectanchoredtext) {
+                    if (_rectanchoredtext.Animates == undefined) {
+                      _rectanchoredtext.Animates = new Array<AnimateDB>()
+                    }
+                    _rectanchoredtext.Animates.push(animate)
+                    if (animate.RectAnchoredText_Animates_reverse == undefined) {
+                      animate.RectAnchoredText_Animates_reverse = _rectanchoredtext
                     }
                   }
                 }
@@ -2098,6 +2190,70 @@ export class FrontRepoService {
     )
   }
 
+  // RectAnchoredTextPull performs a GET on RectAnchoredText of the stack and redeem association pointers 
+  RectAnchoredTextPull(): Observable<FrontRepo> {
+    return new Observable<FrontRepo>(
+      (observer) => {
+        combineLatest([
+          this.rectanchoredtextService.getRectAnchoredTexts(this.GONG__StackPath)
+        ]).subscribe(
+          ([ // insertion point sub template 
+            rectanchoredtexts,
+          ]) => {
+            // init the array
+            this.frontRepo.RectAnchoredTexts_array = rectanchoredtexts
+
+            // clear the map that counts RectAnchoredText in the GET
+            this.frontRepo.RectAnchoredTexts_batch.clear()
+
+            // 
+            // First Step: init map of instances
+            // insertion point sub template 
+            rectanchoredtexts.forEach(
+              rectanchoredtext => {
+                this.frontRepo.RectAnchoredTexts.set(rectanchoredtext.ID, rectanchoredtext)
+                this.frontRepo.RectAnchoredTexts_batch.set(rectanchoredtext.ID, rectanchoredtext)
+
+                // insertion point for redeeming ONE/ZERO-ONE associations
+
+                // insertion point for redeeming ONE-MANY associations
+                // insertion point for slice of pointer field Rect.RectAnchoredTexts redeeming
+                {
+                  let _rect = this.frontRepo.Rects.get(rectanchoredtext.Rect_RectAnchoredTextsDBID.Int64)
+                  if (_rect) {
+                    if (_rect.RectAnchoredTexts == undefined) {
+                      _rect.RectAnchoredTexts = new Array<RectAnchoredTextDB>()
+                    }
+                    _rect.RectAnchoredTexts.push(rectanchoredtext)
+                    if (rectanchoredtext.Rect_RectAnchoredTexts_reverse == undefined) {
+                      rectanchoredtext.Rect_RectAnchoredTexts_reverse = _rect
+                    }
+                  }
+                }
+              }
+            )
+
+            // clear rectanchoredtexts that are absent from the GET
+            this.frontRepo.RectAnchoredTexts.forEach(
+              rectanchoredtext => {
+                if (this.frontRepo.RectAnchoredTexts_batch.get(rectanchoredtext.ID) == undefined) {
+                  this.frontRepo.RectAnchoredTexts.delete(rectanchoredtext.ID)
+                }
+              }
+            )
+
+            // 
+            // Second Step: redeem pointers between instances (thanks to maps in the First Step)
+            // insertion point sub template 
+
+            // hand over control flow to observer
+            observer.next(this.frontRepo)
+          }
+        )
+      }
+    )
+  }
+
   // SVGPull performs a GET on SVG of the stack and redeem association pointers 
   SVGPull(): Observable<FrontRepo> {
     return new Observable<FrontRepo>(
@@ -2265,9 +2421,12 @@ export function getPolylineUniqueID(id: number): number {
 export function getRectUniqueID(id: number): number {
   return 79 * id
 }
-export function getSVGUniqueID(id: number): number {
+export function getRectAnchoredTextUniqueID(id: number): number {
   return 83 * id
 }
-export function getTextUniqueID(id: number): number {
+export function getSVGUniqueID(id: number): number {
   return 89 * id
+}
+export function getTextUniqueID(id: number): number {
+  return 97 * id
 }

@@ -143,6 +143,13 @@ export class AnimatesTableComponent implements OnInit {
             return ""
           }
 
+        case 'RectAnchoredText_Animates':
+          if (this.frontRepo.RectAnchoredTexts.get(animateDB.RectAnchoredText_AnimatesDBID.Int64) != undefined) {
+            return this.frontRepo.RectAnchoredTexts.get(animateDB.RectAnchoredText_AnimatesDBID.Int64)!.Name
+          } else {
+            return ""
+          }
+
         case 'Text_Animates':
           if (this.frontRepo.Texts.get(animateDB.Text_AnimatesDBID.Int64) != undefined) {
             return this.frontRepo.Texts.get(animateDB.Text_AnimatesDBID.Int64)!.Name
@@ -199,6 +206,10 @@ export class AnimatesTableComponent implements OnInit {
 
       if (animateDB.Rect_AnimationsDBID.Int64 != 0) {
         mergedContent += this.frontRepo.Rects.get(animateDB.Rect_AnimationsDBID.Int64)!.Name.toLowerCase()
+      }
+
+      if (animateDB.RectAnchoredText_AnimatesDBID.Int64 != 0) {
+        mergedContent += this.frontRepo.RectAnchoredTexts.get(animateDB.RectAnchoredText_AnimatesDBID.Int64)!.Name.toLowerCase()
       }
 
       if (animateDB.Text_AnimatesDBID.Int64 != 0) {
@@ -272,6 +283,7 @@ export class AnimatesTableComponent implements OnInit {
         "Polygone_Animates",
         "Polyline_Animates",
         "Rect_Animations",
+        "RectAnchoredText_Animates",
         "Text_Animates",
       ]
     } else {
@@ -289,6 +301,7 @@ export class AnimatesTableComponent implements OnInit {
         "Polygone_Animates",
         "Polyline_Animates",
         "Rect_Animations",
+        "RectAnchoredText_Animates",
         "Text_Animates",
       ]
       this.selection = new SelectionModel<AnimateDB>(allowMultiSelect, this.initialSelection);

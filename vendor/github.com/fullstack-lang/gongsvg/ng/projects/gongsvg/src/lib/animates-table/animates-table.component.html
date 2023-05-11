@@ -110,6 +110,13 @@
             </td>
         </ng-container>
         <!-- -->
+        <ng-container matColumnDef="RectAnchoredText_Animates">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header> <-- (RectAnchoredText) Animates </th>
+            <td mat-cell *matCellDef="let animate">
+                {{frontRepo.RectAnchoredTexts.get(animate.RectAnchoredText_AnimatesDBID.Int64)?.Name}}
+            </td>
+        </ng-container>
+        <!-- -->
         <ng-container matColumnDef="Text_Animates">
             <th mat-header-cell *matHeaderCellDef mat-sort-header> <-- (Text) Animates </th>
             <td mat-cell *matCellDef="let animate">

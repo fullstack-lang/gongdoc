@@ -72,6 +72,7 @@ export class RectService {
 
     // insertion point for reset of pointers and reverse pointers (to avoid circular JSON)
     rectdb.Animations = []
+    rectdb.RectAnchoredTexts = []
     let _Layer_Rects_reverse = rectdb.Layer_Rects_reverse
     rectdb.Layer_Rects_reverse = new LayerDB
 
@@ -115,6 +116,7 @@ export class RectService {
 
     // insertion point for reset of pointers and reverse pointers (to avoid circular JSON)
     rectdb.Animations = []
+    rectdb.RectAnchoredTexts = []
     let _Layer_Rects_reverse = rectdb.Layer_Rects_reverse
     rectdb.Layer_Rects_reverse = new LayerDB
 

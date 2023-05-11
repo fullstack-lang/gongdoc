@@ -5,12 +5,16 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "Front on 4200",
-            "type": "chrome",
-            // "runtimeExecutable": "D:/MOSS-Users/peugeot/dev/tools/chrome/GoogleChromePortable64ll/Chrome.exe",
+            "name": "gongdoc on geometry",
+            "type": "go",
             "request": "launch",
-            "url": "http://localhost:4200/",
-            "webRoot": "${workspaceFolder}/ng",
+            "mode": "debug",
+            "program": "${workspaceFolder}/go/cmd/gongdoc",
+            "args": [
+                "-selectedDiagramOnLoad",
+                "NewDiagram",
+                "../../tests/geometry/go/models",
+            ]
         },
         {
             "name": "Launch Chrome",
@@ -172,16 +176,6 @@
             "program": "${workspaceFolder}/go/cmd/gongdoc",
             "args": [
                 "../../tests/dummy/go/models",
-            ]
-        },
-        {
-            "name": "gongdoc on geometry",
-            "type": "go",
-            "request": "launch",
-            "mode": "debug",
-            "program": "${workspaceFolder}/go/cmd/gongdoc",
-            "args": [
-                "../../tests/geometry/go/models",
             ]
         },
         {
