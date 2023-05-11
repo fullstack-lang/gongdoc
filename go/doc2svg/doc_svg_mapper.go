@@ -58,8 +58,9 @@ func (docSVGMapper *DocSVGMapper) GenerateSvg(
 		rect.Width = gongstructShape.Width
 		rect.Height = gongstructShape.Heigth
 
-		rect.Stroke = "transparant"
-		rect.StrokeWidth = 0
+		rect.Stroke = gongsvg_models.Lightsalmon.ToString()
+		rect.StrokeWidth = 1
+		rect.StrokeDashArrayWhenSelected = "5 5"
 
 		rect.FillOpacity = 100
 		rect.Color = gongsvg_models.Lightsalmon.ToString()

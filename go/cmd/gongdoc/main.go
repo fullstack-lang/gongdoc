@@ -160,6 +160,9 @@ func main() {
 		gongdocStage.OnInitCommitFromFrontCallback = beforeCommitImplementation
 		gongdocStage.OnInitCommitFromBackCallback = beforeCommitImplementation
 
+		// enable the inversion control mechanism on the gongsvg backend
+		gongsvg_models.SetOrchestratorOnAfterUpdate[gongsvg_models.Rect](gongsvgStage)
+
 		// load diagram at startup if requested
 		if *selectedDiagramOnLoad != "" {
 			for _, classDiagram := range diagramPackage.Classdiagrams {
