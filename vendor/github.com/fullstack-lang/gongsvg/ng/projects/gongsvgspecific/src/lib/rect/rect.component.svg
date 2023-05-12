@@ -27,6 +27,36 @@
 
         </rect>
 
+                <ng-container *ngFor='let rect of Rect.RectAnchoredRects!; let i = index'>
+                <ng-container *ngIf="rect.RectAnchorType == RectAnchorType.RECT_ANCHOR_TOP" 
+                        [ngTemplateOutlet]="anchoredRect" 
+                        [ngTemplateOutletContext]="{ 
+                                rect: rect, 
+                                anchorX: Rect.X + Rect.Width/2 + rect.X_Offset, 
+                                anchorY: Rect.Y + rect.Y_Offset,
+                                width: (rect.WidthFollowRect ? Rect.Width : rect.Width) }
+                        ">
+                </ng-container>
+                <ng-container *ngIf="rect.RectAnchorType == RectAnchorType.RECT_ANCHOR_TOP_LEFT" 
+                        [ngTemplateOutlet]="anchoredRect" 
+                        [ngTemplateOutletContext]="{ 
+                                rect: rect, 
+                                anchorX: Rect.X + rect.X_Offset, 
+                                anchorY: Rect.Y + rect.Y_Offset ,
+                                width: (rect.WidthFollowRect ? Rect.Width : rect.Width) }
+                        ">
+                </ng-container>
+                <ng-container *ngIf="rect.RectAnchorType == RectAnchorType.RECT_ANCHOR_BOTTOM" 
+                        [ngTemplateOutlet]="anchoredRect" 
+                        [ngTemplateOutletContext]="{ 
+                                rect: rect, 
+                                anchorX: Rect.X + Rect.Width/2 + rect.X_Offset, 
+                                anchorY: Rect.Y + Rect.Height + rect.Y_Offset ,
+                                width: (rect.WidthFollowRect ? Rect.Width : rect.Width) }
+                        ">
+                </ng-container>
+        </ng-container>
+
         <ng-container *ngFor='let text of Rect.RectAnchoredTexts!; let i = index'>
                 <ng-container *ngIf="text.RectAnchorType == RectAnchorType.RECT_ANCHOR_TOP" 
                         [ngTemplateOutlet]="anchoredText" 
@@ -53,6 +83,8 @@
                         ">
                 </ng-container>
         </ng-container>
+
+
 
         <!-- Left anchor -->
         <circle
@@ -119,4 +151,19 @@
     [attr.font-weight]="text.FontWeight"
     [attr.font-size]="text.FontSize !== 0 ? text.FontSize + 'px' : null"
     >{{text.Content}}</text>
+</ng-template>
+
+<ng-template #anchoredRect let-rect="rect" let-anchorX="anchorX" let-anchorY="anchorY" let-width="width">
+        <svg:rect   
+        class="anchored-rect"
+        [attr.x]="anchorX"
+        [attr.y]="anchorY"
+        [attr.width]="width"
+        [attr.height]="rect.Height"
+        [attr.rx]="rect.RX"
+        [attr.fill]="rect.Color"
+        [attr.fill-opacity]="rect.FillOpacity"
+        [attr.stroke]="rect.Stroke"
+        [attr.stroke-width]="rect.StrokeWidth"
+        > </rect>
 </ng-template>

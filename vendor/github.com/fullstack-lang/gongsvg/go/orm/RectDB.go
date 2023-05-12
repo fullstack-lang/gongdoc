@@ -408,6 +408,25 @@ func (backRepoRect *BackRepoRectStruct) CommitPhaseTwoInstance(backRepo *BackRep
 			}
 		}
 
+		// This loop encodes the slice of pointers rect.RectAnchoredRects into the back repo.
+		// Each back repo instance at the end of the association encode the ID of the association start
+		// into a dedicated field for coding the association. The back repo instance is then saved to the db
+		for idx, rectanchoredrectAssocEnd := range rect.RectAnchoredRects {
+
+			// get the back repo instance at the association end
+			rectanchoredrectAssocEnd_DB :=
+				backRepo.BackRepoRectAnchoredRect.GetRectAnchoredRectDBFromRectAnchoredRectPtr(rectanchoredrectAssocEnd)
+
+			// encode reverse pointer in the association end back repo instance
+			rectanchoredrectAssocEnd_DB.Rect_RectAnchoredRectsDBID.Int64 = int64(rectDB.ID)
+			rectanchoredrectAssocEnd_DB.Rect_RectAnchoredRectsDBID.Valid = true
+			rectanchoredrectAssocEnd_DB.Rect_RectAnchoredRectsDBID_Index.Int64 = int64(idx)
+			rectanchoredrectAssocEnd_DB.Rect_RectAnchoredRectsDBID_Index.Valid = true
+			if q := backRepoRect.db.Save(rectanchoredrectAssocEnd_DB); q.Error != nil {
+				return q.Error
+			}
+		}
+
 		query := backRepoRect.db.Save(&rectDB)
 		if query.Error != nil {
 			return query.Error
@@ -567,6 +586,33 @@ func (backRepoRect *BackRepoRectStruct) CheckoutPhaseTwoInstance(backRepo *BackR
 		rectanchoredtextDB_j := backRepo.BackRepoRectAnchoredText.Map_RectAnchoredTextDBID_RectAnchoredTextDB[rectanchoredtextDB_j_ID]
 
 		return rectanchoredtextDB_i.Rect_RectAnchoredTextsDBID_Index.Int64 < rectanchoredtextDB_j.Rect_RectAnchoredTextsDBID_Index.Int64
+	})
+
+	// This loop redeem rect.RectAnchoredRects in the stage from the encode in the back repo
+	// It parses all RectAnchoredRectDB in the back repo and if the reverse pointer encoding matches the back repo ID
+	// it appends the stage instance
+	// 1. reset the slice
+	rect.RectAnchoredRects = rect.RectAnchoredRects[:0]
+	// 2. loop all instances in the type in the association end
+	for _, rectanchoredrectDB_AssocEnd := range backRepo.BackRepoRectAnchoredRect.Map_RectAnchoredRectDBID_RectAnchoredRectDB {
+		// 3. Does the ID encoding at the end and the ID at the start matches ?
+		if rectanchoredrectDB_AssocEnd.Rect_RectAnchoredRectsDBID.Int64 == int64(rectDB.ID) {
+			// 4. fetch the associated instance in the stage
+			rectanchoredrect_AssocEnd := backRepo.BackRepoRectAnchoredRect.Map_RectAnchoredRectDBID_RectAnchoredRectPtr[rectanchoredrectDB_AssocEnd.ID]
+			// 5. append it the association slice
+			rect.RectAnchoredRects = append(rect.RectAnchoredRects, rectanchoredrect_AssocEnd)
+		}
+	}
+
+	// sort the array according to the order
+	sort.Slice(rect.RectAnchoredRects, func(i, j int) bool {
+		rectanchoredrectDB_i_ID := backRepo.BackRepoRectAnchoredRect.Map_RectAnchoredRectPtr_RectAnchoredRectDBID[rect.RectAnchoredRects[i]]
+		rectanchoredrectDB_j_ID := backRepo.BackRepoRectAnchoredRect.Map_RectAnchoredRectPtr_RectAnchoredRectDBID[rect.RectAnchoredRects[j]]
+
+		rectanchoredrectDB_i := backRepo.BackRepoRectAnchoredRect.Map_RectAnchoredRectDBID_RectAnchoredRectDB[rectanchoredrectDB_i_ID]
+		rectanchoredrectDB_j := backRepo.BackRepoRectAnchoredRect.Map_RectAnchoredRectDBID_RectAnchoredRectDB[rectanchoredrectDB_j_ID]
+
+		return rectanchoredrectDB_i.Rect_RectAnchoredRectsDBID_Index.Int64 < rectanchoredrectDB_j.Rect_RectAnchoredRectsDBID_Index.Int64
 	})
 
 	return

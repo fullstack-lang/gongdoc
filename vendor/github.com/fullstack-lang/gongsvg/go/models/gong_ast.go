@@ -315,6 +315,7 @@ var __gong__map_Point = make(map[string]*Point)
 var __gong__map_Polygone = make(map[string]*Polygone)
 var __gong__map_Polyline = make(map[string]*Polyline)
 var __gong__map_Rect = make(map[string]*Rect)
+var __gong__map_RectAnchoredRect = make(map[string]*RectAnchoredRect)
 var __gong__map_RectAnchoredText = make(map[string]*RectAnchoredText)
 var __gong__map_SVG = make(map[string]*SVG)
 var __gong__map_Text = make(map[string]*Text)
@@ -538,6 +539,10 @@ func UnmarshallGongstructStaging(stage *StageStruct, cmap *ast.CommentMap, assig
 										instanceRect := (&Rect{Name: instanceName}).Stage(stage)
 										instance = any(instanceRect)
 										__gong__map_Rect[identifier] = instanceRect
+									case "RectAnchoredRect":
+										instanceRectAnchoredRect := (&RectAnchoredRect{Name: instanceName}).Stage(stage)
+										instance = any(instanceRectAnchoredRect)
+										__gong__map_RectAnchoredRect[identifier] = instanceRectAnchoredRect
 									case "RectAnchoredText":
 										instanceRectAnchoredText := (&RectAnchoredText{Name: instanceName}).Stage(stage)
 										instance = any(instanceRectAnchoredText)
@@ -631,6 +636,10 @@ func UnmarshallGongstructStaging(stage *StageStruct, cmap *ast.CommentMap, assig
 							// insertion point for date assign code
 							}
 						case "Rect":
+							switch fieldName {
+							// insertion point for date assign code
+							}
+						case "RectAnchoredRect":
 							switch fieldName {
 							// insertion point for date assign code
 							}
@@ -844,6 +853,16 @@ func UnmarshallGongstructStaging(stage *StageStruct, cmap *ast.CommentMap, assig
 							target := __gong__map_RectAnchoredText[targetIdentifier]
 							__gong__map_Rect[identifier].RectAnchoredTexts =
 								append(__gong__map_Rect[identifier].RectAnchoredTexts, target)
+						case "RectAnchoredRects":
+							// remove first and last char
+							targetIdentifier := ident.Name
+							target := __gong__map_RectAnchoredRect[targetIdentifier]
+							__gong__map_Rect[identifier].RectAnchoredRects =
+								append(__gong__map_Rect[identifier].RectAnchoredRects, target)
+						}
+					case "RectAnchoredRect":
+						switch fieldName {
+						// insertion point for slice of pointers assign code
 						}
 					case "RectAnchoredText":
 						switch fieldName {
@@ -1547,6 +1566,97 @@ func UnmarshallGongstructStaging(stage *StageStruct, cmap *ast.CommentMap, assig
 					fielValue := basicLit.Value[1 : len(basicLit.Value)-1]
 					__gong__map_Rect[identifier].Transform = fielValue
 				}
+			case "RectAnchoredRect":
+				switch fieldName {
+				// insertion point for field dependant code
+				case "Name":
+					// remove first and last char
+					fielValue := basicLit.Value[1 : len(basicLit.Value)-1]
+					__gong__map_RectAnchoredRect[identifier].Name = fielValue
+				case "X":
+					// convert string to float64
+					fielValue, err := strconv.ParseFloat(basicLit.Value, 64)
+					if err != nil {
+						log.Fatalln(err)
+					}
+					__gong__map_RectAnchoredRect[identifier].X = exprSign * fielValue
+				case "Y":
+					// convert string to float64
+					fielValue, err := strconv.ParseFloat(basicLit.Value, 64)
+					if err != nil {
+						log.Fatalln(err)
+					}
+					__gong__map_RectAnchoredRect[identifier].Y = exprSign * fielValue
+				case "Width":
+					// convert string to float64
+					fielValue, err := strconv.ParseFloat(basicLit.Value, 64)
+					if err != nil {
+						log.Fatalln(err)
+					}
+					__gong__map_RectAnchoredRect[identifier].Width = exprSign * fielValue
+				case "Height":
+					// convert string to float64
+					fielValue, err := strconv.ParseFloat(basicLit.Value, 64)
+					if err != nil {
+						log.Fatalln(err)
+					}
+					__gong__map_RectAnchoredRect[identifier].Height = exprSign * fielValue
+				case "RX":
+					// convert string to float64
+					fielValue, err := strconv.ParseFloat(basicLit.Value, 64)
+					if err != nil {
+						log.Fatalln(err)
+					}
+					__gong__map_RectAnchoredRect[identifier].RX = exprSign * fielValue
+				case "X_Offset":
+					// convert string to float64
+					fielValue, err := strconv.ParseFloat(basicLit.Value, 64)
+					if err != nil {
+						log.Fatalln(err)
+					}
+					__gong__map_RectAnchoredRect[identifier].X_Offset = exprSign * fielValue
+				case "Y_Offset":
+					// convert string to float64
+					fielValue, err := strconv.ParseFloat(basicLit.Value, 64)
+					if err != nil {
+						log.Fatalln(err)
+					}
+					__gong__map_RectAnchoredRect[identifier].Y_Offset = exprSign * fielValue
+				case "Color":
+					// remove first and last char
+					fielValue := basicLit.Value[1 : len(basicLit.Value)-1]
+					__gong__map_RectAnchoredRect[identifier].Color = fielValue
+				case "FillOpacity":
+					// convert string to float64
+					fielValue, err := strconv.ParseFloat(basicLit.Value, 64)
+					if err != nil {
+						log.Fatalln(err)
+					}
+					__gong__map_RectAnchoredRect[identifier].FillOpacity = exprSign * fielValue
+				case "Stroke":
+					// remove first and last char
+					fielValue := basicLit.Value[1 : len(basicLit.Value)-1]
+					__gong__map_RectAnchoredRect[identifier].Stroke = fielValue
+				case "StrokeWidth":
+					// convert string to float64
+					fielValue, err := strconv.ParseFloat(basicLit.Value, 64)
+					if err != nil {
+						log.Fatalln(err)
+					}
+					__gong__map_RectAnchoredRect[identifier].StrokeWidth = exprSign * fielValue
+				case "StrokeDashArray":
+					// remove first and last char
+					fielValue := basicLit.Value[1 : len(basicLit.Value)-1]
+					__gong__map_RectAnchoredRect[identifier].StrokeDashArray = fielValue
+				case "StrokeDashArrayWhenSelected":
+					// remove first and last char
+					fielValue := basicLit.Value[1 : len(basicLit.Value)-1]
+					__gong__map_RectAnchoredRect[identifier].StrokeDashArrayWhenSelected = fielValue
+				case "Transform":
+					// remove first and last char
+					fielValue := basicLit.Value[1 : len(basicLit.Value)-1]
+					__gong__map_RectAnchoredRect[identifier].Transform = fielValue
+				}
 			case "RectAnchoredText":
 				switch fieldName {
 				// insertion point for field dependant code
@@ -1852,6 +1962,24 @@ func UnmarshallGongstructStaging(stage *StageStruct, cmap *ast.CommentMap, assig
 					}
 					__gong__map_Rect[identifier].CanMoveVerticaly = fielValue
 				}
+			case "RectAnchoredRect":
+				switch fieldName {
+				// insertion point for field dependant code
+				case "WidthFollowRect":
+					// convert string to boolean
+					fielValue, err := strconv.ParseBool(ident.Name)
+					if err != nil {
+						log.Fatalln(err)
+					}
+					__gong__map_RectAnchoredRect[identifier].WidthFollowRect = fielValue
+				case "HeightFollowRect":
+					// convert string to boolean
+					fielValue, err := strconv.ParseBool(ident.Name)
+					if err != nil {
+						log.Fatalln(err)
+					}
+					__gong__map_RectAnchoredRect[identifier].HeightFollowRect = fielValue
+				}
 			case "RectAnchoredText":
 				switch fieldName {
 				// insertion point for field dependant code
@@ -1980,6 +2108,17 @@ func UnmarshallGongstructStaging(stage *StageStruct, cmap *ast.CommentMap, assig
 				case "Rect":
 					switch fieldName {
 					// insertion point for enum assign code
+					}
+				case "RectAnchoredRect":
+					switch fieldName {
+					// insertion point for enum assign code
+					case "RectAnchorType":
+						var val RectAnchorType
+						err := (&val).FromCodeString(enumValue)
+						if err != nil {
+							log.Fatalln(err)
+						}
+						__gong__map_RectAnchoredRect[identifier].RectAnchorType = RectAnchorType(val)
 					}
 				case "RectAnchoredText":
 					switch fieldName {

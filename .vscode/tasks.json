@@ -29,7 +29,8 @@
 				"cwd": "ng"
 			},
 			"command": "ng build",
-			"group": "build"
+			"group": "build",
+			"dependsOn": "00 - update deps & go mod vendor"
 		},
 		{
 			"label": "02 - go run",

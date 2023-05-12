@@ -41,6 +41,9 @@ func IsStaged[Type Gongstruct](stage *StageStruct, instance *Type) (ok bool) {
 	case *Rect:
 		ok = stage.IsStagedRect(target)
 
+	case *RectAnchoredRect:
+		ok = stage.IsStagedRectAnchoredRect(target)
+
 	case *RectAnchoredText:
 		ok = stage.IsStagedRectAnchoredText(target)
 
@@ -141,6 +144,13 @@ func IsStaged[Type Gongstruct](stage *StageStruct, instance *Type) (ok bool) {
 		return
 	}
 
+	func (stage *StageStruct) IsStagedRectAnchoredRect(rectanchoredrect *RectAnchoredRect) (ok bool) {
+
+		_, ok = stage.RectAnchoredRects[rectanchoredrect]
+	
+		return
+	}
+
 	func (stage *StageStruct) IsStagedRectAnchoredText(rectanchoredtext *RectAnchoredText) (ok bool) {
 
 		_, ok = stage.RectAnchoredTexts[rectanchoredtext]
@@ -206,6 +216,9 @@ func StageBranch[Type Gongstruct](stage *StageStruct, instance *Type) {
 
 	case *Rect:
 		stage.StageBranchRect(target)
+
+	case *RectAnchoredRect:
+		stage.StageBranchRectAnchoredRect(target)
 
 	case *RectAnchoredText:
 		stage.StageBranchRectAnchoredText(target)
@@ -468,6 +481,24 @@ func (stage *StageStruct) StageBranchRect(rect *Rect) {
 	for _, _rectanchoredtext := range rect.RectAnchoredTexts {
 		StageBranch(stage, _rectanchoredtext)
 	}
+	for _, _rectanchoredrect := range rect.RectAnchoredRects {
+		StageBranch(stage, _rectanchoredrect)
+	}
+
+}
+
+func (stage *StageStruct) StageBranchRectAnchoredRect(rectanchoredrect *RectAnchoredRect) {
+
+	// check if instance is already staged
+	if IsStaged(stage, rectanchoredrect) {
+		return
+	}
+
+	rectanchoredrect.Stage(stage)
+
+	//insertion point for the staging of instances referenced by pointers
+
+	//insertion point for the staging of instances referenced by slice of pointers
 
 }
 
@@ -575,6 +606,9 @@ func UnstageBranch[Type Gongstruct](stage *StageStruct, instance *Type) {
 
 	case *Rect:
 		stage.UnstageBranchRect(target)
+
+	case *RectAnchoredRect:
+		stage.UnstageBranchRectAnchoredRect(target)
 
 	case *RectAnchoredText:
 		stage.UnstageBranchRectAnchoredText(target)
@@ -837,6 +871,24 @@ func (stage *StageStruct) UnstageBranchRect(rect *Rect) {
 	for _, _rectanchoredtext := range rect.RectAnchoredTexts {
 		UnstageBranch(stage, _rectanchoredtext)
 	}
+	for _, _rectanchoredrect := range rect.RectAnchoredRects {
+		UnstageBranch(stage, _rectanchoredrect)
+	}
+
+}
+
+func (stage *StageStruct) UnstageBranchRectAnchoredRect(rectanchoredrect *RectAnchoredRect) {
+
+	// check if instance is already staged
+	if ! IsStaged(stage, rectanchoredrect) {
+		return
+	}
+
+	rectanchoredrect.Unstage(stage)
+
+	//insertion point for the staging of instances referenced by pointers
+
+	//insertion point for the staging of instances referenced by slice of pointers
 
 }
 

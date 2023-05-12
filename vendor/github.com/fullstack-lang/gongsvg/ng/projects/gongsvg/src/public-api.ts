@@ -88,6 +88,12 @@ export * from './lib/rects-table/rects-table.component'
 export * from './lib/rect-db'
 export * from './lib/rect.service'
 
+export * from './lib/rectanchoredrect-detail/rectanchoredrect-detail.component'
+export * from './lib/rectanchoredrect-sorting/rectanchoredrect-sorting.component'
+export * from './lib/rectanchoredrects-table/rectanchoredrects-table.component'
+export * from './lib/rectanchoredrect-db'
+export * from './lib/rectanchoredrect.service'
+
 export * from './lib/rectanchoredtext-detail/rectanchoredtext-detail.component'
 export * from './lib/rectanchoredtext-sorting/rectanchoredtext-sorting.component'
 export * from './lib/rectanchoredtexts-table/rectanchoredtexts-table.component'

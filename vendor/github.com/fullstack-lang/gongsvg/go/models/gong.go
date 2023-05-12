@@ -126,6 +126,14 @@ type StageStruct struct { // insertion point for definition of arrays registerin
 	OnAfterRectDeleteCallback OnAfterDeleteInterface[Rect]
 	OnAfterRectReadCallback   OnAfterReadInterface[Rect]
 
+	RectAnchoredRects           map[*RectAnchoredRect]any
+	RectAnchoredRects_mapString map[string]*RectAnchoredRect
+
+	OnAfterRectAnchoredRectCreateCallback OnAfterCreateInterface[RectAnchoredRect]
+	OnAfterRectAnchoredRectUpdateCallback OnAfterUpdateInterface[RectAnchoredRect]
+	OnAfterRectAnchoredRectDeleteCallback OnAfterDeleteInterface[RectAnchoredRect]
+	OnAfterRectAnchoredRectReadCallback   OnAfterReadInterface[RectAnchoredRect]
+
 	RectAnchoredTexts           map[*RectAnchoredText]any
 	RectAnchoredTexts_mapString map[string]*RectAnchoredText
 
@@ -238,6 +246,8 @@ type BackRepoInterface interface {
 	CheckoutPolyline(polyline *Polyline)
 	CommitRect(rect *Rect)
 	CheckoutRect(rect *Rect)
+	CommitRectAnchoredRect(rectanchoredrect *RectAnchoredRect)
+	CheckoutRectAnchoredRect(rectanchoredrect *RectAnchoredRect)
 	CommitRectAnchoredText(rectanchoredtext *RectAnchoredText)
 	CheckoutRectAnchoredText(rectanchoredtext *RectAnchoredText)
 	CommitSVG(svg *SVG)
@@ -298,6 +308,9 @@ func NewStage() (stage *StageStruct) {
 		Rects:           make(map[*Rect]any),
 		Rects_mapString: make(map[string]*Rect),
 
+		RectAnchoredRects:           make(map[*RectAnchoredRect]any),
+		RectAnchoredRects_mapString: make(map[string]*RectAnchoredRect),
+
 		RectAnchoredTexts:           make(map[*RectAnchoredText]any),
 		RectAnchoredTexts_mapString: make(map[string]*RectAnchoredText),
 
@@ -336,6 +349,7 @@ func (stage *StageStruct) Commit() {
 	stage.Map_GongStructName_InstancesNb["Polygone"] = len(stage.Polygones)
 	stage.Map_GongStructName_InstancesNb["Polyline"] = len(stage.Polylines)
 	stage.Map_GongStructName_InstancesNb["Rect"] = len(stage.Rects)
+	stage.Map_GongStructName_InstancesNb["RectAnchoredRect"] = len(stage.RectAnchoredRects)
 	stage.Map_GongStructName_InstancesNb["RectAnchoredText"] = len(stage.RectAnchoredTexts)
 	stage.Map_GongStructName_InstancesNb["SVG"] = len(stage.SVGs)
 	stage.Map_GongStructName_InstancesNb["Text"] = len(stage.Texts)
@@ -360,6 +374,7 @@ func (stage *StageStruct) Checkout() {
 	stage.Map_GongStructName_InstancesNb["Polygone"] = len(stage.Polygones)
 	stage.Map_GongStructName_InstancesNb["Polyline"] = len(stage.Polylines)
 	stage.Map_GongStructName_InstancesNb["Rect"] = len(stage.Rects)
+	stage.Map_GongStructName_InstancesNb["RectAnchoredRect"] = len(stage.RectAnchoredRects)
 	stage.Map_GongStructName_InstancesNb["RectAnchoredText"] = len(stage.RectAnchoredTexts)
 	stage.Map_GongStructName_InstancesNb["SVG"] = len(stage.SVGs)
 	stage.Map_GongStructName_InstancesNb["Text"] = len(stage.Texts)
@@ -875,6 +890,46 @@ func (rect *Rect) GetName() (res string) {
 	return rect.Name
 }
 
+// Stage puts rectanchoredrect to the model stage
+func (rectanchoredrect *RectAnchoredRect) Stage(stage *StageStruct) *RectAnchoredRect {
+	stage.RectAnchoredRects[rectanchoredrect] = __member
+	stage.RectAnchoredRects_mapString[rectanchoredrect.Name] = rectanchoredrect
+
+	return rectanchoredrect
+}
+
+// Unstage removes rectanchoredrect off the model stage
+func (rectanchoredrect *RectAnchoredRect) Unstage(stage *StageStruct) *RectAnchoredRect {
+	delete(stage.RectAnchoredRects, rectanchoredrect)
+	delete(stage.RectAnchoredRects_mapString, rectanchoredrect.Name)
+	return rectanchoredrect
+}
+
+// commit rectanchoredrect to the back repo (if it is already staged)
+func (rectanchoredrect *RectAnchoredRect) Commit(stage *StageStruct) *RectAnchoredRect {
+	if _, ok := stage.RectAnchoredRects[rectanchoredrect]; ok {
+		if stage.BackRepo != nil {
+			stage.BackRepo.CommitRectAnchoredRect(rectanchoredrect)
+		}
+	}
+	return rectanchoredrect
+}
+
+// Checkout rectanchoredrect to the back repo (if it is already staged)
+func (rectanchoredrect *RectAnchoredRect) Checkout(stage *StageStruct) *RectAnchoredRect {
+	if _, ok := stage.RectAnchoredRects[rectanchoredrect]; ok {
+		if stage.BackRepo != nil {
+			stage.BackRepo.CheckoutRectAnchoredRect(rectanchoredrect)
+		}
+	}
+	return rectanchoredrect
+}
+
+// for satisfaction of GongStruct interface
+func (rectanchoredrect *RectAnchoredRect) GetName() (res string) {
+	return rectanchoredrect.Name
+}
+
 // Stage puts rectanchoredtext to the model stage
 func (rectanchoredtext *RectAnchoredText) Stage(stage *StageStruct) *RectAnchoredText {
 	stage.RectAnchoredTexts[rectanchoredtext] = __member
@@ -1009,6 +1064,7 @@ type AllModelsStructCreateInterface interface { // insertion point for Callbacks
 	CreateORMPolygone(Polygone *Polygone)
 	CreateORMPolyline(Polyline *Polyline)
 	CreateORMRect(Rect *Rect)
+	CreateORMRectAnchoredRect(RectAnchoredRect *RectAnchoredRect)
 	CreateORMRectAnchoredText(RectAnchoredText *RectAnchoredText)
 	CreateORMSVG(SVG *SVG)
 	CreateORMText(Text *Text)
@@ -1027,6 +1083,7 @@ type AllModelsStructDeleteInterface interface { // insertion point for Callbacks
 	DeleteORMPolygone(Polygone *Polygone)
 	DeleteORMPolyline(Polyline *Polyline)
 	DeleteORMRect(Rect *Rect)
+	DeleteORMRectAnchoredRect(RectAnchoredRect *RectAnchoredRect)
 	DeleteORMRectAnchoredText(RectAnchoredText *RectAnchoredText)
 	DeleteORMSVG(SVG *SVG)
 	DeleteORMText(Text *Text)
@@ -1068,6 +1125,9 @@ func (stage *StageStruct) Reset() { // insertion point for array reset
 
 	stage.Rects = make(map[*Rect]any)
 	stage.Rects_mapString = make(map[string]*Rect)
+
+	stage.RectAnchoredRects = make(map[*RectAnchoredRect]any)
+	stage.RectAnchoredRects_mapString = make(map[string]*RectAnchoredRect)
 
 	stage.RectAnchoredTexts = make(map[*RectAnchoredText]any)
 	stage.RectAnchoredTexts_mapString = make(map[string]*RectAnchoredText)
@@ -1116,6 +1176,9 @@ func (stage *StageStruct) Nil() { // insertion point for array nil
 
 	stage.Rects = nil
 	stage.Rects_mapString = nil
+
+	stage.RectAnchoredRects = nil
+	stage.RectAnchoredRects_mapString = nil
 
 	stage.RectAnchoredTexts = nil
 	stage.RectAnchoredTexts_mapString = nil
@@ -1177,6 +1240,10 @@ func (stage *StageStruct) Unstage() { // insertion point for array nil
 		rect.Unstage(stage)
 	}
 
+	for rectanchoredrect := range stage.RectAnchoredRects {
+		rectanchoredrect.Unstage(stage)
+	}
+
 	for rectanchoredtext := range stage.RectAnchoredTexts {
 		rectanchoredtext.Unstage(stage)
 	}
@@ -1197,7 +1264,7 @@ func (stage *StageStruct) Unstage() { // insertion point for array nil
 // - full refactoring of Gongstruct identifiers / fields
 type Gongstruct interface {
 	// insertion point for generic types
-	AnchoredText | Animate | Circle | Ellipse | Layer | Line | Link | Path | Point | Polygone | Polyline | Rect | RectAnchoredText | SVG | Text
+	AnchoredText | Animate | Circle | Ellipse | Layer | Line | Link | Path | Point | Polygone | Polyline | Rect | RectAnchoredRect | RectAnchoredText | SVG | Text
 }
 
 // Gongstruct is the type parameter for generated generic function that allows
@@ -1206,7 +1273,7 @@ type Gongstruct interface {
 // - full refactoring of Gongstruct identifiers / fields
 type PointerToGongstruct interface {
 	// insertion point for generic types
-	*AnchoredText | *Animate | *Circle | *Ellipse | *Layer | *Line | *Link | *Path | *Point | *Polygone | *Polyline | *Rect | *RectAnchoredText | *SVG | *Text
+	*AnchoredText | *Animate | *Circle | *Ellipse | *Layer | *Line | *Link | *Path | *Point | *Polygone | *Polyline | *Rect | *RectAnchoredRect | *RectAnchoredText | *SVG | *Text
 	GetName() string
 }
 
@@ -1225,6 +1292,7 @@ type GongstructSet interface {
 		map[*Polygone]any |
 		map[*Polyline]any |
 		map[*Rect]any |
+		map[*RectAnchoredRect]any |
 		map[*RectAnchoredText]any |
 		map[*SVG]any |
 		map[*Text]any |
@@ -1246,6 +1314,7 @@ type GongstructMapString interface {
 		map[string]*Polygone |
 		map[string]*Polyline |
 		map[string]*Rect |
+		map[string]*RectAnchoredRect |
 		map[string]*RectAnchoredText |
 		map[string]*SVG |
 		map[string]*Text |
@@ -1283,6 +1352,8 @@ func GongGetSet[Type GongstructSet](stage *StageStruct) *Type {
 		return any(&stage.Polylines).(*Type)
 	case map[*Rect]any:
 		return any(&stage.Rects).(*Type)
+	case map[*RectAnchoredRect]any:
+		return any(&stage.RectAnchoredRects).(*Type)
 	case map[*RectAnchoredText]any:
 		return any(&stage.RectAnchoredTexts).(*Type)
 	case map[*SVG]any:
@@ -1325,6 +1396,8 @@ func GongGetMap[Type GongstructMapString](stage *StageStruct) *Type {
 		return any(&stage.Polylines_mapString).(*Type)
 	case map[string]*Rect:
 		return any(&stage.Rects_mapString).(*Type)
+	case map[string]*RectAnchoredRect:
+		return any(&stage.RectAnchoredRects_mapString).(*Type)
 	case map[string]*RectAnchoredText:
 		return any(&stage.RectAnchoredTexts_mapString).(*Type)
 	case map[string]*SVG:
@@ -1367,6 +1440,8 @@ func GetGongstructInstancesSet[Type Gongstruct](stage *StageStruct) *map[*Type]a
 		return any(&stage.Polylines).(*map[*Type]any)
 	case Rect:
 		return any(&stage.Rects).(*map[*Type]any)
+	case RectAnchoredRect:
+		return any(&stage.RectAnchoredRects).(*map[*Type]any)
 	case RectAnchoredText:
 		return any(&stage.RectAnchoredTexts).(*map[*Type]any)
 	case SVG:
@@ -1409,6 +1484,8 @@ func GetGongstructInstancesMap[Type Gongstruct](stage *StageStruct) *map[string]
 		return any(&stage.Polylines_mapString).(*map[string]*Type)
 	case Rect:
 		return any(&stage.Rects_mapString).(*map[string]*Type)
+	case RectAnchoredRect:
+		return any(&stage.RectAnchoredRects_mapString).(*map[string]*Type)
 	case RectAnchoredText:
 		return any(&stage.RectAnchoredTexts_mapString).(*map[string]*Type)
 	case SVG:
@@ -1522,6 +1599,12 @@ func GetAssociationName[Type Gongstruct]() *Type {
 			Animations: []*Animate{{Name: "Animations"}},
 			// field is initialized with an instance of RectAnchoredText with the name of the field
 			RectAnchoredTexts: []*RectAnchoredText{{Name: "RectAnchoredTexts"}},
+			// field is initialized with an instance of RectAnchoredRect with the name of the field
+			RectAnchoredRects: []*RectAnchoredRect{{Name: "RectAnchoredRects"}},
+		}).(*Type)
+	case RectAnchoredRect:
+		return any(&RectAnchoredRect{
+			// Initialisation of associations
 		}).(*Type)
 	case RectAnchoredText:
 		return any(&RectAnchoredText{
@@ -1654,6 +1737,11 @@ func GetPointerReverseMap[Start, End Gongstruct](fieldname string, stage *StageS
 		}
 	// reverse maps of direct associations of Rect
 	case Rect:
+		switch fieldname {
+		// insertion point for per direct association field
+		}
+	// reverse maps of direct associations of RectAnchoredRect
+	case RectAnchoredRect:
 		switch fieldname {
 		// insertion point for per direct association field
 		}
@@ -1949,6 +2037,19 @@ func GetSliceOfPointersReverseMap[Start, End Gongstruct](fieldname string, stage
 				}
 			}
 			return any(res).(map[*End]*Start)
+		case "RectAnchoredRects":
+			res := make(map[*RectAnchoredRect]*Rect)
+			for rect := range stage.Rects {
+				for _, rectanchoredrect_ := range rect.RectAnchoredRects {
+					res[rectanchoredrect_] = rect
+				}
+			}
+			return any(res).(map[*End]*Start)
+		}
+	// reverse maps of direct associations of RectAnchoredRect
+	case RectAnchoredRect:
+		switch fieldname {
+		// insertion point for per direct association field
 		}
 	// reverse maps of direct associations of RectAnchoredText
 	case RectAnchoredText:
@@ -2025,6 +2126,8 @@ func GetGongstructName[Type Gongstruct]() (res string) {
 		res = "Polyline"
 	case Rect:
 		res = "Rect"
+	case RectAnchoredRect:
+		res = "RectAnchoredRect"
 	case RectAnchoredText:
 		res = "RectAnchoredText"
 	case SVG:
@@ -2065,7 +2168,9 @@ func GetFields[Type Gongstruct]() (res []string) {
 	case Polyline:
 		res = []string{"Name", "Points", "Color", "FillOpacity", "Stroke", "StrokeWidth", "StrokeDashArray", "StrokeDashArrayWhenSelected", "Transform", "Animates"}
 	case Rect:
-		res = []string{"Name", "X", "Y", "Width", "Height", "RX", "Color", "FillOpacity", "Stroke", "StrokeWidth", "StrokeDashArray", "StrokeDashArrayWhenSelected", "Transform", "Animations", "IsSelectable", "IsSelected", "CanHaveLeftHandle", "HasLeftHandle", "CanHaveRightHandle", "HasRightHandle", "CanHaveTopHandle", "HasTopHandle", "CanHaveBottomHandle", "HasBottomHandle", "CanMoveHorizontaly", "CanMoveVerticaly", "RectAnchoredTexts"}
+		res = []string{"Name", "X", "Y", "Width", "Height", "RX", "Color", "FillOpacity", "Stroke", "StrokeWidth", "StrokeDashArray", "StrokeDashArrayWhenSelected", "Transform", "Animations", "IsSelectable", "IsSelected", "CanHaveLeftHandle", "HasLeftHandle", "CanHaveRightHandle", "HasRightHandle", "CanHaveTopHandle", "HasTopHandle", "CanHaveBottomHandle", "HasBottomHandle", "CanMoveHorizontaly", "CanMoveVerticaly", "RectAnchoredTexts", "RectAnchoredRects"}
+	case RectAnchoredRect:
+		res = []string{"Name", "X", "Y", "Width", "Height", "RX", "X_Offset", "Y_Offset", "RectAnchorType", "WidthFollowRect", "HeightFollowRect", "Color", "FillOpacity", "Stroke", "StrokeWidth", "StrokeDashArray", "StrokeDashArrayWhenSelected", "Transform"}
 	case RectAnchoredText:
 		res = []string{"Name", "Content", "FontWeight", "FontSize", "X_Offset", "Y_Offset", "RectAnchorType", "TextAnchorType", "Color", "FillOpacity", "Stroke", "StrokeWidth", "StrokeDashArray", "StrokeDashArrayWhenSelected", "Transform", "Animates"}
 	case SVG:
@@ -2546,6 +2651,54 @@ func GetFieldStringValue[Type Gongstruct](instance Type, fieldName string) (res 
 				}
 				res += __instance__.Name
 			}
+		case "RectAnchoredRects":
+			for idx, __instance__ := range any(instance).(Rect).RectAnchoredRects {
+				if idx > 0 {
+					res += "\n"
+				}
+				res += __instance__.Name
+			}
+		}
+	case RectAnchoredRect:
+		switch fieldName {
+		// string value of fields
+		case "Name":
+			res = any(instance).(RectAnchoredRect).Name
+		case "X":
+			res = fmt.Sprintf("%f", any(instance).(RectAnchoredRect).X)
+		case "Y":
+			res = fmt.Sprintf("%f", any(instance).(RectAnchoredRect).Y)
+		case "Width":
+			res = fmt.Sprintf("%f", any(instance).(RectAnchoredRect).Width)
+		case "Height":
+			res = fmt.Sprintf("%f", any(instance).(RectAnchoredRect).Height)
+		case "RX":
+			res = fmt.Sprintf("%f", any(instance).(RectAnchoredRect).RX)
+		case "X_Offset":
+			res = fmt.Sprintf("%f", any(instance).(RectAnchoredRect).X_Offset)
+		case "Y_Offset":
+			res = fmt.Sprintf("%f", any(instance).(RectAnchoredRect).Y_Offset)
+		case "RectAnchorType":
+			enum := any(instance).(RectAnchoredRect).RectAnchorType
+			res = enum.ToCodeString()
+		case "WidthFollowRect":
+			res = fmt.Sprintf("%t", any(instance).(RectAnchoredRect).WidthFollowRect)
+		case "HeightFollowRect":
+			res = fmt.Sprintf("%t", any(instance).(RectAnchoredRect).HeightFollowRect)
+		case "Color":
+			res = any(instance).(RectAnchoredRect).Color
+		case "FillOpacity":
+			res = fmt.Sprintf("%f", any(instance).(RectAnchoredRect).FillOpacity)
+		case "Stroke":
+			res = any(instance).(RectAnchoredRect).Stroke
+		case "StrokeWidth":
+			res = fmt.Sprintf("%f", any(instance).(RectAnchoredRect).StrokeWidth)
+		case "StrokeDashArray":
+			res = any(instance).(RectAnchoredRect).StrokeDashArray
+		case "StrokeDashArrayWhenSelected":
+			res = any(instance).(RectAnchoredRect).StrokeDashArrayWhenSelected
+		case "Transform":
+			res = any(instance).(RectAnchoredRect).Transform
 		}
 	case RectAnchoredText:
 		switch fieldName {

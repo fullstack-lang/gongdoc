@@ -76,24 +76,38 @@ func (docSVGMapper *DocSVGMapper) GenerateSvg(
 		rect.CanHaveTopHandle = true
 		rect.CanHaveRightHandle = true
 
+		//
+		// Title
+		//
 		title := new(gongsvg_models.RectAnchoredText).Stage(gongsvgStage)
 		title.Name = gongdoc_models.IdentifierToGongObjectName(gongstructShape.Identifier)
 		title.Content = title.Name
-
-		// title position
 		title.X_Offset = 0
 		title.Y_Offset = 20
 		title.RectAnchorType = gongsvg_models.RECT_ANCHOR_TOP
 		title.TextAnchorType = gongsvg_models.TEXT_ANCHOR_CENTER
 		title.FontWeight = "bold"
-
-		//
-
-		title.Color = "black"
+		title.Color = gongsvg_models.Black.ToString()
 		title.FillOpacity = 1.0
 		rect.RectAnchoredTexts = append(rect.RectAnchoredTexts, title)
 
-		// display attributes
+		// additional box to hightlight the title
+		titleBox := new(gongsvg_models.RectAnchoredRect).Stage(gongsvgStage)
+		titleBox.Name = gongdoc_models.IdentifierToGongObjectName(gongstructShape.Identifier)
+		titleBox.X_Offset = 0
+		titleBox.Y_Offset = 0
+		titleBox.Width = rect.Width
+		titleBox.Height = 30
+		titleBox.RectAnchorType = gongsvg_models.RECT_ANCHOR_TOP_LEFT
+		titleBox.Color = "#ff8450"
+		titleBox.WidthFollowRect = true
+		titleBox.FillOpacity = 100
+
+		rect.RectAnchoredRects = append(rect.RectAnchoredRects, titleBox)
+
+		//
+		// fields
+		//
 		for idx, field := range gongstructShape.Fields {
 			fieldText := new(gongsvg_models.RectAnchoredText).Stage(gongsvgStage)
 			fieldText.Name = field.Name + ":" + field.FieldTypeAsString

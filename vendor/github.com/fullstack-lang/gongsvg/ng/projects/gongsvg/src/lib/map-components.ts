@@ -23,6 +23,8 @@
   import { PolylineSortingComponent } from './polyline-sorting/polyline-sorting.component'
   import { RectsTableComponent } from './rects-table/rects-table.component'
   import { RectSortingComponent } from './rect-sorting/rect-sorting.component'
+  import { RectAnchoredRectsTableComponent } from './rectanchoredrects-table/rectanchoredrects-table.component'
+  import { RectAnchoredRectSortingComponent } from './rectanchoredrect-sorting/rectanchoredrect-sorting.component'
   import { RectAnchoredTextsTableComponent } from './rectanchoredtexts-table/rectanchoredtexts-table.component'
   import { RectAnchoredTextSortingComponent } from './rectanchoredtext-sorting/rectanchoredtext-sorting.component'
   import { SVGsTableComponent } from './svgs-table/svgs-table.component'
@@ -55,6 +57,8 @@
   export const MapOfPolylineSortingComponents: Map<string, any> = new Map([["PolylineSortingComponent", PolylineSortingComponent],])
   export const MapOfRectsComponents: Map<string, any> = new Map([["RectsTableComponent", RectsTableComponent],])
   export const MapOfRectSortingComponents: Map<string, any> = new Map([["RectSortingComponent", RectSortingComponent],])
+  export const MapOfRectAnchoredRectsComponents: Map<string, any> = new Map([["RectAnchoredRectsTableComponent", RectAnchoredRectsTableComponent],])
+  export const MapOfRectAnchoredRectSortingComponents: Map<string, any> = new Map([["RectAnchoredRectSortingComponent", RectAnchoredRectSortingComponent],])
   export const MapOfRectAnchoredTextsComponents: Map<string, any> = new Map([["RectAnchoredTextsTableComponent", RectAnchoredTextsTableComponent],])
   export const MapOfRectAnchoredTextSortingComponents: Map<string, any> = new Map([["RectAnchoredTextSortingComponent", RectAnchoredTextSortingComponent],])
   export const MapOfSVGsComponents: Map<string, any> = new Map([["SVGsTableComponent", SVGsTableComponent],])
@@ -79,6 +83,7 @@ export const MapOfComponents: Map<string, any> =
       ["Polygone", MapOfPolygonesComponents],
       ["Polyline", MapOfPolylinesComponents],
       ["Rect", MapOfRectsComponents],
+      ["RectAnchoredRect", MapOfRectAnchoredRectsComponents],
       ["RectAnchoredText", MapOfRectAnchoredTextsComponents],
       ["SVG", MapOfSVGsComponents],
       ["Text", MapOfTextsComponents],
@@ -102,6 +107,7 @@ export const MapOfSortingComponents: Map<string, any> =
       ["Polygone", MapOfPolygoneSortingComponents],
       ["Polyline", MapOfPolylineSortingComponents],
       ["Rect", MapOfRectSortingComponents],
+      ["RectAnchoredRect", MapOfRectAnchoredRectSortingComponents],
       ["RectAnchoredText", MapOfRectAnchoredTextSortingComponents],
       ["SVG", MapOfSVGSortingComponents],
       ["Text", MapOfTextSortingComponents],

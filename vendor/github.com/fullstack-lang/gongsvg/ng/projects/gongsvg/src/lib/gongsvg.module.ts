@@ -87,6 +87,10 @@ import { RectsTableComponent } from './rects-table/rects-table.component'
 import { RectSortingComponent } from './rect-sorting/rect-sorting.component'
 import { RectDetailComponent } from './rect-detail/rect-detail.component'
 
+import { RectAnchoredRectsTableComponent } from './rectanchoredrects-table/rectanchoredrects-table.component'
+import { RectAnchoredRectSortingComponent } from './rectanchoredrect-sorting/rectanchoredrect-sorting.component'
+import { RectAnchoredRectDetailComponent } from './rectanchoredrect-detail/rectanchoredrect-detail.component'
+
 import { RectAnchoredTextsTableComponent } from './rectanchoredtexts-table/rectanchoredtexts-table.component'
 import { RectAnchoredTextSortingComponent } from './rectanchoredtext-sorting/rectanchoredtext-sorting.component'
 import { RectAnchoredTextDetailComponent } from './rectanchoredtext-detail/rectanchoredtext-detail.component'
@@ -150,6 +154,10 @@ import { TextDetailComponent } from './text-detail/text-detail.component'
 		RectsTableComponent,
 		RectSortingComponent,
 		RectDetailComponent,
+
+		RectAnchoredRectsTableComponent,
+		RectAnchoredRectSortingComponent,
+		RectAnchoredRectDetailComponent,
 
 		RectAnchoredTextsTableComponent,
 		RectAnchoredTextSortingComponent,
@@ -249,6 +257,10 @@ import { TextDetailComponent } from './text-detail/text-detail.component'
 		RectsTableComponent,
 		RectSortingComponent,
 		RectDetailComponent,
+
+		RectAnchoredRectsTableComponent,
+		RectAnchoredRectSortingComponent,
+		RectAnchoredRectDetailComponent,
 
 		RectAnchoredTextsTableComponent,
 		RectAnchoredTextSortingComponent,

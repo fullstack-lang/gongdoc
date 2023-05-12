@@ -29,6 +29,7 @@ type Rect struct {
 	CanMoveVerticaly   bool
 
 	RectAnchoredTexts []*RectAnchoredText
+	RectAnchoredRects []*RectAnchoredRect
 
 	Impl RectImplInterface
 }

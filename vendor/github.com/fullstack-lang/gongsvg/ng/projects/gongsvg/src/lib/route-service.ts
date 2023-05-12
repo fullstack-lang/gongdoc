@@ -38,6 +38,9 @@ import { PolylineDetailComponent } from './polyline-detail/polyline-detail.compo
 import { RectsTableComponent } from './rects-table/rects-table.component'
 import { RectDetailComponent } from './rect-detail/rect-detail.component'
 
+import { RectAnchoredRectsTableComponent } from './rectanchoredrects-table/rectanchoredrects-table.component'
+import { RectAnchoredRectDetailComponent } from './rectanchoredrect-detail/rectanchoredrect-detail.component'
+
 import { RectAnchoredTextsTableComponent } from './rectanchoredtexts-table/rectanchoredtexts-table.component'
 import { RectAnchoredTextDetailComponent } from './rectanchoredtext-detail/rectanchoredtext-detail.component'
 
@@ -474,6 +477,39 @@ export class RouteService {
         return route
     }
 
+    getRectAnchoredRectTablePath(): string {
+        return this.getPathRoot() + '-rectanchoredrects/:GONG__StackPath'
+    }
+    getRectAnchoredRectTableRoute(stackPath: string): Route {
+        let route: Route =
+            { path: this.getRectAnchoredRectTablePath(), component: RectAnchoredRectsTableComponent, outlet: this.getTableOutlet(stackPath) }
+        return route
+    }
+    getRectAnchoredRectAdderPath(): string {
+        return this.getPathRoot() + '-rectanchoredrect-adder/:GONG__StackPath'
+    }
+    getRectAnchoredRectAdderRoute(stackPath: string): Route {
+        let route: Route =
+            { path: this.getRectAnchoredRectAdderPath(), component: RectAnchoredRectDetailComponent, outlet: this.getEditorOutlet(stackPath) }
+        return route
+    }
+    getRectAnchoredRectAdderForUsePath(): string {
+        return this.getPathRoot() + '-rectanchoredrect-adder/:id/:originStruct/:originStructFieldName/:GONG__StackPath'
+    }
+    getRectAnchoredRectAdderForUseRoute(stackPath: string): Route {
+        let route: Route =
+            { path: this.getRectAnchoredRectAdderForUsePath(), component: RectAnchoredRectDetailComponent, outlet: this.getEditorOutlet(stackPath) }
+        return route
+    }
+    getRectAnchoredRectDetailPath(): string {
+        return this.getPathRoot() + '-rectanchoredrect-detail/:id/:GONG__StackPath'
+    }
+    getRectAnchoredRectDetailRoute(stackPath: string): Route {
+        let route: Route =
+            { path: this.getRectAnchoredRectDetailPath(), component: RectAnchoredRectDetailComponent, outlet: this.getEditorOutlet(stackPath) }
+        return route
+    }
+
     getRectAnchoredTextTablePath(): string {
         return this.getPathRoot() + '-rectanchoredtexts/:GONG__StackPath'
     }
@@ -638,6 +674,11 @@ export class RouteService {
             this.getRectAdderRoute(stackPath),
             this.getRectAdderForUseRoute(stackPath),
             this.getRectDetailRoute(stackPath),
+
+            this.getRectAnchoredRectTableRoute(stackPath),
+            this.getRectAnchoredRectAdderRoute(stackPath),
+            this.getRectAnchoredRectAdderForUseRoute(stackPath),
+            this.getRectAnchoredRectDetailRoute(stackPath),
 
             this.getRectAnchoredTextTableRoute(stackPath),
             this.getRectAnchoredTextAdderRoute(stackPath),
