@@ -8,8 +8,8 @@ import (
 )
 
 type DocSVGMapper struct {
-	map_Rect_GongstructShape map[*gongsvg_models.Rect]*gongdoc_models.GongStructShape
 	map_GongstructShape_Rect map[*gongdoc_models.GongStructShape]*gongsvg_models.Rect
+	map_GongenumShape_Rect   map[*gongdoc_models.GongEnumShape]*gongsvg_models.Rect
 	map_Structname_Rect      map[string]*gongsvg_models.Rect
 }
 
@@ -19,8 +19,9 @@ func (docSVGMapper *DocSVGMapper) GenerateSvg(
 
 	log.Println("DocSVGMapper.GenerateSvg")
 
-	docSVGMapper.map_Rect_GongstructShape = make(map[*gongsvg_models.Rect]*gongdoc_models.GongStructShape)
 	docSVGMapper.map_GongstructShape_Rect = make(map[*gongdoc_models.GongStructShape]*gongsvg_models.Rect)
+	docSVGMapper.map_GongenumShape_Rect = make(map[*gongdoc_models.GongEnumShape]*gongsvg_models.Rect)
+
 	docSVGMapper.map_Structname_Rect = make(map[string]*gongsvg_models.Rect)
 
 	gongsvgStage.Reset()
@@ -48,7 +49,6 @@ func (docSVGMapper *DocSVGMapper) GenerateSvg(
 		rect.Name = gongstructShape.Identifier
 
 		docSVGMapper.map_GongstructShape_Rect[gongstructShape] = rect
-		docSVGMapper.map_Rect_GongstructShape[rect] = gongstructShape
 		docSVGMapper.map_Structname_Rect[gongstructShape.Identifier] = rect
 
 		rectLayer.Rects = append(rectLayer.Rects, rect)
@@ -126,7 +126,7 @@ func (docSVGMapper *DocSVGMapper) GenerateSvg(
 
 	}
 
-	// display links
+	// display links between gongstruct shapes
 	for _, gongstructShape := range selectedDiagram.GongStructShapes {
 
 		startRect := docSVGMapper.map_GongstructShape_Rect[gongstructShape]
@@ -142,8 +142,8 @@ func (docSVGMapper *DocSVGMapper) GenerateSvg(
 			svg.Layers = append(svg.Layers, linkLayer)
 
 			// configuration
-			link.Stroke = gongsvg_models.Black.ToString()
-			link.StrokeWidth = 2
+			link.Stroke = gongsvg_models.Slategray.ToString()
+			link.StrokeWidth = 3
 			link.HasEndArrow = true
 			link.EndArrowSize = 8
 			link.Type = gongsvg_models.LINK_TYPE_FLOATING_ORTHOGONAL
@@ -188,6 +188,96 @@ func (docSVGMapper *DocSVGMapper) GenerateSvg(
 			sourceMultiplicity.StrokeWidth = 1
 
 		}
+	}
+
+	//
+	// GongEnumShapes
+	//
+	for _, gongenumShape := range selectedDiagram.GongEnumShapes {
+
+		rectLayer := new(gongsvg_models.Layer).Stage(gongsvgStage)
+		rectLayer.Name = "Layer" + gongenumShape.Identifier
+		svg.Layers = append(svg.Layers, rectLayer)
+
+		rect := new(gongsvg_models.Rect).Stage(gongsvgStage)
+		rect.Name = gongenumShape.Identifier
+
+		docSVGMapper.map_GongenumShape_Rect[gongenumShape] = rect
+		docSVGMapper.map_Structname_Rect[gongenumShape.Identifier] = rect
+
+		rectLayer.Rects = append(rectLayer.Rects, rect)
+		rect.X = gongenumShape.Position.X
+		rect.Y = gongenumShape.Position.Y
+
+		rect.Width = gongenumShape.Width
+		rect.Height = gongenumShape.Heigth
+
+		rect.Stroke = gongsvg_models.Lightsteelblue.ToString()
+		rect.StrokeWidth = 1
+		rect.StrokeDashArrayWhenSelected = "5 5"
+
+		rect.FillOpacity = 100
+		rect.Color = gongsvg_models.Lightsteelblue.ToString()
+
+		// moveability
+		rect.CanMoveHorizontaly = true
+		rect.CanMoveVerticaly = true
+
+		// resizing
+		rect.IsSelectable = true
+		rect.CanHaveBottomHandle = true
+		rect.CanHaveLeftHandle = true
+		rect.CanHaveTopHandle = true
+		rect.CanHaveRightHandle = true
+
+		//
+		// Title
+		//
+		title := new(gongsvg_models.RectAnchoredText).Stage(gongsvgStage)
+		title.Name = gongdoc_models.IdentifierToGongObjectName(gongenumShape.Identifier)
+		title.Content = title.Name
+		title.X_Offset = 0
+		title.Y_Offset = 20
+		title.RectAnchorType = gongsvg_models.RECT_ANCHOR_TOP
+		title.TextAnchorType = gongsvg_models.TEXT_ANCHOR_CENTER
+		title.FontWeight = "bold"
+		title.Color = gongsvg_models.Black.ToString()
+		title.FillOpacity = 1.0
+		rect.RectAnchoredTexts = append(rect.RectAnchoredTexts, title)
+
+		// additional box to hightlight the title
+		titleBox := new(gongsvg_models.RectAnchoredRect).Stage(gongsvgStage)
+		titleBox.Name = gongdoc_models.IdentifierToGongObjectName(gongenumShape.Identifier)
+		titleBox.X_Offset = 0
+		titleBox.Y_Offset = 0
+		titleBox.Width = rect.Width
+		titleBox.Height = 30
+		titleBox.RectAnchorType = gongsvg_models.RECT_ANCHOR_TOP_LEFT
+		titleBox.Color = gongsvg_models.Steelblue.ToString()
+		titleBox.WidthFollowRect = true
+		titleBox.FillOpacity = 100
+
+		rect.RectAnchoredRects = append(rect.RectAnchoredRects, titleBox)
+
+		//
+		// fields
+		//
+		for idx, field := range gongenumShape.GongEnumValueEntrys {
+			fieldText := new(gongsvg_models.RectAnchoredText).Stage(gongsvgStage)
+			fieldText.Name = field.Name
+			fieldText.Content = field.Name
+
+			// field position
+			fieldText.X_Offset = 10
+			fieldText.Y_Offset = 20 + 30 + float64(idx)*15
+			fieldText.RectAnchorType = gongsvg_models.RECT_ANCHOR_TOP_LEFT
+			fieldText.TextAnchorType = gongsvg_models.TEXT_ANCHOR_LEFT
+
+			fieldText.Color = "black"
+			fieldText.FillOpacity = 1.0
+			rect.RectAnchoredTexts = append(rect.RectAnchoredTexts, fieldText)
+		}
+
 	}
 
 	gongsvgStage.Commit()
