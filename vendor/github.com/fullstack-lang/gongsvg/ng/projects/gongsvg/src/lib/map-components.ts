@@ -27,6 +27,8 @@
   import { RectAnchoredRectSortingComponent } from './rectanchoredrect-sorting/rectanchoredrect-sorting.component'
   import { RectAnchoredTextsTableComponent } from './rectanchoredtexts-table/rectanchoredtexts-table.component'
   import { RectAnchoredTextSortingComponent } from './rectanchoredtext-sorting/rectanchoredtext-sorting.component'
+  import { RectLinkLinksTableComponent } from './rectlinklinks-table/rectlinklinks-table.component'
+  import { RectLinkLinkSortingComponent } from './rectlinklink-sorting/rectlinklink-sorting.component'
   import { SVGsTableComponent } from './svgs-table/svgs-table.component'
   import { SVGSortingComponent } from './svg-sorting/svg-sorting.component'
   import { TextsTableComponent } from './texts-table/texts-table.component'
@@ -61,6 +63,8 @@
   export const MapOfRectAnchoredRectSortingComponents: Map<string, any> = new Map([["RectAnchoredRectSortingComponent", RectAnchoredRectSortingComponent],])
   export const MapOfRectAnchoredTextsComponents: Map<string, any> = new Map([["RectAnchoredTextsTableComponent", RectAnchoredTextsTableComponent],])
   export const MapOfRectAnchoredTextSortingComponents: Map<string, any> = new Map([["RectAnchoredTextSortingComponent", RectAnchoredTextSortingComponent],])
+  export const MapOfRectLinkLinksComponents: Map<string, any> = new Map([["RectLinkLinksTableComponent", RectLinkLinksTableComponent],])
+  export const MapOfRectLinkLinkSortingComponents: Map<string, any> = new Map([["RectLinkLinkSortingComponent", RectLinkLinkSortingComponent],])
   export const MapOfSVGsComponents: Map<string, any> = new Map([["SVGsTableComponent", SVGsTableComponent],])
   export const MapOfSVGSortingComponents: Map<string, any> = new Map([["SVGSortingComponent", SVGSortingComponent],])
   export const MapOfTextsComponents: Map<string, any> = new Map([["TextsTableComponent", TextsTableComponent],])
@@ -85,6 +89,7 @@ export const MapOfComponents: Map<string, any> =
       ["Rect", MapOfRectsComponents],
       ["RectAnchoredRect", MapOfRectAnchoredRectsComponents],
       ["RectAnchoredText", MapOfRectAnchoredTextsComponents],
+      ["RectLinkLink", MapOfRectLinkLinksComponents],
       ["SVG", MapOfSVGsComponents],
       ["Text", MapOfTextsComponents],
     ]
@@ -109,6 +114,7 @@ export const MapOfSortingComponents: Map<string, any> =
       ["Rect", MapOfRectSortingComponents],
       ["RectAnchoredRect", MapOfRectAnchoredRectSortingComponents],
       ["RectAnchoredText", MapOfRectAnchoredTextSortingComponents],
+      ["RectLinkLink", MapOfRectLinkLinkSortingComponents],
       ["SVG", MapOfSVGSortingComponents],
       ["Text", MapOfTextSortingComponents],
     ]

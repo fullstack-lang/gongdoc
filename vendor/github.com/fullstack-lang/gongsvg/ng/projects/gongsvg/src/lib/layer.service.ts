@@ -80,6 +80,7 @@ export class LayerService {
     layerdb.Polygones = []
     layerdb.Paths = []
     layerdb.Links = []
+    layerdb.RectLinkLinks = []
     let _SVG_Layers_reverse = layerdb.SVG_Layers_reverse
     layerdb.SVG_Layers_reverse = new SVGDB
 
@@ -131,6 +132,7 @@ export class LayerService {
     layerdb.Polygones = []
     layerdb.Paths = []
     layerdb.Links = []
+    layerdb.RectLinkLinks = []
     let _SVG_Layers_reverse = layerdb.SVG_Layers_reverse
     layerdb.SVG_Layers_reverse = new SVGDB
 

@@ -142,6 +142,14 @@ type StageStruct struct { // insertion point for definition of arrays registerin
 	OnAfterRectAnchoredTextDeleteCallback OnAfterDeleteInterface[RectAnchoredText]
 	OnAfterRectAnchoredTextReadCallback   OnAfterReadInterface[RectAnchoredText]
 
+	RectLinkLinks           map[*RectLinkLink]any
+	RectLinkLinks_mapString map[string]*RectLinkLink
+
+	OnAfterRectLinkLinkCreateCallback OnAfterCreateInterface[RectLinkLink]
+	OnAfterRectLinkLinkUpdateCallback OnAfterUpdateInterface[RectLinkLink]
+	OnAfterRectLinkLinkDeleteCallback OnAfterDeleteInterface[RectLinkLink]
+	OnAfterRectLinkLinkReadCallback   OnAfterReadInterface[RectLinkLink]
+
 	SVGs           map[*SVG]any
 	SVGs_mapString map[string]*SVG
 
@@ -250,6 +258,8 @@ type BackRepoInterface interface {
 	CheckoutRectAnchoredRect(rectanchoredrect *RectAnchoredRect)
 	CommitRectAnchoredText(rectanchoredtext *RectAnchoredText)
 	CheckoutRectAnchoredText(rectanchoredtext *RectAnchoredText)
+	CommitRectLinkLink(rectlinklink *RectLinkLink)
+	CheckoutRectLinkLink(rectlinklink *RectLinkLink)
 	CommitSVG(svg *SVG)
 	CheckoutSVG(svg *SVG)
 	CommitText(text *Text)
@@ -314,6 +324,9 @@ func NewStage() (stage *StageStruct) {
 		RectAnchoredTexts:           make(map[*RectAnchoredText]any),
 		RectAnchoredTexts_mapString: make(map[string]*RectAnchoredText),
 
+		RectLinkLinks:           make(map[*RectLinkLink]any),
+		RectLinkLinks_mapString: make(map[string]*RectLinkLink),
+
 		SVGs:           make(map[*SVG]any),
 		SVGs_mapString: make(map[string]*SVG),
 
@@ -351,6 +364,7 @@ func (stage *StageStruct) Commit() {
 	stage.Map_GongStructName_InstancesNb["Rect"] = len(stage.Rects)
 	stage.Map_GongStructName_InstancesNb["RectAnchoredRect"] = len(stage.RectAnchoredRects)
 	stage.Map_GongStructName_InstancesNb["RectAnchoredText"] = len(stage.RectAnchoredTexts)
+	stage.Map_GongStructName_InstancesNb["RectLinkLink"] = len(stage.RectLinkLinks)
 	stage.Map_GongStructName_InstancesNb["SVG"] = len(stage.SVGs)
 	stage.Map_GongStructName_InstancesNb["Text"] = len(stage.Texts)
 
@@ -376,6 +390,7 @@ func (stage *StageStruct) Checkout() {
 	stage.Map_GongStructName_InstancesNb["Rect"] = len(stage.Rects)
 	stage.Map_GongStructName_InstancesNb["RectAnchoredRect"] = len(stage.RectAnchoredRects)
 	stage.Map_GongStructName_InstancesNb["RectAnchoredText"] = len(stage.RectAnchoredTexts)
+	stage.Map_GongStructName_InstancesNb["RectLinkLink"] = len(stage.RectLinkLinks)
 	stage.Map_GongStructName_InstancesNb["SVG"] = len(stage.SVGs)
 	stage.Map_GongStructName_InstancesNb["Text"] = len(stage.Texts)
 
@@ -970,6 +985,46 @@ func (rectanchoredtext *RectAnchoredText) GetName() (res string) {
 	return rectanchoredtext.Name
 }
 
+// Stage puts rectlinklink to the model stage
+func (rectlinklink *RectLinkLink) Stage(stage *StageStruct) *RectLinkLink {
+	stage.RectLinkLinks[rectlinklink] = __member
+	stage.RectLinkLinks_mapString[rectlinklink.Name] = rectlinklink
+
+	return rectlinklink
+}
+
+// Unstage removes rectlinklink off the model stage
+func (rectlinklink *RectLinkLink) Unstage(stage *StageStruct) *RectLinkLink {
+	delete(stage.RectLinkLinks, rectlinklink)
+	delete(stage.RectLinkLinks_mapString, rectlinklink.Name)
+	return rectlinklink
+}
+
+// commit rectlinklink to the back repo (if it is already staged)
+func (rectlinklink *RectLinkLink) Commit(stage *StageStruct) *RectLinkLink {
+	if _, ok := stage.RectLinkLinks[rectlinklink]; ok {
+		if stage.BackRepo != nil {
+			stage.BackRepo.CommitRectLinkLink(rectlinklink)
+		}
+	}
+	return rectlinklink
+}
+
+// Checkout rectlinklink to the back repo (if it is already staged)
+func (rectlinklink *RectLinkLink) Checkout(stage *StageStruct) *RectLinkLink {
+	if _, ok := stage.RectLinkLinks[rectlinklink]; ok {
+		if stage.BackRepo != nil {
+			stage.BackRepo.CheckoutRectLinkLink(rectlinklink)
+		}
+	}
+	return rectlinklink
+}
+
+// for satisfaction of GongStruct interface
+func (rectlinklink *RectLinkLink) GetName() (res string) {
+	return rectlinklink.Name
+}
+
 // Stage puts svg to the model stage
 func (svg *SVG) Stage(stage *StageStruct) *SVG {
 	stage.SVGs[svg] = __member
@@ -1066,6 +1121,7 @@ type AllModelsStructCreateInterface interface { // insertion point for Callbacks
 	CreateORMRect(Rect *Rect)
 	CreateORMRectAnchoredRect(RectAnchoredRect *RectAnchoredRect)
 	CreateORMRectAnchoredText(RectAnchoredText *RectAnchoredText)
+	CreateORMRectLinkLink(RectLinkLink *RectLinkLink)
 	CreateORMSVG(SVG *SVG)
 	CreateORMText(Text *Text)
 }
@@ -1085,6 +1141,7 @@ type AllModelsStructDeleteInterface interface { // insertion point for Callbacks
 	DeleteORMRect(Rect *Rect)
 	DeleteORMRectAnchoredRect(RectAnchoredRect *RectAnchoredRect)
 	DeleteORMRectAnchoredText(RectAnchoredText *RectAnchoredText)
+	DeleteORMRectLinkLink(RectLinkLink *RectLinkLink)
 	DeleteORMSVG(SVG *SVG)
 	DeleteORMText(Text *Text)
 }
@@ -1131,6 +1188,9 @@ func (stage *StageStruct) Reset() { // insertion point for array reset
 
 	stage.RectAnchoredTexts = make(map[*RectAnchoredText]any)
 	stage.RectAnchoredTexts_mapString = make(map[string]*RectAnchoredText)
+
+	stage.RectLinkLinks = make(map[*RectLinkLink]any)
+	stage.RectLinkLinks_mapString = make(map[string]*RectLinkLink)
 
 	stage.SVGs = make(map[*SVG]any)
 	stage.SVGs_mapString = make(map[string]*SVG)
@@ -1182,6 +1242,9 @@ func (stage *StageStruct) Nil() { // insertion point for array nil
 
 	stage.RectAnchoredTexts = nil
 	stage.RectAnchoredTexts_mapString = nil
+
+	stage.RectLinkLinks = nil
+	stage.RectLinkLinks_mapString = nil
 
 	stage.SVGs = nil
 	stage.SVGs_mapString = nil
@@ -1248,6 +1311,10 @@ func (stage *StageStruct) Unstage() { // insertion point for array nil
 		rectanchoredtext.Unstage(stage)
 	}
 
+	for rectlinklink := range stage.RectLinkLinks {
+		rectlinklink.Unstage(stage)
+	}
+
 	for svg := range stage.SVGs {
 		svg.Unstage(stage)
 	}
@@ -1264,7 +1331,7 @@ func (stage *StageStruct) Unstage() { // insertion point for array nil
 // - full refactoring of Gongstruct identifiers / fields
 type Gongstruct interface {
 	// insertion point for generic types
-	AnchoredText | Animate | Circle | Ellipse | Layer | Line | Link | Path | Point | Polygone | Polyline | Rect | RectAnchoredRect | RectAnchoredText | SVG | Text
+	AnchoredText | Animate | Circle | Ellipse | Layer | Line | Link | Path | Point | Polygone | Polyline | Rect | RectAnchoredRect | RectAnchoredText | RectLinkLink | SVG | Text
 }
 
 // Gongstruct is the type parameter for generated generic function that allows
@@ -1273,7 +1340,7 @@ type Gongstruct interface {
 // - full refactoring of Gongstruct identifiers / fields
 type PointerToGongstruct interface {
 	// insertion point for generic types
-	*AnchoredText | *Animate | *Circle | *Ellipse | *Layer | *Line | *Link | *Path | *Point | *Polygone | *Polyline | *Rect | *RectAnchoredRect | *RectAnchoredText | *SVG | *Text
+	*AnchoredText | *Animate | *Circle | *Ellipse | *Layer | *Line | *Link | *Path | *Point | *Polygone | *Polyline | *Rect | *RectAnchoredRect | *RectAnchoredText | *RectLinkLink | *SVG | *Text
 	GetName() string
 }
 
@@ -1294,6 +1361,7 @@ type GongstructSet interface {
 		map[*Rect]any |
 		map[*RectAnchoredRect]any |
 		map[*RectAnchoredText]any |
+		map[*RectLinkLink]any |
 		map[*SVG]any |
 		map[*Text]any |
 		map[*any]any // because go does not support an extra "|" at the end of type specifications
@@ -1316,6 +1384,7 @@ type GongstructMapString interface {
 		map[string]*Rect |
 		map[string]*RectAnchoredRect |
 		map[string]*RectAnchoredText |
+		map[string]*RectLinkLink |
 		map[string]*SVG |
 		map[string]*Text |
 		map[*any]any // because go does not support an extra "|" at the end of type specifications
@@ -1356,6 +1425,8 @@ func GongGetSet[Type GongstructSet](stage *StageStruct) *Type {
 		return any(&stage.RectAnchoredRects).(*Type)
 	case map[*RectAnchoredText]any:
 		return any(&stage.RectAnchoredTexts).(*Type)
+	case map[*RectLinkLink]any:
+		return any(&stage.RectLinkLinks).(*Type)
 	case map[*SVG]any:
 		return any(&stage.SVGs).(*Type)
 	case map[*Text]any:
@@ -1400,6 +1471,8 @@ func GongGetMap[Type GongstructMapString](stage *StageStruct) *Type {
 		return any(&stage.RectAnchoredRects_mapString).(*Type)
 	case map[string]*RectAnchoredText:
 		return any(&stage.RectAnchoredTexts_mapString).(*Type)
+	case map[string]*RectLinkLink:
+		return any(&stage.RectLinkLinks_mapString).(*Type)
 	case map[string]*SVG:
 		return any(&stage.SVGs_mapString).(*Type)
 	case map[string]*Text:
@@ -1444,6 +1517,8 @@ func GetGongstructInstancesSet[Type Gongstruct](stage *StageStruct) *map[*Type]a
 		return any(&stage.RectAnchoredRects).(*map[*Type]any)
 	case RectAnchoredText:
 		return any(&stage.RectAnchoredTexts).(*map[*Type]any)
+	case RectLinkLink:
+		return any(&stage.RectLinkLinks).(*map[*Type]any)
 	case SVG:
 		return any(&stage.SVGs).(*map[*Type]any)
 	case Text:
@@ -1488,6 +1563,8 @@ func GetGongstructInstancesMap[Type Gongstruct](stage *StageStruct) *map[string]
 		return any(&stage.RectAnchoredRects_mapString).(*map[string]*Type)
 	case RectAnchoredText:
 		return any(&stage.RectAnchoredTexts_mapString).(*map[string]*Type)
+	case RectLinkLink:
+		return any(&stage.RectLinkLinks_mapString).(*map[string]*Type)
 	case SVG:
 		return any(&stage.SVGs_mapString).(*map[string]*Type)
 	case Text:
@@ -1549,6 +1626,8 @@ func GetAssociationName[Type Gongstruct]() *Type {
 			Paths: []*Path{{Name: "Paths"}},
 			// field is initialized with an instance of Link with the name of the field
 			Links: []*Link{{Name: "Links"}},
+			// field is initialized with an instance of RectLinkLink with the name of the field
+			RectLinkLinks: []*RectLinkLink{{Name: "RectLinkLinks"}},
 		}).(*Type)
 	case Line:
 		return any(&Line{
@@ -1611,6 +1690,14 @@ func GetAssociationName[Type Gongstruct]() *Type {
 			// Initialisation of associations
 			// field is initialized with an instance of Animate with the name of the field
 			Animates: []*Animate{{Name: "Animates"}},
+		}).(*Type)
+	case RectLinkLink:
+		return any(&RectLinkLink{
+			// Initialisation of associations
+			// field is initialized with an instance of Rect with the name of the field
+			Start: &Rect{Name: "Start"},
+			// field is initialized with an instance of Link with the name of the field
+			End: &Link{Name: "End"},
 		}).(*Type)
 	case SVG:
 		return any(&SVG{
@@ -1749,6 +1836,45 @@ func GetPointerReverseMap[Start, End Gongstruct](fieldname string, stage *StageS
 	case RectAnchoredText:
 		switch fieldname {
 		// insertion point for per direct association field
+		}
+	// reverse maps of direct associations of RectLinkLink
+	case RectLinkLink:
+		switch fieldname {
+		// insertion point for per direct association field
+		case "Start":
+			res := make(map[*Rect][]*RectLinkLink)
+			for rectlinklink := range stage.RectLinkLinks {
+				if rectlinklink.Start != nil {
+					rect_ := rectlinklink.Start
+					var rectlinklinks []*RectLinkLink
+					_, ok := res[rect_]
+					if ok {
+						rectlinklinks = res[rect_]
+					} else {
+						rectlinklinks = make([]*RectLinkLink, 0)
+					}
+					rectlinklinks = append(rectlinklinks, rectlinklink)
+					res[rect_] = rectlinklinks
+				}
+			}
+			return any(res).(map[*End][]*Start)
+		case "End":
+			res := make(map[*Link][]*RectLinkLink)
+			for rectlinklink := range stage.RectLinkLinks {
+				if rectlinklink.End != nil {
+					link_ := rectlinklink.End
+					var rectlinklinks []*RectLinkLink
+					_, ok := res[link_]
+					if ok {
+						rectlinklinks = res[link_]
+					} else {
+						rectlinklinks = make([]*RectLinkLink, 0)
+					}
+					rectlinklinks = append(rectlinklinks, rectlinklink)
+					res[link_] = rectlinklinks
+				}
+			}
+			return any(res).(map[*End][]*Start)
 		}
 	// reverse maps of direct associations of SVG
 	case SVG:
@@ -1930,6 +2056,14 @@ func GetSliceOfPointersReverseMap[Start, End Gongstruct](fieldname string, stage
 				}
 			}
 			return any(res).(map[*End]*Start)
+		case "RectLinkLinks":
+			res := make(map[*RectLinkLink]*Layer)
+			for layer := range stage.Layers {
+				for _, rectlinklink_ := range layer.RectLinkLinks {
+					res[rectlinklink_] = layer
+				}
+			}
+			return any(res).(map[*End]*Start)
 		}
 	// reverse maps of direct associations of Line
 	case Line:
@@ -2064,6 +2198,11 @@ func GetSliceOfPointersReverseMap[Start, End Gongstruct](fieldname string, stage
 			}
 			return any(res).(map[*End]*Start)
 		}
+	// reverse maps of direct associations of RectLinkLink
+	case RectLinkLink:
+		switch fieldname {
+		// insertion point for per direct association field
+		}
 	// reverse maps of direct associations of SVG
 	case SVG:
 		switch fieldname {
@@ -2130,6 +2269,8 @@ func GetGongstructName[Type Gongstruct]() (res string) {
 		res = "RectAnchoredRect"
 	case RectAnchoredText:
 		res = "RectAnchoredText"
+	case RectLinkLink:
+		res = "RectLinkLink"
 	case SVG:
 		res = "SVG"
 	case Text:
@@ -2154,7 +2295,7 @@ func GetFields[Type Gongstruct]() (res []string) {
 	case Ellipse:
 		res = []string{"Name", "CX", "CY", "RX", "RY", "Color", "FillOpacity", "Stroke", "StrokeWidth", "StrokeDashArray", "StrokeDashArrayWhenSelected", "Transform", "Animates"}
 	case Layer:
-		res = []string{"Display", "Name", "Rects", "Texts", "Circles", "Lines", "Ellipses", "Polylines", "Polygones", "Paths", "Links"}
+		res = []string{"Display", "Name", "Rects", "Texts", "Circles", "Lines", "Ellipses", "Polylines", "Polygones", "Paths", "Links", "RectLinkLinks"}
 	case Line:
 		res = []string{"Name", "X1", "Y1", "X2", "Y2", "Color", "FillOpacity", "Stroke", "StrokeWidth", "StrokeDashArray", "StrokeDashArrayWhenSelected", "Transform", "Animates", "MouseClickX", "MouseClickY"}
 	case Link:
@@ -2173,6 +2314,8 @@ func GetFields[Type Gongstruct]() (res []string) {
 		res = []string{"Name", "X", "Y", "Width", "Height", "RX", "X_Offset", "Y_Offset", "RectAnchorType", "WidthFollowRect", "HeightFollowRect", "Color", "FillOpacity", "Stroke", "StrokeWidth", "StrokeDashArray", "StrokeDashArrayWhenSelected", "Transform"}
 	case RectAnchoredText:
 		res = []string{"Name", "Content", "FontWeight", "FontSize", "X_Offset", "Y_Offset", "RectAnchorType", "TextAnchorType", "Color", "FillOpacity", "Stroke", "StrokeWidth", "StrokeDashArray", "StrokeDashArrayWhenSelected", "Transform", "Animates"}
+	case RectLinkLink:
+		res = []string{"Name", "Start", "End", "TargetAnchorPosition", "Color", "FillOpacity", "Stroke", "StrokeWidth", "StrokeDashArray", "StrokeDashArrayWhenSelected", "Transform"}
 	case SVG:
 		res = []string{"Name", "Layers", "DrawingState", "StartRect", "EndRect"}
 	case Text:
@@ -2366,6 +2509,13 @@ func GetFieldStringValue[Type Gongstruct](instance Type, fieldName string) (res 
 			}
 		case "Links":
 			for idx, __instance__ := range any(instance).(Layer).Links {
+				if idx > 0 {
+					res += "\n"
+				}
+				res += __instance__.Name
+			}
+		case "RectLinkLinks":
+			for idx, __instance__ := range any(instance).(Layer).RectLinkLinks {
 				if idx > 0 {
 					res += "\n"
 				}
@@ -2742,6 +2892,36 @@ func GetFieldStringValue[Type Gongstruct](instance Type, fieldName string) (res 
 				}
 				res += __instance__.Name
 			}
+		}
+	case RectLinkLink:
+		switch fieldName {
+		// string value of fields
+		case "Name":
+			res = any(instance).(RectLinkLink).Name
+		case "Start":
+			if any(instance).(RectLinkLink).Start != nil {
+				res = any(instance).(RectLinkLink).Start.Name
+			}
+		case "End":
+			if any(instance).(RectLinkLink).End != nil {
+				res = any(instance).(RectLinkLink).End.Name
+			}
+		case "TargetAnchorPosition":
+			res = fmt.Sprintf("%f", any(instance).(RectLinkLink).TargetAnchorPosition)
+		case "Color":
+			res = any(instance).(RectLinkLink).Color
+		case "FillOpacity":
+			res = fmt.Sprintf("%f", any(instance).(RectLinkLink).FillOpacity)
+		case "Stroke":
+			res = any(instance).(RectLinkLink).Stroke
+		case "StrokeWidth":
+			res = fmt.Sprintf("%f", any(instance).(RectLinkLink).StrokeWidth)
+		case "StrokeDashArray":
+			res = any(instance).(RectLinkLink).StrokeDashArray
+		case "StrokeDashArrayWhenSelected":
+			res = any(instance).(RectLinkLink).StrokeDashArrayWhenSelected
+		case "Transform":
+			res = any(instance).(RectLinkLink).Transform
 		}
 	case SVG:
 		switch fieldName {

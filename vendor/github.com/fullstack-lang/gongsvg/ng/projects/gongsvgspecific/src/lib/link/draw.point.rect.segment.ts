@@ -69,6 +69,7 @@ export function drawPointRectSegment(
             segment.EndPoint = endPoint
         }
     }
+    segment.EndPointWithoutRadius = segment.EndPoint
     if (number == 0) {
         segment = swapSegment(segment)
     }

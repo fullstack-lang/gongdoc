@@ -95,6 +95,10 @@ import { RectAnchoredTextsTableComponent } from './rectanchoredtexts-table/recta
 import { RectAnchoredTextSortingComponent } from './rectanchoredtext-sorting/rectanchoredtext-sorting.component'
 import { RectAnchoredTextDetailComponent } from './rectanchoredtext-detail/rectanchoredtext-detail.component'
 
+import { RectLinkLinksTableComponent } from './rectlinklinks-table/rectlinklinks-table.component'
+import { RectLinkLinkSortingComponent } from './rectlinklink-sorting/rectlinklink-sorting.component'
+import { RectLinkLinkDetailComponent } from './rectlinklink-detail/rectlinklink-detail.component'
+
 import { SVGsTableComponent } from './svgs-table/svgs-table.component'
 import { SVGSortingComponent } from './svg-sorting/svg-sorting.component'
 import { SVGDetailComponent } from './svg-detail/svg-detail.component'
@@ -162,6 +166,10 @@ import { TextDetailComponent } from './text-detail/text-detail.component'
 		RectAnchoredTextsTableComponent,
 		RectAnchoredTextSortingComponent,
 		RectAnchoredTextDetailComponent,
+
+		RectLinkLinksTableComponent,
+		RectLinkLinkSortingComponent,
+		RectLinkLinkDetailComponent,
 
 		SVGsTableComponent,
 		SVGSortingComponent,
@@ -265,6 +273,10 @@ import { TextDetailComponent } from './text-detail/text-detail.component'
 		RectAnchoredTextsTableComponent,
 		RectAnchoredTextSortingComponent,
 		RectAnchoredTextDetailComponent,
+
+		RectLinkLinksTableComponent,
+		RectLinkLinkSortingComponent,
+		RectLinkLinkDetailComponent,
 
 		SVGsTableComponent,
 		SVGSortingComponent,

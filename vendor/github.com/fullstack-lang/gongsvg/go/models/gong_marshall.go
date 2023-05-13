@@ -107,7 +107,7 @@ func (stage *StageStruct) Marshall(file *os.File, modelsPackageName, packageName
 	decl := ""
 	_ = decl
 	setValueField := ""
-	_ = setValueField 
+	_ = setValueField
 
 	// insertion initialization of objects to stage
 	map_AnchoredText_Identifiers := make(map[*AnchoredText]string)
@@ -1462,6 +1462,86 @@ func (stage *StageStruct) Marshall(file *os.File, modelsPackageName, packageName
 
 	}
 
+	map_RectLinkLink_Identifiers := make(map[*RectLinkLink]string)
+	_ = map_RectLinkLink_Identifiers
+
+	rectlinklinkOrdered := []*RectLinkLink{}
+	for rectlinklink := range stage.RectLinkLinks {
+		rectlinklinkOrdered = append(rectlinklinkOrdered, rectlinklink)
+	}
+	sort.Slice(rectlinklinkOrdered[:], func(i, j int) bool {
+		return rectlinklinkOrdered[i].Name < rectlinklinkOrdered[j].Name
+	})
+	identifiersDecl += "\n\n	// Declarations of staged instances of RectLinkLink"
+	for idx, rectlinklink := range rectlinklinkOrdered {
+
+		id = generatesIdentifier("RectLinkLink", idx, rectlinklink.Name)
+		map_RectLinkLink_Identifiers[rectlinklink] = id
+
+		decl = IdentifiersDecls
+		decl = strings.ReplaceAll(decl, "{{Identifier}}", id)
+		decl = strings.ReplaceAll(decl, "{{GeneratedStructName}}", "RectLinkLink")
+		decl = strings.ReplaceAll(decl, "{{GeneratedFieldNameValue}}", rectlinklink.Name)
+		identifiersDecl += decl
+
+		initializerStatements += "\n\n	// RectLinkLink values setup"
+		// Initialisation of values
+		setValueField = StringInitStatement
+		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
+		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "Name")
+		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", string(rectlinklink.Name))
+		initializerStatements += setValueField
+
+		setValueField = NumberInitStatement
+		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
+		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "TargetAnchorPosition")
+		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", fmt.Sprintf("%f", rectlinklink.TargetAnchorPosition))
+		initializerStatements += setValueField
+
+		setValueField = StringInitStatement
+		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
+		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "Color")
+		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", string(rectlinklink.Color))
+		initializerStatements += setValueField
+
+		setValueField = NumberInitStatement
+		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
+		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "FillOpacity")
+		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", fmt.Sprintf("%f", rectlinklink.FillOpacity))
+		initializerStatements += setValueField
+
+		setValueField = StringInitStatement
+		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
+		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "Stroke")
+		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", string(rectlinklink.Stroke))
+		initializerStatements += setValueField
+
+		setValueField = NumberInitStatement
+		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
+		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "StrokeWidth")
+		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", fmt.Sprintf("%f", rectlinklink.StrokeWidth))
+		initializerStatements += setValueField
+
+		setValueField = StringInitStatement
+		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
+		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "StrokeDashArray")
+		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", string(rectlinklink.StrokeDashArray))
+		initializerStatements += setValueField
+
+		setValueField = StringInitStatement
+		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
+		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "StrokeDashArrayWhenSelected")
+		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", string(rectlinklink.StrokeDashArrayWhenSelected))
+		initializerStatements += setValueField
+
+		setValueField = StringInitStatement
+		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
+		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "Transform")
+		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", string(rectlinklink.Transform))
+		initializerStatements += setValueField
+
+	}
+
 	map_SVG_Identifiers := make(map[*SVG]string)
 	_ = map_SVG_Identifiers
 
@@ -1739,6 +1819,14 @@ func (stage *StageStruct) Marshall(file *os.File, modelsPackageName, packageName
 			pointersInitializesStatements += setPointerField
 		}
 
+		for _, _rectlinklink := range layer.RectLinkLinks {
+			setPointerField = SliceOfPointersFieldInitStatement
+			setPointerField = strings.ReplaceAll(setPointerField, "{{Identifier}}", id)
+			setPointerField = strings.ReplaceAll(setPointerField, "{{GeneratedFieldName}}", "RectLinkLinks")
+			setPointerField = strings.ReplaceAll(setPointerField, "{{GeneratedFieldNameValue}}", map_RectLinkLink_Identifiers[_rectlinklink])
+			pointersInitializesStatements += setPointerField
+		}
+
 	}
 
 	for idx, line := range lineOrdered {
@@ -1935,6 +2023,32 @@ func (stage *StageStruct) Marshall(file *os.File, modelsPackageName, packageName
 
 	}
 
+	for idx, rectlinklink := range rectlinklinkOrdered {
+		var setPointerField string
+		_ = setPointerField
+
+		id = generatesIdentifier("RectLinkLink", idx, rectlinklink.Name)
+		map_RectLinkLink_Identifiers[rectlinklink] = id
+
+		// Initialisation of values
+		if rectlinklink.Start != nil {
+			setPointerField = PointerFieldInitStatement
+			setPointerField = strings.ReplaceAll(setPointerField, "{{Identifier}}", id)
+			setPointerField = strings.ReplaceAll(setPointerField, "{{GeneratedFieldName}}", "Start")
+			setPointerField = strings.ReplaceAll(setPointerField, "{{GeneratedFieldNameValue}}", map_Rect_Identifiers[rectlinklink.Start])
+			pointersInitializesStatements += setPointerField
+		}
+
+		if rectlinklink.End != nil {
+			setPointerField = PointerFieldInitStatement
+			setPointerField = strings.ReplaceAll(setPointerField, "{{Identifier}}", id)
+			setPointerField = strings.ReplaceAll(setPointerField, "{{GeneratedFieldName}}", "End")
+			setPointerField = strings.ReplaceAll(setPointerField, "{{GeneratedFieldNameValue}}", map_Link_Identifiers[rectlinklink.End])
+			pointersInitializesStatements += setPointerField
+		}
+
+	}
+
 	for idx, svg := range svgOrdered {
 		var setPointerField string
 		_ = setPointerField
@@ -2013,7 +2127,18 @@ func (stage *StageStruct) Marshall(file *os.File, modelsPackageName, packageName
 		sort.Slice(valuesOrdered[:], func(i, j int) bool {
 			return valuesOrdered[i].Ident < valuesOrdered[j].Ident
 		})
+
+		// remove duplicates
+		uniqueValues := make([]GONG__Identifier, 0)
+		seen := make(map[string]bool) // Assuming Ident is of type string
 		for _, value := range valuesOrdered {
+			if _, ok := seen[value.Ident]; !ok {
+				uniqueValues = append(uniqueValues, value)
+				seen[value.Ident] = true
+			}
+		}
+
+		for _, value := range uniqueValues {
 
 			// get the number of points in the value to find if it is a field
 			// or a struct

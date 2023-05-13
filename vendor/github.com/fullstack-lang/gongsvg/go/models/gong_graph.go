@@ -47,6 +47,9 @@ func IsStaged[Type Gongstruct](stage *StageStruct, instance *Type) (ok bool) {
 	case *RectAnchoredText:
 		ok = stage.IsStagedRectAnchoredText(target)
 
+	case *RectLinkLink:
+		ok = stage.IsStagedRectLinkLink(target)
+
 	case *SVG:
 		ok = stage.IsStagedSVG(target)
 
@@ -158,6 +161,13 @@ func IsStaged[Type Gongstruct](stage *StageStruct, instance *Type) (ok bool) {
 		return
 	}
 
+	func (stage *StageStruct) IsStagedRectLinkLink(rectlinklink *RectLinkLink) (ok bool) {
+
+		_, ok = stage.RectLinkLinks[rectlinklink]
+	
+		return
+	}
+
 	func (stage *StageStruct) IsStagedSVG(svg *SVG) (ok bool) {
 
 		_, ok = stage.SVGs[svg]
@@ -222,6 +232,9 @@ func StageBranch[Type Gongstruct](stage *StageStruct, instance *Type) {
 
 	case *RectAnchoredText:
 		stage.StageBranchRectAnchoredText(target)
+
+	case *RectLinkLink:
+		stage.StageBranchRectLinkLink(target)
 
 	case *SVG:
 		stage.StageBranchSVG(target)
@@ -342,6 +355,9 @@ func (stage *StageStruct) StageBranchLayer(layer *Layer) {
 	}
 	for _, _link := range layer.Links {
 		StageBranch(stage, _link)
+	}
+	for _, _rectlinklink := range layer.RectLinkLinks {
+		StageBranch(stage, _rectlinklink)
 	}
 
 }
@@ -520,6 +536,27 @@ func (stage *StageStruct) StageBranchRectAnchoredText(rectanchoredtext *RectAnch
 
 }
 
+func (stage *StageStruct) StageBranchRectLinkLink(rectlinklink *RectLinkLink) {
+
+	// check if instance is already staged
+	if IsStaged(stage, rectlinklink) {
+		return
+	}
+
+	rectlinklink.Stage(stage)
+
+	//insertion point for the staging of instances referenced by pointers
+	if rectlinklink.Start != nil {
+		StageBranch(stage, rectlinklink.Start)
+	}
+	if rectlinklink.End != nil {
+		StageBranch(stage, rectlinklink.End)
+	}
+
+	//insertion point for the staging of instances referenced by slice of pointers
+
+}
+
 func (stage *StageStruct) StageBranchSVG(svg *SVG) {
 
 	// check if instance is already staged
@@ -612,6 +649,9 @@ func UnstageBranch[Type Gongstruct](stage *StageStruct, instance *Type) {
 
 	case *RectAnchoredText:
 		stage.UnstageBranchRectAnchoredText(target)
+
+	case *RectLinkLink:
+		stage.UnstageBranchRectLinkLink(target)
 
 	case *SVG:
 		stage.UnstageBranchSVG(target)
@@ -732,6 +772,9 @@ func (stage *StageStruct) UnstageBranchLayer(layer *Layer) {
 	}
 	for _, _link := range layer.Links {
 		UnstageBranch(stage, _link)
+	}
+	for _, _rectlinklink := range layer.RectLinkLinks {
+		UnstageBranch(stage, _rectlinklink)
 	}
 
 }
@@ -907,6 +950,27 @@ func (stage *StageStruct) UnstageBranchRectAnchoredText(rectanchoredtext *RectAn
 	for _, _animate := range rectanchoredtext.Animates {
 		UnstageBranch(stage, _animate)
 	}
+
+}
+
+func (stage *StageStruct) UnstageBranchRectLinkLink(rectlinklink *RectLinkLink) {
+
+	// check if instance is already staged
+	if ! IsStaged(stage, rectlinklink) {
+		return
+	}
+
+	rectlinklink.Unstage(stage)
+
+	//insertion point for the staging of instances referenced by pointers
+	if rectlinklink.Start != nil {
+		UnstageBranch(stage, rectlinklink.Start)
+	}
+	if rectlinklink.End != nil {
+		UnstageBranch(stage, rectlinklink.End)
+	}
+
+	//insertion point for the staging of instances referenced by slice of pointers
 
 }
 

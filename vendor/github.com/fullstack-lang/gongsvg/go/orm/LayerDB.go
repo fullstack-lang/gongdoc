@@ -392,6 +392,25 @@ func (backRepoLayer *BackRepoLayerStruct) CommitPhaseTwoInstance(backRepo *BackR
 			}
 		}
 
+		// This loop encodes the slice of pointers layer.RectLinkLinks into the back repo.
+		// Each back repo instance at the end of the association encode the ID of the association start
+		// into a dedicated field for coding the association. The back repo instance is then saved to the db
+		for idx, rectlinklinkAssocEnd := range layer.RectLinkLinks {
+
+			// get the back repo instance at the association end
+			rectlinklinkAssocEnd_DB :=
+				backRepo.BackRepoRectLinkLink.GetRectLinkLinkDBFromRectLinkLinkPtr(rectlinklinkAssocEnd)
+
+			// encode reverse pointer in the association end back repo instance
+			rectlinklinkAssocEnd_DB.Layer_RectLinkLinksDBID.Int64 = int64(layerDB.ID)
+			rectlinklinkAssocEnd_DB.Layer_RectLinkLinksDBID.Valid = true
+			rectlinklinkAssocEnd_DB.Layer_RectLinkLinksDBID_Index.Int64 = int64(idx)
+			rectlinklinkAssocEnd_DB.Layer_RectLinkLinksDBID_Index.Valid = true
+			if q := backRepoLayer.db.Save(rectlinklinkAssocEnd_DB); q.Error != nil {
+				return q.Error
+			}
+		}
+
 		query := backRepoLayer.db.Save(&layerDB)
 		if query.Error != nil {
 			return query.Error
@@ -740,6 +759,33 @@ func (backRepoLayer *BackRepoLayerStruct) CheckoutPhaseTwoInstance(backRepo *Bac
 		linkDB_j := backRepo.BackRepoLink.Map_LinkDBID_LinkDB[linkDB_j_ID]
 
 		return linkDB_i.Layer_LinksDBID_Index.Int64 < linkDB_j.Layer_LinksDBID_Index.Int64
+	})
+
+	// This loop redeem layer.RectLinkLinks in the stage from the encode in the back repo
+	// It parses all RectLinkLinkDB in the back repo and if the reverse pointer encoding matches the back repo ID
+	// it appends the stage instance
+	// 1. reset the slice
+	layer.RectLinkLinks = layer.RectLinkLinks[:0]
+	// 2. loop all instances in the type in the association end
+	for _, rectlinklinkDB_AssocEnd := range backRepo.BackRepoRectLinkLink.Map_RectLinkLinkDBID_RectLinkLinkDB {
+		// 3. Does the ID encoding at the end and the ID at the start matches ?
+		if rectlinklinkDB_AssocEnd.Layer_RectLinkLinksDBID.Int64 == int64(layerDB.ID) {
+			// 4. fetch the associated instance in the stage
+			rectlinklink_AssocEnd := backRepo.BackRepoRectLinkLink.Map_RectLinkLinkDBID_RectLinkLinkPtr[rectlinklinkDB_AssocEnd.ID]
+			// 5. append it the association slice
+			layer.RectLinkLinks = append(layer.RectLinkLinks, rectlinklink_AssocEnd)
+		}
+	}
+
+	// sort the array according to the order
+	sort.Slice(layer.RectLinkLinks, func(i, j int) bool {
+		rectlinklinkDB_i_ID := backRepo.BackRepoRectLinkLink.Map_RectLinkLinkPtr_RectLinkLinkDBID[layer.RectLinkLinks[i]]
+		rectlinklinkDB_j_ID := backRepo.BackRepoRectLinkLink.Map_RectLinkLinkPtr_RectLinkLinkDBID[layer.RectLinkLinks[j]]
+
+		rectlinklinkDB_i := backRepo.BackRepoRectLinkLink.Map_RectLinkLinkDBID_RectLinkLinkDB[rectlinklinkDB_i_ID]
+		rectlinklinkDB_j := backRepo.BackRepoRectLinkLink.Map_RectLinkLinkDBID_RectLinkLinkDB[rectlinklinkDB_j_ID]
+
+		return rectlinklinkDB_i.Layer_RectLinkLinksDBID_Index.Int64 < rectlinklinkDB_j.Layer_RectLinkLinksDBID_Index.Int64
 	})
 
 	return

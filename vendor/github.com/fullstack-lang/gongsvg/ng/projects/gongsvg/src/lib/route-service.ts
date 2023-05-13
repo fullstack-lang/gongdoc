@@ -44,6 +44,9 @@ import { RectAnchoredRectDetailComponent } from './rectanchoredrect-detail/recta
 import { RectAnchoredTextsTableComponent } from './rectanchoredtexts-table/rectanchoredtexts-table.component'
 import { RectAnchoredTextDetailComponent } from './rectanchoredtext-detail/rectanchoredtext-detail.component'
 
+import { RectLinkLinksTableComponent } from './rectlinklinks-table/rectlinklinks-table.component'
+import { RectLinkLinkDetailComponent } from './rectlinklink-detail/rectlinklink-detail.component'
+
 import { SVGsTableComponent } from './svgs-table/svgs-table.component'
 import { SVGDetailComponent } from './svg-detail/svg-detail.component'
 
@@ -543,6 +546,39 @@ export class RouteService {
         return route
     }
 
+    getRectLinkLinkTablePath(): string {
+        return this.getPathRoot() + '-rectlinklinks/:GONG__StackPath'
+    }
+    getRectLinkLinkTableRoute(stackPath: string): Route {
+        let route: Route =
+            { path: this.getRectLinkLinkTablePath(), component: RectLinkLinksTableComponent, outlet: this.getTableOutlet(stackPath) }
+        return route
+    }
+    getRectLinkLinkAdderPath(): string {
+        return this.getPathRoot() + '-rectlinklink-adder/:GONG__StackPath'
+    }
+    getRectLinkLinkAdderRoute(stackPath: string): Route {
+        let route: Route =
+            { path: this.getRectLinkLinkAdderPath(), component: RectLinkLinkDetailComponent, outlet: this.getEditorOutlet(stackPath) }
+        return route
+    }
+    getRectLinkLinkAdderForUsePath(): string {
+        return this.getPathRoot() + '-rectlinklink-adder/:id/:originStruct/:originStructFieldName/:GONG__StackPath'
+    }
+    getRectLinkLinkAdderForUseRoute(stackPath: string): Route {
+        let route: Route =
+            { path: this.getRectLinkLinkAdderForUsePath(), component: RectLinkLinkDetailComponent, outlet: this.getEditorOutlet(stackPath) }
+        return route
+    }
+    getRectLinkLinkDetailPath(): string {
+        return this.getPathRoot() + '-rectlinklink-detail/:id/:GONG__StackPath'
+    }
+    getRectLinkLinkDetailRoute(stackPath: string): Route {
+        let route: Route =
+            { path: this.getRectLinkLinkDetailPath(), component: RectLinkLinkDetailComponent, outlet: this.getEditorOutlet(stackPath) }
+        return route
+    }
+
     getSVGTablePath(): string {
         return this.getPathRoot() + '-svgs/:GONG__StackPath'
     }
@@ -684,6 +720,11 @@ export class RouteService {
             this.getRectAnchoredTextAdderRoute(stackPath),
             this.getRectAnchoredTextAdderForUseRoute(stackPath),
             this.getRectAnchoredTextDetailRoute(stackPath),
+
+            this.getRectLinkLinkTableRoute(stackPath),
+            this.getRectLinkLinkAdderRoute(stackPath),
+            this.getRectLinkLinkAdderForUseRoute(stackPath),
+            this.getRectLinkLinkDetailRoute(stackPath),
 
             this.getSVGTableRoute(stackPath),
             this.getSVGAdderRoute(stackPath),

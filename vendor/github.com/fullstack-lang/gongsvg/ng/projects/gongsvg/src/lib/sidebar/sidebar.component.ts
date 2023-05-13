@@ -39,6 +39,8 @@ import { RectAnchoredRectService } from '../rectanchoredrect.service'
 import { getRectAnchoredRectUniqueID } from '../front-repo.service'
 import { RectAnchoredTextService } from '../rectanchoredtext.service'
 import { getRectAnchoredTextUniqueID } from '../front-repo.service'
+import { RectLinkLinkService } from '../rectlinklink.service'
+import { getRectLinkLinkUniqueID } from '../front-repo.service'
 import { SVGService } from '../svg.service'
 import { getSVGUniqueID } from '../front-repo.service'
 import { TextService } from '../text.service'
@@ -202,6 +204,7 @@ export class SidebarComponent implements OnInit {
     private rectService: RectService,
     private rectanchoredrectService: RectAnchoredRectService,
     private rectanchoredtextService: RectAnchoredTextService,
+    private rectlinklinkService: RectLinkLinkService,
     private svgService: SVGService,
     private textService: TextService,
 
@@ -345,6 +348,14 @@ export class SidebarComponent implements OnInit {
     )
     // observable for changes in structs
     this.rectanchoredtextService.RectAnchoredTextServiceChanged.subscribe(
+      message => {
+        if (message == "post" || message == "update" || message == "delete") {
+          this.refresh()
+        }
+      }
+    )
+    // observable for changes in structs
+    this.rectlinklinkService.RectLinkLinkServiceChanged.subscribe(
       message => {
         if (message == "post" || message == "update" || message == "delete") {
           this.refresh()
@@ -990,6 +1001,38 @@ export class SidebarComponent implements OnInit {
               children: new Array<GongNode>()
             }
             LinksGongNodeAssociation.children.push(linkNode)
+          })
+
+          /**
+          * let append a node for the slide of pointer RectLinkLinks
+          */
+          let RectLinkLinksGongNodeAssociation: GongNode = {
+            name: "(RectLinkLink) RectLinkLinks",
+            type: GongNodeType.ONE__ZERO_MANY_ASSOCIATION,
+            id: layerDB.ID,
+            uniqueIdPerStack: 19 * nonInstanceNodeId,
+            structName: "Layer",
+            associationField: "RectLinkLinks",
+            associatedStructName: "RectLinkLink",
+            children: new Array<GongNode>()
+          }
+          nonInstanceNodeId = nonInstanceNodeId + 1
+          layerGongNodeInstance.children.push(RectLinkLinksGongNodeAssociation)
+
+          layerDB.RectLinkLinks?.forEach(rectlinklinkDB => {
+            let rectlinklinkNode: GongNode = {
+              name: rectlinklinkDB.Name,
+              type: GongNodeType.INSTANCE,
+              id: rectlinklinkDB.ID,
+              uniqueIdPerStack: // godel numbering (thank you kurt)
+                7 * getLayerUniqueID(layerDB.ID)
+                + 11 * getRectLinkLinkUniqueID(rectlinklinkDB.ID),
+              structName: "RectLinkLink",
+              associationField: "",
+              associatedStructName: "",
+              children: new Array<GongNode>()
+            }
+            RectLinkLinksGongNodeAssociation.children.push(rectlinklinkNode)
           })
 
         }
@@ -1809,6 +1852,120 @@ export class SidebarComponent implements OnInit {
             }
             AnimatesGongNodeAssociation.children.push(animateNode)
           })
+
+        }
+      )
+
+      /**
+      * fill up the RectLinkLink part of the mat tree
+      */
+      let rectlinklinkGongNodeStruct: GongNode = {
+        name: "RectLinkLink",
+        type: GongNodeType.STRUCT,
+        id: 0,
+        uniqueIdPerStack: 13 * nonInstanceNodeId,
+        structName: "RectLinkLink",
+        associationField: "",
+        associatedStructName: "",
+        children: new Array<GongNode>()
+      }
+      nonInstanceNodeId = nonInstanceNodeId + 1
+      this.gongNodeTree.push(rectlinklinkGongNodeStruct)
+
+      this.frontRepo.RectLinkLinks_array.sort((t1, t2) => {
+        if (t1.Name > t2.Name) {
+          return 1;
+        }
+        if (t1.Name < t2.Name) {
+          return -1;
+        }
+        return 0;
+      });
+
+      this.frontRepo.RectLinkLinks_array.forEach(
+        rectlinklinkDB => {
+          let rectlinklinkGongNodeInstance: GongNode = {
+            name: rectlinklinkDB.Name,
+            type: GongNodeType.INSTANCE,
+            id: rectlinklinkDB.ID,
+            uniqueIdPerStack: getRectLinkLinkUniqueID(rectlinklinkDB.ID),
+            structName: "RectLinkLink",
+            associationField: "",
+            associatedStructName: "",
+            children: new Array<GongNode>()
+          }
+          rectlinklinkGongNodeStruct.children!.push(rectlinklinkGongNodeInstance)
+
+          // insertion point for per field code
+          /**
+          * let append a node for the association Start
+          */
+          let StartGongNodeAssociation: GongNode = {
+            name: "(Rect) Start",
+            type: GongNodeType.ONE__ZERO_ONE_ASSOCIATION,
+            id: rectlinklinkDB.ID,
+            uniqueIdPerStack: 17 * nonInstanceNodeId,
+            structName: "RectLinkLink",
+            associationField: "Start",
+            associatedStructName: "Rect",
+            children: new Array<GongNode>()
+          }
+          nonInstanceNodeId = nonInstanceNodeId + 1
+          rectlinklinkGongNodeInstance.children!.push(StartGongNodeAssociation)
+
+          /**
+            * let append a node for the instance behind the asssociation Start
+            */
+          if (rectlinklinkDB.Start != undefined) {
+            let rectlinklinkGongNodeInstance_Start: GongNode = {
+              name: rectlinklinkDB.Start.Name,
+              type: GongNodeType.INSTANCE,
+              id: rectlinklinkDB.Start.ID,
+              uniqueIdPerStack: // godel numbering (thank you kurt)
+                3 * getRectLinkLinkUniqueID(rectlinklinkDB.ID)
+                + 5 * getRectUniqueID(rectlinklinkDB.Start.ID),
+              structName: "Rect",
+              associationField: "",
+              associatedStructName: "",
+              children: new Array<GongNode>()
+            }
+            StartGongNodeAssociation.children.push(rectlinklinkGongNodeInstance_Start)
+          }
+
+          /**
+          * let append a node for the association End
+          */
+          let EndGongNodeAssociation: GongNode = {
+            name: "(Link) End",
+            type: GongNodeType.ONE__ZERO_ONE_ASSOCIATION,
+            id: rectlinklinkDB.ID,
+            uniqueIdPerStack: 17 * nonInstanceNodeId,
+            structName: "RectLinkLink",
+            associationField: "End",
+            associatedStructName: "Link",
+            children: new Array<GongNode>()
+          }
+          nonInstanceNodeId = nonInstanceNodeId + 1
+          rectlinklinkGongNodeInstance.children!.push(EndGongNodeAssociation)
+
+          /**
+            * let append a node for the instance behind the asssociation End
+            */
+          if (rectlinklinkDB.End != undefined) {
+            let rectlinklinkGongNodeInstance_End: GongNode = {
+              name: rectlinklinkDB.End.Name,
+              type: GongNodeType.INSTANCE,
+              id: rectlinklinkDB.End.ID,
+              uniqueIdPerStack: // godel numbering (thank you kurt)
+                3 * getRectLinkLinkUniqueID(rectlinklinkDB.ID)
+                + 5 * getLinkUniqueID(rectlinklinkDB.End.ID),
+              structName: "Link",
+              associationField: "",
+              associatedStructName: "",
+              children: new Array<GongNode>()
+            }
+            EndGongNodeAssociation.children.push(rectlinklinkGongNodeInstance_End)
+          }
 
         }
       )

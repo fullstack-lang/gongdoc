@@ -139,6 +139,13 @@ func registerControllers(r *gin.Engine) {
 		v1.PUT("/v1/rectanchoredtexts/:id", GetController().UpdateRectAnchoredText)
 		v1.DELETE("/v1/rectanchoredtexts/:id", GetController().DeleteRectAnchoredText)
 
+		v1.GET("/v1/rectlinklinks", GetController().GetRectLinkLinks)
+		v1.GET("/v1/rectlinklinks/:id", GetController().GetRectLinkLink)
+		v1.POST("/v1/rectlinklinks", GetController().PostRectLinkLink)
+		v1.PATCH("/v1/rectlinklinks/:id", GetController().UpdateRectLinkLink)
+		v1.PUT("/v1/rectlinklinks/:id", GetController().UpdateRectLinkLink)
+		v1.DELETE("/v1/rectlinklinks/:id", GetController().DeleteRectLinkLink)
+
 		v1.GET("/v1/svgs", GetController().GetSVGs)
 		v1.GET("/v1/svgs/:id", GetController().GetSVG)
 		v1.POST("/v1/svgs", GetController().PostSVG)

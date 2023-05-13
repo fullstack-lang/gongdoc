@@ -100,6 +100,12 @@ export * from './lib/rectanchoredtexts-table/rectanchoredtexts-table.component'
 export * from './lib/rectanchoredtext-db'
 export * from './lib/rectanchoredtext.service'
 
+export * from './lib/rectlinklink-detail/rectlinklink-detail.component'
+export * from './lib/rectlinklink-sorting/rectlinklink-sorting.component'
+export * from './lib/rectlinklinks-table/rectlinklinks-table.component'
+export * from './lib/rectlinklink-db'
+export * from './lib/rectlinklink.service'
+
 export * from './lib/svg-detail/svg-detail.component'
 export * from './lib/svg-sorting/svg-sorting.component'
 export * from './lib/svgs-table/svgs-table.component'
