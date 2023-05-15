@@ -12,6 +12,7 @@ type DocSVGMapper struct {
 	map_GongenumShape_Rect   map[*gongdoc_models.GongEnumShape]*gongsvg_models.Rect
 	map_NoteShape_Rect       map[*gongdoc_models.NoteShape]*gongsvg_models.Rect
 	map_Structname_Rect      map[string]*gongsvg_models.Rect
+	map_Fieldname_Link       map[string]*gongsvg_models.Link
 }
 
 func (docSVGMapper *DocSVGMapper) GenerateSvg(
@@ -25,6 +26,7 @@ func (docSVGMapper *DocSVGMapper) GenerateSvg(
 	docSVGMapper.map_NoteShape_Rect = make(map[*gongdoc_models.NoteShape]*gongsvg_models.Rect)
 
 	docSVGMapper.map_Structname_Rect = make(map[string]*gongsvg_models.Rect)
+	docSVGMapper.map_Fieldname_Link = make(map[string]*gongsvg_models.Link)
 
 	gongsvgStage.Reset()
 	gongsvgStage.Commit()
@@ -139,6 +141,7 @@ func (docSVGMapper *DocSVGMapper) GenerateSvg(
 			link := new(gongsvg_models.Link).Stage(gongsvgStage)
 			link.Name = startRect.Name + " - to - " + endRect.Name
 			linkLayer := new(gongsvg_models.Layer).Stage(gongsvgStage)
+			docSVGMapper.map_Fieldname_Link[docLink.Identifier] = link
 
 			linkLayer.Links = append(linkLayer.Links, link)
 			svg.Layers = append(svg.Layers, linkLayer)
@@ -372,5 +375,79 @@ func (docSVGMapper *DocSVGMapper) GenerateSvg(
 		// rect.RectAnchoredRects = append(rect.RectAnchoredRects, titleBox)
 	}
 
+	//
+	// Links between notes and othe shapes
+	//
+	for _, noteShape := range selectedDiagram.NoteShapes {
+
+		startRect := docSVGMapper.map_NoteShape_Rect[noteShape]
+		_ = startRect
+
+		for _, noteLink := range noteShape.NoteShapeLinks {
+
+			if noteLink.Type == gongdoc_models.NOTE_SHAPE_LINK_TO_GONG_STRUCT_OR_ENUM_SHAPE {
+
+				var endRect *gongsvg_models.Rect
+				var ok bool
+				// find the endRect
+				endRect, ok = docSVGMapper.map_Structname_Rect[noteLink.Identifier]
+				if ok {
+					// create the link
+					link := new(gongsvg_models.Link).Stage(gongsvgStage)
+					link.Name = startRect.Name + " - to - " + endRect.Name
+					linkLayer := new(gongsvg_models.Layer).Stage(gongsvgStage)
+
+					linkLayer.Links = append(linkLayer.Links, link)
+					svg.Layers = append(svg.Layers, linkLayer)
+
+					// configuration
+					link.Stroke = gongsvg_models.Slategray.ToString()
+					link.StrokeWidth = 2
+					link.StrokeDashArray = "5 5"
+
+					link.Type = gongsvg_models.LINK_TYPE_FLOATING_ORTHOGONAL
+					link.StartOrientation = gongsvg_models.ORIENTATION_HORIZONTAL
+					link.StartRatio = 0.5
+					link.EndOrientation = gongsvg_models.ORIENTATION_HORIZONTAL
+					link.EndRatio = 0.5
+
+					link.CornerOffsetRatio = (endRect.X - startRect.X - 80) / startRect.Width
+
+					link.CornerRadius = 3
+
+					link.Start = startRect
+					link.End = endRect
+				}
+
+			}
+			if noteLink.Type == gongdoc_models.NOTE_SHAPE_LINK_TO_GONG_FIELD {
+
+				var endLink *gongsvg_models.Link
+				_ = endLink
+				var ok bool
+				// find the endLink
+				endLink, ok = docSVGMapper.map_Fieldname_Link[noteLink.Identifier]
+				if ok {
+					rectLinkLink := new(gongsvg_models.RectLinkLink).Stage(gongsvgStage)
+					rectLinkLink.Name = startRect.Name + " - to - " + endLink.Name
+					rectLinkLinkLayer := new(gongsvg_models.Layer).Stage(gongsvgStage)
+
+					rectLinkLinkLayer.RectLinkLinks = append(rectLinkLinkLayer.RectLinkLinks, rectLinkLink)
+					svg.Layers = append(svg.Layers, rectLinkLinkLayer)
+
+					// configuration
+					rectLinkLink.Stroke = gongsvg_models.Slategray.ToString()
+					rectLinkLink.StrokeWidth = 2
+					rectLinkLink.StrokeDashArray = "5 5"
+					rectLinkLink.TargetAnchorPosition = 0.5
+
+					rectLinkLink.Start = startRect
+					rectLinkLink.End = endLink
+				}
+			}
+
+		}
+
+	}
 	gongsvgStage.Commit()
 }
