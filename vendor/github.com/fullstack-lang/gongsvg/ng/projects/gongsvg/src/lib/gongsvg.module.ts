@@ -87,6 +87,18 @@ import { RectsTableComponent } from './rects-table/rects-table.component'
 import { RectSortingComponent } from './rect-sorting/rect-sorting.component'
 import { RectDetailComponent } from './rect-detail/rect-detail.component'
 
+import { RectAnchoredRectsTableComponent } from './rectanchoredrects-table/rectanchoredrects-table.component'
+import { RectAnchoredRectSortingComponent } from './rectanchoredrect-sorting/rectanchoredrect-sorting.component'
+import { RectAnchoredRectDetailComponent } from './rectanchoredrect-detail/rectanchoredrect-detail.component'
+
+import { RectAnchoredTextsTableComponent } from './rectanchoredtexts-table/rectanchoredtexts-table.component'
+import { RectAnchoredTextSortingComponent } from './rectanchoredtext-sorting/rectanchoredtext-sorting.component'
+import { RectAnchoredTextDetailComponent } from './rectanchoredtext-detail/rectanchoredtext-detail.component'
+
+import { RectLinkLinksTableComponent } from './rectlinklinks-table/rectlinklinks-table.component'
+import { RectLinkLinkSortingComponent } from './rectlinklink-sorting/rectlinklink-sorting.component'
+import { RectLinkLinkDetailComponent } from './rectlinklink-detail/rectlinklink-detail.component'
+
 import { SVGsTableComponent } from './svgs-table/svgs-table.component'
 import { SVGSortingComponent } from './svg-sorting/svg-sorting.component'
 import { SVGDetailComponent } from './svg-detail/svg-detail.component'
@@ -146,6 +158,18 @@ import { TextDetailComponent } from './text-detail/text-detail.component'
 		RectsTableComponent,
 		RectSortingComponent,
 		RectDetailComponent,
+
+		RectAnchoredRectsTableComponent,
+		RectAnchoredRectSortingComponent,
+		RectAnchoredRectDetailComponent,
+
+		RectAnchoredTextsTableComponent,
+		RectAnchoredTextSortingComponent,
+		RectAnchoredTextDetailComponent,
+
+		RectLinkLinksTableComponent,
+		RectLinkLinkSortingComponent,
+		RectLinkLinkDetailComponent,
 
 		SVGsTableComponent,
 		SVGSortingComponent,
@@ -241,6 +265,18 @@ import { TextDetailComponent } from './text-detail/text-detail.component'
 		RectsTableComponent,
 		RectSortingComponent,
 		RectDetailComponent,
+
+		RectAnchoredRectsTableComponent,
+		RectAnchoredRectSortingComponent,
+		RectAnchoredRectDetailComponent,
+
+		RectAnchoredTextsTableComponent,
+		RectAnchoredTextSortingComponent,
+		RectAnchoredTextDetailComponent,
+
+		RectLinkLinksTableComponent,
+		RectLinkLinkSortingComponent,
+		RectLinkLinkDetailComponent,
 
 		SVGsTableComponent,
 		SVGSortingComponent,

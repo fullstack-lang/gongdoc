@@ -82,6 +82,9 @@ type AnchoredTextDB struct {
 	// Declation for basic field anchoredtextDB.Y_Offset
 	Y_Offset_Data sql.NullFloat64
 
+	// Declation for basic field anchoredtextDB.FontWeight
+	FontWeight_Data sql.NullString
+
 	// Declation for basic field anchoredtextDB.Color
 	Color_Data sql.NullString
 
@@ -131,19 +134,21 @@ type AnchoredTextWOP struct {
 
 	Y_Offset float64 `xlsx:"4"`
 
-	Color string `xlsx:"5"`
+	FontWeight string `xlsx:"5"`
 
-	FillOpacity float64 `xlsx:"6"`
+	Color string `xlsx:"6"`
 
-	Stroke string `xlsx:"7"`
+	FillOpacity float64 `xlsx:"7"`
 
-	StrokeWidth float64 `xlsx:"8"`
+	Stroke string `xlsx:"8"`
 
-	StrokeDashArray string `xlsx:"9"`
+	StrokeWidth float64 `xlsx:"9"`
 
-	StrokeDashArrayWhenSelected string `xlsx:"10"`
+	StrokeDashArray string `xlsx:"10"`
 
-	Transform string `xlsx:"11"`
+	StrokeDashArrayWhenSelected string `xlsx:"11"`
+
+	Transform string `xlsx:"12"`
 	// insertion for WOP pointer fields
 }
 
@@ -154,6 +159,7 @@ var AnchoredText_Fields = []string{
 	"Content",
 	"X_Offset",
 	"Y_Offset",
+	"FontWeight",
 	"Color",
 	"FillOpacity",
 	"Stroke",
@@ -479,6 +485,9 @@ func (anchoredtextDB *AnchoredTextDB) CopyBasicFieldsFromAnchoredText(anchoredte
 	anchoredtextDB.Y_Offset_Data.Float64 = anchoredtext.Y_Offset
 	anchoredtextDB.Y_Offset_Data.Valid = true
 
+	anchoredtextDB.FontWeight_Data.String = anchoredtext.FontWeight
+	anchoredtextDB.FontWeight_Data.Valid = true
+
 	anchoredtextDB.Color_Data.String = anchoredtext.Color
 	anchoredtextDB.Color_Data.Valid = true
 
@@ -517,6 +526,9 @@ func (anchoredtextDB *AnchoredTextDB) CopyBasicFieldsFromAnchoredTextWOP(anchore
 	anchoredtextDB.Y_Offset_Data.Float64 = anchoredtext.Y_Offset
 	anchoredtextDB.Y_Offset_Data.Valid = true
 
+	anchoredtextDB.FontWeight_Data.String = anchoredtext.FontWeight
+	anchoredtextDB.FontWeight_Data.Valid = true
+
 	anchoredtextDB.Color_Data.String = anchoredtext.Color
 	anchoredtextDB.Color_Data.Valid = true
 
@@ -546,6 +558,7 @@ func (anchoredtextDB *AnchoredTextDB) CopyBasicFieldsToAnchoredText(anchoredtext
 	anchoredtext.Content = anchoredtextDB.Content_Data.String
 	anchoredtext.X_Offset = anchoredtextDB.X_Offset_Data.Float64
 	anchoredtext.Y_Offset = anchoredtextDB.Y_Offset_Data.Float64
+	anchoredtext.FontWeight = anchoredtextDB.FontWeight_Data.String
 	anchoredtext.Color = anchoredtextDB.Color_Data.String
 	anchoredtext.FillOpacity = anchoredtextDB.FillOpacity_Data.Float64
 	anchoredtext.Stroke = anchoredtextDB.Stroke_Data.String
@@ -563,6 +576,7 @@ func (anchoredtextDB *AnchoredTextDB) CopyBasicFieldsToAnchoredTextWOP(anchoredt
 	anchoredtext.Content = anchoredtextDB.Content_Data.String
 	anchoredtext.X_Offset = anchoredtextDB.X_Offset_Data.Float64
 	anchoredtext.Y_Offset = anchoredtextDB.Y_Offset_Data.Float64
+	anchoredtext.FontWeight = anchoredtextDB.FontWeight_Data.String
 	anchoredtext.Color = anchoredtextDB.Color_Data.String
 	anchoredtext.FillOpacity = anchoredtextDB.FillOpacity_Data.Float64
 	anchoredtext.Stroke = anchoredtextDB.Stroke_Data.String

@@ -125,6 +125,27 @@ func registerControllers(r *gin.Engine) {
 		v1.PUT("/v1/rects/:id", GetController().UpdateRect)
 		v1.DELETE("/v1/rects/:id", GetController().DeleteRect)
 
+		v1.GET("/v1/rectanchoredrects", GetController().GetRectAnchoredRects)
+		v1.GET("/v1/rectanchoredrects/:id", GetController().GetRectAnchoredRect)
+		v1.POST("/v1/rectanchoredrects", GetController().PostRectAnchoredRect)
+		v1.PATCH("/v1/rectanchoredrects/:id", GetController().UpdateRectAnchoredRect)
+		v1.PUT("/v1/rectanchoredrects/:id", GetController().UpdateRectAnchoredRect)
+		v1.DELETE("/v1/rectanchoredrects/:id", GetController().DeleteRectAnchoredRect)
+
+		v1.GET("/v1/rectanchoredtexts", GetController().GetRectAnchoredTexts)
+		v1.GET("/v1/rectanchoredtexts/:id", GetController().GetRectAnchoredText)
+		v1.POST("/v1/rectanchoredtexts", GetController().PostRectAnchoredText)
+		v1.PATCH("/v1/rectanchoredtexts/:id", GetController().UpdateRectAnchoredText)
+		v1.PUT("/v1/rectanchoredtexts/:id", GetController().UpdateRectAnchoredText)
+		v1.DELETE("/v1/rectanchoredtexts/:id", GetController().DeleteRectAnchoredText)
+
+		v1.GET("/v1/rectlinklinks", GetController().GetRectLinkLinks)
+		v1.GET("/v1/rectlinklinks/:id", GetController().GetRectLinkLink)
+		v1.POST("/v1/rectlinklinks", GetController().PostRectLinkLink)
+		v1.PATCH("/v1/rectlinklinks/:id", GetController().UpdateRectLinkLink)
+		v1.PUT("/v1/rectlinklinks/:id", GetController().UpdateRectLinkLink)
+		v1.DELETE("/v1/rectlinklinks/:id", GetController().DeleteRectLinkLink)
+
 		v1.GET("/v1/svgs", GetController().GetSVGs)
 		v1.GET("/v1/svgs/:id", GetController().GetSVG)
 		v1.POST("/v1/svgs", GetController().PostSVG)

@@ -38,6 +38,15 @@ import { PolylineDetailComponent } from './polyline-detail/polyline-detail.compo
 import { RectsTableComponent } from './rects-table/rects-table.component'
 import { RectDetailComponent } from './rect-detail/rect-detail.component'
 
+import { RectAnchoredRectsTableComponent } from './rectanchoredrects-table/rectanchoredrects-table.component'
+import { RectAnchoredRectDetailComponent } from './rectanchoredrect-detail/rectanchoredrect-detail.component'
+
+import { RectAnchoredTextsTableComponent } from './rectanchoredtexts-table/rectanchoredtexts-table.component'
+import { RectAnchoredTextDetailComponent } from './rectanchoredtext-detail/rectanchoredtext-detail.component'
+
+import { RectLinkLinksTableComponent } from './rectlinklinks-table/rectlinklinks-table.component'
+import { RectLinkLinkDetailComponent } from './rectlinklink-detail/rectlinklink-detail.component'
+
 import { SVGsTableComponent } from './svgs-table/svgs-table.component'
 import { SVGDetailComponent } from './svg-detail/svg-detail.component'
 
@@ -471,6 +480,105 @@ export class RouteService {
         return route
     }
 
+    getRectAnchoredRectTablePath(): string {
+        return this.getPathRoot() + '-rectanchoredrects/:GONG__StackPath'
+    }
+    getRectAnchoredRectTableRoute(stackPath: string): Route {
+        let route: Route =
+            { path: this.getRectAnchoredRectTablePath(), component: RectAnchoredRectsTableComponent, outlet: this.getTableOutlet(stackPath) }
+        return route
+    }
+    getRectAnchoredRectAdderPath(): string {
+        return this.getPathRoot() + '-rectanchoredrect-adder/:GONG__StackPath'
+    }
+    getRectAnchoredRectAdderRoute(stackPath: string): Route {
+        let route: Route =
+            { path: this.getRectAnchoredRectAdderPath(), component: RectAnchoredRectDetailComponent, outlet: this.getEditorOutlet(stackPath) }
+        return route
+    }
+    getRectAnchoredRectAdderForUsePath(): string {
+        return this.getPathRoot() + '-rectanchoredrect-adder/:id/:originStruct/:originStructFieldName/:GONG__StackPath'
+    }
+    getRectAnchoredRectAdderForUseRoute(stackPath: string): Route {
+        let route: Route =
+            { path: this.getRectAnchoredRectAdderForUsePath(), component: RectAnchoredRectDetailComponent, outlet: this.getEditorOutlet(stackPath) }
+        return route
+    }
+    getRectAnchoredRectDetailPath(): string {
+        return this.getPathRoot() + '-rectanchoredrect-detail/:id/:GONG__StackPath'
+    }
+    getRectAnchoredRectDetailRoute(stackPath: string): Route {
+        let route: Route =
+            { path: this.getRectAnchoredRectDetailPath(), component: RectAnchoredRectDetailComponent, outlet: this.getEditorOutlet(stackPath) }
+        return route
+    }
+
+    getRectAnchoredTextTablePath(): string {
+        return this.getPathRoot() + '-rectanchoredtexts/:GONG__StackPath'
+    }
+    getRectAnchoredTextTableRoute(stackPath: string): Route {
+        let route: Route =
+            { path: this.getRectAnchoredTextTablePath(), component: RectAnchoredTextsTableComponent, outlet: this.getTableOutlet(stackPath) }
+        return route
+    }
+    getRectAnchoredTextAdderPath(): string {
+        return this.getPathRoot() + '-rectanchoredtext-adder/:GONG__StackPath'
+    }
+    getRectAnchoredTextAdderRoute(stackPath: string): Route {
+        let route: Route =
+            { path: this.getRectAnchoredTextAdderPath(), component: RectAnchoredTextDetailComponent, outlet: this.getEditorOutlet(stackPath) }
+        return route
+    }
+    getRectAnchoredTextAdderForUsePath(): string {
+        return this.getPathRoot() + '-rectanchoredtext-adder/:id/:originStruct/:originStructFieldName/:GONG__StackPath'
+    }
+    getRectAnchoredTextAdderForUseRoute(stackPath: string): Route {
+        let route: Route =
+            { path: this.getRectAnchoredTextAdderForUsePath(), component: RectAnchoredTextDetailComponent, outlet: this.getEditorOutlet(stackPath) }
+        return route
+    }
+    getRectAnchoredTextDetailPath(): string {
+        return this.getPathRoot() + '-rectanchoredtext-detail/:id/:GONG__StackPath'
+    }
+    getRectAnchoredTextDetailRoute(stackPath: string): Route {
+        let route: Route =
+            { path: this.getRectAnchoredTextDetailPath(), component: RectAnchoredTextDetailComponent, outlet: this.getEditorOutlet(stackPath) }
+        return route
+    }
+
+    getRectLinkLinkTablePath(): string {
+        return this.getPathRoot() + '-rectlinklinks/:GONG__StackPath'
+    }
+    getRectLinkLinkTableRoute(stackPath: string): Route {
+        let route: Route =
+            { path: this.getRectLinkLinkTablePath(), component: RectLinkLinksTableComponent, outlet: this.getTableOutlet(stackPath) }
+        return route
+    }
+    getRectLinkLinkAdderPath(): string {
+        return this.getPathRoot() + '-rectlinklink-adder/:GONG__StackPath'
+    }
+    getRectLinkLinkAdderRoute(stackPath: string): Route {
+        let route: Route =
+            { path: this.getRectLinkLinkAdderPath(), component: RectLinkLinkDetailComponent, outlet: this.getEditorOutlet(stackPath) }
+        return route
+    }
+    getRectLinkLinkAdderForUsePath(): string {
+        return this.getPathRoot() + '-rectlinklink-adder/:id/:originStruct/:originStructFieldName/:GONG__StackPath'
+    }
+    getRectLinkLinkAdderForUseRoute(stackPath: string): Route {
+        let route: Route =
+            { path: this.getRectLinkLinkAdderForUsePath(), component: RectLinkLinkDetailComponent, outlet: this.getEditorOutlet(stackPath) }
+        return route
+    }
+    getRectLinkLinkDetailPath(): string {
+        return this.getPathRoot() + '-rectlinklink-detail/:id/:GONG__StackPath'
+    }
+    getRectLinkLinkDetailRoute(stackPath: string): Route {
+        let route: Route =
+            { path: this.getRectLinkLinkDetailPath(), component: RectLinkLinkDetailComponent, outlet: this.getEditorOutlet(stackPath) }
+        return route
+    }
+
     getSVGTablePath(): string {
         return this.getPathRoot() + '-svgs/:GONG__StackPath'
     }
@@ -602,6 +710,21 @@ export class RouteService {
             this.getRectAdderRoute(stackPath),
             this.getRectAdderForUseRoute(stackPath),
             this.getRectDetailRoute(stackPath),
+
+            this.getRectAnchoredRectTableRoute(stackPath),
+            this.getRectAnchoredRectAdderRoute(stackPath),
+            this.getRectAnchoredRectAdderForUseRoute(stackPath),
+            this.getRectAnchoredRectDetailRoute(stackPath),
+
+            this.getRectAnchoredTextTableRoute(stackPath),
+            this.getRectAnchoredTextAdderRoute(stackPath),
+            this.getRectAnchoredTextAdderForUseRoute(stackPath),
+            this.getRectAnchoredTextDetailRoute(stackPath),
+
+            this.getRectLinkLinkTableRoute(stackPath),
+            this.getRectLinkLinkAdderRoute(stackPath),
+            this.getRectLinkLinkAdderForUseRoute(stackPath),
+            this.getRectLinkLinkDetailRoute(stackPath),
 
             this.getSVGTableRoute(stackPath),
             this.getSVGAdderRoute(stackPath),

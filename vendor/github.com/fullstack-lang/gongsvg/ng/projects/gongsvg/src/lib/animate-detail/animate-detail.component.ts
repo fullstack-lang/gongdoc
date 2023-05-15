@@ -18,6 +18,7 @@ import { PathDB } from '../path-db'
 import { PolygoneDB } from '../polygone-db'
 import { PolylineDB } from '../polyline-db'
 import { RectDB } from '../rect-db'
+import { RectAnchoredTextDB } from '../rectanchoredtext-db'
 import { TextDB } from '../text-db'
 
 import { Router, ActivatedRoute } from '@angular/router';
@@ -40,6 +41,7 @@ enum AnimateDetailComponentState {
 	CREATE_INSTANCE_WITH_ASSOCIATION_Polygone_Animates_SET,
 	CREATE_INSTANCE_WITH_ASSOCIATION_Polyline_Animates_SET,
 	CREATE_INSTANCE_WITH_ASSOCIATION_Rect_Animations_SET,
+	CREATE_INSTANCE_WITH_ASSOCIATION_RectAnchoredText_Animates_SET,
 	CREATE_INSTANCE_WITH_ASSOCIATION_Text_Animates_SET,
 }
 
@@ -143,6 +145,10 @@ export class AnimateDetailComponent implements OnInit {
 						this.state = AnimateDetailComponentState.CREATE_INSTANCE_WITH_ASSOCIATION_Rect_Animations_SET
 						break;
 					case "Animates":
+						// console.log("Animate" + " is instanciated with back pointer to instance " + this.id + " RectAnchoredText association Animates")
+						this.state = AnimateDetailComponentState.CREATE_INSTANCE_WITH_ASSOCIATION_RectAnchoredText_Animates_SET
+						break;
+					case "Animates":
 						// console.log("Animate" + " is instanciated with back pointer to instance " + this.id + " Text association Animates")
 						this.state = AnimateDetailComponentState.CREATE_INSTANCE_WITH_ASSOCIATION_Text_Animates_SET
 						break;
@@ -213,6 +219,10 @@ export class AnimateDetailComponent implements OnInit {
 					case AnimateDetailComponentState.CREATE_INSTANCE_WITH_ASSOCIATION_Rect_Animations_SET:
 						this.animate = new (AnimateDB)
 						this.animate.Rect_Animations_reverse = frontRepo.Rects.get(this.id)!
+						break;
+					case AnimateDetailComponentState.CREATE_INSTANCE_WITH_ASSOCIATION_RectAnchoredText_Animates_SET:
+						this.animate = new (AnimateDB)
+						this.animate.RectAnchoredText_Animates_reverse = frontRepo.RectAnchoredTexts.get(this.id)!
 						break;
 					case AnimateDetailComponentState.CREATE_INSTANCE_WITH_ASSOCIATION_Text_Animates_SET:
 						this.animate = new (AnimateDB)
@@ -334,6 +344,18 @@ export class AnimateDetailComponent implements OnInit {
 			}
 			this.animate.Rect_AnimationsDBID_Index.Valid = true
 			this.animate.Rect_Animations_reverse = new RectDB // very important, otherwise, circular JSON
+		}
+		if (this.animate.RectAnchoredText_Animates_reverse != undefined) {
+			if (this.animate.RectAnchoredText_AnimatesDBID == undefined) {
+				this.animate.RectAnchoredText_AnimatesDBID = new NullInt64
+			}
+			this.animate.RectAnchoredText_AnimatesDBID.Int64 = this.animate.RectAnchoredText_Animates_reverse.ID
+			this.animate.RectAnchoredText_AnimatesDBID.Valid = true
+			if (this.animate.RectAnchoredText_AnimatesDBID_Index == undefined) {
+				this.animate.RectAnchoredText_AnimatesDBID_Index = new NullInt64
+			}
+			this.animate.RectAnchoredText_AnimatesDBID_Index.Valid = true
+			this.animate.RectAnchoredText_Animates_reverse = new RectAnchoredTextDB // very important, otherwise, circular JSON
 		}
 		if (this.animate.Text_Animates_reverse != undefined) {
 			if (this.animate.Text_AnimatesDBID == undefined) {

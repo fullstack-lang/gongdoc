@@ -27,7 +27,25 @@ var ___dummy__ref_models_NewDiagram_1 ref_models.StageStruct
 var map_DocLink_Identifier_NewDiagram_1 map[string]any = map[string]any{
 	// injection point for docLink to identifiers
 
+	"ref_models.AFTER": ref_models.AFTER,
+
+	"ref_models.BEFORE": ref_models.BEFORE,
+
+	"ref_models.CONTINUOUS": ref_models.CONTINUOUS,
+
+	"ref_models.CONTINUOUS_ZERO": ref_models.CONTINUOUS_ZERO,
+
+	"ref_models.DOTTED": ref_models.DOTTED,
+
+	"ref_models.DOTTED_ONE": ref_models.DOTTED_ONE,
+
 	"ref_models.Line": &(ref_models.Line{}),
+
+	"ref_models.Line.CreationDate": (ref_models.Line{}).CreationDate,
+
+	"ref_models.Line.End": (ref_models.Line{}).End,
+
+	"ref_models.Line.JourneyTime": (ref_models.Line{}).JourneyTime,
 
 	"ref_models.Line.Name": (ref_models.Line{}).Name,
 
@@ -41,11 +59,43 @@ var map_DocLink_Identifier_NewDiagram_1 map[string]any = map[string]any{
 
 	"ref_models.LineTypeString": ref_models.LineTypeString(""),
 
+	"ref_models.LongNodeOnModels": ref_models.LongNodeOnModels,
+
+	"ref_models.MarkdownNodeOnModels": ref_models.MarkdownNodeOnModels,
+
 	"ref_models.Point": &(ref_models.Point{}),
+
+	"ref_models.Point.CreatedAt": (ref_models.Point{}).CreatedAt,
 
 	"ref_models.Point.Name": (ref_models.Point{}).Name,
 
+	"ref_models.Point.X": (ref_models.Point{}).X,
+
+	"ref_models.Point.Y": (ref_models.Point{}).Y,
+
+	"ref_models.Point.Z": (ref_models.Point{}).Z,
+
+	"ref_models.PointExclusiveSet": &(ref_models.PointExclusiveSet{}),
+
+	"ref_models.PointExclusiveSet.Name": (ref_models.PointExclusiveSet{}).Name,
+
+	"ref_models.PointExclusiveSet.Points": (ref_models.PointExclusiveSet{}).Points,
+
+	"ref_models.PointNonExclusiveSet": &(ref_models.PointNonExclusiveSet{}),
+
+	"ref_models.PointNonExclusiveSet.Name": (ref_models.PointNonExclusiveSet{}).Name,
+
+	"ref_models.PointNonExclusiveSet.Points": (ref_models.PointNonExclusiveSet{}).Points,
+
+	"ref_models.PointUse": &(ref_models.PointUse{}),
+
+	"ref_models.PointUse.Name": (ref_models.PointUse{}).Name,
+
+	"ref_models.PointUse.Points": (ref_models.PointUse{}).Points,
+
 	"ref_models.ShortNodeOnModels": ref_models.ShortNodeOnModels,
+
+	"ref_models.SimulationStage": ref_models.SimulationStage(""),
 }
 
 // init might be handy if one want to have the data embedded in the binary
@@ -333,3 +383,5 @@ are referenced in the go code
 	__Link__000000_Start.Middlevertice = __Vertice__000000_Verticle_in_class_diagram_NewDiagram_1_in_middle_between_NewDiagram_1_Line_and_NewDiagram_1_Point
 	__NoteShape__000000_ShortNodeOnModels.NoteShapeLinks = append(__NoteShape__000000_ShortNodeOnModels.NoteShapeLinks, __NoteShapeLink__000000_Line)
 }
+
+

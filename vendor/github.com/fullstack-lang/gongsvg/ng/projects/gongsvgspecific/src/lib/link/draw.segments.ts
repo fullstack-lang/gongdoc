@@ -57,7 +57,6 @@ export function drawSegments(params: SegmentsParams): Segment[] {
         const c1_Y = startY
         const c1 = createPoint(c1_X, c1_Y)
         const firstSegment = drawPointRectSegment(c1, StartRect, StartDirection, CornerRadius, 0)
-
         const secondSegment = drawPointRectSegment(c1, EndRect, EndDirection, CornerRadius, 1)
         segments.push(firstSegment, secondSegment)
     }

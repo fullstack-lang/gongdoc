@@ -174,6 +174,15 @@
         </mat-select>
     </mat-form-field>
     <mat-form-field class="detail-full-width">
+        <mat-label>(RectAnchoredText) Animates</mat-label>
+        <mat-select [compareWith]="compareObjects" [(ngModel)]="animate.RectAnchoredText_Animates_reverse" [ngModelOptions]="{standalone: true}">
+            <mat-option>None</mat-option>
+            <mat-option *ngFor="let rectanchoredtext of frontRepo.RectAnchoredTexts_array" [value]="rectanchoredtext">
+                {{rectanchoredtext.Name}}
+            </mat-option>
+        </mat-select>
+    </mat-form-field>
+    <mat-form-field class="detail-full-width">
         <mat-label>(Text) Animates</mat-label>
         <mat-select [compareWith]="compareObjects" [(ngModel)]="animate.Text_Animates_reverse" [ngModelOptions]="{standalone: true}">
             <mat-option>None</mat-option>

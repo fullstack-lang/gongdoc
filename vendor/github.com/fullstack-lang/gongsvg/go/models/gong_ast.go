@@ -315,6 +315,9 @@ var __gong__map_Point = make(map[string]*Point)
 var __gong__map_Polygone = make(map[string]*Polygone)
 var __gong__map_Polyline = make(map[string]*Polyline)
 var __gong__map_Rect = make(map[string]*Rect)
+var __gong__map_RectAnchoredRect = make(map[string]*RectAnchoredRect)
+var __gong__map_RectAnchoredText = make(map[string]*RectAnchoredText)
+var __gong__map_RectLinkLink = make(map[string]*RectLinkLink)
 var __gong__map_SVG = make(map[string]*SVG)
 var __gong__map_Text = make(map[string]*Text)
 
@@ -537,6 +540,18 @@ func UnmarshallGongstructStaging(stage *StageStruct, cmap *ast.CommentMap, assig
 										instanceRect := (&Rect{Name: instanceName}).Stage(stage)
 										instance = any(instanceRect)
 										__gong__map_Rect[identifier] = instanceRect
+									case "RectAnchoredRect":
+										instanceRectAnchoredRect := (&RectAnchoredRect{Name: instanceName}).Stage(stage)
+										instance = any(instanceRectAnchoredRect)
+										__gong__map_RectAnchoredRect[identifier] = instanceRectAnchoredRect
+									case "RectAnchoredText":
+										instanceRectAnchoredText := (&RectAnchoredText{Name: instanceName}).Stage(stage)
+										instance = any(instanceRectAnchoredText)
+										__gong__map_RectAnchoredText[identifier] = instanceRectAnchoredText
+									case "RectLinkLink":
+										instanceRectLinkLink := (&RectLinkLink{Name: instanceName}).Stage(stage)
+										instance = any(instanceRectLinkLink)
+										__gong__map_RectLinkLink[identifier] = instanceRectLinkLink
 									case "SVG":
 										instanceSVG := (&SVG{Name: instanceName}).Stage(stage)
 										instance = any(instanceSVG)
@@ -626,6 +641,18 @@ func UnmarshallGongstructStaging(stage *StageStruct, cmap *ast.CommentMap, assig
 							// insertion point for date assign code
 							}
 						case "Rect":
+							switch fieldName {
+							// insertion point for date assign code
+							}
+						case "RectAnchoredRect":
+							switch fieldName {
+							// insertion point for date assign code
+							}
+						case "RectAnchoredText":
+							switch fieldName {
+							// insertion point for date assign code
+							}
+						case "RectLinkLink":
 							switch fieldName {
 							// insertion point for date assign code
 							}
@@ -753,6 +780,12 @@ func UnmarshallGongstructStaging(stage *StageStruct, cmap *ast.CommentMap, assig
 							target := __gong__map_Link[targetIdentifier]
 							__gong__map_Layer[identifier].Links =
 								append(__gong__map_Layer[identifier].Links, target)
+						case "RectLinkLinks":
+							// remove first and last char
+							targetIdentifier := ident.Name
+							target := __gong__map_RectLinkLink[targetIdentifier]
+							__gong__map_Layer[identifier].RectLinkLinks =
+								append(__gong__map_Layer[identifier].RectLinkLinks, target)
 						}
 					case "Line":
 						switch fieldName {
@@ -829,6 +862,36 @@ func UnmarshallGongstructStaging(stage *StageStruct, cmap *ast.CommentMap, assig
 							target := __gong__map_Animate[targetIdentifier]
 							__gong__map_Rect[identifier].Animations =
 								append(__gong__map_Rect[identifier].Animations, target)
+						case "RectAnchoredTexts":
+							// remove first and last char
+							targetIdentifier := ident.Name
+							target := __gong__map_RectAnchoredText[targetIdentifier]
+							__gong__map_Rect[identifier].RectAnchoredTexts =
+								append(__gong__map_Rect[identifier].RectAnchoredTexts, target)
+						case "RectAnchoredRects":
+							// remove first and last char
+							targetIdentifier := ident.Name
+							target := __gong__map_RectAnchoredRect[targetIdentifier]
+							__gong__map_Rect[identifier].RectAnchoredRects =
+								append(__gong__map_Rect[identifier].RectAnchoredRects, target)
+						}
+					case "RectAnchoredRect":
+						switch fieldName {
+						// insertion point for slice of pointers assign code
+						}
+					case "RectAnchoredText":
+						switch fieldName {
+						// insertion point for slice of pointers assign code
+						case "Animates":
+							// remove first and last char
+							targetIdentifier := ident.Name
+							target := __gong__map_Animate[targetIdentifier]
+							__gong__map_RectAnchoredText[identifier].Animates =
+								append(__gong__map_RectAnchoredText[identifier].Animates, target)
+						}
+					case "RectLinkLink":
+						switch fieldName {
+						// insertion point for slice of pointers assign code
 						}
 					case "SVG":
 						switch fieldName {
@@ -868,9 +931,22 @@ func UnmarshallGongstructStaging(stage *StageStruct, cmap *ast.CommentMap, assig
 					}
 				}
 			}
-		case *ast.BasicLit:
-			// assignment to string field
-			basicLit := expr
+		case *ast.BasicLit, *ast.UnaryExpr:
+
+			var basicLit *ast.BasicLit
+			var exprSign = 1.0
+			_ = exprSign // in case this is not used
+
+			if bl, ok := expr.(*ast.BasicLit); ok {
+				// expression is  for instance ... = 18.000
+				basicLit = bl
+			} else if ue, ok := expr.(*ast.UnaryExpr); ok {
+				// expression is  for instance ... = -18.000
+				// we want to extract a *ast.BasicLit from the *ast.UnaryExpr
+				basicLit = ue.X.(*ast.BasicLit)
+				exprSign = -1
+			}
+
 			// astCoordinate := astCoordinate + "\tBasicLit" + "." + basicLit.Value
 			// log.Println(astCoordinate)
 			var ok bool
@@ -903,14 +979,18 @@ func UnmarshallGongstructStaging(stage *StageStruct, cmap *ast.CommentMap, assig
 					if err != nil {
 						log.Fatalln(err)
 					}
-					__gong__map_AnchoredText[identifier].X_Offset = fielValue
+					__gong__map_AnchoredText[identifier].X_Offset = exprSign * fielValue
 				case "Y_Offset":
 					// convert string to float64
 					fielValue, err := strconv.ParseFloat(basicLit.Value, 64)
 					if err != nil {
 						log.Fatalln(err)
 					}
-					__gong__map_AnchoredText[identifier].Y_Offset = fielValue
+					__gong__map_AnchoredText[identifier].Y_Offset = exprSign * fielValue
+				case "FontWeight":
+					// remove first and last char
+					fielValue := basicLit.Value[1 : len(basicLit.Value)-1]
+					__gong__map_AnchoredText[identifier].FontWeight = fielValue
 				case "Color":
 					// remove first and last char
 					fielValue := basicLit.Value[1 : len(basicLit.Value)-1]
@@ -921,7 +1001,7 @@ func UnmarshallGongstructStaging(stage *StageStruct, cmap *ast.CommentMap, assig
 					if err != nil {
 						log.Fatalln(err)
 					}
-					__gong__map_AnchoredText[identifier].FillOpacity = fielValue
+					__gong__map_AnchoredText[identifier].FillOpacity = exprSign * fielValue
 				case "Stroke":
 					// remove first and last char
 					fielValue := basicLit.Value[1 : len(basicLit.Value)-1]
@@ -932,7 +1012,7 @@ func UnmarshallGongstructStaging(stage *StageStruct, cmap *ast.CommentMap, assig
 					if err != nil {
 						log.Fatalln(err)
 					}
-					__gong__map_AnchoredText[identifier].StrokeWidth = fielValue
+					__gong__map_AnchoredText[identifier].StrokeWidth = exprSign * fielValue
 				case "StrokeDashArray":
 					// remove first and last char
 					fielValue := basicLit.Value[1 : len(basicLit.Value)-1]
@@ -983,21 +1063,21 @@ func UnmarshallGongstructStaging(stage *StageStruct, cmap *ast.CommentMap, assig
 					if err != nil {
 						log.Fatalln(err)
 					}
-					__gong__map_Circle[identifier].CX = fielValue
+					__gong__map_Circle[identifier].CX = exprSign * fielValue
 				case "CY":
 					// convert string to float64
 					fielValue, err := strconv.ParseFloat(basicLit.Value, 64)
 					if err != nil {
 						log.Fatalln(err)
 					}
-					__gong__map_Circle[identifier].CY = fielValue
+					__gong__map_Circle[identifier].CY = exprSign * fielValue
 				case "Radius":
 					// convert string to float64
 					fielValue, err := strconv.ParseFloat(basicLit.Value, 64)
 					if err != nil {
 						log.Fatalln(err)
 					}
-					__gong__map_Circle[identifier].Radius = fielValue
+					__gong__map_Circle[identifier].Radius = exprSign * fielValue
 				case "Color":
 					// remove first and last char
 					fielValue := basicLit.Value[1 : len(basicLit.Value)-1]
@@ -1008,7 +1088,7 @@ func UnmarshallGongstructStaging(stage *StageStruct, cmap *ast.CommentMap, assig
 					if err != nil {
 						log.Fatalln(err)
 					}
-					__gong__map_Circle[identifier].FillOpacity = fielValue
+					__gong__map_Circle[identifier].FillOpacity = exprSign * fielValue
 				case "Stroke":
 					// remove first and last char
 					fielValue := basicLit.Value[1 : len(basicLit.Value)-1]
@@ -1019,7 +1099,7 @@ func UnmarshallGongstructStaging(stage *StageStruct, cmap *ast.CommentMap, assig
 					if err != nil {
 						log.Fatalln(err)
 					}
-					__gong__map_Circle[identifier].StrokeWidth = fielValue
+					__gong__map_Circle[identifier].StrokeWidth = exprSign * fielValue
 				case "StrokeDashArray":
 					// remove first and last char
 					fielValue := basicLit.Value[1 : len(basicLit.Value)-1]
@@ -1046,28 +1126,28 @@ func UnmarshallGongstructStaging(stage *StageStruct, cmap *ast.CommentMap, assig
 					if err != nil {
 						log.Fatalln(err)
 					}
-					__gong__map_Ellipse[identifier].CX = fielValue
+					__gong__map_Ellipse[identifier].CX = exprSign * fielValue
 				case "CY":
 					// convert string to float64
 					fielValue, err := strconv.ParseFloat(basicLit.Value, 64)
 					if err != nil {
 						log.Fatalln(err)
 					}
-					__gong__map_Ellipse[identifier].CY = fielValue
+					__gong__map_Ellipse[identifier].CY = exprSign * fielValue
 				case "RX":
 					// convert string to float64
 					fielValue, err := strconv.ParseFloat(basicLit.Value, 64)
 					if err != nil {
 						log.Fatalln(err)
 					}
-					__gong__map_Ellipse[identifier].RX = fielValue
+					__gong__map_Ellipse[identifier].RX = exprSign * fielValue
 				case "RY":
 					// convert string to float64
 					fielValue, err := strconv.ParseFloat(basicLit.Value, 64)
 					if err != nil {
 						log.Fatalln(err)
 					}
-					__gong__map_Ellipse[identifier].RY = fielValue
+					__gong__map_Ellipse[identifier].RY = exprSign * fielValue
 				case "Color":
 					// remove first and last char
 					fielValue := basicLit.Value[1 : len(basicLit.Value)-1]
@@ -1078,7 +1158,7 @@ func UnmarshallGongstructStaging(stage *StageStruct, cmap *ast.CommentMap, assig
 					if err != nil {
 						log.Fatalln(err)
 					}
-					__gong__map_Ellipse[identifier].FillOpacity = fielValue
+					__gong__map_Ellipse[identifier].FillOpacity = exprSign * fielValue
 				case "Stroke":
 					// remove first and last char
 					fielValue := basicLit.Value[1 : len(basicLit.Value)-1]
@@ -1089,7 +1169,7 @@ func UnmarshallGongstructStaging(stage *StageStruct, cmap *ast.CommentMap, assig
 					if err != nil {
 						log.Fatalln(err)
 					}
-					__gong__map_Ellipse[identifier].StrokeWidth = fielValue
+					__gong__map_Ellipse[identifier].StrokeWidth = exprSign * fielValue
 				case "StrokeDashArray":
 					// remove first and last char
 					fielValue := basicLit.Value[1 : len(basicLit.Value)-1]
@@ -1124,28 +1204,28 @@ func UnmarshallGongstructStaging(stage *StageStruct, cmap *ast.CommentMap, assig
 					if err != nil {
 						log.Fatalln(err)
 					}
-					__gong__map_Line[identifier].X1 = fielValue
+					__gong__map_Line[identifier].X1 = exprSign * fielValue
 				case "Y1":
 					// convert string to float64
 					fielValue, err := strconv.ParseFloat(basicLit.Value, 64)
 					if err != nil {
 						log.Fatalln(err)
 					}
-					__gong__map_Line[identifier].Y1 = fielValue
+					__gong__map_Line[identifier].Y1 = exprSign * fielValue
 				case "X2":
 					// convert string to float64
 					fielValue, err := strconv.ParseFloat(basicLit.Value, 64)
 					if err != nil {
 						log.Fatalln(err)
 					}
-					__gong__map_Line[identifier].X2 = fielValue
+					__gong__map_Line[identifier].X2 = exprSign * fielValue
 				case "Y2":
 					// convert string to float64
 					fielValue, err := strconv.ParseFloat(basicLit.Value, 64)
 					if err != nil {
 						log.Fatalln(err)
 					}
-					__gong__map_Line[identifier].Y2 = fielValue
+					__gong__map_Line[identifier].Y2 = exprSign * fielValue
 				case "Color":
 					// remove first and last char
 					fielValue := basicLit.Value[1 : len(basicLit.Value)-1]
@@ -1156,7 +1236,7 @@ func UnmarshallGongstructStaging(stage *StageStruct, cmap *ast.CommentMap, assig
 					if err != nil {
 						log.Fatalln(err)
 					}
-					__gong__map_Line[identifier].FillOpacity = fielValue
+					__gong__map_Line[identifier].FillOpacity = exprSign * fielValue
 				case "Stroke":
 					// remove first and last char
 					fielValue := basicLit.Value[1 : len(basicLit.Value)-1]
@@ -1167,7 +1247,7 @@ func UnmarshallGongstructStaging(stage *StageStruct, cmap *ast.CommentMap, assig
 					if err != nil {
 						log.Fatalln(err)
 					}
-					__gong__map_Line[identifier].StrokeWidth = fielValue
+					__gong__map_Line[identifier].StrokeWidth = exprSign * fielValue
 				case "StrokeDashArray":
 					// remove first and last char
 					fielValue := basicLit.Value[1 : len(basicLit.Value)-1]
@@ -1186,14 +1266,14 @@ func UnmarshallGongstructStaging(stage *StageStruct, cmap *ast.CommentMap, assig
 					if err != nil {
 						log.Fatalln(err)
 					}
-					__gong__map_Line[identifier].MouseClickX = fielValue
+					__gong__map_Line[identifier].MouseClickX = exprSign * fielValue
 				case "MouseClickY":
 					// convert string to float64
 					fielValue, err := strconv.ParseFloat(basicLit.Value, 64)
 					if err != nil {
 						log.Fatalln(err)
 					}
-					__gong__map_Line[identifier].MouseClickY = fielValue
+					__gong__map_Line[identifier].MouseClickY = exprSign * fielValue
 				}
 			case "Link":
 				switch fieldName {
@@ -1208,35 +1288,35 @@ func UnmarshallGongstructStaging(stage *StageStruct, cmap *ast.CommentMap, assig
 					if err != nil {
 						log.Fatalln(err)
 					}
-					__gong__map_Link[identifier].StartRatio = fielValue
+					__gong__map_Link[identifier].StartRatio = exprSign * fielValue
 				case "EndRatio":
 					// convert string to float64
 					fielValue, err := strconv.ParseFloat(basicLit.Value, 64)
 					if err != nil {
 						log.Fatalln(err)
 					}
-					__gong__map_Link[identifier].EndRatio = fielValue
+					__gong__map_Link[identifier].EndRatio = exprSign * fielValue
 				case "CornerOffsetRatio":
 					// convert string to float64
 					fielValue, err := strconv.ParseFloat(basicLit.Value, 64)
 					if err != nil {
 						log.Fatalln(err)
 					}
-					__gong__map_Link[identifier].CornerOffsetRatio = fielValue
+					__gong__map_Link[identifier].CornerOffsetRatio = exprSign * fielValue
 				case "CornerRadius":
 					// convert string to float64
 					fielValue, err := strconv.ParseFloat(basicLit.Value, 64)
 					if err != nil {
 						log.Fatalln(err)
 					}
-					__gong__map_Link[identifier].CornerRadius = fielValue
+					__gong__map_Link[identifier].CornerRadius = exprSign * fielValue
 				case "EndArrowSize":
 					// convert string to float64
 					fielValue, err := strconv.ParseFloat(basicLit.Value, 64)
 					if err != nil {
 						log.Fatalln(err)
 					}
-					__gong__map_Link[identifier].EndArrowSize = fielValue
+					__gong__map_Link[identifier].EndArrowSize = exprSign * fielValue
 				case "Color":
 					// remove first and last char
 					fielValue := basicLit.Value[1 : len(basicLit.Value)-1]
@@ -1247,7 +1327,7 @@ func UnmarshallGongstructStaging(stage *StageStruct, cmap *ast.CommentMap, assig
 					if err != nil {
 						log.Fatalln(err)
 					}
-					__gong__map_Link[identifier].FillOpacity = fielValue
+					__gong__map_Link[identifier].FillOpacity = exprSign * fielValue
 				case "Stroke":
 					// remove first and last char
 					fielValue := basicLit.Value[1 : len(basicLit.Value)-1]
@@ -1258,7 +1338,7 @@ func UnmarshallGongstructStaging(stage *StageStruct, cmap *ast.CommentMap, assig
 					if err != nil {
 						log.Fatalln(err)
 					}
-					__gong__map_Link[identifier].StrokeWidth = fielValue
+					__gong__map_Link[identifier].StrokeWidth = exprSign * fielValue
 				case "StrokeDashArray":
 					// remove first and last char
 					fielValue := basicLit.Value[1 : len(basicLit.Value)-1]
@@ -1293,7 +1373,7 @@ func UnmarshallGongstructStaging(stage *StageStruct, cmap *ast.CommentMap, assig
 					if err != nil {
 						log.Fatalln(err)
 					}
-					__gong__map_Path[identifier].FillOpacity = fielValue
+					__gong__map_Path[identifier].FillOpacity = exprSign * fielValue
 				case "Stroke":
 					// remove first and last char
 					fielValue := basicLit.Value[1 : len(basicLit.Value)-1]
@@ -1304,7 +1384,7 @@ func UnmarshallGongstructStaging(stage *StageStruct, cmap *ast.CommentMap, assig
 					if err != nil {
 						log.Fatalln(err)
 					}
-					__gong__map_Path[identifier].StrokeWidth = fielValue
+					__gong__map_Path[identifier].StrokeWidth = exprSign * fielValue
 				case "StrokeDashArray":
 					// remove first and last char
 					fielValue := basicLit.Value[1 : len(basicLit.Value)-1]
@@ -1331,14 +1411,14 @@ func UnmarshallGongstructStaging(stage *StageStruct, cmap *ast.CommentMap, assig
 					if err != nil {
 						log.Fatalln(err)
 					}
-					__gong__map_Point[identifier].X = fielValue
+					__gong__map_Point[identifier].X = exprSign * fielValue
 				case "Y":
 					// convert string to float64
 					fielValue, err := strconv.ParseFloat(basicLit.Value, 64)
 					if err != nil {
 						log.Fatalln(err)
 					}
-					__gong__map_Point[identifier].Y = fielValue
+					__gong__map_Point[identifier].Y = exprSign * fielValue
 				}
 			case "Polygone":
 				switch fieldName {
@@ -1361,7 +1441,7 @@ func UnmarshallGongstructStaging(stage *StageStruct, cmap *ast.CommentMap, assig
 					if err != nil {
 						log.Fatalln(err)
 					}
-					__gong__map_Polygone[identifier].FillOpacity = fielValue
+					__gong__map_Polygone[identifier].FillOpacity = exprSign * fielValue
 				case "Stroke":
 					// remove first and last char
 					fielValue := basicLit.Value[1 : len(basicLit.Value)-1]
@@ -1372,7 +1452,7 @@ func UnmarshallGongstructStaging(stage *StageStruct, cmap *ast.CommentMap, assig
 					if err != nil {
 						log.Fatalln(err)
 					}
-					__gong__map_Polygone[identifier].StrokeWidth = fielValue
+					__gong__map_Polygone[identifier].StrokeWidth = exprSign * fielValue
 				case "StrokeDashArray":
 					// remove first and last char
 					fielValue := basicLit.Value[1 : len(basicLit.Value)-1]
@@ -1407,7 +1487,7 @@ func UnmarshallGongstructStaging(stage *StageStruct, cmap *ast.CommentMap, assig
 					if err != nil {
 						log.Fatalln(err)
 					}
-					__gong__map_Polyline[identifier].FillOpacity = fielValue
+					__gong__map_Polyline[identifier].FillOpacity = exprSign * fielValue
 				case "Stroke":
 					// remove first and last char
 					fielValue := basicLit.Value[1 : len(basicLit.Value)-1]
@@ -1418,7 +1498,7 @@ func UnmarshallGongstructStaging(stage *StageStruct, cmap *ast.CommentMap, assig
 					if err != nil {
 						log.Fatalln(err)
 					}
-					__gong__map_Polyline[identifier].StrokeWidth = fielValue
+					__gong__map_Polyline[identifier].StrokeWidth = exprSign * fielValue
 				case "StrokeDashArray":
 					// remove first and last char
 					fielValue := basicLit.Value[1 : len(basicLit.Value)-1]
@@ -1445,35 +1525,35 @@ func UnmarshallGongstructStaging(stage *StageStruct, cmap *ast.CommentMap, assig
 					if err != nil {
 						log.Fatalln(err)
 					}
-					__gong__map_Rect[identifier].X = fielValue
+					__gong__map_Rect[identifier].X = exprSign * fielValue
 				case "Y":
 					// convert string to float64
 					fielValue, err := strconv.ParseFloat(basicLit.Value, 64)
 					if err != nil {
 						log.Fatalln(err)
 					}
-					__gong__map_Rect[identifier].Y = fielValue
+					__gong__map_Rect[identifier].Y = exprSign * fielValue
 				case "Width":
 					// convert string to float64
 					fielValue, err := strconv.ParseFloat(basicLit.Value, 64)
 					if err != nil {
 						log.Fatalln(err)
 					}
-					__gong__map_Rect[identifier].Width = fielValue
+					__gong__map_Rect[identifier].Width = exprSign * fielValue
 				case "Height":
 					// convert string to float64
 					fielValue, err := strconv.ParseFloat(basicLit.Value, 64)
 					if err != nil {
 						log.Fatalln(err)
 					}
-					__gong__map_Rect[identifier].Height = fielValue
+					__gong__map_Rect[identifier].Height = exprSign * fielValue
 				case "RX":
 					// convert string to float64
 					fielValue, err := strconv.ParseFloat(basicLit.Value, 64)
 					if err != nil {
 						log.Fatalln(err)
 					}
-					__gong__map_Rect[identifier].RX = fielValue
+					__gong__map_Rect[identifier].RX = exprSign * fielValue
 				case "Color":
 					// remove first and last char
 					fielValue := basicLit.Value[1 : len(basicLit.Value)-1]
@@ -1484,7 +1564,7 @@ func UnmarshallGongstructStaging(stage *StageStruct, cmap *ast.CommentMap, assig
 					if err != nil {
 						log.Fatalln(err)
 					}
-					__gong__map_Rect[identifier].FillOpacity = fielValue
+					__gong__map_Rect[identifier].FillOpacity = exprSign * fielValue
 				case "Stroke":
 					// remove first and last char
 					fielValue := basicLit.Value[1 : len(basicLit.Value)-1]
@@ -1495,7 +1575,7 @@ func UnmarshallGongstructStaging(stage *StageStruct, cmap *ast.CommentMap, assig
 					if err != nil {
 						log.Fatalln(err)
 					}
-					__gong__map_Rect[identifier].StrokeWidth = fielValue
+					__gong__map_Rect[identifier].StrokeWidth = exprSign * fielValue
 				case "StrokeDashArray":
 					// remove first and last char
 					fielValue := basicLit.Value[1 : len(basicLit.Value)-1]
@@ -1508,6 +1588,217 @@ func UnmarshallGongstructStaging(stage *StageStruct, cmap *ast.CommentMap, assig
 					// remove first and last char
 					fielValue := basicLit.Value[1 : len(basicLit.Value)-1]
 					__gong__map_Rect[identifier].Transform = fielValue
+				}
+			case "RectAnchoredRect":
+				switch fieldName {
+				// insertion point for field dependant code
+				case "Name":
+					// remove first and last char
+					fielValue := basicLit.Value[1 : len(basicLit.Value)-1]
+					__gong__map_RectAnchoredRect[identifier].Name = fielValue
+				case "X":
+					// convert string to float64
+					fielValue, err := strconv.ParseFloat(basicLit.Value, 64)
+					if err != nil {
+						log.Fatalln(err)
+					}
+					__gong__map_RectAnchoredRect[identifier].X = exprSign * fielValue
+				case "Y":
+					// convert string to float64
+					fielValue, err := strconv.ParseFloat(basicLit.Value, 64)
+					if err != nil {
+						log.Fatalln(err)
+					}
+					__gong__map_RectAnchoredRect[identifier].Y = exprSign * fielValue
+				case "Width":
+					// convert string to float64
+					fielValue, err := strconv.ParseFloat(basicLit.Value, 64)
+					if err != nil {
+						log.Fatalln(err)
+					}
+					__gong__map_RectAnchoredRect[identifier].Width = exprSign * fielValue
+				case "Height":
+					// convert string to float64
+					fielValue, err := strconv.ParseFloat(basicLit.Value, 64)
+					if err != nil {
+						log.Fatalln(err)
+					}
+					__gong__map_RectAnchoredRect[identifier].Height = exprSign * fielValue
+				case "RX":
+					// convert string to float64
+					fielValue, err := strconv.ParseFloat(basicLit.Value, 64)
+					if err != nil {
+						log.Fatalln(err)
+					}
+					__gong__map_RectAnchoredRect[identifier].RX = exprSign * fielValue
+				case "X_Offset":
+					// convert string to float64
+					fielValue, err := strconv.ParseFloat(basicLit.Value, 64)
+					if err != nil {
+						log.Fatalln(err)
+					}
+					__gong__map_RectAnchoredRect[identifier].X_Offset = exprSign * fielValue
+				case "Y_Offset":
+					// convert string to float64
+					fielValue, err := strconv.ParseFloat(basicLit.Value, 64)
+					if err != nil {
+						log.Fatalln(err)
+					}
+					__gong__map_RectAnchoredRect[identifier].Y_Offset = exprSign * fielValue
+				case "Color":
+					// remove first and last char
+					fielValue := basicLit.Value[1 : len(basicLit.Value)-1]
+					__gong__map_RectAnchoredRect[identifier].Color = fielValue
+				case "FillOpacity":
+					// convert string to float64
+					fielValue, err := strconv.ParseFloat(basicLit.Value, 64)
+					if err != nil {
+						log.Fatalln(err)
+					}
+					__gong__map_RectAnchoredRect[identifier].FillOpacity = exprSign * fielValue
+				case "Stroke":
+					// remove first and last char
+					fielValue := basicLit.Value[1 : len(basicLit.Value)-1]
+					__gong__map_RectAnchoredRect[identifier].Stroke = fielValue
+				case "StrokeWidth":
+					// convert string to float64
+					fielValue, err := strconv.ParseFloat(basicLit.Value, 64)
+					if err != nil {
+						log.Fatalln(err)
+					}
+					__gong__map_RectAnchoredRect[identifier].StrokeWidth = exprSign * fielValue
+				case "StrokeDashArray":
+					// remove first and last char
+					fielValue := basicLit.Value[1 : len(basicLit.Value)-1]
+					__gong__map_RectAnchoredRect[identifier].StrokeDashArray = fielValue
+				case "StrokeDashArrayWhenSelected":
+					// remove first and last char
+					fielValue := basicLit.Value[1 : len(basicLit.Value)-1]
+					__gong__map_RectAnchoredRect[identifier].StrokeDashArrayWhenSelected = fielValue
+				case "Transform":
+					// remove first and last char
+					fielValue := basicLit.Value[1 : len(basicLit.Value)-1]
+					__gong__map_RectAnchoredRect[identifier].Transform = fielValue
+				}
+			case "RectAnchoredText":
+				switch fieldName {
+				// insertion point for field dependant code
+				case "Name":
+					// remove first and last char
+					fielValue := basicLit.Value[1 : len(basicLit.Value)-1]
+					__gong__map_RectAnchoredText[identifier].Name = fielValue
+				case "Content":
+					// remove first and last char
+					fielValue := basicLit.Value[1 : len(basicLit.Value)-1]
+					__gong__map_RectAnchoredText[identifier].Content = fielValue
+				case "FontWeight":
+					// remove first and last char
+					fielValue := basicLit.Value[1 : len(basicLit.Value)-1]
+					__gong__map_RectAnchoredText[identifier].FontWeight = fielValue
+				case "FontSize":
+					// convert string to int
+					fielValue, err := strconv.ParseInt(basicLit.Value, 10, 64)
+					if err != nil {
+						log.Fatalln(err)
+					}
+					__gong__map_RectAnchoredText[identifier].FontSize = int(exprSign) * int(fielValue)
+				case "X_Offset":
+					// convert string to float64
+					fielValue, err := strconv.ParseFloat(basicLit.Value, 64)
+					if err != nil {
+						log.Fatalln(err)
+					}
+					__gong__map_RectAnchoredText[identifier].X_Offset = exprSign * fielValue
+				case "Y_Offset":
+					// convert string to float64
+					fielValue, err := strconv.ParseFloat(basicLit.Value, 64)
+					if err != nil {
+						log.Fatalln(err)
+					}
+					__gong__map_RectAnchoredText[identifier].Y_Offset = exprSign * fielValue
+				case "Color":
+					// remove first and last char
+					fielValue := basicLit.Value[1 : len(basicLit.Value)-1]
+					__gong__map_RectAnchoredText[identifier].Color = fielValue
+				case "FillOpacity":
+					// convert string to float64
+					fielValue, err := strconv.ParseFloat(basicLit.Value, 64)
+					if err != nil {
+						log.Fatalln(err)
+					}
+					__gong__map_RectAnchoredText[identifier].FillOpacity = exprSign * fielValue
+				case "Stroke":
+					// remove first and last char
+					fielValue := basicLit.Value[1 : len(basicLit.Value)-1]
+					__gong__map_RectAnchoredText[identifier].Stroke = fielValue
+				case "StrokeWidth":
+					// convert string to float64
+					fielValue, err := strconv.ParseFloat(basicLit.Value, 64)
+					if err != nil {
+						log.Fatalln(err)
+					}
+					__gong__map_RectAnchoredText[identifier].StrokeWidth = exprSign * fielValue
+				case "StrokeDashArray":
+					// remove first and last char
+					fielValue := basicLit.Value[1 : len(basicLit.Value)-1]
+					__gong__map_RectAnchoredText[identifier].StrokeDashArray = fielValue
+				case "StrokeDashArrayWhenSelected":
+					// remove first and last char
+					fielValue := basicLit.Value[1 : len(basicLit.Value)-1]
+					__gong__map_RectAnchoredText[identifier].StrokeDashArrayWhenSelected = fielValue
+				case "Transform":
+					// remove first and last char
+					fielValue := basicLit.Value[1 : len(basicLit.Value)-1]
+					__gong__map_RectAnchoredText[identifier].Transform = fielValue
+				}
+			case "RectLinkLink":
+				switch fieldName {
+				// insertion point for field dependant code
+				case "Name":
+					// remove first and last char
+					fielValue := basicLit.Value[1 : len(basicLit.Value)-1]
+					__gong__map_RectLinkLink[identifier].Name = fielValue
+				case "TargetAnchorPosition":
+					// convert string to float64
+					fielValue, err := strconv.ParseFloat(basicLit.Value, 64)
+					if err != nil {
+						log.Fatalln(err)
+					}
+					__gong__map_RectLinkLink[identifier].TargetAnchorPosition = exprSign * fielValue
+				case "Color":
+					// remove first and last char
+					fielValue := basicLit.Value[1 : len(basicLit.Value)-1]
+					__gong__map_RectLinkLink[identifier].Color = fielValue
+				case "FillOpacity":
+					// convert string to float64
+					fielValue, err := strconv.ParseFloat(basicLit.Value, 64)
+					if err != nil {
+						log.Fatalln(err)
+					}
+					__gong__map_RectLinkLink[identifier].FillOpacity = exprSign * fielValue
+				case "Stroke":
+					// remove first and last char
+					fielValue := basicLit.Value[1 : len(basicLit.Value)-1]
+					__gong__map_RectLinkLink[identifier].Stroke = fielValue
+				case "StrokeWidth":
+					// convert string to float64
+					fielValue, err := strconv.ParseFloat(basicLit.Value, 64)
+					if err != nil {
+						log.Fatalln(err)
+					}
+					__gong__map_RectLinkLink[identifier].StrokeWidth = exprSign * fielValue
+				case "StrokeDashArray":
+					// remove first and last char
+					fielValue := basicLit.Value[1 : len(basicLit.Value)-1]
+					__gong__map_RectLinkLink[identifier].StrokeDashArray = fielValue
+				case "StrokeDashArrayWhenSelected":
+					// remove first and last char
+					fielValue := basicLit.Value[1 : len(basicLit.Value)-1]
+					__gong__map_RectLinkLink[identifier].StrokeDashArrayWhenSelected = fielValue
+				case "Transform":
+					// remove first and last char
+					fielValue := basicLit.Value[1 : len(basicLit.Value)-1]
+					__gong__map_RectLinkLink[identifier].Transform = fielValue
 				}
 			case "SVG":
 				switch fieldName {
@@ -1530,14 +1821,14 @@ func UnmarshallGongstructStaging(stage *StageStruct, cmap *ast.CommentMap, assig
 					if err != nil {
 						log.Fatalln(err)
 					}
-					__gong__map_Text[identifier].X = fielValue
+					__gong__map_Text[identifier].X = exprSign * fielValue
 				case "Y":
 					// convert string to float64
 					fielValue, err := strconv.ParseFloat(basicLit.Value, 64)
 					if err != nil {
 						log.Fatalln(err)
 					}
-					__gong__map_Text[identifier].Y = fielValue
+					__gong__map_Text[identifier].Y = exprSign * fielValue
 				case "Content":
 					// remove first and last char
 					fielValue := basicLit.Value[1 : len(basicLit.Value)-1]
@@ -1552,7 +1843,7 @@ func UnmarshallGongstructStaging(stage *StageStruct, cmap *ast.CommentMap, assig
 					if err != nil {
 						log.Fatalln(err)
 					}
-					__gong__map_Text[identifier].FillOpacity = fielValue
+					__gong__map_Text[identifier].FillOpacity = exprSign * fielValue
 				case "Stroke":
 					// remove first and last char
 					fielValue := basicLit.Value[1 : len(basicLit.Value)-1]
@@ -1563,7 +1854,7 @@ func UnmarshallGongstructStaging(stage *StageStruct, cmap *ast.CommentMap, assig
 					if err != nil {
 						log.Fatalln(err)
 					}
-					__gong__map_Text[identifier].StrokeWidth = fielValue
+					__gong__map_Text[identifier].StrokeWidth = exprSign * fielValue
 				case "StrokeDashArray":
 					// remove first and last char
 					fielValue := basicLit.Value[1 : len(basicLit.Value)-1]
@@ -1743,6 +2034,38 @@ func UnmarshallGongstructStaging(stage *StageStruct, cmap *ast.CommentMap, assig
 					}
 					__gong__map_Rect[identifier].CanMoveVerticaly = fielValue
 				}
+			case "RectAnchoredRect":
+				switch fieldName {
+				// insertion point for field dependant code
+				case "WidthFollowRect":
+					// convert string to boolean
+					fielValue, err := strconv.ParseBool(ident.Name)
+					if err != nil {
+						log.Fatalln(err)
+					}
+					__gong__map_RectAnchoredRect[identifier].WidthFollowRect = fielValue
+				case "HeightFollowRect":
+					// convert string to boolean
+					fielValue, err := strconv.ParseBool(ident.Name)
+					if err != nil {
+						log.Fatalln(err)
+					}
+					__gong__map_RectAnchoredRect[identifier].HeightFollowRect = fielValue
+				}
+			case "RectAnchoredText":
+				switch fieldName {
+				// insertion point for field dependant code
+				}
+			case "RectLinkLink":
+				switch fieldName {
+				// insertion point for field dependant code
+				case "Start":
+					targetIdentifier := ident.Name
+					__gong__map_RectLinkLink[identifier].Start = __gong__map_Rect[targetIdentifier]
+				case "End":
+					targetIdentifier := ident.Name
+					__gong__map_RectLinkLink[identifier].End = __gong__map_Link[targetIdentifier]
+				}
 			case "SVG":
 				switch fieldName {
 				// insertion point for field dependant code
@@ -1865,6 +2188,39 @@ func UnmarshallGongstructStaging(stage *StageStruct, cmap *ast.CommentMap, assig
 					// insertion point for enum assign code
 					}
 				case "Rect":
+					switch fieldName {
+					// insertion point for enum assign code
+					}
+				case "RectAnchoredRect":
+					switch fieldName {
+					// insertion point for enum assign code
+					case "RectAnchorType":
+						var val RectAnchorType
+						err := (&val).FromCodeString(enumValue)
+						if err != nil {
+							log.Fatalln(err)
+						}
+						__gong__map_RectAnchoredRect[identifier].RectAnchorType = RectAnchorType(val)
+					}
+				case "RectAnchoredText":
+					switch fieldName {
+					// insertion point for enum assign code
+					case "RectAnchorType":
+						var val RectAnchorType
+						err := (&val).FromCodeString(enumValue)
+						if err != nil {
+							log.Fatalln(err)
+						}
+						__gong__map_RectAnchoredText[identifier].RectAnchorType = RectAnchorType(val)
+					case "TextAnchorType":
+						var val TextAnchorType
+						err := (&val).FromCodeString(enumValue)
+						if err != nil {
+							log.Fatalln(err)
+						}
+						__gong__map_RectAnchoredText[identifier].TextAnchorType = TextAnchorType(val)
+					}
+				case "RectLinkLink":
 					switch fieldName {
 					// insertion point for enum assign code
 					}

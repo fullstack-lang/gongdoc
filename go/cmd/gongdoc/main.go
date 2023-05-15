@@ -16,6 +16,7 @@ import (
 
 	"github.com/gin-gonic/gin"
 
+	"github.com/fullstack-lang/gongdoc/go/doc2svg"
 	"github.com/fullstack-lang/gongdoc/go/load"
 	"github.com/fullstack-lang/gongdoc/go/node2gongdoc"
 
@@ -23,6 +24,7 @@ import (
 	gong_models "github.com/fullstack-lang/gong/go/models"
 
 	gongsvg_fullstack "github.com/fullstack-lang/gongsvg/go/fullstack"
+	gongsvg_models "github.com/fullstack-lang/gongsvg/go/models"
 )
 
 var (
@@ -42,21 +44,34 @@ var (
 
 	// transport secure layer
 	tls = flag.Bool("tls", false, "serve on https//localhost:443/")
+
+	selectedDiagramOnLoad = flag.String("selectedDiagramOnLoad", "",
+		"load diagram at startup, if empty, no diagram is loaded")
 )
 
 // hook marhalling to stage
 type BeforeCommitImplementation struct {
+	// in case one wants a marshalling of the gongdoc stack
+	marshallOnCommit string
+
+	// for generating SVG
+	docSVGMapper *doc2svg.DocSVGMapper
+	gongsvgStage *gongsvg_models.StageStruct
 }
 
-func (impl *BeforeCommitImplementation) BeforeCommit(stage *gongdoc_models.StageStruct) {
-	file, err := os.Create(fmt.Sprintf("./%s.go", *marshallOnCommit))
-	if err != nil {
-		log.Fatal(err.Error())
-	}
-	defer file.Close()
+func (beforeCommitImplementation *BeforeCommitImplementation) BeforeCommit(gongdocStage *gongdoc_models.StageStruct) {
 
-	gongdoc_models.GetDefaultStage().Checkout()
-	gongdoc_models.GetDefaultStage().Marshall(file, "github.com/fullstack-lang/gongdoc/go/models", "diagrams")
+	if beforeCommitImplementation.marshallOnCommit != "" {
+		file, err := os.Create(fmt.Sprintf("./%s.go", *marshallOnCommit))
+		if err != nil {
+			log.Fatal(err.Error())
+		}
+		defer file.Close()
+
+		gongdoc_models.GetDefaultStage().Checkout()
+		gongdoc_models.GetDefaultStage().Marshall(file, "github.com/fullstack-lang/gongdoc/go/models", "diagrams")
+	}
+	beforeCommitImplementation.docSVGMapper.GenerateSvg(gongdocStage, beforeCommitImplementation.gongsvgStage)
 }
 
 type StackConfigs struct {
@@ -135,11 +150,30 @@ func main() {
 		gongdocStage.Commit()
 		gongsvgStage.Commit()
 
-		if *marshallOnCommit != "" {
-			hook := new(BeforeCommitImplementation)
-			gongdocStage.OnInitCommitFromFrontCallback = hook
-			gongdocStage.OnInitCommitFromBackCallback = hook
+		beforeCommitImplementation := new(BeforeCommitImplementation)
+		beforeCommitImplementation.marshallOnCommit = *marshallOnCommit
+
+		docSVGMapper := new(doc2svg.DocSVGMapper)
+		beforeCommitImplementation.docSVGMapper = docSVGMapper
+		beforeCommitImplementation.gongsvgStage = gongsvgStage
+
+		gongdocStage.OnInitCommitFromFrontCallback = beforeCommitImplementation
+		gongdocStage.OnInitCommitFromBackCallback = beforeCommitImplementation
+
+		// enable the inversion control mechanism on the gongsvg backend
+		gongsvg_models.SetOrchestratorOnAfterUpdate[gongsvg_models.Rect](gongsvgStage)
+
+		// load diagram at startup if requested
+		if *selectedDiagramOnLoad != "" {
+			for _, classDiagram := range diagramPackage.Classdiagrams {
+				if classDiagram.Name == *selectedDiagramOnLoad {
+					diagramPackage.SelectedClassdiagram = classDiagram
+					gongdocStage.Commit()
+					// docSVGMapper.GenerateSvg(gongdocStage, gongsvgStage)
+				}
+			}
 		}
+
 	}
 
 	log.Printf("Server ready to serve on http://localhost:" + strconv.Itoa(*port) + "/")

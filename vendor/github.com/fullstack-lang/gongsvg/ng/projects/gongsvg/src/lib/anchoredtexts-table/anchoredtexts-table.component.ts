@@ -84,6 +84,9 @@ export class AnchoredTextsTableComponent implements OnInit {
         case 'Y_Offset':
           return anchoredtextDB.Y_Offset;
 
+        case 'FontWeight':
+          return anchoredtextDB.FontWeight;
+
         case 'Color':
           return anchoredtextDB.Color;
 
@@ -137,6 +140,7 @@ export class AnchoredTextsTableComponent implements OnInit {
       mergedContent += anchoredtextDB.Content.toLowerCase()
       mergedContent += anchoredtextDB.X_Offset.toString()
       mergedContent += anchoredtextDB.Y_Offset.toString()
+      mergedContent += anchoredtextDB.FontWeight.toLowerCase()
       mergedContent += anchoredtextDB.Color.toLowerCase()
       mergedContent += anchoredtextDB.FillOpacity.toString()
       mergedContent += anchoredtextDB.Stroke.toLowerCase()
@@ -210,6 +214,7 @@ export class AnchoredTextsTableComponent implements OnInit {
         "Content",
         "X_Offset",
         "Y_Offset",
+        "FontWeight",
         "Color",
         "FillOpacity",
         "Stroke",
@@ -226,6 +231,7 @@ export class AnchoredTextsTableComponent implements OnInit {
         "Content",
         "X_Offset",
         "Y_Offset",
+        "FontWeight",
         "Color",
         "FillOpacity",
         "Stroke",

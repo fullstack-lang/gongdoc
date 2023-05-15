@@ -245,24 +245,6 @@ export class SvgComponent implements OnInit, OnDestroy, AfterViewInit {
     )
   }
 
-  onClick(event: MouseEvent) {
-    // an event is emitted for all rects to go on a unselect mode
-    if (!event.altKey && !event.shiftKey) {
-      console.log("SVG : on click()")
-
-      let x = event.clientX - this.pageX
-      let y = event.clientY - this.pageY
-
-      let shapeMouseEvent: ShapeMouseEvent = {
-        ShapeID: 0,
-        ShapeType: "",
-        Point: createPoint(x, y),
-      }
-
-      this.rectangleEventService.emitMouseUpEvent(shapeMouseEvent)
-    }
-  }
-
   mousedown(event: MouseEvent): void {
     if (event.shiftKey) {
       this.selectionRectDrawing = true
@@ -297,6 +279,7 @@ export class SvgComponent implements OnInit, OnDestroy, AfterViewInit {
         Point: createPoint(x, y),
       }
       this.mouseEventService.emitMouseMoveEvent(shapeMouseEvent)
+      // console.log("svg background, mouse move", x, y)
     }
   }
 

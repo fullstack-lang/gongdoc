@@ -212,6 +212,32 @@
     <!-- -->
     <mat-checkbox [formControl]="CanMoveVerticalyFormControl">CanMoveVerticaly</mat-checkbox>
 
+    <mat-grid-list cols="5" rowHeight="2:1">
+        <mat-grid-tile [colspan]="3">
+            <button mat-raised-button (click)="openReverseSelection('RectAnchoredText', 'Rect_RectAnchoredTextsDBID', 'ONE_MANY_ASSOCIATION_MODE', '', '', '')">RectAnchoredTexts</button>
+        </mat-grid-tile>
+        <!-- insertion point for the button of the MANY_MANY association-->
+        <mat-grid-tile>
+            <button mat-raised-button (click)="openDragAndDropOrdering('RectAnchoredText', 'Rect_RectAnchoredTextsDBID')">
+                <mat-icon>
+                    shuffle
+                </mat-icon>
+            </button>
+        </mat-grid-tile>
+    </mat-grid-list>
+    <mat-grid-list cols="5" rowHeight="2:1">
+        <mat-grid-tile [colspan]="3">
+            <button mat-raised-button (click)="openReverseSelection('RectAnchoredRect', 'Rect_RectAnchoredRectsDBID', 'ONE_MANY_ASSOCIATION_MODE', '', '', '')">RectAnchoredRects</button>
+        </mat-grid-tile>
+        <!-- insertion point for the button of the MANY_MANY association-->
+        <mat-grid-tile>
+            <button mat-raised-button (click)="openDragAndDropOrdering('RectAnchoredRect', 'Rect_RectAnchoredRectsDBID')">
+                <mat-icon>
+                    shuffle
+                </mat-icon>
+            </button>
+        </mat-grid-tile>
+    </mat-grid-list>
     <mat-form-field class="detail-full-width">
         <mat-label>(Layer) Rects</mat-label>
         <mat-select [compareWith]="compareObjects" [(ngModel)]="rect.Layer_Rects_reverse" [ngModelOptions]="{standalone: true}">

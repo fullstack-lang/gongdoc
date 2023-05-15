@@ -15,6 +15,7 @@ import { CommonModule } from '@angular/common';
 import { GongsvgModule } from 'gongsvg';
 import { SvgComponent } from './svg/svg.component';
 import { LinkComponent } from './link/link.component';
+import { RectLinkLinkComponent } from './rect-link-link/rect-link-link.component';
 
 
 
@@ -31,7 +32,8 @@ import { LinkComponent } from './link/link.component';
     PathComponent,
     PolygoneComponent,
     SvgComponent,
-    LinkComponent
+    LinkComponent,
+    RectLinkLinkComponent
   ],
   imports: [
     CommonModule,

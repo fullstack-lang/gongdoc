@@ -6,6 +6,7 @@ import { LinkEventService } from '../link-event.service';
 import { Subscription } from 'rxjs';
 import { ShapeMouseEvent } from '../shape.mouse.event';
 import { MouseEventService } from '../mouse-event.service';
+import { compareRectGeometries } from '../compare.rect.geometries'
 
 @Component({
   selector: 'lib-link',
@@ -51,6 +52,9 @@ export class LinkComponent implements OnInit, AfterViewInit, DoCheck {
   private subscriptions: Subscription[] = []
 
   // for change detection, we need to store start and end rect
+  previousStart: gongsvg.RectDB | undefined
+  previousEnd: gongsvg.RectDB | undefined
+
   previousStartX = 0
   previousStartY = 0
   previousEndX = 0
@@ -355,17 +359,18 @@ export class LinkComponent implements OnInit, AfterViewInit, DoCheck {
 
   ngDoCheck(): void {
 
-    if (
-      this.previousStartX != this.Link!.Start!.X ||
-      this.previousStartY != this.Link!.Start!.Y ||
-      this.previousEndX != this.Link!.End!.X ||
-      this.previousEndY != this.Link!.End!.Y) {
+    let hasStartChanged = !compareRectGeometries(this.previousStart!, this.Link!.Start!)
+    let hasEndChanged = !compareRectGeometries(this.previousEnd!, this.Link!.End!)
+    if (hasStartChanged || hasEndChanged) {
       this.drawSegments()
       this.resetPreviousState()
     }
   }
 
   resetPreviousState() {
+    this.previousStart = structuredClone(this.Link!.Start!)
+    this.previousEnd = structuredClone(this.Link!.End!)
+
     this.previousStartX = this.Link!.Start!.X
     this.previousStartY = this.Link!.Start!.Y
     this.previousEndX = this.Link!.End!.X
@@ -726,5 +731,9 @@ export class LinkComponent implements OnInit, AfterViewInit, DoCheck {
       this.textHeight = bbox.height;
     }
 
+  }
+
+  splitTextIntoLines(text: string): string[] {
+    return text.split('\n')
   }
 }

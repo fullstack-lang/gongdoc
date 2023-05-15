@@ -42,6 +42,11 @@
         </lib-polyline>
     </div>
 
+    <div *ngFor="let elt of Layer?.RectLinkLinks" class="child">
+        <lib-rect-link-link [RectLinkLink]="elt">
+        </lib-rect-link-link>
+    </div>
+
     <div *ngFor="let elt of Layer?.Texts" class="child">
         <lib-text [Text]="elt">
         </lib-text>
