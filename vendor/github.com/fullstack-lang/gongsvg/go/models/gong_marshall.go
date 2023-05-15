@@ -107,7 +107,7 @@ func (stage *StageStruct) Marshall(file *os.File, modelsPackageName, packageName
 	decl := ""
 	_ = decl
 	setValueField := ""
-	_ = setValueField
+	_ = setValueField 
 
 	// insertion initialization of objects to stage
 	map_AnchoredText_Identifiers := make(map[*AnchoredText]string)
@@ -156,6 +156,12 @@ func (stage *StageStruct) Marshall(file *os.File, modelsPackageName, packageName
 		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
 		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "Y_Offset")
 		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", fmt.Sprintf("%f", anchoredtext.Y_Offset))
+		initializerStatements += setValueField
+
+		setValueField = StringInitStatement
+		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
+		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "FontWeight")
+		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", string(anchoredtext.FontWeight))
 		initializerStatements += setValueField
 
 		setValueField = StringInitStatement
@@ -2127,18 +2133,7 @@ func (stage *StageStruct) Marshall(file *os.File, modelsPackageName, packageName
 		sort.Slice(valuesOrdered[:], func(i, j int) bool {
 			return valuesOrdered[i].Ident < valuesOrdered[j].Ident
 		})
-
-		// remove duplicates
-		uniqueValues := make([]GONG__Identifier, 0)
-		seen := make(map[string]bool) // Assuming Ident is of type string
 		for _, value := range valuesOrdered {
-			if _, ok := seen[value.Ident]; !ok {
-				uniqueValues = append(uniqueValues, value)
-				seen[value.Ident] = true
-			}
-		}
-
-		for _, value := range uniqueValues {
 
 			// get the number of points in the value to find if it is a field
 			// or a struct

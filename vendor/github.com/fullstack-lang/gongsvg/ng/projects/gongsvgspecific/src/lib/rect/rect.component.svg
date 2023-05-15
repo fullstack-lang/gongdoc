@@ -138,19 +138,25 @@
 </svg>
 
 <ng-template #anchoredText let-text="text" let-anchorX="anchorX" let-anchorY="anchorY">
-    <svg:text class="anchored-text"
-    [attr.x]="anchorX" 
-    [attr.y]="anchorY" 
-    [attr.fill]="text.Color"    
-    [attr.fill-opacity]="text.FillOpacity"
-    [attr.stroke]="text.Stroke"
-    [attr.stroke-width]="text.StrokeWidth != 0 ? text.StrokeWidth : null"
-    [attr.stroke-dasharray]="text.StrokeDashArray"
-    [attr.transform]="text.Transform"
-    [attr.text-anchor]="text.TextAnchorType"
-    [attr.font-weight]="text.FontWeight"
-    [attr.font-size]="text.FontSize !== 0 ? text.FontSize + 'px' : null"
-    >{{text.Content}}</text>
+        <ng-container *ngIf='splitTextIntoLines(text.Content) as lines'>
+                <svg:text class="anchored-text"
+                [attr.x]="anchorX" 
+                [attr.y]="anchorY" 
+                [attr.fill]="text.Color"    
+                [attr.fill-opacity]="text.FillOpacity"
+                [attr.stroke]="text.Stroke"
+                [attr.stroke-width]="text.StrokeWidth != 0 ? text.StrokeWidth : null"
+                [attr.stroke-dasharray]="text.StrokeDashArray"
+                [attr.transform]="text.Transform"
+                [attr.text-anchor]="text.TextAnchorType"
+                [attr.font-weight]="text.FontWeight"
+                [attr.font-size]="text.FontSize !== 0 ? text.FontSize + 'px' : null"
+                >
+                <tspan *ngFor='let line of lines; let j = index' 
+                        [attr.x]="anchorX"
+                        [attr.dy]="j > 0 ? '1em' : '0'">{{line}}</tspan>  
+                </text>
+        </ng-container>
 </ng-template>
 
 <ng-template #anchoredRect let-rect="rect" let-anchorX="anchorX" let-anchorY="anchorY" let-width="width">

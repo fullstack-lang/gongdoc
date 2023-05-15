@@ -987,6 +987,10 @@ func UnmarshallGongstructStaging(stage *StageStruct, cmap *ast.CommentMap, assig
 						log.Fatalln(err)
 					}
 					__gong__map_AnchoredText[identifier].Y_Offset = exprSign * fielValue
+				case "FontWeight":
+					// remove first and last char
+					fielValue := basicLit.Value[1 : len(basicLit.Value)-1]
+					__gong__map_AnchoredText[identifier].FontWeight = fielValue
 				case "Color":
 					// remove first and last char
 					fielValue := basicLit.Value[1 : len(basicLit.Value)-1]

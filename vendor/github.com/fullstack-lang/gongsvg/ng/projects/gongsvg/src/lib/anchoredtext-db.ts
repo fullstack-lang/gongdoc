@@ -18,6 +18,7 @@ export class AnchoredTextDB {
 	Content: string = ""
 	X_Offset: number = 0
 	Y_Offset: number = 0
+	FontWeight: string = ""
 	Color: string = ""
 	FillOpacity: number = 0
 	Stroke: string = ""

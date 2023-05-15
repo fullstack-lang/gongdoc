@@ -10,6 +10,7 @@ import (
 type DocSVGMapper struct {
 	map_GongstructShape_Rect map[*gongdoc_models.GongStructShape]*gongsvg_models.Rect
 	map_GongenumShape_Rect   map[*gongdoc_models.GongEnumShape]*gongsvg_models.Rect
+	map_NoteShape_Rect       map[*gongdoc_models.NoteShape]*gongsvg_models.Rect
 	map_Structname_Rect      map[string]*gongsvg_models.Rect
 }
 
@@ -21,6 +22,7 @@ func (docSVGMapper *DocSVGMapper) GenerateSvg(
 
 	docSVGMapper.map_GongstructShape_Rect = make(map[*gongdoc_models.GongStructShape]*gongsvg_models.Rect)
 	docSVGMapper.map_GongenumShape_Rect = make(map[*gongdoc_models.GongEnumShape]*gongsvg_models.Rect)
+	docSVGMapper.map_NoteShape_Rect = make(map[*gongdoc_models.NoteShape]*gongsvg_models.Rect)
 
 	docSVGMapper.map_Structname_Rect = make(map[string]*gongsvg_models.Rect)
 
@@ -168,6 +170,9 @@ func (docSVGMapper *DocSVGMapper) GenerateSvg(
 			targetMulitplicity.X_Offset = -50
 			targetMulitplicity.Stroke = gongsvg_models.Black.ToString()
 			targetMulitplicity.StrokeWidth = 1
+			targetMulitplicity.Color = gongsvg_models.Black.ToString()
+			targetMulitplicity.FillOpacity = 100
+			targetMulitplicity.FontWeight = "normal"
 
 			fieldName := new(gongsvg_models.AnchoredText).Stage(gongsvgStage)
 			link.TextAtArrowEnd = append(link.TextAtArrowEnd, fieldName)
@@ -177,6 +182,9 @@ func (docSVGMapper *DocSVGMapper) GenerateSvg(
 			fieldName.X_Offset = -50
 			fieldName.Stroke = gongsvg_models.Black.ToString()
 			fieldName.StrokeWidth = 1
+			fieldName.Color = gongsvg_models.Black.ToString()
+			fieldName.FillOpacity = 100
+			fieldName.FontWeight = "normal"
 
 			sourceMultiplicity := new(gongsvg_models.AnchoredText).Stage(gongsvgStage)
 			link.TextAtArrowStart = append(link.TextAtArrowStart, sourceMultiplicity)
@@ -277,7 +285,91 @@ func (docSVGMapper *DocSVGMapper) GenerateSvg(
 			fieldText.FillOpacity = 1.0
 			rect.RectAnchoredTexts = append(rect.RectAnchoredTexts, fieldText)
 		}
+	}
 
+	//
+	// Notes
+	//
+	for _, noteShape := range selectedDiagram.NoteShapes {
+
+		rectLayer := new(gongsvg_models.Layer).Stage(gongsvgStage)
+		rectLayer.Name = "Layer" + noteShape.Identifier
+		svg.Layers = append(svg.Layers, rectLayer)
+
+		rect := new(gongsvg_models.Rect).Stage(gongsvgStage)
+		rect.Name = noteShape.Identifier
+
+		docSVGMapper.map_NoteShape_Rect[noteShape] = rect
+		docSVGMapper.map_Structname_Rect[noteShape.Identifier] = rect
+
+		rectLayer.Rects = append(rectLayer.Rects, rect)
+		rect.X = noteShape.X
+		rect.Y = noteShape.Y
+
+		rect.Width = noteShape.Width
+		rect.Height = noteShape.Heigth
+
+		rect.Stroke = gongsvg_models.Lightskyblue.ToString()
+		rect.StrokeWidth = 1
+		rect.StrokeDashArrayWhenSelected = "5 5"
+
+		rect.FillOpacity = 100
+		rect.Color = gongsvg_models.Lightskyblue.ToString()
+
+		// moveability
+		rect.CanMoveHorizontaly = true
+		rect.CanMoveVerticaly = true
+
+		// resizing
+		rect.IsSelectable = true
+		rect.CanHaveBottomHandle = true
+		rect.CanHaveLeftHandle = true
+		rect.CanHaveTopHandle = true
+		rect.CanHaveRightHandle = true
+
+		//
+		// Title
+		//
+		title := new(gongsvg_models.RectAnchoredText).Stage(gongsvgStage)
+		title.Name = gongdoc_models.IdentifierToGongObjectName(noteShape.Identifier)
+		title.Content = title.Name
+		title.X_Offset = 0
+		title.Y_Offset = 20
+		title.RectAnchorType = gongsvg_models.RECT_ANCHOR_TOP
+		title.TextAnchorType = gongsvg_models.TEXT_ANCHOR_CENTER
+		title.FontWeight = "bold"
+		title.Color = gongsvg_models.Black.ToString()
+		title.FillOpacity = 1.0
+		rect.RectAnchoredTexts = append(rect.RectAnchoredTexts, title)
+
+		//
+		// Title
+		//
+		content := new(gongsvg_models.RectAnchoredText).Stage(gongsvgStage)
+		content.Name = noteShape.Body
+		content.Content = content.Name
+		content.X_Offset = 0
+		content.Y_Offset = 40
+		content.RectAnchorType = gongsvg_models.RECT_ANCHOR_TOP
+		content.TextAnchorType = gongsvg_models.TEXT_ANCHOR_CENTER
+		content.FontWeight = "normal"
+		content.Color = gongsvg_models.Black.ToString()
+		content.FillOpacity = 1.0
+		rect.RectAnchoredTexts = append(rect.RectAnchoredTexts, content)
+
+		// // additional box to hightlight the title
+		// titleBox := new(gongsvg_models.RectAnchoredRect).Stage(gongsvgStage)
+		// titleBox.Name = gongdoc_models.IdentifierToGongObjectName(noteShape.Identifier)
+		// titleBox.X_Offset = 0
+		// titleBox.Y_Offset = 0
+		// titleBox.Width = rect.Width
+		// titleBox.Height = 30
+		// titleBox.RectAnchorType = gongsvg_models.RECT_ANCHOR_TOP_LEFT
+		// titleBox.Color = gongsvg_models.Skyblue.ToString()
+		// titleBox.WidthFollowRect = true
+		// titleBox.FillOpacity = 100
+
+		// rect.RectAnchoredRects = append(rect.RectAnchoredRects, titleBox)
 	}
 
 	gongsvgStage.Commit()

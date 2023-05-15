@@ -2287,7 +2287,7 @@ func GetFields[Type Gongstruct]() (res []string) {
 	switch any(ret).(type) {
 	// insertion point for generic get gongstruct name
 	case AnchoredText:
-		res = []string{"Name", "Content", "X_Offset", "Y_Offset", "Color", "FillOpacity", "Stroke", "StrokeWidth", "StrokeDashArray", "StrokeDashArrayWhenSelected", "Transform", "Animates"}
+		res = []string{"Name", "Content", "X_Offset", "Y_Offset", "FontWeight", "Color", "FillOpacity", "Stroke", "StrokeWidth", "StrokeDashArray", "StrokeDashArrayWhenSelected", "Transform", "Animates"}
 	case Animate:
 		res = []string{"Name", "AttributeName", "Values", "Dur", "RepeatCount"}
 	case Circle:
@@ -2340,6 +2340,8 @@ func GetFieldStringValue[Type Gongstruct](instance Type, fieldName string) (res 
 			res = fmt.Sprintf("%f", any(instance).(AnchoredText).X_Offset)
 		case "Y_Offset":
 			res = fmt.Sprintf("%f", any(instance).(AnchoredText).Y_Offset)
+		case "FontWeight":
+			res = any(instance).(AnchoredText).FontWeight
 		case "Color":
 			res = any(instance).(AnchoredText).Color
 		case "FillOpacity":

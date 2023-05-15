@@ -330,4 +330,8 @@ export class RectComponent implements OnInit, OnDestroy, AfterViewInit {
       this.rectService.updateRect(this.Rect, this.GONG__StackPath).subscribe()
     }
   }
+
+  splitTextIntoLines(text: string): string[] {
+    return text.split('\n')
+  }
 }

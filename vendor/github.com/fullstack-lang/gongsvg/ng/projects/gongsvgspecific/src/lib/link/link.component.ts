@@ -732,4 +732,8 @@ export class LinkComponent implements OnInit, AfterViewInit, DoCheck {
     }
 
   }
+
+  splitTextIntoLines(text: string): string[] {
+    return text.split('\n')
+  }
 }
