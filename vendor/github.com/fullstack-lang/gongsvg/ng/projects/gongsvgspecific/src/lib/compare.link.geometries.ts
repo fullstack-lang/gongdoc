@@ -4,6 +4,10 @@ import * as gongsvg from 'gongsvg'
 
 export function compareLinkGeometries(instance1: gongsvg.LinkDB, instance2: gongsvg.LinkDB): boolean {
 
+    if (instance1 == undefined || instance2 == undefined) {
+        console.log("comparing undefined links")
+    }
+
     if (
         instance1.StartRatio != instance2.StartRatio ||
         instance1.StartOrientation != instance2.StartOrientation ||

@@ -40,14 +40,22 @@ export function getAnchorPoint(polyline: Segment[], targetAnchorPosition: number
 
         if (accumulatedDistance + segmentLength >= targetDistance) {
             // If the target falls within this segment, interpolate the position
-            const remainingDistance = targetDistance - accumulatedDistance;
-            const ratio = remainingDistance / segmentLength;
-            return interpolate(segment.StartPointWithoutRadius, segment.EndPointWithoutRadius, ratio);
+            const remainingDistance = targetDistance - accumulatedDistance
+            const ratio = remainingDistance / segmentLength
+            let anchor = interpolate(segment.StartPointWithoutRadius, segment.EndPointWithoutRadius, ratio)
+            if (Number.isNaN(anchor.X)) {
+                return null
+            }
+
+            return anchor
         } else {
             // Otherwise, add this segment's length to the accumulated distance and continue
             accumulatedDistance += segmentLength;
         }
     }
+
+
+  
 
     // If we've gone through all segments and haven't found the position, return null
     return null;

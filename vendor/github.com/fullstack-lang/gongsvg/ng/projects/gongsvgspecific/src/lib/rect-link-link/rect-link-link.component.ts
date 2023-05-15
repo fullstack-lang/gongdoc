@@ -22,6 +22,7 @@ export class RectLinkLinkComponent implements OnInit, DoCheck {
   previousEnd_StartRect: gongsvg.RectDB | undefined
   previousEnd_EndRect: gongsvg.RectDB | undefined
   previousLink: gongsvg.LinkDB | undefined
+  isTargetX_a_NaN : boolean = false
 
   segments: Segment[] = []
   target: gongsvg.PointDB | null = null
@@ -47,6 +48,10 @@ export class RectLinkLinkComponent implements OnInit, DoCheck {
 
     coordinate[0] = this.target!.X
     coordinate[1] = this.target!.Y
+
+    if (Number.isNaN(coordinate[0])) {
+      console.log("end is NaN")
+    }
 
     return coordinate
   }
@@ -84,6 +89,22 @@ export class RectLinkLinkComponent implements OnInit, DoCheck {
 
     this.segments = drawSegments(segmentsParams)
     this.target = getAnchorPoint(this.segments, this.RectLinkLink!.TargetAnchorPosition)
+
+    // taking into account the case where the target link has been
+    // update but the front has not refreshed the link.Start and link.End associations
+    if (this.target == null) {
+      this.isTargetX_a_NaN = true
+    } else {
+      this.isTargetX_a_NaN = false
+    }
+    
+    if (Number.isNaN(this.target!.X)) {
+      console.log("end is NaN")
+    }
+
+    
     this.source = drawLineFromRectToB(this.RectLinkLink!.Start!, this.target!)
+
+
   }
 }

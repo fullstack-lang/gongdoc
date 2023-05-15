@@ -55,6 +55,12 @@ export class LinkComponent implements OnInit, AfterViewInit, DoCheck {
   previousStart: gongsvg.RectDB | undefined
   previousEnd: gongsvg.RectDB | undefined
 
+  //
+  // indicate wether the link is being updated
+  // no drawing must happen then
+  linkUpdating: boolean = false
+
+
   previousStartX = 0
   previousStartY = 0
   previousEndX = 0
@@ -316,8 +322,11 @@ export class LinkComponent implements OnInit, AfterViewInit, DoCheck {
             if (this.distanceMoved < this.dragThreshold) {
               console.log("Link, link selected selected: ", this.Link?.Name)
             } else {
+              this.linkUpdating = true
               this.linkService.updateLink(this.Link!, this.GONG__StackPath).subscribe(
                 link => {
+                  // this.Link = link
+                  this.linkUpdating = false
                   // console.log("Updated", link.ID)
                 }
               )
@@ -465,6 +474,10 @@ export class LinkComponent implements OnInit, AfterViewInit, DoCheck {
   segments: Segment[] | undefined
 
   drawSegments(): boolean {
+
+    if (this.linkUpdating) {
+      return true
+    }
 
     let link = this.Link!
 

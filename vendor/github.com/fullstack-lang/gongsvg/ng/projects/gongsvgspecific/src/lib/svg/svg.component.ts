@@ -160,12 +160,12 @@ export class SvgComponent implements OnInit, OnDestroy, AfterViewInit {
     )
 
     this.gongsvgPushFromFrontNbService.getPushNbFromFront(500, this.GONG__StackPath).subscribe(
-      commiNbFromBagetCommitNbFromBack => {
-        if (this.lastCommitNbFromBack < commiNbFromBagetCommitNbFromBack) {
+      lastPushFromFrontNb => {
+        if (this.lastPushFromFrontNb < lastPushFromFrontNb) {
 
-          // console.log("last commit nb " + this.lastCommiNbFromBagetCommitNbFromBack + " new: " + commiNbFromBagetCommitNbFromBack)
+          // console.log("last commit nb " + this.lastCommiNbFromBagetCommitNbFromFront + " new: " + commiNbFromBagetCommitNbFromFront)
           this.refresh()
-          this.lastCommitNbFromBack = commiNbFromBagetCommitNbFromBack
+          this.lastPushFromFrontNb = lastPushFromFrontNb
         }
       }
     )

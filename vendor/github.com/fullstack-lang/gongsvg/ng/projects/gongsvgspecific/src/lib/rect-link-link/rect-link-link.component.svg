@@ -1,4 +1,9 @@
-<svg *ngIf="this.RectLinkLink && this.RectLinkLink.Start && this.RectLinkLink.End">
+<svg *ngIf="this.RectLinkLink && 
+    this.RectLinkLink.Start && 
+    this.RectLinkLink.End  && 
+    this.RectLinkLink.End.Start && 
+    this.RectLinkLink.End.End &&
+    ! isTargetX_a_NaN" >
     <g>
         <line class="rect-link-link" 
             [attr.x1]="getStartPosition()[0]" 
