@@ -307,6 +307,8 @@ func (docSVGMapper *DocSVGMapper) GenerateSvg(
 		rect := new(gongsvg_models.Rect).Stage(gongsvgStage)
 		rect.Name = noteShape.Identifier
 
+		rect.Impl = NewRectImplNoteShape(noteShape, gongdocStage)
+
 		docSVGMapper.map_NoteShape_Rect[noteShape] = rect
 		docSVGMapper.map_Structname_Rect[noteShape.Identifier] = rect
 

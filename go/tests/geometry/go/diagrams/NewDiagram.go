@@ -228,8 +228,8 @@ func NewDiagramInjection(stage *models.StageStruct) {
 	__GongStructShape__000001_NewDiagram_Point.Identifier = `ref_models.Point`
 	__GongStructShape__000001_NewDiagram_Point.ShowNbInstances = false
 	__GongStructShape__000001_NewDiagram_Point.NbInstances = 0
-	__GongStructShape__000001_NewDiagram_Point.Width = 240.000000
-	__GongStructShape__000001_NewDiagram_Point.Heigth = 63.000000
+	__GongStructShape__000001_NewDiagram_Point.Width = 232.633301
+	__GongStructShape__000001_NewDiagram_Point.Heigth = 110.000000
 	__GongStructShape__000001_NewDiagram_Point.IsSelected = false
 
 	// Link values setup
@@ -264,10 +264,10 @@ It uses the DocLink convention for referencing Identifiers
 In this case <a href="/models#Line">models.Line</a>, <a href="/models#Point">models.Point</a> and <a href="/models#Line.Start">models.Line.Start</a> <a href="/models#LineTypeString">models.LineTypeString</a>
 are referenced in the go code
 `
-	__NoteShape__000000_ShortNodeOnModels.X = 180.000000
-	__NoteShape__000000_ShortNodeOnModels.Y = 300.000000
-	__NoteShape__000000_ShortNodeOnModels.Width = 240.000000
-	__NoteShape__000000_ShortNodeOnModels.Heigth = 63.000000
+	__NoteShape__000000_ShortNodeOnModels.X = 173.633301
+	__NoteShape__000000_ShortNodeOnModels.Y = 342.000000
+	__NoteShape__000000_ShortNodeOnModels.Width = 702.000000
+	__NoteShape__000000_ShortNodeOnModels.Heigth = 121.000000
 	__NoteShape__000000_ShortNodeOnModels.Matched = false
 
 	// NoteShapeLink values setup
@@ -312,13 +312,13 @@ are referenced in the go code
 	__Position__000000_Pos_NewDiagram_Line.Name = `Pos-NewDiagram-Line`
 
 	// Position values setup
-	__Position__000001_Pos_NewDiagram_LineTypeString.X = 148.616699
-	__Position__000001_Pos_NewDiagram_LineTypeString.Y = 454.000000
+	__Position__000001_Pos_NewDiagram_LineTypeString.X = 124.616699
+	__Position__000001_Pos_NewDiagram_LineTypeString.Y = 640.000000
 	__Position__000001_Pos_NewDiagram_LineTypeString.Name = `Pos-NewDiagram-LineTypeString`
 
 	// Position values setup
-	__Position__000002_Pos_NewDiagram_Point.X = 540.000000
-	__Position__000002_Pos_NewDiagram_Point.Y = 190.000000
+	__Position__000002_Pos_NewDiagram_Point.X = 679.000000
+	__Position__000002_Pos_NewDiagram_Point.Y = 25.000000
 	__Position__000002_Pos_NewDiagram_Point.Name = `Pos-NewDiagram-Point`
 
 	// Vertice values setup
