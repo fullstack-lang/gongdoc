@@ -203,8 +203,8 @@ func NewDiagramInjection(stage *models.StageStruct) {
 
 	//gong:ident [ref_models.LineTypeString]
 	__GongEnumShape__000000_NewDiagram_LineTypeString.Identifier = `ref_models.LineTypeString`
-	__GongEnumShape__000000_NewDiagram_LineTypeString.Width = 240.000000
-	__GongEnumShape__000000_NewDiagram_LineTypeString.Heigth = 63.000000
+	__GongEnumShape__000000_NewDiagram_LineTypeString.Width = 376.016602
+	__GongEnumShape__000000_NewDiagram_LineTypeString.Heigth = 106.000000
 
 	// GongStructShape values setup
 	__GongStructShape__000000_NewDiagram_Line.Name = `NewDiagram-Line`
@@ -215,7 +215,7 @@ func NewDiagramInjection(stage *models.StageStruct) {
 	__GongStructShape__000000_NewDiagram_Line.Identifier = `ref_models.Line`
 	__GongStructShape__000000_NewDiagram_Line.ShowNbInstances = false
 	__GongStructShape__000000_NewDiagram_Line.NbInstances = 0
-	__GongStructShape__000000_NewDiagram_Line.Width = 240.000000
+	__GongStructShape__000000_NewDiagram_Line.Width = 316.633301
 	__GongStructShape__000000_NewDiagram_Line.Heigth = 108.000000
 	__GongStructShape__000000_NewDiagram_Line.IsSelected = false
 
@@ -307,13 +307,13 @@ are referenced in the go code
 	__NoteShapeLink__000003_Point.Type = models.NOTE_SHAPE_LINK_TO_GONG_STRUCT_OR_ENUM_SHAPE
 
 	// Position values setup
-	__Position__000000_Pos_NewDiagram_Line.X = 100.000000
-	__Position__000000_Pos_NewDiagram_Line.Y = 130.000000
+	__Position__000000_Pos_NewDiagram_Line.X = 115.000000
+	__Position__000000_Pos_NewDiagram_Line.Y = 52.000000
 	__Position__000000_Pos_NewDiagram_Line.Name = `Pos-NewDiagram-Line`
 
 	// Position values setup
-	__Position__000001_Pos_NewDiagram_LineTypeString.X = 60.000000
-	__Position__000001_Pos_NewDiagram_LineTypeString.Y = 440.000000
+	__Position__000001_Pos_NewDiagram_LineTypeString.X = 148.616699
+	__Position__000001_Pos_NewDiagram_LineTypeString.Y = 454.000000
 	__Position__000001_Pos_NewDiagram_LineTypeString.Name = `Pos-NewDiagram-LineTypeString`
 
 	// Position values setup

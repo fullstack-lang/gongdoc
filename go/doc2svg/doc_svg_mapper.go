@@ -216,6 +216,8 @@ func (docSVGMapper *DocSVGMapper) GenerateSvg(
 		rect := new(gongsvg_models.Rect).Stage(gongsvgStage)
 		rect.Name = gongenumShape.Identifier
 
+		rect.Impl = NewRectImplGongenumShape(gongenumShape, gongdocStage)
+
 		docSVGMapper.map_GongenumShape_Rect[gongenumShape] = rect
 		docSVGMapper.map_Structname_Rect[gongenumShape.Identifier] = rect
 
