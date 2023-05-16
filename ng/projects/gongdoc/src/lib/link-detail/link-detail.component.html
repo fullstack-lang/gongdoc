@@ -91,6 +91,44 @@
         </mat-select>
     </mat-form-field>
 
+    <!-- -->
+    <mat-form-field appearance="fill" class="detail-full-width">
+        <mat-label>StartOrientation</mat-label>
+        <mat-select [(ngModel)]="link.StartOrientation" [ngModelOptions]="{standalone: true}">
+            <mat-option *ngFor="let enum of OrientationTypeList" [value]="enum.value">
+                {{enum.viewValue}}
+            </mat-option>
+        </mat-select>
+    </mat-form-field>
+
+    <!-- -->
+    <mat-form-field class="detail-full-width">
+        <mat-label>StartRatio</mat-label>
+        <input type="number" [ngModelOptions]="{standalone: true}" matInput [(ngModel)]="link.StartRatio" [ngModelOptions]="{standalone: true}">
+    </mat-form-field>
+
+    <!-- -->
+    <mat-form-field appearance="fill" class="detail-full-width">
+        <mat-label>EndOrientation</mat-label>
+        <mat-select [(ngModel)]="link.EndOrientation" [ngModelOptions]="{standalone: true}">
+            <mat-option *ngFor="let enum of OrientationTypeList" [value]="enum.value">
+                {{enum.viewValue}}
+            </mat-option>
+        </mat-select>
+    </mat-form-field>
+
+    <!-- -->
+    <mat-form-field class="detail-full-width">
+        <mat-label>EndRatio</mat-label>
+        <input type="number" [ngModelOptions]="{standalone: true}" matInput [(ngModel)]="link.EndRatio" [ngModelOptions]="{standalone: true}">
+    </mat-form-field>
+
+    <!-- -->
+    <mat-form-field class="detail-full-width">
+        <mat-label>CornerOffsetRatio</mat-label>
+        <input type="number" [ngModelOptions]="{standalone: true}" matInput [(ngModel)]="link.CornerOffsetRatio" [ngModelOptions]="{standalone: true}">
+    </mat-form-field>
+
     <mat-form-field class="detail-full-width">
         <mat-label>(GongStructShape) Links</mat-label>
         <mat-select [compareWith]="compareObjects" [(ngModel)]="link.GongStructShape_Links_reverse" [ngModelOptions]="{standalone: true}">

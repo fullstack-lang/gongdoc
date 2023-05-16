@@ -18,6 +18,20 @@ type Link struct {
 	TargetMultiplicity MultiplicityType
 	SourceMultiplicity MultiplicityType
 
+	// For link with control points
 	// Vertices at the middle
 	Middlevertice *Vertice
+
+	// for links with floating anchors
+	// if link type is floating orthogonal ratio, from 0 to 1,
+	// where the anchor starts on the edge (horizontal / vertical)
+	StartOrientation OrientationType
+	StartRatio       float64
+	EndOrientation   OrientationType
+	EndRatio         float64
+
+	// in case StartOrientation is the same as EndOrientation,
+	// there is a perpendicular line that reach the corner at
+	// CornerOffsetRatio
+	CornerOffsetRatio float64
 }

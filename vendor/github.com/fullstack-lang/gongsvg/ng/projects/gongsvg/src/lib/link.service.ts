@@ -30,7 +30,7 @@ export class LinkService {
 
   constructor(
     private http: HttpClient,
-    @Inject(DOCUMENT) private document: Document,
+    @Inject(DOCUMENT) private document: Document
   ) {
     // path to the service share the same origin with the path to the document
     // get the origin in the URL to the document

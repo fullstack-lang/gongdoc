@@ -90,6 +90,21 @@ export class LinksTableComponent implements OnInit {
         case 'Middlevertice':
           return (linkDB.Middlevertice ? linkDB.Middlevertice.Name : '');
 
+        case 'StartOrientation':
+          return linkDB.StartOrientation;
+
+        case 'StartRatio':
+          return linkDB.StartRatio;
+
+        case 'EndOrientation':
+          return linkDB.EndOrientation;
+
+        case 'EndRatio':
+          return linkDB.EndRatio;
+
+        case 'CornerOffsetRatio':
+          return linkDB.CornerOffsetRatio;
+
         case 'GongStructShape_Links':
           if (this.frontRepo.GongStructShapes.get(linkDB.GongStructShape_LinksDBID.Int64) != undefined) {
             return this.frontRepo.GongStructShapes.get(linkDB.GongStructShape_LinksDBID.Int64)!.Name
@@ -119,6 +134,11 @@ export class LinksTableComponent implements OnInit {
       if (linkDB.Middlevertice) {
         mergedContent += linkDB.Middlevertice.Name.toLowerCase()
       }
+      mergedContent += linkDB.StartOrientation.toLowerCase()
+      mergedContent += linkDB.StartRatio.toString()
+      mergedContent += linkDB.EndOrientation.toLowerCase()
+      mergedContent += linkDB.EndRatio.toString()
+      mergedContent += linkDB.CornerOffsetRatio.toString()
       if (linkDB.GongStructShape_LinksDBID.Int64 != 0) {
         mergedContent += this.frontRepo.GongStructShapes.get(linkDB.GongStructShape_LinksDBID.Int64)!.Name.toLowerCase()
       }
@@ -183,6 +203,11 @@ export class LinksTableComponent implements OnInit {
         "TargetMultiplicity",
         "SourceMultiplicity",
         "Middlevertice",
+        "StartOrientation",
+        "StartRatio",
+        "EndOrientation",
+        "EndRatio",
+        "CornerOffsetRatio",
         "GongStructShape_Links",
       ]
     } else {
@@ -193,6 +218,11 @@ export class LinksTableComponent implements OnInit {
         "TargetMultiplicity",
         "SourceMultiplicity",
         "Middlevertice",
+        "StartOrientation",
+        "StartRatio",
+        "EndOrientation",
+        "EndRatio",
+        "CornerOffsetRatio",
         "GongStructShape_Links",
       ]
       this.selection = new SelectionModel<LinkDB>(allowMultiSelect, this.initialSelection);

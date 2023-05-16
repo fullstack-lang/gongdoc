@@ -42,9 +42,15 @@ type Link struct {
 	ControlPoints []*Point
 
 	Presentation
+
+	Impl LinkImplInterface
 }
 
 func (link *Link) OnAfterUpdate(stage *StageStruct, _, frontLink *Link) {
 
 	log.Println("Link, OnAfterUpdate", link.Name)
+
+	if link.Impl != nil {
+		link.Impl.LinkUpdated(frontLink)
+	}
 }

@@ -82,6 +82,21 @@ type LinkDB struct {
 
 	// Declation for basic field linkDB.SourceMultiplicity
 	SourceMultiplicity_Data sql.NullString
+
+	// Declation for basic field linkDB.StartOrientation
+	StartOrientation_Data sql.NullString
+
+	// Declation for basic field linkDB.StartRatio
+	StartRatio_Data sql.NullFloat64
+
+	// Declation for basic field linkDB.EndOrientation
+	EndOrientation_Data sql.NullString
+
+	// Declation for basic field linkDB.EndRatio
+	EndRatio_Data sql.NullFloat64
+
+	// Declation for basic field linkDB.CornerOffsetRatio
+	CornerOffsetRatio_Data sql.NullFloat64
 	// encoding of pointers
 	LinkPointersEnconding
 }
@@ -112,6 +127,16 @@ type LinkWOP struct {
 	TargetMultiplicity models.MultiplicityType `xlsx:"4"`
 
 	SourceMultiplicity models.MultiplicityType `xlsx:"5"`
+
+	StartOrientation models.OrientationType `xlsx:"6"`
+
+	StartRatio float64 `xlsx:"7"`
+
+	EndOrientation models.OrientationType `xlsx:"8"`
+
+	EndRatio float64 `xlsx:"9"`
+
+	CornerOffsetRatio float64 `xlsx:"10"`
 	// insertion for WOP pointer fields
 }
 
@@ -123,6 +148,11 @@ var Link_Fields = []string{
 	"Fieldtypename",
 	"TargetMultiplicity",
 	"SourceMultiplicity",
+	"StartOrientation",
+	"StartRatio",
+	"EndOrientation",
+	"EndRatio",
+	"CornerOffsetRatio",
 }
 
 type BackRepoLinkStruct struct {
@@ -410,6 +440,21 @@ func (linkDB *LinkDB) CopyBasicFieldsFromLink(link *models.Link) {
 
 	linkDB.SourceMultiplicity_Data.String = link.SourceMultiplicity.ToString()
 	linkDB.SourceMultiplicity_Data.Valid = true
+
+	linkDB.StartOrientation_Data.String = link.StartOrientation.ToString()
+	linkDB.StartOrientation_Data.Valid = true
+
+	linkDB.StartRatio_Data.Float64 = link.StartRatio
+	linkDB.StartRatio_Data.Valid = true
+
+	linkDB.EndOrientation_Data.String = link.EndOrientation.ToString()
+	linkDB.EndOrientation_Data.Valid = true
+
+	linkDB.EndRatio_Data.Float64 = link.EndRatio
+	linkDB.EndRatio_Data.Valid = true
+
+	linkDB.CornerOffsetRatio_Data.Float64 = link.CornerOffsetRatio
+	linkDB.CornerOffsetRatio_Data.Valid = true
 }
 
 // CopyBasicFieldsFromLinkWOP
@@ -430,6 +475,21 @@ func (linkDB *LinkDB) CopyBasicFieldsFromLinkWOP(link *LinkWOP) {
 
 	linkDB.SourceMultiplicity_Data.String = link.SourceMultiplicity.ToString()
 	linkDB.SourceMultiplicity_Data.Valid = true
+
+	linkDB.StartOrientation_Data.String = link.StartOrientation.ToString()
+	linkDB.StartOrientation_Data.Valid = true
+
+	linkDB.StartRatio_Data.Float64 = link.StartRatio
+	linkDB.StartRatio_Data.Valid = true
+
+	linkDB.EndOrientation_Data.String = link.EndOrientation.ToString()
+	linkDB.EndOrientation_Data.Valid = true
+
+	linkDB.EndRatio_Data.Float64 = link.EndRatio
+	linkDB.EndRatio_Data.Valid = true
+
+	linkDB.CornerOffsetRatio_Data.Float64 = link.CornerOffsetRatio
+	linkDB.CornerOffsetRatio_Data.Valid = true
 }
 
 // CopyBasicFieldsToLink
@@ -440,6 +500,11 @@ func (linkDB *LinkDB) CopyBasicFieldsToLink(link *models.Link) {
 	link.Fieldtypename = linkDB.Fieldtypename_Data.String
 	link.TargetMultiplicity.FromString(linkDB.TargetMultiplicity_Data.String)
 	link.SourceMultiplicity.FromString(linkDB.SourceMultiplicity_Data.String)
+	link.StartOrientation.FromString(linkDB.StartOrientation_Data.String)
+	link.StartRatio = linkDB.StartRatio_Data.Float64
+	link.EndOrientation.FromString(linkDB.EndOrientation_Data.String)
+	link.EndRatio = linkDB.EndRatio_Data.Float64
+	link.CornerOffsetRatio = linkDB.CornerOffsetRatio_Data.Float64
 }
 
 // CopyBasicFieldsToLinkWOP
@@ -451,6 +516,11 @@ func (linkDB *LinkDB) CopyBasicFieldsToLinkWOP(link *LinkWOP) {
 	link.Fieldtypename = linkDB.Fieldtypename_Data.String
 	link.TargetMultiplicity.FromString(linkDB.TargetMultiplicity_Data.String)
 	link.SourceMultiplicity.FromString(linkDB.SourceMultiplicity_Data.String)
+	link.StartOrientation.FromString(linkDB.StartOrientation_Data.String)
+	link.StartRatio = linkDB.StartRatio_Data.Float64
+	link.EndOrientation.FromString(linkDB.EndOrientation_Data.String)
+	link.EndRatio = linkDB.EndRatio_Data.Float64
+	link.CornerOffsetRatio = linkDB.CornerOffsetRatio_Data.Float64
 }
 
 // Backup generates a json file from a slice of all LinkDB instances in the backrepo

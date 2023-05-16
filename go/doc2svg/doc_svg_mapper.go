@@ -143,6 +143,9 @@ func (docSVGMapper *DocSVGMapper) GenerateSvg(
 
 			link := new(gongsvg_models.Link).Stage(gongsvgStage)
 			link.Name = startRect.Name + " - to - " + endRect.Name
+
+			link.Impl = NewLinkImplLink(docLink, gongdocStage)
+
 			linkLayer := new(gongsvg_models.Layer).Stage(gongsvgStage)
 			docSVGMapper.map_Fieldname_Link[docLink.Identifier] = link
 

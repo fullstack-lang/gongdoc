@@ -19,6 +19,11 @@ export class LinkDB {
 	Fieldtypename: string = ""
 	TargetMultiplicity: string = ""
 	SourceMultiplicity: string = ""
+	StartOrientation: string = ""
+	StartRatio: number = 0
+	EndOrientation: string = ""
+	EndRatio: number = 0
+	CornerOffsetRatio: number = 0
 
 	// insertion point for other declarations
 	Middlevertice?: VerticeDB
