@@ -6,7 +6,6 @@ export function compareRectGeometries(instance1: gongsvg.RectDB, instance2: gong
 
     if (instance1 == undefined || instance2 == undefined) {
         console.log("comparing undefined rect")
-        return false
     }
 
     if (
