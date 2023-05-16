@@ -52,6 +52,9 @@ func (docSVGMapper *DocSVGMapper) GenerateSvg(
 		rect := new(gongsvg_models.Rect).Stage(gongsvgStage)
 		rect.Name = gongstructShape.Identifier
 
+		// hook a callback on rect modifications
+		rect.Impl = NewRectImplGongstructShape(gongstructShape, gongdocStage)
+
 		docSVGMapper.map_GongstructShape_Rect[gongstructShape] = rect
 		docSVGMapper.map_Structname_Rect[gongstructShape.Identifier] = rect
 
