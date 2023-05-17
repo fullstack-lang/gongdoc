@@ -8,6 +8,9 @@ import { ShapeMouseEvent } from '../shape.mouse.event';
 import { MouseEventService } from '../mouse-event.service';
 import { compareRectGeometries } from '../compare.rect.geometries'
 
+import { SplitComponent } from 'angular-split'
+import { AngularDragEndEventService } from '../angular-drag-end-event.service';
+
 @Component({
   selector: 'lib-link',
   templateUrl: './link.component.svg',
@@ -17,6 +20,9 @@ export class LinkComponent implements OnInit, AfterViewInit, DoCheck {
 
   @Input() Link?: gongsvg.LinkDB
   @Input() GONG__StackPath: string = ""
+
+  // to detect angular drag events
+  @ViewChild('splitEl') splitEl: SplitComponent | undefined
 
   @ViewChild('textElement', { static: false }) textElement: ElementRef | undefined
   textWidth: number = 0
@@ -70,6 +76,7 @@ export class LinkComponent implements OnInit, AfterViewInit, DoCheck {
     private linkService: gongsvg.LinkService,
     private anchoredTextService: gongsvg.AnchoredTextService,
     private linkEventService: LinkEventService,
+    private angularDragEndEventService: AngularDragEndEventService,
     private mouseEventService: MouseEventService,
     private elementRef: ElementRef,
   ) {
@@ -378,6 +385,15 @@ export class LinkComponent implements OnInit, AfterViewInit, DoCheck {
           this.textDragging = false
         })
     )
+
+    this.subscriptions.push(
+      angularDragEndEventService.angularSplitDragEndEvent$.subscribe(
+        () => {
+          console.log("link component captured angular drag event")
+          this.getSvgTopLeftCoordinates()
+        }
+      )
+    )
   }
 
 
@@ -456,6 +472,8 @@ export class LinkComponent implements OnInit, AfterViewInit, DoCheck {
 
       let x = event.clientX - this.pageX
       let y = event.clientY - this.pageY
+
+      console.log("client x, y:", event.clientX, event.clientY,"x, y", x, y)
 
       // this link shit to dragging state
       this.dragging = true
@@ -762,7 +780,7 @@ export class LinkComponent implements OnInit, AfterViewInit, DoCheck {
     this.pageX = svgRect?.left + window.pageXOffset
     this.pageY = svgRect?.top + window.pageYOffset
 
-    // console.log('SVG Top-Left Corner:', this.pageX, this.pageY);
+    console.log('SVG Top-Left Corner:', this.pageX, this.pageY);
   }
 
   ngAfterViewInit() {
@@ -774,7 +792,6 @@ export class LinkComponent implements OnInit, AfterViewInit, DoCheck {
       this.textWidth = bbox.width;
       this.textHeight = bbox.height;
     }
-
   }
 
   splitTextIntoLines(text: string): string[] {

@@ -8,6 +8,7 @@ import * as gongsvg from 'gongsvg'
 import { ShapeMouseEvent } from '../shape.mouse.event';
 import { createPoint } from '../link/draw.segments';
 import { MouseEventService } from '../mouse-event.service';
+import { AngularDragEndEventService } from '../angular-drag-end-event.service';
 
 @Component({
   selector: 'lib-svg',
@@ -60,6 +61,8 @@ export class SvgComponent implements OnInit, OnDestroy, AfterViewInit {
     private rectangleEventService: RectangleEventService,
     private svgEventService: SvgEventService,
     private mouseEventService: MouseEventService,
+    private angularDragEndEventService: AngularDragEndEventService,
+
   ) {
 
     this.subscriptions.push(
@@ -136,6 +139,15 @@ export class SvgComponent implements OnInit, OnDestroy, AfterViewInit {
           }
 
           this.svgEventService.emitMultiShapeSelectEnd(selectAreaConfig)
+        }
+      )
+    )
+
+    this.subscriptions.push(
+      angularDragEndEventService.angularSplitDragEndEvent$.subscribe(
+        () => {
+          console.log("link component captured angular drag event")
+          this.getSvgTopLeftCoordinates()
         }
       )
     )
@@ -311,6 +323,10 @@ export class SvgComponent implements OnInit, OnDestroy, AfterViewInit {
   @ViewChild('drawingArea') drawingArea: ElementRef<HTMLDivElement> | undefined
 
   ngAfterViewInit() {
+    this.getSvgTopLeftCoordinates()
+  }
+
+  getSvgTopLeftCoordinates() {
     const offset = this.getDivOffset(this.drawingArea!.nativeElement);
     this.pageX = offset.offsetX
     this.pageY = offset.offsetY

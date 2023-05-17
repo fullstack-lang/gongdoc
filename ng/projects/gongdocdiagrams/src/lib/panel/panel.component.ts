@@ -2,6 +2,9 @@ import { Component, Input, OnInit } from '@angular/core';
 
 import * as gongdoc from 'gongdoc';
 
+import { AngularDragEndEventService } from '../../../../../../vendor/github.com/fullstack-lang/gongsvg/ng/projects/gongsvgspecific/src/lib/angular-drag-end-event.service';
+
+
 @Component({
   selector: 'lib-panel',
   templateUrl: './panel.component.html',
@@ -27,6 +30,7 @@ export class PanelComponent implements OnInit {
 
   constructor(
     private diagramPackageService: gongdoc.DiagramPackageService,
+    private angularDragEndEventService: AngularDragEndEventService,
   ) {
 
   }
@@ -51,5 +55,10 @@ export class PanelComponent implements OnInit {
       diagramPackage => {
         console.log('diagram package refreshed')
       })
+  }
+
+  onDragEnd(): void {
+    console.log("angular split : on drag end")
+    this.angularDragEndEventService.emitMouseUpEvent(0)
   }
 }

@@ -1,4 +1,4 @@
-<as-split direction="horizontal" cdkDropListGroup>
+<as-split direction="horizontal" cdkDropListGroup (dragEnd)="onDragEnd()">
     <as-split-area [size]="20" [maxSize]="100">
         <as-split direction="vertical" cdkDropListGroup>
             <as-split-area [size]="30" [maxSize]="100">
