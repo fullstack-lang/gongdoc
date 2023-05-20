@@ -1,5 +1,5 @@
-import { Component, OnInit, Input, OnDestroy } from '@angular/core';
-import { ElementRef, Renderer2, AfterViewInit } from '@angular/core';
+import { Component, OnInit, Input, OnDestroy, DoCheck, OnChanges, SimpleChanges } from '@angular/core';
+import { ElementRef, AfterViewInit } from '@angular/core';
 
 
 import { RectangleEventService } from '../rectangle-event.service';
@@ -10,13 +10,14 @@ import { Subscription } from 'rxjs';
 import { ShapeMouseEvent } from '../shape.mouse.event';
 import { createPoint } from '../link/draw.segments';
 import { MouseEventService } from '../mouse-event.service';
+import { mouseCoordInComponentRef } from '../mouse.coord.in.component.ref';
 
 @Component({
   selector: 'lib-rect',
   templateUrl: './rect.component.svg',
   styleUrls: ['./rect.component.css']
 })
-export class RectComponent implements OnInit, OnDestroy, AfterViewInit {
+export class RectComponent implements OnInit, OnDestroy, DoCheck, OnChanges {
 
   @Input() Rect: gongsvg.RectDB = new gongsvg.RectDB()
   @Input() GONG__StackPath: string = ""
@@ -39,7 +40,6 @@ export class RectComponent implements OnInit, OnDestroy, AfterViewInit {
 
   // to compute wether it was a select / dragging event
   distanceMoved = 0
-  private mousePosRelativeToSvgAtMouseDown: { x: number; y: number } = { x: 0, y: 0 }
   private PointAtMouseDown: gongsvg.PointDB | undefined
   private dragThreshold = 5;
 
@@ -70,17 +70,15 @@ export class RectComponent implements OnInit, OnDestroy, AfterViewInit {
 
           if (this.anchorDragging) {
             if (this.activeAnchor === 'left') {
-              const originalRightEdge = this.Rect.X + this.Rect.Width
-              this.Rect.X = shapeMouseEvent.Point.X
-              this.Rect.Width = originalRightEdge - shapeMouseEvent.Point.X
+              this.Rect.X = this.RectAtMouseDown!.X + (shapeMouseEvent.Point.X - this.PointAtMouseDown!.X)
+              this.Rect.Width = this.RectAtMouseDown!.Width - (shapeMouseEvent.Point.X - this.PointAtMouseDown!.X)
             } else if (this.activeAnchor === 'right') {
-              this.Rect.Width = shapeMouseEvent.Point.X - this.Rect.X
+              this.Rect.Width = this.RectAtMouseDown!.Width + (shapeMouseEvent.Point.X - this.PointAtMouseDown!.X)
             } else if (this.activeAnchor === 'top') {
-              const originalBottomEdge = this.Rect.Y + this.Rect.Height
-              this.Rect.Y = shapeMouseEvent.Point.Y
-              this.Rect.Height = originalBottomEdge - shapeMouseEvent.Point.Y
+              this.Rect.Y = this.RectAtMouseDown!.Y + (shapeMouseEvent.Point.Y - this.PointAtMouseDown!.Y)
+              this.Rect.Height = this.RectAtMouseDown!.Height - (shapeMouseEvent.Point.Y - this.PointAtMouseDown!.Y)
             } else if (this.activeAnchor === 'bottom') {
-              this.Rect.Height = shapeMouseEvent.Point.Y - this.Rect.Y
+              this.Rect.Height = this.RectAtMouseDown!.Height + (shapeMouseEvent.Point.Y - this.PointAtMouseDown!.Y)
             }
             return // we don't want the move move to be interpreted by the rect
           }
@@ -163,10 +161,6 @@ export class RectComponent implements OnInit, OnDestroy, AfterViewInit {
           }
         })
     )
-
-
-
-
   }
 
   ngOnInit(): void {
@@ -174,52 +168,66 @@ export class RectComponent implements OnInit, OnDestroy, AfterViewInit {
     this.anchorDragging = false
   }
 
-  rectMouseDown(event: MouseEvent): void {
+  ngOnDestroy() {
+    gongsvg.RectAnchorType.RECT_ANCHOR_TOP
+    this.subscriptions.forEach((subscription) => subscription.unsubscribe());
+  }
 
+  ngDoCheck(): void {
+    // console.log("DoCheck")
+  }
+
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes['Link']) {
+      // console.log('Previous value: ', changes['Link'].previousValue);
+      // console.log('Current value: ', changes['Link'].currentValue);
+    }
+  }
+
+  rectMouseDown(event: MouseEvent): void {
     if (!event.altKey && !event.shiftKey) {
       event.preventDefault();
       event.stopPropagation(); // Prevent the event from bubbling up to the SVG element
 
       this.rectDragging = true;
 
-      let x = event.clientX - this.pageX
-      let y = event.clientY - this.pageY
-
       let shapeMouseEvent: ShapeMouseEvent = {
-        ShapeID: this.Rect!.ID,
+        ShapeID: this.Rect.ID,
         ShapeType: gongsvg.RectDB.GONGSTRUCT_NAME,
-        Point: createPoint(x, y),
+        Point: mouseCoordInComponentRef(event),
       }
       this.mouseEventService.emitMouseDownEvent(shapeMouseEvent)
     } else {
       console.log("startRectDrag + shiftKey : ", this.Rect?.Name)
 
-      const actualX = event.clientX - this.pageX
-      const actualY = event.clientY - this.pageY
-
-      this.rectangleEventService.emitRectAltKeyMouseDownEvent(
-        this.Rect.ID,
-        [actualX, actualY]);
+      let shapeMouseEvent: ShapeMouseEvent = {
+        ShapeID: this.Rect.ID,
+        ShapeType: gongsvg.RectDB.GONGSTRUCT_NAME,
+        Point: mouseCoordInComponentRef(event),
+      }
+      this.rectangleEventService.emitRectAltKeyMouseDownEvent(shapeMouseEvent)
     }
   }
 
   rectMouseMove(event: MouseEvent): void {
 
-    let x = event.clientX - this.pageX
-    let y = event.clientY - this.pageY
+    let shapeMouseEvent: ShapeMouseEvent = {
+      ShapeID: this.Rect.ID,
+      ShapeType: gongsvg.RectDB.GONGSTRUCT_NAME,
+      Point: mouseCoordInComponentRef(event),
+    }
 
     // console.log("RectComponent DragRect : ", deltaX, deltaY, distanceMoved)
 
     // we want this event to bubble to the SVG element
     if (event.altKey) {
       console.log('RectComponent, Alt Mouse drag event occurred on rectangle ', this.Rect.Name, event.clientX, event.clientY);
-      this.rectangleEventService.emitRectAltKeyMouseDragEvent(
-        [x, y])
+      this.rectangleEventService.emitRectAltKeyMouseDragEvent(shapeMouseEvent)
       return
     }
 
     if (event.shiftKey) {
-      this.svgEventService.emitMultiShapeSelectDrag([x, y])
+      this.svgEventService.emitMultiShapeSelectDrag(shapeMouseEvent)
       return
     }
 
@@ -229,7 +237,7 @@ export class RectComponent implements OnInit, OnDestroy, AfterViewInit {
       let shapeMouseEvent: ShapeMouseEvent = {
         ShapeID: this.Rect!.ID,
         ShapeType: gongsvg.RectDB.GONGSTRUCT_NAME,
-        Point: createPoint(x, y),
+        Point: mouseCoordInComponentRef(event),
       }
       this.mouseEventService.emitMouseMoveEvent(shapeMouseEvent)
     }
@@ -240,15 +248,14 @@ export class RectComponent implements OnInit, OnDestroy, AfterViewInit {
     event.preventDefault();
     event.stopPropagation(); // Prevent the event from bubbling up to the SVG element
 
-    if (!event.altKey && !event.shiftKey) {
-      let x = event.clientX - this.pageX
-      let y = event.clientY - this.pageY
+    let shapeMouseEvent: ShapeMouseEvent = {
+      ShapeID: this.Rect!.ID,
+      ShapeType: gongsvg.RectDB.GONGSTRUCT_NAME,
+      Point: mouseCoordInComponentRef(event),
+    }
 
-      let shapeMouseEvent: ShapeMouseEvent = {
-        ShapeID: this.Rect!.ID,
-        ShapeType: gongsvg.RectDB.GONGSTRUCT_NAME,
-        Point: createPoint(x, y),
-      }
+    if (!event.altKey && !event.shiftKey) {
+
       this.mouseEventService.emitMouseUpEvent(shapeMouseEvent)
       this.rectDragging = false
       this.anchorDragging = false
@@ -261,31 +268,9 @@ export class RectComponent implements OnInit, OnDestroy, AfterViewInit {
     }
 
     if (event.shiftKey) {
-      this.svgEventService.emitMouseShiftKeyMouseUpEvent([event.clientX, event.clientY])
+      this.svgEventService.emitMouseShiftKeyMouseUpEvent(shapeMouseEvent)
     }
   }
-
-  ngOnDestroy() {
-    gongsvg.RectAnchorType.RECT_ANCHOR_TOP
-    this.subscriptions.forEach((subscription) => subscription.unsubscribe());
-  }
-
-  // 
-  pageX: number = 0
-  pageY: number = 0
-  getSvgTopLeftCoordinates() {
-    const svgElement = this.elementRef.nativeElement.querySelector('svg');
-    const svgRect = svgElement.getBoundingClientRect();
-    this.pageX = svgRect.left + window.pageXOffset;
-    this.pageY = svgRect.top + window.pageYOffset;
-
-    // console.log('SVG Top-Left Corner:', this.pageX, this.pageY);
-  }
-
-  ngAfterViewInit() {
-    this.getSvgTopLeftCoordinates();
-  }
-
 
   anchorMouseDown(event: MouseEvent, anchor: 'left' | 'right' | 'top' | 'bottom'): void {
     event.preventDefault();
@@ -294,14 +279,11 @@ export class RectComponent implements OnInit, OnDestroy, AfterViewInit {
     this.anchorDragging = true;
     this.activeAnchor = anchor;
 
-    const x = event.clientX - this.pageX
-    const y = event.clientY - this.pageY
-
     if (!event.altKey && !event.shiftKey) {
       let shapeMouseEvent: ShapeMouseEvent = {
         ShapeID: this.Rect!.ID,
         ShapeType: gongsvg.RectDB.GONGSTRUCT_NAME,
-        Point: createPoint(x, y),
+        Point: mouseCoordInComponentRef(event),
       }
       this.mouseEventService.emitMouseDownEvent(shapeMouseEvent)
     }
@@ -310,14 +292,11 @@ export class RectComponent implements OnInit, OnDestroy, AfterViewInit {
   anchorMouseMove(event: MouseEvent, anchor: 'left' | 'right' | 'top' | 'bottom'): void {
     event.stopPropagation(); // Prevent the event from bubbling up to the SVG element
 
-    const x = event.clientX - this.pageX
-    const y = event.clientY - this.pageY
-
     if (!event.altKey && !event.shiftKey) {
       let shapeMouseEvent: ShapeMouseEvent = {
         ShapeID: this.Rect!.ID,
         ShapeType: gongsvg.RectDB.GONGSTRUCT_NAME,
-        Point: createPoint(x, y),
+        Point: mouseCoordInComponentRef(event),
       }
       this.mouseEventService.emitMouseMoveEvent(shapeMouseEvent)
     }

@@ -19,10 +19,16 @@ export class RectangleEventService {
   // mouse ALT events
   //
 
-  private mouseRectAltKeyMouseDownEventSource = new Subject<RectMouseEvent>();
+  private mouseRectAltKeyMouseDownEventSource = new Subject<ShapeMouseEvent>();
   mouseRectAltKeyMouseDownEvent$ = this.mouseRectAltKeyMouseDownEventSource.asObservable();
-  emitRectAltKeyMouseDownEvent(rectangleID: number, coordinate: [number, number]) {
-    this.mouseRectAltKeyMouseDownEventSource.next({ rectangleID, MousePosRelativeSVG: coordinate });
+  emitRectAltKeyMouseDownEvent(ShapeMouseEvent: ShapeMouseEvent) {
+    this.mouseRectAltKeyMouseDownEventSource.next(ShapeMouseEvent);
+  }
+
+  private mouseRectAltKeyMouseDragEventSource = new Subject<ShapeMouseEvent>()
+  mouseRectAltKeyMouseDragEvent$ = this.mouseRectAltKeyMouseDragEventSource.asObservable()
+  emitRectAltKeyMouseDragEvent(shapeMouseEvent: ShapeMouseEvent) {
+    this.mouseRectAltKeyMouseDragEventSource.next(shapeMouseEvent)
   }
 
   private mouseRectAltKeyMouseUpEventSource = new Subject<number>();
@@ -31,9 +37,4 @@ export class RectangleEventService {
     this.mouseRectAltKeyMouseUpEventSource.next(rectangleID);
   }
 
-  private mouseRectAltKeyMouseDragEventSource = new Subject<Coordinate>()
-  mouseRectAltKeyMouseDragEvent$ = this.mouseRectAltKeyMouseDragEventSource.asObservable()
-  emitRectAltKeyMouseDragEvent(coordinate: Coordinate) {
-    this.mouseRectAltKeyMouseDragEventSource.next(coordinate)
-  }
 }

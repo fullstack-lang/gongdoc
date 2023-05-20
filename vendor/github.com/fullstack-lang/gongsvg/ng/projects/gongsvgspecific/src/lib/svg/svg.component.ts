@@ -8,6 +8,8 @@ import * as gongsvg from 'gongsvg'
 import { ShapeMouseEvent } from '../shape.mouse.event';
 import { createPoint } from '../link/draw.segments';
 import { MouseEventService } from '../mouse-event.service';
+import { AngularDragEndEventService } from '../angular-drag-end-event.service';
+import { mouseCoordInComponentRef } from '../mouse.coord.in.component.ref';
 
 @Component({
   selector: 'lib-svg',
@@ -64,27 +66,28 @@ export class SvgComponent implements OnInit, OnDestroy, AfterViewInit {
 
     this.subscriptions.push(
       rectangleEventService.mouseRectAltKeyMouseDownEvent$.subscribe(
-        ({ rectangleID: rectangleID, MousePosRelativeSVG: coordinate }) => {
+        (shapeMouseEvent: ShapeMouseEvent) => {
           // console.log('SvgComponent, Mouse down event occurred on rectangle ', rectangleID, " at ", coordinate)
-          this.linkStartRectangleID = rectangleID
+          this.linkStartRectangleID = shapeMouseEvent.ShapeID
 
-          let rect = this.gongsvgFrontRepo?.Rects.get(rectangleID)
+          let rect = this.gongsvgFrontRepo?.Rects.get(shapeMouseEvent.ShapeID)
 
           if (rect == undefined) {
             return
           }
 
           this.linkDrawing = true
-          this.startX = coordinate[0]
-          this.startY = coordinate[1]
+          this.startX = shapeMouseEvent.Point.X
+          this.startY = shapeMouseEvent.Point.Y
         })
     );
 
     this.subscriptions.push(
-      rectangleEventService.mouseRectAltKeyMouseDragEvent$.subscribe((coordinate: Coordinate) => {
 
-        this.endX = coordinate[0]
-        this.endY = coordinate[1]
+      rectangleEventService.mouseRectAltKeyMouseDragEvent$.subscribe((shapeMouseEvent: ShapeMouseEvent) => {
+
+        this.endX = shapeMouseEvent.Point.X
+        this.endY = shapeMouseEvent.Point.Y
         // console.log('SvgComponent, Received Mouse drag event occurred', this.linkDrawing, this.startX, this.startY, this.endX, this.endY);
       })
     )
@@ -100,10 +103,10 @@ export class SvgComponent implements OnInit, OnDestroy, AfterViewInit {
 
     this.subscriptions.push(
       svgEventService.multiShapeSelectDragEvent$.subscribe(
-        (coordinate: Coordinate) => {
+        (shapeMouseEvent: ShapeMouseEvent) => {
 
-          let actualX = coordinate[0]
-          let actualY = coordinate[1]
+          let actualX = shapeMouseEvent.Point.X
+          let actualY = shapeMouseEvent.Point.Y
 
           this.rectX = Math.min(this.startX, actualX);
           this.rectY = Math.min(this.startY, actualY);
@@ -114,14 +117,11 @@ export class SvgComponent implements OnInit, OnDestroy, AfterViewInit {
 
     this.subscriptions.push(
       svgEventService.mouseShiftKeyMouseUpEvent$.subscribe(
-        (coordinate: Coordinate) => {
-
-          let actualX = coordinate[0]
-          let actualY = coordinate[1]
+        (shapeMouseEvent) => {
 
           this.selectionRectDrawing = false
-          this.endX = actualX - this.pageX
-          this.endY = actualY - this.pageY
+          this.endX = shapeMouseEvent.Point.X
+          this.endY = shapeMouseEvent.Point.Y
 
           let selectAreaConfig: SelectAreaConfig = new SelectAreaConfig()
 
@@ -140,8 +140,6 @@ export class SvgComponent implements OnInit, OnDestroy, AfterViewInit {
       )
     )
   }
-
-
 
   ngOnInit(): void {
 
@@ -247,6 +245,10 @@ export class SvgComponent implements OnInit, OnDestroy, AfterViewInit {
 
   mousedown(event: MouseEvent): void {
     if (event.shiftKey) {
+
+      this.updateSvgTopLeftCoordinates()
+      // console.log("page X, Y", this.pageX, this.pageY)
+
       this.selectionRectDrawing = true
       this.startX = event.clientX - this.pageX
       this.startY = event.clientY - this.pageY
@@ -254,19 +256,26 @@ export class SvgComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   mousemove(event: MouseEvent): void {
+    this.updateSvgTopLeftCoordinates()
+
     const x = event.clientX - this.pageX
     const y = event.clientY - this.pageY
+
+    let shapeMouseEvent: ShapeMouseEvent = {
+      ShapeID: 0,
+      ShapeType: "",
+      Point: createPoint(x, y),
+    }
 
     // we want this event to bubble to the SVG element
     if (event.altKey) {
       // console.log('SvgComponent, ALT Mouse drag event occurred', this.linkDrawing, this.startX, this.startY, this.endX, this.endY);
-
-      this.rectangleEventService.emitRectAltKeyMouseDragEvent([x, y])
+      this.rectangleEventService.emitRectAltKeyMouseDragEvent(shapeMouseEvent)
       return
     }
     if (event.shiftKey) {
 
-      this.svgEventService.emitMultiShapeSelectDrag([x, y])
+      this.svgEventService.emitMultiShapeSelectDrag(shapeMouseEvent)
       // console.log('SvgComponent, SHIFT Mouse drag event occurred', this.selectionRectDrawing, this.rectX, this.rectY, this.width, this.height);
     }
 
@@ -286,22 +295,23 @@ export class SvgComponent implements OnInit, OnDestroy, AfterViewInit {
 
   onmouseup(event: MouseEvent): void {
 
+    this.updateSvgTopLeftCoordinates()
     const x = event.clientX - this.pageX
     const y = event.clientY - this.pageY
 
+    let shapeMouseEvent: ShapeMouseEvent = {
+      ShapeID: 0,
+      ShapeType: "",
+      Point: createPoint(x, y),
+    }
+
     if (event.shiftKey) {
-      this.svgEventService.emitMouseShiftKeyMouseUpEvent([event.clientX, event.clientY])
+      this.svgEventService.emitMouseShiftKeyMouseUpEvent(shapeMouseEvent)
     }
 
     if (!event.shiftKey && !event.altKey) {
-
       // in case of dragging something, when the mouse moves fast, it can reach the SVG background
       // in this case, one forward the mouse event on the event bus
-      let shapeMouseEvent: ShapeMouseEvent = {
-        ShapeID: 0,
-        ShapeType: "",
-        Point: createPoint(x, y),
-      }
       this.mouseEventService.emitMouseUpEvent(shapeMouseEvent)
     }
   }
@@ -311,6 +321,10 @@ export class SvgComponent implements OnInit, OnDestroy, AfterViewInit {
   @ViewChild('drawingArea') drawingArea: ElementRef<HTMLDivElement> | undefined
 
   ngAfterViewInit() {
+    this.updateSvgTopLeftCoordinates()
+  }
+
+  updateSvgTopLeftCoordinates() {
     const offset = this.getDivOffset(this.drawingArea!.nativeElement);
     this.pageX = offset.offsetX
     this.pageY = offset.offsetY

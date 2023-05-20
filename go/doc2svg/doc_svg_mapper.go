@@ -413,13 +413,19 @@ func (docSVGMapper *DocSVGMapper) GenerateSvg(
 					// configuration
 					link.Stroke = gongsvg_models.Slategray.ToString()
 					link.StrokeWidth = 2
-					link.StrokeDashArray = "5 5"
+					link.StrokeDashArray = "2 2"
 
+					// first version
 					link.Type = gongsvg_models.LINK_TYPE_FLOATING_ORTHOGONAL
 					link.StartOrientation = gongsvg_models.ORIENTATION_HORIZONTAL
 					link.StartRatio = 0.5
 					link.EndOrientation = gongsvg_models.ORIENTATION_HORIZONTAL
 					link.EndRatio = 0.5
+
+					// more elegent
+					link.Type = gongsvg_models.LINK_TYPE_LINE_WITH_CONTROL_POINTS
+					link.StartAnchorType = gongsvg_models.ANCHOR_CENTER
+					link.EndAnchorType = gongsvg_models.ANCHOR_CENTER
 
 					link.CornerOffsetRatio = (endRect.X - startRect.X - 80) / startRect.Width
 
@@ -448,7 +454,7 @@ func (docSVGMapper *DocSVGMapper) GenerateSvg(
 					// configuration
 					rectLinkLink.Stroke = gongsvg_models.Slategray.ToString()
 					rectLinkLink.StrokeWidth = 2
-					rectLinkLink.StrokeDashArray = "5 5"
+					rectLinkLink.StrokeDashArray = "2 2"
 					rectLinkLink.TargetAnchorPosition = 0.5
 
 					rectLinkLink.Start = startRect
