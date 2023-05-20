@@ -2,7 +2,6 @@ import { AfterViewInit, Component, ElementRef, Input, DoCheck, OnInit, SimpleCha
 import * as gongsvg from 'gongsvg'
 import { Coordinate } from '../rectangle-event.service';
 import { SegmentsParams, Segment, createPoint, drawSegments, Offset } from './draw.segments';
-import { LinkEventService } from '../link-event.service';
 import { Subscription } from 'rxjs';
 import { ShapeMouseEvent } from '../shape.mouse.event';
 import { MouseEventService } from '../mouse-event.service';
@@ -10,6 +9,7 @@ import { compareRectGeometries } from '../compare.rect.geometries'
 
 import { SplitComponent } from 'angular-split'
 import { AngularDragEndEventService } from '../angular-drag-end-event.service';
+import { mouseCoordInComponentRef } from '../mouse.coord.in.component.ref';
 
 @Component({
   selector: 'lib-link',
@@ -41,8 +41,6 @@ export class LinkComponent implements OnInit, AfterViewInit, DoCheck {
   draggedTextIndex = 0
 
   // offset between the cursor at the start and the top left corner
-  offsetX = 0;
-  offsetY = 0;
   distanceMoved = 0
 
   private dragThreshold = 5;
@@ -75,14 +73,13 @@ export class LinkComponent implements OnInit, AfterViewInit, DoCheck {
   constructor(
     private linkService: gongsvg.LinkService,
     private anchoredTextService: gongsvg.AnchoredTextService,
-    private linkEventService: LinkEventService,
     private angularDragEndEventService: AngularDragEndEventService,
     private mouseEventService: MouseEventService,
     private elementRef: ElementRef,
   ) {
 
     this.subscriptions.push(
-      linkEventService.mouseMouseDownEvent$.subscribe(
+      mouseEventService.mouseMouseDownEvent$.subscribe(
         (shapeMouseEvent: ShapeMouseEvent) => {
           this.PointAtMouseDown = structuredClone(shapeMouseEvent.Point)
           this.LinkAtMouseDown = structuredClone(this.Link!)
@@ -102,7 +99,7 @@ export class LinkComponent implements OnInit, AfterViewInit, DoCheck {
     )
 
     this.subscriptions.push(
-      linkEventService.mouseMouseMoveEvent$.subscribe(
+      mouseEventService.mouseMouseMoveEvent$.subscribe(
         (shapeMouseEvent: ShapeMouseEvent) => {
 
           // offSetForNewMidlleSegment denotes the standard distance between
@@ -330,24 +327,8 @@ export class LinkComponent implements OnInit, AfterViewInit, DoCheck {
         })
     )
 
-    // getting event from the background (when the mouse moves faster than the link)
-    this.subscriptions.push(
-      mouseEventService.mouseMouseMoveEvent$.subscribe(
-        (shapeMouseEvent: ShapeMouseEvent) => {
-          this.linkEventService.emitMouseMoveEvent(shapeMouseEvent)
-        }
-      )
-    )
     this.subscriptions.push(
       mouseEventService.mouseMouseUpEvent$.subscribe(
-        (shapeMouseEvent: ShapeMouseEvent) => {
-          this.linkEventService.emitMouseUpEvent(shapeMouseEvent)
-        }
-      )
-    )
-
-    this.subscriptions.push(
-      linkEventService.mouseMouseUpEvent$.subscribe(
         (shapeMouseEvent: ShapeMouseEvent) => {
 
           if (this.dragging) {
@@ -384,15 +365,6 @@ export class LinkComponent implements OnInit, AfterViewInit, DoCheck {
           this.dragging = false
           this.textDragging = false
         })
-    )
-
-    this.subscriptions.push(
-      angularDragEndEventService.angularSplitDragEndEvent$.subscribe(
-        () => {
-          console.log("link component captured angular drag event")
-          this.getSvgTopLeftCoordinates()
-        }
-      )
     )
   }
 
@@ -470,11 +442,6 @@ export class LinkComponent implements OnInit, AfterViewInit, DoCheck {
       event.preventDefault();
       event.stopPropagation(); // Prevent the event from bubbling up to the SVG element
 
-      let x = event.clientX - this.pageX
-      let y = event.clientY - this.pageY
-
-      console.log("client x, y:", event.clientX, event.clientY,"x, y", x, y)
-
       // this link shit to dragging state
       this.dragging = true
       this.draggedSegment = segmentNumber
@@ -482,24 +449,22 @@ export class LinkComponent implements OnInit, AfterViewInit, DoCheck {
       let shapeMouseEvent: ShapeMouseEvent = {
         ShapeID: this.Link!.ID,
         ShapeType: gongsvg.LinkDB.GONGSTRUCT_NAME,
-        Point: createPoint(x, y),
+        Point: mouseCoordInComponentRef(event),
       }
-      this.linkEventService.emitMouseDownEvent(shapeMouseEvent)
+      this.mouseEventService.emitMouseDownEvent(shapeMouseEvent)
     }
   }
 
   linkMouseMove(event: MouseEvent): void {
 
     if (!event.altKey && !event.shiftKey) {
-      let x = event.clientX - this.pageX
-      let y = event.clientY - this.pageY
 
       let shapeMouseEvent: ShapeMouseEvent = {
         ShapeID: this.Link!.ID,
         ShapeType: gongsvg.LinkDB.GONGSTRUCT_NAME,
-        Point: createPoint(x, y),
+        Point: mouseCoordInComponentRef(event),
       }
-      this.linkEventService.emitMouseMoveEvent(shapeMouseEvent)
+      this.mouseEventService.emitMouseMoveEvent(shapeMouseEvent)
     }
   }
 
@@ -507,15 +472,13 @@ export class LinkComponent implements OnInit, AfterViewInit, DoCheck {
 
     // console.log("Link : linkMouseUp", this.Link?.Name)
     if (!event.altKey && !event.shiftKey) {
-      let x = event.clientX - this.pageX
-      let y = event.clientY - this.pageY
 
       let shapeMouseEvent: ShapeMouseEvent = {
         ShapeID: this.Link!.ID,
         ShapeType: gongsvg.LinkDB.GONGSTRUCT_NAME,
-        Point: createPoint(x, y),
+        Point: mouseCoordInComponentRef(event),
       }
-      this.linkEventService.emitMouseUpEvent(shapeMouseEvent)
+      this.mouseEventService.emitMouseUpEvent(shapeMouseEvent)
     }
   }
 
@@ -634,24 +597,24 @@ export class LinkComponent implements OnInit, AfterViewInit, DoCheck {
     let secondTipY = segment.EndPoint.Y
 
     {
-      let { x, y } = this.rotateToSegentDirection(segment, - this.Link!.EndArrowSize, - this.Link!.EndArrowSize)
+      let { x, y } = this.rotateToSegmentDirection(segment, - this.Link!.EndArrowSize, - this.Link!.EndArrowSize)
 
       firstTipX += x
       firstTipY += y
     }
     {
-      let { x, y } = this.rotateToSegentDirection(segment, this.Link!.StrokeWidth * ratio, this.Link!.StrokeWidth * ratio)
+      let { x, y } = this.rotateToSegmentDirection(segment, this.Link!.StrokeWidth * ratio, this.Link!.StrokeWidth * ratio)
       firstStartX += x
       firstStartY += y
     }
     {
-      let { x, y } = this.rotateToSegentDirection(segment, - this.Link!.EndArrowSize, this.Link!.EndArrowSize)
+      let { x, y } = this.rotateToSegmentDirection(segment, - this.Link!.EndArrowSize, this.Link!.EndArrowSize)
 
       secondTipX += x
       secondTipY += y
     }
     {
-      let { x, y } = this.rotateToSegentDirection(segment, this.Link!.StrokeWidth * ratio, - this.Link!.StrokeWidth * ratio)
+      let { x, y } = this.rotateToSegmentDirection(segment, this.Link!.StrokeWidth * ratio, - this.Link!.StrokeWidth * ratio)
 
       secondStartX += x
       secondStartY += y
@@ -662,7 +625,7 @@ export class LinkComponent implements OnInit, AfterViewInit, DoCheck {
     return path
   }
 
-  rotateToSegentDirection(segment: Segment, x: number, y: number): { x: number, y: number } {
+  rotateToSegmentDirection(segment: Segment, x: number, y: number): { x: number, y: number } {
     let x_res = 0
     let y_res = 0
 
@@ -688,7 +651,7 @@ export class LinkComponent implements OnInit, AfterViewInit, DoCheck {
     return { x: x_res, y: y_res }
   }
 
-  adjustToSegentDirection(segment: Segment, x: number, y: number): { x: number, y: number } {
+  adjustToSegmentDirection(segment: Segment, x: number, y: number): { x: number, y: number } {
     let x_res = 0
     let y_res = 0
 
@@ -723,9 +686,6 @@ export class LinkComponent implements OnInit, AfterViewInit, DoCheck {
       event.preventDefault();
       event.stopPropagation(); // Prevent the event from bubbling up to the SVG element
 
-      let x = event.clientX - this.pageX
-      let y = event.clientY - this.pageY
-
       // this text shift to dragging state
       this.textDragging = true
       this.draggedTextIndex = anchoredTextIndex
@@ -734,24 +694,22 @@ export class LinkComponent implements OnInit, AfterViewInit, DoCheck {
       let shapeMouseEvent: ShapeMouseEvent = {
         ShapeID: this.Link!.ID,
         ShapeType: gongsvg.LinkDB.GONGSTRUCT_NAME,
-        Point: createPoint(x, y),
+        Point: mouseCoordInComponentRef(event),
       }
-      this.linkEventService.emitMouseDownEvent(shapeMouseEvent)
+      this.mouseEventService.emitMouseDownEvent(shapeMouseEvent)
     }
   }
 
   textAnchoredMouseMove(event: MouseEvent): void {
 
     if (!event.altKey && !event.shiftKey) {
-      let x = event.clientX - this.pageX
-      let y = event.clientY - this.pageY
 
       let shapeMouseEvent: ShapeMouseEvent = {
         ShapeID: this.Link!.ID,
         ShapeType: gongsvg.LinkDB.GONGSTRUCT_NAME,
-        Point: createPoint(x, y),
+        Point: mouseCoordInComponentRef(event),
       }
-      this.linkEventService.emitMouseMoveEvent(shapeMouseEvent)
+      this.mouseEventService.emitMouseMoveEvent(shapeMouseEvent)
     }
   }
 
@@ -759,32 +717,16 @@ export class LinkComponent implements OnInit, AfterViewInit, DoCheck {
 
     // console.log("Link : linkMouseUp", this.Link?.Name)
     if (!event.altKey && !event.shiftKey) {
-      let x = event.clientX - this.pageX
-      let y = event.clientY - this.pageY
-
       let shapeMouseEvent: ShapeMouseEvent = {
         ShapeID: this.Link!.ID,
         ShapeType: gongsvg.LinkDB.GONGSTRUCT_NAME,
-        Point: createPoint(x, y),
+        Point: mouseCoordInComponentRef(event),
       }
-      this.linkEventService.emitMouseUpEvent(shapeMouseEvent)
+      this.mouseEventService.emitMouseUpEvent(shapeMouseEvent)
     }
   }
 
-  pageX: number = 0
-  pageY: number = 0
-  getSvgTopLeftCoordinates() {
-    const svgElement = this.elementRef.nativeElement.querySelector('svg')
-
-    const svgRect = svgElement?.getBoundingClientRect()
-    this.pageX = svgRect?.left + window.pageXOffset
-    this.pageY = svgRect?.top + window.pageYOffset
-
-    console.log('SVG Top-Left Corner:', this.pageX, this.pageY);
-  }
-
   ngAfterViewInit() {
-    this.getSvgTopLeftCoordinates();
 
     const bbox = this.textElement?.nativeElement.getBBox()
 
