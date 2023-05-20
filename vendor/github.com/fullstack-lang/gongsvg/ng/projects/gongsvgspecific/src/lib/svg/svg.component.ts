@@ -245,6 +245,10 @@ export class SvgComponent implements OnInit, OnDestroy, AfterViewInit {
 
   mousedown(event: MouseEvent): void {
     if (event.shiftKey) {
+
+      this.updateSvgTopLeftCoordinates()
+      // console.log("page X, Y", this.pageX, this.pageY)
+
       this.selectionRectDrawing = true
       this.startX = event.clientX - this.pageX
       this.startY = event.clientY - this.pageY
@@ -252,6 +256,8 @@ export class SvgComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   mousemove(event: MouseEvent): void {
+    this.updateSvgTopLeftCoordinates()
+
     const x = event.clientX - this.pageX
     const y = event.clientY - this.pageY
 
@@ -289,6 +295,7 @@ export class SvgComponent implements OnInit, OnDestroy, AfterViewInit {
 
   onmouseup(event: MouseEvent): void {
 
+    this.updateSvgTopLeftCoordinates()
     const x = event.clientX - this.pageX
     const y = event.clientY - this.pageY
 
@@ -314,10 +321,10 @@ export class SvgComponent implements OnInit, OnDestroy, AfterViewInit {
   @ViewChild('drawingArea') drawingArea: ElementRef<HTMLDivElement> | undefined
 
   ngAfterViewInit() {
-    this.getSvgTopLeftCoordinates()
+    this.updateSvgTopLeftCoordinates()
   }
 
-  getSvgTopLeftCoordinates() {
+  updateSvgTopLeftCoordinates() {
     const offset = this.getDivOffset(this.drawingArea!.nativeElement);
     this.pageX = offset.offsetX
     this.pageY = offset.offsetY
