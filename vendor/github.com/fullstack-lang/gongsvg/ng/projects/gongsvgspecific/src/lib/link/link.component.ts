@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, ElementRef, Input, DoCheck, OnInit, SimpleChanges, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, Input, DoCheck, OnInit, SimpleChanges, ViewChild, AfterViewChecked, OnChanges } from '@angular/core';
 import * as gongsvg from 'gongsvg'
 import { Coordinate } from '../rectangle-event.service';
 import { SegmentsParams, Segment, createPoint, drawSegments, Offset } from './draw.segments';
@@ -10,21 +10,19 @@ import { compareRectGeometries } from '../compare.rect.geometries'
 import { SplitComponent } from 'angular-split'
 import { AngularDragEndEventService } from '../angular-drag-end-event.service';
 import { mouseCoordInComponentRef } from '../mouse.coord.in.component.ref';
+import { drawLineFromRectToB } from '../draw.line.from.rect.to.point';
 
 @Component({
   selector: 'lib-link',
   templateUrl: './link.component.svg',
   styleUrls: ['./link.component.css']
 })
-export class LinkComponent implements OnInit, AfterViewInit, DoCheck {
+export class LinkComponent implements OnInit, AfterViewInit, DoCheck, AfterViewChecked, OnChanges {
 
   @Input() Link?: gongsvg.LinkDB
   @Input() GONG__StackPath: string = ""
 
-  // to detect angular drag events
-  @ViewChild('splitEl') splitEl: SplitComponent | undefined
-
-  @ViewChild('textElement', { static: false }) textElement: ElementRef | undefined
+  // @ViewChild('textElement', { static: false }) textElement: ElementRef | undefined
   textWidth: number = 0
   textHeight: number = 0
 
@@ -395,6 +393,17 @@ export class LinkComponent implements OnInit, AfterViewInit, DoCheck {
     }
   }
 
+  ngAfterViewChecked() {
+    console.log('Change detection run on MySvgComponent');
+  }
+
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes['Link']) {
+      // console.log('Previous value: ', changes['Link'].previousValue);
+      // console.log('Current value: ', changes['Link'].currentValue);
+    }
+  }
+
   resetPreviousState() {
     this.previousStart = structuredClone(this.Link!.Start!)
     this.previousEnd = structuredClone(this.Link!.End!)
@@ -405,29 +414,39 @@ export class LinkComponent implements OnInit, AfterViewInit, DoCheck {
     this.previousEndY = this.Link!.End!.Y
   }
 
-  public getPosition(rect: gongsvg.RectDB | undefined, position: string | undefined): Coordinate {
+  public getPosition(
+    startRect: gongsvg.RectDB | undefined,
+    position: string | undefined,
+    endRect?: gongsvg.RectDB | undefined
+  ): Coordinate {
 
     let coordinate: Coordinate = [0, 0]
 
-    if (rect == undefined || position == undefined) {
+    if (startRect == undefined || position == undefined) {
       return coordinate
     }
 
     switch (position) {
       case gongsvg.AnchorType.ANCHOR_BOTTOM:
-        coordinate = [rect.X + rect.Width / 2, rect.Y + rect.Height]
+        coordinate = [startRect.X + startRect.Width / 2, startRect.Y + startRect.Height]
         break;
       case gongsvg.AnchorType.ANCHOR_TOP:
-        coordinate = [rect.X + rect.Width / 2, rect.Y]
+        coordinate = [startRect.X + startRect.Width / 2, startRect.Y]
         break;
       case gongsvg.AnchorType.ANCHOR_LEFT:
-        coordinate = [rect.X, rect.Y + rect.Height / 2]
+        coordinate = [startRect.X, startRect.Y + startRect.Height / 2]
         break;
       case gongsvg.AnchorType.ANCHOR_RIGHT:
-        coordinate = [rect.X + rect.Width, rect.Y + rect.Height / 2]
+        coordinate = [startRect.X + startRect.Width, startRect.Y + startRect.Height / 2]
         break;
       case gongsvg.AnchorType.ANCHOR_CENTER:
-        coordinate = [rect.X + rect.Width / 2, rect.Y + rect.Height / 2]
+        if (endRect == undefined) {
+          coordinate = [startRect.X + startRect.Width / 2, startRect.Y + startRect.Height / 2]
+        } else {
+          let endRectCenter = createPoint(endRect.X + endRect.Width / 2, endRect.Y + endRect.Height / 2)
+          let borderPoint = drawLineFromRectToB(startRect, endRectCenter)
+          coordinate = [borderPoint.X, borderPoint.Y]
+        }
         break;
     }
 
@@ -728,12 +747,12 @@ export class LinkComponent implements OnInit, AfterViewInit, DoCheck {
 
   ngAfterViewInit() {
 
-    const bbox = this.textElement?.nativeElement.getBBox()
+    // const bbox = this.textElement?.nativeElement.getBBox()
 
-    if (bbox != undefined) {
-      this.textWidth = bbox.width;
-      this.textHeight = bbox.height;
-    }
+    // if (bbox != undefined) {
+    //   this.textWidth = bbox.width;
+    //   this.textHeight = bbox.height;
+    // }
   }
 
   splitTextIntoLines(text: string): string[] {

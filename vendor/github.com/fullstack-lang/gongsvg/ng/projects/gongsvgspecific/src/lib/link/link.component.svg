@@ -1,10 +1,10 @@
 <svg *ngIf="nbControlPoints == 0 && this.Link && (!isFloatingOrthogonal)" class="svg">
     <g>
         <line class="overlay" 
-            [attr.x1]="getPosition(Link.Start, Link.StartAnchorType)[0]" 
-            [attr.y1]="getPosition(Link.Start, Link.StartAnchorType)[1]" 
-            [attr.x2]="getPosition(Link.End, Link.EndAnchorType)[0]" 
-            [attr.y2]="getPosition(Link.End, Link.EndAnchorType)[1]"
+            [attr.x1]="getPosition(Link.Start, Link.StartAnchorType, Link.End)[0]" 
+            [attr.y1]="getPosition(Link.Start, Link.StartAnchorType, Link.End)[1]" 
+            [attr.x2]="getPosition(Link.End, Link.EndAnchorType, Link.Start)[0]" 
+            [attr.y2]="getPosition(Link.End, Link.EndAnchorType, Link.Start)[1]"
             [attr.fill]="Link.Color"
             [attr.fill-opacity]="Link.FillOpacity" 
             [attr.stroke]="Link.Stroke" 

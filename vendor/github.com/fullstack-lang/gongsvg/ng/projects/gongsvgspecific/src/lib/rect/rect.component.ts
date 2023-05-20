@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, OnDestroy } from '@angular/core';
+import { Component, OnInit, Input, OnDestroy, DoCheck, OnChanges, SimpleChanges } from '@angular/core';
 import { ElementRef, AfterViewInit } from '@angular/core';
 
 
@@ -17,7 +17,7 @@ import { mouseCoordInComponentRef } from '../mouse.coord.in.component.ref';
   templateUrl: './rect.component.svg',
   styleUrls: ['./rect.component.css']
 })
-export class RectComponent implements OnInit, OnDestroy {
+export class RectComponent implements OnInit, OnDestroy, DoCheck, OnChanges {
 
   @Input() Rect: gongsvg.RectDB = new gongsvg.RectDB()
   @Input() GONG__StackPath: string = ""
@@ -173,9 +173,18 @@ export class RectComponent implements OnInit, OnDestroy {
     this.subscriptions.forEach((subscription) => subscription.unsubscribe());
   }
 
+  ngDoCheck(): void {
+    // console.log("DoCheck")
+  }
+
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes['Link']) {
+      // console.log('Previous value: ', changes['Link'].previousValue);
+      // console.log('Current value: ', changes['Link'].currentValue);
+    }
+  }
+
   rectMouseDown(event: MouseEvent): void {
-
-
     if (!event.altKey && !event.shiftKey) {
       event.preventDefault();
       event.stopPropagation(); // Prevent the event from bubbling up to the SVG element
