@@ -15,8 +15,24 @@ type Link struct {
 	//gong:ident
 	Fieldtypename string
 
+	// position of the field text relative to the
+	// arrow end
+	FieldOffsetX float64
+	FieldOffsetY float64
+
 	TargetMultiplicity MultiplicityType
+
+	// position of the TargetMultiplicity text relative to the
+	// arrow end
+	TargetMultiplicityOffsetX float64
+	TargetMultiplicityOffsetY float64
+
 	SourceMultiplicity MultiplicityType
+
+	// position of the SourceMultiplicity text relative to the
+	// arrow end
+	SourceMultiplicityOffsetX float64
+	SourceMultiplicityOffsetY float64
 
 	// For link with control points
 	// Vertices at the middle

@@ -77,11 +77,29 @@ type LinkDB struct {
 	// Declation for basic field linkDB.Fieldtypename
 	Fieldtypename_Data sql.NullString
 
+	// Declation for basic field linkDB.FieldOffsetX
+	FieldOffsetX_Data sql.NullFloat64
+
+	// Declation for basic field linkDB.FieldOffsetY
+	FieldOffsetY_Data sql.NullFloat64
+
 	// Declation for basic field linkDB.TargetMultiplicity
 	TargetMultiplicity_Data sql.NullString
 
+	// Declation for basic field linkDB.TargetMultiplicityOffsetX
+	TargetMultiplicityOffsetX_Data sql.NullFloat64
+
+	// Declation for basic field linkDB.TargetMultiplicityOffsetY
+	TargetMultiplicityOffsetY_Data sql.NullFloat64
+
 	// Declation for basic field linkDB.SourceMultiplicity
 	SourceMultiplicity_Data sql.NullString
+
+	// Declation for basic field linkDB.SourceMultiplicityOffsetX
+	SourceMultiplicityOffsetX_Data sql.NullFloat64
+
+	// Declation for basic field linkDB.SourceMultiplicityOffsetY
+	SourceMultiplicityOffsetY_Data sql.NullFloat64
 
 	// Declation for basic field linkDB.StartOrientation
 	StartOrientation_Data sql.NullString
@@ -124,19 +142,31 @@ type LinkWOP struct {
 
 	Fieldtypename string `xlsx:"3"`
 
-	TargetMultiplicity models.MultiplicityType `xlsx:"4"`
+	FieldOffsetX float64 `xlsx:"4"`
 
-	SourceMultiplicity models.MultiplicityType `xlsx:"5"`
+	FieldOffsetY float64 `xlsx:"5"`
 
-	StartOrientation models.OrientationType `xlsx:"6"`
+	TargetMultiplicity models.MultiplicityType `xlsx:"6"`
 
-	StartRatio float64 `xlsx:"7"`
+	TargetMultiplicityOffsetX float64 `xlsx:"7"`
 
-	EndOrientation models.OrientationType `xlsx:"8"`
+	TargetMultiplicityOffsetY float64 `xlsx:"8"`
 
-	EndRatio float64 `xlsx:"9"`
+	SourceMultiplicity models.MultiplicityType `xlsx:"9"`
 
-	CornerOffsetRatio float64 `xlsx:"10"`
+	SourceMultiplicityOffsetX float64 `xlsx:"10"`
+
+	SourceMultiplicityOffsetY float64 `xlsx:"11"`
+
+	StartOrientation models.OrientationType `xlsx:"12"`
+
+	StartRatio float64 `xlsx:"13"`
+
+	EndOrientation models.OrientationType `xlsx:"14"`
+
+	EndRatio float64 `xlsx:"15"`
+
+	CornerOffsetRatio float64 `xlsx:"16"`
 	// insertion for WOP pointer fields
 }
 
@@ -146,8 +176,14 @@ var Link_Fields = []string{
 	"Name",
 	"Identifier",
 	"Fieldtypename",
+	"FieldOffsetX",
+	"FieldOffsetY",
 	"TargetMultiplicity",
+	"TargetMultiplicityOffsetX",
+	"TargetMultiplicityOffsetY",
 	"SourceMultiplicity",
+	"SourceMultiplicityOffsetX",
+	"SourceMultiplicityOffsetY",
 	"StartOrientation",
 	"StartRatio",
 	"EndOrientation",
@@ -435,11 +471,29 @@ func (linkDB *LinkDB) CopyBasicFieldsFromLink(link *models.Link) {
 	linkDB.Fieldtypename_Data.String = link.Fieldtypename
 	linkDB.Fieldtypename_Data.Valid = true
 
+	linkDB.FieldOffsetX_Data.Float64 = link.FieldOffsetX
+	linkDB.FieldOffsetX_Data.Valid = true
+
+	linkDB.FieldOffsetY_Data.Float64 = link.FieldOffsetY
+	linkDB.FieldOffsetY_Data.Valid = true
+
 	linkDB.TargetMultiplicity_Data.String = link.TargetMultiplicity.ToString()
 	linkDB.TargetMultiplicity_Data.Valid = true
 
+	linkDB.TargetMultiplicityOffsetX_Data.Float64 = link.TargetMultiplicityOffsetX
+	linkDB.TargetMultiplicityOffsetX_Data.Valid = true
+
+	linkDB.TargetMultiplicityOffsetY_Data.Float64 = link.TargetMultiplicityOffsetY
+	linkDB.TargetMultiplicityOffsetY_Data.Valid = true
+
 	linkDB.SourceMultiplicity_Data.String = link.SourceMultiplicity.ToString()
 	linkDB.SourceMultiplicity_Data.Valid = true
+
+	linkDB.SourceMultiplicityOffsetX_Data.Float64 = link.SourceMultiplicityOffsetX
+	linkDB.SourceMultiplicityOffsetX_Data.Valid = true
+
+	linkDB.SourceMultiplicityOffsetY_Data.Float64 = link.SourceMultiplicityOffsetY
+	linkDB.SourceMultiplicityOffsetY_Data.Valid = true
 
 	linkDB.StartOrientation_Data.String = link.StartOrientation.ToString()
 	linkDB.StartOrientation_Data.Valid = true
@@ -470,11 +524,29 @@ func (linkDB *LinkDB) CopyBasicFieldsFromLinkWOP(link *LinkWOP) {
 	linkDB.Fieldtypename_Data.String = link.Fieldtypename
 	linkDB.Fieldtypename_Data.Valid = true
 
+	linkDB.FieldOffsetX_Data.Float64 = link.FieldOffsetX
+	linkDB.FieldOffsetX_Data.Valid = true
+
+	linkDB.FieldOffsetY_Data.Float64 = link.FieldOffsetY
+	linkDB.FieldOffsetY_Data.Valid = true
+
 	linkDB.TargetMultiplicity_Data.String = link.TargetMultiplicity.ToString()
 	linkDB.TargetMultiplicity_Data.Valid = true
 
+	linkDB.TargetMultiplicityOffsetX_Data.Float64 = link.TargetMultiplicityOffsetX
+	linkDB.TargetMultiplicityOffsetX_Data.Valid = true
+
+	linkDB.TargetMultiplicityOffsetY_Data.Float64 = link.TargetMultiplicityOffsetY
+	linkDB.TargetMultiplicityOffsetY_Data.Valid = true
+
 	linkDB.SourceMultiplicity_Data.String = link.SourceMultiplicity.ToString()
 	linkDB.SourceMultiplicity_Data.Valid = true
+
+	linkDB.SourceMultiplicityOffsetX_Data.Float64 = link.SourceMultiplicityOffsetX
+	linkDB.SourceMultiplicityOffsetX_Data.Valid = true
+
+	linkDB.SourceMultiplicityOffsetY_Data.Float64 = link.SourceMultiplicityOffsetY
+	linkDB.SourceMultiplicityOffsetY_Data.Valid = true
 
 	linkDB.StartOrientation_Data.String = link.StartOrientation.ToString()
 	linkDB.StartOrientation_Data.Valid = true
@@ -498,8 +570,14 @@ func (linkDB *LinkDB) CopyBasicFieldsToLink(link *models.Link) {
 	link.Name = linkDB.Name_Data.String
 	link.Identifier = linkDB.Identifier_Data.String
 	link.Fieldtypename = linkDB.Fieldtypename_Data.String
+	link.FieldOffsetX = linkDB.FieldOffsetX_Data.Float64
+	link.FieldOffsetY = linkDB.FieldOffsetY_Data.Float64
 	link.TargetMultiplicity.FromString(linkDB.TargetMultiplicity_Data.String)
+	link.TargetMultiplicityOffsetX = linkDB.TargetMultiplicityOffsetX_Data.Float64
+	link.TargetMultiplicityOffsetY = linkDB.TargetMultiplicityOffsetY_Data.Float64
 	link.SourceMultiplicity.FromString(linkDB.SourceMultiplicity_Data.String)
+	link.SourceMultiplicityOffsetX = linkDB.SourceMultiplicityOffsetX_Data.Float64
+	link.SourceMultiplicityOffsetY = linkDB.SourceMultiplicityOffsetY_Data.Float64
 	link.StartOrientation.FromString(linkDB.StartOrientation_Data.String)
 	link.StartRatio = linkDB.StartRatio_Data.Float64
 	link.EndOrientation.FromString(linkDB.EndOrientation_Data.String)
@@ -514,8 +592,14 @@ func (linkDB *LinkDB) CopyBasicFieldsToLinkWOP(link *LinkWOP) {
 	link.Name = linkDB.Name_Data.String
 	link.Identifier = linkDB.Identifier_Data.String
 	link.Fieldtypename = linkDB.Fieldtypename_Data.String
+	link.FieldOffsetX = linkDB.FieldOffsetX_Data.Float64
+	link.FieldOffsetY = linkDB.FieldOffsetY_Data.Float64
 	link.TargetMultiplicity.FromString(linkDB.TargetMultiplicity_Data.String)
+	link.TargetMultiplicityOffsetX = linkDB.TargetMultiplicityOffsetX_Data.Float64
+	link.TargetMultiplicityOffsetY = linkDB.TargetMultiplicityOffsetY_Data.Float64
 	link.SourceMultiplicity.FromString(linkDB.SourceMultiplicity_Data.String)
+	link.SourceMultiplicityOffsetX = linkDB.SourceMultiplicityOffsetX_Data.Float64
+	link.SourceMultiplicityOffsetY = linkDB.SourceMultiplicityOffsetY_Data.Float64
 	link.StartOrientation.FromString(linkDB.StartOrientation_Data.String)
 	link.StartRatio = linkDB.StartRatio_Data.Float64
 	link.EndOrientation.FromString(linkDB.EndOrientation_Data.String)

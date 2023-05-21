@@ -81,11 +81,29 @@ export class LinksTableComponent implements OnInit {
         case 'Fieldtypename':
           return linkDB.Fieldtypename;
 
+        case 'FieldOffsetX':
+          return linkDB.FieldOffsetX;
+
+        case 'FieldOffsetY':
+          return linkDB.FieldOffsetY;
+
         case 'TargetMultiplicity':
           return linkDB.TargetMultiplicity;
 
+        case 'TargetMultiplicityOffsetX':
+          return linkDB.TargetMultiplicityOffsetX;
+
+        case 'TargetMultiplicityOffsetY':
+          return linkDB.TargetMultiplicityOffsetY;
+
         case 'SourceMultiplicity':
           return linkDB.SourceMultiplicity;
+
+        case 'SourceMultiplicityOffsetX':
+          return linkDB.SourceMultiplicityOffsetX;
+
+        case 'SourceMultiplicityOffsetY':
+          return linkDB.SourceMultiplicityOffsetY;
 
         case 'Middlevertice':
           return (linkDB.Middlevertice ? linkDB.Middlevertice.Name : '');
@@ -129,8 +147,14 @@ export class LinksTableComponent implements OnInit {
       mergedContent += linkDB.Name.toLowerCase()
       mergedContent += linkDB.Identifier.toLowerCase()
       mergedContent += linkDB.Fieldtypename.toLowerCase()
+      mergedContent += linkDB.FieldOffsetX.toString()
+      mergedContent += linkDB.FieldOffsetY.toString()
       mergedContent += linkDB.TargetMultiplicity.toLowerCase()
+      mergedContent += linkDB.TargetMultiplicityOffsetX.toString()
+      mergedContent += linkDB.TargetMultiplicityOffsetY.toString()
       mergedContent += linkDB.SourceMultiplicity.toLowerCase()
+      mergedContent += linkDB.SourceMultiplicityOffsetX.toString()
+      mergedContent += linkDB.SourceMultiplicityOffsetY.toString()
       if (linkDB.Middlevertice) {
         mergedContent += linkDB.Middlevertice.Name.toLowerCase()
       }
@@ -200,8 +224,14 @@ export class LinksTableComponent implements OnInit {
         "Name",
         "Identifier",
         "Fieldtypename",
+        "FieldOffsetX",
+        "FieldOffsetY",
         "TargetMultiplicity",
+        "TargetMultiplicityOffsetX",
+        "TargetMultiplicityOffsetY",
         "SourceMultiplicity",
+        "SourceMultiplicityOffsetX",
+        "SourceMultiplicityOffsetY",
         "Middlevertice",
         "StartOrientation",
         "StartRatio",
@@ -215,8 +245,14 @@ export class LinksTableComponent implements OnInit {
         "Name",
         "Identifier",
         "Fieldtypename",
+        "FieldOffsetX",
+        "FieldOffsetY",
         "TargetMultiplicity",
+        "TargetMultiplicityOffsetX",
+        "TargetMultiplicityOffsetY",
         "SourceMultiplicity",
+        "SourceMultiplicityOffsetX",
+        "SourceMultiplicityOffsetY",
         "Middlevertice",
         "StartOrientation",
         "StartRatio",

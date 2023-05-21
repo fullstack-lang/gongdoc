@@ -177,8 +177,8 @@ func (docSVGMapper *DocSVGMapper) GenerateSvg(
 			link.TextAtArrowEnd = append(link.TextAtArrowEnd, targetMulitplicity)
 			targetMulitplicity.Name = docLink.TargetMultiplicity.ToString()
 			targetMulitplicity.Content = targetMulitplicity.Name
-			targetMulitplicity.Y_Offset = 16
-			targetMulitplicity.X_Offset = -50
+			targetMulitplicity.X_Offset = docLink.TargetMultiplicityOffsetX
+			targetMulitplicity.Y_Offset = docLink.TargetMultiplicityOffsetY
 			targetMulitplicity.Stroke = gongsvg_models.Black.ToString()
 			targetMulitplicity.StrokeWidth = 1
 			targetMulitplicity.Color = gongsvg_models.Black.ToString()
@@ -189,8 +189,8 @@ func (docSVGMapper *DocSVGMapper) GenerateSvg(
 			link.TextAtArrowEnd = append(link.TextAtArrowEnd, fieldName)
 			fieldName.Name = docLink.GetName()
 			fieldName.Content = fieldName.Name
-			fieldName.Y_Offset = -16
-			fieldName.X_Offset = -50
+			fieldName.Y_Offset = docLink.FieldOffsetY
+			fieldName.X_Offset = docLink.FieldOffsetX
 			fieldName.Stroke = gongsvg_models.Black.ToString()
 			fieldName.StrokeWidth = 1
 			fieldName.Color = gongsvg_models.Black.ToString()
@@ -201,11 +201,10 @@ func (docSVGMapper *DocSVGMapper) GenerateSvg(
 			link.TextAtArrowStart = append(link.TextAtArrowStart, sourceMultiplicity)
 			sourceMultiplicity.Name = docLink.SourceMultiplicity.ToString()
 			sourceMultiplicity.Content = sourceMultiplicity.Name
-			sourceMultiplicity.Y_Offset = 10
-			sourceMultiplicity.X_Offset = 10
+			sourceMultiplicity.X_Offset = docLink.SourceMultiplicityOffsetX
+			sourceMultiplicity.Y_Offset = docLink.SourceMultiplicityOffsetY
 			sourceMultiplicity.Stroke = gongsvg_models.Black.ToString()
 			sourceMultiplicity.StrokeWidth = 1
-
 		}
 	}
 

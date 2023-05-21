@@ -114,8 +114,11 @@ export class RectComponent implements OnInit, OnDestroy, DoCheck, OnChanges {
             if (this.isEditableService.getIsEditable()) {
               this.rectService.updateRect(this.Rect, this.GONG__StackPath).subscribe()
             }
-          } else {
-            if (this.Rect?.IsSelectable && shapeMouseEvent.ShapeID == this.Rect.ID) {
+          }
+          if (this.distanceMoved <= this.dragThreshold) {
+            if (this.Rect?.IsSelectable &&
+              shapeMouseEvent.ShapeType == gongsvg.RectDB.GONGSTRUCT_NAME &&
+              shapeMouseEvent.ShapeID == this.Rect.ID) {
               console.log("rect, mouseEventService.mouseMouseUpEvent$.subscribe, from the shape: ", this.Rect?.Name)
               this.Rect.IsSelected = !this.Rect.IsSelected
               this.rectService.updateRect(this.Rect, this.GONG__StackPath).subscribe()
