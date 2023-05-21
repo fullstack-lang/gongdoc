@@ -130,6 +130,8 @@ func NewDiagramInjection(stage *models.StageStruct) {
 	__GongStructShape__000001_NewDiagram_Point := (&models.GongStructShape{Name: `NewDiagram-Point`}).Stage(stage)
 
 	// Declarations of staged instances of Link
+	__Link__000000_End := (&models.Link{Name: `End`}).Stage(stage)
+	__Link__000001_Start := (&models.Link{Name: `Start`}).Stage(stage)
 
 	// Declarations of staged instances of Node
 
@@ -154,6 +156,8 @@ func NewDiagramInjection(stage *models.StageStruct) {
 	// Declarations of staged instances of Umlsc
 
 	// Declarations of staged instances of Vertice
+	__Vertice__000000_Verticle_in_class_diagram_NewDiagram_in_middle_between_NewDiagram_Line_and_NewDiagram_Point := (&models.Vertice{Name: `Verticle in class diagram NewDiagram in middle between NewDiagram-Line and NewDiagram-Point`}).Stage(stage)
+	__Vertice__000001_Verticle_in_class_diagram_NewDiagram_in_middle_between_NewDiagram_Line_and_NewDiagram_Point := (&models.Vertice{Name: `Verticle in class diagram NewDiagram in middle between NewDiagram-Line and NewDiagram-Point`}).Stage(stage)
 
 	// Setup of values
 
@@ -230,6 +234,58 @@ func NewDiagramInjection(stage *models.StageStruct) {
 	__GongStructShape__000001_NewDiagram_Point.Heigth = 110.000000
 	__GongStructShape__000001_NewDiagram_Point.IsSelected = false
 
+	// Link values setup
+	__Link__000000_End.Name = `End`
+
+	// comment added to overcome the problem with the comment map association
+
+	//gong:ident [ref_models.Line.End]
+	__Link__000000_End.Identifier = `ref_models.Line.End`
+
+	// comment added to overcome the problem with the comment map association
+
+	//gong:ident [ref_models.Point]
+	__Link__000000_End.Fieldtypename = `ref_models.Point`
+	__Link__000000_End.FieldOffsetX = -50.000000
+	__Link__000000_End.FieldOffsetY = -16.000000
+	__Link__000000_End.TargetMultiplicity = models.ZERO_ONE
+	__Link__000000_End.TargetMultiplicityOffsetX = 22.000000
+	__Link__000000_End.TargetMultiplicityOffsetY = -20.000000
+	__Link__000000_End.SourceMultiplicity = models.MANY
+	__Link__000000_End.SourceMultiplicityOffsetX = 10.000000
+	__Link__000000_End.SourceMultiplicityOffsetY = -50.000000
+	__Link__000000_End.StartOrientation = models.ORIENTATION_HORIZONTAL
+	__Link__000000_End.StartRatio = 0.500000
+	__Link__000000_End.EndOrientation = models.ORIENTATION_VERTICAL
+	__Link__000000_End.EndRatio = 0.438458
+	__Link__000000_End.CornerOffsetRatio = 1.222222
+
+	// Link values setup
+	__Link__000001_Start.Name = `Start`
+
+	// comment added to overcome the problem with the comment map association
+
+	//gong:ident [ref_models.Line.Start]
+	__Link__000001_Start.Identifier = `ref_models.Line.Start`
+
+	// comment added to overcome the problem with the comment map association
+
+	//gong:ident [ref_models.Point]
+	__Link__000001_Start.Fieldtypename = `ref_models.Point`
+	__Link__000001_Start.FieldOffsetX = 434.000000
+	__Link__000001_Start.FieldOffsetY = 24.000000
+	__Link__000001_Start.TargetMultiplicity = models.ZERO_ONE
+	__Link__000001_Start.TargetMultiplicityOffsetX = 438.000000
+	__Link__000001_Start.TargetMultiplicityOffsetY = -20.000000
+	__Link__000001_Start.SourceMultiplicity = models.MANY
+	__Link__000001_Start.SourceMultiplicityOffsetX = -31.000000
+	__Link__000001_Start.SourceMultiplicityOffsetY = 20.000000
+	__Link__000001_Start.StartOrientation = models.ORIENTATION_VERTICAL
+	__Link__000001_Start.StartRatio = 0.429519
+	__Link__000001_Start.EndOrientation = models.ORIENTATION_HORIZONTAL
+	__Link__000001_Start.EndRatio = 0.418182
+	__Link__000001_Start.CornerOffsetRatio = 1.333333
+
 	// NoteShape values setup
 	__NoteShape__000000_ShortNodeOnModels.Name = `ShortNodeOnModels`
 
@@ -304,6 +360,16 @@ are referenced in the go code
 	__Position__000002_Pos_NewDiagram_Point.Y = 198.000000
 	__Position__000002_Pos_NewDiagram_Point.Name = `Pos-NewDiagram-Point`
 
+	// Vertice values setup
+	__Vertice__000000_Verticle_in_class_diagram_NewDiagram_in_middle_between_NewDiagram_Line_and_NewDiagram_Point.X = 943.449951
+	__Vertice__000000_Verticle_in_class_diagram_NewDiagram_in_middle_between_NewDiagram_Line_and_NewDiagram_Point.Y = 185.500000
+	__Vertice__000000_Verticle_in_class_diagram_NewDiagram_in_middle_between_NewDiagram_Line_and_NewDiagram_Point.Name = `Verticle in class diagram NewDiagram in middle between NewDiagram-Line and NewDiagram-Point`
+
+	// Vertice values setup
+	__Vertice__000001_Verticle_in_class_diagram_NewDiagram_in_middle_between_NewDiagram_Line_and_NewDiagram_Point.X = 943.449951
+	__Vertice__000001_Verticle_in_class_diagram_NewDiagram_in_middle_between_NewDiagram_Line_and_NewDiagram_Point.Y = 185.500000
+	__Vertice__000001_Verticle_in_class_diagram_NewDiagram_in_middle_between_NewDiagram_Line_and_NewDiagram_Point.Name = `Verticle in class diagram NewDiagram in middle between NewDiagram-Line and NewDiagram-Point`
+
 	// Setup of pointers
 	__Classdiagram__000000_NewDiagram.GongStructShapes = append(__Classdiagram__000000_NewDiagram.GongStructShapes, __GongStructShape__000000_NewDiagram_Line)
 	__Classdiagram__000000_NewDiagram.GongStructShapes = append(__Classdiagram__000000_NewDiagram.GongStructShapes, __GongStructShape__000001_NewDiagram_Point)
@@ -314,7 +380,11 @@ are referenced in the go code
 	__GongStructShape__000000_NewDiagram_Line.Fields = append(__GongStructShape__000000_NewDiagram_Line.Fields, __Field__000000_Name)
 	__GongStructShape__000000_NewDiagram_Line.Fields = append(__GongStructShape__000000_NewDiagram_Line.Fields, __Field__000001_Type)
 	__GongStructShape__000000_NewDiagram_Line.Fields = append(__GongStructShape__000000_NewDiagram_Line.Fields, __Field__000002_VeryLongLongLongLongLongLongField)
+	__GongStructShape__000000_NewDiagram_Line.Links = append(__GongStructShape__000000_NewDiagram_Line.Links, __Link__000000_End)
+	__GongStructShape__000000_NewDiagram_Line.Links = append(__GongStructShape__000000_NewDiagram_Line.Links, __Link__000001_Start)
 	__GongStructShape__000001_NewDiagram_Point.Position = __Position__000002_Pos_NewDiagram_Point
+	__Link__000000_End.Middlevertice = __Vertice__000001_Verticle_in_class_diagram_NewDiagram_in_middle_between_NewDiagram_Line_and_NewDiagram_Point
+	__Link__000001_Start.Middlevertice = __Vertice__000000_Verticle_in_class_diagram_NewDiagram_in_middle_between_NewDiagram_Line_and_NewDiagram_Point
 	__NoteShape__000000_ShortNodeOnModels.NoteShapeLinks = append(__NoteShape__000000_ShortNodeOnModels.NoteShapeLinks, __NoteShapeLink__000000_Line)
 	__NoteShape__000000_ShortNodeOnModels.NoteShapeLinks = append(__NoteShape__000000_ShortNodeOnModels.NoteShapeLinks, __NoteShapeLink__000001_Line_Start)
 	__NoteShape__000000_ShortNodeOnModels.NoteShapeLinks = append(__NoteShape__000000_ShortNodeOnModels.NoteShapeLinks, __NoteShapeLink__000003_Point)

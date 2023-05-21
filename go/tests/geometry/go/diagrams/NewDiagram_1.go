@@ -201,10 +201,10 @@ func NewDiagram_1Injection(stage *models.StageStruct) {
 
 	// comment added to overcome the problem with the comment map association
 
-	//gong:ident [ref_models.Point.Name]
-	__Field__000002_Name.Identifier = `ref_models.Point.Name`
+	//gong:ident [ref_models.Line.Name]
+	__Field__000002_Name.Identifier = `ref_models.Line.Name`
 	__Field__000002_Name.FieldTypeAsString = ``
-	__Field__000002_Name.Structname = `Point`
+	__Field__000002_Name.Structname = `Line`
 	__Field__000002_Name.Fieldtypename = `string`
 
 	// Field values setup
@@ -212,10 +212,10 @@ func NewDiagram_1Injection(stage *models.StageStruct) {
 
 	// comment added to overcome the problem with the comment map association
 
-	//gong:ident [ref_models.Line.Name]
-	__Field__000003_Name.Identifier = `ref_models.Line.Name`
+	//gong:ident [ref_models.Point.Name]
+	__Field__000003_Name.Identifier = `ref_models.Point.Name`
 	__Field__000003_Name.FieldTypeAsString = ``
-	__Field__000003_Name.Structname = `Line`
+	__Field__000003_Name.Structname = `Point`
 	__Field__000003_Name.Fieldtypename = `string`
 
 	// Field values setup
@@ -440,8 +440,8 @@ are referenced in the go code
 	__Position__000001_Pos_NewDiagram_1_LineTypeInt.Name = `Pos-NewDiagram_1-LineTypeInt`
 
 	// Position values setup
-	__Position__000002_Pos_NewDiagram_1_LineTypeString.X = 738.000000
-	__Position__000002_Pos_NewDiagram_1_LineTypeString.Y = 110.000000
+	__Position__000002_Pos_NewDiagram_1_LineTypeString.X = 767.000000
+	__Position__000002_Pos_NewDiagram_1_LineTypeString.Y = 119.000000
 	__Position__000002_Pos_NewDiagram_1_LineTypeString.Name = `Pos-NewDiagram_1-LineTypeString`
 
 	// Position values setup
@@ -472,7 +472,7 @@ are referenced in the go code
 	__GongEnumShape__000001_NewDiagram_1_LineTypeString.GongEnumValueEntrys = append(__GongEnumShape__000001_NewDiagram_1_LineTypeString.GongEnumValueEntrys, __GongEnumValueEntry__000000_CONTINUOUS)
 	__GongEnumShape__000001_NewDiagram_1_LineTypeString.GongEnumValueEntrys = append(__GongEnumShape__000001_NewDiagram_1_LineTypeString.GongEnumValueEntrys, __GongEnumValueEntry__000002_DOTTED)
 	__GongStructShape__000000_NewDiagram_1_Line.Position = __Position__000000_Pos_NewDiagram_1_Line
-	__GongStructShape__000000_NewDiagram_1_Line.Fields = append(__GongStructShape__000000_NewDiagram_1_Line.Fields, __Field__000003_Name)
+	__GongStructShape__000000_NewDiagram_1_Line.Fields = append(__GongStructShape__000000_NewDiagram_1_Line.Fields, __Field__000002_Name)
 	__GongStructShape__000000_NewDiagram_1_Line.Fields = append(__GongStructShape__000000_NewDiagram_1_Line.Fields, __Field__000000_CreationDate)
 	__GongStructShape__000000_NewDiagram_1_Line.Fields = append(__GongStructShape__000000_NewDiagram_1_Line.Fields, __Field__000001_JourneyTime)
 	__GongStructShape__000000_NewDiagram_1_Line.Fields = append(__GongStructShape__000000_NewDiagram_1_Line.Fields, __Field__000004_Type)
@@ -480,7 +480,7 @@ are referenced in the go code
 	__GongStructShape__000000_NewDiagram_1_Line.Links = append(__GongStructShape__000000_NewDiagram_1_Line.Links, __Link__000000_End)
 	__GongStructShape__000000_NewDiagram_1_Line.Links = append(__GongStructShape__000000_NewDiagram_1_Line.Links, __Link__000001_Start)
 	__GongStructShape__000001_NewDiagram_1_Point.Position = __Position__000003_Pos_NewDiagram_1_Point
-	__GongStructShape__000001_NewDiagram_1_Point.Fields = append(__GongStructShape__000001_NewDiagram_1_Point.Fields, __Field__000002_Name)
+	__GongStructShape__000001_NewDiagram_1_Point.Fields = append(__GongStructShape__000001_NewDiagram_1_Point.Fields, __Field__000003_Name)
 	__Link__000000_End.Middlevertice = __Vertice__000000_Verticle_in_class_diagram_NewDiagram_1_in_middle_between_NewDiagram_1_Line_and_NewDiagram_1_Point
 	__Link__000001_Start.Middlevertice = __Vertice__000001_Verticle_in_class_diagram_NewDiagram_1_in_middle_between_NewDiagram_1_Line_and_NewDiagram_1_Point
 	__NoteShape__000000_ShortNodeOnModels.NoteShapeLinks = append(__NoteShape__000000_ShortNodeOnModels.NoteShapeLinks, __NoteShapeLink__000000_Line)
