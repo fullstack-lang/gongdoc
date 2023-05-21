@@ -35,6 +35,7 @@ export class SVGDetailComponent implements OnInit {
 
 	// insertion point for declarations
 	DrawingStateList: DrawingStateSelect[] = []
+	IsEditableFormControl: UntypedFormControl = new UntypedFormControl(false);
 
 	// the SVGDB of interest
 	svg: SVGDB = new SVGDB
@@ -136,6 +137,7 @@ export class SVGDetailComponent implements OnInit {
 				}
 
 				// insertion point for recovery of form controls value for bool fields
+				this.IsEditableFormControl.setValue(this.svg.IsEditable)
 			}
 		)
 
@@ -168,6 +170,7 @@ export class SVGDetailComponent implements OnInit {
 			this.svg.EndRectID.Int64 = 0
 			this.svg.EndRectID.Valid = true
 		}
+		this.svg.IsEditable = this.IsEditableFormControl.value
 
 		// save from the front pointer space to the non pointer space for serialization
 

@@ -64,6 +64,9 @@
         </mat-select>
     </mat-form-field>
 
+    <!-- -->
+    <mat-checkbox [formControl]="IsEditableFormControl">IsEditable</mat-checkbox>
+
     <div class="details__save">
         <button mat-raised-button color="primary" (click)="save()">
             Save svg

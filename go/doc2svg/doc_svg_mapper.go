@@ -42,6 +42,8 @@ func (docSVGMapper *DocSVGMapper) GenerateSvg(
 	}
 
 	svg := new(gongsvg_models.SVG).Stage(gongsvgStage)
+	svg.Name = selectedDiagram.Name
+	svg.IsEditable = selectedDiagram.IsInDrawMode
 
 	for _, gongstructShape := range selectedDiagram.GongStructShapes {
 
@@ -51,6 +53,9 @@ func (docSVGMapper *DocSVGMapper) GenerateSvg(
 
 		rect := new(gongsvg_models.Rect).Stage(gongsvgStage)
 		rect.Name = gongstructShape.Identifier
+
+		// hook a callback on rect modifications
+		rect.Impl = NewRectImplGongstructShape(gongstructShape, gongdocStage)
 
 		docSVGMapper.map_GongstructShape_Rect[gongstructShape] = rect
 		docSVGMapper.map_Structname_Rect[gongstructShape.Identifier] = rect
@@ -140,6 +145,9 @@ func (docSVGMapper *DocSVGMapper) GenerateSvg(
 
 			link := new(gongsvg_models.Link).Stage(gongsvgStage)
 			link.Name = startRect.Name + " - to - " + endRect.Name
+
+			link.Impl = NewLinkImplLink(docLink, gongdocStage)
+
 			linkLayer := new(gongsvg_models.Layer).Stage(gongsvgStage)
 			docSVGMapper.map_Fieldname_Link[docLink.Identifier] = link
 
@@ -152,12 +160,12 @@ func (docSVGMapper *DocSVGMapper) GenerateSvg(
 			link.HasEndArrow = true
 			link.EndArrowSize = 8
 			link.Type = gongsvg_models.LINK_TYPE_FLOATING_ORTHOGONAL
-			link.StartOrientation = gongsvg_models.ORIENTATION_HORIZONTAL
-			link.StartRatio = 0.5
-			link.EndOrientation = gongsvg_models.ORIENTATION_HORIZONTAL
-			link.EndRatio = 0.5
+			link.StartOrientation = gongsvg_models.OrientationType(docLink.StartOrientation)
+			link.StartRatio = docLink.StartRatio
+			link.EndOrientation = gongsvg_models.OrientationType(docLink.EndOrientation)
+			link.EndRatio = docLink.EndRatio
 
-			link.CornerOffsetRatio = (endRect.X - startRect.X - 80) / startRect.Width
+			link.CornerOffsetRatio = docLink.CornerOffsetRatio
 
 			link.CornerRadius = 3
 
@@ -166,11 +174,12 @@ func (docSVGMapper *DocSVGMapper) GenerateSvg(
 
 			// add text to the arrow
 			targetMulitplicity := new(gongsvg_models.AnchoredText).Stage(gongsvgStage)
+			targetMulitplicity.Impl = NewAnchoredTextImplLinkTargetMultiplicity(docLink, gongdocStage)
 			link.TextAtArrowEnd = append(link.TextAtArrowEnd, targetMulitplicity)
 			targetMulitplicity.Name = docLink.TargetMultiplicity.ToString()
 			targetMulitplicity.Content = targetMulitplicity.Name
-			targetMulitplicity.Y_Offset = 16
-			targetMulitplicity.X_Offset = -50
+			targetMulitplicity.X_Offset = docLink.TargetMultiplicityOffsetX
+			targetMulitplicity.Y_Offset = docLink.TargetMultiplicityOffsetY
 			targetMulitplicity.Stroke = gongsvg_models.Black.ToString()
 			targetMulitplicity.StrokeWidth = 1
 			targetMulitplicity.Color = gongsvg_models.Black.ToString()
@@ -178,26 +187,31 @@ func (docSVGMapper *DocSVGMapper) GenerateSvg(
 			targetMulitplicity.FontWeight = "normal"
 
 			fieldName := new(gongsvg_models.AnchoredText).Stage(gongsvgStage)
+			fieldName.Impl = NewAnchoredTextImplLinkFieldName(docLink, gongdocStage)
+
 			link.TextAtArrowEnd = append(link.TextAtArrowEnd, fieldName)
 			fieldName.Name = docLink.GetName()
 			fieldName.Content = fieldName.Name
-			fieldName.Y_Offset = -16
-			fieldName.X_Offset = -50
+			fieldName.Y_Offset = docLink.FieldOffsetY
+			fieldName.X_Offset = docLink.FieldOffsetX
 			fieldName.Stroke = gongsvg_models.Black.ToString()
 			fieldName.StrokeWidth = 1
 			fieldName.Color = gongsvg_models.Black.ToString()
 			fieldName.FillOpacity = 100
 			fieldName.FontWeight = "normal"
 
+			// add the callback
+
 			sourceMultiplicity := new(gongsvg_models.AnchoredText).Stage(gongsvgStage)
+			sourceMultiplicity.Impl = NewAnchoredTextImplLinkSourceMultiplicity(docLink, gongdocStage)
+
 			link.TextAtArrowStart = append(link.TextAtArrowStart, sourceMultiplicity)
 			sourceMultiplicity.Name = docLink.SourceMultiplicity.ToString()
 			sourceMultiplicity.Content = sourceMultiplicity.Name
-			sourceMultiplicity.Y_Offset = 10
-			sourceMultiplicity.X_Offset = 10
+			sourceMultiplicity.X_Offset = docLink.SourceMultiplicityOffsetX
+			sourceMultiplicity.Y_Offset = docLink.SourceMultiplicityOffsetY
 			sourceMultiplicity.Stroke = gongsvg_models.Black.ToString()
 			sourceMultiplicity.StrokeWidth = 1
-
 		}
 	}
 
@@ -212,6 +226,8 @@ func (docSVGMapper *DocSVGMapper) GenerateSvg(
 
 		rect := new(gongsvg_models.Rect).Stage(gongsvgStage)
 		rect.Name = gongenumShape.Identifier
+
+		rect.Impl = NewRectImplGongenumShape(gongenumShape, gongdocStage)
 
 		docSVGMapper.map_GongenumShape_Rect[gongenumShape] = rect
 		docSVGMapper.map_Structname_Rect[gongenumShape.Identifier] = rect
@@ -301,6 +317,8 @@ func (docSVGMapper *DocSVGMapper) GenerateSvg(
 
 		rect := new(gongsvg_models.Rect).Stage(gongsvgStage)
 		rect.Name = noteShape.Identifier
+
+		rect.Impl = NewRectImplNoteShape(noteShape, gongdocStage)
 
 		docSVGMapper.map_NoteShape_Rect[noteShape] = rect
 		docSVGMapper.map_Structname_Rect[noteShape.Identifier] = rect

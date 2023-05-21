@@ -821,9 +821,22 @@ func UnmarshallGongstructStaging(stage *StageStruct, cmap *ast.CommentMap, assig
 					}
 				}
 			}
-		case *ast.BasicLit:
-			// assignment to string field
-			basicLit := expr
+		case *ast.BasicLit, *ast.UnaryExpr:
+
+			var basicLit *ast.BasicLit
+			var exprSign = 1.0
+			_ = exprSign // in case this is not used
+
+			if bl, ok := expr.(*ast.BasicLit); ok {
+				// expression is  for instance ... = 18.000
+				basicLit = bl
+			} else if ue, ok := expr.(*ast.UnaryExpr); ok {
+				// expression is  for instance ... = -18.000
+				// we want to extract a *ast.BasicLit from the *ast.UnaryExpr
+				basicLit = ue.X.(*ast.BasicLit)
+				exprSign = -1
+			}
+
 			// astCoordinate := astCoordinate + "\tBasicLit" + "." + basicLit.Value
 			// log.Println(astCoordinate)
 			var ok bool
@@ -908,14 +921,14 @@ func UnmarshallGongstructStaging(stage *StageStruct, cmap *ast.CommentMap, assig
 					if err != nil {
 						log.Fatalln(err)
 					}
-					__gong__map_GongEnumShape[identifier].Width = fielValue
+					__gong__map_GongEnumShape[identifier].Width = exprSign * fielValue
 				case "Heigth":
 					// convert string to float64
 					fielValue, err := strconv.ParseFloat(basicLit.Value, 64)
 					if err != nil {
 						log.Fatalln(err)
 					}
-					__gong__map_GongEnumShape[identifier].Heigth = fielValue
+					__gong__map_GongEnumShape[identifier].Heigth = exprSign * fielValue
 				}
 			case "GongEnumValueEntry":
 				switch fieldName {
@@ -946,21 +959,21 @@ func UnmarshallGongstructStaging(stage *StageStruct, cmap *ast.CommentMap, assig
 					if err != nil {
 						log.Fatalln(err)
 					}
-					__gong__map_GongStructShape[identifier].NbInstances = int(fielValue)
+					__gong__map_GongStructShape[identifier].NbInstances = int(exprSign) * int(fielValue)
 				case "Width":
 					// convert string to float64
 					fielValue, err := strconv.ParseFloat(basicLit.Value, 64)
 					if err != nil {
 						log.Fatalln(err)
 					}
-					__gong__map_GongStructShape[identifier].Width = fielValue
+					__gong__map_GongStructShape[identifier].Width = exprSign * fielValue
 				case "Heigth":
 					// convert string to float64
 					fielValue, err := strconv.ParseFloat(basicLit.Value, 64)
 					if err != nil {
 						log.Fatalln(err)
 					}
-					__gong__map_GongStructShape[identifier].Heigth = fielValue
+					__gong__map_GongStructShape[identifier].Heigth = exprSign * fielValue
 				}
 			case "Link":
 				switch fieldName {
@@ -977,6 +990,69 @@ func UnmarshallGongstructStaging(stage *StageStruct, cmap *ast.CommentMap, assig
 					// remove first and last char
 					fielValue := basicLit.Value[1 : len(basicLit.Value)-1]
 					__gong__map_Link[identifier].Fieldtypename = fielValue
+				case "FieldOffsetX":
+					// convert string to float64
+					fielValue, err := strconv.ParseFloat(basicLit.Value, 64)
+					if err != nil {
+						log.Fatalln(err)
+					}
+					__gong__map_Link[identifier].FieldOffsetX = exprSign * fielValue
+				case "FieldOffsetY":
+					// convert string to float64
+					fielValue, err := strconv.ParseFloat(basicLit.Value, 64)
+					if err != nil {
+						log.Fatalln(err)
+					}
+					__gong__map_Link[identifier].FieldOffsetY = exprSign * fielValue
+				case "TargetMultiplicityOffsetX":
+					// convert string to float64
+					fielValue, err := strconv.ParseFloat(basicLit.Value, 64)
+					if err != nil {
+						log.Fatalln(err)
+					}
+					__gong__map_Link[identifier].TargetMultiplicityOffsetX = exprSign * fielValue
+				case "TargetMultiplicityOffsetY":
+					// convert string to float64
+					fielValue, err := strconv.ParseFloat(basicLit.Value, 64)
+					if err != nil {
+						log.Fatalln(err)
+					}
+					__gong__map_Link[identifier].TargetMultiplicityOffsetY = exprSign * fielValue
+				case "SourceMultiplicityOffsetX":
+					// convert string to float64
+					fielValue, err := strconv.ParseFloat(basicLit.Value, 64)
+					if err != nil {
+						log.Fatalln(err)
+					}
+					__gong__map_Link[identifier].SourceMultiplicityOffsetX = exprSign * fielValue
+				case "SourceMultiplicityOffsetY":
+					// convert string to float64
+					fielValue, err := strconv.ParseFloat(basicLit.Value, 64)
+					if err != nil {
+						log.Fatalln(err)
+					}
+					__gong__map_Link[identifier].SourceMultiplicityOffsetY = exprSign * fielValue
+				case "StartRatio":
+					// convert string to float64
+					fielValue, err := strconv.ParseFloat(basicLit.Value, 64)
+					if err != nil {
+						log.Fatalln(err)
+					}
+					__gong__map_Link[identifier].StartRatio = exprSign * fielValue
+				case "EndRatio":
+					// convert string to float64
+					fielValue, err := strconv.ParseFloat(basicLit.Value, 64)
+					if err != nil {
+						log.Fatalln(err)
+					}
+					__gong__map_Link[identifier].EndRatio = exprSign * fielValue
+				case "CornerOffsetRatio":
+					// convert string to float64
+					fielValue, err := strconv.ParseFloat(basicLit.Value, 64)
+					if err != nil {
+						log.Fatalln(err)
+					}
+					__gong__map_Link[identifier].CornerOffsetRatio = exprSign * fielValue
 				}
 			case "Node":
 				switch fieldName {
@@ -1011,28 +1087,28 @@ func UnmarshallGongstructStaging(stage *StageStruct, cmap *ast.CommentMap, assig
 					if err != nil {
 						log.Fatalln(err)
 					}
-					__gong__map_NoteShape[identifier].X = fielValue
+					__gong__map_NoteShape[identifier].X = exprSign * fielValue
 				case "Y":
 					// convert string to float64
 					fielValue, err := strconv.ParseFloat(basicLit.Value, 64)
 					if err != nil {
 						log.Fatalln(err)
 					}
-					__gong__map_NoteShape[identifier].Y = fielValue
+					__gong__map_NoteShape[identifier].Y = exprSign * fielValue
 				case "Width":
 					// convert string to float64
 					fielValue, err := strconv.ParseFloat(basicLit.Value, 64)
 					if err != nil {
 						log.Fatalln(err)
 					}
-					__gong__map_NoteShape[identifier].Width = fielValue
+					__gong__map_NoteShape[identifier].Width = exprSign * fielValue
 				case "Heigth":
 					// convert string to float64
 					fielValue, err := strconv.ParseFloat(basicLit.Value, 64)
 					if err != nil {
 						log.Fatalln(err)
 					}
-					__gong__map_NoteShape[identifier].Heigth = fielValue
+					__gong__map_NoteShape[identifier].Heigth = exprSign * fielValue
 				}
 			case "NoteShapeLink":
 				switch fieldName {
@@ -1055,14 +1131,14 @@ func UnmarshallGongstructStaging(stage *StageStruct, cmap *ast.CommentMap, assig
 					if err != nil {
 						log.Fatalln(err)
 					}
-					__gong__map_Position[identifier].X = fielValue
+					__gong__map_Position[identifier].X = exprSign * fielValue
 				case "Y":
 					// convert string to float64
 					fielValue, err := strconv.ParseFloat(basicLit.Value, 64)
 					if err != nil {
 						log.Fatalln(err)
 					}
-					__gong__map_Position[identifier].Y = fielValue
+					__gong__map_Position[identifier].Y = exprSign * fielValue
 				case "Name":
 					// remove first and last char
 					fielValue := basicLit.Value[1 : len(basicLit.Value)-1]
@@ -1089,14 +1165,14 @@ func UnmarshallGongstructStaging(stage *StageStruct, cmap *ast.CommentMap, assig
 					if err != nil {
 						log.Fatalln(err)
 					}
-					__gong__map_UmlState[identifier].X = fielValue
+					__gong__map_UmlState[identifier].X = exprSign * fielValue
 				case "Y":
 					// convert string to float64
 					fielValue, err := strconv.ParseFloat(basicLit.Value, 64)
 					if err != nil {
 						log.Fatalln(err)
 					}
-					__gong__map_UmlState[identifier].Y = fielValue
+					__gong__map_UmlState[identifier].Y = exprSign * fielValue
 				}
 			case "Umlsc":
 				switch fieldName {
@@ -1119,14 +1195,14 @@ func UnmarshallGongstructStaging(stage *StageStruct, cmap *ast.CommentMap, assig
 					if err != nil {
 						log.Fatalln(err)
 					}
-					__gong__map_Vertice[identifier].X = fielValue
+					__gong__map_Vertice[identifier].X = exprSign * fielValue
 				case "Y":
 					// convert string to float64
 					fielValue, err := strconv.ParseFloat(basicLit.Value, 64)
 					if err != nil {
 						log.Fatalln(err)
 					}
-					__gong__map_Vertice[identifier].Y = fielValue
+					__gong__map_Vertice[identifier].Y = exprSign * fielValue
 				case "Name":
 					// remove first and last char
 					fielValue := basicLit.Value[1 : len(basicLit.Value)-1]
@@ -1420,6 +1496,20 @@ func UnmarshallGongstructStaging(stage *StageStruct, cmap *ast.CommentMap, assig
 							log.Fatalln(err)
 						}
 						__gong__map_Link[identifier].SourceMultiplicity = MultiplicityType(val)
+					case "StartOrientation":
+						var val OrientationType
+						err := (&val).FromCodeString(enumValue)
+						if err != nil {
+							log.Fatalln(err)
+						}
+						__gong__map_Link[identifier].StartOrientation = OrientationType(val)
+					case "EndOrientation":
+						var val OrientationType
+						err := (&val).FromCodeString(enumValue)
+						if err != nil {
+							log.Fatalln(err)
+						}
+						__gong__map_Link[identifier].EndOrientation = OrientationType(val)
 					}
 				case "Node":
 					switch fieldName {

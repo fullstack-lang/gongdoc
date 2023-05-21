@@ -176,7 +176,16 @@ func (fieldImpl *FieldImpl) OnAfterUpdate(
 			link := new(gongdoc_models.Link).Stage(gongdocStage)
 			link.Name = stagedNode.Name
 			link.SourceMultiplicity = sourceMultiplicity
+			link.SourceMultiplicityOffsetX = 10
+			link.SourceMultiplicityOffsetY = -50
+
 			link.TargetMultiplicity = targetMultiplicity
+			link.TargetMultiplicityOffsetX = -50
+			link.TargetMultiplicityOffsetY = 16
+
+			link.FieldOffsetX = -50
+			link.FieldOffsetY = -16
+
 			link.Identifier =
 				gongdoc_models.GongstructAndFieldnameToFieldIdentifier(gongStruct.Name, stagedNode.Name)
 			link.Fieldtypename = gongdoc_models.GongStructNameToIdentifier(targetStructName)
@@ -189,6 +198,13 @@ func (fieldImpl *FieldImpl) OnAfterUpdate(
 				gongStructShape.Width*1.5
 			link.Middlevertice.Y = (gongStructShape.Position.Y+targetGongStructShape.Position.Y)/2.0 +
 				gongStructShape.Heigth/2.0
+
+			link.StartOrientation = gongdoc_models.ORIENTATION_HORIZONTAL
+			link.StartRatio = 0.5
+			link.EndOrientation = gongdoc_models.ORIENTATION_HORIZONTAL
+			link.EndRatio = 0.5
+			link.CornerOffsetRatio = 0.8
+
 			gongdocStage.Commit()
 		}
 

@@ -1935,7 +1935,7 @@ func GetFields[Type Gongstruct]() (res []string) {
 	case GongStructShape:
 		res = []string{"Name", "Position", "Identifier", "ShowNbInstances", "NbInstances", "Fields", "Links", "Width", "Heigth", "IsSelected"}
 	case Link:
-		res = []string{"Name", "Identifier", "Fieldtypename", "TargetMultiplicity", "SourceMultiplicity", "Middlevertice"}
+		res = []string{"Name", "Identifier", "Fieldtypename", "FieldOffsetX", "FieldOffsetY", "TargetMultiplicity", "TargetMultiplicityOffsetX", "TargetMultiplicityOffsetY", "SourceMultiplicity", "SourceMultiplicityOffsetX", "SourceMultiplicityOffsetY", "Middlevertice", "StartOrientation", "StartRatio", "EndOrientation", "EndRatio", "CornerOffsetRatio"}
 	case Node:
 		res = []string{"Name", "IsExpanded", "HasCheckboxButton", "IsChecked", "IsCheckboxDisabled", "HasAddChildButton", "HasEditButton", "IsInEditMode", "HasDrawButton", "HasDrawOffButton", "IsInDrawMode", "IsSaved", "HasDeleteButton", "Children"}
 	case NoteShape:
@@ -2114,16 +2114,40 @@ func GetFieldStringValue[Type Gongstruct](instance Type, fieldName string) (res 
 			res = any(instance).(Link).Identifier
 		case "Fieldtypename":
 			res = any(instance).(Link).Fieldtypename
+		case "FieldOffsetX":
+			res = fmt.Sprintf("%f", any(instance).(Link).FieldOffsetX)
+		case "FieldOffsetY":
+			res = fmt.Sprintf("%f", any(instance).(Link).FieldOffsetY)
 		case "TargetMultiplicity":
 			enum := any(instance).(Link).TargetMultiplicity
 			res = enum.ToCodeString()
+		case "TargetMultiplicityOffsetX":
+			res = fmt.Sprintf("%f", any(instance).(Link).TargetMultiplicityOffsetX)
+		case "TargetMultiplicityOffsetY":
+			res = fmt.Sprintf("%f", any(instance).(Link).TargetMultiplicityOffsetY)
 		case "SourceMultiplicity":
 			enum := any(instance).(Link).SourceMultiplicity
 			res = enum.ToCodeString()
+		case "SourceMultiplicityOffsetX":
+			res = fmt.Sprintf("%f", any(instance).(Link).SourceMultiplicityOffsetX)
+		case "SourceMultiplicityOffsetY":
+			res = fmt.Sprintf("%f", any(instance).(Link).SourceMultiplicityOffsetY)
 		case "Middlevertice":
 			if any(instance).(Link).Middlevertice != nil {
 				res = any(instance).(Link).Middlevertice.Name
 			}
+		case "StartOrientation":
+			enum := any(instance).(Link).StartOrientation
+			res = enum.ToCodeString()
+		case "StartRatio":
+			res = fmt.Sprintf("%f", any(instance).(Link).StartRatio)
+		case "EndOrientation":
+			enum := any(instance).(Link).EndOrientation
+			res = enum.ToCodeString()
+		case "EndRatio":
+			res = fmt.Sprintf("%f", any(instance).(Link).EndRatio)
+		case "CornerOffsetRatio":
+			res = fmt.Sprintf("%f", any(instance).(Link).CornerOffsetRatio)
 		}
 	case Node:
 		switch fieldName {

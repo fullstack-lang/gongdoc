@@ -162,6 +162,8 @@ func main() {
 
 		// enable the inversion control mechanism on the gongsvg backend
 		gongsvg_models.SetOrchestratorOnAfterUpdate[gongsvg_models.Rect](gongsvgStage)
+		gongsvg_models.SetOrchestratorOnAfterUpdate[gongsvg_models.Link](gongsvgStage)
+		gongsvg_models.SetOrchestratorOnAfterUpdate[gongsvg_models.AnchoredText](gongsvgStage)
 
 		// load diagram at startup if requested
 		if *selectedDiagramOnLoad != "" {

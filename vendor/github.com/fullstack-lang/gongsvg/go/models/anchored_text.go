@@ -12,4 +12,13 @@ type AnchoredText struct {
 
 	Presentation
 	Animates []*Animate
+
+	Impl AnchoredTextImplInterface
+}
+
+func (anchoredText *AnchoredText) OnAfterUpdate(stage *StageStruct, _, frontAnchoredText *AnchoredText) {
+
+	if anchoredText.Impl != nil {
+		anchoredText.Impl.AnchoredTextUpdated(frontAnchoredText)
+	}
 }

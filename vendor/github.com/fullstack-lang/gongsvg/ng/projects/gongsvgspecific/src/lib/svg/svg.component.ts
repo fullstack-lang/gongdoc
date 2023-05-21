@@ -10,6 +10,7 @@ import { createPoint } from '../link/draw.segments';
 import { MouseEventService } from '../mouse-event.service';
 import { AngularDragEndEventService } from '../angular-drag-end-event.service';
 import { mouseCoordInComponentRef } from '../mouse.coord.in.component.ref';
+import { IsEditableService } from '../is-editable.service';
 
 @Component({
   selector: 'lib-svg',
@@ -62,6 +63,7 @@ export class SvgComponent implements OnInit, OnDestroy, AfterViewInit {
     private rectangleEventService: RectangleEventService,
     private svgEventService: SvgEventService,
     private mouseEventService: MouseEventService,
+    private isEditableService: IsEditableService,
   ) {
 
     this.subscriptions.push(
@@ -177,6 +179,9 @@ export class SvgComponent implements OnInit, OnDestroy, AfterViewInit {
 
         if (this.gongsvgFrontRepo.SVGs_array.length == 1) {
           this.svg = this.gongsvgFrontRepo.SVGs_array[0]
+
+          // set the isEditable
+          this.isEditableService.setIsEditable(this.svg!.IsEditable)
         } else {
           return
         }
