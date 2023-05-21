@@ -11,6 +11,7 @@ import { ShapeMouseEvent } from '../shape.mouse.event';
 import { createPoint } from '../link/draw.segments';
 import { MouseEventService } from '../mouse-event.service';
 import { mouseCoordInComponentRef } from '../mouse.coord.in.component.ref';
+import { IsEditableService } from '../is-editable.service';
 
 @Component({
   selector: 'lib-rect',
@@ -53,7 +54,8 @@ export class RectComponent implements OnInit, OnDestroy, DoCheck, OnChanges {
     private rectangleEventService: RectangleEventService,
     private mouseEventService: MouseEventService,
     private svgEventService: SvgEventService,
-    private elementRef: ElementRef) {
+    private isEditableService: IsEditableService,
+  ) {
 
     this.subscriptions.push(
       mouseEventService.mouseMouseDownEvent$.subscribe(
@@ -67,6 +69,10 @@ export class RectComponent implements OnInit, OnDestroy, DoCheck, OnChanges {
     this.subscriptions.push(
       mouseEventService.mouseMouseMoveEvent$.subscribe(
         (shapeMouseEvent: ShapeMouseEvent) => {
+
+          if (!this.isEditableService.getIsEditable()) {
+            return
+          }
 
           if (this.anchorDragging) {
             if (this.activeAnchor === 'left') {
@@ -104,7 +110,10 @@ export class RectComponent implements OnInit, OnDestroy, DoCheck, OnChanges {
         (shapeMouseEvent: ShapeMouseEvent) => {
 
           if (shapeMouseEvent.ShapeID != 0 && this.distanceMoved > this.dragThreshold) {
-            this.rectService.updateRect(this.Rect, this.GONG__StackPath).subscribe()
+
+            if (this.isEditableService.getIsEditable()) {
+              this.rectService.updateRect(this.Rect, this.GONG__StackPath).subscribe()
+            }
           } else {
             if (this.Rect?.IsSelectable && shapeMouseEvent.ShapeID == this.Rect.ID) {
               console.log("rect, mouseEventService.mouseMouseUpEvent$.subscribe, from the shape: ", this.Rect?.Name)
@@ -189,7 +198,7 @@ export class RectComponent implements OnInit, OnDestroy, DoCheck, OnChanges {
       event.preventDefault();
       event.stopPropagation(); // Prevent the event from bubbling up to the SVG element
 
-      this.rectDragging = true;
+      this.rectDragging = true
 
       let shapeMouseEvent: ShapeMouseEvent = {
         ShapeID: this.Rect.ID,
@@ -206,6 +215,7 @@ export class RectComponent implements OnInit, OnDestroy, DoCheck, OnChanges {
         Point: mouseCoordInComponentRef(event),
       }
       this.rectangleEventService.emitRectAltKeyMouseDownEvent(shapeMouseEvent)
+
     }
   }
 

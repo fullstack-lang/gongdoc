@@ -2317,7 +2317,7 @@ func GetFields[Type Gongstruct]() (res []string) {
 	case RectLinkLink:
 		res = []string{"Name", "Start", "End", "TargetAnchorPosition", "Color", "FillOpacity", "Stroke", "StrokeWidth", "StrokeDashArray", "StrokeDashArrayWhenSelected", "Transform"}
 	case SVG:
-		res = []string{"Name", "Layers", "DrawingState", "StartRect", "EndRect"}
+		res = []string{"Name", "Layers", "DrawingState", "StartRect", "EndRect", "IsEditable"}
 	case Text:
 		res = []string{"Name", "X", "Y", "Content", "Color", "FillOpacity", "Stroke", "StrokeWidth", "StrokeDashArray", "StrokeDashArrayWhenSelected", "Transform", "Animates"}
 	}
@@ -2948,6 +2948,8 @@ func GetFieldStringValue[Type Gongstruct](instance Type, fieldName string) (res 
 			if any(instance).(SVG).EndRect != nil {
 				res = any(instance).(SVG).EndRect.Name
 			}
+		case "IsEditable":
+			res = fmt.Sprintf("%t", any(instance).(SVG).IsEditable)
 		}
 	case Text:
 		switch fieldName {

@@ -16,6 +16,7 @@ export class SVGDB {
 	// insertion point for basic fields declarations
 	Name: string = ""
 	DrawingState: string = ""
+	IsEditable: boolean = false
 
 	// insertion point for other declarations
 	Layers?: Array<LayerDB>

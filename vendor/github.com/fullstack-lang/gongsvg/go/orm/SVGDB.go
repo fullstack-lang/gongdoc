@@ -71,6 +71,10 @@ type SVGDB struct {
 
 	// Declation for basic field svgDB.DrawingState
 	DrawingState_Data sql.NullString
+
+	// Declation for basic field svgDB.IsEditable
+	// provide the sql storage for the boolan
+	IsEditable_Data sql.NullBool
 	// encoding of pointers
 	SVGPointersEnconding
 }
@@ -95,6 +99,8 @@ type SVGWOP struct {
 	Name string `xlsx:"1"`
 
 	DrawingState models.DrawingState `xlsx:"2"`
+
+	IsEditable bool `xlsx:"3"`
 	// insertion for WOP pointer fields
 }
 
@@ -103,6 +109,7 @@ var SVG_Fields = []string{
 	"ID",
 	"Name",
 	"DrawingState",
+	"IsEditable",
 }
 
 type BackRepoSVGStruct struct {
@@ -440,6 +447,9 @@ func (svgDB *SVGDB) CopyBasicFieldsFromSVG(svg *models.SVG) {
 
 	svgDB.DrawingState_Data.String = svg.DrawingState.ToString()
 	svgDB.DrawingState_Data.Valid = true
+
+	svgDB.IsEditable_Data.Bool = svg.IsEditable
+	svgDB.IsEditable_Data.Valid = true
 }
 
 // CopyBasicFieldsFromSVGWOP
@@ -451,6 +461,9 @@ func (svgDB *SVGDB) CopyBasicFieldsFromSVGWOP(svg *SVGWOP) {
 
 	svgDB.DrawingState_Data.String = svg.DrawingState.ToString()
 	svgDB.DrawingState_Data.Valid = true
+
+	svgDB.IsEditable_Data.Bool = svg.IsEditable
+	svgDB.IsEditable_Data.Valid = true
 }
 
 // CopyBasicFieldsToSVG
@@ -458,6 +471,7 @@ func (svgDB *SVGDB) CopyBasicFieldsToSVG(svg *models.SVG) {
 	// insertion point for checkout of basic fields (back repo to stage)
 	svg.Name = svgDB.Name_Data.String
 	svg.DrawingState.FromString(svgDB.DrawingState_Data.String)
+	svg.IsEditable = svgDB.IsEditable_Data.Bool
 }
 
 // CopyBasicFieldsToSVGWOP
@@ -466,6 +480,7 @@ func (svgDB *SVGDB) CopyBasicFieldsToSVGWOP(svg *SVGWOP) {
 	// insertion point for checkout of basic fields (back repo to stage)
 	svg.Name = svgDB.Name_Data.String
 	svg.DrawingState.FromString(svgDB.DrawingState_Data.String)
+	svg.IsEditable = svgDB.IsEditable_Data.Bool
 }
 
 // Backup generates a json file from a slice of all SVGDB instances in the backrepo

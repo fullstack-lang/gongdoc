@@ -20,6 +20,8 @@ type SVG struct {
 	// between both rects
 	StartRect *Rect
 	EndRect   *Rect
+
+	IsEditable bool
 }
 
 // OnAfterUpdate, notice that rect == stagedRect

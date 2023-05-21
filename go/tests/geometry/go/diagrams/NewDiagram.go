@@ -246,6 +246,9 @@ func NewDiagramInjection(stage *models.StageStruct) {
 	__Link__000000_Start.Fieldtypename = `ref_models.Point`
 	__Link__000000_Start.TargetMultiplicity = models.ZERO_ONE
 	__Link__000000_Start.SourceMultiplicity = models.MANY
+	__Link__000000_Start.StartRatio = 0.000000
+	__Link__000000_Start.EndRatio = 0.000000
+	__Link__000000_Start.CornerOffsetRatio = 0.000000
 
 	// NoteShape values setup
 	__NoteShape__000000_ShortNodeOnModels.Name = `ShortNodeOnModels`
@@ -264,8 +267,8 @@ It uses the DocLink convention for referencing Identifiers
 In this case <a href="/models#Line">models.Line</a>, <a href="/models#Point">models.Point</a> and <a href="/models#Line.Start">models.Line.Start</a> <a href="/models#LineTypeString">models.LineTypeString</a>
 are referenced in the go code
 `
-	__NoteShape__000000_ShortNodeOnModels.X = 173.633301
-	__NoteShape__000000_ShortNodeOnModels.Y = 342.000000
+	__NoteShape__000000_ShortNodeOnModels.X = 50.633301
+	__NoteShape__000000_ShortNodeOnModels.Y = 345.000000
 	__NoteShape__000000_ShortNodeOnModels.Width = 702.000000
 	__NoteShape__000000_ShortNodeOnModels.Heigth = 121.000000
 	__NoteShape__000000_ShortNodeOnModels.Matched = false
@@ -307,13 +310,13 @@ are referenced in the go code
 	__NoteShapeLink__000003_Point.Type = models.NOTE_SHAPE_LINK_TO_GONG_STRUCT_OR_ENUM_SHAPE
 
 	// Position values setup
-	__Position__000000_Pos_NewDiagram_Line.X = 115.000000
-	__Position__000000_Pos_NewDiagram_Line.Y = 52.000000
+	__Position__000000_Pos_NewDiagram_Line.X = 62.000000
+	__Position__000000_Pos_NewDiagram_Line.Y = 87.000000
 	__Position__000000_Pos_NewDiagram_Line.Name = `Pos-NewDiagram-Line`
 
 	// Position values setup
-	__Position__000001_Pos_NewDiagram_LineTypeString.X = 124.616699
-	__Position__000001_Pos_NewDiagram_LineTypeString.Y = 640.000000
+	__Position__000001_Pos_NewDiagram_LineTypeString.X = 50.616699
+	__Position__000001_Pos_NewDiagram_LineTypeString.Y = 608.000000
 	__Position__000001_Pos_NewDiagram_LineTypeString.Name = `Pos-NewDiagram-LineTypeString`
 
 	// Position values setup

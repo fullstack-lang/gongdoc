@@ -84,6 +84,9 @@ export class SVGsTableComponent implements OnInit {
         case 'EndRect':
           return (svgDB.EndRect ? svgDB.EndRect.Name : '');
 
+        case 'IsEditable':
+          return svgDB.IsEditable ? "true" : "false";
+
         default:
           console.assert(false, "Unknown field")
           return "";
@@ -164,6 +167,7 @@ export class SVGsTableComponent implements OnInit {
         "DrawingState",
         "StartRect",
         "EndRect",
+        "IsEditable",
       ]
     } else {
       this.displayedColumns = ['select', 'ID', // insertion point for columns to display
@@ -171,6 +175,7 @@ export class SVGsTableComponent implements OnInit {
         "DrawingState",
         "StartRect",
         "EndRect",
+        "IsEditable",
       ]
       this.selection = new SelectionModel<SVGDB>(allowMultiSelect, this.initialSelection);
     }

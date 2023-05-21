@@ -42,6 +42,8 @@ func (docSVGMapper *DocSVGMapper) GenerateSvg(
 	}
 
 	svg := new(gongsvg_models.SVG).Stage(gongsvgStage)
+	svg.Name = selectedDiagram.Name
+	svg.IsEditable = selectedDiagram.IsInDrawMode
 
 	for _, gongstructShape := range selectedDiagram.GongStructShapes {
 

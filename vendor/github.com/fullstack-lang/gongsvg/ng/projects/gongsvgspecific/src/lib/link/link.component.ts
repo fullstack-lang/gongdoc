@@ -11,6 +11,7 @@ import { SplitComponent } from 'angular-split'
 import { AngularDragEndEventService } from '../angular-drag-end-event.service';
 import { mouseCoordInComponentRef } from '../mouse.coord.in.component.ref';
 import { drawLineFromRectToB } from '../draw.line.from.rect.to.point';
+import { IsEditableService } from '../is-editable.service';
 
 @Component({
   selector: 'lib-link',
@@ -74,6 +75,7 @@ export class LinkComponent implements OnInit, AfterViewInit, DoCheck, AfterViewC
     private angularDragEndEventService: AngularDragEndEventService,
     private mouseEventService: MouseEventService,
     private elementRef: ElementRef,
+    private isEditableService: IsEditableService,
   ) {
 
     this.subscriptions.push(
@@ -99,6 +101,10 @@ export class LinkComponent implements OnInit, AfterViewInit, DoCheck, AfterViewC
     this.subscriptions.push(
       mouseEventService.mouseMouseMoveEvent$.subscribe(
         (shapeMouseEvent: ShapeMouseEvent) => {
+
+          if (!this.isEditableService.getIsEditable()) {
+            return
+          }
 
           // offSetForNewMidlleSegment denotes the standard distance between
           // a rect and the middle segment that is created when going from a
@@ -329,7 +335,7 @@ export class LinkComponent implements OnInit, AfterViewInit, DoCheck, AfterViewC
       mouseEventService.mouseMouseUpEvent$.subscribe(
         (shapeMouseEvent: ShapeMouseEvent) => {
 
-          if (this.dragging) {
+          if (this.dragging && this.isEditableService.getIsEditable()) {
             document.body.style.cursor = ''
 
             let deltaX = shapeMouseEvent.Point.X - this.PointAtMouseDown!.X
@@ -350,7 +356,7 @@ export class LinkComponent implements OnInit, AfterViewInit, DoCheck, AfterViewC
             }
           }
 
-          if (this.textDragging) {
+          if (this.textDragging && this.isEditableService.getIsEditable()) {
             if (this.draggedSegmentPositionOnArrow == gongsvg.PositionOnArrowType.POSITION_ON_ARROW_END) {
               let text = this.Link!.TextAtArrowEnd![this.draggedTextIndex]
               this.anchoredTextService.updateAnchoredText(text, this.GONG__StackPath).subscribe()
