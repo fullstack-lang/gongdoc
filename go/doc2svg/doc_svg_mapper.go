@@ -160,12 +160,12 @@ func (docSVGMapper *DocSVGMapper) GenerateSvg(
 			link.HasEndArrow = true
 			link.EndArrowSize = 8
 			link.Type = gongsvg_models.LINK_TYPE_FLOATING_ORTHOGONAL
-			link.StartOrientation = gongsvg_models.ORIENTATION_HORIZONTAL
-			link.StartRatio = 0.5
-			link.EndOrientation = gongsvg_models.ORIENTATION_HORIZONTAL
-			link.EndRatio = 0.5
+			link.StartOrientation = gongsvg_models.OrientationType(docLink.StartOrientation)
+			link.StartRatio = docLink.StartRatio
+			link.EndOrientation = gongsvg_models.OrientationType(docLink.EndOrientation)
+			link.EndRatio = docLink.EndRatio
 
-			link.CornerOffsetRatio = (endRect.X - startRect.X - 80) / startRect.Width
+			link.CornerOffsetRatio = docLink.CornerOffsetRatio
 
 			link.CornerRadius = 3
 

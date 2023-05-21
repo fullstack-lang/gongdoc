@@ -30,6 +30,11 @@ func (linkImplLink *LinkImplLink) LinkUpdated(updatedLink *gongsvg_models.Link) 
 	log.Println("LinkImplLink:LinkUpdated")
 
 	// update the link
+	linkImplLink.link.StartOrientation = gongdoc_models.OrientationType(updatedLink.StartOrientation)
+	linkImplLink.link.StartRatio = updatedLink.StartRatio
+	linkImplLink.link.EndOrientation = gongdoc_models.OrientationType(updatedLink.EndOrientation)
+	linkImplLink.link.EndRatio = updatedLink.EndRatio
+	linkImplLink.link.CornerOffsetRatio = updatedLink.CornerOffsetRatio
 
 	linkImplLink.gongdocStage.Commit()
 }

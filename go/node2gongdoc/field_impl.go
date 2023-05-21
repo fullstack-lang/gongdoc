@@ -189,6 +189,13 @@ func (fieldImpl *FieldImpl) OnAfterUpdate(
 				gongStructShape.Width*1.5
 			link.Middlevertice.Y = (gongStructShape.Position.Y+targetGongStructShape.Position.Y)/2.0 +
 				gongStructShape.Heigth/2.0
+
+			link.StartOrientation = gongdoc_models.ORIENTATION_HORIZONTAL
+			link.StartRatio = 0.5
+			link.EndOrientation = gongdoc_models.ORIENTATION_HORIZONTAL
+			link.EndRatio = 0.5
+			link.CornerOffsetRatio = 1.5
+
 			gongdocStage.Commit()
 		}
 
