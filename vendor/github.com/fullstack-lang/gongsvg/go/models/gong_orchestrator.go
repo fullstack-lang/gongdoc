@@ -1,6 +1,16 @@
 package models
 
 // insertion point
+// AnchoredTextOrchestrator
+type AnchoredTextOrchestrator struct {
+}
+
+func (orchestrator *AnchoredTextOrchestrator) OnAfterUpdate(
+	gongsvgStage *StageStruct,
+	stagedAnchoredText, backRepoAnchoredText *AnchoredText) {
+
+	stagedAnchoredText.OnAfterUpdate(gongsvgStage, stagedAnchoredText, backRepoAnchoredText)
+}
 // LineOrchestrator
 type LineOrchestrator struct {
 }
@@ -48,6 +58,8 @@ func SetOrchestratorOnAfterUpdate[Type Gongstruct](stage *StageStruct) {
 
 	switch any(ret).(type) {
 	// insertion point
+	case AnchoredText:
+		stage.OnAfterAnchoredTextUpdateCallback = new(AnchoredTextOrchestrator)
 	case Line:
 		stage.OnAfterLineUpdateCallback = new(LineOrchestrator)
 	case Link:
