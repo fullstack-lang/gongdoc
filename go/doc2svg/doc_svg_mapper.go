@@ -119,8 +119,8 @@ func (docSVGMapper *DocSVGMapper) GenerateSvg(
 		//
 		for idx, field := range gongstructShape.Fields {
 			fieldText := new(gongsvg_models.RectAnchoredText).Stage(gongsvgStage)
-			fieldText.Name = field.Name + ":" + field.FieldTypeAsString
-			fieldText.Content = field.Name
+			fieldText.Name = field.Name + " : " + field.Fieldtypename
+			fieldText.Content = field.Name + " : " + field.Fieldtypename
 
 			// field position
 			fieldText.X_Offset = 10
