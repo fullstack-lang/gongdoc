@@ -142,6 +142,8 @@ func NewDiagram_1Injection(stage *models.StageStruct) {
 	__NoteShape__000000_ShortNodeOnModels := (&models.NoteShape{Name: `ShortNodeOnModels`}).Stage(stage)
 
 	// Declarations of staged instances of NoteShapeLink
+	__NoteShapeLink__000000_Line := (&models.NoteShapeLink{Name: `Line`}).Stage(stage)
+	__NoteShapeLink__000001_LineTypeString := (&models.NoteShapeLink{Name: `LineTypeString`}).Stage(stage)
 
 	// Declarations of staged instances of Position
 	__Position__000000_Pos_NewDiagram_1_Line := (&models.Position{Name: `Pos-NewDiagram_1-Line`}).Stage(stage)
@@ -276,19 +278,19 @@ func NewDiagram_1Injection(stage *models.StageStruct) {
 
 	//gong:ident [ref_models.Point]
 	__Link__000000_End.Fieldtypename = `ref_models.Point`
-	__Link__000000_End.FieldOffsetX = -50.000000
-	__Link__000000_End.FieldOffsetY = -16.000000
+	__Link__000000_End.FieldOffsetX = 7.000000
+	__Link__000000_End.FieldOffsetY = -17.000000
 	__Link__000000_End.TargetMultiplicity = models.ZERO_ONE
-	__Link__000000_End.TargetMultiplicityOffsetX = -50.000000
-	__Link__000000_End.TargetMultiplicityOffsetY = 16.000000
+	__Link__000000_End.TargetMultiplicityOffsetX = 10.000000
+	__Link__000000_End.TargetMultiplicityOffsetY = 26.000000
 	__Link__000000_End.SourceMultiplicity = models.MANY
-	__Link__000000_End.SourceMultiplicityOffsetX = 10.000000
-	__Link__000000_End.SourceMultiplicityOffsetY = -50.000000
+	__Link__000000_End.SourceMultiplicityOffsetX = -27.000000
+	__Link__000000_End.SourceMultiplicityOffsetY = -10.000000
 	__Link__000000_End.StartOrientation = models.ORIENTATION_HORIZONTAL
 	__Link__000000_End.StartRatio = 0.500000
 	__Link__000000_End.EndOrientation = models.ORIENTATION_HORIZONTAL
 	__Link__000000_End.EndRatio = 0.500000
-	__Link__000000_End.CornerOffsetRatio = -0.266667
+	__Link__000000_End.CornerOffsetRatio = -0.104167
 
 	// NoteShape values setup
 	__NoteShape__000000_ShortNodeOnModels.Name = `ShortNodeOnModels`
@@ -307,30 +309,48 @@ It uses the DocLink convention for referencing Identifiers
 In this case <a href="/models#Line">models.Line</a>, <a href="/models#Point">models.Point</a> and <a href="/models#Line.Start">models.Line.Start</a> <a href="/models#LineTypeString">models.LineTypeString</a>
 are referenced in the go code
 `
-	__NoteShape__000000_ShortNodeOnModels.X = 112.000000
-	__NoteShape__000000_ShortNodeOnModels.Y = 11.000000
+	__NoteShape__000000_ShortNodeOnModels.X = 151.000000
+	__NoteShape__000000_ShortNodeOnModels.Y = 14.000000
 	__NoteShape__000000_ShortNodeOnModels.Width = 626.000000
 	__NoteShape__000000_ShortNodeOnModels.Heigth = 111.000000
 	__NoteShape__000000_ShortNodeOnModels.Matched = false
 
+	// NoteShapeLink values setup
+	__NoteShapeLink__000000_Line.Name = `Line`
+
+	// comment added to overcome the problem with the comment map association
+
+	//gong:ident [ref_models.Line]
+	__NoteShapeLink__000000_Line.Identifier = `ref_models.Line`
+	__NoteShapeLink__000000_Line.Type = models.NOTE_SHAPE_LINK_TO_GONG_STRUCT_OR_ENUM_SHAPE
+
+	// NoteShapeLink values setup
+	__NoteShapeLink__000001_LineTypeString.Name = `LineTypeString`
+
+	// comment added to overcome the problem with the comment map association
+
+	//gong:ident [ref_models.LineTypeString]
+	__NoteShapeLink__000001_LineTypeString.Identifier = `ref_models.LineTypeString`
+	__NoteShapeLink__000001_LineTypeString.Type = models.NOTE_SHAPE_LINK_TO_GONG_STRUCT_OR_ENUM_SHAPE
+
 	// Position values setup
-	__Position__000000_Pos_NewDiagram_1_Line.X = 129.000000
-	__Position__000000_Pos_NewDiagram_1_Line.Y = 195.000000
+	__Position__000000_Pos_NewDiagram_1_Line.X = 180.000000
+	__Position__000000_Pos_NewDiagram_1_Line.Y = 184.000000
 	__Position__000000_Pos_NewDiagram_1_Line.Name = `Pos-NewDiagram_1-Line`
 
 	// Position values setup
-	__Position__000001_Pos_NewDiagram_1_LineTypeInt.X = 841.000000
-	__Position__000001_Pos_NewDiagram_1_LineTypeInt.Y = 202.000000
+	__Position__000001_Pos_NewDiagram_1_LineTypeInt.X = 597.000000
+	__Position__000001_Pos_NewDiagram_1_LineTypeInt.Y = 313.000000
 	__Position__000001_Pos_NewDiagram_1_LineTypeInt.Name = `Pos-NewDiagram_1-LineTypeInt`
 
 	// Position values setup
-	__Position__000002_Pos_NewDiagram_1_LineTypeString.X = 842.000000
-	__Position__000002_Pos_NewDiagram_1_LineTypeString.Y = 86.000000
+	__Position__000002_Pos_NewDiagram_1_LineTypeString.X = 595.000000
+	__Position__000002_Pos_NewDiagram_1_LineTypeString.Y = 184.000000
 	__Position__000002_Pos_NewDiagram_1_LineTypeString.Name = `Pos-NewDiagram_1-LineTypeString`
 
 	// Position values setup
-	__Position__000003_Pos_NewDiagram_1_Point.X = 100.000000
-	__Position__000003_Pos_NewDiagram_1_Point.Y = 521.000000
+	__Position__000003_Pos_NewDiagram_1_Point.X = 212.000000
+	__Position__000003_Pos_NewDiagram_1_Point.Y = 517.000000
 	__Position__000003_Pos_NewDiagram_1_Point.Name = `Pos-NewDiagram_1-Point`
 
 	// Vertice values setup
@@ -356,6 +376,8 @@ are referenced in the go code
 	__GongStructShape__000001_NewDiagram_1_Point.Position = __Position__000003_Pos_NewDiagram_1_Point
 	__GongStructShape__000001_NewDiagram_1_Point.Fields = append(__GongStructShape__000001_NewDiagram_1_Point.Fields, __Field__000001_Name)
 	__Link__000000_End.Middlevertice = __Vertice__000000_Verticle_in_class_diagram_NewDiagram_1_in_middle_between_NewDiagram_1_Line_and_NewDiagram_1_Point
+	__NoteShape__000000_ShortNodeOnModels.NoteShapeLinks = append(__NoteShape__000000_ShortNodeOnModels.NoteShapeLinks, __NoteShapeLink__000000_Line)
+	__NoteShape__000000_ShortNodeOnModels.NoteShapeLinks = append(__NoteShape__000000_ShortNodeOnModels.NoteShapeLinks, __NoteShapeLink__000001_LineTypeString)
 }
 
 

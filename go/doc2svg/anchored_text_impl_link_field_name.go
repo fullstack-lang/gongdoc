@@ -15,7 +15,7 @@ type AnchoredTextImplLinkFieldName struct {
 	gongdocStage *gongdoc_models.StageStruct
 }
 
-func NewAnchoredTextImplAnchoredText(
+func NewAnchoredTextImplLinkFieldName(
 	anchoredtext *gongdoc_models.Link,
 	gongdocStage *gongdoc_models.StageStruct) (anchoredtextImplAnchoredText *AnchoredTextImplLinkFieldName) {
 
