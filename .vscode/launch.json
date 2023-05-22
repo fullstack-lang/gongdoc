@@ -183,17 +183,17 @@
                 "../../tests/dummy/go/models",
             ]
         },
-        {
-            "name": "gongdoc on gongsvg",
-            "type": "go",
-            "request": "launch",
-            "mode": "debug",
-            "program": "${workspaceFolder}/go/cmd/gongdoc",
-            "cwd": "${workspaceFolder}/../../../../gongsvg",
-            "args": [
-                "../../models",
-            ]
-        },
+        // {
+        //     "name": "gongdoc on gongsvg",
+        //     "type": "go",
+        //     "request": "launch",
+        //     "mode": "debug",
+        //     "program": "${workspaceFolder}/go/cmd/gongdoc",
+        //     "cwd": "${workspaceFolder}/../../../../gongsvg",
+        //     "args": [
+        //         "../../models",
+        //     ]
+        // },
         {
             "name": "gongdoc on issuerenaming",
             "type": "go",
@@ -244,7 +244,7 @@
             "program": "${workspaceFolder}/go/cmd/gongdoc",
             "cwd": "${workspaceFolder}/../gongsvg",
             "args": [
-                "../../models",
+                "go/models",
             ]
         },
     ]
