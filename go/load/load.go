@@ -11,10 +11,22 @@ import (
 	gongdoc_fullstack "github.com/fullstack-lang/gongdoc/go/fullstack"
 	gongdoc_models "github.com/fullstack-lang/gongdoc/go/models"
 
+	"github.com/fullstack-lang/gongdoc/go/doc2svg"
 	gongsvg_fullstack "github.com/fullstack-lang/gongsvg/go/fullstack"
+	gongsvg_models "github.com/fullstack-lang/gongsvg/go/models"
 
 	"github.com/gin-gonic/gin"
 )
+
+type BeforeCommitImplementation struct {
+	// for generating SVG
+	docSVGMapper *doc2svg.DocSVGMapper
+	gongsvgStage *gongsvg_models.StageStruct
+}
+
+func (beforeCommitImplementation *BeforeCommitImplementation) BeforeCommit(gongdocStage *gongdoc_models.StageStruct) {
+	beforeCommitImplementation.docSVGMapper.GenerateSvg(gongdocStage, beforeCommitImplementation.gongsvgStage)
+}
 
 // Load have gongdoc init itself and the gong stack as well
 // then parse the model source code in [goSourceDirectories]
@@ -37,7 +49,20 @@ func Load(
 	gongStage := gong_fullstack.NewStackInstance(r, pkgPath)
 	gongdocStage := gongdoc_fullstack.NewStackInstance(r, pkgPath)
 	gongsvgStage := gongsvg_fullstack.NewStackInstance(r, pkgPath)
-	_ = gongsvgStage
+
+	gongsvg_models.SetOrchestratorOnAfterUpdate[gongsvg_models.Rect](gongsvgStage)
+	gongsvg_models.SetOrchestratorOnAfterUpdate[gongsvg_models.Link](gongsvgStage)
+	gongsvg_models.SetOrchestratorOnAfterUpdate[gongsvg_models.AnchoredText](gongsvgStage)
+
+	beforeCommitImplementation := new(BeforeCommitImplementation)
+
+	docSVGMapper := new(doc2svg.DocSVGMapper)
+	beforeCommitImplementation.docSVGMapper = docSVGMapper
+	beforeCommitImplementation.gongsvgStage = gongsvgStage
+
+	gongdocStage.OnInitCommitFromFrontCallback = beforeCommitImplementation
+	gongdocStage.OnInitCommitFromBackCallback = beforeCommitImplementation
+
 	modelPackage, _ := gong_models.LoadEmbedded(gongStage, goModelsDir)
 
 	modelPackage.Name = stackName

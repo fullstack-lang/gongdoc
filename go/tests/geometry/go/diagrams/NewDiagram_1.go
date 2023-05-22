@@ -299,7 +299,7 @@ func NewDiagram_1Injection(stage *models.StageStruct) {
 
 	//gong:ident [ref_models.Line]
 	__GongStructShape__000000_NewDiagram_1_Line.Identifier = `ref_models.Line`
-	__GongStructShape__000000_NewDiagram_1_Line.ShowNbInstances = false
+	__GongStructShape__000000_NewDiagram_1_Line.ShowNbInstances = true
 	__GongStructShape__000000_NewDiagram_1_Line.NbInstances = 0
 	__GongStructShape__000000_NewDiagram_1_Line.Width = 335.000000
 	__GongStructShape__000000_NewDiagram_1_Line.Heigth = 138.000000
@@ -312,7 +312,7 @@ func NewDiagram_1Injection(stage *models.StageStruct) {
 
 	//gong:ident [ref_models.Point]
 	__GongStructShape__000001_NewDiagram_1_Point.Identifier = `ref_models.Point`
-	__GongStructShape__000001_NewDiagram_1_Point.ShowNbInstances = false
+	__GongStructShape__000001_NewDiagram_1_Point.ShowNbInstances = true
 	__GongStructShape__000001_NewDiagram_1_Point.NbInstances = 0
 	__GongStructShape__000001_NewDiagram_1_Point.Width = 320.000000
 	__GongStructShape__000001_NewDiagram_1_Point.Heigth = 93.000000
@@ -387,8 +387,8 @@ It uses the DocLink convention for referencing Identifiers
 In this case <a href="/models#Line">models.Line</a>, <a href="/models#Point">models.Point</a> and <a href="/models#Line.Start">models.Line.Start</a> <a href="/models#LineTypeString">models.LineTypeString</a>
 are referenced in the go code
 `
-	__NoteShape__000000_ShortNodeOnModels.X = 479.000000
-	__NoteShape__000000_ShortNodeOnModels.Y = 343.000000
+	__NoteShape__000000_ShortNodeOnModels.X = 451.000000
+	__NoteShape__000000_ShortNodeOnModels.Y = 511.000000
 	__NoteShape__000000_ShortNodeOnModels.Width = 626.000000
 	__NoteShape__000000_ShortNodeOnModels.Heigth = 111.000000
 	__NoteShape__000000_ShortNodeOnModels.Matched = false
