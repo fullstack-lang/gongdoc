@@ -35,5 +35,5 @@ func (rectImplGongstructShape *RectImplGongstructShape) RectUpdated(updatedRect 
 	rectImplGongstructShape.gongstructShape.Width = updatedRect.Width
 	rectImplGongstructShape.gongstructShape.Heigth = updatedRect.Height
 
-	rectImplGongstructShape.gongdocStage.Commit()
+	rectImplGongstructShape.gongdocStage.CommitWithSuspendedCallbacks()
 }

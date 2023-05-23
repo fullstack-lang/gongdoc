@@ -272,11 +272,11 @@ func NewDiagramInjection(stage *models.StageStruct) {
 
 	//gong:ident [ref_models.Point]
 	__Link__000001_Start.Fieldtypename = `ref_models.Point`
-	__Link__000001_Start.FieldOffsetX = 434.000000
-	__Link__000001_Start.FieldOffsetY = 24.000000
+	__Link__000001_Start.FieldOffsetX = -60.000061
+	__Link__000001_Start.FieldOffsetY = 23.000000
 	__Link__000001_Start.TargetMultiplicity = models.ZERO_ONE
-	__Link__000001_Start.TargetMultiplicityOffsetX = 438.000000
-	__Link__000001_Start.TargetMultiplicityOffsetY = -20.000000
+	__Link__000001_Start.TargetMultiplicityOffsetX = -58.000061
+	__Link__000001_Start.TargetMultiplicityOffsetY = -21.000000
 	__Link__000001_Start.SourceMultiplicity = models.MANY
 	__Link__000001_Start.SourceMultiplicityOffsetX = -31.000000
 	__Link__000001_Start.SourceMultiplicityOffsetY = 20.000000
@@ -383,8 +383,8 @@ are referenced in the go code
 	__GongStructShape__000000_NewDiagram_Line.Links = append(__GongStructShape__000000_NewDiagram_Line.Links, __Link__000000_End)
 	__GongStructShape__000000_NewDiagram_Line.Links = append(__GongStructShape__000000_NewDiagram_Line.Links, __Link__000001_Start)
 	__GongStructShape__000001_NewDiagram_Point.Position = __Position__000002_Pos_NewDiagram_Point
-	__Link__000000_End.Middlevertice = __Vertice__000001_Verticle_in_class_diagram_NewDiagram_in_middle_between_NewDiagram_Line_and_NewDiagram_Point
-	__Link__000001_Start.Middlevertice = __Vertice__000000_Verticle_in_class_diagram_NewDiagram_in_middle_between_NewDiagram_Line_and_NewDiagram_Point
+	__Link__000000_End.Middlevertice = __Vertice__000000_Verticle_in_class_diagram_NewDiagram_in_middle_between_NewDiagram_Line_and_NewDiagram_Point
+	__Link__000001_Start.Middlevertice = __Vertice__000001_Verticle_in_class_diagram_NewDiagram_in_middle_between_NewDiagram_Line_and_NewDiagram_Point
 	__NoteShape__000000_ShortNodeOnModels.NoteShapeLinks = append(__NoteShape__000000_ShortNodeOnModels.NoteShapeLinks, __NoteShapeLink__000000_Line)
 	__NoteShape__000000_ShortNodeOnModels.NoteShapeLinks = append(__NoteShape__000000_ShortNodeOnModels.NoteShapeLinks, __NoteShapeLink__000001_Line_Start)
 	__NoteShape__000000_ShortNodeOnModels.NoteShapeLinks = append(__NoteShape__000000_ShortNodeOnModels.NoteShapeLinks, __NoteShapeLink__000003_Point)

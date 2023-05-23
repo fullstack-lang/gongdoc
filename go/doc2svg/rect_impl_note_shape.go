@@ -35,5 +35,5 @@ func (rectImplNoteShape *RectImplNoteShape) RectUpdated(updatedRect *gongsvg_mod
 	rectImplNoteShape.noteShape.Width = updatedRect.Width
 	rectImplNoteShape.noteShape.Heigth = updatedRect.Height
 
-	rectImplNoteShape.gongdocStage.Commit()
+	rectImplNoteShape.gongdocStage.CommitWithSuspendedCallbacks()
 }

@@ -81,6 +81,12 @@ export class LinkComponent implements OnInit, AfterViewInit, DoCheck, AfterViewC
     this.subscriptions.push(
       mouseEventService.mouseMouseDownEvent$.subscribe(
         (shapeMouseEvent: ShapeMouseEvent) => {
+
+          if (shapeMouseEvent.ShapeType != gongsvg.LinkDB.GONGSTRUCT_NAME ||
+            shapeMouseEvent.ShapeID != this.Link!.ID) {
+            return
+          }
+
           this.PointAtMouseDown = structuredClone(shapeMouseEvent.Point)
           this.LinkAtMouseDown = structuredClone(this.Link!)
 
@@ -400,7 +406,7 @@ export class LinkComponent implements OnInit, AfterViewInit, DoCheck, AfterViewC
   }
 
   ngAfterViewChecked() {
-    console.log('Change detection run on MySvgComponent');
+    //  console.log('Change detection run on MySvgComponent');
   }
 
   ngOnChanges(changes: SimpleChanges) {

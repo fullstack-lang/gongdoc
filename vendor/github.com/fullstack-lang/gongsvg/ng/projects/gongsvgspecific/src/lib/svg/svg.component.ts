@@ -159,16 +159,16 @@ export class SvgComponent implements OnInit, OnDestroy, AfterViewInit {
       }
     )
 
-    this.gongsvgPushFromFrontNbService.getPushNbFromFront(500, this.GONG__StackPath).subscribe(
-      lastPushFromFrontNb => {
-        if (this.lastPushFromFrontNb < lastPushFromFrontNb) {
+    // this.gongsvgPushFromFrontNbService.getPushNbFromFront(500, this.GONG__StackPath).subscribe(
+    //   lastPushFromFrontNb => {
+    //     if (this.lastPushFromFrontNb < lastPushFromFrontNb) {
 
-          // console.log("last commit nb " + this.lastCommiNbFromBagetCommitNbFromFront + " new: " + commiNbFromBagetCommitNbFromFront)
-          this.refresh()
-          this.lastPushFromFrontNb = lastPushFromFrontNb
-        }
-      }
-    )
+    //       // console.log("last commit nb " + this.lastCommiNbFromBagetCommitNbFromFront + " new: " + commiNbFromBagetCommitNbFromFront)
+    //       this.refresh()
+    //       this.lastPushFromFrontNb = lastPushFromFrontNb
+    //     }
+    //   }
+    // )
   }
 
   refresh(): void {

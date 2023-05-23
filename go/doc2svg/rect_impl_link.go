@@ -36,5 +36,5 @@ func (linkImplLink *LinkImplLink) LinkUpdated(updatedLink *gongsvg_models.Link) 
 	linkImplLink.link.EndRatio = updatedLink.EndRatio
 	linkImplLink.link.CornerOffsetRatio = updatedLink.CornerOffsetRatio
 
-	linkImplLink.gongdocStage.Commit()
+	linkImplLink.gongdocStage.CommitWithSuspendedCallbacks()
 }

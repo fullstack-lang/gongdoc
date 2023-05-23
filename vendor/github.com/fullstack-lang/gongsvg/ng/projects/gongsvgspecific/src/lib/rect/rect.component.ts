@@ -60,8 +60,12 @@ export class RectComponent implements OnInit, OnDestroy, DoCheck, OnChanges {
     this.subscriptions.push(
       mouseEventService.mouseMouseDownEvent$.subscribe(
         (shapeMouseEvent: ShapeMouseEvent) => {
-          this.RectAtMouseDown = structuredClone(this.Rect)
-          this.PointAtMouseDown = structuredClone(shapeMouseEvent.Point)
+
+          if (this.anchorDragging || this.rectDragging || this.Rect.IsSelected) {
+            this.distanceMoved = 0
+            this.RectAtMouseDown = structuredClone(this.Rect)
+            this.PointAtMouseDown = structuredClone(shapeMouseEvent.Point)
+          }
         }
       )
     )
@@ -89,7 +93,7 @@ export class RectComponent implements OnInit, OnDestroy, DoCheck, OnChanges {
             return // we don't want the move move to be interpreted by the rect
           }
 
-          if ((this.rectDragging || this.Rect.IsSelected) && this.PointAtMouseDown) {
+          if (this.rectDragging) {
             const deltaX = shapeMouseEvent.Point.X - this.PointAtMouseDown!.X
             const deltaY = shapeMouseEvent.Point.Y - this.PointAtMouseDown!.Y
             this.distanceMoved = Math.sqrt(deltaX * deltaX + deltaY * deltaY)
@@ -109,11 +113,17 @@ export class RectComponent implements OnInit, OnDestroy, DoCheck, OnChanges {
       mouseEventService.mouseMouseUpEvent$.subscribe(
         (shapeMouseEvent: ShapeMouseEvent) => {
 
-          if (shapeMouseEvent.ShapeID != 0 && this.distanceMoved > this.dragThreshold) {
+          if (!this.isEditableService.getIsEditable()) {
+            return
+          }
 
-            if (this.isEditableService.getIsEditable()) {
+          if (shapeMouseEvent.ShapeID != 0 && this.distanceMoved > this.dragThreshold) {
+            if (this.anchorDragging || this.rectDragging || this.Rect.IsSelected) {
+              this.Rect.IsSelected = false
+              this.manageHandles()
               this.rectService.updateRect(this.Rect, this.GONG__StackPath).subscribe()
             }
+
           }
           if (this.distanceMoved <= this.dragThreshold) {
             if (this.Rect?.IsSelectable &&
@@ -121,6 +131,7 @@ export class RectComponent implements OnInit, OnDestroy, DoCheck, OnChanges {
               shapeMouseEvent.ShapeID == this.Rect.ID) {
               console.log("rect, mouseEventService.mouseMouseUpEvent$.subscribe, from the shape: ", this.Rect?.Name)
               this.Rect.IsSelected = !this.Rect.IsSelected
+              this.manageHandles()
               this.rectService.updateRect(this.Rect, this.GONG__StackPath).subscribe()
             }
 
@@ -128,9 +139,13 @@ export class RectComponent implements OnInit, OnDestroy, DoCheck, OnChanges {
             if (this.Rect.IsSelectable && this.Rect.IsSelected && shapeMouseEvent.ShapeID == 0) {
               console.log("rect, mouseEventService.mouseMouseUpEvent$.subscribe: from the svg", this.Rect?.Name)
               this.Rect.IsSelected = false
+              this.manageHandles()
               this.rectService.updateRect(this.Rect, this.GONG__StackPath).subscribe()
             }
           }
+
+          this.rectDragging = false
+          this.anchorDragging = false
           // console.log('Rect ', this.Rect.Name, 'Mouse down event occurred on rectangle ', rectangleID);
         })
     )
@@ -154,6 +169,7 @@ export class RectComponent implements OnInit, OnDestroy, DoCheck, OnChanges {
                 this.Rect.Y + this.Rect.Height < selectAreaConfig.BottomRigth[1]
               ) {
                 this.Rect.IsSelected = true
+                this.manageHandles()
                 this.rectService.updateRect(this.Rect, this.GONG__StackPath).subscribe()
               }
               break
@@ -167,6 +183,7 @@ export class RectComponent implements OnInit, OnDestroy, DoCheck, OnChanges {
                 this.Rect.Y + this.Rect.Height > selectAreaConfig.TopLeft[1]
               ) {
                 this.Rect.IsSelected = true
+                this.manageHandles()
                 this.rectService.updateRect(this.Rect, this.GONG__StackPath).subscribe()
               }
               break
@@ -268,10 +285,7 @@ export class RectComponent implements OnInit, OnDestroy, DoCheck, OnChanges {
     }
 
     if (!event.altKey && !event.shiftKey) {
-
       this.mouseEventService.emitMouseUpEvent(shapeMouseEvent)
-      this.rectDragging = false
-      this.anchorDragging = false
     }
 
     if (event.altKey) {
@@ -319,11 +333,38 @@ export class RectComponent implements OnInit, OnDestroy, DoCheck, OnChanges {
     if (!event.altKey && !event.shiftKey) {
       this.anchorDragging = false;
       this.activeAnchor = null;
+      this.Rect!.IsSelected = false
+      this.manageHandles()
       this.rectService.updateRect(this.Rect, this.GONG__StackPath).subscribe()
     }
   }
 
   splitTextIntoLines(text: string): string[] {
     return text.split('\n')
+  }
+
+  // display or not handles if selected or not
+  manageHandles() {
+
+    if (this.Rect!.IsSelected && this.Rect!.CanHaveLeftHandle) {
+      this.Rect!.HasLeftHandle = true
+    } else {
+      this.Rect!.HasLeftHandle = false
+    }
+    if (this.Rect!.IsSelected && this.Rect!.CanHaveRightHandle) {
+      this.Rect!.HasRightHandle = true
+    } else {
+      this.Rect!.HasRightHandle = false
+    }
+    if (this.Rect!.IsSelected && this.Rect!.CanHaveTopHandle) {
+      this.Rect!.HasTopHandle = true
+    } else {
+      this.Rect!.HasTopHandle = false
+    }
+    if (this.Rect!.IsSelected && this.Rect!.CanHaveBottomHandle) {
+      this.Rect!.HasBottomHandle = true
+    } else {
+      this.Rect!.HasBottomHandle = false
+    }
   }
 }

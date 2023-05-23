@@ -35,5 +35,5 @@ func (anchoredtextImplAnchoredText *AnchoredTextImplLinkFieldName) AnchoredTextU
 	anchoredtextImplAnchoredText.link.FieldOffsetX = updatedAnchoredText.X_Offset
 	anchoredtextImplAnchoredText.link.FieldOffsetY = updatedAnchoredText.Y_Offset
 
-	anchoredtextImplAnchoredText.gongdocStage.Commit()
+	anchoredtextImplAnchoredText.gongdocStage.CommitWithSuspendedCallbacks()
 }

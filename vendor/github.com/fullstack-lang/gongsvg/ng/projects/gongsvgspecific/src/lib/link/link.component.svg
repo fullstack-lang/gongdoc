@@ -135,7 +135,7 @@
                             (mouseup)="textAnchoredMouseUp($event)"
                             >
                             <tspan *ngFor='let line of lines; let j = index' 
-                                [attr.x]="segment.StartPoint.X + text.X_Offset"
+                                [attr.x]="segment.EndPoint.X + text.X_Offset"
                                 [attr.dy]="j > 0 ? '1em' : '0'">{{line}}</tspan>  
                             </text>
                     </ng-container>
