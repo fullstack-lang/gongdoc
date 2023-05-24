@@ -11,8 +11,6 @@ import { CommitNbFromBackService } from '../commitnbfromback.service'
 import { GongstructSelectionService } from '../gongstruct-selection.service'
 
 // insertion point for per struct import code
-import { AnchoredTextService } from '../anchoredtext.service'
-import { getAnchoredTextUniqueID } from '../front-repo.service'
 import { AnimateService } from '../animate.service'
 import { getAnimateUniqueID } from '../front-repo.service'
 import { CircleService } from '../circle.service'
@@ -25,6 +23,8 @@ import { LineService } from '../line.service'
 import { getLineUniqueID } from '../front-repo.service'
 import { LinkService } from '../link.service'
 import { getLinkUniqueID } from '../front-repo.service'
+import { LinkAnchoredTextService } from '../linkanchoredtext.service'
+import { getLinkAnchoredTextUniqueID } from '../front-repo.service'
 import { PathService } from '../path.service'
 import { getPathUniqueID } from '../front-repo.service'
 import { PointService } from '../point.service'
@@ -190,13 +190,13 @@ export class SidebarComponent implements OnInit {
     private gongstructSelectionService: GongstructSelectionService,
 
     // insertion point for per struct service declaration
-    private anchoredtextService: AnchoredTextService,
     private animateService: AnimateService,
     private circleService: CircleService,
     private ellipseService: EllipseService,
     private layerService: LayerService,
     private lineService: LineService,
     private linkService: LinkService,
+    private linkanchoredtextService: LinkAnchoredTextService,
     private pathService: PathService,
     private pointService: PointService,
     private polygoneService: PolygoneService,
@@ -243,14 +243,6 @@ export class SidebarComponent implements OnInit {
 
     // insertion point for per struct observable for refresh trigger
     // observable for changes in structs
-    this.anchoredtextService.AnchoredTextServiceChanged.subscribe(
-      message => {
-        if (message == "post" || message == "update" || message == "delete") {
-          this.refresh()
-        }
-      }
-    )
-    // observable for changes in structs
     this.animateService.AnimateServiceChanged.subscribe(
       message => {
         if (message == "post" || message == "update" || message == "delete") {
@@ -292,6 +284,14 @@ export class SidebarComponent implements OnInit {
     )
     // observable for changes in structs
     this.linkService.LinkServiceChanged.subscribe(
+      message => {
+        if (message == "post" || message == "update" || message == "delete") {
+          this.refresh()
+        }
+      }
+    )
+    // observable for changes in structs
+    this.linkanchoredtextService.LinkAnchoredTextServiceChanged.subscribe(
       message => {
         if (message == "post" || message == "update" || message == "delete") {
           this.refresh()
@@ -402,82 +402,6 @@ export class SidebarComponent implements OnInit {
       this.gongNodeTree = new Array<GongNode>();
 
       // insertion point for per struct tree construction
-      /**
-      * fill up the AnchoredText part of the mat tree
-      */
-      let anchoredtextGongNodeStruct: GongNode = {
-        name: "AnchoredText",
-        type: GongNodeType.STRUCT,
-        id: 0,
-        uniqueIdPerStack: 13 * nonInstanceNodeId,
-        structName: "AnchoredText",
-        associationField: "",
-        associatedStructName: "",
-        children: new Array<GongNode>()
-      }
-      nonInstanceNodeId = nonInstanceNodeId + 1
-      this.gongNodeTree.push(anchoredtextGongNodeStruct)
-
-      this.frontRepo.AnchoredTexts_array.sort((t1, t2) => {
-        if (t1.Name > t2.Name) {
-          return 1;
-        }
-        if (t1.Name < t2.Name) {
-          return -1;
-        }
-        return 0;
-      });
-
-      this.frontRepo.AnchoredTexts_array.forEach(
-        anchoredtextDB => {
-          let anchoredtextGongNodeInstance: GongNode = {
-            name: anchoredtextDB.Name,
-            type: GongNodeType.INSTANCE,
-            id: anchoredtextDB.ID,
-            uniqueIdPerStack: getAnchoredTextUniqueID(anchoredtextDB.ID),
-            structName: "AnchoredText",
-            associationField: "",
-            associatedStructName: "",
-            children: new Array<GongNode>()
-          }
-          anchoredtextGongNodeStruct.children!.push(anchoredtextGongNodeInstance)
-
-          // insertion point for per field code
-          /**
-          * let append a node for the slide of pointer Animates
-          */
-          let AnimatesGongNodeAssociation: GongNode = {
-            name: "(Animate) Animates",
-            type: GongNodeType.ONE__ZERO_MANY_ASSOCIATION,
-            id: anchoredtextDB.ID,
-            uniqueIdPerStack: 19 * nonInstanceNodeId,
-            structName: "AnchoredText",
-            associationField: "Animates",
-            associatedStructName: "Animate",
-            children: new Array<GongNode>()
-          }
-          nonInstanceNodeId = nonInstanceNodeId + 1
-          anchoredtextGongNodeInstance.children.push(AnimatesGongNodeAssociation)
-
-          anchoredtextDB.Animates?.forEach(animateDB => {
-            let animateNode: GongNode = {
-              name: animateDB.Name,
-              type: GongNodeType.INSTANCE,
-              id: animateDB.ID,
-              uniqueIdPerStack: // godel numbering (thank you kurt)
-                7 * getAnchoredTextUniqueID(anchoredtextDB.ID)
-                + 11 * getAnimateUniqueID(animateDB.ID),
-              structName: "Animate",
-              associationField: "",
-              associatedStructName: "",
-              children: new Array<GongNode>()
-            }
-            AnimatesGongNodeAssociation.children.push(animateNode)
-          })
-
-        }
-      )
-
       /**
       * fill up the Animate part of the mat tree
       */
@@ -1229,64 +1153,64 @@ export class SidebarComponent implements OnInit {
           * let append a node for the slide of pointer TextAtArrowEnd
           */
           let TextAtArrowEndGongNodeAssociation: GongNode = {
-            name: "(AnchoredText) TextAtArrowEnd",
+            name: "(LinkAnchoredText) TextAtArrowEnd",
             type: GongNodeType.ONE__ZERO_MANY_ASSOCIATION,
             id: linkDB.ID,
             uniqueIdPerStack: 19 * nonInstanceNodeId,
             structName: "Link",
             associationField: "TextAtArrowEnd",
-            associatedStructName: "AnchoredText",
+            associatedStructName: "LinkAnchoredText",
             children: new Array<GongNode>()
           }
           nonInstanceNodeId = nonInstanceNodeId + 1
           linkGongNodeInstance.children.push(TextAtArrowEndGongNodeAssociation)
 
-          linkDB.TextAtArrowEnd?.forEach(anchoredtextDB => {
-            let anchoredtextNode: GongNode = {
-              name: anchoredtextDB.Name,
+          linkDB.TextAtArrowEnd?.forEach(linkanchoredtextDB => {
+            let linkanchoredtextNode: GongNode = {
+              name: linkanchoredtextDB.Name,
               type: GongNodeType.INSTANCE,
-              id: anchoredtextDB.ID,
+              id: linkanchoredtextDB.ID,
               uniqueIdPerStack: // godel numbering (thank you kurt)
                 7 * getLinkUniqueID(linkDB.ID)
-                + 11 * getAnchoredTextUniqueID(anchoredtextDB.ID),
-              structName: "AnchoredText",
+                + 11 * getLinkAnchoredTextUniqueID(linkanchoredtextDB.ID),
+              structName: "LinkAnchoredText",
               associationField: "",
               associatedStructName: "",
               children: new Array<GongNode>()
             }
-            TextAtArrowEndGongNodeAssociation.children.push(anchoredtextNode)
+            TextAtArrowEndGongNodeAssociation.children.push(linkanchoredtextNode)
           })
 
           /**
           * let append a node for the slide of pointer TextAtArrowStart
           */
           let TextAtArrowStartGongNodeAssociation: GongNode = {
-            name: "(AnchoredText) TextAtArrowStart",
+            name: "(LinkAnchoredText) TextAtArrowStart",
             type: GongNodeType.ONE__ZERO_MANY_ASSOCIATION,
             id: linkDB.ID,
             uniqueIdPerStack: 19 * nonInstanceNodeId,
             structName: "Link",
             associationField: "TextAtArrowStart",
-            associatedStructName: "AnchoredText",
+            associatedStructName: "LinkAnchoredText",
             children: new Array<GongNode>()
           }
           nonInstanceNodeId = nonInstanceNodeId + 1
           linkGongNodeInstance.children.push(TextAtArrowStartGongNodeAssociation)
 
-          linkDB.TextAtArrowStart?.forEach(anchoredtextDB => {
-            let anchoredtextNode: GongNode = {
-              name: anchoredtextDB.Name,
+          linkDB.TextAtArrowStart?.forEach(linkanchoredtextDB => {
+            let linkanchoredtextNode: GongNode = {
+              name: linkanchoredtextDB.Name,
               type: GongNodeType.INSTANCE,
-              id: anchoredtextDB.ID,
+              id: linkanchoredtextDB.ID,
               uniqueIdPerStack: // godel numbering (thank you kurt)
                 7 * getLinkUniqueID(linkDB.ID)
-                + 11 * getAnchoredTextUniqueID(anchoredtextDB.ID),
-              structName: "AnchoredText",
+                + 11 * getLinkAnchoredTextUniqueID(linkanchoredtextDB.ID),
+              structName: "LinkAnchoredText",
               associationField: "",
               associatedStructName: "",
               children: new Array<GongNode>()
             }
-            TextAtArrowStartGongNodeAssociation.children.push(anchoredtextNode)
+            TextAtArrowStartGongNodeAssociation.children.push(linkanchoredtextNode)
           })
 
           /**
@@ -1319,6 +1243,82 @@ export class SidebarComponent implements OnInit {
               children: new Array<GongNode>()
             }
             ControlPointsGongNodeAssociation.children.push(pointNode)
+          })
+
+        }
+      )
+
+      /**
+      * fill up the LinkAnchoredText part of the mat tree
+      */
+      let linkanchoredtextGongNodeStruct: GongNode = {
+        name: "LinkAnchoredText",
+        type: GongNodeType.STRUCT,
+        id: 0,
+        uniqueIdPerStack: 13 * nonInstanceNodeId,
+        structName: "LinkAnchoredText",
+        associationField: "",
+        associatedStructName: "",
+        children: new Array<GongNode>()
+      }
+      nonInstanceNodeId = nonInstanceNodeId + 1
+      this.gongNodeTree.push(linkanchoredtextGongNodeStruct)
+
+      this.frontRepo.LinkAnchoredTexts_array.sort((t1, t2) => {
+        if (t1.Name > t2.Name) {
+          return 1;
+        }
+        if (t1.Name < t2.Name) {
+          return -1;
+        }
+        return 0;
+      });
+
+      this.frontRepo.LinkAnchoredTexts_array.forEach(
+        linkanchoredtextDB => {
+          let linkanchoredtextGongNodeInstance: GongNode = {
+            name: linkanchoredtextDB.Name,
+            type: GongNodeType.INSTANCE,
+            id: linkanchoredtextDB.ID,
+            uniqueIdPerStack: getLinkAnchoredTextUniqueID(linkanchoredtextDB.ID),
+            structName: "LinkAnchoredText",
+            associationField: "",
+            associatedStructName: "",
+            children: new Array<GongNode>()
+          }
+          linkanchoredtextGongNodeStruct.children!.push(linkanchoredtextGongNodeInstance)
+
+          // insertion point for per field code
+          /**
+          * let append a node for the slide of pointer Animates
+          */
+          let AnimatesGongNodeAssociation: GongNode = {
+            name: "(Animate) Animates",
+            type: GongNodeType.ONE__ZERO_MANY_ASSOCIATION,
+            id: linkanchoredtextDB.ID,
+            uniqueIdPerStack: 19 * nonInstanceNodeId,
+            structName: "LinkAnchoredText",
+            associationField: "Animates",
+            associatedStructName: "Animate",
+            children: new Array<GongNode>()
+          }
+          nonInstanceNodeId = nonInstanceNodeId + 1
+          linkanchoredtextGongNodeInstance.children.push(AnimatesGongNodeAssociation)
+
+          linkanchoredtextDB.Animates?.forEach(animateDB => {
+            let animateNode: GongNode = {
+              name: animateDB.Name,
+              type: GongNodeType.INSTANCE,
+              id: animateDB.ID,
+              uniqueIdPerStack: // godel numbering (thank you kurt)
+                7 * getLinkAnchoredTextUniqueID(linkanchoredtextDB.ID)
+                + 11 * getAnimateUniqueID(animateDB.ID),
+              structName: "Animate",
+              associationField: "",
+              associatedStructName: "",
+              children: new Array<GongNode>()
+            }
+            AnimatesGongNodeAssociation.children.push(animateNode)
           })
 
         }

@@ -5,9 +5,9 @@ import { LinkDB } from './link-db'
 // usefull for managing pointer ID values that can be nullable
 import { NullInt64 } from './null-int64'
 
-export class AnchoredTextDB {
+export class LinkAnchoredTextDB {
 
-	static GONGSTRUCT_NAME = "AnchoredText"
+	static GONGSTRUCT_NAME = "LinkAnchoredText"
 
 	CreatedAt?: string
 	DeletedAt?: string
@@ -30,11 +30,11 @@ export class AnchoredTextDB {
 	// insertion point for other declarations
 	Animates?: Array<AnimateDB>
 	Link_TextAtArrowEndDBID: NullInt64 = new NullInt64
-	Link_TextAtArrowEndDBID_Index: NullInt64  = new NullInt64 // store the index of the anchoredtext instance in Link.TextAtArrowEnd
+	Link_TextAtArrowEndDBID_Index: NullInt64  = new NullInt64 // store the index of the linkanchoredtext instance in Link.TextAtArrowEnd
 	Link_TextAtArrowEnd_reverse?: LinkDB 
 
 	Link_TextAtArrowStartDBID: NullInt64 = new NullInt64
-	Link_TextAtArrowStartDBID_Index: NullInt64  = new NullInt64 // store the index of the anchoredtext instance in Link.TextAtArrowStart
+	Link_TextAtArrowStartDBID_Index: NullInt64  = new NullInt64 // store the index of the linkanchoredtext instance in Link.TextAtArrowStart
 	Link_TextAtArrowStart_reverse?: LinkDB 
 
 }

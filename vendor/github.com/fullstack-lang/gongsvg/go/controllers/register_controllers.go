@@ -41,13 +41,6 @@ type ValidationError struct {
 func registerControllers(r *gin.Engine) {
 	v1 := r.Group("/api/github.com/fullstack-lang/gongsvg/go")
 	{ // insertion point for registrations
-		v1.GET("/v1/anchoredtexts", GetController().GetAnchoredTexts)
-		v1.GET("/v1/anchoredtexts/:id", GetController().GetAnchoredText)
-		v1.POST("/v1/anchoredtexts", GetController().PostAnchoredText)
-		v1.PATCH("/v1/anchoredtexts/:id", GetController().UpdateAnchoredText)
-		v1.PUT("/v1/anchoredtexts/:id", GetController().UpdateAnchoredText)
-		v1.DELETE("/v1/anchoredtexts/:id", GetController().DeleteAnchoredText)
-
 		v1.GET("/v1/animates", GetController().GetAnimates)
 		v1.GET("/v1/animates/:id", GetController().GetAnimate)
 		v1.POST("/v1/animates", GetController().PostAnimate)
@@ -89,6 +82,13 @@ func registerControllers(r *gin.Engine) {
 		v1.PATCH("/v1/links/:id", GetController().UpdateLink)
 		v1.PUT("/v1/links/:id", GetController().UpdateLink)
 		v1.DELETE("/v1/links/:id", GetController().DeleteLink)
+
+		v1.GET("/v1/linkanchoredtexts", GetController().GetLinkAnchoredTexts)
+		v1.GET("/v1/linkanchoredtexts/:id", GetController().GetLinkAnchoredText)
+		v1.POST("/v1/linkanchoredtexts", GetController().PostLinkAnchoredText)
+		v1.PATCH("/v1/linkanchoredtexts/:id", GetController().UpdateLinkAnchoredText)
+		v1.PUT("/v1/linkanchoredtexts/:id", GetController().UpdateLinkAnchoredText)
+		v1.DELETE("/v1/linkanchoredtexts/:id", GetController().DeleteLinkAnchoredText)
 
 		v1.GET("/v1/paths", GetController().GetPaths)
 		v1.GET("/v1/paths/:id", GetController().GetPath)

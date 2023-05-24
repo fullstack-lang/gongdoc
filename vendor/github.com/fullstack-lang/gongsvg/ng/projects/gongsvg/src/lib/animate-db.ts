@@ -1,8 +1,8 @@
 // insertion point for imports
-import { AnchoredTextDB } from './anchoredtext-db'
 import { CircleDB } from './circle-db'
 import { EllipseDB } from './ellipse-db'
 import { LineDB } from './line-db'
+import { LinkAnchoredTextDB } from './linkanchoredtext-db'
 import { PathDB } from './path-db'
 import { PolygoneDB } from './polygone-db'
 import { PolylineDB } from './polyline-db'
@@ -29,10 +29,6 @@ export class AnimateDB {
 	RepeatCount: string = ""
 
 	// insertion point for other declarations
-	AnchoredText_AnimatesDBID: NullInt64 = new NullInt64
-	AnchoredText_AnimatesDBID_Index: NullInt64  = new NullInt64 // store the index of the animate instance in AnchoredText.Animates
-	AnchoredText_Animates_reverse?: AnchoredTextDB 
-
 	Circle_AnimationsDBID: NullInt64 = new NullInt64
 	Circle_AnimationsDBID_Index: NullInt64  = new NullInt64 // store the index of the animate instance in Circle.Animations
 	Circle_Animations_reverse?: CircleDB 
@@ -44,6 +40,10 @@ export class AnimateDB {
 	Line_AnimatesDBID: NullInt64 = new NullInt64
 	Line_AnimatesDBID_Index: NullInt64  = new NullInt64 // store the index of the animate instance in Line.Animates
 	Line_Animates_reverse?: LineDB 
+
+	LinkAnchoredText_AnimatesDBID: NullInt64 = new NullInt64
+	LinkAnchoredText_AnimatesDBID_Index: NullInt64  = new NullInt64 // store the index of the animate instance in LinkAnchoredText.Animates
+	LinkAnchoredText_Animates_reverse?: LinkAnchoredTextDB 
 
 	Path_AnimatesDBID: NullInt64 = new NullInt64
 	Path_AnimatesDBID_Index: NullInt64  = new NullInt64 // store the index of the animate instance in Path.Animates

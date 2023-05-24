@@ -33,10 +33,10 @@ type Link struct {
 	EndArrowSize float64
 
 	// to be displayed at the end
-	TextAtArrowEnd []*AnchoredText
+	TextAtArrowEnd []*LinkAnchoredText
 
 	// to be displayed at the start
-	TextAtArrowStart []*AnchoredText
+	TextAtArrowStart []*LinkAnchoredText
 
 	// for non floating orthogonal anchors
 	ControlPoints []*Point

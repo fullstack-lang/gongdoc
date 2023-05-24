@@ -1,11 +1,11 @@
-<form *ngIf="anchoredtext" class="details">
-    <h2 class="details__title">anchoredtext</h2>
+<form *ngIf="linkanchoredtext" class="details">
+    <h2 class="details__title">linkanchoredtext</h2>
     <!-- insertion point for fields specific code -->
     <mat-grid-list *ngIf='!isATextArea("Name")' cols="5" rowHeight="1:1">
         <mat-grid-tile [colspan]="3">
             <mat-form-field mat-form-field class="detail-full-width">
                 <mat-label>Name</mat-label>
-                <input name="" [ngModelOptions]="{standalone: true}" matInput [(ngModel)]="anchoredtext.Name">
+                <input name="" [ngModelOptions]="{standalone: true}" matInput [(ngModel)]="linkanchoredtext.Name">
             </mat-form-field>
         </mat-grid-tile>
         <mat-grid-tile>
@@ -18,14 +18,14 @@
     </mat-grid-list>
     <mat-form-field *ngIf='isATextArea("Name")' mat-form-field class="detail-full-width">
         <mat-label>Name</mat-label>
-        <textarea name="" [ngModelOptions]="{standalone: true}" matInput [(ngModel)]="anchoredtext.Name"></textarea>
+        <textarea name="" [ngModelOptions]="{standalone: true}" matInput [(ngModel)]="linkanchoredtext.Name"></textarea>
     </mat-form-field>
 
     <mat-grid-list *ngIf='!isATextArea("Content")' cols="5" rowHeight="1:1">
         <mat-grid-tile [colspan]="3">
             <mat-form-field mat-form-field class="detail-full-width">
                 <mat-label>Content</mat-label>
-                <input name="" [ngModelOptions]="{standalone: true}" matInput [(ngModel)]="anchoredtext.Content">
+                <input name="" [ngModelOptions]="{standalone: true}" matInput [(ngModel)]="linkanchoredtext.Content">
             </mat-form-field>
         </mat-grid-tile>
         <mat-grid-tile>
@@ -38,26 +38,26 @@
     </mat-grid-list>
     <mat-form-field *ngIf='isATextArea("Content")' mat-form-field class="detail-full-width">
         <mat-label>Content</mat-label>
-        <textarea name="" [ngModelOptions]="{standalone: true}" matInput [(ngModel)]="anchoredtext.Content"></textarea>
+        <textarea name="" [ngModelOptions]="{standalone: true}" matInput [(ngModel)]="linkanchoredtext.Content"></textarea>
     </mat-form-field>
 
     <!-- -->
     <mat-form-field class="detail-full-width">
         <mat-label>X_Offset</mat-label>
-        <input type="number" [ngModelOptions]="{standalone: true}" matInput [(ngModel)]="anchoredtext.X_Offset" [ngModelOptions]="{standalone: true}">
+        <input type="number" [ngModelOptions]="{standalone: true}" matInput [(ngModel)]="linkanchoredtext.X_Offset" [ngModelOptions]="{standalone: true}">
     </mat-form-field>
 
     <!-- -->
     <mat-form-field class="detail-full-width">
         <mat-label>Y_Offset</mat-label>
-        <input type="number" [ngModelOptions]="{standalone: true}" matInput [(ngModel)]="anchoredtext.Y_Offset" [ngModelOptions]="{standalone: true}">
+        <input type="number" [ngModelOptions]="{standalone: true}" matInput [(ngModel)]="linkanchoredtext.Y_Offset" [ngModelOptions]="{standalone: true}">
     </mat-form-field>
 
     <mat-grid-list *ngIf='!isATextArea("FontWeight")' cols="5" rowHeight="1:1">
         <mat-grid-tile [colspan]="3">
             <mat-form-field mat-form-field class="detail-full-width">
                 <mat-label>FontWeight</mat-label>
-                <input name="" [ngModelOptions]="{standalone: true}" matInput [(ngModel)]="anchoredtext.FontWeight">
+                <input name="" [ngModelOptions]="{standalone: true}" matInput [(ngModel)]="linkanchoredtext.FontWeight">
             </mat-form-field>
         </mat-grid-tile>
         <mat-grid-tile>
@@ -70,14 +70,14 @@
     </mat-grid-list>
     <mat-form-field *ngIf='isATextArea("FontWeight")' mat-form-field class="detail-full-width">
         <mat-label>FontWeight</mat-label>
-        <textarea name="" [ngModelOptions]="{standalone: true}" matInput [(ngModel)]="anchoredtext.FontWeight"></textarea>
+        <textarea name="" [ngModelOptions]="{standalone: true}" matInput [(ngModel)]="linkanchoredtext.FontWeight"></textarea>
     </mat-form-field>
 
     <mat-grid-list *ngIf='!isATextArea("Color")' cols="5" rowHeight="1:1">
         <mat-grid-tile [colspan]="3">
             <mat-form-field mat-form-field class="detail-full-width">
                 <mat-label>Color</mat-label>
-                <input name="" [ngModelOptions]="{standalone: true}" matInput [(ngModel)]="anchoredtext.Color">
+                <input name="" [ngModelOptions]="{standalone: true}" matInput [(ngModel)]="linkanchoredtext.Color">
             </mat-form-field>
         </mat-grid-tile>
         <mat-grid-tile>
@@ -90,20 +90,20 @@
     </mat-grid-list>
     <mat-form-field *ngIf='isATextArea("Color")' mat-form-field class="detail-full-width">
         <mat-label>Color</mat-label>
-        <textarea name="" [ngModelOptions]="{standalone: true}" matInput [(ngModel)]="anchoredtext.Color"></textarea>
+        <textarea name="" [ngModelOptions]="{standalone: true}" matInput [(ngModel)]="linkanchoredtext.Color"></textarea>
     </mat-form-field>
 
     <!-- -->
     <mat-form-field class="detail-full-width">
         <mat-label>FillOpacity</mat-label>
-        <input type="number" [ngModelOptions]="{standalone: true}" matInput [(ngModel)]="anchoredtext.FillOpacity" [ngModelOptions]="{standalone: true}">
+        <input type="number" [ngModelOptions]="{standalone: true}" matInput [(ngModel)]="linkanchoredtext.FillOpacity" [ngModelOptions]="{standalone: true}">
     </mat-form-field>
 
     <mat-grid-list *ngIf='!isATextArea("Stroke")' cols="5" rowHeight="1:1">
         <mat-grid-tile [colspan]="3">
             <mat-form-field mat-form-field class="detail-full-width">
                 <mat-label>Stroke</mat-label>
-                <input name="" [ngModelOptions]="{standalone: true}" matInput [(ngModel)]="anchoredtext.Stroke">
+                <input name="" [ngModelOptions]="{standalone: true}" matInput [(ngModel)]="linkanchoredtext.Stroke">
             </mat-form-field>
         </mat-grid-tile>
         <mat-grid-tile>
@@ -116,20 +116,20 @@
     </mat-grid-list>
     <mat-form-field *ngIf='isATextArea("Stroke")' mat-form-field class="detail-full-width">
         <mat-label>Stroke</mat-label>
-        <textarea name="" [ngModelOptions]="{standalone: true}" matInput [(ngModel)]="anchoredtext.Stroke"></textarea>
+        <textarea name="" [ngModelOptions]="{standalone: true}" matInput [(ngModel)]="linkanchoredtext.Stroke"></textarea>
     </mat-form-field>
 
     <!-- -->
     <mat-form-field class="detail-full-width">
         <mat-label>StrokeWidth</mat-label>
-        <input type="number" [ngModelOptions]="{standalone: true}" matInput [(ngModel)]="anchoredtext.StrokeWidth" [ngModelOptions]="{standalone: true}">
+        <input type="number" [ngModelOptions]="{standalone: true}" matInput [(ngModel)]="linkanchoredtext.StrokeWidth" [ngModelOptions]="{standalone: true}">
     </mat-form-field>
 
     <mat-grid-list *ngIf='!isATextArea("StrokeDashArray")' cols="5" rowHeight="1:1">
         <mat-grid-tile [colspan]="3">
             <mat-form-field mat-form-field class="detail-full-width">
                 <mat-label>StrokeDashArray</mat-label>
-                <input name="" [ngModelOptions]="{standalone: true}" matInput [(ngModel)]="anchoredtext.StrokeDashArray">
+                <input name="" [ngModelOptions]="{standalone: true}" matInput [(ngModel)]="linkanchoredtext.StrokeDashArray">
             </mat-form-field>
         </mat-grid-tile>
         <mat-grid-tile>
@@ -142,14 +142,14 @@
     </mat-grid-list>
     <mat-form-field *ngIf='isATextArea("StrokeDashArray")' mat-form-field class="detail-full-width">
         <mat-label>StrokeDashArray</mat-label>
-        <textarea name="" [ngModelOptions]="{standalone: true}" matInput [(ngModel)]="anchoredtext.StrokeDashArray"></textarea>
+        <textarea name="" [ngModelOptions]="{standalone: true}" matInput [(ngModel)]="linkanchoredtext.StrokeDashArray"></textarea>
     </mat-form-field>
 
     <mat-grid-list *ngIf='!isATextArea("StrokeDashArrayWhenSelected")' cols="5" rowHeight="1:1">
         <mat-grid-tile [colspan]="3">
             <mat-form-field mat-form-field class="detail-full-width">
                 <mat-label>StrokeDashArrayWhenSelected</mat-label>
-                <input name="" [ngModelOptions]="{standalone: true}" matInput [(ngModel)]="anchoredtext.StrokeDashArrayWhenSelected">
+                <input name="" [ngModelOptions]="{standalone: true}" matInput [(ngModel)]="linkanchoredtext.StrokeDashArrayWhenSelected">
             </mat-form-field>
         </mat-grid-tile>
         <mat-grid-tile>
@@ -162,14 +162,14 @@
     </mat-grid-list>
     <mat-form-field *ngIf='isATextArea("StrokeDashArrayWhenSelected")' mat-form-field class="detail-full-width">
         <mat-label>StrokeDashArrayWhenSelected</mat-label>
-        <textarea name="" [ngModelOptions]="{standalone: true}" matInput [(ngModel)]="anchoredtext.StrokeDashArrayWhenSelected"></textarea>
+        <textarea name="" [ngModelOptions]="{standalone: true}" matInput [(ngModel)]="linkanchoredtext.StrokeDashArrayWhenSelected"></textarea>
     </mat-form-field>
 
     <mat-grid-list *ngIf='!isATextArea("Transform")' cols="5" rowHeight="1:1">
         <mat-grid-tile [colspan]="3">
             <mat-form-field mat-form-field class="detail-full-width">
                 <mat-label>Transform</mat-label>
-                <input name="" [ngModelOptions]="{standalone: true}" matInput [(ngModel)]="anchoredtext.Transform">
+                <input name="" [ngModelOptions]="{standalone: true}" matInput [(ngModel)]="linkanchoredtext.Transform">
             </mat-form-field>
         </mat-grid-tile>
         <mat-grid-tile>
@@ -182,16 +182,16 @@
     </mat-grid-list>
     <mat-form-field *ngIf='isATextArea("Transform")' mat-form-field class="detail-full-width">
         <mat-label>Transform</mat-label>
-        <textarea name="" [ngModelOptions]="{standalone: true}" matInput [(ngModel)]="anchoredtext.Transform"></textarea>
+        <textarea name="" [ngModelOptions]="{standalone: true}" matInput [(ngModel)]="linkanchoredtext.Transform"></textarea>
     </mat-form-field>
 
     <mat-grid-list cols="5" rowHeight="2:1">
         <mat-grid-tile [colspan]="3">
-            <button mat-raised-button (click)="openReverseSelection('Animate', 'AnchoredText_AnimatesDBID', 'ONE_MANY_ASSOCIATION_MODE', '', '', '')">Animates</button>
+            <button mat-raised-button (click)="openReverseSelection('Animate', 'LinkAnchoredText_AnimatesDBID', 'ONE_MANY_ASSOCIATION_MODE', '', '', '')">Animates</button>
         </mat-grid-tile>
         <!-- insertion point for the button of the MANY_MANY association-->
         <mat-grid-tile>
-            <button mat-raised-button (click)="openDragAndDropOrdering('Animate', 'AnchoredText_AnimatesDBID')">
+            <button mat-raised-button (click)="openDragAndDropOrdering('Animate', 'LinkAnchoredText_AnimatesDBID')">
                 <mat-icon>
                     shuffle
                 </mat-icon>
@@ -200,7 +200,7 @@
     </mat-grid-list>
     <mat-form-field class="detail-full-width">
         <mat-label>(Link) TextAtArrowEnd</mat-label>
-        <mat-select [compareWith]="compareObjects" [(ngModel)]="anchoredtext.Link_TextAtArrowEnd_reverse" [ngModelOptions]="{standalone: true}">
+        <mat-select [compareWith]="compareObjects" [(ngModel)]="linkanchoredtext.Link_TextAtArrowEnd_reverse" [ngModelOptions]="{standalone: true}">
             <mat-option>None</mat-option>
             <mat-option *ngFor="let link of frontRepo.Links_array" [value]="link">
                 {{link.Name}}
@@ -209,7 +209,7 @@
     </mat-form-field>
     <mat-form-field class="detail-full-width">
         <mat-label>(Link) TextAtArrowStart</mat-label>
-        <mat-select [compareWith]="compareObjects" [(ngModel)]="anchoredtext.Link_TextAtArrowStart_reverse" [ngModelOptions]="{standalone: true}">
+        <mat-select [compareWith]="compareObjects" [(ngModel)]="linkanchoredtext.Link_TextAtArrowStart_reverse" [ngModelOptions]="{standalone: true}">
             <mat-option>None</mat-option>
             <mat-option *ngFor="let link of frontRepo.Links_array" [value]="link">
                 {{link.Name}}
@@ -218,7 +218,7 @@
     </mat-form-field>
     <div class="details__save">
         <button mat-raised-button color="primary" (click)="save()">
-            Save anchoredtext
+            Save linkanchoredtext
         </button>
     </div>
 </form>

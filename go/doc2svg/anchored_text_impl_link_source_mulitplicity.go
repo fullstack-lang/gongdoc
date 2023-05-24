@@ -27,7 +27,7 @@ func NewAnchoredTextImplLinkSourceMultiplicity(
 }
 
 func (anchoredtextImplAnchoredText *AnchoredTextImplLinkSourceMultiplicity) AnchoredTextUpdated(
-	updatedAnchoredText *gongsvg_models.AnchoredText) {
+	updatedAnchoredText *gongsvg_models.LinkAnchoredText) {
 
 	log.Println("AnchoredTextImplSourceMultiplicity:AnchoredTextUpdated")
 

@@ -2,8 +2,8 @@
 import { Component, OnInit } from '@angular/core';
 import { UntypedFormControl } from '@angular/forms';
 
-import { AnchoredTextDB } from '../anchoredtext-db'
-import { AnchoredTextService } from '../anchoredtext.service'
+import { LinkAnchoredTextDB } from '../linkanchoredtext-db'
+import { LinkAnchoredTextService } from '../linkanchoredtext.service'
 
 import { FrontRepoService, FrontRepo, SelectionMode, DialogData } from '../front-repo.service'
 import { MapOfComponents } from '../map-components'
@@ -18,9 +18,9 @@ import { MatDialog, MAT_DIALOG_DATA, MatDialogRef, MatDialogConfig } from '@angu
 
 import { NullInt64 } from '../null-int64'
 
-// AnchoredTextDetailComponent is initilizaed from different routes
-// AnchoredTextDetailComponentState detail different cases 
-enum AnchoredTextDetailComponentState {
+// LinkAnchoredTextDetailComponent is initilizaed from different routes
+// LinkAnchoredTextDetailComponentState detail different cases 
+enum LinkAnchoredTextDetailComponentState {
 	CREATE_INSTANCE,
 	UPDATE_INSTANCE,
 	// insertion point for declarations of enum values of state
@@ -29,16 +29,16 @@ enum AnchoredTextDetailComponentState {
 }
 
 @Component({
-	selector: 'app-anchoredtext-detail',
-	templateUrl: './anchoredtext-detail.component.html',
-	styleUrls: ['./anchoredtext-detail.component.css'],
+	selector: 'app-linkanchoredtext-detail',
+	templateUrl: './linkanchoredtext-detail.component.html',
+	styleUrls: ['./linkanchoredtext-detail.component.css'],
 })
-export class AnchoredTextDetailComponent implements OnInit {
+export class LinkAnchoredTextDetailComponent implements OnInit {
 
 	// insertion point for declarations
 
-	// the AnchoredTextDB of interest
-	anchoredtext: AnchoredTextDB = new AnchoredTextDB
+	// the LinkAnchoredTextDB of interest
+	linkanchoredtext: LinkAnchoredTextDB = new LinkAnchoredTextDB
 
 	// front repo
 	frontRepo: FrontRepo = new FrontRepo
@@ -49,7 +49,7 @@ export class AnchoredTextDetailComponent implements OnInit {
 	mapFields_displayAsTextArea = new Map<string, boolean>()
 
 	// the state at initialization (CREATION, UPDATE or CREATE with one association set)
-	state: AnchoredTextDetailComponentState = AnchoredTextDetailComponentState.CREATE_INSTANCE
+	state: LinkAnchoredTextDetailComponentState = LinkAnchoredTextDetailComponentState.CREATE_INSTANCE
 
 	// in UDPATE state, if is the id of the instance to update
 	// in CREATE state with one association set, this is the id of the associated instance
@@ -62,7 +62,7 @@ export class AnchoredTextDetailComponent implements OnInit {
 	GONG__StackPath: string = ""
 
 	constructor(
-		private anchoredtextService: AnchoredTextService,
+		private linkanchoredtextService: LinkAnchoredTextService,
 		private frontRepoService: FrontRepoService,
 		public dialog: MatDialog,
 		private activatedRoute: ActivatedRoute,
@@ -88,20 +88,20 @@ export class AnchoredTextDetailComponent implements OnInit {
 
 		const association = this.activatedRoute.snapshot.paramMap.get('association');
 		if (this.id == 0) {
-			this.state = AnchoredTextDetailComponentState.CREATE_INSTANCE
+			this.state = LinkAnchoredTextDetailComponentState.CREATE_INSTANCE
 		} else {
 			if (this.originStruct == undefined) {
-				this.state = AnchoredTextDetailComponentState.UPDATE_INSTANCE
+				this.state = LinkAnchoredTextDetailComponentState.UPDATE_INSTANCE
 			} else {
 				switch (this.originStructFieldName) {
 					// insertion point for state computation
 					case "TextAtArrowEnd":
-						// console.log("AnchoredText" + " is instanciated with back pointer to instance " + this.id + " Link association TextAtArrowEnd")
-						this.state = AnchoredTextDetailComponentState.CREATE_INSTANCE_WITH_ASSOCIATION_Link_TextAtArrowEnd_SET
+						// console.log("LinkAnchoredText" + " is instanciated with back pointer to instance " + this.id + " Link association TextAtArrowEnd")
+						this.state = LinkAnchoredTextDetailComponentState.CREATE_INSTANCE_WITH_ASSOCIATION_Link_TextAtArrowEnd_SET
 						break;
 					case "TextAtArrowStart":
-						// console.log("AnchoredText" + " is instanciated with back pointer to instance " + this.id + " Link association TextAtArrowStart")
-						this.state = AnchoredTextDetailComponentState.CREATE_INSTANCE_WITH_ASSOCIATION_Link_TextAtArrowStart_SET
+						// console.log("LinkAnchoredText" + " is instanciated with back pointer to instance " + this.id + " Link association TextAtArrowStart")
+						this.state = LinkAnchoredTextDetailComponentState.CREATE_INSTANCE_WITH_ASSOCIATION_Link_TextAtArrowStart_SET
 						break;
 					default:
 						console.log(this.originStructFieldName + " is unkown association")
@@ -109,13 +109,13 @@ export class AnchoredTextDetailComponent implements OnInit {
 			}
 		}
 
-		this.getAnchoredText()
+		this.getLinkAnchoredText()
 
 		// observable for changes in structs
-		this.anchoredtextService.AnchoredTextServiceChanged.subscribe(
+		this.linkanchoredtextService.LinkAnchoredTextServiceChanged.subscribe(
 			message => {
 				if (message == "post" || message == "update" || message == "delete") {
-					this.getAnchoredText()
+					this.getLinkAnchoredText()
 				}
 			}
 		)
@@ -123,29 +123,29 @@ export class AnchoredTextDetailComponent implements OnInit {
 		// insertion point for initialisation of enums list
 	}
 
-	getAnchoredText(): void {
+	getLinkAnchoredText(): void {
 
 		this.frontRepoService.pull(this.GONG__StackPath).subscribe(
 			frontRepo => {
 				this.frontRepo = frontRepo
 
 				switch (this.state) {
-					case AnchoredTextDetailComponentState.CREATE_INSTANCE:
-						this.anchoredtext = new (AnchoredTextDB)
+					case LinkAnchoredTextDetailComponentState.CREATE_INSTANCE:
+						this.linkanchoredtext = new (LinkAnchoredTextDB)
 						break;
-					case AnchoredTextDetailComponentState.UPDATE_INSTANCE:
-						let anchoredtext = frontRepo.AnchoredTexts.get(this.id)
-						console.assert(anchoredtext != undefined, "missing anchoredtext with id:" + this.id)
-						this.anchoredtext = anchoredtext!
+					case LinkAnchoredTextDetailComponentState.UPDATE_INSTANCE:
+						let linkanchoredtext = frontRepo.LinkAnchoredTexts.get(this.id)
+						console.assert(linkanchoredtext != undefined, "missing linkanchoredtext with id:" + this.id)
+						this.linkanchoredtext = linkanchoredtext!
 						break;
 					// insertion point for init of association field
-					case AnchoredTextDetailComponentState.CREATE_INSTANCE_WITH_ASSOCIATION_Link_TextAtArrowEnd_SET:
-						this.anchoredtext = new (AnchoredTextDB)
-						this.anchoredtext.Link_TextAtArrowEnd_reverse = frontRepo.Links.get(this.id)!
+					case LinkAnchoredTextDetailComponentState.CREATE_INSTANCE_WITH_ASSOCIATION_Link_TextAtArrowEnd_SET:
+						this.linkanchoredtext = new (LinkAnchoredTextDB)
+						this.linkanchoredtext.Link_TextAtArrowEnd_reverse = frontRepo.Links.get(this.id)!
 						break;
-					case AnchoredTextDetailComponentState.CREATE_INSTANCE_WITH_ASSOCIATION_Link_TextAtArrowStart_SET:
-						this.anchoredtext = new (AnchoredTextDB)
-						this.anchoredtext.Link_TextAtArrowStart_reverse = frontRepo.Links.get(this.id)!
+					case LinkAnchoredTextDetailComponentState.CREATE_INSTANCE_WITH_ASSOCIATION_Link_TextAtArrowStart_SET:
+						this.linkanchoredtext = new (LinkAnchoredTextDB)
+						this.linkanchoredtext.Link_TextAtArrowStart_reverse = frontRepo.Links.get(this.id)!
 						break;
 					default:
 						console.log(this.state + " is unkown state")
@@ -168,42 +168,42 @@ export class AnchoredTextDetailComponent implements OnInit {
 		// save from the front pointer space to the non pointer space for serialization
 
 		// insertion point for translation/nullation of each pointers
-		if (this.anchoredtext.Link_TextAtArrowEnd_reverse != undefined) {
-			if (this.anchoredtext.Link_TextAtArrowEndDBID == undefined) {
-				this.anchoredtext.Link_TextAtArrowEndDBID = new NullInt64
+		if (this.linkanchoredtext.Link_TextAtArrowEnd_reverse != undefined) {
+			if (this.linkanchoredtext.Link_TextAtArrowEndDBID == undefined) {
+				this.linkanchoredtext.Link_TextAtArrowEndDBID = new NullInt64
 			}
-			this.anchoredtext.Link_TextAtArrowEndDBID.Int64 = this.anchoredtext.Link_TextAtArrowEnd_reverse.ID
-			this.anchoredtext.Link_TextAtArrowEndDBID.Valid = true
-			if (this.anchoredtext.Link_TextAtArrowEndDBID_Index == undefined) {
-				this.anchoredtext.Link_TextAtArrowEndDBID_Index = new NullInt64
+			this.linkanchoredtext.Link_TextAtArrowEndDBID.Int64 = this.linkanchoredtext.Link_TextAtArrowEnd_reverse.ID
+			this.linkanchoredtext.Link_TextAtArrowEndDBID.Valid = true
+			if (this.linkanchoredtext.Link_TextAtArrowEndDBID_Index == undefined) {
+				this.linkanchoredtext.Link_TextAtArrowEndDBID_Index = new NullInt64
 			}
-			this.anchoredtext.Link_TextAtArrowEndDBID_Index.Valid = true
-			this.anchoredtext.Link_TextAtArrowEnd_reverse = new LinkDB // very important, otherwise, circular JSON
+			this.linkanchoredtext.Link_TextAtArrowEndDBID_Index.Valid = true
+			this.linkanchoredtext.Link_TextAtArrowEnd_reverse = new LinkDB // very important, otherwise, circular JSON
 		}
-		if (this.anchoredtext.Link_TextAtArrowStart_reverse != undefined) {
-			if (this.anchoredtext.Link_TextAtArrowStartDBID == undefined) {
-				this.anchoredtext.Link_TextAtArrowStartDBID = new NullInt64
+		if (this.linkanchoredtext.Link_TextAtArrowStart_reverse != undefined) {
+			if (this.linkanchoredtext.Link_TextAtArrowStartDBID == undefined) {
+				this.linkanchoredtext.Link_TextAtArrowStartDBID = new NullInt64
 			}
-			this.anchoredtext.Link_TextAtArrowStartDBID.Int64 = this.anchoredtext.Link_TextAtArrowStart_reverse.ID
-			this.anchoredtext.Link_TextAtArrowStartDBID.Valid = true
-			if (this.anchoredtext.Link_TextAtArrowStartDBID_Index == undefined) {
-				this.anchoredtext.Link_TextAtArrowStartDBID_Index = new NullInt64
+			this.linkanchoredtext.Link_TextAtArrowStartDBID.Int64 = this.linkanchoredtext.Link_TextAtArrowStart_reverse.ID
+			this.linkanchoredtext.Link_TextAtArrowStartDBID.Valid = true
+			if (this.linkanchoredtext.Link_TextAtArrowStartDBID_Index == undefined) {
+				this.linkanchoredtext.Link_TextAtArrowStartDBID_Index = new NullInt64
 			}
-			this.anchoredtext.Link_TextAtArrowStartDBID_Index.Valid = true
-			this.anchoredtext.Link_TextAtArrowStart_reverse = new LinkDB // very important, otherwise, circular JSON
+			this.linkanchoredtext.Link_TextAtArrowStartDBID_Index.Valid = true
+			this.linkanchoredtext.Link_TextAtArrowStart_reverse = new LinkDB // very important, otherwise, circular JSON
 		}
 
 		switch (this.state) {
-			case AnchoredTextDetailComponentState.UPDATE_INSTANCE:
-				this.anchoredtextService.updateAnchoredText(this.anchoredtext, this.GONG__StackPath)
-					.subscribe(anchoredtext => {
-						this.anchoredtextService.AnchoredTextServiceChanged.next("update")
+			case LinkAnchoredTextDetailComponentState.UPDATE_INSTANCE:
+				this.linkanchoredtextService.updateLinkAnchoredText(this.linkanchoredtext, this.GONG__StackPath)
+					.subscribe(linkanchoredtext => {
+						this.linkanchoredtextService.LinkAnchoredTextServiceChanged.next("update")
 					});
 				break;
 			default:
-				this.anchoredtextService.postAnchoredText(this.anchoredtext, this.GONG__StackPath).subscribe(anchoredtext => {
-					this.anchoredtextService.AnchoredTextServiceChanged.next("post")
-					this.anchoredtext = new (AnchoredTextDB) // reset fields
+				this.linkanchoredtextService.postLinkAnchoredText(this.linkanchoredtext, this.GONG__StackPath).subscribe(linkanchoredtext => {
+					this.linkanchoredtextService.LinkAnchoredTextServiceChanged.next("post")
+					this.linkanchoredtext = new (LinkAnchoredTextDB) // reset fields
 				});
 		}
 	}
@@ -226,7 +226,7 @@ export class AnchoredTextDetailComponent implements OnInit {
 		dialogConfig.height = "50%"
 		if (selectionMode == SelectionMode.ONE_MANY_ASSOCIATION_MODE) {
 
-			dialogData.ID = this.anchoredtext.ID!
+			dialogData.ID = this.linkanchoredtext.ID!
 			dialogData.ReversePointer = reverseField
 			dialogData.OrderingMode = false
 			dialogData.SelectionMode = selectionMode
@@ -243,14 +243,14 @@ export class AnchoredTextDetailComponent implements OnInit {
 			});
 		}
 		if (selectionMode == SelectionMode.MANY_MANY_ASSOCIATION_MODE) {
-			dialogData.ID = this.anchoredtext.ID!
+			dialogData.ID = this.linkanchoredtext.ID!
 			dialogData.ReversePointer = reverseField
 			dialogData.OrderingMode = false
 			dialogData.SelectionMode = selectionMode
 			dialogData.GONG__StackPath = this.GONG__StackPath
 
 			// set up the source
-			dialogData.SourceStruct = "AnchoredText"
+			dialogData.SourceStruct = "LinkAnchoredText"
 			dialogData.SourceField = sourceField
 
 			// set up the intermediate struct
@@ -280,7 +280,7 @@ export class AnchoredTextDetailComponent implements OnInit {
 		// dialogConfig.disableClose = true;
 		dialogConfig.autoFocus = true;
 		dialogConfig.data = {
-			ID: this.anchoredtext.ID,
+			ID: this.linkanchoredtext.ID,
 			ReversePointer: reverseField,
 			OrderingMode: true,
 			GONG__StackPath: this.GONG__StackPath,
@@ -297,8 +297,8 @@ export class AnchoredTextDetailComponent implements OnInit {
 	}
 
 	fillUpNameIfEmpty(event: { value: { Name: string; }; }) {
-		if (this.anchoredtext.Name == "") {
-			this.anchoredtext.Name = event.value.Name
+		if (this.linkanchoredtext.Name == "") {
+			this.linkanchoredtext.Name = event.value.Name
 		}
 	}
 

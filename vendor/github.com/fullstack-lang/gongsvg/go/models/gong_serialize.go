@@ -13,13 +13,13 @@ func SerializeStage(stage *StageStruct, filename string) {
 	f := excelize.NewFile()
 	{
 		// insertion point
-		SerializeExcelize[AnchoredText](stage, f)
 		SerializeExcelize[Animate](stage, f)
 		SerializeExcelize[Circle](stage, f)
 		SerializeExcelize[Ellipse](stage, f)
 		SerializeExcelize[Layer](stage, f)
 		SerializeExcelize[Line](stage, f)
 		SerializeExcelize[Link](stage, f)
+		SerializeExcelize[LinkAnchoredText](stage, f)
 		SerializeExcelize[Path](stage, f)
 		SerializeExcelize[Point](stage, f)
 		SerializeExcelize[Polygone](stage, f)

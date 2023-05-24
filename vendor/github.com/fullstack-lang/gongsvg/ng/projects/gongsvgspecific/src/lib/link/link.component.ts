@@ -48,7 +48,7 @@ export class LinkComponent implements OnInit, AfterViewInit, DoCheck, AfterViewC
   // LinkAtMouseDown is the clone of the Link when mouse down
   private PointAtMouseDown: gongsvg.PointDB | undefined
   private LinkAtMouseDown: gongsvg.LinkDB | undefined
-  private AnchoredTextAtMouseDown: gongsvg.AnchoredTextDB | undefined
+  private AnchoredTextAtMouseDown: gongsvg.LinkAnchoredTextDB | undefined
 
   //
   // for events management
@@ -72,7 +72,7 @@ export class LinkComponent implements OnInit, AfterViewInit, DoCheck, AfterViewC
 
   constructor(
     private linkService: gongsvg.LinkService,
-    private anchoredTextService: gongsvg.AnchoredTextService,
+    private anchoredTextService: gongsvg.LinkAnchoredTextService,
     private angularDragEndEventService: AngularDragEndEventService,
     private mouseEventService: MouseEventService,
     private elementRef: ElementRef,
@@ -367,11 +367,11 @@ export class LinkComponent implements OnInit, AfterViewInit, DoCheck, AfterViewC
           if (this.textDragging && this.isEditableService.getIsEditable()) {
             if (this.draggedSegmentPositionOnArrow == gongsvg.PositionOnArrowType.POSITION_ON_ARROW_END) {
               let text = this.Link!.TextAtArrowEnd![this.draggedTextIndex]
-              this.anchoredTextService.updateAnchoredText(text, this.GONG__StackPath).subscribe()
+              this.anchoredTextService.updateLinkAnchoredText(text, this.GONG__StackPath).subscribe()
             }
             if (this.draggedSegmentPositionOnArrow == gongsvg.PositionOnArrowType.POSITION_ON_ARROW_START) {
               let text = this.Link!.TextAtArrowStart![this.draggedTextIndex]
-              this.anchoredTextService.updateAnchoredText(text, this.GONG__StackPath).subscribe()
+              this.anchoredTextService.updateLinkAnchoredText(text, this.GONG__StackPath).subscribe()
             }
           }
           this.dragging = false

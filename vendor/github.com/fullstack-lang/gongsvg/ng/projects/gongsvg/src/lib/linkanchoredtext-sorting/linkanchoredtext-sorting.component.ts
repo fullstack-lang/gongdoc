@@ -8,30 +8,30 @@ import { DialogData } from '../front-repo.service'
 import { SelectionModel } from '@angular/cdk/collections';
 
 import { Router, RouterState } from '@angular/router';
-import { AnchoredTextDB } from '../anchoredtext-db'
-import { AnchoredTextService } from '../anchoredtext.service'
+import { LinkAnchoredTextDB } from '../linkanchoredtext-db'
+import { LinkAnchoredTextService } from '../linkanchoredtext.service'
 
 import { FrontRepoService, FrontRepo } from '../front-repo.service'
 import { NullInt64 } from '../null-int64'
 
 @Component({
-  selector: 'lib-anchoredtext-sorting',
-  templateUrl: './anchoredtext-sorting.component.html',
-  styleUrls: ['./anchoredtext-sorting.component.css']
+  selector: 'lib-linkanchoredtext-sorting',
+  templateUrl: './linkanchoredtext-sorting.component.html',
+  styleUrls: ['./linkanchoredtext-sorting.component.css']
 })
-export class AnchoredTextSortingComponent implements OnInit {
+export class LinkAnchoredTextSortingComponent implements OnInit {
 
   frontRepo: FrontRepo = new (FrontRepo)
 
-  // array of AnchoredText instances that are in the association
-  associatedAnchoredTexts = new Array<AnchoredTextDB>();
+  // array of LinkAnchoredText instances that are in the association
+  associatedLinkAnchoredTexts = new Array<LinkAnchoredTextDB>();
 
   constructor(
-    private anchoredtextService: AnchoredTextService,
+    private linkanchoredtextService: LinkAnchoredTextService,
     private frontRepoService: FrontRepoService,
 
-    // not null if the component is called as a selection component of anchoredtext instances
-    public dialogRef: MatDialogRef<AnchoredTextSortingComponent>,
+    // not null if the component is called as a selection component of linkanchoredtext instances
+    public dialogRef: MatDialogRef<LinkAnchoredTextSortingComponent>,
     @Optional() @Inject(MAT_DIALOG_DATA) public dialogData: DialogData,
 
     private router: Router,
@@ -42,31 +42,31 @@ export class AnchoredTextSortingComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.getAnchoredTexts()
+    this.getLinkAnchoredTexts()
   }
 
-  getAnchoredTexts(): void {
+  getLinkAnchoredTexts(): void {
     this.frontRepoService.pull(this.dialogData.GONG__StackPath).subscribe(
       frontRepo => {
         this.frontRepo = frontRepo
 
         let index = 0
-        for (let anchoredtext of this.frontRepo.AnchoredTexts_array) {
+        for (let linkanchoredtext of this.frontRepo.LinkAnchoredTexts_array) {
           let ID = this.dialogData.ID
-          let revPointerID = anchoredtext[this.dialogData.ReversePointer as keyof AnchoredTextDB] as unknown as NullInt64
-          let revPointerID_Index = anchoredtext[this.dialogData.ReversePointer + "_Index" as keyof AnchoredTextDB] as unknown as NullInt64
+          let revPointerID = linkanchoredtext[this.dialogData.ReversePointer as keyof LinkAnchoredTextDB] as unknown as NullInt64
+          let revPointerID_Index = linkanchoredtext[this.dialogData.ReversePointer + "_Index" as keyof LinkAnchoredTextDB] as unknown as NullInt64
           if (revPointerID.Int64 == ID) {
             if (revPointerID_Index == undefined) {
               revPointerID_Index = new NullInt64
               revPointerID_Index.Valid = true
               revPointerID_Index.Int64 = index++
             }
-            this.associatedAnchoredTexts.push(anchoredtext)
+            this.associatedLinkAnchoredTexts.push(linkanchoredtext)
           }
         }
 
-        // sort associated anchoredtext according to order
-        this.associatedAnchoredTexts.sort((t1, t2) => {
+        // sort associated linkanchoredtext according to order
+        this.associatedLinkAnchoredTexts.sort((t1, t2) => {
           let t1_revPointerID_Index = t1[this.dialogData.ReversePointer + "_Index" as keyof typeof t1] as unknown as NullInt64
           let t2_revPointerID_Index = t2[this.dialogData.ReversePointer + "_Index" as keyof typeof t2] as unknown as NullInt64
           if (t1_revPointerID_Index && t2_revPointerID_Index) {
@@ -84,13 +84,13 @@ export class AnchoredTextSortingComponent implements OnInit {
   }
 
   drop(event: CdkDragDrop<string[]>) {
-    moveItemInArray(this.associatedAnchoredTexts, event.previousIndex, event.currentIndex);
+    moveItemInArray(this.associatedLinkAnchoredTexts, event.previousIndex, event.currentIndex);
 
-    // set the order of AnchoredText instances
+    // set the order of LinkAnchoredText instances
     let index = 0
 
-    for (let anchoredtext of this.associatedAnchoredTexts) {
-      let revPointerID_Index = anchoredtext[this.dialogData.ReversePointer + "_Index" as keyof AnchoredTextDB] as unknown as NullInt64
+    for (let linkanchoredtext of this.associatedLinkAnchoredTexts) {
+      let revPointerID_Index = linkanchoredtext[this.dialogData.ReversePointer + "_Index" as keyof LinkAnchoredTextDB] as unknown as NullInt64
       revPointerID_Index.Valid = true
       revPointerID_Index.Int64 = index++
     }
@@ -98,11 +98,11 @@ export class AnchoredTextSortingComponent implements OnInit {
 
   save() {
 
-    this.associatedAnchoredTexts.forEach(
-      anchoredtext => {
-        this.anchoredtextService.updateAnchoredText(anchoredtext, this.dialogData.GONG__StackPath)
-          .subscribe(anchoredtext => {
-            this.anchoredtextService.AnchoredTextServiceChanged.next("update")
+    this.associatedLinkAnchoredTexts.forEach(
+      linkanchoredtext => {
+        this.linkanchoredtextService.updateLinkAnchoredText(linkanchoredtext, this.dialogData.GONG__StackPath)
+          .subscribe(linkanchoredtext => {
+            this.linkanchoredtextService.LinkAnchoredTextServiceChanged.next("update")
           });
       }
     )

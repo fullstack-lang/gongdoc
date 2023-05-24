@@ -5,9 +5,6 @@ func IsStaged[Type Gongstruct](stage *StageStruct, instance *Type) (ok bool) {
 
 	switch target := any(instance).(type) {
 	// insertion point for stage
-	case *AnchoredText:
-		ok = stage.IsStagedAnchoredText(target)
-
 	case *Animate:
 		ok = stage.IsStagedAnimate(target)
 
@@ -25,6 +22,9 @@ func IsStaged[Type Gongstruct](stage *StageStruct, instance *Type) (ok bool) {
 
 	case *Link:
 		ok = stage.IsStagedLink(target)
+
+	case *LinkAnchoredText:
+		ok = stage.IsStagedLinkAnchoredText(target)
 
 	case *Path:
 		ok = stage.IsStagedPath(target)
@@ -63,13 +63,6 @@ func IsStaged[Type Gongstruct](stage *StageStruct, instance *Type) (ok bool) {
 }
 
 // insertion point for stage per struct
-	func (stage *StageStruct) IsStagedAnchoredText(anchoredtext *AnchoredText) (ok bool) {
-
-		_, ok = stage.AnchoredTexts[anchoredtext]
-	
-		return
-	}
-
 	func (stage *StageStruct) IsStagedAnimate(animate *Animate) (ok bool) {
 
 		_, ok = stage.Animates[animate]
@@ -108,6 +101,13 @@ func IsStaged[Type Gongstruct](stage *StageStruct, instance *Type) (ok bool) {
 	func (stage *StageStruct) IsStagedLink(link *Link) (ok bool) {
 
 		_, ok = stage.Links[link]
+	
+		return
+	}
+
+	func (stage *StageStruct) IsStagedLinkAnchoredText(linkanchoredtext *LinkAnchoredText) (ok bool) {
+
+		_, ok = stage.LinkAnchoredTexts[linkanchoredtext]
 	
 		return
 	}
@@ -191,9 +191,6 @@ func StageBranch[Type Gongstruct](stage *StageStruct, instance *Type) {
 
 	switch target := any(instance).(type) {
 	// insertion point for stage branch
-	case *AnchoredText:
-		stage.StageBranchAnchoredText(target)
-
 	case *Animate:
 		stage.StageBranchAnimate(target)
 
@@ -211,6 +208,9 @@ func StageBranch[Type Gongstruct](stage *StageStruct, instance *Type) {
 
 	case *Link:
 		stage.StageBranchLink(target)
+
+	case *LinkAnchoredText:
+		stage.StageBranchLinkAnchoredText(target)
 
 	case *Path:
 		stage.StageBranchPath(target)
@@ -248,24 +248,6 @@ func StageBranch[Type Gongstruct](stage *StageStruct, instance *Type) {
 }
 
 // insertion point for stage branch per struct
-func (stage *StageStruct) StageBranchAnchoredText(anchoredtext *AnchoredText) {
-
-	// check if instance is already staged
-	if IsStaged(stage, anchoredtext) {
-		return
-	}
-
-	anchoredtext.Stage(stage)
-
-	//insertion point for the staging of instances referenced by pointers
-
-	//insertion point for the staging of instances referenced by slice of pointers
-	for _, _animate := range anchoredtext.Animates {
-		StageBranch(stage, _animate)
-	}
-
-}
-
 func (stage *StageStruct) StageBranchAnimate(animate *Animate) {
 
 	// check if instance is already staged
@@ -398,14 +380,32 @@ func (stage *StageStruct) StageBranchLink(link *Link) {
 	}
 
 	//insertion point for the staging of instances referenced by slice of pointers
-	for _, _anchoredtext := range link.TextAtArrowEnd {
-		StageBranch(stage, _anchoredtext)
+	for _, _linkanchoredtext := range link.TextAtArrowEnd {
+		StageBranch(stage, _linkanchoredtext)
 	}
-	for _, _anchoredtext := range link.TextAtArrowStart {
-		StageBranch(stage, _anchoredtext)
+	for _, _linkanchoredtext := range link.TextAtArrowStart {
+		StageBranch(stage, _linkanchoredtext)
 	}
 	for _, _point := range link.ControlPoints {
 		StageBranch(stage, _point)
+	}
+
+}
+
+func (stage *StageStruct) StageBranchLinkAnchoredText(linkanchoredtext *LinkAnchoredText) {
+
+	// check if instance is already staged
+	if IsStaged(stage, linkanchoredtext) {
+		return
+	}
+
+	linkanchoredtext.Stage(stage)
+
+	//insertion point for the staging of instances referenced by pointers
+
+	//insertion point for the staging of instances referenced by slice of pointers
+	for _, _animate := range linkanchoredtext.Animates {
+		StageBranch(stage, _animate)
 	}
 
 }
@@ -608,9 +608,6 @@ func UnstageBranch[Type Gongstruct](stage *StageStruct, instance *Type) {
 
 	switch target := any(instance).(type) {
 	// insertion point for unstage branch
-	case *AnchoredText:
-		stage.UnstageBranchAnchoredText(target)
-
 	case *Animate:
 		stage.UnstageBranchAnimate(target)
 
@@ -628,6 +625,9 @@ func UnstageBranch[Type Gongstruct](stage *StageStruct, instance *Type) {
 
 	case *Link:
 		stage.UnstageBranchLink(target)
+
+	case *LinkAnchoredText:
+		stage.UnstageBranchLinkAnchoredText(target)
 
 	case *Path:
 		stage.UnstageBranchPath(target)
@@ -665,24 +665,6 @@ func UnstageBranch[Type Gongstruct](stage *StageStruct, instance *Type) {
 }
 
 // insertion point for unstage branch per struct
-func (stage *StageStruct) UnstageBranchAnchoredText(anchoredtext *AnchoredText) {
-
-	// check if instance is already staged
-	if ! IsStaged(stage, anchoredtext) {
-		return
-	}
-
-	anchoredtext.Unstage(stage)
-
-	//insertion point for the staging of instances referenced by pointers
-
-	//insertion point for the staging of instances referenced by slice of pointers
-	for _, _animate := range anchoredtext.Animates {
-		UnstageBranch(stage, _animate)
-	}
-
-}
-
 func (stage *StageStruct) UnstageBranchAnimate(animate *Animate) {
 
 	// check if instance is already staged
@@ -815,14 +797,32 @@ func (stage *StageStruct) UnstageBranchLink(link *Link) {
 	}
 
 	//insertion point for the staging of instances referenced by slice of pointers
-	for _, _anchoredtext := range link.TextAtArrowEnd {
-		UnstageBranch(stage, _anchoredtext)
+	for _, _linkanchoredtext := range link.TextAtArrowEnd {
+		UnstageBranch(stage, _linkanchoredtext)
 	}
-	for _, _anchoredtext := range link.TextAtArrowStart {
-		UnstageBranch(stage, _anchoredtext)
+	for _, _linkanchoredtext := range link.TextAtArrowStart {
+		UnstageBranch(stage, _linkanchoredtext)
 	}
 	for _, _point := range link.ControlPoints {
 		UnstageBranch(stage, _point)
+	}
+
+}
+
+func (stage *StageStruct) UnstageBranchLinkAnchoredText(linkanchoredtext *LinkAnchoredText) {
+
+	// check if instance is already staged
+	if ! IsStaged(stage, linkanchoredtext) {
+		return
+	}
+
+	linkanchoredtext.Unstage(stage)
+
+	//insertion point for the staging of instances referenced by pointers
+
+	//insertion point for the staging of instances referenced by slice of pointers
+	for _, _animate := range linkanchoredtext.Animates {
+		UnstageBranch(stage, _animate)
 	}
 
 }

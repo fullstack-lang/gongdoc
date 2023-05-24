@@ -303,13 +303,13 @@ func ParseAstFileFromAst(stage *StageStruct, inFile *ast.File, fset *token.FileS
 var __gong__map_Indentifiers_gongstructName = make(map[string]string)
 
 // insertion point for identifiers maps
-var __gong__map_AnchoredText = make(map[string]*AnchoredText)
 var __gong__map_Animate = make(map[string]*Animate)
 var __gong__map_Circle = make(map[string]*Circle)
 var __gong__map_Ellipse = make(map[string]*Ellipse)
 var __gong__map_Layer = make(map[string]*Layer)
 var __gong__map_Line = make(map[string]*Line)
 var __gong__map_Link = make(map[string]*Link)
+var __gong__map_LinkAnchoredText = make(map[string]*LinkAnchoredText)
 var __gong__map_Path = make(map[string]*Path)
 var __gong__map_Point = make(map[string]*Point)
 var __gong__map_Polygone = make(map[string]*Polygone)
@@ -492,10 +492,6 @@ func UnmarshallGongstructStaging(stage *StageStruct, cmap *ast.CommentMap, assig
 									// this is the place where an instance is created
 									switch gongstructName {
 									// insertion point for identifiers
-									case "AnchoredText":
-										instanceAnchoredText := (&AnchoredText{Name: instanceName}).Stage(stage)
-										instance = any(instanceAnchoredText)
-										__gong__map_AnchoredText[identifier] = instanceAnchoredText
 									case "Animate":
 										instanceAnimate := (&Animate{Name: instanceName}).Stage(stage)
 										instance = any(instanceAnimate)
@@ -520,6 +516,10 @@ func UnmarshallGongstructStaging(stage *StageStruct, cmap *ast.CommentMap, assig
 										instanceLink := (&Link{Name: instanceName}).Stage(stage)
 										instance = any(instanceLink)
 										__gong__map_Link[identifier] = instanceLink
+									case "LinkAnchoredText":
+										instanceLinkAnchoredText := (&LinkAnchoredText{Name: instanceName}).Stage(stage)
+										instance = any(instanceLinkAnchoredText)
+										__gong__map_LinkAnchoredText[identifier] = instanceLinkAnchoredText
 									case "Path":
 										instancePath := (&Path{Name: instanceName}).Stage(stage)
 										instance = any(instancePath)
@@ -596,10 +596,6 @@ func UnmarshallGongstructStaging(stage *StageStruct, cmap *ast.CommentMap, assig
 						}
 						switch gongstructName {
 						// insertion point for basic lit assignments
-						case "AnchoredText":
-							switch fieldName {
-							// insertion point for date assign code
-							}
 						case "Animate":
 							switch fieldName {
 							// insertion point for date assign code
@@ -621,6 +617,10 @@ func UnmarshallGongstructStaging(stage *StageStruct, cmap *ast.CommentMap, assig
 							// insertion point for date assign code
 							}
 						case "Link":
+							switch fieldName {
+							// insertion point for date assign code
+							}
+						case "LinkAnchoredText":
 							switch fieldName {
 							// insertion point for date assign code
 							}
@@ -689,16 +689,6 @@ func UnmarshallGongstructStaging(stage *StageStruct, cmap *ast.CommentMap, assig
 					}
 					switch gongstructName {
 					// insertion point for slice of pointers assignments
-					case "AnchoredText":
-						switch fieldName {
-						// insertion point for slice of pointers assign code
-						case "Animates":
-							// remove first and last char
-							targetIdentifier := ident.Name
-							target := __gong__map_Animate[targetIdentifier]
-							__gong__map_AnchoredText[identifier].Animates =
-								append(__gong__map_AnchoredText[identifier].Animates, target)
-						}
 					case "Animate":
 						switch fieldName {
 						// insertion point for slice of pointers assign code
@@ -803,13 +793,13 @@ func UnmarshallGongstructStaging(stage *StageStruct, cmap *ast.CommentMap, assig
 						case "TextAtArrowEnd":
 							// remove first and last char
 							targetIdentifier := ident.Name
-							target := __gong__map_AnchoredText[targetIdentifier]
+							target := __gong__map_LinkAnchoredText[targetIdentifier]
 							__gong__map_Link[identifier].TextAtArrowEnd =
 								append(__gong__map_Link[identifier].TextAtArrowEnd, target)
 						case "TextAtArrowStart":
 							// remove first and last char
 							targetIdentifier := ident.Name
-							target := __gong__map_AnchoredText[targetIdentifier]
+							target := __gong__map_LinkAnchoredText[targetIdentifier]
 							__gong__map_Link[identifier].TextAtArrowStart =
 								append(__gong__map_Link[identifier].TextAtArrowStart, target)
 						case "ControlPoints":
@@ -818,6 +808,16 @@ func UnmarshallGongstructStaging(stage *StageStruct, cmap *ast.CommentMap, assig
 							target := __gong__map_Point[targetIdentifier]
 							__gong__map_Link[identifier].ControlPoints =
 								append(__gong__map_Link[identifier].ControlPoints, target)
+						}
+					case "LinkAnchoredText":
+						switch fieldName {
+						// insertion point for slice of pointers assign code
+						case "Animates":
+							// remove first and last char
+							targetIdentifier := ident.Name
+							target := __gong__map_Animate[targetIdentifier]
+							__gong__map_LinkAnchoredText[identifier].Animates =
+								append(__gong__map_LinkAnchoredText[identifier].Animates, target)
 						}
 					case "Path":
 						switch fieldName {
@@ -962,70 +962,6 @@ func UnmarshallGongstructStaging(stage *StageStruct, cmap *ast.CommentMap, assig
 
 			switch gongstructName {
 			// insertion point for basic lit assignments
-			case "AnchoredText":
-				switch fieldName {
-				// insertion point for field dependant code
-				case "Name":
-					// remove first and last char
-					fielValue := basicLit.Value[1 : len(basicLit.Value)-1]
-					__gong__map_AnchoredText[identifier].Name = fielValue
-				case "Content":
-					// remove first and last char
-					fielValue := basicLit.Value[1 : len(basicLit.Value)-1]
-					__gong__map_AnchoredText[identifier].Content = fielValue
-				case "X_Offset":
-					// convert string to float64
-					fielValue, err := strconv.ParseFloat(basicLit.Value, 64)
-					if err != nil {
-						log.Fatalln(err)
-					}
-					__gong__map_AnchoredText[identifier].X_Offset = exprSign * fielValue
-				case "Y_Offset":
-					// convert string to float64
-					fielValue, err := strconv.ParseFloat(basicLit.Value, 64)
-					if err != nil {
-						log.Fatalln(err)
-					}
-					__gong__map_AnchoredText[identifier].Y_Offset = exprSign * fielValue
-				case "FontWeight":
-					// remove first and last char
-					fielValue := basicLit.Value[1 : len(basicLit.Value)-1]
-					__gong__map_AnchoredText[identifier].FontWeight = fielValue
-				case "Color":
-					// remove first and last char
-					fielValue := basicLit.Value[1 : len(basicLit.Value)-1]
-					__gong__map_AnchoredText[identifier].Color = fielValue
-				case "FillOpacity":
-					// convert string to float64
-					fielValue, err := strconv.ParseFloat(basicLit.Value, 64)
-					if err != nil {
-						log.Fatalln(err)
-					}
-					__gong__map_AnchoredText[identifier].FillOpacity = exprSign * fielValue
-				case "Stroke":
-					// remove first and last char
-					fielValue := basicLit.Value[1 : len(basicLit.Value)-1]
-					__gong__map_AnchoredText[identifier].Stroke = fielValue
-				case "StrokeWidth":
-					// convert string to float64
-					fielValue, err := strconv.ParseFloat(basicLit.Value, 64)
-					if err != nil {
-						log.Fatalln(err)
-					}
-					__gong__map_AnchoredText[identifier].StrokeWidth = exprSign * fielValue
-				case "StrokeDashArray":
-					// remove first and last char
-					fielValue := basicLit.Value[1 : len(basicLit.Value)-1]
-					__gong__map_AnchoredText[identifier].StrokeDashArray = fielValue
-				case "StrokeDashArrayWhenSelected":
-					// remove first and last char
-					fielValue := basicLit.Value[1 : len(basicLit.Value)-1]
-					__gong__map_AnchoredText[identifier].StrokeDashArrayWhenSelected = fielValue
-				case "Transform":
-					// remove first and last char
-					fielValue := basicLit.Value[1 : len(basicLit.Value)-1]
-					__gong__map_AnchoredText[identifier].Transform = fielValue
-				}
 			case "Animate":
 				switch fieldName {
 				// insertion point for field dependant code
@@ -1351,6 +1287,70 @@ func UnmarshallGongstructStaging(stage *StageStruct, cmap *ast.CommentMap, assig
 					// remove first and last char
 					fielValue := basicLit.Value[1 : len(basicLit.Value)-1]
 					__gong__map_Link[identifier].Transform = fielValue
+				}
+			case "LinkAnchoredText":
+				switch fieldName {
+				// insertion point for field dependant code
+				case "Name":
+					// remove first and last char
+					fielValue := basicLit.Value[1 : len(basicLit.Value)-1]
+					__gong__map_LinkAnchoredText[identifier].Name = fielValue
+				case "Content":
+					// remove first and last char
+					fielValue := basicLit.Value[1 : len(basicLit.Value)-1]
+					__gong__map_LinkAnchoredText[identifier].Content = fielValue
+				case "X_Offset":
+					// convert string to float64
+					fielValue, err := strconv.ParseFloat(basicLit.Value, 64)
+					if err != nil {
+						log.Fatalln(err)
+					}
+					__gong__map_LinkAnchoredText[identifier].X_Offset = exprSign * fielValue
+				case "Y_Offset":
+					// convert string to float64
+					fielValue, err := strconv.ParseFloat(basicLit.Value, 64)
+					if err != nil {
+						log.Fatalln(err)
+					}
+					__gong__map_LinkAnchoredText[identifier].Y_Offset = exprSign * fielValue
+				case "FontWeight":
+					// remove first and last char
+					fielValue := basicLit.Value[1 : len(basicLit.Value)-1]
+					__gong__map_LinkAnchoredText[identifier].FontWeight = fielValue
+				case "Color":
+					// remove first and last char
+					fielValue := basicLit.Value[1 : len(basicLit.Value)-1]
+					__gong__map_LinkAnchoredText[identifier].Color = fielValue
+				case "FillOpacity":
+					// convert string to float64
+					fielValue, err := strconv.ParseFloat(basicLit.Value, 64)
+					if err != nil {
+						log.Fatalln(err)
+					}
+					__gong__map_LinkAnchoredText[identifier].FillOpacity = exprSign * fielValue
+				case "Stroke":
+					// remove first and last char
+					fielValue := basicLit.Value[1 : len(basicLit.Value)-1]
+					__gong__map_LinkAnchoredText[identifier].Stroke = fielValue
+				case "StrokeWidth":
+					// convert string to float64
+					fielValue, err := strconv.ParseFloat(basicLit.Value, 64)
+					if err != nil {
+						log.Fatalln(err)
+					}
+					__gong__map_LinkAnchoredText[identifier].StrokeWidth = exprSign * fielValue
+				case "StrokeDashArray":
+					// remove first and last char
+					fielValue := basicLit.Value[1 : len(basicLit.Value)-1]
+					__gong__map_LinkAnchoredText[identifier].StrokeDashArray = fielValue
+				case "StrokeDashArrayWhenSelected":
+					// remove first and last char
+					fielValue := basicLit.Value[1 : len(basicLit.Value)-1]
+					__gong__map_LinkAnchoredText[identifier].StrokeDashArrayWhenSelected = fielValue
+				case "Transform":
+					// remove first and last char
+					fielValue := basicLit.Value[1 : len(basicLit.Value)-1]
+					__gong__map_LinkAnchoredText[identifier].Transform = fielValue
 				}
 			case "Path":
 				switch fieldName {
@@ -1882,10 +1882,6 @@ func UnmarshallGongstructStaging(stage *StageStruct, cmap *ast.CommentMap, assig
 			}
 			switch gongstructName {
 			// insertion point for bool & pointers assignments
-			case "AnchoredText":
-				switch fieldName {
-				// insertion point for field dependant code
-				}
 			case "Animate":
 				switch fieldName {
 				// insertion point for field dependant code
@@ -1929,6 +1925,10 @@ func UnmarshallGongstructStaging(stage *StageStruct, cmap *ast.CommentMap, assig
 						log.Fatalln(err)
 					}
 					__gong__map_Link[identifier].HasEndArrow = fielValue
+				}
+			case "LinkAnchoredText":
+				switch fieldName {
+				// insertion point for field dependant code
 				}
 			case "Path":
 				switch fieldName {
@@ -2115,10 +2115,6 @@ func UnmarshallGongstructStaging(stage *StageStruct, cmap *ast.CommentMap, assig
 				_ = enumValue
 				switch gongstructName {
 				// insertion point for enums assignments
-				case "AnchoredText":
-					switch fieldName {
-					// insertion point for enum assign code
-					}
 				case "Animate":
 					switch fieldName {
 					// insertion point for enum assign code
@@ -2177,6 +2173,10 @@ func UnmarshallGongstructStaging(stage *StageStruct, cmap *ast.CommentMap, assig
 							log.Fatalln(err)
 						}
 						__gong__map_Link[identifier].EndOrientation = OrientationType(val)
+					}
+				case "LinkAnchoredText":
+					switch fieldName {
+					// insertion point for enum assign code
 					}
 				case "Path":
 					switch fieldName {

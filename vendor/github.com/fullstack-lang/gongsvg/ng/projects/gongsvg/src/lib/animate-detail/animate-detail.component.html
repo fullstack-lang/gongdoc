@@ -102,15 +102,6 @@
     </mat-form-field>
 
     <mat-form-field class="detail-full-width">
-        <mat-label>(AnchoredText) Animates</mat-label>
-        <mat-select [compareWith]="compareObjects" [(ngModel)]="animate.AnchoredText_Animates_reverse" [ngModelOptions]="{standalone: true}">
-            <mat-option>None</mat-option>
-            <mat-option *ngFor="let anchoredtext of frontRepo.AnchoredTexts_array" [value]="anchoredtext">
-                {{anchoredtext.Name}}
-            </mat-option>
-        </mat-select>
-    </mat-form-field>
-    <mat-form-field class="detail-full-width">
         <mat-label>(Circle) Animations</mat-label>
         <mat-select [compareWith]="compareObjects" [(ngModel)]="animate.Circle_Animations_reverse" [ngModelOptions]="{standalone: true}">
             <mat-option>None</mat-option>
@@ -134,6 +125,15 @@
             <mat-option>None</mat-option>
             <mat-option *ngFor="let line of frontRepo.Lines_array" [value]="line">
                 {{line.Name}}
+            </mat-option>
+        </mat-select>
+    </mat-form-field>
+    <mat-form-field class="detail-full-width">
+        <mat-label>(LinkAnchoredText) Animates</mat-label>
+        <mat-select [compareWith]="compareObjects" [(ngModel)]="animate.LinkAnchoredText_Animates_reverse" [ngModelOptions]="{standalone: true}">
+            <mat-option>None</mat-option>
+            <mat-option *ngFor="let linkanchoredtext of frontRepo.LinkAnchoredTexts_array" [value]="linkanchoredtext">
+                {{linkanchoredtext.Name}}
             </mat-option>
         </mat-select>
     </mat-form-field>

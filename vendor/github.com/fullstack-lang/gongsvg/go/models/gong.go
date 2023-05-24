@@ -30,14 +30,6 @@ type GongStructInterface interface {
 // StageStruct enables storage of staged instances
 // swagger:ignore
 type StageStruct struct { // insertion point for definition of arrays registering instances
-	AnchoredTexts           map[*AnchoredText]any
-	AnchoredTexts_mapString map[string]*AnchoredText
-
-	OnAfterAnchoredTextCreateCallback OnAfterCreateInterface[AnchoredText]
-	OnAfterAnchoredTextUpdateCallback OnAfterUpdateInterface[AnchoredText]
-	OnAfterAnchoredTextDeleteCallback OnAfterDeleteInterface[AnchoredText]
-	OnAfterAnchoredTextReadCallback   OnAfterReadInterface[AnchoredText]
-
 	Animates           map[*Animate]any
 	Animates_mapString map[string]*Animate
 
@@ -85,6 +77,14 @@ type StageStruct struct { // insertion point for definition of arrays registerin
 	OnAfterLinkUpdateCallback OnAfterUpdateInterface[Link]
 	OnAfterLinkDeleteCallback OnAfterDeleteInterface[Link]
 	OnAfterLinkReadCallback   OnAfterReadInterface[Link]
+
+	LinkAnchoredTexts           map[*LinkAnchoredText]any
+	LinkAnchoredTexts_mapString map[string]*LinkAnchoredText
+
+	OnAfterLinkAnchoredTextCreateCallback OnAfterCreateInterface[LinkAnchoredText]
+	OnAfterLinkAnchoredTextUpdateCallback OnAfterUpdateInterface[LinkAnchoredText]
+	OnAfterLinkAnchoredTextDeleteCallback OnAfterDeleteInterface[LinkAnchoredText]
+	OnAfterLinkAnchoredTextReadCallback   OnAfterReadInterface[LinkAnchoredText]
 
 	Paths           map[*Path]any
 	Paths_mapString map[string]*Path
@@ -230,8 +230,6 @@ type BackRepoInterface interface {
 	BackupXL(stage *StageStruct, dirPath string)
 	RestoreXL(stage *StageStruct, dirPath string)
 	// insertion point for Commit and Checkout signatures
-	CommitAnchoredText(anchoredtext *AnchoredText)
-	CheckoutAnchoredText(anchoredtext *AnchoredText)
 	CommitAnimate(animate *Animate)
 	CheckoutAnimate(animate *Animate)
 	CommitCircle(circle *Circle)
@@ -244,6 +242,8 @@ type BackRepoInterface interface {
 	CheckoutLine(line *Line)
 	CommitLink(link *Link)
 	CheckoutLink(link *Link)
+	CommitLinkAnchoredText(linkanchoredtext *LinkAnchoredText)
+	CheckoutLinkAnchoredText(linkanchoredtext *LinkAnchoredText)
 	CommitPath(path *Path)
 	CheckoutPath(path *Path)
 	CommitPoint(point *Point)
@@ -282,9 +282,6 @@ func GetDefaultStage() *StageStruct {
 func NewStage() (stage *StageStruct) {
 
 	stage = &StageStruct{ // insertion point for array initiatialisation
-		AnchoredTexts:           make(map[*AnchoredText]any),
-		AnchoredTexts_mapString: make(map[string]*AnchoredText),
-
 		Animates:           make(map[*Animate]any),
 		Animates_mapString: make(map[string]*Animate),
 
@@ -302,6 +299,9 @@ func NewStage() (stage *StageStruct) {
 
 		Links:           make(map[*Link]any),
 		Links_mapString: make(map[string]*Link),
+
+		LinkAnchoredTexts:           make(map[*LinkAnchoredText]any),
+		LinkAnchoredTexts_mapString: make(map[string]*LinkAnchoredText),
 
 		Paths:           make(map[*Path]any),
 		Paths_mapString: make(map[string]*Path),
@@ -344,19 +344,27 @@ func NewStage() (stage *StageStruct) {
 	return
 }
 
+func (stage *StageStruct) CommitWithSuspendedCallbacks() {
+
+	tmp := stage.OnInitCommitFromBackCallback
+	stage.OnInitCommitFromBackCallback = nil
+	stage.Commit()
+	stage.OnInitCommitFromBackCallback = tmp
+}
+
 func (stage *StageStruct) Commit() {
 	if stage.BackRepo != nil {
 		stage.BackRepo.Commit(stage)
 	}
 
 	// insertion point for computing the map of number of instances per gongstruct
-	stage.Map_GongStructName_InstancesNb["AnchoredText"] = len(stage.AnchoredTexts)
 	stage.Map_GongStructName_InstancesNb["Animate"] = len(stage.Animates)
 	stage.Map_GongStructName_InstancesNb["Circle"] = len(stage.Circles)
 	stage.Map_GongStructName_InstancesNb["Ellipse"] = len(stage.Ellipses)
 	stage.Map_GongStructName_InstancesNb["Layer"] = len(stage.Layers)
 	stage.Map_GongStructName_InstancesNb["Line"] = len(stage.Lines)
 	stage.Map_GongStructName_InstancesNb["Link"] = len(stage.Links)
+	stage.Map_GongStructName_InstancesNb["LinkAnchoredText"] = len(stage.LinkAnchoredTexts)
 	stage.Map_GongStructName_InstancesNb["Path"] = len(stage.Paths)
 	stage.Map_GongStructName_InstancesNb["Point"] = len(stage.Points)
 	stage.Map_GongStructName_InstancesNb["Polygone"] = len(stage.Polygones)
@@ -376,13 +384,13 @@ func (stage *StageStruct) Checkout() {
 	}
 
 	// insertion point for computing the map of number of instances per gongstruct
-	stage.Map_GongStructName_InstancesNb["AnchoredText"] = len(stage.AnchoredTexts)
 	stage.Map_GongStructName_InstancesNb["Animate"] = len(stage.Animates)
 	stage.Map_GongStructName_InstancesNb["Circle"] = len(stage.Circles)
 	stage.Map_GongStructName_InstancesNb["Ellipse"] = len(stage.Ellipses)
 	stage.Map_GongStructName_InstancesNb["Layer"] = len(stage.Layers)
 	stage.Map_GongStructName_InstancesNb["Line"] = len(stage.Lines)
 	stage.Map_GongStructName_InstancesNb["Link"] = len(stage.Links)
+	stage.Map_GongStructName_InstancesNb["LinkAnchoredText"] = len(stage.LinkAnchoredTexts)
 	stage.Map_GongStructName_InstancesNb["Path"] = len(stage.Paths)
 	stage.Map_GongStructName_InstancesNb["Point"] = len(stage.Points)
 	stage.Map_GongStructName_InstancesNb["Polygone"] = len(stage.Polygones)
@@ -425,46 +433,6 @@ func (stage *StageStruct) RestoreXL(dirPath string) {
 }
 
 // insertion point for cumulative sub template with model space calls
-// Stage puts anchoredtext to the model stage
-func (anchoredtext *AnchoredText) Stage(stage *StageStruct) *AnchoredText {
-	stage.AnchoredTexts[anchoredtext] = __member
-	stage.AnchoredTexts_mapString[anchoredtext.Name] = anchoredtext
-
-	return anchoredtext
-}
-
-// Unstage removes anchoredtext off the model stage
-func (anchoredtext *AnchoredText) Unstage(stage *StageStruct) *AnchoredText {
-	delete(stage.AnchoredTexts, anchoredtext)
-	delete(stage.AnchoredTexts_mapString, anchoredtext.Name)
-	return anchoredtext
-}
-
-// commit anchoredtext to the back repo (if it is already staged)
-func (anchoredtext *AnchoredText) Commit(stage *StageStruct) *AnchoredText {
-	if _, ok := stage.AnchoredTexts[anchoredtext]; ok {
-		if stage.BackRepo != nil {
-			stage.BackRepo.CommitAnchoredText(anchoredtext)
-		}
-	}
-	return anchoredtext
-}
-
-// Checkout anchoredtext to the back repo (if it is already staged)
-func (anchoredtext *AnchoredText) Checkout(stage *StageStruct) *AnchoredText {
-	if _, ok := stage.AnchoredTexts[anchoredtext]; ok {
-		if stage.BackRepo != nil {
-			stage.BackRepo.CheckoutAnchoredText(anchoredtext)
-		}
-	}
-	return anchoredtext
-}
-
-// for satisfaction of GongStruct interface
-func (anchoredtext *AnchoredText) GetName() (res string) {
-	return anchoredtext.Name
-}
-
 // Stage puts animate to the model stage
 func (animate *Animate) Stage(stage *StageStruct) *Animate {
 	stage.Animates[animate] = __member
@@ -703,6 +671,46 @@ func (link *Link) Checkout(stage *StageStruct) *Link {
 // for satisfaction of GongStruct interface
 func (link *Link) GetName() (res string) {
 	return link.Name
+}
+
+// Stage puts linkanchoredtext to the model stage
+func (linkanchoredtext *LinkAnchoredText) Stage(stage *StageStruct) *LinkAnchoredText {
+	stage.LinkAnchoredTexts[linkanchoredtext] = __member
+	stage.LinkAnchoredTexts_mapString[linkanchoredtext.Name] = linkanchoredtext
+
+	return linkanchoredtext
+}
+
+// Unstage removes linkanchoredtext off the model stage
+func (linkanchoredtext *LinkAnchoredText) Unstage(stage *StageStruct) *LinkAnchoredText {
+	delete(stage.LinkAnchoredTexts, linkanchoredtext)
+	delete(stage.LinkAnchoredTexts_mapString, linkanchoredtext.Name)
+	return linkanchoredtext
+}
+
+// commit linkanchoredtext to the back repo (if it is already staged)
+func (linkanchoredtext *LinkAnchoredText) Commit(stage *StageStruct) *LinkAnchoredText {
+	if _, ok := stage.LinkAnchoredTexts[linkanchoredtext]; ok {
+		if stage.BackRepo != nil {
+			stage.BackRepo.CommitLinkAnchoredText(linkanchoredtext)
+		}
+	}
+	return linkanchoredtext
+}
+
+// Checkout linkanchoredtext to the back repo (if it is already staged)
+func (linkanchoredtext *LinkAnchoredText) Checkout(stage *StageStruct) *LinkAnchoredText {
+	if _, ok := stage.LinkAnchoredTexts[linkanchoredtext]; ok {
+		if stage.BackRepo != nil {
+			stage.BackRepo.CheckoutLinkAnchoredText(linkanchoredtext)
+		}
+	}
+	return linkanchoredtext
+}
+
+// for satisfaction of GongStruct interface
+func (linkanchoredtext *LinkAnchoredText) GetName() (res string) {
+	return linkanchoredtext.Name
 }
 
 // Stage puts path to the model stage
@@ -1107,13 +1115,13 @@ func (text *Text) GetName() (res string) {
 
 // swagger:ignore
 type AllModelsStructCreateInterface interface { // insertion point for Callbacks on creation
-	CreateORMAnchoredText(AnchoredText *AnchoredText)
 	CreateORMAnimate(Animate *Animate)
 	CreateORMCircle(Circle *Circle)
 	CreateORMEllipse(Ellipse *Ellipse)
 	CreateORMLayer(Layer *Layer)
 	CreateORMLine(Line *Line)
 	CreateORMLink(Link *Link)
+	CreateORMLinkAnchoredText(LinkAnchoredText *LinkAnchoredText)
 	CreateORMPath(Path *Path)
 	CreateORMPoint(Point *Point)
 	CreateORMPolygone(Polygone *Polygone)
@@ -1127,13 +1135,13 @@ type AllModelsStructCreateInterface interface { // insertion point for Callbacks
 }
 
 type AllModelsStructDeleteInterface interface { // insertion point for Callbacks on deletion
-	DeleteORMAnchoredText(AnchoredText *AnchoredText)
 	DeleteORMAnimate(Animate *Animate)
 	DeleteORMCircle(Circle *Circle)
 	DeleteORMEllipse(Ellipse *Ellipse)
 	DeleteORMLayer(Layer *Layer)
 	DeleteORMLine(Line *Line)
 	DeleteORMLink(Link *Link)
+	DeleteORMLinkAnchoredText(LinkAnchoredText *LinkAnchoredText)
 	DeleteORMPath(Path *Path)
 	DeleteORMPoint(Point *Point)
 	DeleteORMPolygone(Polygone *Polygone)
@@ -1147,9 +1155,6 @@ type AllModelsStructDeleteInterface interface { // insertion point for Callbacks
 }
 
 func (stage *StageStruct) Reset() { // insertion point for array reset
-	stage.AnchoredTexts = make(map[*AnchoredText]any)
-	stage.AnchoredTexts_mapString = make(map[string]*AnchoredText)
-
 	stage.Animates = make(map[*Animate]any)
 	stage.Animates_mapString = make(map[string]*Animate)
 
@@ -1167,6 +1172,9 @@ func (stage *StageStruct) Reset() { // insertion point for array reset
 
 	stage.Links = make(map[*Link]any)
 	stage.Links_mapString = make(map[string]*Link)
+
+	stage.LinkAnchoredTexts = make(map[*LinkAnchoredText]any)
+	stage.LinkAnchoredTexts_mapString = make(map[string]*LinkAnchoredText)
 
 	stage.Paths = make(map[*Path]any)
 	stage.Paths_mapString = make(map[string]*Path)
@@ -1201,9 +1209,6 @@ func (stage *StageStruct) Reset() { // insertion point for array reset
 }
 
 func (stage *StageStruct) Nil() { // insertion point for array nil
-	stage.AnchoredTexts = nil
-	stage.AnchoredTexts_mapString = nil
-
 	stage.Animates = nil
 	stage.Animates_mapString = nil
 
@@ -1221,6 +1226,9 @@ func (stage *StageStruct) Nil() { // insertion point for array nil
 
 	stage.Links = nil
 	stage.Links_mapString = nil
+
+	stage.LinkAnchoredTexts = nil
+	stage.LinkAnchoredTexts_mapString = nil
 
 	stage.Paths = nil
 	stage.Paths_mapString = nil
@@ -1255,10 +1263,6 @@ func (stage *StageStruct) Nil() { // insertion point for array nil
 }
 
 func (stage *StageStruct) Unstage() { // insertion point for array nil
-	for anchoredtext := range stage.AnchoredTexts {
-		anchoredtext.Unstage(stage)
-	}
-
 	for animate := range stage.Animates {
 		animate.Unstage(stage)
 	}
@@ -1281,6 +1285,10 @@ func (stage *StageStruct) Unstage() { // insertion point for array nil
 
 	for link := range stage.Links {
 		link.Unstage(stage)
+	}
+
+	for linkanchoredtext := range stage.LinkAnchoredTexts {
+		linkanchoredtext.Unstage(stage)
 	}
 
 	for path := range stage.Paths {
@@ -1331,7 +1339,7 @@ func (stage *StageStruct) Unstage() { // insertion point for array nil
 // - full refactoring of Gongstruct identifiers / fields
 type Gongstruct interface {
 	// insertion point for generic types
-	AnchoredText | Animate | Circle | Ellipse | Layer | Line | Link | Path | Point | Polygone | Polyline | Rect | RectAnchoredRect | RectAnchoredText | RectLinkLink | SVG | Text
+	Animate | Circle | Ellipse | Layer | Line | Link | LinkAnchoredText | Path | Point | Polygone | Polyline | Rect | RectAnchoredRect | RectAnchoredText | RectLinkLink | SVG | Text
 }
 
 // Gongstruct is the type parameter for generated generic function that allows
@@ -1340,20 +1348,20 @@ type Gongstruct interface {
 // - full refactoring of Gongstruct identifiers / fields
 type PointerToGongstruct interface {
 	// insertion point for generic types
-	*AnchoredText | *Animate | *Circle | *Ellipse | *Layer | *Line | *Link | *Path | *Point | *Polygone | *Polyline | *Rect | *RectAnchoredRect | *RectAnchoredText | *RectLinkLink | *SVG | *Text
+	*Animate | *Circle | *Ellipse | *Layer | *Line | *Link | *LinkAnchoredText | *Path | *Point | *Polygone | *Polyline | *Rect | *RectAnchoredRect | *RectAnchoredText | *RectLinkLink | *SVG | *Text
 	GetName() string
 }
 
 type GongstructSet interface {
 	map[any]any |
 		// insertion point for generic types
-		map[*AnchoredText]any |
 		map[*Animate]any |
 		map[*Circle]any |
 		map[*Ellipse]any |
 		map[*Layer]any |
 		map[*Line]any |
 		map[*Link]any |
+		map[*LinkAnchoredText]any |
 		map[*Path]any |
 		map[*Point]any |
 		map[*Polygone]any |
@@ -1370,13 +1378,13 @@ type GongstructSet interface {
 type GongstructMapString interface {
 	map[any]any |
 		// insertion point for generic types
-		map[string]*AnchoredText |
 		map[string]*Animate |
 		map[string]*Circle |
 		map[string]*Ellipse |
 		map[string]*Layer |
 		map[string]*Line |
 		map[string]*Link |
+		map[string]*LinkAnchoredText |
 		map[string]*Path |
 		map[string]*Point |
 		map[string]*Polygone |
@@ -1397,8 +1405,6 @@ func GongGetSet[Type GongstructSet](stage *StageStruct) *Type {
 
 	switch any(ret).(type) {
 	// insertion point for generic get functions
-	case map[*AnchoredText]any:
-		return any(&stage.AnchoredTexts).(*Type)
 	case map[*Animate]any:
 		return any(&stage.Animates).(*Type)
 	case map[*Circle]any:
@@ -1411,6 +1417,8 @@ func GongGetSet[Type GongstructSet](stage *StageStruct) *Type {
 		return any(&stage.Lines).(*Type)
 	case map[*Link]any:
 		return any(&stage.Links).(*Type)
+	case map[*LinkAnchoredText]any:
+		return any(&stage.LinkAnchoredTexts).(*Type)
 	case map[*Path]any:
 		return any(&stage.Paths).(*Type)
 	case map[*Point]any:
@@ -1443,8 +1451,6 @@ func GongGetMap[Type GongstructMapString](stage *StageStruct) *Type {
 
 	switch any(ret).(type) {
 	// insertion point for generic get functions
-	case map[string]*AnchoredText:
-		return any(&stage.AnchoredTexts_mapString).(*Type)
 	case map[string]*Animate:
 		return any(&stage.Animates_mapString).(*Type)
 	case map[string]*Circle:
@@ -1457,6 +1463,8 @@ func GongGetMap[Type GongstructMapString](stage *StageStruct) *Type {
 		return any(&stage.Lines_mapString).(*Type)
 	case map[string]*Link:
 		return any(&stage.Links_mapString).(*Type)
+	case map[string]*LinkAnchoredText:
+		return any(&stage.LinkAnchoredTexts_mapString).(*Type)
 	case map[string]*Path:
 		return any(&stage.Paths_mapString).(*Type)
 	case map[string]*Point:
@@ -1489,8 +1497,6 @@ func GetGongstructInstancesSet[Type Gongstruct](stage *StageStruct) *map[*Type]a
 
 	switch any(ret).(type) {
 	// insertion point for generic get functions
-	case AnchoredText:
-		return any(&stage.AnchoredTexts).(*map[*Type]any)
 	case Animate:
 		return any(&stage.Animates).(*map[*Type]any)
 	case Circle:
@@ -1503,6 +1509,8 @@ func GetGongstructInstancesSet[Type Gongstruct](stage *StageStruct) *map[*Type]a
 		return any(&stage.Lines).(*map[*Type]any)
 	case Link:
 		return any(&stage.Links).(*map[*Type]any)
+	case LinkAnchoredText:
+		return any(&stage.LinkAnchoredTexts).(*map[*Type]any)
 	case Path:
 		return any(&stage.Paths).(*map[*Type]any)
 	case Point:
@@ -1535,8 +1543,6 @@ func GetGongstructInstancesMap[Type Gongstruct](stage *StageStruct) *map[string]
 
 	switch any(ret).(type) {
 	// insertion point for generic get functions
-	case AnchoredText:
-		return any(&stage.AnchoredTexts_mapString).(*map[string]*Type)
 	case Animate:
 		return any(&stage.Animates_mapString).(*map[string]*Type)
 	case Circle:
@@ -1549,6 +1555,8 @@ func GetGongstructInstancesMap[Type Gongstruct](stage *StageStruct) *map[string]
 		return any(&stage.Lines_mapString).(*map[string]*Type)
 	case Link:
 		return any(&stage.Links_mapString).(*map[string]*Type)
+	case LinkAnchoredText:
+		return any(&stage.LinkAnchoredTexts_mapString).(*map[string]*Type)
 	case Path:
 		return any(&stage.Paths_mapString).(*map[string]*Type)
 	case Point:
@@ -1583,12 +1591,6 @@ func GetAssociationName[Type Gongstruct]() *Type {
 
 	switch any(ret).(type) {
 	// insertion point for instance with special fields
-	case AnchoredText:
-		return any(&AnchoredText{
-			// Initialisation of associations
-			// field is initialized with an instance of Animate with the name of the field
-			Animates: []*Animate{{Name: "Animates"}},
-		}).(*Type)
 	case Animate:
 		return any(&Animate{
 			// Initialisation of associations
@@ -1642,12 +1644,18 @@ func GetAssociationName[Type Gongstruct]() *Type {
 			Start: &Rect{Name: "Start"},
 			// field is initialized with an instance of Rect with the name of the field
 			End: &Rect{Name: "End"},
-			// field is initialized with an instance of AnchoredText with the name of the field
-			TextAtArrowEnd: []*AnchoredText{{Name: "TextAtArrowEnd"}},
-			// field is initialized with an instance of AnchoredText with the name of the field
-			TextAtArrowStart: []*AnchoredText{{Name: "TextAtArrowStart"}},
+			// field is initialized with an instance of LinkAnchoredText with the name of the field
+			TextAtArrowEnd: []*LinkAnchoredText{{Name: "TextAtArrowEnd"}},
+			// field is initialized with an instance of LinkAnchoredText with the name of the field
+			TextAtArrowStart: []*LinkAnchoredText{{Name: "TextAtArrowStart"}},
 			// field is initialized with an instance of Point with the name of the field
 			ControlPoints: []*Point{{Name: "ControlPoints"}},
+		}).(*Type)
+	case LinkAnchoredText:
+		return any(&LinkAnchoredText{
+			// Initialisation of associations
+			// field is initialized with an instance of Animate with the name of the field
+			Animates: []*Animate{{Name: "Animates"}},
 		}).(*Type)
 	case Path:
 		return any(&Path{
@@ -1733,11 +1741,6 @@ func GetPointerReverseMap[Start, End Gongstruct](fieldname string, stage *StageS
 
 	switch any(ret).(type) {
 	// insertion point of functions that provide maps for reverse associations
-	// reverse maps of direct associations of AnchoredText
-	case AnchoredText:
-		switch fieldname {
-		// insertion point for per direct association field
-		}
 	// reverse maps of direct associations of Animate
 	case Animate:
 		switch fieldname {
@@ -1801,6 +1804,11 @@ func GetPointerReverseMap[Start, End Gongstruct](fieldname string, stage *StageS
 				}
 			}
 			return any(res).(map[*End][]*Start)
+		}
+	// reverse maps of direct associations of LinkAnchoredText
+	case LinkAnchoredText:
+		switch fieldname {
+		// insertion point for per direct association field
 		}
 	// reverse maps of direct associations of Path
 	case Path:
@@ -1936,19 +1944,6 @@ func GetSliceOfPointersReverseMap[Start, End Gongstruct](fieldname string, stage
 
 	switch any(ret).(type) {
 	// insertion point of functions that provide maps for reverse associations
-	// reverse maps of direct associations of AnchoredText
-	case AnchoredText:
-		switch fieldname {
-		// insertion point for per direct association field
-		case "Animates":
-			res := make(map[*Animate]*AnchoredText)
-			for anchoredtext := range stage.AnchoredTexts {
-				for _, animate_ := range anchoredtext.Animates {
-					res[animate_] = anchoredtext
-				}
-			}
-			return any(res).(map[*End]*Start)
-		}
 	// reverse maps of direct associations of Animate
 	case Animate:
 		switch fieldname {
@@ -2083,18 +2078,18 @@ func GetSliceOfPointersReverseMap[Start, End Gongstruct](fieldname string, stage
 		switch fieldname {
 		// insertion point for per direct association field
 		case "TextAtArrowEnd":
-			res := make(map[*AnchoredText]*Link)
+			res := make(map[*LinkAnchoredText]*Link)
 			for link := range stage.Links {
-				for _, anchoredtext_ := range link.TextAtArrowEnd {
-					res[anchoredtext_] = link
+				for _, linkanchoredtext_ := range link.TextAtArrowEnd {
+					res[linkanchoredtext_] = link
 				}
 			}
 			return any(res).(map[*End]*Start)
 		case "TextAtArrowStart":
-			res := make(map[*AnchoredText]*Link)
+			res := make(map[*LinkAnchoredText]*Link)
 			for link := range stage.Links {
-				for _, anchoredtext_ := range link.TextAtArrowStart {
-					res[anchoredtext_] = link
+				for _, linkanchoredtext_ := range link.TextAtArrowStart {
+					res[linkanchoredtext_] = link
 				}
 			}
 			return any(res).(map[*End]*Start)
@@ -2103,6 +2098,19 @@ func GetSliceOfPointersReverseMap[Start, End Gongstruct](fieldname string, stage
 			for link := range stage.Links {
 				for _, point_ := range link.ControlPoints {
 					res[point_] = link
+				}
+			}
+			return any(res).(map[*End]*Start)
+		}
+	// reverse maps of direct associations of LinkAnchoredText
+	case LinkAnchoredText:
+		switch fieldname {
+		// insertion point for per direct association field
+		case "Animates":
+			res := make(map[*Animate]*LinkAnchoredText)
+			for linkanchoredtext := range stage.LinkAnchoredTexts {
+				for _, animate_ := range linkanchoredtext.Animates {
+					res[animate_] = linkanchoredtext
 				}
 			}
 			return any(res).(map[*End]*Start)
@@ -2241,8 +2249,6 @@ func GetGongstructName[Type Gongstruct]() (res string) {
 
 	switch any(ret).(type) {
 	// insertion point for generic get gongstruct name
-	case AnchoredText:
-		res = "AnchoredText"
 	case Animate:
 		res = "Animate"
 	case Circle:
@@ -2255,6 +2261,8 @@ func GetGongstructName[Type Gongstruct]() (res string) {
 		res = "Line"
 	case Link:
 		res = "Link"
+	case LinkAnchoredText:
+		res = "LinkAnchoredText"
 	case Path:
 		res = "Path"
 	case Point:
@@ -2286,8 +2294,6 @@ func GetFields[Type Gongstruct]() (res []string) {
 
 	switch any(ret).(type) {
 	// insertion point for generic get gongstruct name
-	case AnchoredText:
-		res = []string{"Name", "Content", "X_Offset", "Y_Offset", "FontWeight", "Color", "FillOpacity", "Stroke", "StrokeWidth", "StrokeDashArray", "StrokeDashArrayWhenSelected", "Transform", "Animates"}
 	case Animate:
 		res = []string{"Name", "AttributeName", "Values", "Dur", "RepeatCount"}
 	case Circle:
@@ -2300,6 +2306,8 @@ func GetFields[Type Gongstruct]() (res []string) {
 		res = []string{"Name", "X1", "Y1", "X2", "Y2", "Color", "FillOpacity", "Stroke", "StrokeWidth", "StrokeDashArray", "StrokeDashArrayWhenSelected", "Transform", "Animates", "MouseClickX", "MouseClickY"}
 	case Link:
 		res = []string{"Name", "Type", "Start", "StartAnchorType", "End", "EndAnchorType", "StartOrientation", "StartRatio", "EndOrientation", "EndRatio", "CornerOffsetRatio", "CornerRadius", "HasEndArrow", "EndArrowSize", "TextAtArrowEnd", "TextAtArrowStart", "ControlPoints", "Color", "FillOpacity", "Stroke", "StrokeWidth", "StrokeDashArray", "StrokeDashArrayWhenSelected", "Transform"}
+	case LinkAnchoredText:
+		res = []string{"Name", "Content", "X_Offset", "Y_Offset", "FontWeight", "Color", "FillOpacity", "Stroke", "StrokeWidth", "StrokeDashArray", "StrokeDashArrayWhenSelected", "Transform", "Animates"}
 	case Path:
 		res = []string{"Name", "Definition", "Color", "FillOpacity", "Stroke", "StrokeWidth", "StrokeDashArray", "StrokeDashArrayWhenSelected", "Transform", "Animates"}
 	case Point:
@@ -2329,41 +2337,6 @@ func GetFieldStringValue[Type Gongstruct](instance Type, fieldName string) (res 
 
 	switch any(ret).(type) {
 	// insertion point for generic get gongstruct field value
-	case AnchoredText:
-		switch fieldName {
-		// string value of fields
-		case "Name":
-			res = any(instance).(AnchoredText).Name
-		case "Content":
-			res = any(instance).(AnchoredText).Content
-		case "X_Offset":
-			res = fmt.Sprintf("%f", any(instance).(AnchoredText).X_Offset)
-		case "Y_Offset":
-			res = fmt.Sprintf("%f", any(instance).(AnchoredText).Y_Offset)
-		case "FontWeight":
-			res = any(instance).(AnchoredText).FontWeight
-		case "Color":
-			res = any(instance).(AnchoredText).Color
-		case "FillOpacity":
-			res = fmt.Sprintf("%f", any(instance).(AnchoredText).FillOpacity)
-		case "Stroke":
-			res = any(instance).(AnchoredText).Stroke
-		case "StrokeWidth":
-			res = fmt.Sprintf("%f", any(instance).(AnchoredText).StrokeWidth)
-		case "StrokeDashArray":
-			res = any(instance).(AnchoredText).StrokeDashArray
-		case "StrokeDashArrayWhenSelected":
-			res = any(instance).(AnchoredText).StrokeDashArrayWhenSelected
-		case "Transform":
-			res = any(instance).(AnchoredText).Transform
-		case "Animates":
-			for idx, __instance__ := range any(instance).(AnchoredText).Animates {
-				if idx > 0 {
-					res += "\n"
-				}
-				res += __instance__.Name
-			}
-		}
 	case Animate:
 		switch fieldName {
 		// string value of fields
@@ -2638,6 +2611,41 @@ func GetFieldStringValue[Type Gongstruct](instance Type, fieldName string) (res 
 			res = any(instance).(Link).StrokeDashArrayWhenSelected
 		case "Transform":
 			res = any(instance).(Link).Transform
+		}
+	case LinkAnchoredText:
+		switch fieldName {
+		// string value of fields
+		case "Name":
+			res = any(instance).(LinkAnchoredText).Name
+		case "Content":
+			res = any(instance).(LinkAnchoredText).Content
+		case "X_Offset":
+			res = fmt.Sprintf("%f", any(instance).(LinkAnchoredText).X_Offset)
+		case "Y_Offset":
+			res = fmt.Sprintf("%f", any(instance).(LinkAnchoredText).Y_Offset)
+		case "FontWeight":
+			res = any(instance).(LinkAnchoredText).FontWeight
+		case "Color":
+			res = any(instance).(LinkAnchoredText).Color
+		case "FillOpacity":
+			res = fmt.Sprintf("%f", any(instance).(LinkAnchoredText).FillOpacity)
+		case "Stroke":
+			res = any(instance).(LinkAnchoredText).Stroke
+		case "StrokeWidth":
+			res = fmt.Sprintf("%f", any(instance).(LinkAnchoredText).StrokeWidth)
+		case "StrokeDashArray":
+			res = any(instance).(LinkAnchoredText).StrokeDashArray
+		case "StrokeDashArrayWhenSelected":
+			res = any(instance).(LinkAnchoredText).StrokeDashArrayWhenSelected
+		case "Transform":
+			res = any(instance).(LinkAnchoredText).Transform
+		case "Animates":
+			for idx, __instance__ := range any(instance).(LinkAnchoredText).Animates {
+				if idx > 0 {
+					res += "\n"
+				}
+				res += __instance__.Name
+			}
 		}
 	case Path:
 		switch fieldName {

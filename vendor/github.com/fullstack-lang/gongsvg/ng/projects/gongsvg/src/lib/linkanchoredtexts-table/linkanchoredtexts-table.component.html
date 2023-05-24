@@ -3,7 +3,7 @@
         <mat-label>Filter</mat-label>
         <input matInput (keyup)="applyFilter($event)" placeholder="Ex. ium" #input>
     </mat-form-field>
-    <h1 *ngIf="dialogData">anchoredtext</h1>
+    <h1 *ngIf="dialogData">linkanchoredtext</h1>
     <table class="table" mat-table [dataSource]="matTableDataSource" matSort>
         <!-- Checkbox Column, only used when the component is used to select items for a field that is a slice of pointers -->
         <ng-container matColumnDef="select">
@@ -21,111 +21,111 @@
         <!-- -->
         <ng-container matColumnDef="Name" sticky>
             <th mat-header-cell *matHeaderCellDef mat-sort-header> Name </th>
-            <td mat-cell *matCellDef="let AnchoredText">
-                {{AnchoredText.Name}}
+            <td mat-cell *matCellDef="let LinkAnchoredText">
+                {{LinkAnchoredText.Name}}
             </td>
         </ng-container>
         <!-- -->
         <ng-container matColumnDef="Content">
             <th mat-header-cell *matHeaderCellDef mat-sort-header> Content </th>
-            <td mat-cell *matCellDef="let AnchoredText">
-                {{AnchoredText.Content}}
+            <td mat-cell *matCellDef="let LinkAnchoredText">
+                {{LinkAnchoredText.Content}}
             </td>
         </ng-container>
         <!-- -->
         <ng-container matColumnDef="X_Offset">
             <th mat-header-cell *matHeaderCellDef mat-sort-header> X_Offset </th>
-            <td mat-cell *matCellDef="let AnchoredText">
-                {{AnchoredText.X_Offset.toPrecision(5)}}
+            <td mat-cell *matCellDef="let LinkAnchoredText">
+                {{LinkAnchoredText.X_Offset.toPrecision(5)}}
             </td>
         </ng-container>
         <!-- -->
         <ng-container matColumnDef="Y_Offset">
             <th mat-header-cell *matHeaderCellDef mat-sort-header> Y_Offset </th>
-            <td mat-cell *matCellDef="let AnchoredText">
-                {{AnchoredText.Y_Offset.toPrecision(5)}}
+            <td mat-cell *matCellDef="let LinkAnchoredText">
+                {{LinkAnchoredText.Y_Offset.toPrecision(5)}}
             </td>
         </ng-container>
         <!-- -->
         <ng-container matColumnDef="FontWeight">
             <th mat-header-cell *matHeaderCellDef mat-sort-header> FontWeight </th>
-            <td mat-cell *matCellDef="let AnchoredText">
-                {{AnchoredText.FontWeight}}
+            <td mat-cell *matCellDef="let LinkAnchoredText">
+                {{LinkAnchoredText.FontWeight}}
             </td>
         </ng-container>
         <!-- -->
         <ng-container matColumnDef="Color">
             <th mat-header-cell *matHeaderCellDef mat-sort-header> Color </th>
-            <td mat-cell *matCellDef="let AnchoredText">
-                {{AnchoredText.Color}}
+            <td mat-cell *matCellDef="let LinkAnchoredText">
+                {{LinkAnchoredText.Color}}
             </td>
         </ng-container>
         <!-- -->
         <ng-container matColumnDef="FillOpacity">
             <th mat-header-cell *matHeaderCellDef mat-sort-header> FillOpacity </th>
-            <td mat-cell *matCellDef="let AnchoredText">
-                {{AnchoredText.FillOpacity.toPrecision(5)}}
+            <td mat-cell *matCellDef="let LinkAnchoredText">
+                {{LinkAnchoredText.FillOpacity.toPrecision(5)}}
             </td>
         </ng-container>
         <!-- -->
         <ng-container matColumnDef="Stroke">
             <th mat-header-cell *matHeaderCellDef mat-sort-header> Stroke </th>
-            <td mat-cell *matCellDef="let AnchoredText">
-                {{AnchoredText.Stroke}}
+            <td mat-cell *matCellDef="let LinkAnchoredText">
+                {{LinkAnchoredText.Stroke}}
             </td>
         </ng-container>
         <!-- -->
         <ng-container matColumnDef="StrokeWidth">
             <th mat-header-cell *matHeaderCellDef mat-sort-header> StrokeWidth </th>
-            <td mat-cell *matCellDef="let AnchoredText">
-                {{AnchoredText.StrokeWidth.toPrecision(5)}}
+            <td mat-cell *matCellDef="let LinkAnchoredText">
+                {{LinkAnchoredText.StrokeWidth.toPrecision(5)}}
             </td>
         </ng-container>
         <!-- -->
         <ng-container matColumnDef="StrokeDashArray">
             <th mat-header-cell *matHeaderCellDef mat-sort-header> StrokeDashArray </th>
-            <td mat-cell *matCellDef="let AnchoredText">
-                {{AnchoredText.StrokeDashArray}}
+            <td mat-cell *matCellDef="let LinkAnchoredText">
+                {{LinkAnchoredText.StrokeDashArray}}
             </td>
         </ng-container>
         <!-- -->
         <ng-container matColumnDef="StrokeDashArrayWhenSelected">
             <th mat-header-cell *matHeaderCellDef mat-sort-header> StrokeDashArrayWhenSelected </th>
-            <td mat-cell *matCellDef="let AnchoredText">
-                {{AnchoredText.StrokeDashArrayWhenSelected}}
+            <td mat-cell *matCellDef="let LinkAnchoredText">
+                {{LinkAnchoredText.StrokeDashArrayWhenSelected}}
             </td>
         </ng-container>
         <!-- -->
         <ng-container matColumnDef="Transform">
             <th mat-header-cell *matHeaderCellDef mat-sort-header> Transform </th>
-            <td mat-cell *matCellDef="let AnchoredText">
-                {{AnchoredText.Transform}}
+            <td mat-cell *matCellDef="let LinkAnchoredText">
+                {{LinkAnchoredText.Transform}}
             </td>
         </ng-container>
         <!-- -->
         <ng-container matColumnDef="Link_TextAtArrowEnd">
             <th mat-header-cell *matHeaderCellDef mat-sort-header> <-- (Link) TextAtArrowEnd </th>
-            <td mat-cell *matCellDef="let anchoredtext">
-                {{frontRepo.Links.get(anchoredtext.Link_TextAtArrowEndDBID.Int64)?.Name}}
+            <td mat-cell *matCellDef="let linkanchoredtext">
+                {{frontRepo.Links.get(linkanchoredtext.Link_TextAtArrowEndDBID.Int64)?.Name}}
             </td>
         </ng-container>
         <!-- -->
         <ng-container matColumnDef="Link_TextAtArrowStart">
             <th mat-header-cell *matHeaderCellDef mat-sort-header> <-- (Link) TextAtArrowStart </th>
-            <td mat-cell *matCellDef="let anchoredtext">
-                {{frontRepo.Links.get(anchoredtext.Link_TextAtArrowStartDBID.Int64)?.Name}}
+            <td mat-cell *matCellDef="let linkanchoredtext">
+                {{frontRepo.Links.get(linkanchoredtext.Link_TextAtArrowStartDBID.Int64)?.Name}}
             </td>
         </ng-container>
 
         <ng-container matColumnDef="ID" sticky>
             <th mat-header-cell *matHeaderCellDef mat-sort-header> ID. </th>
-            <td mat-cell *matCellDef="let AnchoredText"> {{AnchoredText.ID}} </td>
+            <td mat-cell *matCellDef="let LinkAnchoredText"> {{LinkAnchoredText.ID}} </td>
         </ng-container>
 
         <ng-container matColumnDef="Delete" sticky>
             <th mat-header-cell *matHeaderCellDef> Delete </th>
-            <td mat-cell *matCellDef="let anchoredtext;  let j = index;">
-                <i class="material-icons my-delete-button" [ngStyle]="{'color':'rgba(0,0,0,.50)'}" (click)="deleteAnchoredText(anchoredtext.ID, anchoredtext); $event.stopPropagation()">delete</i>
+            <td mat-cell *matCellDef="let linkanchoredtext;  let j = index;">
+                <i class="material-icons my-delete-button" [ngStyle]="{'color':'rgba(0,0,0,.50)'}" (click)="deleteLinkAnchoredText(linkanchoredtext.ID, linkanchoredtext); $event.stopPropagation()">delete</i>
             </td>
         </ng-container>
 

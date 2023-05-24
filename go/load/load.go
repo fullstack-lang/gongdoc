@@ -52,7 +52,7 @@ func Load(
 
 	gongsvg_models.SetOrchestratorOnAfterUpdate[gongsvg_models.Rect](gongsvgStage)
 	gongsvg_models.SetOrchestratorOnAfterUpdate[gongsvg_models.Link](gongsvgStage)
-	gongsvg_models.SetOrchestratorOnAfterUpdate[gongsvg_models.AnchoredText](gongsvgStage)
+	gongsvg_models.SetOrchestratorOnAfterUpdate[gongsvg_models.LinkAnchoredText](gongsvgStage)
 
 	beforeCommitImplementation := new(BeforeCommitImplementation)
 

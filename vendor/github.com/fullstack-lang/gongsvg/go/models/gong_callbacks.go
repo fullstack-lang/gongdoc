@@ -5,10 +5,6 @@ func AfterCreateFromFront[Type Gongstruct](stage *StageStruct, instance *Type) {
 
 	switch target := any(instance).(type) {
 	// insertion point
-	case *AnchoredText:
-		if stage.OnAfterAnchoredTextCreateCallback != nil {
-			stage.OnAfterAnchoredTextCreateCallback.OnAfterCreate(stage, target)
-		}
 	case *Animate:
 		if stage.OnAfterAnimateCreateCallback != nil {
 			stage.OnAfterAnimateCreateCallback.OnAfterCreate(stage, target)
@@ -32,6 +28,10 @@ func AfterCreateFromFront[Type Gongstruct](stage *StageStruct, instance *Type) {
 	case *Link:
 		if stage.OnAfterLinkCreateCallback != nil {
 			stage.OnAfterLinkCreateCallback.OnAfterCreate(stage, target)
+		}
+	case *LinkAnchoredText:
+		if stage.OnAfterLinkAnchoredTextCreateCallback != nil {
+			stage.OnAfterLinkAnchoredTextCreateCallback.OnAfterCreate(stage, target)
 		}
 	case *Path:
 		if stage.OnAfterPathCreateCallback != nil {
@@ -83,11 +83,6 @@ func AfterUpdateFromFront[Type Gongstruct](stage *StageStruct, old, new *Type) {
 
 	switch oldTarget := any(old).(type) {
 	// insertion point
-	case *AnchoredText:
-		newTarget := any(new).(*AnchoredText)
-		if stage.OnAfterAnchoredTextUpdateCallback != nil {
-			stage.OnAfterAnchoredTextUpdateCallback.OnAfterUpdate(stage, oldTarget, newTarget)
-		}
 	case *Animate:
 		newTarget := any(new).(*Animate)
 		if stage.OnAfterAnimateUpdateCallback != nil {
@@ -117,6 +112,11 @@ func AfterUpdateFromFront[Type Gongstruct](stage *StageStruct, old, new *Type) {
 		newTarget := any(new).(*Link)
 		if stage.OnAfterLinkUpdateCallback != nil {
 			stage.OnAfterLinkUpdateCallback.OnAfterUpdate(stage, oldTarget, newTarget)
+		}
+	case *LinkAnchoredText:
+		newTarget := any(new).(*LinkAnchoredText)
+		if stage.OnAfterLinkAnchoredTextUpdateCallback != nil {
+			stage.OnAfterLinkAnchoredTextUpdateCallback.OnAfterUpdate(stage, oldTarget, newTarget)
 		}
 	case *Path:
 		newTarget := any(new).(*Path)
@@ -178,11 +178,6 @@ func AfterDeleteFromFront[Type Gongstruct](stage *StageStruct, staged, front *Ty
 
 	switch front := any(front).(type) {
 	// insertion point
-	case *AnchoredText:
-		if stage.OnAfterAnchoredTextDeleteCallback != nil {
-			staged := any(staged).(*AnchoredText)
-			stage.OnAfterAnchoredTextDeleteCallback.OnAfterDelete(stage, staged, front)
-		}
 	case *Animate:
 		if stage.OnAfterAnimateDeleteCallback != nil {
 			staged := any(staged).(*Animate)
@@ -212,6 +207,11 @@ func AfterDeleteFromFront[Type Gongstruct](stage *StageStruct, staged, front *Ty
 		if stage.OnAfterLinkDeleteCallback != nil {
 			staged := any(staged).(*Link)
 			stage.OnAfterLinkDeleteCallback.OnAfterDelete(stage, staged, front)
+		}
+	case *LinkAnchoredText:
+		if stage.OnAfterLinkAnchoredTextDeleteCallback != nil {
+			staged := any(staged).(*LinkAnchoredText)
+			stage.OnAfterLinkAnchoredTextDeleteCallback.OnAfterDelete(stage, staged, front)
 		}
 	case *Path:
 		if stage.OnAfterPathDeleteCallback != nil {
@@ -273,10 +273,6 @@ func AfterReadFromFront[Type Gongstruct](stage *StageStruct, instance *Type) {
 
 	switch target := any(instance).(type) {
 	// insertion point
-	case *AnchoredText:
-		if stage.OnAfterAnchoredTextReadCallback != nil {
-			stage.OnAfterAnchoredTextReadCallback.OnAfterRead(stage, target)
-		}
 	case *Animate:
 		if stage.OnAfterAnimateReadCallback != nil {
 			stage.OnAfterAnimateReadCallback.OnAfterRead(stage, target)
@@ -300,6 +296,10 @@ func AfterReadFromFront[Type Gongstruct](stage *StageStruct, instance *Type) {
 	case *Link:
 		if stage.OnAfterLinkReadCallback != nil {
 			stage.OnAfterLinkReadCallback.OnAfterRead(stage, target)
+		}
+	case *LinkAnchoredText:
+		if stage.OnAfterLinkAnchoredTextReadCallback != nil {
+			stage.OnAfterLinkAnchoredTextReadCallback.OnAfterRead(stage, target)
 		}
 	case *Path:
 		if stage.OnAfterPathReadCallback != nil {
@@ -352,9 +352,6 @@ func SetCallbackAfterUpdateFromFront[Type Gongstruct](stage *StageStruct, callba
 	var instance Type
 	switch any(instance).(type) {
 		// insertion point
-	case *AnchoredText:
-		stage.OnAfterAnchoredTextUpdateCallback = any(callback).(OnAfterUpdateInterface[AnchoredText])
-	
 	case *Animate:
 		stage.OnAfterAnimateUpdateCallback = any(callback).(OnAfterUpdateInterface[Animate])
 	
@@ -372,6 +369,9 @@ func SetCallbackAfterUpdateFromFront[Type Gongstruct](stage *StageStruct, callba
 	
 	case *Link:
 		stage.OnAfterLinkUpdateCallback = any(callback).(OnAfterUpdateInterface[Link])
+	
+	case *LinkAnchoredText:
+		stage.OnAfterLinkAnchoredTextUpdateCallback = any(callback).(OnAfterUpdateInterface[LinkAnchoredText])
 	
 	case *Path:
 		stage.OnAfterPathUpdateCallback = any(callback).(OnAfterUpdateInterface[Path])
@@ -410,9 +410,6 @@ func SetCallbackAfterCreateFromFront[Type Gongstruct](stage *StageStruct, callba
 	var instance Type
 	switch any(instance).(type) {
 		// insertion point
-	case *AnchoredText:
-		stage.OnAfterAnchoredTextCreateCallback = any(callback).(OnAfterCreateInterface[AnchoredText])
-	
 	case *Animate:
 		stage.OnAfterAnimateCreateCallback = any(callback).(OnAfterCreateInterface[Animate])
 	
@@ -430,6 +427,9 @@ func SetCallbackAfterCreateFromFront[Type Gongstruct](stage *StageStruct, callba
 	
 	case *Link:
 		stage.OnAfterLinkCreateCallback = any(callback).(OnAfterCreateInterface[Link])
+	
+	case *LinkAnchoredText:
+		stage.OnAfterLinkAnchoredTextCreateCallback = any(callback).(OnAfterCreateInterface[LinkAnchoredText])
 	
 	case *Path:
 		stage.OnAfterPathCreateCallback = any(callback).(OnAfterCreateInterface[Path])
@@ -468,9 +468,6 @@ func SetCallbackAfterDeleteFromFront[Type Gongstruct](stage *StageStruct, callba
 	var instance Type
 	switch any(instance).(type) {
 		// insertion point
-	case *AnchoredText:
-		stage.OnAfterAnchoredTextDeleteCallback = any(callback).(OnAfterDeleteInterface[AnchoredText])
-	
 	case *Animate:
 		stage.OnAfterAnimateDeleteCallback = any(callback).(OnAfterDeleteInterface[Animate])
 	
@@ -488,6 +485,9 @@ func SetCallbackAfterDeleteFromFront[Type Gongstruct](stage *StageStruct, callba
 	
 	case *Link:
 		stage.OnAfterLinkDeleteCallback = any(callback).(OnAfterDeleteInterface[Link])
+	
+	case *LinkAnchoredText:
+		stage.OnAfterLinkAnchoredTextDeleteCallback = any(callback).(OnAfterDeleteInterface[LinkAnchoredText])
 	
 	case *Path:
 		stage.OnAfterPathDeleteCallback = any(callback).(OnAfterDeleteInterface[Path])
@@ -526,9 +526,6 @@ func SetCallbackAfterReadFromFront[Type Gongstruct](stage *StageStruct, callback
 	var instance Type
 	switch any(instance).(type) {
 		// insertion point
-	case *AnchoredText:
-		stage.OnAfterAnchoredTextReadCallback = any(callback).(OnAfterReadInterface[AnchoredText])
-	
 	case *Animate:
 		stage.OnAfterAnimateReadCallback = any(callback).(OnAfterReadInterface[Animate])
 	
@@ -546,6 +543,9 @@ func SetCallbackAfterReadFromFront[Type Gongstruct](stage *StageStruct, callback
 	
 	case *Link:
 		stage.OnAfterLinkReadCallback = any(callback).(OnAfterReadInterface[Link])
+	
+	case *LinkAnchoredText:
+		stage.OnAfterLinkAnchoredTextReadCallback = any(callback).(OnAfterReadInterface[LinkAnchoredText])
 	
 	case *Path:
 		stage.OnAfterPathReadCallback = any(callback).(OnAfterReadInterface[Path])

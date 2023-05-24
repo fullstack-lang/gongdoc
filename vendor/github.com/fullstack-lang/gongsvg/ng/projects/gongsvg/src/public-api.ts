@@ -16,12 +16,6 @@ export * from './lib/push_from_front_nb.service'
 export * from './lib/route-service'
 
 
-export * from './lib/anchoredtext-detail/anchoredtext-detail.component'
-export * from './lib/anchoredtext-sorting/anchoredtext-sorting.component'
-export * from './lib/anchoredtexts-table/anchoredtexts-table.component'
-export * from './lib/anchoredtext-db'
-export * from './lib/anchoredtext.service'
-
 export * from './lib/animate-detail/animate-detail.component'
 export * from './lib/animate-sorting/animate-sorting.component'
 export * from './lib/animates-table/animates-table.component'
@@ -57,6 +51,12 @@ export * from './lib/link-sorting/link-sorting.component'
 export * from './lib/links-table/links-table.component'
 export * from './lib/link-db'
 export * from './lib/link.service'
+
+export * from './lib/linkanchoredtext-detail/linkanchoredtext-detail.component'
+export * from './lib/linkanchoredtext-sorting/linkanchoredtext-sorting.component'
+export * from './lib/linkanchoredtexts-table/linkanchoredtexts-table.component'
+export * from './lib/linkanchoredtext-db'
+export * from './lib/linkanchoredtext.service'
 
 export * from './lib/path-detail/path-detail.component'
 export * from './lib/path-sorting/path-sorting.component'

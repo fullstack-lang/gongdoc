@@ -27,7 +27,7 @@ func NewAnchoredTextImplLinkFieldName(
 }
 
 func (anchoredtextImplAnchoredText *AnchoredTextImplLinkFieldName) AnchoredTextUpdated(
-	updatedAnchoredText *gongsvg_models.AnchoredText) {
+	updatedAnchoredText *gongsvg_models.LinkAnchoredText) {
 
 	log.Println("AnchoredTextImplAnchoredText:AnchoredTextUpdated")
 
