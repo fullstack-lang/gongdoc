@@ -35,5 +35,5 @@ func (anchoredtextImplAnchoredText *AnchoredTextImplLinkSourceMultiplicity) Anch
 	anchoredtextImplAnchoredText.link.SourceMultiplicityOffsetX = updatedAnchoredText.X_Offset
 	anchoredtextImplAnchoredText.link.SourceMultiplicityOffsetY = updatedAnchoredText.Y_Offset
 
-	anchoredtextImplAnchoredText.gongdocStage.Commit()
+	anchoredtextImplAnchoredText.gongdocStage.CommitWithSuspendedCallbacks()
 }

@@ -35,5 +35,5 @@ func (rectImplGongenumShape *RectImplGongenumShape) RectUpdated(updatedRect *gon
 	rectImplGongenumShape.gongenumShape.Width = updatedRect.Width
 	rectImplGongenumShape.gongenumShape.Heigth = updatedRect.Height
 
-	rectImplGongenumShape.gongdocStage.Commit()
+	rectImplGongenumShape.gongdocStage.CommitWithSuspendedCallbacks()
 }

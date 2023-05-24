@@ -39,46 +39,7 @@ func (rect *Rect) OnAfterUpdate(stage *StageStruct, _, frontRect *Rect) {
 
 	log.Println("Rect, OnAfterUpdate", rect.Name)
 
-	// behavior logic
-	if frontRect.IsSelected != rect.IsSelected {
-		rect.IsSelected = frontRect.IsSelected
-		if frontRect.IsSelected && frontRect.CanHaveLeftHandle {
-			rect.HasLeftHandle = true
-		} else {
-			rect.HasLeftHandle = false
-		}
-		if frontRect.IsSelected && frontRect.CanHaveRightHandle {
-			rect.HasRightHandle = true
-		} else {
-			rect.HasRightHandle = false
-		}
-		if frontRect.IsSelected && frontRect.CanHaveTopHandle {
-			rect.HasTopHandle = true
-		} else {
-			rect.HasTopHandle = false
-		}
-		if frontRect.IsSelected && frontRect.CanHaveBottomHandle {
-			rect.HasBottomHandle = true
-		} else {
-			rect.HasBottomHandle = false
-		}
-		rect.Commit(stage)
-	}
-
-	if rect.X != frontRect.X ||
-		rect.Y != frontRect.Y ||
-		rect.Width != frontRect.Width ||
-		rect.Height != frontRect.Height {
-
-		rect.X = frontRect.X
-		rect.Y = frontRect.Y
-		rect.Width = frontRect.Width
-		rect.Height = frontRect.Height
-
-		rect.Commit(stage)
-
-		if rect.Impl != nil {
-			rect.Impl.RectUpdated(rect)
-		}
+	if rect.Impl != nil {
+		rect.Impl.RectUpdated(frontRect)
 	}
 }

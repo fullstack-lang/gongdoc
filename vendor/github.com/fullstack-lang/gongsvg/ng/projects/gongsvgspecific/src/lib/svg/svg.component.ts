@@ -11,6 +11,7 @@ import { MouseEventService } from '../mouse-event.service';
 import { AngularDragEndEventService } from '../angular-drag-end-event.service';
 import { mouseCoordInComponentRef } from '../mouse.coord.in.component.ref';
 import { IsEditableService } from '../is-editable.service';
+import { RefreshService } from '../refresh.service';
 
 @Component({
   selector: 'lib-svg',
@@ -64,6 +65,7 @@ export class SvgComponent implements OnInit, OnDestroy, AfterViewInit {
     private svgEventService: SvgEventService,
     private mouseEventService: MouseEventService,
     private isEditableService: IsEditableService,
+    private refreshRequestService: RefreshService,
   ) {
 
     this.subscriptions.push(
@@ -141,6 +143,14 @@ export class SvgComponent implements OnInit, OnDestroy, AfterViewInit {
         }
       )
     )
+
+    this.subscriptions.push(
+      refreshRequestService.refreshRequest$.subscribe(
+        _ => {
+          this.refresh()
+        }
+      )
+    )
   }
 
   ngOnInit(): void {
@@ -159,16 +169,16 @@ export class SvgComponent implements OnInit, OnDestroy, AfterViewInit {
       }
     )
 
-    this.gongsvgPushFromFrontNbService.getPushNbFromFront(500, this.GONG__StackPath).subscribe(
-      lastPushFromFrontNb => {
-        if (this.lastPushFromFrontNb < lastPushFromFrontNb) {
+    // this.gongsvgPushFromFrontNbService.getPushNbFromFront(500, this.GONG__StackPath).subscribe(
+    //   lastPushFromFrontNb => {
+    //     if (this.lastPushFromFrontNb < lastPushFromFrontNb) {
 
-          // console.log("last commit nb " + this.lastCommiNbFromBagetCommitNbFromFront + " new: " + commiNbFromBagetCommitNbFromFront)
-          this.refresh()
-          this.lastPushFromFrontNb = lastPushFromFrontNb
-        }
-      }
-    )
+    //       // console.log("last commit nb " + this.lastCommiNbFromBagetCommitNbFromFront + " new: " + commiNbFromBagetCommitNbFromFront)
+    //       this.refresh()
+    //       this.lastPushFromFrontNb = lastPushFromFrontNb
+    //     }
+    //   }
+    // )
   }
 
   refresh(): void {
