@@ -23,7 +23,7 @@ require (
 )
 
 require (
-	github.com/fullstack-lang/gongsvg v0.0.0-20230524063846-70b71dda3580
+	github.com/fullstack-lang/gongsvg v0.0.0-20230524084606-6e3785d700c8
 	github.com/glebarez/sqlite v1.4.7
 	github.com/xuri/excelize/v2 v2.6.1
 )

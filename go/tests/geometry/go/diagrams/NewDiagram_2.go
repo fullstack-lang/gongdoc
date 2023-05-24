@@ -163,8 +163,8 @@ func NewDiagram_2Injection(stage *models.StageStruct) {
 	__GongStructShape__000000_NewDiagram_2_Line.IsSelected = false
 
 	// Position values setup
-	__Position__000000_Pos_NewDiagram_2_Line.X = 18.000000
-	__Position__000000_Pos_NewDiagram_2_Line.Y = 12.000000
+	__Position__000000_Pos_NewDiagram_2_Line.X = 209.000000
+	__Position__000000_Pos_NewDiagram_2_Line.Y = 206.000000
 	__Position__000000_Pos_NewDiagram_2_Line.Name = `Pos-NewDiagram_2-Line`
 
 	// Setup of pointers

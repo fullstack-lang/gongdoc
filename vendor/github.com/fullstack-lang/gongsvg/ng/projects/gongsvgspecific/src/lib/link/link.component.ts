@@ -12,6 +12,7 @@ import { AngularDragEndEventService } from '../angular-drag-end-event.service';
 import { mouseCoordInComponentRef } from '../mouse.coord.in.component.ref';
 import { drawLineFromRectToB } from '../draw.line.from.rect.to.point';
 import { IsEditableService } from '../is-editable.service';
+import { RefreshService } from '../refresh.service';
 
 @Component({
   selector: 'lib-link',
@@ -76,6 +77,7 @@ export class LinkComponent implements OnInit, AfterViewInit, DoCheck, AfterViewC
     private mouseEventService: MouseEventService,
     private elementRef: ElementRef,
     private isEditableService: IsEditableService,
+    private refreshService: RefreshService,
   ) {
 
     this.subscriptions.push(
@@ -356,7 +358,7 @@ export class LinkComponent implements OnInit, AfterViewInit, DoCheck, AfterViewC
                 link => {
                   // this.Link = link
                   this.linkUpdating = false
-                  // console.log("Updated", link.ID)
+                  this.refreshService.emitRefreshRequestEvent(0)
                 }
               )
             }

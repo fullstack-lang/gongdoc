@@ -257,7 +257,7 @@ func NewDiagramInjection(stage *models.StageStruct) {
 	__Link__000000_End.StartOrientation = models.ORIENTATION_HORIZONTAL
 	__Link__000000_End.StartRatio = 0.500000
 	__Link__000000_End.EndOrientation = models.ORIENTATION_VERTICAL
-	__Link__000000_End.EndRatio = 0.438458
+	__Link__000000_End.EndRatio = 0.698667
 	__Link__000000_End.CornerOffsetRatio = 1.222222
 
 	// Link values setup
@@ -283,7 +283,7 @@ func NewDiagramInjection(stage *models.StageStruct) {
 	__Link__000001_Start.StartOrientation = models.ORIENTATION_VERTICAL
 	__Link__000001_Start.StartRatio = 0.429519
 	__Link__000001_Start.EndOrientation = models.ORIENTATION_HORIZONTAL
-	__Link__000001_Start.EndRatio = 0.418182
+	__Link__000001_Start.EndRatio = 0.745455
 	__Link__000001_Start.CornerOffsetRatio = 1.333333
 
 	// NoteShape values setup
@@ -303,8 +303,8 @@ It uses the DocLink convention for referencing Identifiers
 In this case <a href="/models#Line">models.Line</a>, <a href="/models#Point">models.Point</a> and <a href="/models#Line.Start">models.Line.Start</a> <a href="/models#LineTypeString">models.LineTypeString</a>
 are referenced in the go code
 `
-	__NoteShape__000000_ShortNodeOnModels.X = 128.633301
-	__NoteShape__000000_ShortNodeOnModels.Y = 382.000000
+	__NoteShape__000000_ShortNodeOnModels.X = 76.633301
+	__NoteShape__000000_ShortNodeOnModels.Y = 372.000000
 	__NoteShape__000000_ShortNodeOnModels.Width = 702.000000
 	__NoteShape__000000_ShortNodeOnModels.Heigth = 121.000000
 	__NoteShape__000000_ShortNodeOnModels.Matched = false
@@ -346,18 +346,18 @@ are referenced in the go code
 	__NoteShapeLink__000003_Point.Type = models.NOTE_SHAPE_LINK_TO_GONG_STRUCT_OR_ENUM_SHAPE
 
 	// Position values setup
-	__Position__000000_Pos_NewDiagram_Line.X = 154.000000
-	__Position__000000_Pos_NewDiagram_Line.Y = 65.000000
+	__Position__000000_Pos_NewDiagram_Line.X = 86.000000
+	__Position__000000_Pos_NewDiagram_Line.Y = 50.000000
 	__Position__000000_Pos_NewDiagram_Line.Name = `Pos-NewDiagram-Line`
 
 	// Position values setup
-	__Position__000001_Pos_NewDiagram_LineTypeString.X = 212.616699
-	__Position__000001_Pos_NewDiagram_LineTypeString.Y = 584.000000
+	__Position__000001_Pos_NewDiagram_LineTypeString.X = 336.616699
+	__Position__000001_Pos_NewDiagram_LineTypeString.Y = 558.000000
 	__Position__000001_Pos_NewDiagram_LineTypeString.Name = `Pos-NewDiagram-LineTypeString`
 
 	// Position values setup
-	__Position__000002_Pos_NewDiagram_Point.X = 783.000000
-	__Position__000002_Pos_NewDiagram_Point.Y = 198.000000
+	__Position__000002_Pos_NewDiagram_Point.X = 475.000000
+	__Position__000002_Pos_NewDiagram_Point.Y = 157.000000
 	__Position__000002_Pos_NewDiagram_Point.Name = `Pos-NewDiagram-Point`
 
 	// Vertice values setup

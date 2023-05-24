@@ -12,6 +12,7 @@ import { createPoint } from '../link/draw.segments';
 import { MouseEventService } from '../mouse-event.service';
 import { mouseCoordInComponentRef } from '../mouse.coord.in.component.ref';
 import { IsEditableService } from '../is-editable.service';
+import { RefreshService } from '../refresh.service';
 
 @Component({
   selector: 'lib-rect',
@@ -55,6 +56,7 @@ export class RectComponent implements OnInit, OnDestroy, DoCheck, OnChanges {
     private mouseEventService: MouseEventService,
     private svgEventService: SvgEventService,
     private isEditableService: IsEditableService,
+    private refreshService: RefreshService,
   ) {
 
     this.subscriptions.push(
@@ -121,7 +123,11 @@ export class RectComponent implements OnInit, OnDestroy, DoCheck, OnChanges {
             if (this.anchorDragging || this.rectDragging || this.Rect.IsSelected) {
               this.Rect.IsSelected = false
               this.manageHandles()
-              this.rectService.updateRect(this.Rect, this.GONG__StackPath).subscribe()
+              this.rectService.updateRect(this.Rect, this.GONG__StackPath).subscribe(
+                _ => {
+                  this.refreshService.emitRefreshRequestEvent(0)
+                }
+              )
             }
 
           }
@@ -132,7 +138,11 @@ export class RectComponent implements OnInit, OnDestroy, DoCheck, OnChanges {
               console.log("rect, mouseEventService.mouseMouseUpEvent$.subscribe, from the shape: ", this.Rect?.Name)
               this.Rect.IsSelected = !this.Rect.IsSelected
               this.manageHandles()
-              this.rectService.updateRect(this.Rect, this.GONG__StackPath).subscribe()
+              this.rectService.updateRect(this.Rect, this.GONG__StackPath).subscribe(
+                _ => {
+                  this.refreshService.emitRefreshRequestEvent(0)
+                }
+              )
             }
 
             // mouseup emited from the background let to unselect selected shapes
@@ -140,7 +150,11 @@ export class RectComponent implements OnInit, OnDestroy, DoCheck, OnChanges {
               console.log("rect, mouseEventService.mouseMouseUpEvent$.subscribe: from the svg", this.Rect?.Name)
               this.Rect.IsSelected = false
               this.manageHandles()
-              this.rectService.updateRect(this.Rect, this.GONG__StackPath).subscribe()
+              this.rectService.updateRect(this.Rect, this.GONG__StackPath).subscribe(
+                _ => {
+                  this.refreshService.emitRefreshRequestEvent(0)
+                }
+              )
             }
           }
 
@@ -170,7 +184,11 @@ export class RectComponent implements OnInit, OnDestroy, DoCheck, OnChanges {
               ) {
                 this.Rect.IsSelected = true
                 this.manageHandles()
-                this.rectService.updateRect(this.Rect, this.GONG__StackPath).subscribe()
+                this.rectService.updateRect(this.Rect, this.GONG__StackPath).subscribe(
+                  _ => {
+                    this.refreshService.emitRefreshRequestEvent(0)
+                  }
+                )
               }
               break
             case SweepDirection.RIGHT_TO_LEFT:
@@ -184,7 +202,11 @@ export class RectComponent implements OnInit, OnDestroy, DoCheck, OnChanges {
               ) {
                 this.Rect.IsSelected = true
                 this.manageHandles()
-                this.rectService.updateRect(this.Rect, this.GONG__StackPath).subscribe()
+                this.rectService.updateRect(this.Rect, this.GONG__StackPath).subscribe(
+                  _ => {
+                    this.refreshService.emitRefreshRequestEvent(0)
+                  }
+                )
               }
               break
           }
@@ -335,7 +357,11 @@ export class RectComponent implements OnInit, OnDestroy, DoCheck, OnChanges {
       this.activeAnchor = null;
       this.Rect!.IsSelected = false
       this.manageHandles()
-      this.rectService.updateRect(this.Rect, this.GONG__StackPath).subscribe()
+      this.rectService.updateRect(this.Rect, this.GONG__StackPath).subscribe(
+        _ => {
+          this.refreshService.emitRefreshRequestEvent(0)
+        }
+      )
     }
   }
 
