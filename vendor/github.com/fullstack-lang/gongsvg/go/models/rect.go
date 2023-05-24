@@ -40,6 +40,6 @@ func (rect *Rect) OnAfterUpdate(stage *StageStruct, _, frontRect *Rect) {
 	log.Println("Rect, OnAfterUpdate", rect.Name)
 
 	if rect.Impl != nil {
-		rect.Impl.RectUpdated(rect)
+		rect.Impl.RectUpdated(frontRect)
 	}
 }
