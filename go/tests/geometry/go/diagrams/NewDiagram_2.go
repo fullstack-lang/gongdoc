@@ -123,8 +123,10 @@ func NewDiagram_2Injection(stage *models.StageStruct) {
 
 	// Declarations of staged instances of GongStructShape
 	__GongStructShape__000000_NewDiagram_2_Line := (&models.GongStructShape{Name: `NewDiagram_2-Line`}).Stage(stage)
+	__GongStructShape__000001_NewDiagram_2_Point := (&models.GongStructShape{Name: `NewDiagram_2-Point`}).Stage(stage)
 
 	// Declarations of staged instances of Link
+	__Link__000000_End := (&models.Link{Name: `End`}).Stage(stage)
 
 	// Declarations of staged instances of Node
 
@@ -134,6 +136,7 @@ func NewDiagram_2Injection(stage *models.StageStruct) {
 
 	// Declarations of staged instances of Position
 	__Position__000000_Pos_NewDiagram_2_Line := (&models.Position{Name: `Pos-NewDiagram_2-Line`}).Stage(stage)
+	__Position__000001_Pos_NewDiagram_2_Point := (&models.Position{Name: `Pos-NewDiagram_2-Point`}).Stage(stage)
 
 	// Declarations of staged instances of Tree
 
@@ -142,6 +145,7 @@ func NewDiagram_2Injection(stage *models.StageStruct) {
 	// Declarations of staged instances of Umlsc
 
 	// Declarations of staged instances of Vertice
+	__Vertice__000000_Verticle_in_class_diagram_NewDiagram_2_in_middle_between_NewDiagram_2_Line_and_NewDiagram_2_Point := (&models.Vertice{Name: `Verticle in class diagram NewDiagram_2 in middle between NewDiagram_2-Line and NewDiagram_2-Point`}).Stage(stage)
 
 	// Setup of values
 
@@ -162,14 +166,67 @@ func NewDiagram_2Injection(stage *models.StageStruct) {
 	__GongStructShape__000000_NewDiagram_2_Line.Heigth = 63.000000
 	__GongStructShape__000000_NewDiagram_2_Line.IsSelected = false
 
+	// GongStructShape values setup
+	__GongStructShape__000001_NewDiagram_2_Point.Name = `NewDiagram_2-Point`
+
+	// comment added to overcome the problem with the comment map association
+
+	//gong:ident [ref_models.Point]
+	__GongStructShape__000001_NewDiagram_2_Point.Identifier = `ref_models.Point`
+	__GongStructShape__000001_NewDiagram_2_Point.ShowNbInstances = false
+	__GongStructShape__000001_NewDiagram_2_Point.NbInstances = 0
+	__GongStructShape__000001_NewDiagram_2_Point.Width = 240.000000
+	__GongStructShape__000001_NewDiagram_2_Point.Heigth = 63.000000
+	__GongStructShape__000001_NewDiagram_2_Point.IsSelected = false
+
+	// Link values setup
+	__Link__000000_End.Name = `End`
+
+	// comment added to overcome the problem with the comment map association
+
+	//gong:ident [ref_models.Line.End]
+	__Link__000000_End.Identifier = `ref_models.Line.End`
+
+	// comment added to overcome the problem with the comment map association
+
+	//gong:ident [ref_models.Point]
+	__Link__000000_End.Fieldtypename = `ref_models.Point`
+	__Link__000000_End.FieldOffsetX = -50.000000
+	__Link__000000_End.FieldOffsetY = -16.000000
+	__Link__000000_End.TargetMultiplicity = models.ZERO_ONE
+	__Link__000000_End.TargetMultiplicityOffsetX = -50.000000
+	__Link__000000_End.TargetMultiplicityOffsetY = 16.000000
+	__Link__000000_End.SourceMultiplicity = models.MANY
+	__Link__000000_End.SourceMultiplicityOffsetX = 16.000000
+	__Link__000000_End.SourceMultiplicityOffsetY = -12.000000
+	__Link__000000_End.StartOrientation = models.ORIENTATION_HORIZONTAL
+	__Link__000000_End.StartRatio = 0.500000
+	__Link__000000_End.EndOrientation = models.ORIENTATION_HORIZONTAL
+	__Link__000000_End.EndRatio = 0.500000
+	__Link__000000_End.CornerOffsetRatio = 1.710278
+
 	// Position values setup
-	__Position__000000_Pos_NewDiagram_2_Line.X = 209.000000
-	__Position__000000_Pos_NewDiagram_2_Line.Y = 206.000000
+	__Position__000000_Pos_NewDiagram_2_Line.X = 166.000000
+	__Position__000000_Pos_NewDiagram_2_Line.Y = 212.000000
 	__Position__000000_Pos_NewDiagram_2_Line.Name = `Pos-NewDiagram_2-Line`
+
+	// Position values setup
+	__Position__000001_Pos_NewDiagram_2_Point.X = 727.000000
+	__Position__000001_Pos_NewDiagram_2_Point.Y = 214.000000
+	__Position__000001_Pos_NewDiagram_2_Point.Name = `Pos-NewDiagram_2-Point`
+
+	// Vertice values setup
+	__Vertice__000000_Verticle_in_class_diagram_NewDiagram_2_in_middle_between_NewDiagram_2_Line_and_NewDiagram_2_Point.X = 515.500000
+	__Vertice__000000_Verticle_in_class_diagram_NewDiagram_2_in_middle_between_NewDiagram_2_Line_and_NewDiagram_2_Point.Y = 161.000000
+	__Vertice__000000_Verticle_in_class_diagram_NewDiagram_2_in_middle_between_NewDiagram_2_Line_and_NewDiagram_2_Point.Name = `Verticle in class diagram NewDiagram_2 in middle between NewDiagram_2-Line and NewDiagram_2-Point`
 
 	// Setup of pointers
 	__Classdiagram__000000_NewDiagram_2.GongStructShapes = append(__Classdiagram__000000_NewDiagram_2.GongStructShapes, __GongStructShape__000000_NewDiagram_2_Line)
+	__Classdiagram__000000_NewDiagram_2.GongStructShapes = append(__Classdiagram__000000_NewDiagram_2.GongStructShapes, __GongStructShape__000001_NewDiagram_2_Point)
 	__GongStructShape__000000_NewDiagram_2_Line.Position = __Position__000000_Pos_NewDiagram_2_Line
+	__GongStructShape__000000_NewDiagram_2_Line.Links = append(__GongStructShape__000000_NewDiagram_2_Line.Links, __Link__000000_End)
+	__GongStructShape__000001_NewDiagram_2_Point.Position = __Position__000001_Pos_NewDiagram_2_Point
+	__Link__000000_End.Middlevertice = __Vertice__000000_Verticle_in_class_diagram_NewDiagram_2_in_middle_between_NewDiagram_2_Line_and_NewDiagram_2_Point
 }
 
 
