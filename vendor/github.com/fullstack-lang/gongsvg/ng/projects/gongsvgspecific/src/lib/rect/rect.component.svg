@@ -58,6 +58,14 @@
         </ng-container>
 
         <ng-container *ngFor='let text of Rect.RectAnchoredTexts!; let i = index'>
+                <ng-container *ngIf="text.RectAnchorType == RectAnchorType.RECT_ANCHOR_TOP_LEFT" 
+                        [ngTemplateOutlet]="anchoredText" 
+                        [ngTemplateOutletContext]="{ 
+                                text: text, 
+                                anchorX: Rect.X + text.X_Offset, 
+                                anchorY: Rect.Y + text.Y_Offset }
+                        ">
+                </ng-container>
                 <ng-container *ngIf="text.RectAnchorType == RectAnchorType.RECT_ANCHOR_TOP" 
                         [ngTemplateOutlet]="anchoredText" 
                         [ngTemplateOutletContext]="{ 
@@ -66,11 +74,11 @@
                                 anchorY: Rect.Y + text.Y_Offset }
                         ">
                 </ng-container>
-                <ng-container *ngIf="text.RectAnchorType == RectAnchorType.RECT_ANCHOR_TOP_LEFT" 
+                <ng-container *ngIf="text.RectAnchorType == RectAnchorType.RECT_ANCHOR_TOP_RIGHT" 
                         [ngTemplateOutlet]="anchoredText" 
                         [ngTemplateOutletContext]="{ 
                                 text: text, 
-                                anchorX: Rect.X + text.X_Offset, 
+                                anchorX: Rect.X + Rect.Width + text.X_Offset, 
                                 anchorY: Rect.Y + text.Y_Offset }
                         ">
                 </ng-container>
@@ -154,7 +162,8 @@
                 >
                 <tspan *ngFor='let line of lines; let j = index' 
                         [attr.x]="anchorX"
-                        [attr.dy]="j > 0 ? '1em' : '0'">{{line}}</tspan>  
+                        [attr.dy]="j > 0 ? '1em' : '0'"
+                        [attr.text-anchor]="text.TextAnchorType">{{line}}</tspan>  
                 </text>
         </ng-container>
 </ng-template>

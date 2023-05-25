@@ -64,6 +64,9 @@ export class RectComponent implements OnInit, OnDestroy, DoCheck, OnChanges {
         (shapeMouseEvent: ShapeMouseEvent) => {
 
           if (this.anchorDragging || this.rectDragging || this.Rect.IsSelected) {
+
+            console.log("rect: mouseMouseDownEvent, ", this.Rect!.Name)
+
             this.distanceMoved = 0
             this.RectAtMouseDown = structuredClone(this.Rect)
             this.PointAtMouseDown = structuredClone(shapeMouseEvent.Point)
@@ -95,7 +98,7 @@ export class RectComponent implements OnInit, OnDestroy, DoCheck, OnChanges {
             return // we don't want the move move to be interpreted by the rect
           }
 
-          if (this.rectDragging) {
+          if (this.rectDragging || this.Rect.IsSelected) {
             const deltaX = shapeMouseEvent.Point.X - this.PointAtMouseDown!.X
             const deltaY = shapeMouseEvent.Point.Y - this.PointAtMouseDown!.Y
             this.distanceMoved = Math.sqrt(deltaX * deltaX + deltaY * deltaY)
