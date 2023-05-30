@@ -82,13 +82,12 @@ func (classdiagramImpl *ClassdiagramImpl) OnAfterUpdate(
 				}
 				defer file.Close()
 
-				classdiagramImpl.classdiagram.Name = frontNode.Name
-
 				// checkout in order to get the latest version of the diagram before
 				// modifying it updated by the front
 				gongdocStage.Checkout()
 				gongdocStage.Unstage()
 				gongdoc_models.StageBranch(gongdocStage, classdiagramImpl.classdiagram)
+				classdiagramImpl.classdiagram.Name = frontNode.Name
 
 				gongdoc_models.SetupMapDocLinkRenaming(classdiagramImpl.nodeCb.diagramPackage.ModelPkg.Stage_, gongdocStage)
 
@@ -98,6 +97,10 @@ func (classdiagramImpl *ClassdiagramImpl) OnAfterUpdate(
 				// restore the original stage
 				gongdocStage.Unstage()
 				gongdocStage.Checkout()
+
+				classdiagramImpl.classdiagram.Name = frontNode.Name
+				gongdocStage.Commit()
+
 			}
 		}
 

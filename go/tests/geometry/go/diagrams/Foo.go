@@ -11,11 +11,11 @@ import (
 
 // generated in order to avoid error in the package import
 // if there are no elements in the stage to marshall
-var ___dummy__Stage_NewDiagram_2 models.StageStruct
-var ___dummy__Time_NewDiagram_2 time.Time
+var ___dummy__Stage_Foo models.StageStruct
+var ___dummy__Time_Foo time.Time
 
 // Injection point for meta package dummy declaration
-var ___dummy__ref_models_NewDiagram_2 ref_models.StageStruct
+var ___dummy__ref_models_Foo ref_models.StageStruct
 
 // currently, DocLink renaming is not enabled in gopls
 // the following map are devised to overcome this limitation
@@ -24,7 +24,7 @@ var ___dummy__ref_models_NewDiagram_2 ref_models.StageStruct
 // [Corresponding Issue](https://github.com/golang/go/issues/57559)
 //
 // When parsed, those maps will help with the renaming process
-var map_DocLink_Identifier_NewDiagram_2 map[string]any = map[string]any{
+var map_DocLink_Identifier_Foo map[string]any = map[string]any{
 	// injection point for docLink to identifiers
 
 	"ref_models.AFTER": ref_models.AFTER,
@@ -102,16 +102,16 @@ var map_DocLink_Identifier_NewDiagram_2 map[string]any = map[string]any{
 // but it has to properly reference the Injection gateway in the main package
 // func init() {
 // 	_ = __Dummy_time_variable
-// 	InjectionGateway["NewDiagram_2"] = NewDiagram_2Injection
+// 	InjectionGateway["Foo"] = FooInjection
 // }
 
-// NewDiagram_2Injection will stage objects of database "NewDiagram_2"
-func NewDiagram_2Injection(stage *models.StageStruct) {
+// FooInjection will stage objects of database "Foo"
+func FooInjection(stage *models.StageStruct) {
 
 	// Declaration of instances to stage
 
 	// Declarations of staged instances of Classdiagram
-	__Classdiagram__000000_NewDiagram_2 := (&models.Classdiagram{Name: `NewDiagram_2`}).Stage(stage)
+	__Classdiagram__000000_Foo := (&models.Classdiagram{Name: `Foo`}).Stage(stage)
 
 	// Declarations of staged instances of DiagramPackage
 
@@ -150,8 +150,8 @@ func NewDiagram_2Injection(stage *models.StageStruct) {
 	// Setup of values
 
 	// Classdiagram values setup
-	__Classdiagram__000000_NewDiagram_2.Name = `NewDiagram_2`
-	__Classdiagram__000000_NewDiagram_2.IsInDrawMode = true
+	__Classdiagram__000000_Foo.Name = `Foo`
+	__Classdiagram__000000_Foo.IsInDrawMode = true
 
 	// GongStructShape values setup
 	__GongStructShape__000000_NewDiagram_2_Line.Name = `NewDiagram_2-Line`
@@ -160,8 +160,8 @@ func NewDiagram_2Injection(stage *models.StageStruct) {
 
 	//gong:ident [ref_models.Line]
 	__GongStructShape__000000_NewDiagram_2_Line.Identifier = `ref_models.Line`
-	__GongStructShape__000000_NewDiagram_2_Line.ShowNbInstances = false
-	__GongStructShape__000000_NewDiagram_2_Line.NbInstances = 0
+	__GongStructShape__000000_NewDiagram_2_Line.ShowNbInstances = true
+	__GongStructShape__000000_NewDiagram_2_Line.NbInstances = 54
 	__GongStructShape__000000_NewDiagram_2_Line.Width = 240.000000
 	__GongStructShape__000000_NewDiagram_2_Line.Heigth = 114.999992
 	__GongStructShape__000000_NewDiagram_2_Line.IsSelected = false
@@ -173,10 +173,10 @@ func NewDiagram_2Injection(stage *models.StageStruct) {
 
 	//gong:ident [ref_models.Point]
 	__GongStructShape__000001_NewDiagram_2_Point.Identifier = `ref_models.Point`
-	__GongStructShape__000001_NewDiagram_2_Point.ShowNbInstances = false
-	__GongStructShape__000001_NewDiagram_2_Point.NbInstances = 0
+	__GongStructShape__000001_NewDiagram_2_Point.ShowNbInstances = true
+	__GongStructShape__000001_NewDiagram_2_Point.NbInstances = 33
 	__GongStructShape__000001_NewDiagram_2_Point.Width = 240.000000
-	__GongStructShape__000001_NewDiagram_2_Point.Heigth = 63.000000
+	__GongStructShape__000001_NewDiagram_2_Point.Heigth = 114.999992
 	__GongStructShape__000001_NewDiagram_2_Point.IsSelected = false
 
 	// Link values setup
@@ -199,11 +199,11 @@ func NewDiagram_2Injection(stage *models.StageStruct) {
 	__Link__000000_End.SourceMultiplicity = models.MANY
 	__Link__000000_End.SourceMultiplicityOffsetX = -25.000000
 	__Link__000000_End.SourceMultiplicityOffsetY = 28.000000
-	__Link__000000_End.StartOrientation = models.ORIENTATION_VERTICAL
-	__Link__000000_End.StartRatio = 0.385619
+	__Link__000000_End.StartOrientation = models.ORIENTATION_HORIZONTAL
+	__Link__000000_End.StartRatio = 0.547860
 	__Link__000000_End.EndOrientation = models.ORIENTATION_HORIZONTAL
-	__Link__000000_End.EndRatio = 0.000000
-	__Link__000000_End.CornerOffsetRatio = 1.000165
+	__Link__000000_End.EndRatio = 0.460903
+	__Link__000000_End.CornerOffsetRatio = 1.598584
 
 	// Position values setup
 	__Position__000000_Pos_NewDiagram_2_Line.X = 203.000000
@@ -211,8 +211,8 @@ func NewDiagram_2Injection(stage *models.StageStruct) {
 	__Position__000000_Pos_NewDiagram_2_Line.Name = `Pos-NewDiagram_2-Line`
 
 	// Position values setup
-	__Position__000001_Pos_NewDiagram_2_Point.X = 525.000000
-	__Position__000001_Pos_NewDiagram_2_Point.Y = 341.000000
+	__Position__000001_Pos_NewDiagram_2_Point.X = 693.000000
+	__Position__000001_Pos_NewDiagram_2_Point.Y = 212.000008
 	__Position__000001_Pos_NewDiagram_2_Point.Name = `Pos-NewDiagram_2-Point`
 
 	// Vertice values setup
@@ -221,8 +221,8 @@ func NewDiagram_2Injection(stage *models.StageStruct) {
 	__Vertice__000000_Verticle_in_class_diagram_NewDiagram_2_in_middle_between_NewDiagram_2_Line_and_NewDiagram_2_Point.Name = `Verticle in class diagram NewDiagram_2 in middle between NewDiagram_2-Line and NewDiagram_2-Point`
 
 	// Setup of pointers
-	__Classdiagram__000000_NewDiagram_2.GongStructShapes = append(__Classdiagram__000000_NewDiagram_2.GongStructShapes, __GongStructShape__000000_NewDiagram_2_Line)
-	__Classdiagram__000000_NewDiagram_2.GongStructShapes = append(__Classdiagram__000000_NewDiagram_2.GongStructShapes, __GongStructShape__000001_NewDiagram_2_Point)
+	__Classdiagram__000000_Foo.GongStructShapes = append(__Classdiagram__000000_Foo.GongStructShapes, __GongStructShape__000000_NewDiagram_2_Line)
+	__Classdiagram__000000_Foo.GongStructShapes = append(__Classdiagram__000000_Foo.GongStructShapes, __GongStructShape__000001_NewDiagram_2_Point)
 	__GongStructShape__000000_NewDiagram_2_Line.Position = __Position__000000_Pos_NewDiagram_2_Line
 	__GongStructShape__000000_NewDiagram_2_Line.Links = append(__GongStructShape__000000_NewDiagram_2_Line.Links, __Link__000000_End)
 	__GongStructShape__000001_NewDiagram_2_Point.Position = __Position__000001_Pos_NewDiagram_2_Point
