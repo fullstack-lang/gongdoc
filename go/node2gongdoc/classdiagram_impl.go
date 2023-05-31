@@ -2,6 +2,7 @@ package node2gongdoc
 
 import (
 	"fmt"
+	"io"
 	"log"
 	"os"
 	"path/filepath"
@@ -188,6 +189,16 @@ func (classdiagramImpl *ClassdiagramImpl) OnAfterUpdate(
 		gongdocStage.Checkout()
 		gongdocStage.Unstage()
 		gongdoc_models.StageBranch(gongdocStage, classdiagramImpl.classdiagram)
+		classdiagramImpl.classdiagram.Name = newName
+
+		gongdoc_models.SetupMapDocLinkRenaming(classdiagramImpl.nodeCb.diagramPackage.ModelPkg.Stage_, gongdocStage)
+		gongdocStage.Marshall(file, "github.com/fullstack-lang/gongdoc/go/models", "diagrams")
+
+		// marshall the new diagram to the new file
+		gongdocStage.Checkout()
+		gongdocStage.Unstage()
+		gongdoc_models.StageBranch(gongdocStage, classdiagramImpl.classdiagram)
+		classdiagramImpl.classdiagram.Name = newName
 
 		gongdocStage.Checkout()
 		stagedNode.DuplicationInProgress = false
@@ -229,4 +240,21 @@ func remove[T gongdoc_models.Gongstruct](slice []*T, t *T) []*T {
 		}
 	}
 	return append(slice[:rank], slice[rank+1:]...)
+}
+
+func copyFile(sourceFile, destinationFile string) error {
+	source, err := os.Open(sourceFile)
+	if err != nil {
+		return err
+	}
+	defer source.Close()
+
+	destination, err := os.Create(destinationFile)
+	if err != nil {
+		return err
+	}
+	defer destination.Close()
+
+	_, err = io.Copy(destination, source)
+	return err
 }
