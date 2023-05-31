@@ -1945,7 +1945,7 @@ func GetFields[Type Gongstruct]() (res []string) {
 	case Link:
 		res = []string{"Name", "Identifier", "Fieldtypename", "FieldOffsetX", "FieldOffsetY", "TargetMultiplicity", "TargetMultiplicityOffsetX", "TargetMultiplicityOffsetY", "SourceMultiplicity", "SourceMultiplicityOffsetX", "SourceMultiplicityOffsetY", "Middlevertice", "StartOrientation", "StartRatio", "EndOrientation", "EndRatio", "CornerOffsetRatio"}
 	case Node:
-		res = []string{"Name", "IsExpanded", "HasCheckboxButton", "IsChecked", "IsCheckboxDisabled", "HasAddChildButton", "HasEditButton", "IsInEditMode", "HasDrawButton", "HasDrawOffButton", "IsInDrawMode", "IsSaved", "HasDeleteButton", "Children"}
+		res = []string{"Name", "IsExpanded", "HasCheckboxButton", "IsChecked", "IsCheckboxDisabled", "HasAddChildButton", "HasEditButton", "IsInEditMode", "HasDuplicateButton", "HasDrawButton", "HasDrawOffButton", "IsInDrawMode", "IsSaved", "HasDeleteButton", "Children"}
 	case NoteShape:
 		res = []string{"Name", "Identifier", "Body", "BodyHTML", "X", "Y", "Width", "Heigth", "Matched", "NoteShapeLinks"}
 	case NoteShapeLink:
@@ -2176,6 +2176,8 @@ func GetFieldStringValue[Type Gongstruct](instance Type, fieldName string) (res 
 			res = fmt.Sprintf("%t", any(instance).(Node).HasEditButton)
 		case "IsInEditMode":
 			res = fmt.Sprintf("%t", any(instance).(Node).IsInEditMode)
+		case "HasDuplicateButton":
+			res = fmt.Sprintf("%t", any(instance).(Node).HasDuplicateButton)
 		case "HasDrawButton":
 			res = fmt.Sprintf("%t", any(instance).(Node).HasDrawButton)
 		case "HasDrawOffButton":

@@ -21,6 +21,7 @@ export class NodeDB {
 	HasAddChildButton: boolean = false
 	HasEditButton: boolean = false
 	IsInEditMode: boolean = false
+	HasDuplicateButton: boolean = false
 	HasDrawButton: boolean = false
 	HasDrawOffButton: boolean = false
 	IsInDrawMode: boolean = false

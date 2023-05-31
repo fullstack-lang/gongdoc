@@ -26,6 +26,8 @@ type Node struct {
 	HasEditButton bool
 	IsInEditMode  bool
 
+	HasDuplicateButton bool
+
 	// to edit the diagram
 	HasDrawButton    bool
 	HasDrawOffButton bool

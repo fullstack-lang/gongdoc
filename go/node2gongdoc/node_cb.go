@@ -90,6 +90,7 @@ func (nodeCb *NodeCB) OnAfterCreate(
 	node.IsInEditMode = false
 	node.IsInDrawMode = false
 	node.HasEditButton = false
+	node.HasDuplicateButton = false
 
 	nodeCb.diagramPackageNode.Children = append(nodeCb.diagramPackageNode.Children, node)
 
@@ -163,6 +164,7 @@ func (nodeCb *NodeCB) FillUpDiagramNodeTree(diagramPackage *gongdoc_models.Diagr
 		node.HasCheckboxButton = true
 		node.HasDeleteButton = true
 		node.HasEditButton = true
+		node.HasDuplicateButton = true
 		diagramPackageNode.Children = append(diagramPackageNode.Children, node)
 
 		// set up the back pointer from the shape to the node
@@ -235,6 +237,7 @@ func (nodesCb *NodeCB) computeDiagramNodesConfigurations(stage *gongdoc_models.S
 		// reset the state of the classdiagram node
 		classdiagramNode.HasEditButton = false
 		classdiagramNode.HasDeleteButton = false
+		classdiagramNode.HasDuplicateButton = false
 		classdiagramNode.HasDrawButton = false
 		classdiagramNode.HasDrawOffButton = false
 
@@ -251,5 +254,6 @@ func (nodesCb *NodeCB) computeDiagramNodesConfigurations(stage *gongdoc_models.S
 		classdiagramNode.HasEditButton = editable
 		classdiagramNode.HasDeleteButton = editable
 		classdiagramNode.HasDrawButton = editable
+		classdiagramNode.HasDuplicateButton = editable
 	}
 }

@@ -334,6 +334,10 @@ export class TreeComponent implements OnInit {
     )
   }
 
+  duplicateNode(node: FlatNode) {
+
+  }
+
   setInDrawMode(node: FlatNode) {
     node.gongNode.IsInDrawMode = true
     this.gongdocNodeService.updateNode(node.gongNode, this.GONG__StackPath).subscribe(

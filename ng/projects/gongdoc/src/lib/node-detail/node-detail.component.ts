@@ -43,6 +43,7 @@ export class NodeDetailComponent implements OnInit {
 	HasAddChildButtonFormControl: UntypedFormControl = new UntypedFormControl(false);
 	HasEditButtonFormControl: UntypedFormControl = new UntypedFormControl(false);
 	IsInEditModeFormControl: UntypedFormControl = new UntypedFormControl(false);
+	HasDuplicateButtonFormControl: UntypedFormControl = new UntypedFormControl(false);
 	HasDrawButtonFormControl: UntypedFormControl = new UntypedFormControl(false);
 	HasDrawOffButtonFormControl: UntypedFormControl = new UntypedFormControl(false);
 	IsInDrawModeFormControl: UntypedFormControl = new UntypedFormControl(false);
@@ -171,6 +172,7 @@ export class NodeDetailComponent implements OnInit {
 				this.HasAddChildButtonFormControl.setValue(this.node.HasAddChildButton)
 				this.HasEditButtonFormControl.setValue(this.node.HasEditButton)
 				this.IsInEditModeFormControl.setValue(this.node.IsInEditMode)
+				this.HasDuplicateButtonFormControl.setValue(this.node.HasDuplicateButton)
 				this.HasDrawButtonFormControl.setValue(this.node.HasDrawButton)
 				this.HasDrawOffButtonFormControl.setValue(this.node.HasDrawOffButton)
 				this.IsInDrawModeFormControl.setValue(this.node.IsInDrawMode)
@@ -195,6 +197,7 @@ export class NodeDetailComponent implements OnInit {
 		this.node.HasAddChildButton = this.HasAddChildButtonFormControl.value
 		this.node.HasEditButton = this.HasEditButtonFormControl.value
 		this.node.IsInEditMode = this.IsInEditModeFormControl.value
+		this.node.HasDuplicateButton = this.HasDuplicateButtonFormControl.value
 		this.node.HasDrawButton = this.HasDrawButtonFormControl.value
 		this.node.HasDrawOffButton = this.HasDrawOffButtonFormControl.value
 		this.node.IsInDrawMode = this.IsInDrawModeFormControl.value
