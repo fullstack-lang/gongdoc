@@ -31,6 +31,10 @@
                 <mat-icon [ngStyle]="{'color':'rgba(0,0,0,.50)'}">save
                 </mat-icon>
             </button>
+            <button mat-icon-button *ngIf="node.gongNode.HasDrawButton" (click)="setInDrawMode(node)">
+                <mat-icon [ngStyle]="{'color':'rgba(0,0,0,.50)'}">
+                    draw</mat-icon>
+            </button>
             <button *ngIf="node.gongNode.HasEditButton" mat-icon-button (click)="setInEditMode(node)">
                 <mat-icon [ngStyle]="{'color':'rgba(0,0,0,.50)'}">edit
                 </mat-icon>
@@ -42,10 +46,6 @@
             <button mat-icon-button *ngIf="node.gongNode.HasDeleteButton" (click)="deleteNode(node)">
                 <mat-icon [ngStyle]="{'color':'rgba(0,0,0,.50)'}">
                     delete</mat-icon>
-            </button>
-            <button mat-icon-button *ngIf="node.gongNode.HasDrawButton" (click)="setInDrawMode(node)">
-                <mat-icon [ngStyle]="{'color':'rgba(0,0,0,.50)'}">
-                    draw</mat-icon>
             </button>
         </mat-tree-node>
         <!-- This is the tree node template for expandable nodes -->
