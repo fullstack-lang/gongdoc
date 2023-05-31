@@ -82,6 +82,13 @@
             </td>
         </ng-container>
         <!-- -->
+        <ng-container matColumnDef="DuplicationInProgress">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header> DuplicationInProgress </th>
+            <td mat-cell *matCellDef="let Node">
+                <mat-checkbox [checked]="Node.DuplicationInProgress" disabled=true></mat-checkbox>
+            </td>
+        </ng-container>
+        <!-- -->
         <ng-container matColumnDef="HasDrawButton">
             <th mat-header-cell *matHeaderCellDef mat-sort-header> HasDrawButton </th>
             <td mat-cell *matCellDef="let Node">

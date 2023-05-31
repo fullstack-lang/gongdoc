@@ -335,7 +335,12 @@ export class TreeComponent implements OnInit {
   }
 
   duplicateNode(node: FlatNode) {
-
+    node.gongNode.DuplicationInProgress = true
+    this.gongdocNodeService.updateNode(node.gongNode, this.GONG__StackPath).subscribe(
+      gongdocNode => {
+        console.log("duplicateNode, updated node")
+      }
+    )
   }
 
   setInDrawMode(node: FlatNode) {

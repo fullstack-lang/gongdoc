@@ -27,6 +27,9 @@ type Node struct {
 	IsInEditMode  bool
 
 	HasDuplicateButton bool
+	// DuplicationInProgress manages the duplication state
+	// set up true by the front, back to false by the back
+	DuplicationInProgress bool
 
 	// to edit the diagram
 	HasDrawButton    bool

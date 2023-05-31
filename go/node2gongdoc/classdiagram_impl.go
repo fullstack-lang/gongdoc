@@ -1,6 +1,7 @@
 package node2gongdoc
 
 import (
+	"fmt"
 	"log"
 	"os"
 	"path/filepath"
@@ -72,37 +73,37 @@ func (classdiagramImpl *ClassdiagramImpl) OnAfterUpdate(
 		oldClassdiagramFilePath := filepath.Join(classdiagramImpl.nodeCb.diagramPackage.Path, "../diagrams", classdiagramImpl.classdiagram.Name) + ".go"
 		newClassdiagramFilePath := filepath.Join(classdiagramImpl.nodeCb.diagramPackage.Path, "../diagrams", frontNode.Name) + ".go"
 
-		if _, err := os.Stat(oldClassdiagramFilePath); err == nil {
-			if err := os.Remove(oldClassdiagramFilePath); err != nil {
-				log.Println("Error while renaming file " + oldClassdiagramFilePath + " : " + err.Error())
-			} else {
-				file, err := os.Create(newClassdiagramFilePath)
-				if err != nil {
-					log.Fatal("Cannot open diagram file" + err.Error())
-				}
-				defer file.Close()
-
-				// checkout in order to get the latest version of the diagram before
-				// modifying it updated by the front
-				gongdocStage.Checkout()
-				gongdocStage.Unstage()
-				gongdoc_models.StageBranch(gongdocStage, classdiagramImpl.classdiagram)
-				classdiagramImpl.classdiagram.Name = frontNode.Name
-
-				gongdoc_models.SetupMapDocLinkRenaming(classdiagramImpl.nodeCb.diagramPackage.ModelPkg.Stage_, gongdocStage)
-
-				// save the diagram
-				gongdocStage.Marshall(file, "github.com/fullstack-lang/gongdoc/go/models", "diagrams")
-
-				// restore the original stage
-				gongdocStage.Unstage()
-				gongdocStage.Checkout()
-
-				classdiagramImpl.classdiagram.Name = frontNode.Name
-				gongdocStage.Commit()
-
-			}
+		if _, err := os.Stat(oldClassdiagramFilePath); err != nil {
+			return
 		}
+		if err := os.Remove(oldClassdiagramFilePath); err != nil {
+			log.Fatal("Error while renaming file " + oldClassdiagramFilePath + " : " + err.Error())
+		}
+
+		file, err := os.Create(newClassdiagramFilePath)
+		if err != nil {
+			log.Fatal("Cannot create diagram file" + err.Error())
+		}
+		defer file.Close()
+
+		// checkout in order to get the latest version of the diagram before
+		// modifying it updated by the front
+		gongdocStage.Checkout()
+		gongdocStage.Unstage()
+		gongdoc_models.StageBranch(gongdocStage, classdiagramImpl.classdiagram)
+		classdiagramImpl.classdiagram.Name = frontNode.Name
+
+		gongdoc_models.SetupMapDocLinkRenaming(classdiagramImpl.nodeCb.diagramPackage.ModelPkg.Stage_, gongdocStage)
+
+		// save the diagram
+		gongdocStage.Marshall(file, "github.com/fullstack-lang/gongdoc/go/models", "diagrams")
+
+		// restore the original stage
+		gongdocStage.Unstage()
+		gongdocStage.Checkout()
+
+		classdiagramImpl.classdiagram.Name = frontNode.Name
+		gongdocStage.Commit()
 
 		stagedNode.Name = frontNode.Name
 		stagedNode.IsInEditMode = false
@@ -153,7 +154,44 @@ func (classdiagramImpl *ClassdiagramImpl) OnAfterUpdate(
 		gongdocStage.Checkout()
 		stagedNode.IsSaved = false
 		gongdocStage.Commit()
+	}
+	if !stagedNode.DuplicationInProgress && frontNode.DuplicationInProgress {
 
+		var hasNameCollision bool
+		initialName := frontNode.Name
+		newName := initialName
+		index := 0
+		// loop until the name of the new diagram is not in collision with an existing
+		// diagram name
+		for index == 0 || hasNameCollision {
+			index++
+			hasNameCollision = false
+			for classdiagram := range *gongdoc_models.GetGongstructInstancesSet[gongdoc_models.Classdiagram](gongdocStage) {
+				if classdiagram.Name == newName {
+					hasNameCollision = true
+				}
+			}
+			if hasNameCollision {
+				newName = initialName + fmt.Sprintf("_%d", index)
+			}
+		}
+
+		log.Println("New name is", newName)
+		newClassdiagramFilePath := filepath.Join(classdiagramImpl.nodeCb.diagramPackage.Path, "../diagrams", newName) + ".go"
+
+		file, err := os.Create(newClassdiagramFilePath)
+		if err != nil {
+			log.Fatal("Cannot open diagram file" + err.Error())
+		}
+		defer file.Close()
+
+		gongdocStage.Checkout()
+		gongdocStage.Unstage()
+		gongdoc_models.StageBranch(gongdocStage, classdiagramImpl.classdiagram)
+
+		gongdocStage.Checkout()
+		stagedNode.DuplicationInProgress = false
+		gongdocStage.Commit()
 	}
 }
 
