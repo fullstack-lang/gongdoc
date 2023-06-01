@@ -1,0 +1,463 @@
+<div xmlns="http://www.w3.org/1999/xhtml" _ngcontent-gcd-c142="" class="parent">
+  <div _ngcontent-gcd-c142="" class="background"></div>
+  <div _ngcontent-gcd-c142="" class="child">
+    <lib-layer _ngcontent-gcd-c142="" _nghost-gcd-c141=""
+      ng-reflect--g-o-n-g__-stack-path="github.com/fullstack-lang/gong"
+      ng-reflect--layer="[object Object]">
+      <div _ngcontent-gcd-c141="" class="parent">
+        <div _ngcontent-gcd-c141="" class="child">
+          <lib-rect _ngcontent-gcd-c141="" _nghost-gcd-c131=""
+            ng-reflect--g-o-n-g__-stack-path="github.com/fullstack-lang/gong"
+            ng-reflect--rect="[object Object]">
+            <svg xmlns="http://www.w3.org/2000/svg" _ngcontent-gcd-c131="">
+              <style _ngcontent-gcd-c131="">
+                svg { position: absolute; width: 3000px; height: 8000px; pointer-events: none;
+                } .overlay { pointer-events: auto;
+                } .anchored-text { pointer-events: none;
+                } .anchored-rect { pointer-events: none;
+                } </style>
+              <g _ngcontent-gcd-c131="">
+                <rect _ngcontent-gcd-c131="" class="overlay" x="549" y="122" width="632"
+                  height="122" rx="5" fill="bisque" fill-opacity="50" stroke="lightcoral"
+                  stroke-width="3" stroke-dasharray="" transform=""><!--bindings={
+  "ng-reflect-ng-for-of": null
+}-->
+                </rect><!--bindings={
+  "ng-reflect-ng-if": "false"
+}-->
+                <rect _ngcontent-gcd-c131="" class="anchored-rect" x="549" y="122" width="632"
+                  height="50" rx="0" fill="lightblue" fill-opacity="100" stroke="" stroke-width="0" /><!--ng-container--><!--bindings={
+  "ng-reflect-ng-if": "true"
+}--><!--bindings={
+  "ng-reflect-ng-if": "false"
+}--><!--ng-container--><!--bindings={
+  "ng-reflect-ng-for-of": "[object Object]"
+}--><!--bindings={
+  "ng-reflect-ng-if": "false"
+}-->
+                <text _ngcontent-gcd-c131="" class="anchored-text" x="865" y="142" fill="black"
+                  fill-opacity="100" stroke="black" stroke-width="1" stroke-dasharray=""
+                  transform="" text-anchor="middle" font-weight="normal">
+                  <tspan _ngcontent-gcd-c131="" x="865" dy="0" text-anchor="middle">This is an
+                    example of a note that</tspan>
+                  <tspan _ngcontent-gcd-c131="" x="865" dy="1em" text-anchor="middle">could be
+                    displayed on a diagram.</tspan>
+                  <tspan _ngcontent-gcd-c131="" x="865" dy="1em" text-anchor="middle"></tspan>
+                  <tspan _ngcontent-gcd-c131="" x="865" dy="1em" text-anchor="middle">It could
+                    explain one aspect of the model</tspan>
+                  <tspan _ngcontent-gcd-c131="" x="865" dy="1em" text-anchor="middle">for instance,
+                    describing relations between structs</tspan>
+                  <tspan _ngcontent-gcd-c131="" x="865" dy="1em" text-anchor="middle"></tspan>
+                  <tspan _ngcontent-gcd-c131="" x="865" dy="1em" text-anchor="middle">The text of a
+                    UML note refers a comment with the GONGNOTE keyword which is</tspan>
+                  <tspan _ngcontent-gcd-c131="" x="865" dy="1em" text-anchor="middle">a special case
+                    of go Note convention. See example</tspan>
+                  <tspan _ngcontent-gcd-c131="" x="865" dy="1em" text-anchor="middle">for details in
+                    the go code of the models.</tspan>
+                  <tspan _ngcontent-gcd-c131="" x="865" dy="1em" text-anchor="middle"></tspan><!--bindings={
+  "ng-reflect-ng-for-of": "This is an example of a note t"
+}-->
+                </text><!--ng-container--><!--bindings={
+  "ng-reflect-ng-if": "This is an example of a note t"
+}--><!--ng-container--><!--bindings={
+  "ng-reflect-ng-if": "true"
+}--><!--bindings={
+  "ng-reflect-ng-if": "false"
+}--><!--bindings={
+  "ng-reflect-ng-if": "false"
+}--><!--ng-container--><!--bindings={
+  "ng-reflect-ng-for-of": "[object Object]"
+}--><!--bindings={
+  "ng-reflect-ng-if": "false"
+}--><!--bindings={
+  "ng-reflect-ng-if": "false"
+}--><!--bindings={
+  "ng-reflect-ng-if": "false"
+}--><!--bindings={
+  "ng-reflect-ng-if": "false"
+}-->
+              </g>
+            </svg><!--container--><!--container-->
+          </lib-rect>
+        </div><!--bindings={
+  "ng-reflect-ng-for-of": "[object Object]"
+}--><!--bindings={
+  "ng-reflect-ng-for-of": null
+}--><!--bindings={
+  "ng-reflect-ng-for-of": null
+}--><!--bindings={
+  "ng-reflect-ng-for-of": null
+}--><!--bindings={
+  "ng-reflect-ng-for-of": null
+}--><!--bindings={
+  "ng-reflect-ng-for-of": null
+}--><!--bindings={
+  "ng-reflect-ng-for-of": null
+}--><!--bindings={
+  "ng-reflect-ng-for-of": null
+}--><!--bindings={
+  "ng-reflect-ng-for-of": null
+}--><!--bindings={
+  "ng-reflect-ng-for-of": null
+}-->
+      </div>
+    </lib-layer>
+  </div>
+  <div _ngcontent-gcd-c142="" class="child">
+    <lib-layer _ngcontent-gcd-c142="" _nghost-gcd-c141=""
+      ng-reflect--g-o-n-g__-stack-path="github.com/fullstack-lang/gong"
+      ng-reflect--layer="[object Object]">
+      <div _ngcontent-gcd-c141="" class="parent">
+        <div _ngcontent-gcd-c141="" class="child">
+          <lib-rect _ngcontent-gcd-c141="" _nghost-gcd-c131=""
+            ng-reflect--g-o-n-g__-stack-path="github.com/fullstack-lang/gong"
+            ng-reflect--rect="[object Object]">
+            <svg xmlns="http://www.w3.org/2000/svg" _ngcontent-gcd-c131="">
+              <style _ngcontent-gcd-c131="">
+                svg { position: absolute; width: 3000px; height: 8000px; pointer-events: none;
+                } .overlay { pointer-events: auto;
+                } .anchored-text { pointer-events: none;
+                } .anchored-rect { pointer-events: none;
+                } </style>
+              <g _ngcontent-gcd-c131="">
+                <rect _ngcontent-gcd-c131="" class="overlay" x="87.99996899999996" y="109"
+                  width="208" height="214" rx="3" fill="lightcyan" fill-opacity="100"
+                  stroke="darkcyan" stroke-width="2" stroke-dasharray="" transform=""><!--bindings={
+  "ng-reflect-ng-for-of": null
+}-->
+                </rect>
+                <rect _ngcontent-gcd-c131="" class="anchored-rect" x="191.99996899999996" y="149"
+                  width="100" height="30" rx="3" fill="lightgrey" fill-opacity="40" stroke="bisque"
+                  stroke-width="1" /><!--ng-container--><!--bindings={
+  "ng-reflect-ng-if": "true"
+}--><!--bindings={
+  "ng-reflect-ng-if": "false"
+}--><!--bindings={
+  "ng-reflect-ng-if": "false"
+}--><!--ng-container--><!--bindings={
+  "ng-reflect-ng-for-of": "[object Object]"
+}-->
+                <text _ngcontent-gcd-c131="" class="anchored-text" x="87.99996899999996" y="109"
+                  fill="" fill-opacity="0" stroke="black" stroke-dasharray="" transform=""
+                  text-anchor="" font-weight="">
+                  <tspan _ngcontent-gcd-c131="" x="87.99996899999996" dy="0" text-anchor="">Top Left</tspan><!--bindings={
+  "ng-reflect-ng-for-of": "Top Left"
+}-->
+                </text><!--ng-container--><!--bindings={
+  "ng-reflect-ng-if": "Top Left"
+}--><!--ng-container--><!--bindings={
+  "ng-reflect-ng-if": "true"
+}--><!--bindings={
+  "ng-reflect-ng-if": "false"
+}--><!--bindings={
+  "ng-reflect-ng-if": "false"
+}--><!--bindings={
+  "ng-reflect-ng-if": "false"
+}--><!--ng-container--><!--bindings={
+  "ng-reflect-ng-if": "false"
+}--><!--bindings={
+  "ng-reflect-ng-if": "false"
+}--><!--bindings={
+  "ng-reflect-ng-if": "false"
+}-->
+                <text _ngcontent-gcd-c131="" class="anchored-text" x="191.99996899999996" y="343"
+                  fill="" fill-opacity="100" stroke="blue" stroke-width="2" stroke-dasharray=""
+                  transform="" text-anchor="start" font-weight="">
+                  <tspan _ngcontent-gcd-c131="" x="191.99996899999996" dy="0" text-anchor="start">Top
+                    anchored bottom middle</tspan><!--bindings={
+  "ng-reflect-ng-for-of": "Top anchored bottom middle"
+}-->
+                </text><!--ng-container--><!--bindings={
+  "ng-reflect-ng-if": "Top anchored bottom middle"
+}--><!--ng-container--><!--bindings={
+  "ng-reflect-ng-if": "true"
+}--><!--ng-container--><!--bindings={
+  "ng-reflect-ng-if": "false"
+}-->
+                <text _ngcontent-gcd-c131="" class="anchored-text" x="191.99996899999996" y="129"
+                  fill="" fill-opacity="100" stroke="black" stroke-width="1" stroke-dasharray=""
+                  transform="" text-anchor="start" font-weight="bold">
+                  <tspan _ngcontent-gcd-c131="" x="191.99996899999996" dy="0" text-anchor="start">Top
+                    anchored</tspan>
+                  <tspan _ngcontent-gcd-c131="" x="191.99996899999996" dy="1em" text-anchor="start">top
+                    middle</tspan>
+                  <tspan _ngcontent-gcd-c131="" x="191.99996899999996" dy="1em" text-anchor="start">line
+                    3</tspan><!--bindings={
+  "ng-reflect-ng-for-of": "Top anchored,top middle,line 3"
+}-->
+                </text><!--ng-container--><!--bindings={
+  "ng-reflect-ng-if": "Top anchored,top middle,line 3"
+}--><!--ng-container--><!--bindings={
+  "ng-reflect-ng-if": "true"
+}--><!--bindings={
+  "ng-reflect-ng-if": "false"
+}--><!--bindings={
+  "ng-reflect-ng-if": "false"
+}--><!--ng-container--><!--bindings={
+  "ng-reflect-ng-for-of": "[object Object],[object Object"
+}--><!--bindings={
+  "ng-reflect-ng-if": "false"
+}--><!--bindings={
+  "ng-reflect-ng-if": "false"
+}--><!--bindings={
+  "ng-reflect-ng-if": "false"
+}--><!--bindings={
+  "ng-reflect-ng-if": "false"
+}-->
+              </g>
+            </svg><!--container--><!--container-->
+          </lib-rect>
+        </div><!--bindings={
+  "ng-reflect-ng-for-of": "[object Object]"
+}--><!--bindings={
+  "ng-reflect-ng-for-of": null
+}--><!--bindings={
+  "ng-reflect-ng-for-of": null
+}--><!--bindings={
+  "ng-reflect-ng-for-of": null
+}--><!--bindings={
+  "ng-reflect-ng-for-of": null
+}--><!--bindings={
+  "ng-reflect-ng-for-of": null
+}--><!--bindings={
+  "ng-reflect-ng-for-of": null
+}--><!--bindings={
+  "ng-reflect-ng-for-of": null
+}--><!--bindings={
+  "ng-reflect-ng-for-of": null
+}--><!--bindings={
+  "ng-reflect-ng-for-of": null
+}-->
+      </div>
+    </lib-layer>
+  </div>
+  <div _ngcontent-gcd-c142="" class="child">
+    <lib-layer _ngcontent-gcd-c142="" _nghost-gcd-c141=""
+      ng-reflect--g-o-n-g__-stack-path="github.com/fullstack-lang/gong"
+      ng-reflect--layer="[object Object]">
+      <div _ngcontent-gcd-c141="" class="parent">
+        <div _ngcontent-gcd-c141="" class="child">
+          <lib-rect _ngcontent-gcd-c141="" _nghost-gcd-c131=""
+            ng-reflect--g-o-n-g__-stack-path="github.com/fullstack-lang/gong"
+            ng-reflect--rect="[object Object]">
+            <svg xmlns="http://www.w3.org/2000/svg" _ngcontent-gcd-c131="">
+              <style _ngcontent-gcd-c131="">
+                svg { position: absolute; width: 3000px; height: 8000px; pointer-events: none;
+                } .overlay { pointer-events: auto;
+                } .anchored-text { pointer-events: none;
+                } .anchored-rect { pointer-events: none;
+                } </style>
+              <g _ngcontent-gcd-c131="">
+                <rect _ngcontent-gcd-c131="" class="overlay" x="486" y="387" width="253"
+                  height="132" rx="3" fill="lavender" fill-opacity="50" stroke="turquoise"
+                  stroke-width="1" stroke-dasharray="" transform=""><!--bindings={
+  "ng-reflect-ng-for-of": null
+}-->
+                </rect><!--bindings={
+  "ng-reflect-ng-for-of": null
+}--><!--bindings={
+  "ng-reflect-ng-for-of": null
+}--><!--bindings={
+  "ng-reflect-ng-if": "false"
+}--><!--bindings={
+  "ng-reflect-ng-if": "false"
+}--><!--bindings={
+  "ng-reflect-ng-if": "false"
+}--><!--bindings={
+  "ng-reflect-ng-if": "false"
+}-->
+              </g>
+            </svg><!--container--><!--container-->
+          </lib-rect>
+        </div><!--bindings={
+  "ng-reflect-ng-for-of": "[object Object]"
+}--><!--bindings={
+  "ng-reflect-ng-for-of": null
+}--><!--bindings={
+  "ng-reflect-ng-for-of": null
+}--><!--bindings={
+  "ng-reflect-ng-for-of": null
+}--><!--bindings={
+  "ng-reflect-ng-for-of": null
+}--><!--bindings={
+  "ng-reflect-ng-for-of": null
+}--><!--bindings={
+  "ng-reflect-ng-for-of": null
+}--><!--bindings={
+  "ng-reflect-ng-for-of": null
+}--><!--bindings={
+  "ng-reflect-ng-for-of": null
+}--><!--bindings={
+  "ng-reflect-ng-for-of": null
+}-->
+      </div>
+    </lib-layer>
+  </div>
+  <div _ngcontent-gcd-c142="" class="child">
+    <lib-layer _ngcontent-gcd-c142="" _nghost-gcd-c141=""
+      ng-reflect--g-o-n-g__-stack-path="github.com/fullstack-lang/gong"
+      ng-reflect--layer="[object Object]">
+      <div _ngcontent-gcd-c141="" class="parent"><!--bindings={
+  "ng-reflect-ng-for-of": null
+}--><!--bindings={
+  "ng-reflect-ng-for-of": null
+}--><!--bindings={
+  "ng-reflect-ng-for-of": null
+}--><!--bindings={
+  "ng-reflect-ng-for-of": null
+}-->
+        <div _ngcontent-gcd-c141="" class="child">
+          <lib-link _ngcontent-gcd-c141="" _nghost-gcd-c139=""
+            ng-reflect--g-o-n-g__-stack-path="github.com/fullstack-lang/gong"
+            ng-reflect--link="[object Object]"><!--bindings={
+  "ng-reflect-ng-if": "false"
+}--><!--bindings={
+  "ng-reflect-ng-if": "false"
+}--><!--bindings={
+  "ng-reflect-ng-if": "false"
+}-->
+            <svg xmlns="http://www.w3.org/2000/svg" _ngcontent-gcd-c139="" class="svg">
+              <g _ngcontent-gcd-c139="">
+                <line _ngcontent-gcd-c139="" class="overlay" x1="295.99996899999996" y1="307"
+                  x2="440.9999849999999" y2="307" fill="" fill-opacity="0" stroke="green"
+                  stroke-width="4" stroke-dasharray="" segment-orientation="horizontal"
+                  segment-number="0" />
+                <line _ngcontent-gcd-c139="" class="overlay" x1="448.9999849999999" y1="299"
+                  x2="448.9999849999999" y2="181.29551" fill="" fill-opacity="0" stroke="green"
+                  stroke-width="4" stroke-dasharray="" segment-orientation="vertical"
+                  segment-number="1" />
+                <line _ngcontent-gcd-c139="" class="overlay" x1="456.9999849999999" y1="173.29551"
+                  x2="549" y2="173.29551" fill="" fill-opacity="0" stroke="green" stroke-width="4"
+                  stroke-dasharray="" segment-orientation="horizontal" segment-number="2" /><!--bindings={
+  "ng-reflect-ng-for-of": "[object Object],[object Object"
+}-->
+                <path _ngcontent-gcd-c139="" class="overlay"
+                  d="M 440.9999849999999 307 A 8 8 0 0 0 448.9999849999999 299" fill=""
+                  fill-opacity="0" stroke="green" stroke-width="4" stroke-dasharray="" /><!--bindings={
+  "ng-reflect-ng-if": "[object Object]"
+}--><!--bindings={
+  "ng-reflect-ng-if": "false"
+}--><!--bindings={
+  "ng-reflect-ng-if": "false"
+}-->
+                <text _ngcontent-gcd-c139="" class="movable-text" x="301.999938"
+                  y="234.01251200000002" fill="cyan" fill-opacity="100" stroke="cyan"
+                  stroke-width="1" stroke-dasharray="" transform="">
+                  <tspan _ngcontent-gcd-c139="" x="301.999938" dy="0">Start Anchored 1</tspan>
+                  <tspan _ngcontent-gcd-c139="" x="301.999938" dy="1em">Second line</tspan>
+                  <tspan _ngcontent-gcd-c139="" x="301.999938" dy="1em">Third Line</tspan><!--bindings={
+  "ng-reflect-ng-for-of": "Start Anchored 1,Second line,T"
+}-->
+                </text><!--ng-container--><!--bindings={
+  "ng-reflect-ng-if": "Start Anchored 1,Second line,T"
+}--><!--ng-container--><!--bindings={
+  "ng-reflect-ng-for-of": "[object Object]"
+}--><!--ng-container--><!--bindings={
+  "ng-reflect-ng-if": "true"
+}--><!--ng-container-->
+                <path _ngcontent-gcd-c139="" class="overlay"
+                  d="M 448.9999849999999 181.29551 A 8 8 0 0 1 456.9999849999999 173.29551" fill=""
+                  fill-opacity="0" stroke="green" stroke-width="4" stroke-dasharray="" /><!--bindings={
+  "ng-reflect-ng-if": "[object Object]"
+}--><!--bindings={
+  "ng-reflect-ng-if": "false"
+}--><!--bindings={
+  "ng-reflect-ng-if": "false"
+}--><!--bindings={
+  "ng-reflect-ng-if": "false"
+}--><!--ng-container--><!--bindings={}-->
+                <path _ngcontent-gcd-c139="" class="overlay"
+                  d="M 550.414213562 174.709723562 L 539 163.29551 M 550.414213562 171.88129643800002 L 539 183.29551"
+                  fill="" fill-opacity="0" stroke="green" stroke-width="4" stroke-dasharray="" /><!--ng-container--><!--bindings={
+  "ng-reflect-ng-if": "true"
+}-->
+                <text _ngcontent-gcd-c139="" class="movable-text" x="484" y="136.29551" fill="black"
+                  fill-opacity="100" stroke="black" stroke-width="1" stroke-dasharray=""
+                  transform="">
+                  <tspan _ngcontent-gcd-c139="" x="484" dy="0">Liine 1</tspan>
+                  <tspan _ngcontent-gcd-c139="" x="484" dy="1em">Line 2</tspan><!--bindings={
+  "ng-reflect-ng-for-of": "Liine 1,Line 2"
+}-->
+                </text><!--ng-container--><!--bindings={
+  "ng-reflect-ng-if": "Liine 1,Line 2"
+}--><!--ng-container--><!--bindings={
+  "ng-reflect-ng-for-of": "[object Object]"
+}--><!--ng-container--><!--bindings={
+  "ng-reflect-ng-if": "true"
+}--><!--bindings={
+  "ng-reflect-ng-if": "false"
+}--><!--ng-container--><!--bindings={
+  "ng-reflect-ng-for-of": "[object Object],[object Object"
+}-->
+              </g>
+            </svg><!--bindings={
+  "ng-reflect-ng-if": "[object Object],[object Object"
+}-->
+          </lib-link>
+        </div><!--bindings={
+  "ng-reflect-ng-for-of": "[object Object]"
+}--><!--bindings={
+  "ng-reflect-ng-for-of": null
+}--><!--bindings={
+  "ng-reflect-ng-for-of": null
+}--><!--bindings={
+  "ng-reflect-ng-for-of": null
+}--><!--bindings={
+  "ng-reflect-ng-for-of": null
+}--><!--bindings={
+  "ng-reflect-ng-for-of": null
+}-->
+      </div>
+    </lib-layer>
+  </div>
+  <div _ngcontent-gcd-c142="" class="child">
+    <lib-layer _ngcontent-gcd-c142="" _nghost-gcd-c141=""
+      ng-reflect--g-o-n-g__-stack-path="github.com/fullstack-lang/gong"
+      ng-reflect--layer="[object Object]">
+      <div _ngcontent-gcd-c141="" class="parent"><!--bindings={
+  "ng-reflect-ng-for-of": null
+}--><!--bindings={
+  "ng-reflect-ng-for-of": null
+}--><!--bindings={
+  "ng-reflect-ng-for-of": null
+}--><!--bindings={
+  "ng-reflect-ng-for-of": null
+}--><!--bindings={
+  "ng-reflect-ng-for-of": null
+}--><!--bindings={
+  "ng-reflect-ng-for-of": null
+}--><!--bindings={
+  "ng-reflect-ng-for-of": null
+}--><!--bindings={
+  "ng-reflect-ng-for-of": null
+}-->
+        <div _ngcontent-gcd-c141="" class="child">
+          <lib-rect-link-link _ngcontent-gcd-c141="" _nghost-gcd-c140=""
+            ng-reflect--rect-link-link="[object Object]">
+            <svg xmlns="http://www.w3.org/2000/svg" _ngcontent-gcd-c140="">
+              <g _ngcontent-gcd-c140="">
+                <line _ngcontent-gcd-c140="" class="rect-link-link" x1="564.5448330188573" y1="387"
+                  x2="448.9999849999999" y2="227.97730339999998" fill="" fill-opacity="0"
+                  stroke="lightgreen" stroke-width="4" stroke-dasharray="" transform="" />
+              </g>
+            </svg><!--bindings={
+  "ng-reflect-ng-if": "true"
+}-->
+          </lib-rect-link-link>
+        </div><!--bindings={
+  "ng-reflect-ng-for-of": "[object Object]"
+}--><!--bindings={
+  "ng-reflect-ng-for-of": null
+}-->
+      </div>
+    </lib-layer>
+  </div><!--bindings={
+  "ng-reflect-ng-for-of": "[object Object],[object Object"
+}-->
+  <div _ngcontent-gcd-c142=""><!--bindings={
+  "ng-reflect-ng-if": "false"
+}--><!--bindings={
+  "ng-reflect-ng-if": "false"
+}-->
+  </div>
+</div>

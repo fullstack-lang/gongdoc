@@ -1,0 +1,80 @@
+package main
+
+import (
+	"bytes"
+	"encoding/xml"
+	"fmt"
+	"io/ioutil"
+	"os"
+	"strings"
+)
+
+func main() {
+	// Check command line arguments
+	if len(os.Args) != 3 {
+		fmt.Println("Usage: program <sourcefile> <destfile>")
+		os.Exit(1)
+	}
+
+	sourcefile := os.Args[1]
+	destfile := os.Args[2]
+
+	// Read the source file
+	data, err := ioutil.ReadFile(sourcefile)
+	if err != nil {
+		fmt.Println("Error reading file:", err)
+		os.Exit(1)
+	}
+
+	content := string(data)
+
+	// Find SVG tags and extract the content
+	start := strings.Index(content, "<svg")
+	end := strings.Index(content, "</svg>")
+	if start == -1 || end == -1 {
+		fmt.Println("SVG tags not found in the file.")
+		os.Exit(1)
+	}
+	svgContent := content[start : end+len("</svg>")]
+
+	// Create a decoder
+	decoder := xml.NewDecoder(strings.NewReader(svgContent))
+
+	// Create a buffer for the output
+	var out bytes.Buffer
+	encoder := xml.NewEncoder(&out)
+
+	// Loop over the tokens
+	for {
+		t, err := decoder.Token()
+		if err != nil {
+			break
+		}
+
+		// Check the token type and write non-comment tokens
+		switch t := t.(type) {
+		case xml.Comment:
+			// Skip comments
+			continue
+		default:
+			if err := encoder.EncodeToken(t); err != nil {
+				fmt.Println("Error encoding token:", err)
+				os.Exit(1)
+			}
+		}
+	}
+
+	// End the encoder element
+	if err := encoder.Flush(); err != nil {
+		fmt.Println("Error ending document:", err)
+		os.Exit(1)
+	}
+
+	// Write the output to the destination file
+	if err := ioutil.WriteFile(destfile, out.Bytes(), 0644); err != nil {
+		fmt.Println("Error writing output:", err)
+		os.Exit(1)
+	}
+
+	fmt.Println("Finished processing", sourcefile)
+}

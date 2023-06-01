@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns="http://www.w3.org/2000/svg" _ngcontent-gcd-c131="">
+              <style xmlns="http://www.w3.org/2000/svg" _ngcontent-gcd-c131="">
+                svg { position: absolute; width: 3000px; height: 8000px; pointer-events: none;
+                } .overlay { pointer-events: auto;
+                } .anchored-text { pointer-events: none;
+                } .anchored-rect { pointer-events: none;
+                } </style>
+              <g xmlns="http://www.w3.org/2000/svg" _ngcontent-gcd-c131="">
+                <rect xmlns="http://www.w3.org/2000/svg" _ngcontent-gcd-c131="" class="overlay" x="549" y="122" width="632" height="122" rx="5" fill="bisque" fill-opacity="50" stroke="lightcoral" stroke-width="3" stroke-dasharray="" transform="">
+                </rect>
+                <rect xmlns="http://www.w3.org/2000/svg" _ngcontent-gcd-c131="" class="anchored-rect" x="549" y="122" width="632" height="50" rx="0" fill="lightblue" fill-opacity="100" stroke="" stroke-width="0"></rect>
+                <text xmlns="http://www.w3.org/2000/svg" _ngcontent-gcd-c131="" class="anchored-text" x="865" y="142" fill="black" fill-opacity="100" stroke="black" stroke-width="1" stroke-dasharray="" transform="" text-anchor="middle" font-weight="normal">
+                  <tspan xmlns="http://www.w3.org/2000/svg" _ngcontent-gcd-c131="" x="865" dy="0" text-anchor="middle">This is an
+                    example of a note that</tspan>
+                  <tspan xmlns="http://www.w3.org/2000/svg" _ngcontent-gcd-c131="" x="865" dy="1em" text-anchor="middle">could be
+                    displayed on a diagram.</tspan>
+                  <tspan xmlns="http://www.w3.org/2000/svg" _ngcontent-gcd-c131="" x="865" dy="1em" text-anchor="middle"></tspan>
+                  <tspan xmlns="http://www.w3.org/2000/svg" _ngcontent-gcd-c131="" x="865" dy="1em" text-anchor="middle">It could
+                    explain one aspect of the model</tspan>
+                  <tspan xmlns="http://www.w3.org/2000/svg" _ngcontent-gcd-c131="" x="865" dy="1em" text-anchor="middle">for instance,
+                    describing relations between structs</tspan>
+                  <tspan xmlns="http://www.w3.org/2000/svg" _ngcontent-gcd-c131="" x="865" dy="1em" text-anchor="middle"></tspan>
+                  <tspan xmlns="http://www.w3.org/2000/svg" _ngcontent-gcd-c131="" x="865" dy="1em" text-anchor="middle">The text of a
+                    UML note refers a comment with the GONGNOTE keyword which is</tspan>
+                  <tspan xmlns="http://www.w3.org/2000/svg" _ngcontent-gcd-c131="" x="865" dy="1em" text-anchor="middle">a special case
+                    of go Note convention. See example</tspan>
+                  <tspan xmlns="http://www.w3.org/2000/svg" _ngcontent-gcd-c131="" x="865" dy="1em" text-anchor="middle">for details in
+                    the go code of the models.</tspan>
+                  <tspan xmlns="http://www.w3.org/2000/svg" _ngcontent-gcd-c131="" x="865" dy="1em" text-anchor="middle"></tspan>
+                </text>
+              </g>
+            </svg>
