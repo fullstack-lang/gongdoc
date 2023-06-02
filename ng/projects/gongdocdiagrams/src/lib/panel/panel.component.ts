@@ -47,7 +47,7 @@ export class PanelComponent implements OnInit {
   refresh() {
     // refresh the view
     this.diagramPackage.IsReloaded = true
-    this.diagramPackageService.updateDiagramPackage(this.diagramPackage, "").subscribe(
+    this.diagramPackageService.updateDiagramPackage(this.diagramPackage, this.GONG__StackPath).subscribe(
       diagramPackage => {
         console.log('diagram package refreshed')
       })

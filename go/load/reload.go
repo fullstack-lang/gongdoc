@@ -18,6 +18,7 @@ func Reload(gongdocStage *gongdoc_models.StageStruct, diagramPackage *gongdoc_mo
 
 	diagramPackage.Stage_.Checkout()
 	diagramPackage.Stage_.Reset()
+	diagramPackage.SelectedClassdiagram = nil
 	diagramPackage.Stage_.Commit()
 
 	diagramPackage.Classdiagrams = nil

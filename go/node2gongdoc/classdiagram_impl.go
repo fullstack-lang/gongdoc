@@ -203,6 +203,18 @@ func (classdiagramImpl *ClassdiagramImpl) OnAfterUpdate(
 		gongdocStage.Checkout()
 		stagedNode.DuplicationInProgress = false
 		gongdocStage.Commit()
+
+		// reload
+		fakeFrontDiagramPackage := (&gongdoc_models.DiagramPackage{})
+		fakeFrontDiagramPackage.IsReloaded = classdiagramImpl.nodeCb.diagramPackage.IsReloaded
+		classdiagramImpl.nodeCb.diagramPackage.IsReloaded = !classdiagramImpl.nodeCb.diagramPackage.IsReloaded
+
+		gongdocStage.OnAfterDiagramPackageUpdateCallback.OnAfterUpdate(gongdocStage,
+			classdiagramImpl.nodeCb.diagramPackage,
+			fakeFrontDiagramPackage,
+		)
+
+		// load.Reload(gongdocStage, classdiagramImpl.nodeCb.diagramPackage)
 	}
 }
 
