@@ -31,10 +31,8 @@ import { DragDropModule } from '@angular/cdk/drag-drop';
 import { AngularSplitModule } from 'angular-split';
 
 import { GongdocdiagramsComponent } from './gongdocdiagrams.component';
-import { ClassDiagramComponent } from './class-diagram/class-diagram.component';
 import { PkgeltDocsComponent } from './pkgelt-docs/pkgelt-docs.component';
 
-import { ClassdiagramDetailComponent } from './classdiagram-detail/classdiagram-detail.component';
 import { TreeComponent } from './tree/tree.component';
 import { PanelComponent } from './panel/panel.component'
 
@@ -43,9 +41,7 @@ import { GongsvgspecificModule } from 'gongsvgspecific'
 @NgModule({
   declarations: [
     GongdocdiagramsComponent,
-    ClassDiagramComponent,
     PkgeltDocsComponent,
-    ClassdiagramDetailComponent,
     TreeComponent,
     PanelComponent
   ],
@@ -86,8 +82,6 @@ import { GongsvgspecificModule } from 'gongsvgspecific'
   ],
   exports: [
     PkgeltDocsComponent,
-    ClassDiagramComponent,
-    ClassdiagramDetailComponent,
     PanelComponent
   ],
 })

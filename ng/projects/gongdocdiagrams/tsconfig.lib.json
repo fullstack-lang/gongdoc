@@ -5,11 +5,7 @@
     "declaration": true,
     "inlineSources": true,
     "types": [],
-    "paths": {
-      "jointjs": [
-        "./node_modules/jointjs",
-      ],
-    },
+    "paths": {},
     "lib": [
       "dom",
       "es2018"
