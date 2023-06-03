@@ -63,6 +63,9 @@ func Load(
 	gongdocStage.OnInitCommitFromFrontCallback = beforeCommitImplementation
 	gongdocStage.OnInitCommitFromBackCallback = beforeCommitImplementation
 
+	diagramPackageCallbackSingloton := new(DiagramPackageCallbacksSingloton)
+	gongdocStage.OnAfterDiagramPackageUpdateCallback = diagramPackageCallbackSingloton
+
 	modelPackage, _ := gong_models.LoadEmbedded(gongStage, goModelsDir)
 
 	modelPackage.Name = stackName
