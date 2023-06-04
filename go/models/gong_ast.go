@@ -303,6 +303,7 @@ func ParseAstFileFromAst(stage *StageStruct, inFile *ast.File, fset *token.FileS
 var __gong__map_Indentifiers_gongstructName = make(map[string]string)
 
 // insertion point for identifiers maps
+var __gong__map_Button = make(map[string]*Button)
 var __gong__map_Classdiagram = make(map[string]*Classdiagram)
 var __gong__map_DiagramPackage = make(map[string]*DiagramPackage)
 var __gong__map_Field = make(map[string]*Field)
@@ -490,6 +491,10 @@ func UnmarshallGongstructStaging(stage *StageStruct, cmap *ast.CommentMap, assig
 									// this is the place where an instance is created
 									switch gongstructName {
 									// insertion point for identifiers
+									case "Button":
+										instanceButton := (&Button{Name: instanceName}).Stage(stage)
+										instance = any(instanceButton)
+										__gong__map_Button[identifier] = instanceButton
 									case "Classdiagram":
 										instanceClassdiagram := (&Classdiagram{Name: instanceName}).Stage(stage)
 										instance = any(instanceClassdiagram)
@@ -586,6 +591,10 @@ func UnmarshallGongstructStaging(stage *StageStruct, cmap *ast.CommentMap, assig
 						}
 						switch gongstructName {
 						// insertion point for basic lit assignments
+						case "Button":
+							switch fieldName {
+							// insertion point for date assign code
+							}
 						case "Classdiagram":
 							switch fieldName {
 							// insertion point for date assign code
@@ -671,6 +680,10 @@ func UnmarshallGongstructStaging(stage *StageStruct, cmap *ast.CommentMap, assig
 					}
 					switch gongstructName {
 					// insertion point for slice of pointers assignments
+					case "Button":
+						switch fieldName {
+						// insertion point for slice of pointers assign code
+						}
 					case "Classdiagram":
 						switch fieldName {
 						// insertion point for slice of pointers assign code
@@ -756,6 +769,12 @@ func UnmarshallGongstructStaging(stage *StageStruct, cmap *ast.CommentMap, assig
 							target := __gong__map_Node[targetIdentifier]
 							__gong__map_Node[identifier].Children =
 								append(__gong__map_Node[identifier].Children, target)
+						case "Buttons":
+							// remove first and last char
+							targetIdentifier := ident.Name
+							target := __gong__map_Button[targetIdentifier]
+							__gong__map_Node[identifier].Buttons =
+								append(__gong__map_Node[identifier].Buttons, target)
 						}
 					case "NoteShape":
 						switch fieldName {
@@ -852,6 +871,18 @@ func UnmarshallGongstructStaging(stage *StageStruct, cmap *ast.CommentMap, assig
 
 			switch gongstructName {
 			// insertion point for basic lit assignments
+			case "Button":
+				switch fieldName {
+				// insertion point for field dependant code
+				case "Name":
+					// remove first and last char
+					fielValue := basicLit.Value[1 : len(basicLit.Value)-1]
+					__gong__map_Button[identifier].Name = fielValue
+				case "Icon":
+					// remove first and last char
+					fielValue := basicLit.Value[1 : len(basicLit.Value)-1]
+					__gong__map_Button[identifier].Icon = fielValue
+				}
 			case "Classdiagram":
 				switch fieldName {
 				// insertion point for field dependant code
@@ -1222,6 +1253,17 @@ func UnmarshallGongstructStaging(stage *StageStruct, cmap *ast.CommentMap, assig
 			}
 			switch gongstructName {
 			// insertion point for bool & pointers assignments
+			case "Button":
+				switch fieldName {
+				// insertion point for field dependant code
+				case "Displayed":
+					// convert string to boolean
+					fielValue, err := strconv.ParseBool(ident.Name)
+					if err != nil {
+						log.Fatalln(err)
+					}
+					__gong__map_Button[identifier].Displayed = fielValue
+				}
 			case "Classdiagram":
 				switch fieldName {
 				// insertion point for field dependant code
@@ -1469,6 +1511,10 @@ func UnmarshallGongstructStaging(stage *StageStruct, cmap *ast.CommentMap, assig
 				_ = enumValue
 				switch gongstructName {
 				// insertion point for enums assignments
+				case "Button":
+					switch fieldName {
+					// insertion point for enum assign code
+					}
 				case "Classdiagram":
 					switch fieldName {
 					// insertion point for enum assign code

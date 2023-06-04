@@ -337,6 +337,25 @@ func (backRepoNode *BackRepoNodeStruct) CommitPhaseTwoInstance(backRepo *BackRep
 			}
 		}
 
+		// This loop encodes the slice of pointers node.Buttons into the back repo.
+		// Each back repo instance at the end of the association encode the ID of the association start
+		// into a dedicated field for coding the association. The back repo instance is then saved to the db
+		for idx, buttonAssocEnd := range node.Buttons {
+
+			// get the back repo instance at the association end
+			buttonAssocEnd_DB :=
+				backRepo.BackRepoButton.GetButtonDBFromButtonPtr(buttonAssocEnd)
+
+			// encode reverse pointer in the association end back repo instance
+			buttonAssocEnd_DB.Node_ButtonsDBID.Int64 = int64(nodeDB.ID)
+			buttonAssocEnd_DB.Node_ButtonsDBID.Valid = true
+			buttonAssocEnd_DB.Node_ButtonsDBID_Index.Int64 = int64(idx)
+			buttonAssocEnd_DB.Node_ButtonsDBID_Index.Valid = true
+			if q := backRepoNode.db.Save(buttonAssocEnd_DB); q.Error != nil {
+				return q.Error
+			}
+		}
+
 		query := backRepoNode.db.Save(&nodeDB)
 		if query.Error != nil {
 			return query.Error
@@ -469,6 +488,33 @@ func (backRepoNode *BackRepoNodeStruct) CheckoutPhaseTwoInstance(backRepo *BackR
 		nodeDB_j := backRepo.BackRepoNode.Map_NodeDBID_NodeDB[nodeDB_j_ID]
 
 		return nodeDB_i.Node_ChildrenDBID_Index.Int64 < nodeDB_j.Node_ChildrenDBID_Index.Int64
+	})
+
+	// This loop redeem node.Buttons in the stage from the encode in the back repo
+	// It parses all ButtonDB in the back repo and if the reverse pointer encoding matches the back repo ID
+	// it appends the stage instance
+	// 1. reset the slice
+	node.Buttons = node.Buttons[:0]
+	// 2. loop all instances in the type in the association end
+	for _, buttonDB_AssocEnd := range backRepo.BackRepoButton.Map_ButtonDBID_ButtonDB {
+		// 3. Does the ID encoding at the end and the ID at the start matches ?
+		if buttonDB_AssocEnd.Node_ButtonsDBID.Int64 == int64(nodeDB.ID) {
+			// 4. fetch the associated instance in the stage
+			button_AssocEnd := backRepo.BackRepoButton.Map_ButtonDBID_ButtonPtr[buttonDB_AssocEnd.ID]
+			// 5. append it the association slice
+			node.Buttons = append(node.Buttons, button_AssocEnd)
+		}
+	}
+
+	// sort the array according to the order
+	sort.Slice(node.Buttons, func(i, j int) bool {
+		buttonDB_i_ID := backRepo.BackRepoButton.Map_ButtonPtr_ButtonDBID[node.Buttons[i]]
+		buttonDB_j_ID := backRepo.BackRepoButton.Map_ButtonPtr_ButtonDBID[node.Buttons[j]]
+
+		buttonDB_i := backRepo.BackRepoButton.Map_ButtonDBID_ButtonDB[buttonDB_i_ID]
+		buttonDB_j := backRepo.BackRepoButton.Map_ButtonDBID_ButtonDB[buttonDB_j_ID]
+
+		return buttonDB_i.Node_ButtonsDBID_Index.Int64 < buttonDB_j.Node_ButtonsDBID_Index.Int64
 	})
 
 	return

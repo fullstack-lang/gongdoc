@@ -40,4 +40,6 @@ type Node struct {
 	HasDeleteButton bool
 
 	Children []*Node
+
+	Buttons []*Button
 }
