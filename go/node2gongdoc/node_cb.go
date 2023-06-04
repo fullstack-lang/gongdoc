@@ -285,6 +285,8 @@ func SetDrawButtonDisplay(
 		drawButton = (&gongdoc_models.Button{Name: string(BUTTON_draw)}).Stage(gongdocStage)
 		drawButton.Icon = "draw"
 		classdiagramNode.Buttons = append(classdiagramNode.Buttons, drawButton)
+
+		drawButton.Impl = new(ButtonImpl)
 	}
 
 	// set the display value
