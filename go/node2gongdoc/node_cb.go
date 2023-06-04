@@ -245,7 +245,7 @@ func (nodesCb *NodeCB) computeDiagramNodesConfigurations(stage *gongdoc_models.S
 		classdiagramNode.HasDeleteButton = false
 		classdiagramNode.HasDuplicateButton = false
 		classdiagramNode.HasDrawButton = false
-		SetDrawButtonDisplay(stage, classdiagramNode, false)
+		SetDrawButtonDisplay(nodesCb, stage, classdiagramNode, false)
 		classdiagramNode.HasDrawOffButton = false
 
 		classdiagramNode.IsCheckboxDisabled = inModificationMode
@@ -262,12 +262,13 @@ func (nodesCb *NodeCB) computeDiagramNodesConfigurations(stage *gongdoc_models.S
 		classdiagramNode.HasEditButton = editable
 		classdiagramNode.HasDeleteButton = editable
 		classdiagramNode.HasDrawButton = editable
-		SetDrawButtonDisplay(stage, classdiagramNode, editable)
+		SetDrawButtonDisplay(nodesCb, stage, classdiagramNode, editable)
 		classdiagramNode.HasDuplicateButton = editable
 	}
 }
 
 func SetDrawButtonDisplay(
+	nodeCB *NodeCB,
 	gongdocStage *gongdoc_models.StageStruct,
 	classdiagramNode *gongdoc_models.Node,
 	display bool) {
@@ -286,7 +287,7 @@ func SetDrawButtonDisplay(
 		drawButton.Icon = "draw"
 		classdiagramNode.Buttons = append(classdiagramNode.Buttons, drawButton)
 
-		drawButton.Impl = new(ButtonImpl)
+		drawButton.Impl = NewClassdiagramDrawButtonImpl(nodeCB)
 	}
 
 	// set the display value
