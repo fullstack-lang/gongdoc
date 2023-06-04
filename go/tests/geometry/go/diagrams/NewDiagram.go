@@ -356,8 +356,8 @@ are referenced in the go code
 	__Position__000001_Pos_NewDiagram_LineTypeString.Name = `Pos-NewDiagram-LineTypeString`
 
 	// Position values setup
-	__Position__000002_Pos_NewDiagram_Point.X = 475.000000
-	__Position__000002_Pos_NewDiagram_Point.Y = 157.000000
+	__Position__000002_Pos_NewDiagram_Point.X = 829.000000
+	__Position__000002_Pos_NewDiagram_Point.Y = 196.000000
 	__Position__000002_Pos_NewDiagram_Point.Name = `Pos-NewDiagram-Point`
 
 	// Vertice values setup
@@ -383,8 +383,8 @@ are referenced in the go code
 	__GongStructShape__000000_NewDiagram_Line.Links = append(__GongStructShape__000000_NewDiagram_Line.Links, __Link__000000_End)
 	__GongStructShape__000000_NewDiagram_Line.Links = append(__GongStructShape__000000_NewDiagram_Line.Links, __Link__000001_Start)
 	__GongStructShape__000001_NewDiagram_Point.Position = __Position__000002_Pos_NewDiagram_Point
-	__Link__000000_End.Middlevertice = __Vertice__000000_Verticle_in_class_diagram_NewDiagram_in_middle_between_NewDiagram_Line_and_NewDiagram_Point
-	__Link__000001_Start.Middlevertice = __Vertice__000001_Verticle_in_class_diagram_NewDiagram_in_middle_between_NewDiagram_Line_and_NewDiagram_Point
+	__Link__000000_End.Middlevertice = __Vertice__000001_Verticle_in_class_diagram_NewDiagram_in_middle_between_NewDiagram_Line_and_NewDiagram_Point
+	__Link__000001_Start.Middlevertice = __Vertice__000000_Verticle_in_class_diagram_NewDiagram_in_middle_between_NewDiagram_Line_and_NewDiagram_Point
 	__NoteShape__000000_ShortNodeOnModels.NoteShapeLinks = append(__NoteShape__000000_ShortNodeOnModels.NoteShapeLinks, __NoteShapeLink__000000_Line)
 	__NoteShape__000000_ShortNodeOnModels.NoteShapeLinks = append(__NoteShape__000000_ShortNodeOnModels.NoteShapeLinks, __NoteShapeLink__000001_Line_Start)
 	__NoteShape__000000_ShortNodeOnModels.NoteShapeLinks = append(__NoteShape__000000_ShortNodeOnModels.NoteShapeLinks, __NoteShapeLink__000003_Point)

@@ -18,7 +18,6 @@ import (
 
 	"github.com/fullstack-lang/gongdoc/go/doc2svg"
 	"github.com/fullstack-lang/gongdoc/go/load"
-	"github.com/fullstack-lang/gongdoc/go/node2gongdoc"
 
 	gong_fullstack "github.com/fullstack-lang/gong/go/fullstack"
 	gong_models "github.com/fullstack-lang/gong/go/models"
@@ -135,13 +134,6 @@ func main() {
 				}
 			}
 		}
-
-		gongStructShapeCallbackSingloton := new(node2gongdoc.GongStructShapeCallbacksSingloton)
-
-		// very strangely,
-		// gongdoc_models.GetDefaultStage().OnAfterClassshapeUpdateCallback = classshapeCallbackSingloton
-		// does not seem to be executed
-		gongdocStage.OnAfterGongStructShapeUpdateCallback = gongStructShapeCallbackSingloton
 
 		diagramPackageCallbackSingloton := new(load.DiagramPackageCallbacksSingloton)
 		gongdocStage.OnAfterDiagramPackageUpdateCallback = diagramPackageCallbackSingloton

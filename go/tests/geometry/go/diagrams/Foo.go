@@ -197,8 +197,8 @@ func FooInjection(stage *models.StageStruct) {
 	__Link__000000_End.TargetMultiplicityOffsetX = -51.000000
 	__Link__000000_End.TargetMultiplicityOffsetY = 27.000000
 	__Link__000000_End.SourceMultiplicity = models.MANY
-	__Link__000000_End.SourceMultiplicityOffsetX = -25.000000
-	__Link__000000_End.SourceMultiplicityOffsetY = 28.000000
+	__Link__000000_End.SourceMultiplicityOffsetX = 12.000000
+	__Link__000000_End.SourceMultiplicityOffsetY = 23.000000
 	__Link__000000_End.StartOrientation = models.ORIENTATION_HORIZONTAL
 	__Link__000000_End.StartRatio = 0.547860
 	__Link__000000_End.EndOrientation = models.ORIENTATION_HORIZONTAL
@@ -206,8 +206,8 @@ func FooInjection(stage *models.StageStruct) {
 	__Link__000000_End.CornerOffsetRatio = 1.598584
 
 	// Position values setup
-	__Position__000000_Pos_NewDiagram_2_Line.X = 203.000000
-	__Position__000000_Pos_NewDiagram_2_Line.Y = 114.000008
+	__Position__000000_Pos_NewDiagram_2_Line.X = 138.000000
+	__Position__000000_Pos_NewDiagram_2_Line.Y = 128.000008
 	__Position__000000_Pos_NewDiagram_2_Line.Name = `Pos-NewDiagram_2-Line`
 
 	// Position values setup
