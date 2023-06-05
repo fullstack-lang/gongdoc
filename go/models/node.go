@@ -1,5 +1,7 @@
 package models
 
+import "log"
+
 // Node is a node in the tree for selecting items to display
 // Node implements the visual artifacts of a node (the name, the buttons, the checkbocks, ...)
 // The font end read the fields of the node and display the node accordingly
@@ -40,4 +42,22 @@ type Node struct {
 	HasDeleteButton bool
 
 	Children []*Node
+
+	Impl2 NodeImplInterface2
+}
+
+// OnAfterUpdate, notice that node == stagedNode
+func (node *Node) OnAfterUpdate(stage *StageStruct, _, frontNode *Node) {
+
+	log.Println("Node, OnAfterUpdate", node.Name)
+
+	if node.Impl2 != nil {
+		node.Impl2.NodeUpdated(stage, frontNode)
+	}
+}
+
+type NodeImplInterface2 interface {
+
+	// NodeUpdated function is called each time a Node is modified
+	NodeUpdated(stage *StageStruct, updatedNode *Node)
 }

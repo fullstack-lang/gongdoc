@@ -107,6 +107,9 @@ func main() {
 
 		// load package to analyse
 		modelPkg, _ := gong_models.LoadSource(gongStage, absPkgPath)
+
+		// set the inversion control mechanism on nodes
+		gongdoc_models.SetOrchestratorOnAfterUpdate[gongdoc_models.Node](gongdocStage)
 		diagramPackage, _ := load.LoadDiagramPackage(gongdocStage, absPkgPath, modelPkg, *editable)
 
 		// to be removed after fix of [issue](https://github.com/golang/go/issues/57559)
