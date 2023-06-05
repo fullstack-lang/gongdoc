@@ -7,13 +7,11 @@ import (
 )
 
 type ClassdiagramDrawButtonImpl struct {
-	nodeCB *NodeCB
 }
 
 func NewClassdiagramDrawButtonImpl(nodeCB *NodeCB) (classdiagramDrawButtonImpl *ClassdiagramDrawButtonImpl) {
 
 	classdiagramDrawButtonImpl = new(ClassdiagramDrawButtonImpl)
-	classdiagramDrawButtonImpl.nodeCB = nodeCB
 	return
 }
 
@@ -22,8 +20,4 @@ func (classdiagramDrawButtonImpl *ClassdiagramDrawButtonImpl) ButtonUpdated(
 	front *gongdoc_models.Button) {
 
 	log.Println("ButtonImpl, ButtonUpdated", front.Name)
-
-	selectedClassdiagram := classdiagramDrawButtonImpl.nodeCB.GetSelectedClassdiagram()
-	selectedClassdiagram.IsInDrawMode = true
-	classdiagramDrawButtonImpl.nodeCB.computeDiagramNodesConfigurations(stage)
 }
