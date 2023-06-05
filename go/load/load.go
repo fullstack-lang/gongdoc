@@ -50,6 +50,8 @@ func Load(
 	gongdocStage := gongdoc_fullstack.NewStackInstance(r, pkgPath)
 	gongsvgStage := gongsvg_fullstack.NewStackInstance(r, pkgPath)
 
+	gongdoc_models.SetOrchestratorOnAfterUpdate[gongdoc_models.Button](gongdocStage)
+
 	gongsvg_models.SetOrchestratorOnAfterUpdate[gongsvg_models.Rect](gongsvgStage)
 	gongsvg_models.SetOrchestratorOnAfterUpdate[gongsvg_models.Link](gongsvgStage)
 	gongsvg_models.SetOrchestratorOnAfterUpdate[gongsvg_models.LinkAnchoredText](gongsvgStage)

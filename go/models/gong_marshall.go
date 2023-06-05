@@ -110,6 +110,50 @@ func (stage *StageStruct) Marshall(file *os.File, modelsPackageName, packageName
 	_ = setValueField 
 
 	// insertion initialization of objects to stage
+	map_Button_Identifiers := make(map[*Button]string)
+	_ = map_Button_Identifiers
+
+	buttonOrdered := []*Button{}
+	for button := range stage.Buttons {
+		buttonOrdered = append(buttonOrdered, button)
+	}
+	sort.Slice(buttonOrdered[:], func(i, j int) bool {
+		return buttonOrdered[i].Name < buttonOrdered[j].Name
+	})
+	identifiersDecl += "\n\n	// Declarations of staged instances of Button"
+	for idx, button := range buttonOrdered {
+
+		id = generatesIdentifier("Button", idx, button.Name)
+		map_Button_Identifiers[button] = id
+
+		decl = IdentifiersDecls
+		decl = strings.ReplaceAll(decl, "{{Identifier}}", id)
+		decl = strings.ReplaceAll(decl, "{{GeneratedStructName}}", "Button")
+		decl = strings.ReplaceAll(decl, "{{GeneratedFieldNameValue}}", button.Name)
+		identifiersDecl += decl
+
+		initializerStatements += "\n\n	// Button values setup"
+		// Initialisation of values
+		setValueField = StringInitStatement
+		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
+		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "Name")
+		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", string(button.Name))
+		initializerStatements += setValueField
+
+		setValueField = StringInitStatement
+		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
+		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "Icon")
+		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", string(button.Icon))
+		initializerStatements += setValueField
+
+		setValueField = NumberInitStatement
+		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
+		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "Displayed")
+		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", fmt.Sprintf("%t", button.Displayed))
+		initializerStatements += setValueField
+
+	}
+
 	map_Classdiagram_Identifiers := make(map[*Classdiagram]string)
 	_ = map_Classdiagram_Identifiers
 
@@ -1027,6 +1071,16 @@ func (stage *StageStruct) Marshall(file *os.File, modelsPackageName, packageName
 	}
 
 	// insertion initialization of objects to stage
+	for idx, button := range buttonOrdered {
+		var setPointerField string
+		_ = setPointerField
+
+		id = generatesIdentifier("Button", idx, button.Name)
+		map_Button_Identifiers[button] = id
+
+		// Initialisation of values
+	}
+
 	for idx, classdiagram := range classdiagramOrdered {
 		var setPointerField string
 		_ = setPointerField

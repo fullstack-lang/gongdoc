@@ -80,6 +80,7 @@ export class TreeComponent implements OnInit {
     private gongdocCommitNbFromBackService: gongdoc.CommitNbFromBackService,
     private gongdocPushFromFrontNbService: gongdoc.PushFromFrontNbService,
     private gongdocNodeService: gongdoc.NodeService,
+    private gongdocButtonService: gongdoc.ButtonService,
     private router: Router,
   ) {
   }
@@ -350,5 +351,15 @@ export class TreeComponent implements OnInit {
         console.log("setInDrawMode, updated node")
       }
     )
+  }
+
+  onButtonClick(node: FlatNode, button: gongdoc.ButtonDB) {
+
+    this.gongdocButtonService.updateButton(button, this.GONG__StackPath).subscribe(
+      gongdocButton => {
+        console.log("button pressed")
+      }
+    )
+
   }
 }

@@ -11,6 +11,8 @@ import { CommitNbFromBackService } from '../commitnbfromback.service'
 import { GongstructSelectionService } from '../gongstruct-selection.service'
 
 // insertion point for per struct import code
+import { ButtonService } from '../button.service'
+import { getButtonUniqueID } from '../front-repo.service'
 import { ClassdiagramService } from '../classdiagram.service'
 import { getClassdiagramUniqueID } from '../front-repo.service'
 import { DiagramPackageService } from '../diagrampackage.service'
@@ -186,6 +188,7 @@ export class SidebarComponent implements OnInit {
     private gongstructSelectionService: GongstructSelectionService,
 
     // insertion point for per struct service declaration
+    private buttonService: ButtonService,
     private classdiagramService: ClassdiagramService,
     private diagrampackageService: DiagramPackageService,
     private fieldService: FieldService,
@@ -236,6 +239,14 @@ export class SidebarComponent implements OnInit {
     )
 
     // insertion point for per struct observable for refresh trigger
+    // observable for changes in structs
+    this.buttonService.ButtonServiceChanged.subscribe(
+      message => {
+        if (message == "post" || message == "update" || message == "delete") {
+          this.refresh()
+        }
+      }
+    )
     // observable for changes in structs
     this.classdiagramService.ClassdiagramServiceChanged.subscribe(
       message => {
@@ -380,6 +391,50 @@ export class SidebarComponent implements OnInit {
       this.gongNodeTree = new Array<GongNode>();
 
       // insertion point for per struct tree construction
+      /**
+      * fill up the Button part of the mat tree
+      */
+      let buttonGongNodeStruct: GongNode = {
+        name: "Button",
+        type: GongNodeType.STRUCT,
+        id: 0,
+        uniqueIdPerStack: 13 * nonInstanceNodeId,
+        structName: "Button",
+        associationField: "",
+        associatedStructName: "",
+        children: new Array<GongNode>()
+      }
+      nonInstanceNodeId = nonInstanceNodeId + 1
+      this.gongNodeTree.push(buttonGongNodeStruct)
+
+      this.frontRepo.Buttons_array.sort((t1, t2) => {
+        if (t1.Name > t2.Name) {
+          return 1;
+        }
+        if (t1.Name < t2.Name) {
+          return -1;
+        }
+        return 0;
+      });
+
+      this.frontRepo.Buttons_array.forEach(
+        buttonDB => {
+          let buttonGongNodeInstance: GongNode = {
+            name: buttonDB.Name,
+            type: GongNodeType.INSTANCE,
+            id: buttonDB.ID,
+            uniqueIdPerStack: getButtonUniqueID(buttonDB.ID),
+            structName: "Button",
+            associationField: "",
+            associatedStructName: "",
+            children: new Array<GongNode>()
+          }
+          buttonGongNodeStruct.children!.push(buttonGongNodeInstance)
+
+          // insertion point for per field code
+        }
+      )
+
       /**
       * fill up the Classdiagram part of the mat tree
       */

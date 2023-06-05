@@ -155,6 +155,8 @@ func main() {
 		gongdocStage.OnInitCommitFromFrontCallback = beforeCommitImplementation
 		gongdocStage.OnInitCommitFromBackCallback = beforeCommitImplementation
 
+		gongdoc_models.SetOrchestratorOnAfterUpdate[gongdoc_models.Button](gongdocStage)
+
 		// enable the inversion control mechanism on the gongsvg backend
 		gongsvg_models.SetOrchestratorOnAfterUpdate[gongsvg_models.Rect](gongsvgStage)
 		gongsvg_models.SetOrchestratorOnAfterUpdate[gongsvg_models.Link](gongsvgStage)

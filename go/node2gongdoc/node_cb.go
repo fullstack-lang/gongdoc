@@ -92,6 +92,11 @@ func (nodeCb *NodeCB) OnAfterCreate(
 	node.HasEditButton = false
 	node.HasDuplicateButton = false
 
+	// append buttons
+	drawButton := (&gongdoc_models.Button{Name: string(BUTTON_draw)}).Stage(gongdocStage)
+	drawButton.Icon = "draw"
+	drawButton.Displayed = false
+
 	nodeCb.diagramPackageNode.Children = append(nodeCb.diagramPackageNode.Children, node)
 
 	// set up the back pointer from the shape to the node
@@ -217,6 +222,7 @@ func (nodesCb *NodeCB) computeDiagramNodesConfigurations(stage *gongdoc_models.S
 			continue
 		}
 
+		// the classdiagram has been checked
 		editable := nodesCb.diagramPackage.IsEditable && !classdiagramNode.IsInEditMode && !classdiagramNode.IsInDrawMode
 
 		classdiagramNode.HasEditButton = editable

@@ -12,7 +12,6 @@
     "importHelpers": true,
     "target": "ES2022",
     "strict": true,
-    "skipLibCheck": false,
     "typeRoots": [
       "node_modules/@types"
     ],
@@ -62,6 +61,7 @@
   },
   "angularCompilerOptions": {
     "fullTemplateTypeCheck": true,
-    "strictInjectionParameters": true
+    "strictInjectionParameters": true,
+    "strictTemplate": true,
   }
 }
