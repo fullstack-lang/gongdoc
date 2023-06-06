@@ -62,7 +62,7 @@ func FillUpNodeTree(diagramPackage *gongdoc_models.DiagramPackage) {
 			Displayed: true}).Stage(diagramPackage.Stage_)
 		_ = drawButton
 		classdiagramNode.Buttons = append(classdiagramNode.Buttons, drawButton)
-		drawButton.Impl = NewClassdiagramDrawButtonImpl(
+		drawButton.Impl = NewButtonImplClassdiagramDraw(
 			diagramPackage,
 			classdiagram,
 			rootOfClassdiagramsNode,

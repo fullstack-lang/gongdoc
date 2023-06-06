@@ -6,7 +6,7 @@ import (
 	gongdoc_models "github.com/fullstack-lang/gongdoc/go/models"
 )
 
-type ClassdiagramDrawButtonImpl struct {
+type ButtonImplClassdiagramDraw struct {
 	// one need to access the daigramPackage to set the selected diagram
 	diagramPackage *gongdoc_models.DiagramPackage
 	classdiagram   *gongdoc_models.Classdiagram
@@ -20,36 +20,36 @@ type ClassdiagramDrawButtonImpl struct {
 	treeOfGongObjects *gongdoc_models.Tree
 }
 
-func NewClassdiagramDrawButtonImpl(
+func NewButtonImplClassdiagramDraw(
 	diagramPackage *gongdoc_models.DiagramPackage,
 	classdiagram *gongdoc_models.Classdiagram,
 	diagramPackageNode *gongdoc_models.Node,
 	legacyDiagramPackageNode *gongdoc_models.Node,
 	treeOfGongObjects *gongdoc_models.Tree,
-) (classdiagramDrawButtonImpl *ClassdiagramDrawButtonImpl) {
+) (buttonImplClassdiagramDraw *ButtonImplClassdiagramDraw) {
 
-	classdiagramDrawButtonImpl = new(ClassdiagramDrawButtonImpl)
+	buttonImplClassdiagramDraw = new(ButtonImplClassdiagramDraw)
 
-	classdiagramDrawButtonImpl.diagramPackage = diagramPackage
-	classdiagramDrawButtonImpl.classdiagram = classdiagram
-	classdiagramDrawButtonImpl.diagramPackageNode = diagramPackageNode
-	classdiagramDrawButtonImpl.legacyDiagramPackageNode = legacyDiagramPackageNode
-	classdiagramDrawButtonImpl.treeOfGongObjects = treeOfGongObjects
+	buttonImplClassdiagramDraw.diagramPackage = diagramPackage
+	buttonImplClassdiagramDraw.classdiagram = classdiagram
+	buttonImplClassdiagramDraw.diagramPackageNode = diagramPackageNode
+	buttonImplClassdiagramDraw.legacyDiagramPackageNode = legacyDiagramPackageNode
+	buttonImplClassdiagramDraw.treeOfGongObjects = treeOfGongObjects
 
 	return
 }
 
-func (classdiagramDrawButtonImpl *ClassdiagramDrawButtonImpl) ButtonUpdated(
+func (buttonImplClassdiagramDraw *ButtonImplClassdiagramDraw) ButtonUpdated(
 	gongdocStage *gongdoc_models.StageStruct,
 	front *gongdoc_models.Button) {
 
-	log.Println("ClassdiagramDrawButtonImpl, ButtonUpdated", front.Name)
+	log.Println("ButtonImplClassdiagramDraw, ButtonUpdated", front.Name)
 
 	// set the classdiagram in draw mode
-	classdiagramDrawButtonImpl.classdiagram.IsInDrawMode = true
+	buttonImplClassdiagramDraw.classdiagram.IsInDrawMode = true
 
 	computeNodeConfs(gongdocStage,
-		classdiagramDrawButtonImpl.diagramPackageNode,
-		classdiagramDrawButtonImpl.diagramPackage,
-		classdiagramDrawButtonImpl.treeOfGongObjects)
+		buttonImplClassdiagramDraw.diagramPackageNode,
+		buttonImplClassdiagramDraw.diagramPackage,
+		buttonImplClassdiagramDraw.treeOfGongObjects)
 }
