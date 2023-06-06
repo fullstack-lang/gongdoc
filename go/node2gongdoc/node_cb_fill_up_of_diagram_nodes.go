@@ -2,10 +2,12 @@ package node2gongdoc
 
 import gongdoc_models "github.com/fullstack-lang/gongdoc/go/models"
 
-func (nodeCb *NodeCB) FillUpDiagramNodeTree(diagramPackage *gongdoc_models.DiagramPackage) {
+func (nodeCb *NodeCB) FillUpDiagramNodeTree(
+	diagramPackage *gongdoc_models.DiagramPackage,
+) (gongdocTree *gongdoc_models.Tree) {
 
 	// generate tree of diagrams
-	gongdocTree := (&gongdoc_models.Tree{Name: "gongdoc"}).Stage(nodeCb.diagramPackage.Stage_)
+	gongdocTree = (&gongdoc_models.Tree{Name: "gongdoc"}).Stage(nodeCb.diagramPackage.Stage_)
 
 	// add the root of class diagrams
 	diagramPackageNode := (&gongdoc_models.Node{Name: "class diagrams"}).Stage(nodeCb.diagramPackage.Stage_)
@@ -32,4 +34,6 @@ func (nodeCb *NodeCB) FillUpDiagramNodeTree(diagramPackage *gongdoc_models.Diagr
 
 	// set callbacks on node updates
 	nodeCb.diagramPackageNode = diagramPackageNode
+
+	return
 }

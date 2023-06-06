@@ -7,6 +7,19 @@ import (
 func FillUpNodeTree(diagramPackage *gongdoc_models.DiagramPackage) {
 
 	//
+	// LEGACY
+	//
+
+	// a node tree is agnostic of the node types it manages
+	// therefore, a callback functiion is necessary
+	nodeCb := new(NodeCB)
+	nodeCb.diagramPackage = diagramPackage
+
+	gongTree := nodeCb.FillUpDiagramNodeTree(diagramPackage)
+	nodeCb.FillUpTreeOfGongObjects()
+	nodeCb.computeNodesConfiguration(diagramPackage.Stage_)
+
+	//
 	// NEW IMPLEMENTATION
 	//
 
@@ -29,21 +42,8 @@ func FillUpNodeTree(diagramPackage *gongdoc_models.DiagramPackage) {
 
 		classdiagramNode.HasCheckboxButton = true
 		classdiagramNode.Impl2 = NewNodeImplClasssiagram(
-			diagramPackage, classdiagram, rootOfClassdiagramsNode)
+			diagramPackage, classdiagram, rootOfClassdiagramsNode, gongTree)
 	}
-
-	//
-	// LEGACY
-	//
-
-	// a node tree is agnostic of the node types it manages
-	// therefore, a callback functiion is necessary
-	nodeCb := new(NodeCB)
-	nodeCb.diagramPackage = diagramPackage
-
-	nodeCb.FillUpDiagramNodeTree(diagramPackage)
-	nodeCb.FillUpTreeOfGongObjects()
-	nodeCb.computeNodesConfiguration(diagramPackage.Stage_)
 
 	// set callbacks on node updates
 	diagramPackage.Stage_.OnAfterNodeUpdateCallback = nodeCb

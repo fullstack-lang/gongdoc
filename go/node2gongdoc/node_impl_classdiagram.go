@@ -12,19 +12,25 @@ type NodeImplClasssiagram struct {
 	diagramPackage *gongdoc_models.DiagramPackage
 	classdiagram   *gongdoc_models.Classdiagram
 
-	// one need to access the node of the diagram package to manage the childern nodes
+	// one needs to access the node of the diagram package to manage the childern nodes
 	diagramPackageNode *gongdoc_models.Node
+
+	// one needs to perform computation of node confs after the update
+	treeOfGongObjects *gongdoc_models.Tree
 }
 
 func NewNodeImplClasssiagram(
 	diagramPackage *gongdoc_models.DiagramPackage,
 	classdiagram *gongdoc_models.Classdiagram,
-	diagramPackageNode *gongdoc_models.Node) (nodeImplClasssiagram *NodeImplClasssiagram) {
+	diagramPackageNode *gongdoc_models.Node,
+	treeOfGongObjects *gongdoc_models.Tree,
+) (nodeImplClasssiagram *NodeImplClasssiagram) {
 
 	nodeImplClasssiagram = new(NodeImplClasssiagram)
 	nodeImplClasssiagram.diagramPackage = diagramPackage
 	nodeImplClasssiagram.classdiagram = classdiagram
 	nodeImplClasssiagram.diagramPackageNode = diagramPackageNode
+	nodeImplClasssiagram.treeOfGongObjects = treeOfGongObjects
 
 	return
 }
@@ -68,4 +74,9 @@ func (nodeImplClasssiagram *NodeImplClasssiagram) NodeUpdated(
 	if stagedNode.IsChecked && !frontNode.IsChecked {
 		stagedNode.Commit(gongdocStage)
 	}
+
+	computeNodeConfs(gongdocStage,
+		nodeImplClasssiagram.diagramPackageNode,
+		nodeImplClasssiagram.diagramPackage,
+		nodeImplClasssiagram.treeOfGongObjects)
 }
