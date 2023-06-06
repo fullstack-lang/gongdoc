@@ -192,42 +192,8 @@ func (nodeCb *NodeCB) computeNodesConfiguration(gongdocStage *gongdoc_models.Sta
 
 func (nodesCb *NodeCB) computeDiagramNodesConfigurations(stage *gongdoc_models.StageStruct) {
 
-	// compute wether one of the diagrams is in draw/edit mode
-	// if so, all diagram check need to be disabled
-	var inModificationMode bool
-	for _, classdiagramNode := range nodesCb.diagramPackageNode.Children {
-		if classdiagramNode.IsInDrawMode || classdiagramNode.IsInEditMode {
-			inModificationMode = true
-		}
-	}
-
-	nodesCb.diagramPackageNode.HasAddChildButton = !inModificationMode && nodesCb.diagramPackage.IsEditable
-
-	// get the selected diagram and collect what are its referenced
-	// gongstructs
-	for _, classdiagramNode := range nodesCb.diagramPackageNode.Children {
-
-		// reset the state of the classdiagram node
-		classdiagramNode.HasEditButton = false
-		classdiagramNode.HasDeleteButton = false
-		classdiagramNode.HasDuplicateButton = false
-		classdiagramNode.HasDrawButton = false
-		classdiagramNode.HasDrawOffButton = false
-
-		classdiagramNode.IsCheckboxDisabled = inModificationMode
-
-		if !classdiagramNode.IsChecked {
-			classdiagramNode.IsInEditMode = false
-			classdiagramNode.IsInDrawMode = false
-			continue
-		}
-
-		// the classdiagram has been checked
-		editable := nodesCb.diagramPackage.IsEditable && !classdiagramNode.IsInEditMode && !classdiagramNode.IsInDrawMode
-
-		classdiagramNode.HasEditButton = editable
-		classdiagramNode.HasDeleteButton = editable
-		classdiagramNode.HasDrawButton = editable
-		classdiagramNode.HasDuplicateButton = editable
-	}
+	computeDiagramNodesConfigurations(
+		nodesCb.diagramPackageNode,
+		nodesCb.diagramPackage,
+		stage)
 }
