@@ -155,38 +155,10 @@ func (nodeCb *NodeCB) OnAfterDelete(
 // computeNodesConfiguration computes both trees
 func (nodeCb *NodeCB) computeNodesConfiguration(gongdocStage *gongdoc_models.StageStruct) {
 
-	nodeCb.computeDiagramNodesConfigurations(gongdocStage)
-
-	// now manage object nodes accordign to the selected diagram
-
-	// get the the selected diagram
-	classdiagram := nodeCb.diagramPackage.SelectedClassdiagram
-
-	// if no diagram is selected, all gong nodes are to be disabled
-	isCheckboxDisabled := true
-
-	// is the classdiagram is not in drawing mode, all gong nodes are to be disabled
-	// otherwise gong nodes are enabled by default
-	if classdiagram != nil {
-		isCheckboxDisabled = !classdiagram.IsInDrawMode
-	}
-
-	// now, compute wether each gong node to be checked / disabled
-	for _, _node := range nodeCb.treeOfGongObjects.RootNodes {
-		applyGongNodesConfiguration(_node, isCheckboxDisabled, false)
-	}
-
-	// no selected diagram yet
-	if classdiagram == nil {
-		gongdocStage.Commit()
-		return
-	}
-
-	nodeCb.computeGongNodesConfiguration(gongdocStage, classdiagram)
-
-	// log.Println("UpdateNodeStates, before commit, nb ", stage.BackRepo.GetLastCommitFromBackNb())
-	gongdocStage.Commit()
-	// log.Println("UpdateNodeStates, after  commit, nb ", stage.BackRepo.GetLastCommitFromBackNb())
+	computeNodeConfs(gongdocStage,
+		nodeCb.diagramPackageNode,
+		nodeCb.diagramPackage,
+		nodeCb.treeOfGongObjects)
 
 }
 
