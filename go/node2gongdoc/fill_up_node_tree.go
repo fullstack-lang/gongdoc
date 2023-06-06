@@ -15,7 +15,7 @@ func FillUpNodeTree(diagramPackage *gongdoc_models.DiagramPackage) {
 	nodeCb := new(NodeCB)
 	nodeCb.diagramPackage = diagramPackage
 
-	gongTree := nodeCb.FillUpDiagramNodeTree(diagramPackage)
+	leagacyTreeOfDiagramNodes := nodeCb.FillUpDiagramNodeTree(diagramPackage)
 	nodeCb.FillUpTreeOfGongObjects()
 	nodeCb.computeNodesConfiguration(diagramPackage.Stage_)
 
@@ -41,12 +41,23 @@ func FillUpNodeTree(diagramPackage *gongdoc_models.DiagramPackage) {
 		rootOfClassdiagramsNode.Children = append(rootOfClassdiagramsNode.Children, classdiagramNode)
 
 		classdiagramNode.HasCheckboxButton = true
+
+		// fetch the root of diagram nodes
+		var legacyRootOfClassdiagramsNode *gongdoc_models.Node
+		for _, _node := range leagacyTreeOfDiagramNodes.RootNodes {
+			legacyRootOfClassdiagramsNode = _node
+		}
+
 		classdiagramNode.Impl2 = NewNodeImplClasssiagram(
-			diagramPackage, classdiagram, rootOfClassdiagramsNode, gongTree)
+			diagramPackage,
+			classdiagram,
+			rootOfClassdiagramsNode,
+			legacyRootOfClassdiagramsNode,
+			nodeCb.treeOfGongObjects)
 	}
 
 	// set callbacks on node updates
-	diagramPackage.Stage_.OnAfterNodeUpdateCallback = nodeCb
-	diagramPackage.Stage_.OnAfterNodeCreateCallback = nodeCb
-	diagramPackage.Stage_.OnAfterNodeDeleteCallback = nodeCb
+	// diagramPackage.Stage_.OnAfterNodeUpdateCallback = nodeCb
+	// diagramPackage.Stage_.OnAfterNodeCreateCallback = nodeCb
+	// diagramPackage.Stage_.OnAfterNodeDeleteCallback = nodeCb
 }
