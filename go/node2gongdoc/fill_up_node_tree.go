@@ -52,7 +52,8 @@ func FillUpNodeTree(diagramPackage *gongdoc_models.DiagramPackage) {
 			classdiagram,
 			rootOfClassdiagramsNode,
 			legacyRootOfClassdiagramsNode,
-			nodeCb.treeOfGongObjects)
+			nodeCb.treeOfGongObjects,
+		)
 
 		// add draw button
 		drawButton := (&gongdoc_models.Button{
@@ -61,7 +62,13 @@ func FillUpNodeTree(diagramPackage *gongdoc_models.DiagramPackage) {
 			Displayed: true}).Stage(diagramPackage.Stage_)
 		_ = drawButton
 		classdiagramNode.Buttons = append(classdiagramNode.Buttons, drawButton)
-		drawButton.Impl = NewClassdiagramDrawButtonImpl()
+		drawButton.Impl = NewClassdiagramDrawButtonImpl(
+			diagramPackage,
+			classdiagram,
+			rootOfClassdiagramsNode,
+			legacyRootOfClassdiagramsNode,
+			nodeCb.treeOfGongObjects,
+		)
 	}
 
 	computeNodeConfs(diagramPackage.Stage_,
