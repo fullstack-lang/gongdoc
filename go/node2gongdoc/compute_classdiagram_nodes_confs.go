@@ -1,6 +1,8 @@
 package node2gongdoc
 
 import (
+	"log"
+
 	gongdoc_models "github.com/fullstack-lang/gongdoc/go/models"
 )
 
@@ -29,6 +31,7 @@ func computeDiagramNodesConfigurations(
 		classdiagramNode.HasDeleteButton = false
 		classdiagramNode.HasDuplicateButton = false
 		classdiagramNode.HasDrawButton = false
+		SetButtonDiaplayState(classdiagramNode, BUTTON_draw, false)
 		classdiagramNode.HasDrawOffButton = false
 
 		classdiagramNode.IsCheckboxDisabled = inModificationMode
@@ -45,6 +48,22 @@ func computeDiagramNodesConfigurations(
 		classdiagramNode.HasEditButton = editable
 		classdiagramNode.HasDeleteButton = editable
 		classdiagramNode.HasDrawButton = editable
+		SetButtonDiaplayState(classdiagramNode, BUTTON_draw, editable)
 		classdiagramNode.HasDuplicateButton = editable
+	}
+}
+
+// SetButtonDiaplayState set the display attribute of the button designed by buttonId of the node
+func SetButtonDiaplayState(node *gongdoc_models.Node, icon ButtonType, displayed bool) {
+
+	var found bool
+	for _, _button := range node.Buttons {
+		if _button.Icon == string(icon) {
+			_button.Displayed = displayed
+			found = true
+		}
+	}
+	if !found {
+		log.Fatal("No such button", icon)
 	}
 }

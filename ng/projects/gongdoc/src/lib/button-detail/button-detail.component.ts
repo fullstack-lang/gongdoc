@@ -10,6 +10,7 @@ import { MapOfComponents } from '../map-components'
 import { MapOfSortingComponents } from '../map-components'
 
 // insertion point for imports
+import { NodeDB } from '../node-db'
 
 import { Router, ActivatedRoute } from '@angular/router';
 
@@ -23,6 +24,7 @@ enum ButtonDetailComponentState {
 	CREATE_INSTANCE,
 	UPDATE_INSTANCE,
 	// insertion point for declarations of enum values of state
+	CREATE_INSTANCE_WITH_ASSOCIATION_Node_Buttons_SET,
 }
 
 @Component({
@@ -93,6 +95,10 @@ export class ButtonDetailComponent implements OnInit {
 			} else {
 				switch (this.originStructFieldName) {
 					// insertion point for state computation
+					case "Buttons":
+						// console.log("Button" + " is instanciated with back pointer to instance " + this.id + " Node association Buttons")
+						this.state = ButtonDetailComponentState.CREATE_INSTANCE_WITH_ASSOCIATION_Node_Buttons_SET
+						break;
 					default:
 						console.log(this.originStructFieldName + " is unkown association")
 				}
@@ -129,6 +135,10 @@ export class ButtonDetailComponent implements OnInit {
 						this.button = button!
 						break;
 					// insertion point for init of association field
+					case ButtonDetailComponentState.CREATE_INSTANCE_WITH_ASSOCIATION_Node_Buttons_SET:
+						this.button = new (ButtonDB)
+						this.button.Node_Buttons_reverse = frontRepo.Nodes.get(this.id)!
+						break;
 					default:
 						console.log(this.state + " is unkown state")
 				}
@@ -152,6 +162,18 @@ export class ButtonDetailComponent implements OnInit {
 		// save from the front pointer space to the non pointer space for serialization
 
 		// insertion point for translation/nullation of each pointers
+		if (this.button.Node_Buttons_reverse != undefined) {
+			if (this.button.Node_ButtonsDBID == undefined) {
+				this.button.Node_ButtonsDBID = new NullInt64
+			}
+			this.button.Node_ButtonsDBID.Int64 = this.button.Node_Buttons_reverse.ID
+			this.button.Node_ButtonsDBID.Valid = true
+			if (this.button.Node_ButtonsDBID_Index == undefined) {
+				this.button.Node_ButtonsDBID_Index = new NullInt64
+			}
+			this.button.Node_ButtonsDBID_Index.Valid = true
+			this.button.Node_Buttons_reverse = new NodeDB // very important, otherwise, circular JSON
+		}
 
 		switch (this.state) {
 			case ButtonDetailComponentState.UPDATE_INSTANCE:

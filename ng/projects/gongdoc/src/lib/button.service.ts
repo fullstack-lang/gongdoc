@@ -14,6 +14,7 @@ import { catchError, map, tap } from 'rxjs/operators';
 import { ButtonDB } from './button-db';
 
 // insertion point for imports
+import { NodeDB } from './node-db'
 
 @Injectable({
   providedIn: 'root'
@@ -70,6 +71,8 @@ export class ButtonService {
   postButton(buttondb: ButtonDB, GONG__StackPath: string): Observable<ButtonDB> {
 
     // insertion point for reset of pointers and reverse pointers (to avoid circular JSON)
+    let _Node_Buttons_reverse = buttondb.Node_Buttons_reverse
+    buttondb.Node_Buttons_reverse = new NodeDB
 
     let params = new HttpParams().set("GONG__StackPath", GONG__StackPath)
     let httpOptions = {
@@ -80,6 +83,7 @@ export class ButtonService {
     return this.http.post<ButtonDB>(this.buttonsUrl, buttondb, httpOptions).pipe(
       tap(_ => {
         // insertion point for restoration of reverse pointers
+        buttondb.Node_Buttons_reverse = _Node_Buttons_reverse
         // this.log(`posted buttondb id=${buttondb.ID}`)
       }),
       catchError(this.handleError<ButtonDB>('postButton'))
@@ -109,6 +113,8 @@ export class ButtonService {
     const url = `${this.buttonsUrl}/${id}`;
 
     // insertion point for reset of pointers and reverse pointers (to avoid circular JSON)
+    let _Node_Buttons_reverse = buttondb.Node_Buttons_reverse
+    buttondb.Node_Buttons_reverse = new NodeDB
 
     let params = new HttpParams().set("GONG__StackPath", GONG__StackPath)
     let httpOptions = {
@@ -119,6 +125,7 @@ export class ButtonService {
     return this.http.put<ButtonDB>(url, buttondb, httpOptions).pipe(
       tap(_ => {
         // insertion point for restoration of reverse pointers
+        buttondb.Node_Buttons_reverse = _Node_Buttons_reverse
         // this.log(`updated buttondb id=${buttondb.ID}`)
       }),
       catchError(this.handleError<ButtonDB>('updateButton'))

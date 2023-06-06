@@ -1575,6 +1575,8 @@ func GetAssociationName[Type Gongstruct]() *Type {
 			// Initialisation of associations
 			// field is initialized with an instance of Node with the name of the field
 			Children: []*Node{{Name: "Children"}},
+			// field is initialized with an instance of Button with the name of the field
+			Buttons: []*Button{{Name: "Buttons"}},
 		}).(*Type)
 	case NoteShape:
 		return any(&NoteShape{
@@ -1908,6 +1910,14 @@ func GetSliceOfPointersReverseMap[Start, End Gongstruct](fieldname string, stage
 				}
 			}
 			return any(res).(map[*End]*Start)
+		case "Buttons":
+			res := make(map[*Button]*Node)
+			for node := range stage.Nodes {
+				for _, button_ := range node.Buttons {
+					res[button_] = node
+				}
+			}
+			return any(res).(map[*End]*Start)
 		}
 	// reverse maps of direct associations of NoteShape
 	case NoteShape:
@@ -2040,7 +2050,7 @@ func GetFields[Type Gongstruct]() (res []string) {
 	case Link:
 		res = []string{"Name", "Identifier", "Fieldtypename", "FieldOffsetX", "FieldOffsetY", "TargetMultiplicity", "TargetMultiplicityOffsetX", "TargetMultiplicityOffsetY", "SourceMultiplicity", "SourceMultiplicityOffsetX", "SourceMultiplicityOffsetY", "Middlevertice", "StartOrientation", "StartRatio", "EndOrientation", "EndRatio", "CornerOffsetRatio"}
 	case Node:
-		res = []string{"Name", "IsExpanded", "HasCheckboxButton", "IsChecked", "IsCheckboxDisabled", "HasAddChildButton", "HasEditButton", "IsInEditMode", "HasDuplicateButton", "DuplicationInProgress", "HasDrawButton", "HasDrawOffButton", "IsInDrawMode", "IsSaved", "HasDeleteButton", "Children"}
+		res = []string{"Name", "IsExpanded", "HasCheckboxButton", "IsChecked", "IsCheckboxDisabled", "HasAddChildButton", "HasEditButton", "IsInEditMode", "HasDuplicateButton", "DuplicationInProgress", "HasDrawButton", "HasDrawOffButton", "IsInDrawMode", "IsSaved", "HasDeleteButton", "Children", "Buttons"}
 	case NoteShape:
 		res = []string{"Name", "Identifier", "Body", "BodyHTML", "X", "Y", "Width", "Heigth", "Matched", "NoteShapeLinks"}
 	case NoteShapeLink:
@@ -2297,6 +2307,13 @@ func GetFieldStringValue[Type Gongstruct](instance Type, fieldName string) (res 
 			res = fmt.Sprintf("%t", any(instance).(Node).HasDeleteButton)
 		case "Children":
 			for idx, __instance__ := range any(instance).(Node).Children {
+				if idx > 0 {
+					res += "\n"
+				}
+				res += __instance__.Name
+			}
+		case "Buttons":
+			for idx, __instance__ := range any(instance).(Node).Buttons {
 				if idx > 0 {
 					res += "\n"
 				}

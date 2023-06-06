@@ -81,6 +81,13 @@ export class ButtonsTableComponent implements OnInit {
         case 'Displayed':
           return buttonDB.Displayed ? "true" : "false";
 
+        case 'Node_Buttons':
+          if (this.frontRepo.Nodes.get(buttonDB.Node_ButtonsDBID.Int64) != undefined) {
+            return this.frontRepo.Nodes.get(buttonDB.Node_ButtonsDBID.Int64)!.Name
+          } else {
+            return ""
+          }
+
         default:
           console.assert(false, "Unknown field")
           return "";
@@ -97,6 +104,10 @@ export class ButtonsTableComponent implements OnInit {
       // insertion point for merging of fields
       mergedContent += buttonDB.Name.toLowerCase()
       mergedContent += buttonDB.Icon.toLowerCase()
+      if (buttonDB.Node_ButtonsDBID.Int64 != 0) {
+        mergedContent += this.frontRepo.Nodes.get(buttonDB.Node_ButtonsDBID.Int64)!.Name.toLowerCase()
+      }
+
 
       let isSelected = mergedContent.includes(filter.toLowerCase())
       return isSelected
@@ -154,12 +165,14 @@ export class ButtonsTableComponent implements OnInit {
         "Name",
         "Icon",
         "Displayed",
+        "Node_Buttons",
       ]
     } else {
       this.displayedColumns = ['select', 'ID', // insertion point for columns to display
         "Name",
         "Icon",
         "Displayed",
+        "Node_Buttons",
       ]
       this.selection = new SelectionModel<ButtonDB>(allowMultiSelect, this.initialSelection);
     }

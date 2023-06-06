@@ -44,6 +44,8 @@ type Node struct {
 	Children []*Node
 
 	Impl2 NodeImplInterface2
+
+	Buttons []*Button
 }
 
 // OnAfterUpdate, notice that node == stagedNode

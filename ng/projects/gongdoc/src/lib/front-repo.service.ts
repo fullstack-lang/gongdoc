@@ -873,6 +873,19 @@ export class FrontRepoService {
                 // insertion point sub sub template for ONE-/ZERO-ONE associations pointers redeeming
 
                 // insertion point for redeeming ONE-MANY associations
+                // insertion point for slice of pointer field Node.Buttons redeeming
+                {
+                  let _node = this.frontRepo.Nodes.get(button.Node_ButtonsDBID.Int64)
+                  if (_node) {
+                    if (_node.Buttons == undefined) {
+                      _node.Buttons = new Array<ButtonDB>()
+                    }
+                    _node.Buttons.push(button)
+                    if (button.Node_Buttons_reverse == undefined) {
+                      button.Node_Buttons_reverse = _node
+                    }
+                  }
+                }
               }
             )
             classdiagrams.forEach(
@@ -1202,6 +1215,19 @@ export class FrontRepoService {
                 // insertion point for redeeming ONE/ZERO-ONE associations
 
                 // insertion point for redeeming ONE-MANY associations
+                // insertion point for slice of pointer field Node.Buttons redeeming
+                {
+                  let _node = this.frontRepo.Nodes.get(button.Node_ButtonsDBID.Int64)
+                  if (_node) {
+                    if (_node.Buttons == undefined) {
+                      _node.Buttons = new Array<ButtonDB>()
+                    }
+                    _node.Buttons.push(button)
+                    if (button.Node_Buttons_reverse == undefined) {
+                      button.Node_Buttons_reverse = _node
+                    }
+                  }
+                }
               }
             )
 

@@ -44,6 +44,15 @@
     <!-- -->
     <mat-checkbox [formControl]="DisplayedFormControl">Displayed</mat-checkbox>
 
+    <mat-form-field class="detail-full-width">
+        <mat-label>(Node) Buttons</mat-label>
+        <mat-select [compareWith]="compareObjects" [(ngModel)]="button.Node_Buttons_reverse" [ngModelOptions]="{standalone: true}">
+            <mat-option>None</mat-option>
+            <mat-option *ngFor="let node of frontRepo.Nodes_array" [value]="node">
+                {{node.Name}}
+            </mat-option>
+        </mat-select>
+    </mat-form-field>
     <div class="details__save">
         <button mat-raised-button color="primary" (click)="save()">
             Save button

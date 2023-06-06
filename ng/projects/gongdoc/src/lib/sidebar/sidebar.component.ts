@@ -1212,6 +1212,38 @@ export class SidebarComponent implements OnInit {
             ChildrenGongNodeAssociation.children.push(nodeNode)
           })
 
+          /**
+          * let append a node for the slide of pointer Buttons
+          */
+          let ButtonsGongNodeAssociation: GongNode = {
+            name: "(Button) Buttons",
+            type: GongNodeType.ONE__ZERO_MANY_ASSOCIATION,
+            id: nodeDB.ID,
+            uniqueIdPerStack: 19 * nonInstanceNodeId,
+            structName: "Node",
+            associationField: "Buttons",
+            associatedStructName: "Button",
+            children: new Array<GongNode>()
+          }
+          nonInstanceNodeId = nonInstanceNodeId + 1
+          nodeGongNodeInstance.children.push(ButtonsGongNodeAssociation)
+
+          nodeDB.Buttons?.forEach(buttonDB => {
+            let buttonNode: GongNode = {
+              name: buttonDB.Name,
+              type: GongNodeType.INSTANCE,
+              id: buttonDB.ID,
+              uniqueIdPerStack: // godel numbering (thank you kurt)
+                7 * getNodeUniqueID(nodeDB.ID)
+                + 11 * getButtonUniqueID(buttonDB.ID),
+              structName: "Button",
+              associationField: "",
+              associatedStructName: "",
+              children: new Array<GongNode>()
+            }
+            ButtonsGongNodeAssociation.children.push(buttonNode)
+          })
+
         }
       )
 

@@ -5,10 +5,10 @@ import (
 	gongdoc_models "github.com/fullstack-lang/gongdoc/go/models"
 )
 
-func (nodeCb *NodeCB) FillUpTreeOfGongObjects() {
+func (nodeCb *NodeCB) FillUpTreeOfGongObjects() (gongTree *gongdoc_models.Tree) {
 
 	// set up the gongTree to display elements
-	gongTree := (&gongdoc_models.Tree{Name: "gong"}).Stage(nodeCb.diagramPackage.Stage_)
+	gongTree = (&gongdoc_models.Tree{Name: "gong"}).Stage(nodeCb.diagramPackage.Stage_)
 	nodeCb.treeOfGongObjects = gongTree
 
 	gongstructRootNode := (&gongdoc_models.Node{Name: "gongstructs"}).Stage(nodeCb.diagramPackage.Stage_)
@@ -128,4 +128,7 @@ func (nodeCb *NodeCB) FillUpTreeOfGongObjects() {
 	fieldName := gongdoc_models.GetAssociationName[gongdoc_models.Node]().Children[0].Name
 	nodeCb.map_Children_Parent =
 		gongdoc_models.GetSliceOfPointersReverseMap[gongdoc_models.Node, gongdoc_models.Node](fieldName, nodeCb.diagramPackage.Stage_)
+
+	return
+
 }

@@ -406,6 +406,9 @@ func (stage *StageStruct) StageBranchNode(node *Node) {
 	for _, _node := range node.Children {
 		StageBranch(stage, _node)
 	}
+	for _, _button := range node.Buttons {
+		StageBranch(stage, _button)
+	}
 
 }
 
@@ -756,6 +759,9 @@ func (stage *StageStruct) UnstageBranchNode(node *Node) {
 	//insertion point for the staging of instances referenced by slice of pointers
 	for _, _node := range node.Children {
 		UnstageBranch(stage, _node)
+	}
+	for _, _button := range node.Buttons {
+		UnstageBranch(stage, _button)
 	}
 
 }

@@ -76,6 +76,19 @@
             </button>
         </mat-grid-tile>
     </mat-grid-list>
+    <mat-grid-list cols="5" rowHeight="2:1">
+        <mat-grid-tile [colspan]="3">
+            <button mat-raised-button (click)="openReverseSelection('Button', 'Node_ButtonsDBID', 'ONE_MANY_ASSOCIATION_MODE', '', '', '')">Buttons</button>
+        </mat-grid-tile>
+        <!-- insertion point for the button of the MANY_MANY association-->
+        <mat-grid-tile>
+            <button mat-raised-button (click)="openDragAndDropOrdering('Button', 'Node_ButtonsDBID')">
+                <mat-icon>
+                    shuffle
+                </mat-icon>
+            </button>
+        </mat-grid-tile>
+    </mat-grid-list>
     <mat-form-field class="detail-full-width">
         <mat-label>(Node) Children</mat-label>
         <mat-select [compareWith]="compareObjects" [(ngModel)]="node.Node_Children_reverse" [ngModelOptions]="{standalone: true}">

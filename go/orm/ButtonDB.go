@@ -45,6 +45,12 @@ type ButtonAPI struct {
 // reverse pointers of slice of poitners to Struct
 type ButtonPointersEnconding struct {
 	// insertion for pointer fields encoding declaration
+
+	// Implementation of a reverse ID for field Node{}.Buttons []*Button
+	Node_ButtonsDBID sql.NullInt64
+
+	// implementation of the index of the withing the slice
+	Node_ButtonsDBID_Index sql.NullInt64
 }
 
 // ButtonDB describes a button in the database
@@ -558,6 +564,12 @@ func (backRepoButton *BackRepoButtonStruct) RestorePhaseTwo() {
 		_ = buttonDB
 
 		// insertion point for reindexing pointers encoding
+		// This reindex button.Buttons
+		if buttonDB.Node_ButtonsDBID.Int64 != 0 {
+			buttonDB.Node_ButtonsDBID.Int64 =
+				int64(BackRepoNodeid_atBckpTime_newID[uint(buttonDB.Node_ButtonsDBID.Int64)])
+		}
+
 		// update databse with new index encoding
 		query := backRepoButton.db.Model(buttonDB).Updates(*buttonDB)
 		if query.Error != nil {

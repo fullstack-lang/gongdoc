@@ -9,7 +9,7 @@ import (
 type ClassdiagramDrawButtonImpl struct {
 }
 
-func NewClassdiagramDrawButtonImpl(nodeCB *NodeCB) (classdiagramDrawButtonImpl *ClassdiagramDrawButtonImpl) {
+func NewClassdiagramDrawButtonImpl() (classdiagramDrawButtonImpl *ClassdiagramDrawButtonImpl) {
 
 	classdiagramDrawButtonImpl = new(ClassdiagramDrawButtonImpl)
 	return

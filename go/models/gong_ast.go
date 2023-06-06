@@ -769,6 +769,12 @@ func UnmarshallGongstructStaging(stage *StageStruct, cmap *ast.CommentMap, assig
 							target := __gong__map_Node[targetIdentifier]
 							__gong__map_Node[identifier].Children =
 								append(__gong__map_Node[identifier].Children, target)
+						case "Buttons":
+							// remove first and last char
+							targetIdentifier := ident.Name
+							target := __gong__map_Button[targetIdentifier]
+							__gong__map_Node[identifier].Buttons =
+								append(__gong__map_Node[identifier].Buttons, target)
 						}
 					case "NoteShape":
 						switch fieldName {
