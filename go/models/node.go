@@ -52,12 +52,12 @@ func (node *Node) OnAfterUpdate(stage *StageStruct, _, frontNode *Node) {
 	log.Println("Node, OnAfterUpdate", node.Name)
 
 	if node.Impl2 != nil {
-		node.Impl2.NodeUpdated(stage, frontNode)
+		node.Impl2.NodeUpdated(stage, node, frontNode)
 	}
 }
 
 type NodeImplInterface2 interface {
 
 	// NodeUpdated function is called each time a Node is modified
-	NodeUpdated(stage *StageStruct, updatedNode *Node)
+	NodeUpdated(stage *StageStruct, stageNode, updatedNode *Node)
 }

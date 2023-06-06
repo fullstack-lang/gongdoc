@@ -14,12 +14,23 @@ func FillUpNodeTree(diagramPackage *gongdoc_models.DiagramPackage) {
 	gongdocTree := (&gongdoc_models.Tree{Name: "gongdoc_new"}).Stage(diagramPackage.Stage_)
 
 	// add the root of class diagrams
-	rootOfClassdiagrams := (&gongdoc_models.Node{Name: "class diagrams 2"}).Stage(diagramPackage.Stage_)
-	rootOfClassdiagrams.IsExpanded = true
-	gongdocTree.RootNodes = append(gongdocTree.RootNodes, rootOfClassdiagrams)
+	rootOfClassdiagramsNode := (&gongdoc_models.Node{Name: "class diagrams 2"}).Stage(diagramPackage.Stage_)
+	rootOfClassdiagramsNode.IsExpanded = true
+	gongdocTree.RootNodes = append(gongdocTree.RootNodes, rootOfClassdiagramsNode)
 
 	// append an implementation
-	rootOfClassdiagrams.Impl2 = NewNodeImplRootOfClassDiagrams()
+	rootOfClassdiagramsNode.Impl2 = NewNodeImplRootOfClassDiagrams()
+
+	// add one node for each diagram
+	for classdiagram := range *gongdoc_models.GetGongstructInstancesSet[gongdoc_models.Classdiagram](diagramPackage.Stage_) {
+		classdiagramNode := (&gongdoc_models.Node{Name: classdiagram.Name}).Stage(diagramPackage.Stage_)
+
+		rootOfClassdiagramsNode.Children = append(rootOfClassdiagramsNode.Children, classdiagramNode)
+
+		classdiagramNode.HasCheckboxButton = true
+		classdiagramNode.Impl2 = NewNodeImplClasssiagram(
+			diagramPackage, classdiagram, rootOfClassdiagramsNode)
+	}
 
 	//
 	// LEGACY

@@ -16,6 +16,7 @@ func NewNodeImplRootOfClassDiagrams() (nodeImplRootOfClassDiagrams *NodeImplRoot
 
 func (nodeImplRootOfClassDiagrams *NodeImplRootOfClassDiagrams) NodeUpdated(
 	stage *gongdoc_models.StageStruct,
+	stagedNode,
 	updatedNode *gongdoc_models.Node) {
 
 }

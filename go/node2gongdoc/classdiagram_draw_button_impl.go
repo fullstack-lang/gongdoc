@@ -19,5 +19,5 @@ func (classdiagramDrawButtonImpl *ClassdiagramDrawButtonImpl) ButtonUpdated(
 	stage *gongdoc_models.StageStruct,
 	front *gongdoc_models.Button) {
 
-	log.Println("ButtonImpl, ButtonUpdated", front.Name)
+	log.Println("ClassdiagramDrawButtonImpl, ButtonUpdated", front.Name)
 }
