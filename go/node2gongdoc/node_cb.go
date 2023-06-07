@@ -1,11 +1,6 @@
 package node2gongdoc
 
 import (
-	"fmt"
-	"log"
-	"os"
-	"path/filepath"
-
 	gongdoc_models "github.com/fullstack-lang/gongdoc/go/models"
 )
 
@@ -62,79 +57,6 @@ func (nodeCb *NodeCB) OnAfterCreate(
 	gongdocStage *gongdoc_models.StageStruct,
 	node *gongdoc_models.Node) {
 
-	log.Println("Node " + node.Name + " is created")
-
-	node.HasCheckboxButton = true
-
-	// check unicity of name, otherwise, add an index
-	var hasNameCollision bool
-	initialName := node.Name
-	index := 0
-	// loop until the name of the new diagram is not in collision with an existing
-	// diagram name
-	for index == 0 || hasNameCollision {
-		index++
-		hasNameCollision = false
-		for classdiagram := range *gongdoc_models.GetGongstructInstancesSet[gongdoc_models.Classdiagram](gongdocStage) {
-			if classdiagram.Name == node.Name {
-				hasNameCollision = true
-			}
-		}
-		if hasNameCollision {
-			node.Name = initialName + fmt.Sprintf("_%d", index)
-		}
-	}
-
-	classdiagram := (&gongdoc_models.Classdiagram{Name: node.Name}).Stage(nodeCb.diagramPackage.Stage_)
-	nodeCb.diagramPackage.Classdiagrams = append(nodeCb.diagramPackage.Classdiagrams, classdiagram)
-	node.IsInEditMode = false
-	node.IsInDrawMode = false
-	node.HasEditButton = false
-	node.HasDuplicateButton = false
-
-	// append buttons
-	drawButton := (&gongdoc_models.Button{Name: string(BUTTON_draw)}).Stage(gongdocStage)
-	drawButton.Icon = "draw"
-	drawButton.Displayed = false
-
-	nodeCb.diagramPackageNode.Children = append(nodeCb.diagramPackageNode.Children, node)
-
-	// set up the back pointer from the shape to the node
-	classdiagramImpl := new(ClassdiagramImpl)
-	classdiagramImpl.node = node
-	classdiagramImpl.classdiagram = classdiagram
-	classdiagramImpl.nodeCb = nodeCb
-	node.Impl = classdiagramImpl
-
-	filepath := filepath.Join(
-		filepath.Join(classdiagramImpl.nodeCb.diagramPackage.AbsolutePathToDiagramPackage,
-			"../diagrams"),
-		classdiagramImpl.classdiagram.Name) + ".go"
-	file, err := os.Create(filepath)
-	if err != nil {
-		log.Fatal("Cannot open diagram file" + err.Error())
-	}
-	defer file.Close()
-
-	// save the diagram
-	// checkout in order to get the latest version of the diagram before
-	// modifying it updated by the front
-	nodeCb.computeNodesConfiguration(gongdocStage)
-	gongdocStage.Commit()
-
-	// now save the diagram
-	gongdocStage.Checkout()
-	gongdocStage.Unstage()
-	gongdoc_models.StageBranch(gongdocStage, classdiagramImpl.classdiagram)
-
-	gongdoc_models.SetupMapDocLinkRenaming(nodeCb.diagramPackage.ModelPkg.Stage_, gongdocStage)
-
-	gongdocStage.Marshall(file, "github.com/fullstack-lang/gongdoc/go/models", "diagrams")
-
-	// restore the original stage
-	gongdocStage.Unstage()
-	gongdocStage.Checkout()
-
 }
 
 // OnAfterDelete is called after a node is deleted
@@ -144,12 +66,6 @@ func (nodeCb *NodeCB) OnAfterDelete(
 	stage *gongdoc_models.StageStruct,
 	stagedNode, frontNode *gongdoc_models.Node) {
 
-	switch impl := stagedNode.Impl.(type) {
-	case *ClassdiagramImpl:
-		impl.OnAfterDelete(stage, stagedNode, frontNode)
-	}
-
-	nodeCb.computeNodesConfiguration(stage)
 }
 
 // computeNodesConfiguration computes both trees
