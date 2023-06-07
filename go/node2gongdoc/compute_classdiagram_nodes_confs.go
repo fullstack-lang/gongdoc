@@ -40,6 +40,7 @@ func computeClassdiagramNodesConfigurations(
 		SetButtonDiaplayState(classdiagramNode, BUTTON_draw, false)
 		SetButtonDiaplayState(classdiagramNode, BUTTON_edit_off, false)
 		SetButtonDiaplayState(classdiagramNode, BUTTON_save, false)
+		SetButtonDiaplayState(classdiagramNode, BUTTON_delete, false)
 
 		nodeImplClasssiagram, ok := classdiagramNode.Impl2.(*NodeImplClasssiagram)
 		if !ok {
@@ -52,12 +53,14 @@ func computeClassdiagramNodesConfigurations(
 			continue
 		}
 
-		displayDrawButton := diagramPackage.IsEditable && !nodeImplClasssiagram.IsInDrawMode
-		displayEditOffButton := diagramPackage.IsEditable && nodeImplClasssiagram.IsInDrawMode
+		selectedForEdit := diagramPackage.IsEditable && !nodeImplClasssiagram.IsInDrawMode
+		inDrawingMode := diagramPackage.IsEditable && nodeImplClasssiagram.IsInDrawMode
 
-		SetButtonDiaplayState(classdiagramNode, BUTTON_draw, displayDrawButton)
-		SetButtonDiaplayState(classdiagramNode, BUTTON_edit_off, displayEditOffButton)
-		SetButtonDiaplayState(classdiagramNode, BUTTON_save, displayEditOffButton)
+		SetButtonDiaplayState(classdiagramNode, BUTTON_draw, selectedForEdit)
+		SetButtonDiaplayState(classdiagramNode, BUTTON_delete, selectedForEdit)
+
+		SetButtonDiaplayState(classdiagramNode, BUTTON_edit_off, inDrawingMode)
+		SetButtonDiaplayState(classdiagramNode, BUTTON_save, inDrawingMode)
 
 	}
 }

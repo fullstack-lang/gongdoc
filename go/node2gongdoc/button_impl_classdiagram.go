@@ -95,6 +95,37 @@ func (buttonImplClassdiagram *ButtonImplClassdiagram) ButtonUpdated(
 		gongdocStage.Unstage()
 		gongdocStage.Checkout()
 		gongdocStage.Commit()
+
+	case BUTTON_delete:
+		// checkout the stage, it shall remove the link between
+		// the parent node and the staged node because 0..1->0..N association
+		// is stored in the staged node as a reverse pointer
+		gongdocStage.Checkout()
+
+		// remove the classdiagram node from the pkg element node
+		buttonImplClassdiagram.diagramPackage.Classdiagrams =
+			remove(buttonImplClassdiagram.diagramPackage.Classdiagrams, buttonImplClassdiagram.classdiagram)
+		gongdoc_models.UnstageBranch(gongdocStage, buttonImplClassdiagram.classdiagram)
+
+		// remove the actual classdiagram file if it exsits
+		classdiagramFilePath := filepath.Join(buttonImplClassdiagram.diagramPackage.Path, "../diagrams", buttonImplClassdiagram.classdiagram.Name) + ".go"
+		if _, err := os.Stat(classdiagramFilePath); err == nil {
+			if err := os.Remove(classdiagramFilePath); err != nil {
+				log.Println("Error while deleting file " + classdiagramFilePath + " : " + err.Error())
+			}
+		}
+
+		// reload
+		fakeFrontDiagramPackage := (&gongdoc_models.DiagramPackage{})
+		fakeFrontDiagramPackage.IsReloaded = buttonImplClassdiagram.diagramPackage.IsReloaded
+		buttonImplClassdiagram.diagramPackage.IsReloaded = !buttonImplClassdiagram.diagramPackage.IsReloaded
+
+		gongdocStage.OnAfterDiagramPackageUpdateCallback.OnAfterUpdate(gongdocStage,
+			buttonImplClassdiagram.diagramPackage,
+			fakeFrontDiagramPackage,
+		)
+	default:
+		log.Fatalln("Unkown button type", buttonImplClassdiagram.Icon)
 	}
 
 	computeNodeConfs(gongdocStage,

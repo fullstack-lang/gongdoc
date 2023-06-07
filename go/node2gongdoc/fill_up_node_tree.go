@@ -44,9 +44,13 @@ func FillUpNodeTree(diagramPackage *gongdoc_models.DiagramPackage) {
 			diagramPackage,
 			classdiagram,
 			rootOfClassdiagramsNode,
-			nodeCb.treeOfGongObjects,
+			treeOfGongObjects,
 		)
 		classdiagramNode.Impl2 = nodeImplClassdiagram
+
+		//
+		// Buttons that are displayed if the node is selected
+		//
 
 		// add draw button
 		drawButton := (&gongdoc_models.Button{
@@ -59,11 +63,32 @@ func FillUpNodeTree(diagramPackage *gongdoc_models.DiagramPackage) {
 			diagramPackage,
 			classdiagram,
 			rootOfClassdiagramsNode,
-			nodeCb.treeOfGongObjects,
+			treeOfGongObjects,
 			classdiagramNode,
 			nodeImplClassdiagram,
 			BUTTON_draw,
 		)
+
+		// delete button
+		deleteButton := (&gongdoc_models.Button{
+			Name:      classdiagram.Name + " " + string(BUTTON_delete),
+			Icon:      string(BUTTON_delete),
+			Displayed: true}).Stage(diagramPackage.Stage_)
+		_ = deleteButton
+		classdiagramNode.Buttons = append(classdiagramNode.Buttons, deleteButton)
+		deleteButton.Impl = NewButtonImplClassdiagram(
+			diagramPackage,
+			classdiagram,
+			rootOfClassdiagramsNode,
+			treeOfGongObjects,
+			classdiagramNode,
+			nodeImplClassdiagram,
+			BUTTON_delete,
+		)
+
+		//
+		// Buttons that are displayed if the node is drawned
+		//
 
 		// add editoff button
 		editoffButton := (&gongdoc_models.Button{
@@ -76,7 +101,7 @@ func FillUpNodeTree(diagramPackage *gongdoc_models.DiagramPackage) {
 			diagramPackage,
 			classdiagram,
 			rootOfClassdiagramsNode,
-			nodeCb.treeOfGongObjects,
+			treeOfGongObjects,
 			classdiagramNode,
 			nodeImplClassdiagram,
 			BUTTON_edit_off,
@@ -93,7 +118,7 @@ func FillUpNodeTree(diagramPackage *gongdoc_models.DiagramPackage) {
 			diagramPackage,
 			classdiagram,
 			rootOfClassdiagramsNode,
-			nodeCb.treeOfGongObjects,
+			treeOfGongObjects,
 			classdiagramNode,
 			nodeImplClassdiagram,
 			BUTTON_save,
