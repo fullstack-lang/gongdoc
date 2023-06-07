@@ -20,7 +20,7 @@ func NewClassdiagramNode(
 		rootOfClassdiagramsNode,
 		treeOfGongObjects,
 	)
-	classdiagramNode.Impl2 = nodeImplClassdiagram
+	classdiagramNode.Impl = nodeImplClassdiagram
 
 	//
 	// Buttons that are displayed if the node is selected

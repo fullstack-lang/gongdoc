@@ -42,8 +42,6 @@ type Node struct {
 
 	Children []*Node
 
-	Impl2 NodeImplInterface2
-
 	Buttons []*Button
 }
 
@@ -52,13 +50,7 @@ func (node *Node) OnAfterUpdate(stage *StageStruct, _, frontNode *Node) {
 
 	log.Println("Node, OnAfterUpdate", node.Name)
 
-	if node.Impl2 != nil {
-		node.Impl2.NodeUpdated(stage, node, frontNode)
+	if node.Impl != nil {
+		node.Impl.OnAfterUpdate(stage, node, frontNode)
 	}
-}
-
-type NodeImplInterface2 interface {
-
-	// NodeUpdated function is called each time a Node is modified
-	NodeUpdated(stage *StageStruct, stageNode, updatedNode *Node)
 }

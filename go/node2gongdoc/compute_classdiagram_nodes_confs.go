@@ -16,7 +16,7 @@ func computeClassdiagramNodesConfigurations(
 	var inModificationMode bool
 	for _, classdiagramNode := range diagramPackageNode.Children {
 
-		nodeImplClasssiagram, ok := classdiagramNode.Impl2.(*NodeImplClasssiagram)
+		nodeImplClasssiagram, ok := classdiagramNode.Impl.(*NodeImplClasssiagram)
 		if !ok {
 			log.Fatalln("not a good interface")
 		}
@@ -43,7 +43,7 @@ func computeClassdiagramNodesConfigurations(
 		SetButtonDiaplayState(classdiagramNode, BUTTON_delete, false)
 		SetButtonDiaplayState(classdiagramNode, BUTTON_file_copy, false)
 
-		nodeImplClasssiagram, ok := classdiagramNode.Impl2.(*NodeImplClasssiagram)
+		nodeImplClasssiagram, ok := classdiagramNode.Impl.(*NodeImplClasssiagram)
 		if !ok {
 			log.Fatalln("not a good interface")
 		}

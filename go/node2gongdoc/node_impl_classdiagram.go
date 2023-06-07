@@ -38,12 +38,12 @@ func NewNodeImplClasssiagram(
 	return
 }
 
-func (nodeImplClasssiagram *NodeImplClasssiagram) NodeUpdated(
+func (nodeImplClasssiagram *NodeImplClasssiagram) OnAfterUpdate(
 	gongdocStage *gongdoc_models.StageStruct,
 	stagedNode,
 	frontNode *gongdoc_models.Node) {
 
-	log.Println("NodeImplClasssiagram: NodeUpdated")
+	log.Println("NodeImplClasssiagram: OnAfterUpdate")
 
 	// node has been checked by the end user
 	if frontNode.IsChecked && !stagedNode.IsChecked {

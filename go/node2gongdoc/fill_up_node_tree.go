@@ -29,9 +29,6 @@ func FillUpNodeTree(diagramPackage *gongdoc_models.DiagramPackage) {
 	rootOfClassdiagramsNode.IsExpanded = true
 	gongdocTree.RootNodes = append(gongdocTree.RootNodes, rootOfClassdiagramsNode)
 
-	// append an implementation
-	rootOfClassdiagramsNode.Impl2 = NewNodeImplRootOfClassDiagrams()
-
 	// add add button
 	addButton := (&gongdoc_models.Button{
 		Name:      diagramPackage.Name + " " + string(BUTTON_add),
