@@ -47,17 +47,18 @@ func FillUpNodeTree(diagramPackage *gongdoc_models.DiagramPackage) {
 			legacyRootOfClassdiagramsNode = _node
 		}
 
-		classdiagramNode.Impl2 = NewNodeImplClasssiagram(
+		nodeImplClassdiagram := NewNodeImplClasssiagram(
 			diagramPackage,
 			classdiagram,
 			rootOfClassdiagramsNode,
 			legacyRootOfClassdiagramsNode,
 			nodeCb.treeOfGongObjects,
 		)
+		classdiagramNode.Impl2 = nodeImplClassdiagram
 
 		// add draw button
 		drawButton := (&gongdoc_models.Button{
-			Name:      string(BUTTON_draw),
+			Name:      classdiagram.Name + " " + string(BUTTON_draw),
 			Icon:      string(BUTTON_draw),
 			Displayed: true}).Stage(diagramPackage.Stage_)
 		_ = drawButton
@@ -69,6 +70,24 @@ func FillUpNodeTree(diagramPackage *gongdoc_models.DiagramPackage) {
 			legacyRootOfClassdiagramsNode,
 			nodeCb.treeOfGongObjects,
 			classdiagramNode,
+			nodeImplClassdiagram,
+		)
+
+		// add editoff button
+		editoffButton := (&gongdoc_models.Button{
+			Name:      classdiagram.Name + " " + string(BUTTON_edit_off),
+			Icon:      string(BUTTON_edit_off),
+			Displayed: true}).Stage(diagramPackage.Stage_)
+		_ = editoffButton
+		classdiagramNode.Buttons = append(classdiagramNode.Buttons, editoffButton)
+		editoffButton.Impl = NewButtonImplClassdiagramEditOff(
+			diagramPackage,
+			classdiagram,
+			rootOfClassdiagramsNode,
+			legacyRootOfClassdiagramsNode,
+			nodeCb.treeOfGongObjects,
+			classdiagramNode,
+			nodeImplClassdiagram,
 		)
 	}
 

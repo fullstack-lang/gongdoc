@@ -19,6 +19,9 @@ type NodeImplClasssiagram struct {
 
 	// one needs to perform computation of node confs after the update
 	treeOfGongObjects *gongdoc_models.Tree
+
+	// peculiar
+	IsInDrawMode bool
 }
 
 func NewNodeImplClasssiagram(

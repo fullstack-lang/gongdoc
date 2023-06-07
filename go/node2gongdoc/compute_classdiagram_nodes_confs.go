@@ -32,6 +32,7 @@ func computeDiagramNodesConfigurations(
 		classdiagramNode.HasDuplicateButton = false
 		classdiagramNode.HasDrawButton = false
 		SetButtonDiaplayState(classdiagramNode, BUTTON_draw, false)
+		SetButtonDiaplayState(classdiagramNode, BUTTON_edit_off, false)
 
 		classdiagramNode.IsCheckboxDisabled = inModificationMode
 
@@ -48,6 +49,7 @@ func computeDiagramNodesConfigurations(
 		classdiagramNode.HasDeleteButton = editable
 		classdiagramNode.HasDrawButton = editable
 		SetButtonDiaplayState(classdiagramNode, BUTTON_draw, editable)
+		SetButtonDiaplayState(classdiagramNode, BUTTON_edit_off, editable)
 		classdiagramNode.HasDuplicateButton = editable
 	}
 }
@@ -65,4 +67,19 @@ func SetButtonDiaplayState(node *gongdoc_models.Node, icon ButtonType, displayed
 	if !found {
 		log.Fatal("No such button", icon)
 	}
+}
+
+func GetButtonDiaplayState(node *gongdoc_models.Node, icon ButtonType) (displayed bool) {
+
+	var found bool
+	for _, _button := range node.Buttons {
+		if _button.Icon == string(icon) {
+			displayed = _button.Displayed
+			found = true
+		}
+	}
+	if !found {
+		log.Fatal("No such button", icon)
+	}
+	return
 }

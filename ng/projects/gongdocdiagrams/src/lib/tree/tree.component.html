@@ -15,7 +15,7 @@
                     </mat-icon>
                 </button>
             </ng-container>
-            <mat-form-field *ngIf='node.gongNode.IsInEditMode' mat-form-field class="detail-full-width">
+            <!-- <mat-form-field *ngIf='node.gongNode.IsInEditMode' mat-form-field class="detail-full-width">
                 <mat-label>Name</mat-label>
                 <input name="" [ngModelOptions]="{standalone: true}" matInput [(ngModel)]="node.gongNode.Name">
             </mat-form-field>
@@ -56,7 +56,7 @@
             <button mat-icon-button *ngIf="node.gongNode.HasDuplicateButton" (click)="duplicateNode(node)">
                 <mat-icon [ngStyle]="{'color':'rgba(0,0,0,.50)'}">
                     file_copy</mat-icon>
-            </button>
+            </button> -->
         </mat-tree-node>
         <!-- This is the tree node template for expandable nodes -->
         <mat-tree-node *matTreeNodeDef="let node;when: hasChild" matTreeNodePadding>
