@@ -67,7 +67,6 @@ func FillUpNodeTree(diagramPackage *gongdoc_models.DiagramPackage) {
 			diagramPackage,
 			classdiagram,
 			rootOfClassdiagramsNode,
-			legacyRootOfClassdiagramsNode,
 			nodeCb.treeOfGongObjects,
 			classdiagramNode,
 			nodeImplClassdiagram,
@@ -85,11 +84,27 @@ func FillUpNodeTree(diagramPackage *gongdoc_models.DiagramPackage) {
 			diagramPackage,
 			classdiagram,
 			rootOfClassdiagramsNode,
-			legacyRootOfClassdiagramsNode,
 			nodeCb.treeOfGongObjects,
 			classdiagramNode,
 			nodeImplClassdiagram,
 			BUTTON_edit_off,
+		)
+
+		// add save button
+		saveButton := (&gongdoc_models.Button{
+			Name:      classdiagram.Name + " " + string(BUTTON_save),
+			Icon:      string(BUTTON_save),
+			Displayed: true}).Stage(diagramPackage.Stage_)
+		_ = saveButton
+		classdiagramNode.Buttons = append(classdiagramNode.Buttons, saveButton)
+		saveButton.Impl = NewButtonImplClassdiagram(
+			diagramPackage,
+			classdiagram,
+			rootOfClassdiagramsNode,
+			nodeCb.treeOfGongObjects,
+			classdiagramNode,
+			nodeImplClassdiagram,
+			BUTTON_save,
 		)
 	}
 

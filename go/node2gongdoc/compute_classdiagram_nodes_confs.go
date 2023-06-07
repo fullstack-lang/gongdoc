@@ -34,6 +34,7 @@ func computeDiagramNodesConfigurations(
 
 		SetButtonDiaplayState(classdiagramNode, BUTTON_draw, false)
 		SetButtonDiaplayState(classdiagramNode, BUTTON_edit_off, false)
+		SetButtonDiaplayState(classdiagramNode, BUTTON_save, false)
 
 		nodeImplClasssiagram, ok := classdiagramNode.Impl2.(*NodeImplClasssiagram)
 
@@ -52,6 +53,8 @@ func computeDiagramNodesConfigurations(
 
 		SetButtonDiaplayState(classdiagramNode, BUTTON_draw, displayDrawButton)
 		SetButtonDiaplayState(classdiagramNode, BUTTON_edit_off, displayEditOffButton)
+		SetButtonDiaplayState(classdiagramNode, BUTTON_save, displayEditOffButton)
+
 	}
 }
 

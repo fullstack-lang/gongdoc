@@ -2,6 +2,8 @@ package node2gongdoc
 
 import (
 	"log"
+	"os"
+	"path/filepath"
 
 	gongdoc_models "github.com/fullstack-lang/gongdoc/go/models"
 )
@@ -30,7 +32,6 @@ func NewButtonImplClassdiagram(
 	diagramPackage *gongdoc_models.DiagramPackage,
 	classdiagram *gongdoc_models.Classdiagram,
 	diagramPackageNode *gongdoc_models.Node,
-	legacyDiagramPackageNode *gongdoc_models.Node,
 	treeOfGongObjects *gongdoc_models.Tree,
 	classdiagramNode *gongdoc_models.Node,
 	nodeImplClassdiagram *NodeImplClasssiagram,
@@ -42,7 +43,6 @@ func NewButtonImplClassdiagram(
 	buttonImplClassdiagram.diagramPackage = diagramPackage
 	buttonImplClassdiagram.classdiagram = classdiagram
 	buttonImplClassdiagram.diagramPackageNode = diagramPackageNode
-	buttonImplClassdiagram.legacyDiagramPackageNode = legacyDiagramPackageNode
 	buttonImplClassdiagram.treeOfGongObjects = treeOfGongObjects
 	buttonImplClassdiagram.classdiagramNode = classdiagramNode
 	buttonImplClassdiagram.nodeImplClassdiagram = nodeImplClassdiagram
@@ -64,6 +64,37 @@ func (buttonImplClassdiagram *ButtonImplClassdiagram) ButtonUpdated(
 	case BUTTON_edit_off:
 		buttonImplClassdiagram.classdiagram.IsInDrawMode = false
 		buttonImplClassdiagram.nodeImplClassdiagram.IsInDrawMode = false
+	case BUTTON_save:
+		buttonImplClassdiagram.classdiagram.IsInDrawMode = false
+		buttonImplClassdiagram.nodeImplClassdiagram.IsInDrawMode = false
+
+		// checkout in order to get the latest version of the diagram before
+		// modifying it updated by the front
+		gongdocStage.Checkout()
+		gongdocStage.Unstage()
+		gongdoc_models.StageBranch(gongdocStage, buttonImplClassdiagram.classdiagram)
+
+		filepath := filepath.Join(
+			filepath.Join(buttonImplClassdiagram.diagramPackage.AbsolutePathToDiagramPackage,
+				"../diagrams"),
+			buttonImplClassdiagram.classdiagram.Name) + ".go"
+		file, err := os.Create(filepath)
+		if err != nil {
+			log.Fatal("Cannot open diagram file" + err.Error())
+		}
+		defer file.Close()
+
+		mapDocLinkRemaping := &gongdocStage.Map_DocLink_Renaming
+		_ = mapDocLinkRemaping
+
+		gongdoc_models.SetupMapDocLinkRenaming(buttonImplClassdiagram.diagramPackage.ModelPkg.Stage_, gongdocStage)
+
+		gongdocStage.Marshall(file, "github.com/fullstack-lang/gongdoc/go/models", "diagrams")
+
+		// restore the original stage
+		gongdocStage.Unstage()
+		gongdocStage.Checkout()
+		gongdocStage.Commit()
 	}
 
 	computeNodeConfs(gongdocStage,
