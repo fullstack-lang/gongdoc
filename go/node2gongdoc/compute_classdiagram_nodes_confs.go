@@ -31,26 +31,27 @@ func computeDiagramNodesConfigurations(
 		classdiagramNode.HasDeleteButton = false
 		classdiagramNode.HasDuplicateButton = false
 		classdiagramNode.HasDrawButton = false
+
 		SetButtonDiaplayState(classdiagramNode, BUTTON_draw, false)
 		SetButtonDiaplayState(classdiagramNode, BUTTON_edit_off, false)
+
+		nodeImplClasssiagram, ok := classdiagramNode.Impl2.(*NodeImplClasssiagram)
+
+		if !ok {
+			log.Fatalln("not a good interface")
+		}
 
 		classdiagramNode.IsCheckboxDisabled = inModificationMode
 
 		if !classdiagramNode.IsChecked {
-			classdiagramNode.IsInEditMode = false
-			classdiagramNode.IsInDrawMode = false
 			continue
 		}
 
-		// the classdiagram has been checked
-		editable := diagramPackage.IsEditable && !classdiagramNode.IsInEditMode && !classdiagramNode.IsInDrawMode
+		displayDrawButton := diagramPackage.IsEditable && !nodeImplClasssiagram.IsInDrawMode
+		displayEditOffButton := diagramPackage.IsEditable && nodeImplClasssiagram.IsInDrawMode
 
-		classdiagramNode.HasEditButton = editable
-		classdiagramNode.HasDeleteButton = editable
-		classdiagramNode.HasDrawButton = editable
-		SetButtonDiaplayState(classdiagramNode, BUTTON_draw, editable)
-		SetButtonDiaplayState(classdiagramNode, BUTTON_edit_off, editable)
-		classdiagramNode.HasDuplicateButton = editable
+		SetButtonDiaplayState(classdiagramNode, BUTTON_draw, displayDrawButton)
+		SetButtonDiaplayState(classdiagramNode, BUTTON_edit_off, displayEditOffButton)
 	}
 }
 

@@ -63,7 +63,7 @@ func FillUpNodeTree(diagramPackage *gongdoc_models.DiagramPackage) {
 			Displayed: true}).Stage(diagramPackage.Stage_)
 		_ = drawButton
 		classdiagramNode.Buttons = append(classdiagramNode.Buttons, drawButton)
-		drawButton.Impl = NewButtonImplClassdiagramDraw(
+		drawButton.Impl = NewButtonImplClassdiagram(
 			diagramPackage,
 			classdiagram,
 			rootOfClassdiagramsNode,
@@ -71,6 +71,7 @@ func FillUpNodeTree(diagramPackage *gongdoc_models.DiagramPackage) {
 			nodeCb.treeOfGongObjects,
 			classdiagramNode,
 			nodeImplClassdiagram,
+			BUTTON_draw,
 		)
 
 		// add editoff button
@@ -80,7 +81,7 @@ func FillUpNodeTree(diagramPackage *gongdoc_models.DiagramPackage) {
 			Displayed: true}).Stage(diagramPackage.Stage_)
 		_ = editoffButton
 		classdiagramNode.Buttons = append(classdiagramNode.Buttons, editoffButton)
-		editoffButton.Impl = NewButtonImplClassdiagramEditOff(
+		editoffButton.Impl = NewButtonImplClassdiagram(
 			diagramPackage,
 			classdiagram,
 			rootOfClassdiagramsNode,
@@ -88,6 +89,7 @@ func FillUpNodeTree(diagramPackage *gongdoc_models.DiagramPackage) {
 			nodeCb.treeOfGongObjects,
 			classdiagramNode,
 			nodeImplClassdiagram,
+			BUTTON_edit_off,
 		)
 	}
 
