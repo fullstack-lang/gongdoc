@@ -71,10 +71,12 @@
             <div>
                 {{node.name}}
             </div>
-            <!-- <button *ngIf="node.gongNode.HasAddChildButton" mat-icon-button (click)="addNewItem(node)">
-                <mat-icon [ngStyle]="{'color':'rgba(0,0,0,.50)'}">add
-                </mat-icon>
-            </button> -->
+            <ng-container *ngFor="let button of node.gongNode.Buttons">
+                <button mat-button *ngIf='button.Displayed' (click)="onButtonClick(node, button)">
+                    <mat-icon [ngStyle]="{'color':'rgba(0,0,0,.50)'}">{{button.Icon}}
+                    </mat-icon>
+                </button>
+            </ng-container>
         </mat-tree-node>
     </mat-tree>
 </div>

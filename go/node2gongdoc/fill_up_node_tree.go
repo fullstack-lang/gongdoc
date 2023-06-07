@@ -32,6 +32,20 @@ func FillUpNodeTree(diagramPackage *gongdoc_models.DiagramPackage) {
 	// append an implementation
 	rootOfClassdiagramsNode.Impl2 = NewNodeImplRootOfClassDiagrams()
 
+	// add add button
+	addButton := (&gongdoc_models.Button{
+		Name:      diagramPackage.Name + " " + string(BUTTON_add),
+		Icon:      string(BUTTON_add),
+		Displayed: true}).Stage(diagramPackage.Stage_)
+	_ = addButton
+	rootOfClassdiagramsNode.Buttons = append(rootOfClassdiagramsNode.Buttons, addButton)
+	addButton.Impl = NewButtonImplRootOfClassdiagrams(
+		diagramPackage,
+		rootOfClassdiagramsNode,
+		treeOfGongObjects,
+		BUTTON_add,
+	)
+
 	// add one node for each diagram
 	for classdiagram := range *gongdoc_models.GetGongstructInstancesSet[gongdoc_models.Classdiagram](diagramPackage.Stage_) {
 		classdiagramNode := NewClassdiagramNode(classdiagram, diagramPackage, rootOfClassdiagramsNode, treeOfGongObjects)
