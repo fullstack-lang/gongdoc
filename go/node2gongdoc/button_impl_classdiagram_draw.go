@@ -18,6 +18,8 @@ type ButtonImplClassdiagramDraw struct {
 
 	// one needs to perform computation of node confs after the update
 	treeOfGongObjects *gongdoc_models.Tree
+
+	classdiagramNode *gongdoc_models.Node
 }
 
 func NewButtonImplClassdiagramDraw(
@@ -26,6 +28,7 @@ func NewButtonImplClassdiagramDraw(
 	diagramPackageNode *gongdoc_models.Node,
 	legacyDiagramPackageNode *gongdoc_models.Node,
 	treeOfGongObjects *gongdoc_models.Tree,
+	classdiagramNode *gongdoc_models.Node,
 ) (buttonImplClassdiagramDraw *ButtonImplClassdiagramDraw) {
 
 	buttonImplClassdiagramDraw = new(ButtonImplClassdiagramDraw)
@@ -35,18 +38,22 @@ func NewButtonImplClassdiagramDraw(
 	buttonImplClassdiagramDraw.diagramPackageNode = diagramPackageNode
 	buttonImplClassdiagramDraw.legacyDiagramPackageNode = legacyDiagramPackageNode
 	buttonImplClassdiagramDraw.treeOfGongObjects = treeOfGongObjects
+	buttonImplClassdiagramDraw.classdiagramNode = classdiagramNode
 
 	return
 }
 
 func (buttonImplClassdiagramDraw *ButtonImplClassdiagramDraw) ButtonUpdated(
 	gongdocStage *gongdoc_models.StageStruct,
-	front *gongdoc_models.Button) {
+	stageButton, front *gongdoc_models.Button) {
 
 	log.Println("ButtonImplClassdiagramDraw, ButtonUpdated", front.Name)
 
 	// set the classdiagram in draw mode
 	buttonImplClassdiagramDraw.classdiagram.IsInDrawMode = true
+
+	// set the node in draw mode
+	buttonImplClassdiagramDraw.classdiagramNode.IsInDrawMode = true
 
 	computeNodeConfs(gongdocStage,
 		buttonImplClassdiagramDraw.diagramPackageNode,

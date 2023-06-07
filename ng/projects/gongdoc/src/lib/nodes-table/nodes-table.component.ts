@@ -105,9 +105,6 @@ export class NodesTableComponent implements OnInit {
         case 'HasDrawButton':
           return nodeDB.HasDrawButton ? "true" : "false";
 
-        case 'HasDrawOffButton':
-          return nodeDB.HasDrawOffButton ? "true" : "false";
-
         case 'IsInDrawMode':
           return nodeDB.IsInDrawMode ? "true" : "false";
 
@@ -219,7 +216,6 @@ export class NodesTableComponent implements OnInit {
         "HasDuplicateButton",
         "DuplicationInProgress",
         "HasDrawButton",
-        "HasDrawOffButton",
         "IsInDrawMode",
         "IsSaved",
         "HasDeleteButton",
@@ -239,7 +235,6 @@ export class NodesTableComponent implements OnInit {
         "HasDuplicateButton",
         "DuplicationInProgress",
         "HasDrawButton",
-        "HasDrawOffButton",
         "IsInDrawMode",
         "IsSaved",
         "HasDeleteButton",

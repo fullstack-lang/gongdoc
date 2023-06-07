@@ -46,7 +46,6 @@ export class NodeDetailComponent implements OnInit {
 	HasDuplicateButtonFormControl: UntypedFormControl = new UntypedFormControl(false);
 	DuplicationInProgressFormControl: UntypedFormControl = new UntypedFormControl(false);
 	HasDrawButtonFormControl: UntypedFormControl = new UntypedFormControl(false);
-	HasDrawOffButtonFormControl: UntypedFormControl = new UntypedFormControl(false);
 	IsInDrawModeFormControl: UntypedFormControl = new UntypedFormControl(false);
 	IsSavedFormControl: UntypedFormControl = new UntypedFormControl(false);
 	HasDeleteButtonFormControl: UntypedFormControl = new UntypedFormControl(false);
@@ -176,7 +175,6 @@ export class NodeDetailComponent implements OnInit {
 				this.HasDuplicateButtonFormControl.setValue(this.node.HasDuplicateButton)
 				this.DuplicationInProgressFormControl.setValue(this.node.DuplicationInProgress)
 				this.HasDrawButtonFormControl.setValue(this.node.HasDrawButton)
-				this.HasDrawOffButtonFormControl.setValue(this.node.HasDrawOffButton)
 				this.IsInDrawModeFormControl.setValue(this.node.IsInDrawMode)
 				this.IsSavedFormControl.setValue(this.node.IsSaved)
 				this.HasDeleteButtonFormControl.setValue(this.node.HasDeleteButton)
@@ -202,7 +200,6 @@ export class NodeDetailComponent implements OnInit {
 		this.node.HasDuplicateButton = this.HasDuplicateButtonFormControl.value
 		this.node.DuplicationInProgress = this.DuplicationInProgressFormControl.value
 		this.node.HasDrawButton = this.HasDrawButtonFormControl.value
-		this.node.HasDrawOffButton = this.HasDrawOffButtonFormControl.value
 		this.node.IsInDrawMode = this.IsInDrawModeFormControl.value
 		this.node.IsSaved = this.IsSavedFormControl.value
 		this.node.HasDeleteButton = this.HasDeleteButtonFormControl.value

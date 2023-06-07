@@ -25,7 +25,6 @@ export class NodeDB {
 	HasDuplicateButton: boolean = false
 	DuplicationInProgress: boolean = false
 	HasDrawButton: boolean = false
-	HasDrawOffButton: boolean = false
 	IsInDrawMode: boolean = false
 	IsSaved: boolean = false
 	HasDeleteButton: boolean = false

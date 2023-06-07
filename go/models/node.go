@@ -34,10 +34,9 @@ type Node struct {
 	DuplicationInProgress bool
 
 	// to edit the diagram
-	HasDrawButton    bool
-	HasDrawOffButton bool
-	IsInDrawMode     bool
-	IsSaved          bool
+	HasDrawButton bool
+	IsInDrawMode  bool
+	IsSaved       bool
 
 	HasDeleteButton bool
 

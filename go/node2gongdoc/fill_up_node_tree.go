@@ -68,6 +68,7 @@ func FillUpNodeTree(diagramPackage *gongdoc_models.DiagramPackage) {
 			rootOfClassdiagramsNode,
 			legacyRootOfClassdiagramsNode,
 			nodeCb.treeOfGongObjects,
+			classdiagramNode,
 		)
 	}
 

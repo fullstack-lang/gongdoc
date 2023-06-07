@@ -32,7 +32,6 @@ func computeDiagramNodesConfigurations(
 		classdiagramNode.HasDuplicateButton = false
 		classdiagramNode.HasDrawButton = false
 		SetButtonDiaplayState(classdiagramNode, BUTTON_draw, false)
-		classdiagramNode.HasDrawOffButton = false
 
 		classdiagramNode.IsCheckboxDisabled = inModificationMode
 
