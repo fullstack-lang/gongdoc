@@ -1,6 +1,7 @@
 package node2gongdoc
 
 import (
+	"fmt"
 	"log"
 	"os"
 	"path/filepath"
@@ -114,6 +115,61 @@ func (buttonImplClassdiagram *ButtonImplClassdiagram) ButtonUpdated(
 				log.Println("Error while deleting file " + classdiagramFilePath + " : " + err.Error())
 			}
 		}
+
+		// reload
+		fakeFrontDiagramPackage := (&gongdoc_models.DiagramPackage{})
+		fakeFrontDiagramPackage.IsReloaded = buttonImplClassdiagram.diagramPackage.IsReloaded
+		buttonImplClassdiagram.diagramPackage.IsReloaded = !buttonImplClassdiagram.diagramPackage.IsReloaded
+
+		gongdocStage.OnAfterDiagramPackageUpdateCallback.OnAfterUpdate(gongdocStage,
+			buttonImplClassdiagram.diagramPackage,
+			fakeFrontDiagramPackage,
+		)
+	case BUTTON_file_copy:
+		var hasNameCollision bool
+		initialName := buttonImplClassdiagram.classdiagram.Name
+		newName := initialName
+		index := 0
+		// loop until the name of the new diagram is not in collision with an existing
+		// diagram name
+		for index == 0 || hasNameCollision {
+			index++
+			hasNameCollision = false
+			for classdiagram := range *gongdoc_models.GetGongstructInstancesSet[gongdoc_models.Classdiagram](gongdocStage) {
+				if classdiagram.Name == newName {
+					hasNameCollision = true
+				}
+			}
+			if hasNameCollision {
+				newName = initialName + fmt.Sprintf("_%d", index)
+			}
+		}
+
+		log.Println("New name is", newName)
+		newClassdiagramFilePath := filepath.Join(buttonImplClassdiagram.diagramPackage.Path, "../diagrams", newName) + ".go"
+
+		file, err := os.Create(newClassdiagramFilePath)
+		if err != nil {
+			log.Fatal("Cannot open diagram file" + err.Error())
+		}
+		defer file.Close()
+
+		gongdocStage.Checkout()
+		gongdocStage.Unstage()
+		gongdoc_models.StageBranch(gongdocStage, buttonImplClassdiagram.classdiagram)
+		buttonImplClassdiagram.classdiagram.Name = newName
+
+		gongdoc_models.SetupMapDocLinkRenaming(buttonImplClassdiagram.diagramPackage.ModelPkg.Stage_, gongdocStage)
+		gongdocStage.Marshall(file, "github.com/fullstack-lang/gongdoc/go/models", "diagrams")
+
+		// marshall the new diagram to the new file
+		gongdocStage.Checkout()
+		gongdocStage.Unstage()
+		gongdoc_models.StageBranch(gongdocStage, buttonImplClassdiagram.classdiagram)
+		buttonImplClassdiagram.classdiagram.Name = newName
+
+		gongdocStage.Checkout()
+		gongdocStage.Commit()
 
 		// reload
 		fakeFrontDiagramPackage := (&gongdoc_models.DiagramPackage{})

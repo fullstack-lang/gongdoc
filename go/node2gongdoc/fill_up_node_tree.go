@@ -86,6 +86,23 @@ func FillUpNodeTree(diagramPackage *gongdoc_models.DiagramPackage) {
 			BUTTON_delete,
 		)
 
+		// file_copy
+		// delete button
+		file_copyButton := (&gongdoc_models.Button{
+			Name:      classdiagram.Name + " " + string(BUTTON_file_copy),
+			Icon:      string(BUTTON_file_copy),
+			Displayed: true}).Stage(diagramPackage.Stage_)
+		_ = file_copyButton
+		classdiagramNode.Buttons = append(classdiagramNode.Buttons, file_copyButton)
+		file_copyButton.Impl = NewButtonImplClassdiagram(
+			diagramPackage,
+			classdiagram,
+			rootOfClassdiagramsNode,
+			treeOfGongObjects,
+			classdiagramNode,
+			nodeImplClassdiagram,
+			BUTTON_file_copy,
+		)
 		//
 		// Buttons that are displayed if the node is drawned
 		//

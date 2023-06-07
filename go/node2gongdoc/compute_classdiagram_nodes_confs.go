@@ -41,6 +41,7 @@ func computeClassdiagramNodesConfigurations(
 		SetButtonDiaplayState(classdiagramNode, BUTTON_edit_off, false)
 		SetButtonDiaplayState(classdiagramNode, BUTTON_save, false)
 		SetButtonDiaplayState(classdiagramNode, BUTTON_delete, false)
+		SetButtonDiaplayState(classdiagramNode, BUTTON_file_copy, false)
 
 		nodeImplClasssiagram, ok := classdiagramNode.Impl2.(*NodeImplClasssiagram)
 		if !ok {
@@ -58,6 +59,7 @@ func computeClassdiagramNodesConfigurations(
 
 		SetButtonDiaplayState(classdiagramNode, BUTTON_draw, selectedForEdit)
 		SetButtonDiaplayState(classdiagramNode, BUTTON_delete, selectedForEdit)
+		SetButtonDiaplayState(classdiagramNode, BUTTON_file_copy, selectedForEdit)
 
 		SetButtonDiaplayState(classdiagramNode, BUTTON_edit_off, inDrawingMode)
 		SetButtonDiaplayState(classdiagramNode, BUTTON_save, inDrawingMode)
