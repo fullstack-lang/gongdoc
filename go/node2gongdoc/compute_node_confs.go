@@ -9,7 +9,7 @@ func computeNodeConfs(
 	treeOfGongObjects *gongdoc_models.Tree,
 ) {
 
-	computeDiagramNodesConfigurations(
+	computeClassdiagramNodesConfigurations(
 		diagramPackageNode,
 		diagramPackage,
 		gongdocStage)

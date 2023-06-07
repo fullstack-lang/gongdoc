@@ -15,7 +15,6 @@ func FillUpNodeTree(diagramPackage *gongdoc_models.DiagramPackage) {
 	nodeCb := new(NodeCB)
 	nodeCb.diagramPackage = diagramPackage
 
-	leagacyTreeOfDiagramNodes := nodeCb.FillUpDiagramNodeTree(diagramPackage)
 	treeOfGongObjects := nodeCb.FillUpTreeOfGongObjects()
 
 	//
@@ -41,17 +40,10 @@ func FillUpNodeTree(diagramPackage *gongdoc_models.DiagramPackage) {
 
 		classdiagramNode.HasCheckboxButton = true
 
-		// fetch the root of diagram nodes
-		var legacyRootOfClassdiagramsNode *gongdoc_models.Node
-		for _, _node := range leagacyTreeOfDiagramNodes.RootNodes {
-			legacyRootOfClassdiagramsNode = _node
-		}
-
 		nodeImplClassdiagram := NewNodeImplClasssiagram(
 			diagramPackage,
 			classdiagram,
 			rootOfClassdiagramsNode,
-			legacyRootOfClassdiagramsNode,
 			nodeCb.treeOfGongObjects,
 		)
 		classdiagramNode.Impl2 = nodeImplClassdiagram

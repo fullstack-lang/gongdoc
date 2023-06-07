@@ -164,7 +164,7 @@ func (nodeCb *NodeCB) computeNodesConfiguration(gongdocStage *gongdoc_models.Sta
 
 func (nodesCb *NodeCB) computeDiagramNodesConfigurations(stage *gongdoc_models.StageStruct) {
 
-	computeDiagramNodesConfigurations(
+	computeClassdiagramNodesConfigurations(
 		nodesCb.diagramPackageNode,
 		nodesCb.diagramPackage,
 		stage)

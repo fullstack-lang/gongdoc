@@ -6,7 +6,7 @@ import (
 	gongdoc_models "github.com/fullstack-lang/gongdoc/go/models"
 )
 
-func computeDiagramNodesConfigurations(
+func computeClassdiagramNodesConfigurations(
 	diagramPackageNode *gongdoc_models.Node,
 	diagramPackage *gongdoc_models.DiagramPackage,
 	gongdocStage *gongdoc_models.StageStruct) {
@@ -15,7 +15,12 @@ func computeDiagramNodesConfigurations(
 	// if so, all diagram check need to be disabled
 	var inModificationMode bool
 	for _, classdiagramNode := range diagramPackageNode.Children {
-		if classdiagramNode.IsInDrawMode || classdiagramNode.IsInEditMode {
+
+		nodeImplClasssiagram, ok := classdiagramNode.Impl2.(*NodeImplClasssiagram)
+		if !ok {
+			log.Fatalln("not a good interface")
+		}
+		if nodeImplClasssiagram.IsInDrawMode {
 			inModificationMode = true
 		}
 	}
@@ -37,7 +42,6 @@ func computeDiagramNodesConfigurations(
 		SetButtonDiaplayState(classdiagramNode, BUTTON_save, false)
 
 		nodeImplClasssiagram, ok := classdiagramNode.Impl2.(*NodeImplClasssiagram)
-
 		if !ok {
 			log.Fatalln("not a good interface")
 		}
