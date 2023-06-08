@@ -60,7 +60,7 @@ func LoadDiagramPackage(gongdocStage *gongdoc_models.StageStruct, pkgPath string
 	log.Printf("Parser took %s", time.Since(startParser))
 
 	if errParser != nil {
-		log.Panic("Unable to parser ")
+		log.Panic("Unable to parser ", errParser.Error())
 	}
 	diagramPackageAst, ok := pkgsParser["diagrams"]
 	if !ok {

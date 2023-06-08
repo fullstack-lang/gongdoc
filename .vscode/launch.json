@@ -247,5 +247,16 @@
                 "go/models",
             ]
         },
+        {
+            "name": "gongdoc on gong",
+            "type": "go",
+            "request": "launch",
+            "mode": "debug",
+            "program": "${workspaceFolder}/go/cmd/gongdoc",
+            "cwd": "${workspaceFolder}/../gong",
+            "args": [
+                "go/models",
+            ]
+        },
     ]
 }
