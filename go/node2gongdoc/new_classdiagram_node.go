@@ -43,6 +43,23 @@ func NewClassdiagramNode(
 		BUTTON_draw,
 	)
 
+	// add edit button
+	editButton := (&gongdoc_models.Button{
+		Name:      classdiagram.Name + " " + string(BUTTON_edit),
+		Icon:      string(BUTTON_edit),
+		Displayed: true}).Stage(diagramPackage.Stage_)
+	_ = editButton
+	classdiagramNode.Buttons = append(classdiagramNode.Buttons, editButton)
+	editButton.Impl = NewButtonImplClassdiagram(
+		diagramPackage,
+		classdiagram,
+		rootOfClassdiagramsNode,
+		treeOfGongObjects,
+		classdiagramNode,
+		nodeImplClassdiagram,
+		BUTTON_edit,
+	)
+
 	// delete button
 	deleteButton := (&gongdoc_models.Button{
 		Name:      classdiagram.Name + " " + string(BUTTON_delete),

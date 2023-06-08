@@ -1370,6 +1370,13 @@ func UnmarshallGongstructStaging(stage *StageStruct, cmap *ast.CommentMap, assig
 						log.Fatalln(err)
 					}
 					__gong__map_Node[identifier].IsCheckboxDisabled = fielValue
+				case "IsInEditMode":
+					// convert string to boolean
+					fielValue, err := strconv.ParseBool(ident.Name)
+					if err != nil {
+						log.Fatalln(err)
+					}
+					__gong__map_Node[identifier].IsInEditMode = fielValue
 				}
 			case "NoteShape":
 				switch fieldName {

@@ -88,6 +88,10 @@ type NodeDB struct {
 	// Declation for basic field nodeDB.IsCheckboxDisabled
 	// provide the sql storage for the boolan
 	IsCheckboxDisabled_Data sql.NullBool
+
+	// Declation for basic field nodeDB.IsInEditMode
+	// provide the sql storage for the boolan
+	IsInEditMode_Data sql.NullBool
 	// encoding of pointers
 	NodePointersEnconding
 }
@@ -118,6 +122,8 @@ type NodeWOP struct {
 	IsChecked bool `xlsx:"4"`
 
 	IsCheckboxDisabled bool `xlsx:"5"`
+
+	IsInEditMode bool `xlsx:"6"`
 	// insertion for WOP pointer fields
 }
 
@@ -129,6 +135,7 @@ var Node_Fields = []string{
 	"HasCheckboxButton",
 	"IsChecked",
 	"IsCheckboxDisabled",
+	"IsInEditMode",
 }
 
 type BackRepoNodeStruct struct {
@@ -495,6 +502,9 @@ func (nodeDB *NodeDB) CopyBasicFieldsFromNode(node *models.Node) {
 
 	nodeDB.IsCheckboxDisabled_Data.Bool = node.IsCheckboxDisabled
 	nodeDB.IsCheckboxDisabled_Data.Valid = true
+
+	nodeDB.IsInEditMode_Data.Bool = node.IsInEditMode
+	nodeDB.IsInEditMode_Data.Valid = true
 }
 
 // CopyBasicFieldsFromNodeWOP
@@ -515,6 +525,9 @@ func (nodeDB *NodeDB) CopyBasicFieldsFromNodeWOP(node *NodeWOP) {
 
 	nodeDB.IsCheckboxDisabled_Data.Bool = node.IsCheckboxDisabled
 	nodeDB.IsCheckboxDisabled_Data.Valid = true
+
+	nodeDB.IsInEditMode_Data.Bool = node.IsInEditMode
+	nodeDB.IsInEditMode_Data.Valid = true
 }
 
 // CopyBasicFieldsToNode
@@ -525,6 +538,7 @@ func (nodeDB *NodeDB) CopyBasicFieldsToNode(node *models.Node) {
 	node.HasCheckboxButton = nodeDB.HasCheckboxButton_Data.Bool
 	node.IsChecked = nodeDB.IsChecked_Data.Bool
 	node.IsCheckboxDisabled = nodeDB.IsCheckboxDisabled_Data.Bool
+	node.IsInEditMode = nodeDB.IsInEditMode_Data.Bool
 }
 
 // CopyBasicFieldsToNodeWOP
@@ -536,6 +550,7 @@ func (nodeDB *NodeDB) CopyBasicFieldsToNodeWOP(node *NodeWOP) {
 	node.HasCheckboxButton = nodeDB.HasCheckboxButton_Data.Bool
 	node.IsChecked = nodeDB.IsChecked_Data.Bool
 	node.IsCheckboxDisabled = nodeDB.IsCheckboxDisabled_Data.Bool
+	node.IsInEditMode = nodeDB.IsInEditMode_Data.Bool
 }
 
 // Backup generates a json file from a slice of all NodeDB instances in the backrepo

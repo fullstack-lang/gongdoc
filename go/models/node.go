@@ -22,6 +22,9 @@ type Node struct {
 	IsChecked          bool
 	IsCheckboxDisabled bool
 
+	// in case the user wants to change the name of the node
+	IsInEditMode bool
+
 	Children []*Node
 
 	Buttons []*Button

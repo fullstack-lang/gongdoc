@@ -2050,7 +2050,7 @@ func GetFields[Type Gongstruct]() (res []string) {
 	case Link:
 		res = []string{"Name", "Identifier", "Fieldtypename", "FieldOffsetX", "FieldOffsetY", "TargetMultiplicity", "TargetMultiplicityOffsetX", "TargetMultiplicityOffsetY", "SourceMultiplicity", "SourceMultiplicityOffsetX", "SourceMultiplicityOffsetY", "Middlevertice", "StartOrientation", "StartRatio", "EndOrientation", "EndRatio", "CornerOffsetRatio"}
 	case Node:
-		res = []string{"Name", "IsExpanded", "HasCheckboxButton", "IsChecked", "IsCheckboxDisabled", "Children", "Buttons"}
+		res = []string{"Name", "IsExpanded", "HasCheckboxButton", "IsChecked", "IsCheckboxDisabled", "IsInEditMode", "Children", "Buttons"}
 	case NoteShape:
 		res = []string{"Name", "Identifier", "Body", "BodyHTML", "X", "Y", "Width", "Heigth", "Matched", "NoteShapeLinks"}
 	case NoteShapeLink:
@@ -2285,6 +2285,8 @@ func GetFieldStringValue[Type Gongstruct](instance Type, fieldName string) (res 
 			res = fmt.Sprintf("%t", any(instance).(Node).IsChecked)
 		case "IsCheckboxDisabled":
 			res = fmt.Sprintf("%t", any(instance).(Node).IsCheckboxDisabled)
+		case "IsInEditMode":
+			res = fmt.Sprintf("%t", any(instance).(Node).IsInEditMode)
 		case "Children":
 			for idx, __instance__ := range any(instance).(Node).Children {
 				if idx > 0 {

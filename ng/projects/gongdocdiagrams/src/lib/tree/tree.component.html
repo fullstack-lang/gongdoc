@@ -9,17 +9,22 @@
             <div *ngIf='!node.gongNode.IsInEditMode'>
                 {{node.name}}
             </div>
-            <ng-container *ngFor="let button of node.gongNode.Buttons">
-                <button mat-button *ngIf='button.Displayed' (click)="onButtonClick(node, button)">
-                    <mat-icon [ngStyle]="{'color':'rgba(0,0,0,.50)'}">{{button.Icon}}
-                    </mat-icon>
-                </button>
-            </ng-container>
-            <!-- <mat-form-field *ngIf='node.gongNode.IsInEditMode' mat-form-field class="detail-full-width">
+            <mat-form-field *ngIf='node.gongNode.IsInEditMode' mat-form-field class="mat-mdc-form-field">
                 <mat-label>Name</mat-label>
                 <input name="" [ngModelOptions]="{standalone: true}" matInput [(ngModel)]="node.gongNode.Name">
             </mat-form-field>
             <button *ngIf='node.gongNode.IsInEditMode' mat-button (click)="update(node)">
+                <mat-icon [ngStyle]="{'color':'rgba(0,0,0,.50)'}">save
+                </mat-icon>
+            </button>
+            <ng-container *ngFor="let button of node.gongNode.Buttons">
+                <button mat-button *ngIf='button.Displayed' (click)="onButtonClick(node, button)" class="tight-buttons">
+                    <mat-icon [ngStyle]="{'color':'rgba(0,0,0,.50)'}">{{button.Icon}}
+                    </mat-icon>
+                </button>
+            </ng-container>
+
+            <!-- <button *ngIf='node.gongNode.IsInEditMode' mat-button (click)="update(node)">
                 <mat-icon [ngStyle]="{'color':'rgba(0,0,0,.50)'}">save
                 </mat-icon>
             </button>

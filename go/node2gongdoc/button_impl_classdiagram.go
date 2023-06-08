@@ -64,37 +64,99 @@ func (buttonImplClassdiagram *ButtonImplClassdiagram) ButtonUpdated(
 		buttonImplClassdiagram.nodeImplClassdiagram.IsInDrawMode = true
 	case BUTTON_edit_off:
 		buttonImplClassdiagram.classdiagram.IsInDrawMode = false
+		buttonImplClassdiagram.classdiagramNode.IsInEditMode = false
 		buttonImplClassdiagram.nodeImplClassdiagram.IsInDrawMode = false
 	case BUTTON_save:
 		buttonImplClassdiagram.classdiagram.IsInDrawMode = false
-		buttonImplClassdiagram.nodeImplClassdiagram.IsInDrawMode = false
 
-		// checkout in order to get the latest version of the diagram before
-		// modifying it updated by the front
-		gongdocStage.Checkout()
-		gongdocStage.Unstage()
-		gongdoc_models.StageBranch(gongdocStage, buttonImplClassdiagram.classdiagram)
+		if buttonImplClassdiagram.nodeImplClassdiagram.IsInDrawMode {
 
-		filepath := filepath.Join(
-			filepath.Join(buttonImplClassdiagram.diagramPackage.AbsolutePathToDiagramPackage,
-				"../diagrams"),
-			buttonImplClassdiagram.classdiagram.Name) + ".go"
-		file, err := os.Create(filepath)
-		if err != nil {
-			log.Fatal("Cannot open diagram file" + err.Error())
+			// checkout in order to get the latest version of the diagram before
+			// modifying it updated by the front
+			gongdocStage.Checkout()
+			gongdocStage.Unstage()
+			gongdoc_models.StageBranch(gongdocStage, buttonImplClassdiagram.classdiagram)
+
+			filepath := filepath.Join(
+				filepath.Join(buttonImplClassdiagram.diagramPackage.AbsolutePathToDiagramPackage,
+					"../diagrams"),
+				buttonImplClassdiagram.classdiagram.Name) + ".go"
+			file, err := os.Create(filepath)
+			if err != nil {
+				log.Fatal("Cannot open diagram file" + err.Error())
+			}
+			defer file.Close()
+
+			mapDocLinkRemaping := &gongdocStage.Map_DocLink_Renaming
+			_ = mapDocLinkRemaping
+
+			gongdoc_models.SetupMapDocLinkRenaming(buttonImplClassdiagram.diagramPackage.ModelPkg.Stage_, gongdocStage)
+
+			gongdocStage.Marshall(file, "github.com/fullstack-lang/gongdoc/go/models", "diagrams")
+
+			// restore the original stage
+			gongdocStage.Unstage()
+			gongdocStage.Checkout()
+
+			buttonImplClassdiagram.nodeImplClassdiagram.IsInDrawMode = false
 		}
-		defer file.Close()
+		if buttonImplClassdiagram.classdiagramNode.IsInEditMode {
+			// check that the name is a correct identifer in go
+			// for _, b := range buttonImplClassdiagram.classdiagram.Name {
+			// 	if 'a' <= b && b <= 'z' || 'A' <= b && b <= 'Z' || b == '_' || '0' <= b && b <= '9' {
+			// 		// Avoid assigning a rune for the common case of an ascii character.
+			// 		continue
+			// 	} else {
+			// 		log.Println("The name of the diagram is not a correct identifier in go: " +
+			// 			buttonImplClassdiagram.classdiagram.Name)
+			// 		buttonImplClassdiagram.classdiagramNode.Commit(gongdocStage)
+			// 		return
+			// 	}
+			// }
 
-		mapDocLinkRemaping := &gongdocStage.Map_DocLink_Renaming
-		_ = mapDocLinkRemaping
+			// // rename the diagram file if it exists
+			// // remove the actual classdiagram file if it exsits
+			// oldClassdiagramFilePath := filepath.Join(buttonImplClassdiagram.diagramPackage.Path,
+			// 	"../diagrams", classdiagramImpl.classdiagram.Name) + ".go"
+			// newClassdiagramFilePath := filepath.Join(buttonImplClassdiagram.diagramPackage.Path,
+			// 	"../diagrams", frontNode.Name) + ".go"
 
-		gongdoc_models.SetupMapDocLinkRenaming(buttonImplClassdiagram.diagramPackage.ModelPkg.Stage_, gongdocStage)
+			// if _, err := os.Stat(oldClassdiagramFilePath); err != nil {
+			// 	return
+			// }
+			// if err := os.Remove(oldClassdiagramFilePath); err != nil {
+			// 	log.Fatal("Error while renaming file " + oldClassdiagramFilePath + " : " + err.Error())
+			// }
 
-		gongdocStage.Marshall(file, "github.com/fullstack-lang/gongdoc/go/models", "diagrams")
+			// file, err := os.Create(newClassdiagramFilePath)
+			// if err != nil {
+			// 	log.Fatal("Cannot create diagram file" + err.Error())
+			// }
+			// defer file.Close()
 
-		// restore the original stage
-		gongdocStage.Unstage()
-		gongdocStage.Checkout()
+			// // checkout in order to get the latest version of the diagram before
+			// // modifying it updated by the front
+			// gongdocStage.Checkout()
+			// gongdocStage.Unstage()
+			// gongdoc_models.StageBranch(gongdocStage, classdiagramImpl.classdiagram)
+			// classdiagramImpl.classdiagram.Name = frontNode.Name
+
+			// gongdoc_models.SetupMapDocLinkRenaming(buttonImplClassdiagram.diagramPackage.ModelPkg.Stage_, gongdocStage)
+
+			// // save the diagram
+			// gongdocStage.Marshall(file, "github.com/fullstack-lang/gongdoc/go/models", "diagrams")
+
+			// // restore the original stage
+			// gongdocStage.Unstage()
+			// gongdocStage.Checkout()
+
+			// classdiagramImpl.classdiagram.Name = frontNode.Name
+
+			// buttonImplClassdiagram.classdiagramNode.IsInEditMode = false
+			// stagedNode.Name = frontNode.Name
+			// gongdocStage.Commit()
+		}
+
 		gongdocStage.Commit()
 
 	case BUTTON_delete:
@@ -180,6 +242,9 @@ func (buttonImplClassdiagram *ButtonImplClassdiagram) ButtonUpdated(
 			buttonImplClassdiagram.diagramPackage,
 			fakeFrontDiagramPackage,
 		)
+	case BUTTON_edit:
+
+		buttonImplClassdiagram.classdiagramNode.IsInEditMode = true
 	default:
 		log.Fatalln("Unkown button type", buttonImplClassdiagram.Icon)
 	}

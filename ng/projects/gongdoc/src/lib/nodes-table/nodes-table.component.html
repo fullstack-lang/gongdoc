@@ -54,6 +54,13 @@
             </td>
         </ng-container>
         <!-- -->
+        <ng-container matColumnDef="IsInEditMode">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header> IsInEditMode </th>
+            <td mat-cell *matCellDef="let Node">
+                <mat-checkbox [checked]="Node.IsInEditMode" disabled=true></mat-checkbox>
+            </td>
+        </ng-container>
+        <!-- -->
         <ng-container matColumnDef="Node_Children">
             <th mat-header-cell *matHeaderCellDef mat-sort-header> <-- (Node) Children </th>
             <td mat-cell *matCellDef="let node">

@@ -244,6 +244,14 @@ export class TreeComponent implements OnInit {
         console.log("button pressed")
       }
     )
+  }
 
+  update(node: FlatNode) {
+    node.gongNode.IsInEditMode = false
+    this.gongdocNodeService.updateNode(node.gongNode, this.GONG__StackPath).subscribe(
+      gongdocNode => {
+        console.log("node.gongNode.IsInEditMode = false, updated node")
+      }
+    )
   }
 }
