@@ -22,24 +22,6 @@ type Node struct {
 	IsChecked          bool
 	IsCheckboxDisabled bool
 
-	HasAddChildButton bool
-
-	// to edit the name
-	HasEditButton bool
-	IsInEditMode  bool
-
-	HasDuplicateButton bool
-	// DuplicationInProgress manages the duplication state
-	// set up true by the front, back to false by the back
-	DuplicationInProgress bool
-
-	// to edit the diagram
-	HasDrawButton bool
-	IsInDrawMode  bool
-	IsSaved       bool
-
-	HasDeleteButton bool
-
 	Children []*Node
 
 	Buttons []*Button

@@ -88,42 +88,6 @@ type NodeDB struct {
 	// Declation for basic field nodeDB.IsCheckboxDisabled
 	// provide the sql storage for the boolan
 	IsCheckboxDisabled_Data sql.NullBool
-
-	// Declation for basic field nodeDB.HasAddChildButton
-	// provide the sql storage for the boolan
-	HasAddChildButton_Data sql.NullBool
-
-	// Declation for basic field nodeDB.HasEditButton
-	// provide the sql storage for the boolan
-	HasEditButton_Data sql.NullBool
-
-	// Declation for basic field nodeDB.IsInEditMode
-	// provide the sql storage for the boolan
-	IsInEditMode_Data sql.NullBool
-
-	// Declation for basic field nodeDB.HasDuplicateButton
-	// provide the sql storage for the boolan
-	HasDuplicateButton_Data sql.NullBool
-
-	// Declation for basic field nodeDB.DuplicationInProgress
-	// provide the sql storage for the boolan
-	DuplicationInProgress_Data sql.NullBool
-
-	// Declation for basic field nodeDB.HasDrawButton
-	// provide the sql storage for the boolan
-	HasDrawButton_Data sql.NullBool
-
-	// Declation for basic field nodeDB.IsInDrawMode
-	// provide the sql storage for the boolan
-	IsInDrawMode_Data sql.NullBool
-
-	// Declation for basic field nodeDB.IsSaved
-	// provide the sql storage for the boolan
-	IsSaved_Data sql.NullBool
-
-	// Declation for basic field nodeDB.HasDeleteButton
-	// provide the sql storage for the boolan
-	HasDeleteButton_Data sql.NullBool
 	// encoding of pointers
 	NodePointersEnconding
 }
@@ -154,24 +118,6 @@ type NodeWOP struct {
 	IsChecked bool `xlsx:"4"`
 
 	IsCheckboxDisabled bool `xlsx:"5"`
-
-	HasAddChildButton bool `xlsx:"6"`
-
-	HasEditButton bool `xlsx:"7"`
-
-	IsInEditMode bool `xlsx:"8"`
-
-	HasDuplicateButton bool `xlsx:"9"`
-
-	DuplicationInProgress bool `xlsx:"10"`
-
-	HasDrawButton bool `xlsx:"11"`
-
-	IsInDrawMode bool `xlsx:"12"`
-
-	IsSaved bool `xlsx:"13"`
-
-	HasDeleteButton bool `xlsx:"14"`
 	// insertion for WOP pointer fields
 }
 
@@ -183,15 +129,6 @@ var Node_Fields = []string{
 	"HasCheckboxButton",
 	"IsChecked",
 	"IsCheckboxDisabled",
-	"HasAddChildButton",
-	"HasEditButton",
-	"IsInEditMode",
-	"HasDuplicateButton",
-	"DuplicationInProgress",
-	"HasDrawButton",
-	"IsInDrawMode",
-	"IsSaved",
-	"HasDeleteButton",
 }
 
 type BackRepoNodeStruct struct {
@@ -558,33 +495,6 @@ func (nodeDB *NodeDB) CopyBasicFieldsFromNode(node *models.Node) {
 
 	nodeDB.IsCheckboxDisabled_Data.Bool = node.IsCheckboxDisabled
 	nodeDB.IsCheckboxDisabled_Data.Valid = true
-
-	nodeDB.HasAddChildButton_Data.Bool = node.HasAddChildButton
-	nodeDB.HasAddChildButton_Data.Valid = true
-
-	nodeDB.HasEditButton_Data.Bool = node.HasEditButton
-	nodeDB.HasEditButton_Data.Valid = true
-
-	nodeDB.IsInEditMode_Data.Bool = node.IsInEditMode
-	nodeDB.IsInEditMode_Data.Valid = true
-
-	nodeDB.HasDuplicateButton_Data.Bool = node.HasDuplicateButton
-	nodeDB.HasDuplicateButton_Data.Valid = true
-
-	nodeDB.DuplicationInProgress_Data.Bool = node.DuplicationInProgress
-	nodeDB.DuplicationInProgress_Data.Valid = true
-
-	nodeDB.HasDrawButton_Data.Bool = node.HasDrawButton
-	nodeDB.HasDrawButton_Data.Valid = true
-
-	nodeDB.IsInDrawMode_Data.Bool = node.IsInDrawMode
-	nodeDB.IsInDrawMode_Data.Valid = true
-
-	nodeDB.IsSaved_Data.Bool = node.IsSaved
-	nodeDB.IsSaved_Data.Valid = true
-
-	nodeDB.HasDeleteButton_Data.Bool = node.HasDeleteButton
-	nodeDB.HasDeleteButton_Data.Valid = true
 }
 
 // CopyBasicFieldsFromNodeWOP
@@ -605,33 +515,6 @@ func (nodeDB *NodeDB) CopyBasicFieldsFromNodeWOP(node *NodeWOP) {
 
 	nodeDB.IsCheckboxDisabled_Data.Bool = node.IsCheckboxDisabled
 	nodeDB.IsCheckboxDisabled_Data.Valid = true
-
-	nodeDB.HasAddChildButton_Data.Bool = node.HasAddChildButton
-	nodeDB.HasAddChildButton_Data.Valid = true
-
-	nodeDB.HasEditButton_Data.Bool = node.HasEditButton
-	nodeDB.HasEditButton_Data.Valid = true
-
-	nodeDB.IsInEditMode_Data.Bool = node.IsInEditMode
-	nodeDB.IsInEditMode_Data.Valid = true
-
-	nodeDB.HasDuplicateButton_Data.Bool = node.HasDuplicateButton
-	nodeDB.HasDuplicateButton_Data.Valid = true
-
-	nodeDB.DuplicationInProgress_Data.Bool = node.DuplicationInProgress
-	nodeDB.DuplicationInProgress_Data.Valid = true
-
-	nodeDB.HasDrawButton_Data.Bool = node.HasDrawButton
-	nodeDB.HasDrawButton_Data.Valid = true
-
-	nodeDB.IsInDrawMode_Data.Bool = node.IsInDrawMode
-	nodeDB.IsInDrawMode_Data.Valid = true
-
-	nodeDB.IsSaved_Data.Bool = node.IsSaved
-	nodeDB.IsSaved_Data.Valid = true
-
-	nodeDB.HasDeleteButton_Data.Bool = node.HasDeleteButton
-	nodeDB.HasDeleteButton_Data.Valid = true
 }
 
 // CopyBasicFieldsToNode
@@ -642,15 +525,6 @@ func (nodeDB *NodeDB) CopyBasicFieldsToNode(node *models.Node) {
 	node.HasCheckboxButton = nodeDB.HasCheckboxButton_Data.Bool
 	node.IsChecked = nodeDB.IsChecked_Data.Bool
 	node.IsCheckboxDisabled = nodeDB.IsCheckboxDisabled_Data.Bool
-	node.HasAddChildButton = nodeDB.HasAddChildButton_Data.Bool
-	node.HasEditButton = nodeDB.HasEditButton_Data.Bool
-	node.IsInEditMode = nodeDB.IsInEditMode_Data.Bool
-	node.HasDuplicateButton = nodeDB.HasDuplicateButton_Data.Bool
-	node.DuplicationInProgress = nodeDB.DuplicationInProgress_Data.Bool
-	node.HasDrawButton = nodeDB.HasDrawButton_Data.Bool
-	node.IsInDrawMode = nodeDB.IsInDrawMode_Data.Bool
-	node.IsSaved = nodeDB.IsSaved_Data.Bool
-	node.HasDeleteButton = nodeDB.HasDeleteButton_Data.Bool
 }
 
 // CopyBasicFieldsToNodeWOP
@@ -662,15 +536,6 @@ func (nodeDB *NodeDB) CopyBasicFieldsToNodeWOP(node *NodeWOP) {
 	node.HasCheckboxButton = nodeDB.HasCheckboxButton_Data.Bool
 	node.IsChecked = nodeDB.IsChecked_Data.Bool
 	node.IsCheckboxDisabled = nodeDB.IsCheckboxDisabled_Data.Bool
-	node.HasAddChildButton = nodeDB.HasAddChildButton_Data.Bool
-	node.HasEditButton = nodeDB.HasEditButton_Data.Bool
-	node.IsInEditMode = nodeDB.IsInEditMode_Data.Bool
-	node.HasDuplicateButton = nodeDB.HasDuplicateButton_Data.Bool
-	node.DuplicationInProgress = nodeDB.DuplicationInProgress_Data.Bool
-	node.HasDrawButton = nodeDB.HasDrawButton_Data.Bool
-	node.IsInDrawMode = nodeDB.IsInDrawMode_Data.Bool
-	node.IsSaved = nodeDB.IsSaved_Data.Bool
-	node.HasDeleteButton = nodeDB.HasDeleteButton_Data.Bool
 }
 
 // Backup generates a json file from a slice of all NodeDB instances in the backrepo

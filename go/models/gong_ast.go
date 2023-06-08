@@ -1370,69 +1370,6 @@ func UnmarshallGongstructStaging(stage *StageStruct, cmap *ast.CommentMap, assig
 						log.Fatalln(err)
 					}
 					__gong__map_Node[identifier].IsCheckboxDisabled = fielValue
-				case "HasAddChildButton":
-					// convert string to boolean
-					fielValue, err := strconv.ParseBool(ident.Name)
-					if err != nil {
-						log.Fatalln(err)
-					}
-					__gong__map_Node[identifier].HasAddChildButton = fielValue
-				case "HasEditButton":
-					// convert string to boolean
-					fielValue, err := strconv.ParseBool(ident.Name)
-					if err != nil {
-						log.Fatalln(err)
-					}
-					__gong__map_Node[identifier].HasEditButton = fielValue
-				case "IsInEditMode":
-					// convert string to boolean
-					fielValue, err := strconv.ParseBool(ident.Name)
-					if err != nil {
-						log.Fatalln(err)
-					}
-					__gong__map_Node[identifier].IsInEditMode = fielValue
-				case "HasDuplicateButton":
-					// convert string to boolean
-					fielValue, err := strconv.ParseBool(ident.Name)
-					if err != nil {
-						log.Fatalln(err)
-					}
-					__gong__map_Node[identifier].HasDuplicateButton = fielValue
-				case "DuplicationInProgress":
-					// convert string to boolean
-					fielValue, err := strconv.ParseBool(ident.Name)
-					if err != nil {
-						log.Fatalln(err)
-					}
-					__gong__map_Node[identifier].DuplicationInProgress = fielValue
-				case "HasDrawButton":
-					// convert string to boolean
-					fielValue, err := strconv.ParseBool(ident.Name)
-					if err != nil {
-						log.Fatalln(err)
-					}
-					__gong__map_Node[identifier].HasDrawButton = fielValue
-				case "IsInDrawMode":
-					// convert string to boolean
-					fielValue, err := strconv.ParseBool(ident.Name)
-					if err != nil {
-						log.Fatalln(err)
-					}
-					__gong__map_Node[identifier].IsInDrawMode = fielValue
-				case "IsSaved":
-					// convert string to boolean
-					fielValue, err := strconv.ParseBool(ident.Name)
-					if err != nil {
-						log.Fatalln(err)
-					}
-					__gong__map_Node[identifier].IsSaved = fielValue
-				case "HasDeleteButton":
-					// convert string to boolean
-					fielValue, err := strconv.ParseBool(ident.Name)
-					if err != nil {
-						log.Fatalln(err)
-					}
-					__gong__map_Node[identifier].HasDeleteButton = fielValue
 				}
 			case "NoteShape":
 				switch fieldName {

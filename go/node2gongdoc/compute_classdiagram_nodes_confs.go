@@ -25,17 +25,9 @@ func computeClassdiagramNodesConfigurations(
 		}
 	}
 
-	diagramPackageNode.HasAddChildButton = !inModificationMode && diagramPackage.IsEditable
-
 	// get the selected diagram and collect what are its referenced
 	// gongstructs
 	for _, classdiagramNode := range diagramPackageNode.Children {
-
-		// reset the state of the classdiagram node
-		classdiagramNode.HasEditButton = false
-		classdiagramNode.HasDeleteButton = false
-		classdiagramNode.HasDuplicateButton = false
-		classdiagramNode.HasDrawButton = false
 
 		SetButtonDiaplayState(classdiagramNode, BUTTON_draw, false)
 		SetButtonDiaplayState(classdiagramNode, BUTTON_edit_off, false)
