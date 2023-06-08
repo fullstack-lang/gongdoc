@@ -2,6 +2,8 @@ package node2gongdoc
 
 import (
 	"log"
+	"os"
+	"path/filepath"
 
 	gongdoc_models "github.com/fullstack-lang/gongdoc/go/models"
 )
@@ -68,6 +70,69 @@ func (nodeImplClasssiagram *NodeImplClasssiagram) OnAfterUpdate(
 				otherDiagramNode.Commit(gongdocStage)
 			}
 		}
+	}
+
+	// in case the front change the name of the diagram
+	// one need to indicate the change as an increase in the commit
+	// from the back, otherwise, the front wont be able to detect
+	// the change
+	// change the name of the diagram
+	if stagedNode.Name != frontNode.Name {
+
+		// check that the name is a correct identifer in go
+		for _, b := range frontNode.Name {
+			if 'a' <= b && b <= 'z' || 'A' <= b && b <= 'Z' || b == '_' || '0' <= b && b <= '9' {
+				// Avoid assigning a rune for the common case of an ascii character.
+				continue
+			} else {
+				log.Println("The name of the diagram is not a correct identifier in go: " + frontNode.Name)
+				stagedNode.Commit(gongdocStage)
+				return
+			}
+		}
+
+		// rename the diagram file if it exists
+		// remove the actual classdiagram file if it exsits
+		oldClassdiagramFilePath := filepath.Join(nodeImplClasssiagram.diagramPackage.Path,
+			"../diagrams", nodeImplClasssiagram.classdiagram.Name) + ".go"
+		newClassdiagramFilePath := filepath.Join(nodeImplClasssiagram.diagramPackage.Path,
+			"../diagrams", frontNode.Name) + ".go"
+
+		if _, err := os.Stat(oldClassdiagramFilePath); err != nil {
+			return
+		}
+		if err := os.Remove(oldClassdiagramFilePath); err != nil {
+			log.Fatal("Error while renaming file " + oldClassdiagramFilePath + " : " + err.Error())
+		}
+
+		file, err := os.Create(newClassdiagramFilePath)
+		if err != nil {
+			log.Fatal("Cannot create diagram file" + err.Error())
+		}
+		defer file.Close()
+
+		// checkout in order to get the latest version of the diagram before
+		// modifying it updated by the front
+		gongdocStage.Checkout()
+		gongdocStage.Unstage()
+		gongdoc_models.StageBranch(gongdocStage, nodeImplClasssiagram.classdiagram)
+		nodeImplClasssiagram.classdiagram.Name = frontNode.Name
+
+		gongdoc_models.SetupMapDocLinkRenaming(nodeImplClasssiagram.diagramPackage.ModelPkg.Stage_, gongdocStage)
+
+		// save the diagram
+		gongdocStage.Marshall(file, "github.com/fullstack-lang/gongdoc/go/models", "diagrams")
+
+		// restore the original stage
+		gongdocStage.Unstage()
+		gongdocStage.Checkout()
+
+		nodeImplClasssiagram.classdiagram.Name = frontNode.Name
+		gongdocStage.Commit()
+
+		stagedNode.Name = frontNode.Name
+		stagedNode.IsInEditMode = false
+
 	}
 
 	// node was checked and user wants to uncheck it. This is not possible

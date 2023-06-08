@@ -11,11 +11,11 @@ import (
 
 // generated in order to avoid error in the package import
 // if there are no elements in the stage to marshall
-var ___dummy__Stage_Default models.StageStruct
-var ___dummy__Time_Default time.Time
+var ___dummy__Stage_Toto models.StageStruct
+var ___dummy__Time_Toto time.Time
 
 // Injection point for meta package dummy declaration
-var ___dummy__ref_models_Default ref_models.StageStruct
+var ___dummy__ref_models_Toto ref_models.StageStruct
 
 // currently, DocLink renaming is not enabled in gopls
 // the following map are devised to overcome this limitation
@@ -24,7 +24,7 @@ var ___dummy__ref_models_Default ref_models.StageStruct
 // [Corresponding Issue](https://github.com/golang/go/issues/57559)
 //
 // When parsed, those maps will help with the renaming process
-var map_DocLink_Identifier_Default map[string]any = map[string]any{
+var map_DocLink_Identifier_Toto map[string]any = map[string]any{
 	// injection point for docLink to identifiers
 
 	"ref_models.AFTER": ref_models.AFTER,
@@ -102,18 +102,18 @@ var map_DocLink_Identifier_Default map[string]any = map[string]any{
 // but it has to properly reference the Injection gateway in the main package
 // func init() {
 // 	_ = __Dummy_time_variable
-// 	InjectionGateway["Default"] = DefaultInjection
+// 	InjectionGateway["Toto"] = TotoInjection
 // }
 
-// DefaultInjection will stage objects of database "Default"
-func DefaultInjection(stage *models.StageStruct) {
+// TotoInjection will stage objects of database "Toto"
+func TotoInjection(stage *models.StageStruct) {
 
 	// Declaration of instances to stage
 
 	// Declarations of staged instances of Button
 
 	// Declarations of staged instances of Classdiagram
-	__Classdiagram__000000_Default := (&models.Classdiagram{Name: `Default`}).Stage(stage)
+	__Classdiagram__000000_Toto := (&models.Classdiagram{Name: `Toto`}).Stage(stage)
 
 	// Declarations of staged instances of DiagramPackage
 
@@ -157,8 +157,8 @@ func DefaultInjection(stage *models.StageStruct) {
 	// Setup of values
 
 	// Classdiagram values setup
-	__Classdiagram__000000_Default.Name = `Default`
-	__Classdiagram__000000_Default.IsInDrawMode = true
+	__Classdiagram__000000_Toto.Name = `Toto`
+	__Classdiagram__000000_Toto.IsInDrawMode = false
 
 	// Field values setup
 	__Field__000000_CreationDate.Name = `CreationDate`
@@ -292,8 +292,8 @@ func DefaultInjection(stage *models.StageStruct) {
 	__Vertice__000001_Verticle_in_class_diagram_Default_in_middle_between_Default_Line_and_Default_Point.Name = `Verticle in class diagram Default in middle between Default-Line and Default-Point`
 
 	// Setup of pointers
-	__Classdiagram__000000_Default.GongStructShapes = append(__Classdiagram__000000_Default.GongStructShapes, __GongStructShape__000000_Default_Line)
-	__Classdiagram__000000_Default.GongStructShapes = append(__Classdiagram__000000_Default.GongStructShapes, __GongStructShape__000001_Default_Point)
+	__Classdiagram__000000_Toto.GongStructShapes = append(__Classdiagram__000000_Toto.GongStructShapes, __GongStructShape__000000_Default_Line)
+	__Classdiagram__000000_Toto.GongStructShapes = append(__Classdiagram__000000_Toto.GongStructShapes, __GongStructShape__000001_Default_Point)
 	__GongStructShape__000000_Default_Line.Position = __Position__000000_Pos_Default_Line
 	__GongStructShape__000000_Default_Line.Fields = append(__GongStructShape__000000_Default_Line.Fields, __Field__000002_Name)
 	__GongStructShape__000000_Default_Line.Fields = append(__GongStructShape__000000_Default_Line.Fields, __Field__000000_CreationDate)
