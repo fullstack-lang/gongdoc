@@ -87,35 +87,8 @@ export class NodesTableComponent implements OnInit {
         case 'IsCheckboxDisabled':
           return nodeDB.IsCheckboxDisabled ? "true" : "false";
 
-        case 'HasAddChildButton':
-          return nodeDB.HasAddChildButton ? "true" : "false";
-
-        case 'HasEditButton':
-          return nodeDB.HasEditButton ? "true" : "false";
-
         case 'IsInEditMode':
           return nodeDB.IsInEditMode ? "true" : "false";
-
-        case 'HasDuplicateButton':
-          return nodeDB.HasDuplicateButton ? "true" : "false";
-
-        case 'DuplicationInProgress':
-          return nodeDB.DuplicationInProgress ? "true" : "false";
-
-        case 'HasDrawButton':
-          return nodeDB.HasDrawButton ? "true" : "false";
-
-        case 'HasDrawOffButton':
-          return nodeDB.HasDrawOffButton ? "true" : "false";
-
-        case 'IsInDrawMode':
-          return nodeDB.IsInDrawMode ? "true" : "false";
-
-        case 'IsSaved':
-          return nodeDB.IsSaved ? "true" : "false";
-
-        case 'HasDeleteButton':
-          return nodeDB.HasDeleteButton ? "true" : "false";
 
         case 'Node_Children':
           if (this.frontRepo.Nodes.get(nodeDB.Node_ChildrenDBID.Int64) != undefined) {
@@ -213,16 +186,7 @@ export class NodesTableComponent implements OnInit {
         "HasCheckboxButton",
         "IsChecked",
         "IsCheckboxDisabled",
-        "HasAddChildButton",
-        "HasEditButton",
         "IsInEditMode",
-        "HasDuplicateButton",
-        "DuplicationInProgress",
-        "HasDrawButton",
-        "HasDrawOffButton",
-        "IsInDrawMode",
-        "IsSaved",
-        "HasDeleteButton",
         "Node_Children",
         "Tree_RootNodes",
       ]
@@ -233,16 +197,7 @@ export class NodesTableComponent implements OnInit {
         "HasCheckboxButton",
         "IsChecked",
         "IsCheckboxDisabled",
-        "HasAddChildButton",
-        "HasEditButton",
         "IsInEditMode",
-        "HasDuplicateButton",
-        "DuplicationInProgress",
-        "HasDrawButton",
-        "HasDrawOffButton",
-        "IsInDrawMode",
-        "IsSaved",
-        "HasDeleteButton",
         "Node_Children",
         "Tree_RootNodes",
       ]

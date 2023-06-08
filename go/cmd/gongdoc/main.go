@@ -107,6 +107,9 @@ func main() {
 
 		// load package to analyse
 		modelPkg, _ := gong_models.LoadSource(gongStage, absPkgPath)
+
+		// set the inversion control mechanism on nodes
+		gongdoc_models.SetOrchestratorOnAfterUpdate[gongdoc_models.Node](gongdocStage)
 		diagramPackage, _ := load.LoadDiagramPackage(gongdocStage, absPkgPath, modelPkg, *editable)
 
 		// to be removed after fix of [issue](https://github.com/golang/go/issues/57559)
@@ -151,6 +154,8 @@ func main() {
 
 		gongdocStage.OnInitCommitFromFrontCallback = beforeCommitImplementation
 		gongdocStage.OnInitCommitFromBackCallback = beforeCommitImplementation
+
+		gongdoc_models.SetOrchestratorOnAfterUpdate[gongdoc_models.Button](gongdocStage)
 
 		// enable the inversion control mechanism on the gongsvg backend
 		gongsvg_models.SetOrchestratorOnAfterUpdate[gongsvg_models.Rect](gongsvgStage)

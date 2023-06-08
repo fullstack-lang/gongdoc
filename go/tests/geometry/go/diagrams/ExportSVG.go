@@ -110,6 +110,8 @@ func ExportSVGInjection(stage *models.StageStruct) {
 
 	// Declaration of instances to stage
 
+	// Declarations of staged instances of Button
+
 	// Declarations of staged instances of Classdiagram
 	__Classdiagram__000000_ExportSVG := (&models.Classdiagram{Name: `ExportSVG`}).Stage(stage)
 
@@ -147,7 +149,7 @@ func ExportSVGInjection(stage *models.StageStruct) {
 
 	// Classdiagram values setup
 	__Classdiagram__000000_ExportSVG.Name = `ExportSVG`
-	__Classdiagram__000000_ExportSVG.IsInDrawMode = true
+	__Classdiagram__000000_ExportSVG.IsInDrawMode = false
 
 	// GongStructShape values setup
 	__GongStructShape__000000_ExportSVG_Line.Name = `ExportSVG-Line`
