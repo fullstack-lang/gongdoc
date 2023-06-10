@@ -24,6 +24,14 @@ func NewNodeImplGongstruct(
 func (nodeImplGongstruct *NodeImplGongstruct) OnAfterUpdate(
 	gongdocStage *gongdoc_models.StageStruct,
 	stagedNode, frontNode *gongdoc_models.Node) {
+
+	// setting the value of the staged node	to the new value
+	// otherwise, the expansion memory is lost
+	if stagedNode.IsExpanded != frontNode.IsExpanded {
+		stagedNode.IsExpanded = frontNode.IsExpanded
+		return
+	}
+
 	// if node is unchecked
 	if stagedNode.IsChecked && !frontNode.IsChecked {
 
@@ -45,9 +53,4 @@ func (nodeImplGongstruct *NodeImplGongstruct) OnAfterUpdate(
 		classDiagram := nodeImplGongstruct.diagramPackage.SelectedClassdiagram
 		classDiagram.AddGongStructShape(gongdocStage, nodeImplGongstruct.diagramPackage, frontNode.Name)
 	}
-}
-
-func (nodeImplGongstruct *NodeImplGongstruct) OnAfterDelete(
-	stage *gongdoc_models.StageStruct,
-	stagedNode, frontNode *gongdoc_models.Node) {
 }

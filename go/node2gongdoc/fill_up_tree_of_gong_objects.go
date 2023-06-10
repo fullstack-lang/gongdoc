@@ -8,14 +8,14 @@ import (
 func FillUpTreeOfGongObjects(
 	gongdocStage *gongdoc_models.StageStruct,
 	diagramPackage *gongdoc_models.DiagramPackage,
-) (gongTree *gongdoc_models.Tree) {
+) (treeOfGongObjects *gongdoc_models.Tree) {
 
 	// set up the gongTree to display elements
-	gongTree = (&gongdoc_models.Tree{Name: "gong"}).Stage(gongdocStage)
+	treeOfGongObjects = (&gongdoc_models.Tree{Name: "gong"}).Stage(gongdocStage)
 
 	gongstructRootNode := (&gongdoc_models.Node{Name: "gongstructs"}).Stage(gongdocStage)
 	gongstructRootNode.IsExpanded = true
-	gongTree.RootNodes = append(gongTree.RootNodes, gongstructRootNode)
+	treeOfGongObjects.RootNodes = append(treeOfGongObjects.RootNodes, gongstructRootNode)
 	for gongStruct := range *gong_models.GetGongstructInstancesSet[gong_models.GongStruct](diagramPackage.ModelPkg.GetStage()) {
 
 		nodeGongstruct := (&gongdoc_models.Node{Name: gongStruct.Name}).Stage(gongdocStage)
@@ -26,15 +26,23 @@ func FillUpTreeOfGongObjects(
 
 		// set up inversion control
 		nodeGongstruct.Impl = NewNodeImplGongstruct(gongStruct, diagramPackage)
+
+		for _, field := range gongStruct.Fields {
+			nodeGongField := (&gongdoc_models.Node{Name: field.GetName()}).Stage(gongdocStage)
+			nodeGongstruct.Children = append(nodeGongstruct.Children, nodeGongField)
+
+			nodeGongField.HasCheckboxButton = true
+			nodeGongField.Impl = NewNodeImplField(gongStruct, field, diagramPackage, nodeGongstruct, treeOfGongObjects)
+		}
 	}
 
 	gongenumRootNode := (&gongdoc_models.Node{Name: "gongenums"}).Stage(gongdocStage)
 	gongenumRootNode.IsExpanded = true
-	gongTree.RootNodes = append(gongTree.RootNodes, gongenumRootNode)
+	treeOfGongObjects.RootNodes = append(treeOfGongObjects.RootNodes, gongenumRootNode)
 
 	gongNotesRootNode := (&gongdoc_models.Node{Name: "notes"}).Stage(gongdocStage)
 	gongNotesRootNode.IsExpanded = true
-	gongTree.RootNodes = append(gongTree.RootNodes, gongNotesRootNode)
+	treeOfGongObjects.RootNodes = append(treeOfGongObjects.RootNodes, gongNotesRootNode)
 
 	return
 }
