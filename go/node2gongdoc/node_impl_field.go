@@ -38,6 +38,7 @@ func NewNodeImplField(
 	nodeImplField.field = field
 	nodeImplField.nodeOfGongstruct = nodeOfGongstruct
 	nodeImplField.nodeOfField = nodeOfField
+	nodeImplField.treeOfGongObjects = treeOfGongObjects
 
 	return
 }
@@ -226,11 +227,9 @@ func (nodeImplField *NodeImplField) OnAfterUpdate(
 			link.EndRatio = 0.5
 			link.CornerOffsetRatio = 0.8
 		}
-
-		computeGongNodesConfigurations(
-			gongdocStage,
-			nodeImplField.diagramPackage.SelectedClassdiagram,
-			nodeImplField.treeOfGongObjects)
-
 	}
+	computeGongNodesConfigurations(
+		gongdocStage,
+		nodeImplField.diagramPackage.SelectedClassdiagram,
+		nodeImplField.treeOfGongObjects)
 }

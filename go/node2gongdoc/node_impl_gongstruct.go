@@ -6,17 +6,21 @@ import (
 )
 
 type NodeImplGongstruct struct {
-	gongStruct     *gong_models.GongStruct
-	diagramPackage *gongdoc_models.DiagramPackage
+	gongStruct        *gong_models.GongStruct
+	diagramPackage    *gongdoc_models.DiagramPackage
+	treeOfGongObjects *gongdoc_models.Tree
 }
 
 func NewNodeImplGongstruct(
 	gongStruct *gong_models.GongStruct,
-	diagramPackage *gongdoc_models.DiagramPackage) (nodeImplGongstruct *NodeImplGongstruct) {
+	diagramPackage *gongdoc_models.DiagramPackage,
+	treeOfGongObjects *gongdoc_models.Tree,
+) (nodeImplGongstruct *NodeImplGongstruct) {
 
 	nodeImplGongstruct = new(NodeImplGongstruct)
 	nodeImplGongstruct.diagramPackage = diagramPackage
 	nodeImplGongstruct.gongStruct = gongStruct
+	nodeImplGongstruct.treeOfGongObjects = treeOfGongObjects
 
 	return
 }
@@ -53,4 +57,9 @@ func (nodeImplGongstruct *NodeImplGongstruct) OnAfterUpdate(
 		classDiagram := nodeImplGongstruct.diagramPackage.SelectedClassdiagram
 		classDiagram.AddGongStructShape(gongdocStage, nodeImplGongstruct.diagramPackage, frontNode.Name)
 	}
+
+	computeGongNodesConfigurations(
+		gongdocStage,
+		nodeImplGongstruct.diagramPackage.SelectedClassdiagram,
+		nodeImplGongstruct.treeOfGongObjects)
 }

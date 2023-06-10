@@ -63,6 +63,33 @@ func (buttonImplClassdiagram *ButtonImplClassdiagram) ButtonUpdated(
 		buttonImplClassdiagram.classdiagram.IsInDrawMode = true
 		buttonImplClassdiagram.nodeImplClassdiagram.IsInDrawMode = true
 	case BUTTON_edit_off:
+		if buttonImplClassdiagram.nodeImplClassdiagram.IsInDrawMode {
+
+			selectedClassdiagramName := buttonImplClassdiagram.diagramPackage.SelectedClassdiagram.Name
+			// reset the stage
+			gongdocStage.Checkout()
+
+			// reload
+			fakeFrontDiagramPackage := (&gongdoc_models.DiagramPackage{})
+			fakeFrontDiagramPackage.IsReloaded = buttonImplClassdiagram.diagramPackage.IsReloaded
+			buttonImplClassdiagram.diagramPackage.IsReloaded = !buttonImplClassdiagram.diagramPackage.IsReloaded
+
+			gongdocStage.OnAfterDiagramPackageUpdateCallback.OnAfterUpdate(gongdocStage,
+				buttonImplClassdiagram.diagramPackage,
+				fakeFrontDiagramPackage,
+			)
+
+			// get the diagram package on the stage and set the selected diagram package
+			var diagramPackage *gongdoc_models.DiagramPackage
+			for _, _diagramPackage := range *gongdoc_models.GetGongstructInstancesMap[gongdoc_models.DiagramPackage](gongdocStage) {
+				diagramPackage = _diagramPackage
+			}
+			diagramPackage.SelectedClassdiagram =
+				(*gongdoc_models.GetGongstructInstancesMap[gongdoc_models.Classdiagram](gongdocStage))[selectedClassdiagramName]
+
+			gongdocStage.Commit()
+			return
+		}
 		buttonImplClassdiagram.classdiagram.IsInDrawMode = false
 		buttonImplClassdiagram.classdiagramNode.IsInEditMode = false
 		buttonImplClassdiagram.nodeImplClassdiagram.IsInDrawMode = false

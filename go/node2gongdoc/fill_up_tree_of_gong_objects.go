@@ -25,7 +25,7 @@ func FillUpTreeOfGongObjects(
 		nodeGongstruct.IsExpanded = false
 
 		// set up inversion control
-		nodeGongstruct.Impl = NewNodeImplGongstruct(gongStruct, diagramPackage)
+		nodeGongstruct.Impl = NewNodeImplGongstruct(gongStruct, diagramPackage, treeOfGongObjects)
 
 		for _, field := range gongStruct.Fields {
 			nodeGongField := (&gongdoc_models.Node{Name: field.GetName()}).Stage(gongdocStage)
