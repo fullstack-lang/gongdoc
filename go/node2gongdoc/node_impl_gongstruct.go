@@ -62,4 +62,6 @@ func (nodeImplGongstruct *NodeImplGongstruct) OnAfterUpdate(
 		gongdocStage,
 		nodeImplGongstruct.diagramPackage.SelectedClassdiagram,
 		nodeImplGongstruct.treeOfGongObjects)
+
+	gongdocStage.Commit()
 }

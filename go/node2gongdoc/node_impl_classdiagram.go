@@ -147,4 +147,6 @@ func (nodeImplClasssiagram *NodeImplClasssiagram) OnAfterUpdate(
 		nodeImplClasssiagram.diagramPackageNode,
 		nodeImplClasssiagram.diagramPackage,
 		nodeImplClasssiagram.treeOfGongObjects)
+
+	gongdocStage.Commit()
 }

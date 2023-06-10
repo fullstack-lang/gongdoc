@@ -101,9 +101,10 @@ func (nodeImplField *NodeImplField) OnAfterUpdate(
 		switch nodeImplField.field.(type) {
 		case *gong_models.GongBasicField, *gong_models.GongTimeField:
 
-			var field gongdoc_models.Field
-			field.Name = stagedNode.Name
-			field.Identifier = gongdoc_models.GongstructAndFieldnameToFieldIdentifier(
+			// concrete in the sense of UML concrete syntax
+			var concreteField gongdoc_models.Field
+			concreteField.Name = stagedNode.Name
+			concreteField.Identifier = gongdoc_models.GongstructAndFieldnameToFieldIdentifier(
 				nodeImplField.gongStruct.Name, stagedNode.Name)
 
 			switch realField := nodeImplField.field.(type) {
@@ -113,15 +114,15 @@ func (nodeImplField *NodeImplField) OnAfterUpdate(
 				names := strings.Split(realField.DeclaredType, ".")
 				fieldTypeName := names[len(names)-1]
 
-				field.Fieldtypename = fieldTypeName
+				concreteField.Fieldtypename = fieldTypeName
 			case *gong_models.GongTimeField:
-				field.Fieldtypename = "Time"
+				concreteField.Fieldtypename = "Time"
 			case *gong_models.PointerToGongStructField:
 			case *gong_models.SliceOfPointerToGongStructField:
 			}
 
-			field.Structname = gongdoc_models.IdentifierToGongObjectName(gongStructShape.Identifier)
-			field.Stage(gongdocStage)
+			concreteField.Structname = gongdoc_models.IdentifierToGongObjectName(gongStructShape.Identifier)
+			concreteField.Stage(gongdocStage)
 
 			gongStructShape.Heigth = gongStructShape.Heigth + 15
 
@@ -140,7 +141,7 @@ func (nodeImplField *NodeImplField) OnAfterUpdate(
 				map_Field_Rank[gongField] = idx
 				map_Name_Field[gongField.GetName()] = gongField
 
-				if gongField.GetName() == field.Name {
+				if gongField.GetName() == concreteField.Name {
 					fieldRank = idx
 				}
 			}
@@ -157,11 +158,11 @@ func (nodeImplField *NodeImplField) OnAfterUpdate(
 
 			// append the filed to display in the right index
 			if insertionIndex == len(gongStructShape.Fields) {
-				gongStructShape.Fields = append(gongStructShape.Fields, &field)
+				gongStructShape.Fields = append(gongStructShape.Fields, &concreteField)
 			} else {
 				gongStructShape.Fields = append(gongStructShape.Fields[:insertionIndex+1],
 					gongStructShape.Fields[insertionIndex:]...)
-				gongStructShape.Fields[insertionIndex] = &field
+				gongStructShape.Fields[insertionIndex] = &concreteField
 			}
 
 		case *gong_models.PointerToGongStructField, *gong_models.SliceOfPointerToGongStructField:
@@ -232,4 +233,5 @@ func (nodeImplField *NodeImplField) OnAfterUpdate(
 		gongdocStage,
 		nodeImplField.diagramPackage.SelectedClassdiagram,
 		nodeImplField.treeOfGongObjects)
+	gongdocStage.Commit()
 }
