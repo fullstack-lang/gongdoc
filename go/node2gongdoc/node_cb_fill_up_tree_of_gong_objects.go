@@ -14,38 +14,6 @@ func (nodeCb *NodeCB) FillUpTreeOfGongObjectsLegacy() (gongTree *gongdoc_models.
 	gongstructRootNode := (&gongdoc_models.Node{Name: "gongstructs"}).Stage(nodeCb.diagramPackage.Stage_)
 	gongstructRootNode.IsExpanded = true
 	gongTree.RootNodes = append(gongTree.RootNodes, gongstructRootNode)
-	for gongStruct := range *gong_models.GetGongstructInstancesSet[gong_models.GongStruct](nodeCb.diagramPackage.ModelPkg.GetStage()) {
-
-		nodeGongstruct := (&gongdoc_models.Node{Name: gongStruct.Name}).Stage(nodeCb.diagramPackage.Stage_)
-
-		nodeGongstruct.HasCheckboxButton = true
-		nodeGongstruct.IsExpanded = false
-
-		// set up the back pointer from the shape to the node
-		gongStructImpl := new(GongStructImpl)
-		gongStructImpl.node = nodeGongstruct
-		gongStructImpl.gongStruct = gongStruct
-		gongStructImpl.nodeCb = nodeCb
-		nodeGongstruct.Impl = gongStructImpl
-
-		// append to the tree
-		gongstructRootNode.Children = append(gongstructRootNode.Children, nodeGongstruct)
-
-		for _, field := range gongStruct.Fields {
-			nodeGongField := (&gongdoc_models.Node{Name: field.GetName()}).Stage(nodeCb.diagramPackage.Stage_)
-
-			nodeGongField.HasCheckboxButton = true
-
-			fieldImpl := new(FieldImpl)
-			fieldImpl.node = nodeGongField
-			fieldImpl.field = field
-			fieldImpl.nodeCb = nodeCb
-			nodeGongField.Impl = fieldImpl
-
-			// append to tree
-			nodeGongstruct.Children = append(nodeGongstruct.Children, nodeGongField)
-		}
-	}
 
 	gongenumRootNode := (&gongdoc_models.Node{Name: "gongenums"}).Stage(nodeCb.diagramPackage.Stage_)
 	gongenumRootNode.IsExpanded = true

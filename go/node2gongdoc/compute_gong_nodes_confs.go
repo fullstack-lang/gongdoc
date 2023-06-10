@@ -91,25 +91,6 @@ func computeGongNodesConfigurations(
 					!isDSLShapePresent || // the parent shape is not present OR
 						!classdiagram.IsInDrawMode // the diagram is not editable
 				switch nodeImpl := _nodeForProperty.Impl.(type) {
-				case *FieldImpl:
-					gongField := nodeImpl.field
-
-					fieldUniqueName := parentNodeName + "." + gongField.GetName()
-					if namesOfDisplayedGongfields[fieldUniqueName] {
-						_nodeForProperty.IsChecked = true
-					}
-
-					switch fieldReal := gongField.(type) {
-					case *gong_models.PointerToGongStructField:
-						if ok := namesOfDisplayedGongstructs[fieldReal.GongStruct.Name]; !ok {
-							nodeImpl.node.IsCheckboxDisabled = true
-						}
-					case *gong_models.SliceOfPointerToGongStructField:
-						if ok := namesOfDisplayedGongstructs[fieldReal.GongStruct.Name]; !ok {
-							nodeImpl.node.IsCheckboxDisabled = true
-						}
-					default:
-					}
 				case *NodeImplField:
 					nodeImplField := nodeImpl
 					field := nodeImplField.field
