@@ -32,7 +32,13 @@ func FillUpTreeOfGongObjects(
 			nodeGongstruct.Children = append(nodeGongstruct.Children, nodeGongField)
 
 			nodeGongField.HasCheckboxButton = true
-			nodeGongField.Impl = NewNodeImplField(gongStruct, field, diagramPackage, nodeGongstruct, treeOfGongObjects)
+			nodeGongField.Impl = NewNodeImplField(
+				gongStruct,
+				field,
+				diagramPackage,
+				nodeGongstruct,
+				nodeGongField,
+				treeOfGongObjects)
 		}
 	}
 

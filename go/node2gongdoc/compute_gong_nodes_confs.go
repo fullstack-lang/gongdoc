@@ -111,21 +111,26 @@ func computeGongNodesConfigurations(
 					default:
 					}
 				case *NodeImplField:
-					gongField := nodeImpl.field
+					nodeImplField := nodeImpl
+					field := nodeImplField.field
 
-					fieldUniqueName := parentNodeName + "." + gongField.GetName()
+					fieldUniqueName := parentNodeName + "." + field.GetName()
 					if namesOfDisplayedGongfields[fieldUniqueName] {
 						_nodeForProperty.IsChecked = true
 					}
 
-					switch fieldReal := gongField.(type) {
+					switch fieldReal := field.(type) {
 					case *gong_models.PointerToGongStructField:
 						if ok := namesOfDisplayedGongstructs[fieldReal.GongStruct.Name]; !ok {
-							nodeImpl.nodeOfGongstruct.IsCheckboxDisabled = true
+							// if the target type is not present, it is not possible
+							// for the user to add the association to the diagram
+							nodeImpl.nodeOfField.IsCheckboxDisabled = true
 						}
 					case *gong_models.SliceOfPointerToGongStructField:
 						if ok := namesOfDisplayedGongstructs[fieldReal.GongStruct.Name]; !ok {
-							nodeImpl.nodeOfGongstruct.IsCheckboxDisabled = true
+							// if the target type is not present, it is not possible
+							// for the user to add the association to the diagram
+							nodeImpl.nodeOfField.IsCheckboxDisabled = true
 						}
 					default:
 					}

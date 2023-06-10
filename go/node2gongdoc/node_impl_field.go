@@ -17,6 +17,7 @@ type NodeImplField struct {
 	field      gong_models.FieldInterface
 
 	nodeOfGongstruct  *gongdoc_models.Node
+	nodeOfField       *gongdoc_models.Node
 	treeOfGongObjects *gongdoc_models.Tree
 
 	diagramPackage *gongdoc_models.DiagramPackage
@@ -26,7 +27,8 @@ func NewNodeImplField(
 	gongStruct *gong_models.GongStruct,
 	field gong_models.FieldInterface,
 	diagramPackage *gongdoc_models.DiagramPackage,
-	node *gongdoc_models.Node,
+	nodeOfGongstruct *gongdoc_models.Node,
+	nodeOfField *gongdoc_models.Node,
 	treeOfGongObjects *gongdoc_models.Tree,
 ) (nodeImplField *NodeImplField) {
 
@@ -34,7 +36,8 @@ func NewNodeImplField(
 	nodeImplField.gongStruct = gongStruct
 	nodeImplField.diagramPackage = diagramPackage
 	nodeImplField.field = field
-	nodeImplField.nodeOfGongstruct = node
+	nodeImplField.nodeOfGongstruct = nodeOfGongstruct
+	nodeImplField.nodeOfField = nodeOfField
 
 	return
 }
