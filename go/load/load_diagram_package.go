@@ -65,7 +65,7 @@ func LoadDiagramPackage(gongdocStage *gongdoc_models.StageStruct, pkgPath string
 	diagramPackageAst, ok := pkgsParser["diagrams"]
 	if !ok {
 		diagramPackage.IsEditable = editable
-		gongdoc_node2gongdoc.FillUpNodeTree(diagramPackage)
+		gongdoc_node2gongdoc.FillUpNodeTree(gongdocStage, diagramPackage)
 		gongdocStage.Commit()
 		return diagramPackage, nil
 	}
@@ -79,7 +79,7 @@ func LoadDiagramPackage(gongdocStage *gongdoc_models.StageStruct, pkgPath string
 	}
 
 	diagramPackage.IsEditable = editable
-	gongdoc_node2gongdoc.FillUpNodeTree(diagramPackage)
+	gongdoc_node2gongdoc.FillUpNodeTree(gongdocStage, diagramPackage)
 	gongdocStage.Commit()
 	return diagramPackage, nil
 }
