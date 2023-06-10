@@ -15,7 +15,7 @@ func FillUpNodeTree(gongdocStage *gongdoc_models.StageStruct, diagramPackage *go
 	nodeCb := new(NodeCB)
 	nodeCb.diagramPackage = diagramPackage
 
-	treeOfGongObjects := FillUpTreeOfGongObjects(gongdocStage)
+	treeOfGongObjects := FillUpTreeOfGongObjects(gongdocStage, diagramPackage)
 
 	//
 	// NEW IMPLEMENTATION
