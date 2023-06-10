@@ -6,21 +6,18 @@ import (
 )
 
 type NodeImplGongstruct struct {
-	gongStruct        *gong_models.GongStruct
-	diagramPackage    *gongdoc_models.DiagramPackage
-	treeOfGongObjects *gongdoc_models.Tree
+	NodeImplGongObjectAbstract
+	gongStruct *gong_models.GongStruct
 }
 
 func NewNodeImplGongstruct(
 	gongStruct *gong_models.GongStruct,
-	diagramPackage *gongdoc_models.DiagramPackage,
-	treeOfGongObjects *gongdoc_models.Tree,
+	nodeImplGongObjectAbstract NodeImplGongObjectAbstract,
 ) (nodeImplGongstruct *NodeImplGongstruct) {
 
 	nodeImplGongstruct = new(NodeImplGongstruct)
-	nodeImplGongstruct.diagramPackage = diagramPackage
+	nodeImplGongstruct.NodeImplGongObjectAbstract = nodeImplGongObjectAbstract
 	nodeImplGongstruct.gongStruct = gongStruct
-	nodeImplGongstruct.treeOfGongObjects = treeOfGongObjects
 
 	return
 }

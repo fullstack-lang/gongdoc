@@ -13,32 +13,30 @@ import (
 // other nodes in the tree of identifiers and to the
 // the diagram
 type NodeImplField struct {
+	NodeImplGongObjectAbstract
+
 	gongStruct *gong_models.GongStruct
 	field      gong_models.FieldInterface
 
-	nodeOfGongstruct  *gongdoc_models.Node
-	nodeOfField       *gongdoc_models.Node
-	treeOfGongObjects *gongdoc_models.Tree
-
-	diagramPackage *gongdoc_models.DiagramPackage
+	nodeOfGongstruct *gongdoc_models.Node
+	nodeOfField      *gongdoc_models.Node
 }
 
 func NewNodeImplField(
 	gongStruct *gong_models.GongStruct,
 	field gong_models.FieldInterface,
-	diagramPackage *gongdoc_models.DiagramPackage,
 	nodeOfGongstruct *gongdoc_models.Node,
 	nodeOfField *gongdoc_models.Node,
-	treeOfGongObjects *gongdoc_models.Tree,
+	NodeImplGongObjectAbstract NodeImplGongObjectAbstract,
 ) (nodeImplField *NodeImplField) {
 
 	nodeImplField = new(NodeImplField)
 	nodeImplField.gongStruct = gongStruct
-	nodeImplField.diagramPackage = diagramPackage
 	nodeImplField.field = field
 	nodeImplField.nodeOfGongstruct = nodeOfGongstruct
 	nodeImplField.nodeOfField = nodeOfField
-	nodeImplField.treeOfGongObjects = treeOfGongObjects
+
+	nodeImplField.NodeImplGongObjectAbstract = NodeImplGongObjectAbstract
 
 	return
 }
