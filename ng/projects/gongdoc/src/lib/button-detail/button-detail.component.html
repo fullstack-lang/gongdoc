@@ -41,9 +41,6 @@
         <textarea name="" [ngModelOptions]="{standalone: true}" matInput [(ngModel)]="button.Icon"></textarea>
     </mat-form-field>
 
-    <!-- -->
-    <mat-checkbox [formControl]="DisplayedFormControl">Displayed</mat-checkbox>
-
     <mat-form-field class="detail-full-width">
         <mat-label>(Node) Buttons</mat-label>
         <mat-select [compareWith]="compareObjects" [(ngModel)]="button.Node_Buttons_reverse" [ngModelOptions]="{standalone: true}">

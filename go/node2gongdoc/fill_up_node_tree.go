@@ -31,9 +31,8 @@ func FillUpNodeTree(gongdocStage *gongdoc_models.StageStruct, diagramPackage *go
 
 	// add add button
 	addButton := (&gongdoc_models.Button{
-		Name:      diagramPackage.Name + " " + string(BUTTON_add),
-		Icon:      string(BUTTON_add),
-		Displayed: true}).Stage(gongdocStage)
+		Name: diagramPackage.Name + " " + string(BUTTON_add),
+		Icon: string(BUTTON_add)}).Stage(gongdocStage)
 	_ = addButton
 	rootOfClassdiagramsNode.Buttons = append(rootOfClassdiagramsNode.Buttons, addButton)
 	addButton.Impl = NewButtonImplRootOfClassdiagrams(

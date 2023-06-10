@@ -78,9 +78,6 @@ export class ButtonsTableComponent implements OnInit {
         case 'Icon':
           return buttonDB.Icon;
 
-        case 'Displayed':
-          return buttonDB.Displayed ? "true" : "false";
-
         case 'Node_Buttons':
           if (this.frontRepo.Nodes.get(buttonDB.Node_ButtonsDBID.Int64) != undefined) {
             return this.frontRepo.Nodes.get(buttonDB.Node_ButtonsDBID.Int64)!.Name
@@ -164,14 +161,12 @@ export class ButtonsTableComponent implements OnInit {
       this.displayedColumns = ['ID', 'Delete', // insertion point for columns to display
         "Name",
         "Icon",
-        "Displayed",
         "Node_Buttons",
       ]
     } else {
       this.displayedColumns = ['select', 'ID', // insertion point for columns to display
         "Name",
         "Icon",
-        "Displayed",
         "Node_Buttons",
       ]
       this.selection = new SelectionModel<ButtonDB>(allowMultiSelect, this.initialSelection);
