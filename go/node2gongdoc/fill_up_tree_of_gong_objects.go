@@ -48,6 +48,16 @@ func FillUpTreeOfGongObjects(
 	gongNotesRootNode := (&gongdoc_models.Node{Name: "notes"}).Stage(gongdocStage)
 	gongNotesRootNode.IsExpanded = true
 	treeOfGongObjects.RootNodes = append(treeOfGongObjects.RootNodes, gongNotesRootNode)
+	for gongNote := range *gong_models.GetGongstructInstancesSet[gong_models.GongNote](diagramPackage.ModelPkg.GetStage()) {
+
+		nodeGongNote := (&gongdoc_models.Node{Name: gongNote.Name}).Stage(diagramPackage.Stage_)
+		nodeGongNote.HasCheckboxButton = true
+		nodeGongNote.IsExpanded = true
+		gongNotesRootNode.Children = append(gongNotesRootNode.Children, nodeGongNote)
+
+		nodeGongNote.Impl = NewNodeImplGongnote(gongNote,
+			NewNodeImplGongObjectAbstract(diagramPackage, treeOfGongObjects))
+	}
 
 	return
 }
