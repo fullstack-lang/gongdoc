@@ -44,6 +44,26 @@ func FillUpTreeOfGongObjects(
 	gongenumRootNode := (&gongdoc_models.Node{Name: "gongenums"}).Stage(gongdocStage)
 	gongenumRootNode.IsExpanded = true
 	treeOfGongObjects.RootNodes = append(treeOfGongObjects.RootNodes, gongenumRootNode)
+	for gongEnum := range *gong_models.GetGongstructInstancesSet[gong_models.GongEnum](diagramPackage.ModelPkg.GetStage()) {
+
+		nodeGongEnum := (&gongdoc_models.Node{Name: gongEnum.Name}).Stage(diagramPackage.Stage_)
+		nodeGongEnum.HasCheckboxButton = true
+		nodeGongEnum.IsExpanded = false
+
+		// append to tree
+		gongenumRootNode.Children = append(gongenumRootNode.Children, nodeGongEnum)
+		nodeGongEnum.Impl = NewNodeImplGongEnum(gongEnum,
+			NewNodeImplGongObjectAbstract(diagramPackage, treeOfGongObjects))
+
+		// for _, gongEnumValue := range gongEnum.GongEnumValues {
+		// 	nodeGongEnumValue := (&gongdoc_models.Node{Name: gongEnumValue.GetName()}).Stage(diagramPackage.Stage_)
+
+		// 	nodeGongEnumValue.HasCheckboxButton = true
+
+		// 	// append to tree
+		// 	nodeGongEnum.Children = append(nodeGongEnum.Children, nodeGongEnumValue)
+		// }
+	}
 
 	gongNotesRootNode := (&gongdoc_models.Node{Name: "notes"}).Stage(gongdocStage)
 	gongNotesRootNode.IsExpanded = true

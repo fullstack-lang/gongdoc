@@ -53,44 +53,6 @@ func (nodeCb *NodeCB) FillUpTreeOfGongObjectsLegacy() (gongTree *gongdoc_models.
 	gongNotesRootNode := (&gongdoc_models.Node{Name: "notes"}).Stage(nodeCb.diagramPackage.Stage_)
 	gongNotesRootNode.IsExpanded = true
 	gongTree.RootNodes = append(gongTree.RootNodes, gongNotesRootNode)
-	for gongNote := range *gong_models.GetGongstructInstancesSet[gong_models.GongNote](nodeCb.diagramPackage.ModelPkg.GetStage()) {
-
-		nodeGongNote := (&gongdoc_models.Node{Name: gongNote.Name}).Stage(nodeCb.diagramPackage.Stage_)
-		nodeGongNote.HasCheckboxButton = true
-
-		nodeGongNote.IsExpanded = true
-
-		gongNoteImpl := new(GongNoteImpl)
-		gongNoteImpl.node = nodeGongNote
-		gongNoteImpl.gongNote = gongNote
-		gongNoteImpl.nodeCb = nodeCb
-		nodeGongNote.Impl = gongNoteImpl
-
-		// append to tree
-		gongNotesRootNode.Children = append(gongNotesRootNode.Children, nodeGongNote)
-
-		for _, gongLink := range gongNote.Links {
-
-			gongLinkName := gongLink.Name
-
-			if gongLink.Recv != "" {
-				gongLinkName = gongLink.Recv + "." + gongLinkName
-			}
-
-			nodeGongLink := (&gongdoc_models.Node{Name: gongLinkName}).Stage(nodeCb.diagramPackage.Stage_)
-			nodeGongLink.HasCheckboxButton = true
-
-			gongLinkImpl := new(GongLinkImpl)
-			gongLinkImpl.node = nodeGongLink
-			gongLinkImpl.gongLink = gongLink
-			gongLinkImpl.nodeCb = nodeCb
-			nodeGongLink.Impl = gongLinkImpl
-
-			// append to tree
-			nodeGongNote.Children = append(nodeGongNote.Children, nodeGongLink)
-
-		}
-	}
 
 	// generate the map to navigate from children to parents
 	fieldName := gongdoc_models.GetAssociationName[gongdoc_models.Node]().Children[0].Name

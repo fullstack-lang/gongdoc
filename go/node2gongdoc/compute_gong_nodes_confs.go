@@ -115,38 +115,6 @@ func computeGongNodesConfigurations(
 						}
 					default:
 					}
-				case *GongLinkImpl:
-					gongLink := nodeImpl.gongLink
-
-					// first case is when the gong link points to a shape
-					if gongLink.Recv == "" {
-
-						fieldUniqueName := parentNodeName + "." + gongLink.GetName()
-						if namesOfDisplayedGongnoteLinks[fieldUniqueName] {
-							_nodeForProperty.IsChecked = true
-						}
-
-						gongStructShapeWithThisNameIsPresent := namesOfDisplayedGongstructs[gongLink.Name]
-						gongEnumShapeWithThisNameIsPresent := namesOfDisplayedGongenums[gongLink.Name]
-
-						if !gongStructShapeWithThisNameIsPresent && !gongEnumShapeWithThisNameIsPresent {
-
-							// no corresponding gong struct shape, therefore, disable the node
-							_nodeForProperty.IsCheckboxDisabled = true
-						}
-					} else // the other case (Recv != "") is when the gonglink points to a link
-					{
-						fieldName := gongLink.Recv + "." + gongLink.Name
-
-						fieldUniqueName := parentNodeName + "." + fieldName
-						if namesOfDisplayedGongnoteLinks[fieldUniqueName] {
-							_nodeForProperty.IsChecked = true
-						}
-
-						if ok := namesOfDisplayedGongfields[fieldName]; !ok {
-							_nodeForProperty.IsCheckboxDisabled = true
-						}
-					}
 				case *NodeImplLink:
 					nodeImplGongLink := nodeImpl
 					gongLink := nodeImplGongLink.gongLink
