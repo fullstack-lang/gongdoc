@@ -55,14 +55,15 @@ func FillUpTreeOfGongObjects(
 		nodeGongEnum.Impl = NewNodeImplGongEnum(gongEnum,
 			NewNodeImplGongObjectAbstract(diagramPackage, treeOfGongObjects))
 
-		// for _, gongEnumValue := range gongEnum.GongEnumValues {
-		// 	nodeGongEnumValue := (&gongdoc_models.Node{Name: gongEnumValue.GetName()}).Stage(diagramPackage.Stage_)
+		for _, gongEnumValue := range gongEnum.GongEnumValues {
+			nodeGongEnumValue := (&gongdoc_models.Node{Name: gongEnumValue.GetName()}).Stage(diagramPackage.Stage_)
 
-		// 	nodeGongEnumValue.HasCheckboxButton = true
+			nodeGongEnumValue.HasCheckboxButton = true
+			nodeGongEnum.Children = append(nodeGongEnum.Children, nodeGongEnumValue)
 
-		// 	// append to tree
-		// 	nodeGongEnum.Children = append(nodeGongEnum.Children, nodeGongEnumValue)
-		// }
+			nodeGongEnumValue.Impl = NewNodeImplEnumValue(gongEnum, gongEnumValue, nodeGongEnum, nodeGongEnumValue,
+				NewNodeImplGongObjectAbstract(diagramPackage, treeOfGongObjects))
+		}
 	}
 
 	gongNotesRootNode := (&gongdoc_models.Node{Name: "notes"}).Stage(gongdocStage)

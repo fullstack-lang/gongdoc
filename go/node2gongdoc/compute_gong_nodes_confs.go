@@ -148,13 +148,12 @@ func computeGongNodesConfigurations(
 							_nodeForProperty.IsCheckboxDisabled = true
 						}
 					}
-				case *GongEnumValueImpl:
+				case *NodeImplEnumValue:
 					gongEnumValue := nodeImpl.gongEnumValue
 
 					if namesOfDisplayedGongenumValues[gongEnumValue.Name] {
 						_nodeForProperty.IsChecked = true
 					}
-
 				default:
 					_ = nodeImpl
 					log.Panic("No known implementation")
