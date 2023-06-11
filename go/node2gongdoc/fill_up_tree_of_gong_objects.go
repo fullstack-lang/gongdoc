@@ -50,13 +50,31 @@ func FillUpTreeOfGongObjects(
 	treeOfGongObjects.RootNodes = append(treeOfGongObjects.RootNodes, gongNotesRootNode)
 	for gongNote := range *gong_models.GetGongstructInstancesSet[gong_models.GongNote](diagramPackage.ModelPkg.GetStage()) {
 
-		nodeGongNote := (&gongdoc_models.Node{Name: gongNote.Name}).Stage(diagramPackage.Stage_)
+		nodeGongNote := (&gongdoc_models.Node{Name: gongNote.Name}).Stage(gongdocStage)
 		nodeGongNote.HasCheckboxButton = true
 		nodeGongNote.IsExpanded = true
 		gongNotesRootNode.Children = append(gongNotesRootNode.Children, nodeGongNote)
 
 		nodeGongNote.Impl = NewNodeImplGongnote(gongNote,
 			NewNodeImplGongObjectAbstract(diagramPackage, treeOfGongObjects))
+
+		for _, gongLink := range gongNote.Links {
+
+			gongLinkName := gongLink.Name
+
+			if gongLink.Recv != "" {
+				gongLinkName = gongLink.Recv + "." + gongLinkName
+			}
+
+			nodeGongLink := (&gongdoc_models.Node{Name: gongLinkName}).Stage(gongdocStage)
+			nodeGongLink.HasCheckboxButton = true
+
+			// append to tree
+			nodeGongNote.Children = append(nodeGongNote.Children, nodeGongLink)
+
+			nodeGongLink.Impl = NewNodeImplLink(gongNote, gongLink, nodeGongNote, nodeGongLink,
+				NewNodeImplGongObjectAbstract(diagramPackage, treeOfGongObjects))
+		}
 	}
 
 	return
