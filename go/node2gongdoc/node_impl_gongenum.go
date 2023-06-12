@@ -64,6 +64,5 @@ func (nodeImplGongEnum *NodeImplGongEnum) OnAfterUpdate(
 		gongdocStage,
 		classDiagram,
 		nodeImplGongEnum.treeOfGongObjects)
-
 	gongdocStage.Commit()
 }

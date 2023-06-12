@@ -10,14 +10,12 @@ import (
 )
 
 type ButtonImplClassdiagram struct {
-	// one need to access the daigramPackage to set the selected diagram
+	// one need to access the diagramPackage to set the selected diagram
 	diagramPackage *gongdoc_models.DiagramPackage
 	classdiagram   *gongdoc_models.Classdiagram
 
 	// one needs to access the node of the diagram package to manage the childern nodes
 	diagramPackageNode *gongdoc_models.Node
-
-	legacyDiagramPackageNode *gongdoc_models.Node
 
 	// one needs to perform computation of node confs after the update
 	treeOfGongObjects *gongdoc_models.Tree
@@ -63,6 +61,8 @@ func (buttonImplClassdiagram *ButtonImplClassdiagram) ButtonUpdated(
 		buttonImplClassdiagram.classdiagram.IsInDrawMode = true
 		buttonImplClassdiagram.nodeImplClassdiagram.IsInDrawMode = true
 	case BUTTON_edit_off:
+
+		// edit of the drawing of the diagram
 		if buttonImplClassdiagram.nodeImplClassdiagram.IsInDrawMode {
 
 			selectedClassdiagramName := buttonImplClassdiagram.diagramPackage.SelectedClassdiagram.Name
@@ -94,6 +94,8 @@ func (buttonImplClassdiagram *ButtonImplClassdiagram) ButtonUpdated(
 		buttonImplClassdiagram.classdiagramNode.IsInEditMode = false
 		buttonImplClassdiagram.nodeImplClassdiagram.IsInDrawMode = false
 	case BUTTON_save:
+
+		// save the diagram
 		if buttonImplClassdiagram.nodeImplClassdiagram.IsInDrawMode {
 
 			// checkout in order to get the latest version of the diagram before
@@ -210,7 +212,7 @@ func (buttonImplClassdiagram *ButtonImplClassdiagram) ButtonUpdated(
 			fakeFrontDiagramPackage,
 		)
 	case BUTTON_edit:
-
+		// change the name of the diagram
 		buttonImplClassdiagram.classdiagramNode.IsInEditMode = true
 	default:
 		log.Fatalln("Unkown button type", buttonImplClassdiagram.Icon)
@@ -220,4 +222,5 @@ func (buttonImplClassdiagram *ButtonImplClassdiagram) ButtonUpdated(
 		buttonImplClassdiagram.diagramPackageNode,
 		buttonImplClassdiagram.diagramPackage,
 		buttonImplClassdiagram.treeOfGongObjects)
+	gongdocStage.Commit()
 }

@@ -6,20 +6,7 @@ import (
 
 func FillUpNodeTree(gongdocStage *gongdoc_models.StageStruct, diagramPackage *gongdoc_models.DiagramPackage) {
 
-	//
-	// LEGACY
-	//
-
-	// a node tree is agnostic of the node types it manages
-	// therefore, a callback functiion is necessary
-	nodeCb := new(NodeCB)
-	nodeCb.diagramPackage = diagramPackage
-
 	treeOfGongObjects := FillUpTreeOfGongObjects(gongdocStage, diagramPackage)
-
-	//
-	// NEW IMPLEMENTATION
-	//
 
 	// create a tree for classdiagrams
 	gongdocTree := (&gongdoc_models.Tree{Name: "gongdoc"}).Stage(gongdocStage)
@@ -52,10 +39,4 @@ func FillUpNodeTree(gongdocStage *gongdoc_models.StageStruct, diagramPackage *go
 		rootOfClassdiagramsNode,
 		diagramPackage,
 		treeOfGongObjects)
-	// nodeCb.computeNodesConfiguration(gongdocStage)
-
-	// set callbacks on node updates
-	// gongdocStage.OnAfterNodeUpdateCallback = nodeCb
-	// gongdocStage.OnAfterNodeCreateCallback = nodeCb
-	// gongdocStage.OnAfterNodeDeleteCallback = nodeCb
 }

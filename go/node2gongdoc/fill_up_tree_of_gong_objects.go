@@ -97,6 +97,5 @@ func FillUpTreeOfGongObjects(
 				NewNodeImplGongObjectAbstract(diagramPackage, treeOfGongObjects))
 		}
 	}
-
 	return
 }

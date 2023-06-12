@@ -13,7 +13,8 @@ func computeGongNodesConfigurations(
 	treeOfGongObjects *gongdoc_models.Tree) {
 
 	//
-	// compute maps of displayed gong objects
+	// compute maps of displayed gong objects because we need to
+	// access them when analysing associations
 	//
 	namesOfDisplayedGongstructs := make(map[string]bool)
 	namesOfDisplayedGongfields := make(map[string]bool)
@@ -60,7 +61,7 @@ func computeGongNodesConfigurations(
 	// now, compute wether each gong node to be checked / disabled
 	isCheckboxDisabled := !classdiagram.IsInDrawMode
 	for _, _node := range treeOfGongObjects.RootNodes {
-		applyGongNodesConfiguration(_node, isCheckboxDisabled, false)
+		applyGongNodesConfRecursively(_node, isCheckboxDisabled, false)
 	}
 
 	// parses all DSL nodes (that is gong identifiers).

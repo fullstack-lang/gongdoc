@@ -50,53 +50,45 @@ func computeClassdiagramNodesConfigurations(
 		inDrawingMode := diagramPackage.IsEditable && nodeImplClasssiagram.IsInDrawMode
 		inEditMode := diagramPackage.IsEditable && classdiagramNode.IsInEditMode
 
-		SetButton(classdiagramNode, diagramPackageNode, BUTTON_draw, selectedForEdit)
-		SetButton(classdiagramNode, diagramPackageNode, BUTTON_delete, selectedForEdit)
-		SetButton(classdiagramNode, diagramPackageNode, BUTTON_file_copy, selectedForEdit)
-		SetButton(classdiagramNode, diagramPackageNode, BUTTON_edit, selectedForEdit)
+		AddNewButton(classdiagramNode, diagramPackageNode, BUTTON_draw, selectedForEdit)
+		AddNewButton(classdiagramNode, diagramPackageNode, BUTTON_delete, selectedForEdit)
+		AddNewButton(classdiagramNode, diagramPackageNode, BUTTON_file_copy, selectedForEdit)
+		AddNewButton(classdiagramNode, diagramPackageNode, BUTTON_edit, selectedForEdit)
 
-		SetButton(classdiagramNode, diagramPackageNode, BUTTON_edit_off, inDrawingMode || inEditMode)
-		SetButton(classdiagramNode, diagramPackageNode, BUTTON_save, inDrawingMode)
+		AddNewButton(classdiagramNode, diagramPackageNode, BUTTON_edit_off, inDrawingMode || inEditMode)
+		AddNewButton(classdiagramNode, diagramPackageNode, BUTTON_save, inDrawingMode)
 
 	}
 }
 
-// SetButton set the display attribute of the button designed by buttonId of the node
-func SetButton(
+// AddNewButton add a button if confirmation is true
+func AddNewButton(
 	classdiagramNode *gongdoc_models.Node,
 	diagramPackageNode *gongdoc_models.Node,
-	icon ButtonType, displayed bool) {
+	icon ButtonType, confirmation bool) {
 
 	nodeImplClassdiagram, ok := classdiagramNode.Impl.(*NodeImplClasssiagram)
 	if !ok {
 		log.Fatalln("youre kidding me ?")
 	}
 
-	if displayed == true {
-		drawButton := (&gongdoc_models.Button{
-			Name: nodeImplClassdiagram.classdiagram.Name + " " + string(icon),
-			Icon: string(icon)}).Stage(nodeImplClassdiagram.diagramPackage.Stage_)
-		_ = drawButton
-		classdiagramNode.Buttons = append(classdiagramNode.Buttons, drawButton)
-		drawButton.Impl = NewButtonImplClassdiagram(
-			nodeImplClassdiagram.diagramPackage,
-			nodeImplClassdiagram.classdiagram,
-			diagramPackageNode,
-			nodeImplClassdiagram.treeOfGongObjects,
-			classdiagramNode,
-			nodeImplClassdiagram,
-			icon,
-		)
+	if confirmation == false {
+		return
 	}
 
-	if displayed == false {
-		return
-		// for _, _button := range classdiagramNode.Buttons {
-		// 	if _button.Icon == string(icon) {
-		// 		remove[gongdoc_models.Button](classdiagramNode.Buttons, _button)
-		// 		_button.Unstage(nodeImplClassdiagram.diagramPackage.Stage_)
-		// 		continue
-		// 	}
-		// }
-	}
+	drawButton := (&gongdoc_models.Button{
+		Name: nodeImplClassdiagram.classdiagram.Name + " " + string(icon),
+		Icon: string(icon)}).Stage(nodeImplClassdiagram.diagramPackage.Stage_)
+	_ = drawButton
+	classdiagramNode.Buttons = append(classdiagramNode.Buttons, drawButton)
+	drawButton.Impl = NewButtonImplClassdiagram(
+		nodeImplClassdiagram.diagramPackage,
+		nodeImplClassdiagram.classdiagram,
+		diagramPackageNode,
+		nodeImplClassdiagram.treeOfGongObjects,
+		classdiagramNode,
+		nodeImplClassdiagram,
+		icon,
+	)
+
 }
