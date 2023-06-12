@@ -33,13 +33,6 @@
             </td>
         </ng-container>
         <!-- -->
-        <ng-container matColumnDef="Displayed">
-            <th mat-header-cell *matHeaderCellDef mat-sort-header> Displayed </th>
-            <td mat-cell *matCellDef="let Button">
-                <mat-checkbox [checked]="Button.Displayed" disabled=true></mat-checkbox>
-            </td>
-        </ng-container>
-        <!-- -->
         <ng-container matColumnDef="Node_Buttons">
             <th mat-header-cell *matHeaderCellDef mat-sort-header> <-- (Node) Buttons </th>
             <td mat-cell *matCellDef="let button">

@@ -8,32 +8,50 @@ import (
 	gongdoc_models "github.com/fullstack-lang/gongdoc/go/models"
 )
 
-type FieldImpl struct {
-	field gong_models.FieldInterface
-	NodeImpl
+// NodeImplField handles the passage fo information
+// from the field node in the tree of identifiers to
+// other nodes in the tree of identifiers and to the
+// the diagram
+type NodeImplField struct {
+	NodeImplGongObjectAbstract
+
+	gongStruct *gong_models.GongStruct
+	field      gong_models.FieldInterface
+
+	nodeOfGongstruct *gongdoc_models.Node
+	nodeOfField      *gongdoc_models.Node
 }
 
-func (fieldImpl *FieldImpl) OnAfterUpdate(
+func NewNodeImplField(
+	gongStruct *gong_models.GongStruct,
+	field gong_models.FieldInterface,
+	nodeOfGongstruct *gongdoc_models.Node,
+	nodeOfField *gongdoc_models.Node,
+	NodeImplGongObjectAbstract NodeImplGongObjectAbstract,
+) (nodeImplField *NodeImplField) {
+
+	nodeImplField = new(NodeImplField)
+	nodeImplField.gongStruct = gongStruct
+	nodeImplField.field = field
+	nodeImplField.nodeOfGongstruct = nodeOfGongstruct
+	nodeImplField.nodeOfField = nodeOfField
+
+	nodeImplField.NodeImplGongObjectAbstract = NodeImplGongObjectAbstract
+
+	return
+}
+
+func (nodeImplField *NodeImplField) OnAfterUpdate(
 	gongdocStage *gongdoc_models.StageStruct,
 	stagedNode, frontNode *gongdoc_models.Node) {
-
-	classdiagram := fieldImpl.nodeCb.GetSelectedClassdiagram()
-
-	// find the parent node to find the gongstruct to find the gongstructshape
-	// the node is field, one needs to find the gongstruct that contains it
-	// get the parent node
-	parentNode := fieldImpl.nodeCb.map_Children_Parent[stagedNode]
-
-	gongStructImpl := parentNode.Impl.(*GongStructImpl)
-	gongStruct := gongStructImpl.gongStruct
 
 	// find the classhape in the classdiagram
 	foundGongStructShape := false
 	var gongStructShape *gongdoc_models.GongStructShape
-	for _, _gongstructshape := range classdiagram.GongStructShapes {
+	for _, _gongstructshape := range nodeImplField.diagramPackage.SelectedClassdiagram.GongStructShapes {
 		// strange behavior when the gongstructshape is remove within the loop
 		if gongdoc_models.IdentifierToGongObjectName(_gongstructshape.Identifier) ==
-			gongStruct.Name && !foundGongStructShape {
+			nodeImplField.gongStruct.Name && !foundGongStructShape {
 			gongStructShape = _gongstructshape
 		}
 	}
@@ -78,29 +96,31 @@ func (fieldImpl *FieldImpl) OnAfterUpdate(
 		// get the latest version of the diagram before modifying it
 		gongdocStage.Checkout()
 
-		switch fieldImpl.field.(type) {
+		switch nodeImplField.field.(type) {
 		case *gong_models.GongBasicField, *gong_models.GongTimeField:
 
-			var field gongdoc_models.Field
-			field.Name = stagedNode.Name
-			field.Identifier = gongdoc_models.GongstructAndFieldnameToFieldIdentifier(gongStruct.Name, stagedNode.Name)
+			// concrete in the sense of UML concrete syntax
+			var concreteField gongdoc_models.Field
+			concreteField.Name = stagedNode.Name
+			concreteField.Identifier = gongdoc_models.GongstructAndFieldnameToFieldIdentifier(
+				nodeImplField.gongStruct.Name, stagedNode.Name)
 
-			switch realField := fieldImpl.field.(type) {
+			switch realField := nodeImplField.field.(type) {
 			case *gong_models.GongBasicField:
 
 				// get the type after the "."
 				names := strings.Split(realField.DeclaredType, ".")
 				fieldTypeName := names[len(names)-1]
 
-				field.Fieldtypename = fieldTypeName
+				concreteField.Fieldtypename = fieldTypeName
 			case *gong_models.GongTimeField:
-				field.Fieldtypename = "Time"
+				concreteField.Fieldtypename = "Time"
 			case *gong_models.PointerToGongStructField:
 			case *gong_models.SliceOfPointerToGongStructField:
 			}
 
-			field.Structname = gongdoc_models.IdentifierToGongObjectName(gongStructShape.Identifier)
-			field.Stage(gongdocStage)
+			concreteField.Structname = gongdoc_models.IdentifierToGongObjectName(gongStructShape.Identifier)
+			concreteField.Stage(gongdocStage)
 
 			gongStructShape.Heigth = gongStructShape.Heigth + 15
 
@@ -112,13 +132,14 @@ func (fieldImpl *FieldImpl) OnAfterUpdate(
 			fieldRank := 0
 
 			// let's compute it by parsing the field of the gongstruct
-			gongStruct_ := (*gong_models.GetGongstructInstancesMap[gong_models.GongStruct](fieldImpl.nodeCb.diagramPackage.ModelPkg.GetStage()))[gongStruct.Name]
+			gongStruct_ := (*gong_models.GetGongstructInstancesMap[gong_models.GongStruct](
+				nodeImplField.diagramPackage.ModelPkg.GetStage()))[nodeImplField.gongStruct.Name]
 			for idx, gongField := range gongStruct_.Fields {
 
 				map_Field_Rank[gongField] = idx
 				map_Name_Field[gongField.GetName()] = gongField
 
-				if gongField.GetName() == field.Name {
+				if gongField.GetName() == concreteField.Name {
 					fieldRank = idx
 				}
 			}
@@ -135,11 +156,11 @@ func (fieldImpl *FieldImpl) OnAfterUpdate(
 
 			// append the filed to display in the right index
 			if insertionIndex == len(gongStructShape.Fields) {
-				gongStructShape.Fields = append(gongStructShape.Fields, &field)
+				gongStructShape.Fields = append(gongStructShape.Fields, &concreteField)
 			} else {
 				gongStructShape.Fields = append(gongStructShape.Fields[:insertionIndex+1],
 					gongStructShape.Fields[insertionIndex:]...)
-				gongStructShape.Fields[insertionIndex] = &field
+				gongStructShape.Fields[insertionIndex] = &concreteField
 			}
 
 		case *gong_models.PointerToGongStructField, *gong_models.SliceOfPointerToGongStructField:
@@ -148,7 +169,7 @@ func (fieldImpl *FieldImpl) OnAfterUpdate(
 			var sourceMultiplicity gongdoc_models.MultiplicityType
 			var targetMultiplicity gongdoc_models.MultiplicityType
 
-			switch realField := fieldImpl.field.(type) {
+			switch realField := nodeImplField.field.(type) {
 			case *gong_models.PointerToGongStructField:
 				targetStructName = realField.GongStruct.Name
 				sourceMultiplicity = gongdoc_models.MANY
@@ -160,7 +181,7 @@ func (fieldImpl *FieldImpl) OnAfterUpdate(
 			}
 			targetSourceGongStructShape := false
 			var targetGongStructShape *gongdoc_models.GongStructShape
-			for _, _gongstructshape := range classdiagram.GongStructShapes {
+			for _, _gongstructshape := range nodeImplField.diagramPackage.SelectedClassdiagram.GongStructShapes {
 
 				// strange behavior when the gongstructshape is remove within the loop
 				if gongdoc_models.IdentifierToGongObjectName(_gongstructshape.Identifier) == targetStructName && !targetSourceGongStructShape {
@@ -187,12 +208,12 @@ func (fieldImpl *FieldImpl) OnAfterUpdate(
 			link.FieldOffsetY = -16
 
 			link.Identifier =
-				gongdoc_models.GongstructAndFieldnameToFieldIdentifier(gongStruct.Name, stagedNode.Name)
+				gongdoc_models.GongstructAndFieldnameToFieldIdentifier(nodeImplField.gongStruct.Name, stagedNode.Name)
 			link.Fieldtypename = gongdoc_models.GongStructNameToIdentifier(targetStructName)
 
 			gongStructShape.Links = append(gongStructShape.Links, link)
 			link.Middlevertice = new(gongdoc_models.Vertice).Stage(gongdocStage)
-			link.Middlevertice.Name = "Verticle in class diagram " + classdiagram.Name +
+			link.Middlevertice.Name = "Verticle in class diagram " + nodeImplField.diagramPackage.SelectedClassdiagram.Name +
 				" in middle between " + gongStructShape.Name + " and " + targetGongStructShape.Name
 			link.Middlevertice.X = (gongStructShape.Position.X+targetGongStructShape.Position.X)/2.0 +
 				gongStructShape.Width*1.5
@@ -204,15 +225,11 @@ func (fieldImpl *FieldImpl) OnAfterUpdate(
 			link.EndOrientation = gongdoc_models.ORIENTATION_HORIZONTAL
 			link.EndRatio = 0.5
 			link.CornerOffsetRatio = 0.8
-
-			gongdocStage.Commit()
 		}
-
-		gongdocStage.Commit()
 	}
-}
-
-func (fieldImpl *FieldImpl) OnAfterDelete(
-	stage *gongdoc_models.StageStruct,
-	stagedNode, frontNode *gongdoc_models.Node) {
+	computeGongNodesConfigurations(
+		gongdocStage,
+		nodeImplField.diagramPackage.SelectedClassdiagram,
+		nodeImplField.treeOfGongObjects)
+	gongdocStage.Commit()
 }

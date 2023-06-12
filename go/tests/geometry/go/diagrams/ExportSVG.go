@@ -165,8 +165,8 @@ func ExportSVGInjection(stage *models.StageStruct) {
 	__GongStructShape__000000_ExportSVG_Line.IsSelected = false
 
 	// Position values setup
-	__Position__000000_Pos_ExportSVG_Line.X = 138.000000
-	__Position__000000_Pos_ExportSVG_Line.Y = 98.000000
+	__Position__000000_Pos_ExportSVG_Line.X = 288.000000
+	__Position__000000_Pos_ExportSVG_Line.Y = 200.000000
 	__Position__000000_Pos_ExportSVG_Line.Name = `Pos-ExportSVG-Line`
 
 	// Setup of pointers

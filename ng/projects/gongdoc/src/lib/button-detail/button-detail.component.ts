@@ -35,7 +35,6 @@ enum ButtonDetailComponentState {
 export class ButtonDetailComponent implements OnInit {
 
 	// insertion point for declarations
-	DisplayedFormControl: UntypedFormControl = new UntypedFormControl(false);
 
 	// the ButtonDB of interest
 	button: ButtonDB = new ButtonDB
@@ -144,7 +143,6 @@ export class ButtonDetailComponent implements OnInit {
 				}
 
 				// insertion point for recovery of form controls value for bool fields
-				this.DisplayedFormControl.setValue(this.button.Displayed)
 			}
 		)
 
@@ -157,7 +155,6 @@ export class ButtonDetailComponent implements OnInit {
 		// pointers fields, after the translation, are nulled in order to perform serialization
 
 		// insertion point for translation/nullation of each field
-		this.button.Displayed = this.DisplayedFormControl.value
 
 		// save from the front pointer space to the non pointer space for serialization
 

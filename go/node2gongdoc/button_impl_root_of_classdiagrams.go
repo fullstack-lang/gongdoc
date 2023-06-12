@@ -44,8 +44,6 @@ func (buttonImpl *ButtonImplRootOfClassdiagrams) ButtonUpdated(
 	gongdocStage *gongdoc_models.StageStruct,
 	stageButton, front *gongdoc_models.Button) {
 
-	log.Println("ButtonImplRootOfClassdiagramsDraw, ButtonUpdated", front.Name)
-
 	switch buttonImpl.Icon {
 	case BUTTON_add:
 
@@ -112,4 +110,6 @@ func (buttonImpl *ButtonImplRootOfClassdiagrams) ButtonUpdated(
 		buttonImpl.diagramPackageNode,
 		buttonImpl.diagramPackage,
 		buttonImpl.treeOfGongObjects)
+
+	gongdocStage.Commit()
 }

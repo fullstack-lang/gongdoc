@@ -18,50 +18,11 @@
                 </mat-icon>
             </button>
             <ng-container *ngFor="let button of node.gongNode.Buttons">
-                <button mat-button *ngIf='button.Displayed' (click)="onButtonClick(node, button)" class="tight-buttons">
+                <button mat-button (click)="onButtonClick(node, button)" class="tight-buttons">
                     <mat-icon [ngStyle]="{'color':'rgba(0,0,0,.50)'}">{{button.Icon}}
                     </mat-icon>
                 </button>
             </ng-container>
-
-            <!-- <button *ngIf='node.gongNode.IsInEditMode' mat-button (click)="update(node)">
-                <mat-icon [ngStyle]="{'color':'rgba(0,0,0,.50)'}">save
-                </mat-icon>
-            </button>
-            <button *ngIf='node.gongNode.IsInEditMode' mat-button (click)="cancelEditMode(node)">
-                <mat-icon [ngStyle]="{'color':'rgba(0,0,0,.50)'}">
-                    edit_off
-                </mat-icon>
-            </button>
-            <button *ngIf='node.gongNode.IsInDrawMode' mat-button (click)="cancelDrawMode(node)">
-                <mat-icon [ngStyle]="{'color':'rgba(0,0,0,.50)'}">
-                    edit_off
-                </mat-icon>
-            </button>
-            <button *ngIf='node.gongNode.IsInDrawMode' mat-button (click)="updateDiagram(node)">
-                <mat-icon [ngStyle]="{'color':'rgba(0,0,0,.50)'}">save
-                </mat-icon>
-            </button>
-            <button mat-icon-button *ngIf="node.gongNode.HasDrawButton" (click)="setInDrawMode(node)">
-                <mat-icon [ngStyle]="{'color':'rgba(0,0,0,.50)'}">
-                    draw</mat-icon>
-            </button>
-            <button *ngIf="node.gongNode.HasEditButton" mat-icon-button (click)="setInEditMode(node)">
-                <mat-icon [ngStyle]="{'color':'rgba(0,0,0,.50)'}">edit
-                </mat-icon>
-            </button>
-            <button mat-icon-button *ngIf="node.gongNode.HasAddChildButton" (click)="addNewItem(node)">
-                <mat-icon [ngStyle]="{'color':'rgba(0,0,0,.50)'}">
-                    add</mat-icon>
-            </button>
-            <button mat-icon-button *ngIf="node.gongNode.HasDeleteButton" (click)="deleteNode(node)">
-                <mat-icon [ngStyle]="{'color':'rgba(0,0,0,.50)'}">
-                    delete</mat-icon>
-            </button>
-            <button mat-icon-button *ngIf="node.gongNode.HasDuplicateButton" (click)="duplicateNode(node)">
-                <mat-icon [ngStyle]="{'color':'rgba(0,0,0,.50)'}">
-                    file_copy</mat-icon>
-            </button> -->
         </mat-tree-node>
         <!-- This is the tree node template for expandable nodes -->
         <mat-tree-node *matTreeNodeDef="let node;when: hasChild" matTreeNodePadding>
@@ -77,7 +38,7 @@
                 {{node.name}}
             </div>
             <ng-container *ngFor="let button of node.gongNode.Buttons">
-                <button mat-button *ngIf='button.Displayed' (click)="onButtonClick(node, button)">
+                <button mat-button (click)="onButtonClick(node, button)">
                     <mat-icon [ngStyle]="{'color':'rgba(0,0,0,.50)'}">{{button.Icon}}
                     </mat-icon>
                 </button>

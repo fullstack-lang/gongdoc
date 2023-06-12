@@ -7,24 +7,40 @@ import (
 	gongdoc_models "github.com/fullstack-lang/gongdoc/go/models"
 )
 
-type GongLinkImpl struct {
+type NodeImplLink struct {
+	NodeImplGongObjectAbstract
+
+	gongNote *gong_models.GongNote
 	gongLink *gong_models.GongLink
-	NodeImpl
+
+	nodeOfGongNote *gongdoc_models.Node
+	nodeOfLink     *gongdoc_models.Node
 }
 
-func (gongLinkImpl *GongLinkImpl) OnAfterUpdate(
+func NewNodeImplLink(
+	gongNote *gong_models.GongNote,
+	gongLink *gong_models.GongLink,
+	nodeOfGongNote *gongdoc_models.Node,
+	nodeOfLink *gongdoc_models.Node,
+	NodeImplGongObjectAbstract NodeImplGongObjectAbstract,
+) (nodeImplLink *NodeImplLink) {
+
+	nodeImplLink = new(NodeImplLink)
+	nodeImplLink.gongNote = gongNote
+	nodeImplLink.gongLink = gongLink
+	nodeImplLink.nodeOfGongNote = nodeOfGongNote
+	nodeImplLink.nodeOfLink = nodeOfLink
+
+	nodeImplLink.NodeImplGongObjectAbstract = NodeImplGongObjectAbstract
+
+	return
+}
+
+func (nodeImplLink *NodeImplLink) OnAfterUpdate(
 	gongdocStage *gongdoc_models.StageStruct,
 	stagedNode, frontNode *gongdoc_models.Node) {
 
-	classdiagram := gongLinkImpl.nodeCb.GetSelectedClassdiagram()
-
-	// find the parent node to find the gongstruct to find the gongstructshape
-	// the node is field, one needs to find the gongstruct that contains it
-	// get the parent node
-	parentNode := gongLinkImpl.nodeCb.map_Children_Parent[stagedNode]
-
-	gongNoteImpl := parentNode.Impl.(*GongNoteImpl)
-	gongNote := gongNoteImpl.gongNote
+	classdiagram := nodeImplLink.diagramPackage.SelectedClassdiagram
 
 	// find the classhape in the classdiagram
 	foundNoteshape := false
@@ -34,7 +50,7 @@ func (gongLinkImpl *GongLinkImpl) OnAfterUpdate(
 	for _, _noteshape := range classdiagram.NoteShapes {
 		// strange behavior when the gongstructshape is remove within the loop
 		if gongdoc_models.IdentifierToGongObjectName(_noteshape.Identifier) ==
-			gongNote.Name && !foundNoteshape {
+			nodeImplLink.gongNote.Name && !foundNoteshape {
 			noteshape = _noteshape
 		}
 	}
@@ -87,12 +103,11 @@ func (gongLinkImpl *GongLinkImpl) OnAfterUpdate(
 
 		noteShapeLink.Unstage(gongdocStage)
 		noteshape.NoteShapeLinks = remove(noteshape.NoteShapeLinks, noteShapeLink)
-
 	}
 
-}
-
-func (gongLinkImpl *GongLinkImpl) OnAfterDelete(
-	stage *gongdoc_models.StageStruct,
-	stagedNode, frontNode *gongdoc_models.Node) {
+	computeGongNodesConfigurations(
+		gongdocStage,
+		nodeImplLink.diagramPackage.SelectedClassdiagram,
+		nodeImplLink.treeOfGongObjects)
+	gongdocStage.Commit()
 }

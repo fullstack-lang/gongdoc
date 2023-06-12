@@ -27,7 +27,7 @@ func computeNodeConfs(
 
 	// now, compute wether each gong node to be checked / disabled
 	for _, _node := range treeOfGongObjects.RootNodes {
-		applyGongNodesConfiguration(_node, isCheckboxDisabled, false)
+		applyGongNodesConfRecursively(_node, isCheckboxDisabled, false)
 	}
 
 	// no selected diagram yet

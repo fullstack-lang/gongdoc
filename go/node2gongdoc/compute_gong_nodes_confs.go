@@ -13,7 +13,8 @@ func computeGongNodesConfigurations(
 	treeOfGongObjects *gongdoc_models.Tree) {
 
 	//
-	// compute maps of displayed gong objects
+	// compute maps of displayed gong objects because we need to
+	// access them when analysing associations
 	//
 	namesOfDisplayedGongstructs := make(map[string]bool)
 	namesOfDisplayedGongfields := make(map[string]bool)
@@ -57,6 +58,12 @@ func computeGongNodesConfigurations(
 		}
 	}
 
+	// now, compute wether each gong node to be checked / disabled
+	isCheckboxDisabled := !classdiagram.IsInDrawMode
+	for _, _node := range treeOfGongObjects.RootNodes {
+		applyGongNodesConfRecursively(_node, isCheckboxDisabled, false)
+	}
+
 	// parses all DSL nodes (that is gong identifiers).
 	//
 	// For each node
@@ -67,52 +74,58 @@ func computeGongNodesConfigurations(
 	//
 	// 2. check is DSL shape is present in the diagram
 	//
-	for _, _node := range treeOfGongObjects.RootNodes {
-		for _, _node := range _node.Children {
+	for _, _nodeForIdentifierCategory := range treeOfGongObjects.RootNodes {
+		for _, _nodeForCategoryInstance := range _nodeForIdentifierCategory.Children {
 
 			isDSLShapePresent :=
-				namesOfDisplayedGongstructs[_node.Name] ||
-					namesOfDisplayedGongenums[_node.Name] ||
-					namesOfDisplayedGongnotes[_node.Name]
+				namesOfDisplayedGongstructs[_nodeForCategoryInstance.Name] ||
+					namesOfDisplayedGongenums[_nodeForCategoryInstance.Name] ||
+					namesOfDisplayedGongnotes[_nodeForCategoryInstance.Name]
 
-			_node.IsChecked = isDSLShapePresent
-			parentNodeName := _node.GetName()
+			_nodeForCategoryInstance.IsChecked = isDSLShapePresent
+			parentNodeName := _nodeForCategoryInstance.GetName()
 
-			for _, _node := range _node.Children {
+			for _, _nodeForProperty := range _nodeForCategoryInstance.Children {
 
 				// checkbox of the field/link is disabled if the classdiagram
-				_node.IsCheckboxDisabled =
+				_nodeForProperty.IsCheckboxDisabled =
 					!isDSLShapePresent || // the parent shape is not present OR
 						!classdiagram.IsInDrawMode // the diagram is not editable
-				switch nodeImpl := _node.Impl.(type) {
-				case *FieldImpl:
-					gongField := nodeImpl.field
+				switch nodeImpl := _nodeForProperty.Impl.(type) {
+				case *NodeImplField:
+					nodeImplField := nodeImpl
+					field := nodeImplField.field
 
-					fieldUniqueName := parentNodeName + "." + gongField.GetName()
+					fieldUniqueName := parentNodeName + "." + field.GetName()
 					if namesOfDisplayedGongfields[fieldUniqueName] {
-						_node.IsChecked = true
+						_nodeForProperty.IsChecked = true
 					}
 
-					switch fieldReal := gongField.(type) {
+					switch fieldReal := field.(type) {
 					case *gong_models.PointerToGongStructField:
 						if ok := namesOfDisplayedGongstructs[fieldReal.GongStruct.Name]; !ok {
-							nodeImpl.DisableNodeCheckbox()
+							// if the target type is not present, it is not possible
+							// for the user to add the association to the diagram
+							nodeImpl.nodeOfField.IsCheckboxDisabled = true
 						}
 					case *gong_models.SliceOfPointerToGongStructField:
 						if ok := namesOfDisplayedGongstructs[fieldReal.GongStruct.Name]; !ok {
-							nodeImpl.DisableNodeCheckbox()
+							// if the target type is not present, it is not possible
+							// for the user to add the association to the diagram
+							nodeImpl.nodeOfField.IsCheckboxDisabled = true
 						}
 					default:
 					}
-				case *GongLinkImpl:
-					gongLink := nodeImpl.gongLink
+				case *NodeImplLink:
+					nodeImplGongLink := nodeImpl
+					gongLink := nodeImplGongLink.gongLink
 
 					// first case is when the gong link points to a shape
 					if gongLink.Recv == "" {
 
 						fieldUniqueName := parentNodeName + "." + gongLink.GetName()
 						if namesOfDisplayedGongnoteLinks[fieldUniqueName] {
-							_node.IsChecked = true
+							_nodeForProperty.IsChecked = true
 						}
 
 						gongStructShapeWithThisNameIsPresent := namesOfDisplayedGongstructs[gongLink.Name]
@@ -121,7 +134,7 @@ func computeGongNodesConfigurations(
 						if !gongStructShapeWithThisNameIsPresent && !gongEnumShapeWithThisNameIsPresent {
 
 							// no corresponding gong struct shape, therefore, disable the node
-							_node.IsCheckboxDisabled = true
+							_nodeForProperty.IsCheckboxDisabled = true
 						}
 					} else // the other case (Recv != "") is when the gonglink points to a link
 					{
@@ -129,20 +142,19 @@ func computeGongNodesConfigurations(
 
 						fieldUniqueName := parentNodeName + "." + fieldName
 						if namesOfDisplayedGongnoteLinks[fieldUniqueName] {
-							_node.IsChecked = true
+							_nodeForProperty.IsChecked = true
 						}
 
 						if ok := namesOfDisplayedGongfields[fieldName]; !ok {
-							_node.IsCheckboxDisabled = true
+							_nodeForProperty.IsCheckboxDisabled = true
 						}
 					}
-				case *GongEnumValueImpl:
+				case *NodeImplEnumValue:
 					gongEnumValue := nodeImpl.gongEnumValue
 
 					if namesOfDisplayedGongenumValues[gongEnumValue.Name] {
-						_node.IsChecked = true
+						_nodeForProperty.IsChecked = true
 					}
-
 				default:
 					_ = nodeImpl
 					log.Panic("No known implementation")

@@ -15,7 +15,6 @@ export class ButtonDB {
 	// insertion point for basic fields declarations
 	Name: string = ""
 	Icon: string = ""
-	Displayed: boolean = false
 
 	// insertion point for other declarations
 	Node_ButtonsDBID: NullInt64 = new NullInt64

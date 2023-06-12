@@ -5,31 +5,51 @@ import (
 	gongdoc_models "github.com/fullstack-lang/gongdoc/go/models"
 )
 
-type GongEnumValueImpl struct {
+// NodeImplEnumValue handles the passage fo information
+// from the field node in the tree of identifiers to
+// other nodes in the tree of identifiers and to the
+// the diagram
+type NodeImplEnumValue struct {
+	NodeImplGongObjectAbstract
+
+	gongEnum      *gong_models.GongEnum
 	gongEnumValue *gong_models.GongEnumValue
-	NodeImpl
+
+	nodeOfGongEnum  *gongdoc_models.Node
+	nodeOfEnumValue *gongdoc_models.Node
 }
 
-func (enumValueImpl *GongEnumValueImpl) OnAfterUpdate(
+func NewNodeImplEnumValue(
+	gongEnum *gong_models.GongEnum,
+	gongEnumValue *gong_models.GongEnumValue,
+	nodeOfGongEnum *gongdoc_models.Node,
+	nodeOfEnumValue *gongdoc_models.Node,
+	NodeImplGongObjectAbstract NodeImplGongObjectAbstract,
+) (nodeImplEnumValue *NodeImplEnumValue) {
+
+	nodeImplEnumValue = new(NodeImplEnumValue)
+	nodeImplEnumValue.gongEnum = gongEnum
+	nodeImplEnumValue.gongEnumValue = gongEnumValue
+	nodeImplEnumValue.nodeOfGongEnum = nodeOfGongEnum
+	nodeImplEnumValue.nodeOfEnumValue = nodeOfEnumValue
+
+	nodeImplEnumValue.NodeImplGongObjectAbstract = NodeImplGongObjectAbstract
+
+	return
+}
+
+func (nodeImplEnumValue *NodeImplEnumValue) OnAfterUpdate(
 	gongdocStage *gongdoc_models.StageStruct,
 	stagedNode, frontNode *gongdoc_models.Node) {
 
-	// find classdiagram
-	classdiagram := enumValueImpl.nodeCb.GetSelectedClassdiagram()
-
-	// find the parent node to find the gongenum to find the gongstructshape
-	// the node is field, one needs to find the gongenum that contains it
-	// get the parent node
-	parentNode := enumValueImpl.nodeCb.map_Children_Parent[stagedNode]
-
-	gongEnumImpl := parentNode.Impl.(*GongEnumImpl)
-	gongEnum := gongEnumImpl.gongEnum
+	classdiagram := nodeImplEnumValue.diagramPackage.SelectedClassdiagram
 
 	// find the classhape in the classdiagram
 	foundGongEnumShape := false
 	var gongEnumShape *gongdoc_models.GongEnumShape
 	for _, _gongstructshape := range classdiagram.GongEnumShapes {
-		if gongdoc_models.IdentifierToGongObjectName(_gongstructshape.Identifier) == gongEnum.Name && !foundGongEnumShape {
+		if gongdoc_models.IdentifierToGongObjectName(_gongstructshape.Identifier) ==
+			nodeImplEnumValue.gongEnum.Name && !foundGongEnumShape {
 			gongEnumShape = _gongstructshape
 		}
 	}
@@ -51,9 +71,10 @@ func (enumValueImpl *GongEnumValueImpl) OnAfterUpdate(
 
 		var gongEnumValueEntry gongdoc_models.GongEnumValueEntry
 		gongEnumValueEntry.Name = stagedNode.Name
-		gongEnumValueEntry.Identifier = gongdoc_models.GongstructAndFieldnameToFieldIdentifier(gongEnum.Name, stagedNode.Name)
+		gongEnumValueEntry.Identifier = gongdoc_models.GongstructAndFieldnameToFieldIdentifier(
+			nodeImplEnumValue.gongEnum.Name, stagedNode.Name)
 
-		for idx, gongEnum := range gongEnum.GongEnumValues {
+		for idx, gongEnum := range nodeImplEnumValue.gongEnum.GongEnumValues {
 
 			map_Value_rankInEnum[*gongEnum] = idx
 			map_ValueName_Value[gongEnum.GetName()] = *gongEnum
@@ -107,9 +128,10 @@ func (enumValueImpl *GongEnumValueImpl) OnAfterUpdate(
 
 		gongdocStage.Commit()
 	}
-}
 
-func (EnumValueImpl *GongEnumValueImpl) OnAfterDelete(
-	stage *gongdoc_models.StageStruct,
-	stagedNode, frontNode *gongdoc_models.Node) {
+	computeGongNodesConfigurations(
+		gongdocStage,
+		nodeImplEnumValue.diagramPackage.SelectedClassdiagram,
+		nodeImplEnumValue.treeOfGongObjects)
+	gongdocStage.Commit()
 }

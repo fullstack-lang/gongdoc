@@ -2034,7 +2034,7 @@ func GetFields[Type Gongstruct]() (res []string) {
 	switch any(ret).(type) {
 	// insertion point for generic get gongstruct name
 	case Button:
-		res = []string{"Name", "Icon", "Displayed"}
+		res = []string{"Name", "Icon"}
 	case Classdiagram:
 		res = []string{"Name", "GongStructShapes", "GongEnumShapes", "NoteShapes", "IsInDrawMode"}
 	case DiagramPackage:
@@ -2081,8 +2081,6 @@ func GetFieldStringValue[Type Gongstruct](instance Type, fieldName string) (res 
 			res = any(instance).(Button).Name
 		case "Icon":
 			res = any(instance).(Button).Icon
-		case "Displayed":
-			res = fmt.Sprintf("%t", any(instance).(Button).Displayed)
 		}
 	case Classdiagram:
 		switch fieldName {

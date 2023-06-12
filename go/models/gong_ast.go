@@ -1256,13 +1256,6 @@ func UnmarshallGongstructStaging(stage *StageStruct, cmap *ast.CommentMap, assig
 			case "Button":
 				switch fieldName {
 				// insertion point for field dependant code
-				case "Displayed":
-					// convert string to boolean
-					fielValue, err := strconv.ParseBool(ident.Name)
-					if err != nil {
-						log.Fatalln(err)
-					}
-					__gong__map_Button[identifier].Displayed = fielValue
 				}
 			case "Classdiagram":
 				switch fieldName {

@@ -69,10 +69,6 @@ type ButtonDB struct {
 
 	// Declation for basic field buttonDB.Icon
 	Icon_Data sql.NullString
-
-	// Declation for basic field buttonDB.Displayed
-	// provide the sql storage for the boolan
-	Displayed_Data sql.NullBool
 	// encoding of pointers
 	ButtonPointersEnconding
 }
@@ -97,8 +93,6 @@ type ButtonWOP struct {
 	Name string `xlsx:"1"`
 
 	Icon string `xlsx:"2"`
-
-	Displayed bool `xlsx:"3"`
 	// insertion for WOP pointer fields
 }
 
@@ -107,7 +101,6 @@ var Button_Fields = []string{
 	"ID",
 	"Name",
 	"Icon",
-	"Displayed",
 }
 
 type BackRepoButtonStruct struct {
@@ -373,9 +366,6 @@ func (buttonDB *ButtonDB) CopyBasicFieldsFromButton(button *models.Button) {
 
 	buttonDB.Icon_Data.String = button.Icon
 	buttonDB.Icon_Data.Valid = true
-
-	buttonDB.Displayed_Data.Bool = button.Displayed
-	buttonDB.Displayed_Data.Valid = true
 }
 
 // CopyBasicFieldsFromButtonWOP
@@ -387,9 +377,6 @@ func (buttonDB *ButtonDB) CopyBasicFieldsFromButtonWOP(button *ButtonWOP) {
 
 	buttonDB.Icon_Data.String = button.Icon
 	buttonDB.Icon_Data.Valid = true
-
-	buttonDB.Displayed_Data.Bool = button.Displayed
-	buttonDB.Displayed_Data.Valid = true
 }
 
 // CopyBasicFieldsToButton
@@ -397,7 +384,6 @@ func (buttonDB *ButtonDB) CopyBasicFieldsToButton(button *models.Button) {
 	// insertion point for checkout of basic fields (back repo to stage)
 	button.Name = buttonDB.Name_Data.String
 	button.Icon = buttonDB.Icon_Data.String
-	button.Displayed = buttonDB.Displayed_Data.Bool
 }
 
 // CopyBasicFieldsToButtonWOP
@@ -406,7 +392,6 @@ func (buttonDB *ButtonDB) CopyBasicFieldsToButtonWOP(button *ButtonWOP) {
 	// insertion point for checkout of basic fields (back repo to stage)
 	button.Name = buttonDB.Name_Data.String
 	button.Icon = buttonDB.Icon_Data.String
-	button.Displayed = buttonDB.Displayed_Data.Bool
 }
 
 // Backup generates a json file from a slice of all ButtonDB instances in the backrepo
