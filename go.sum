@@ -14,6 +14,8 @@ github.com/fullstack-lang/gong v0.0.0-20230603143452-e3c35b41bcf3 h1:Mx62zk6pu/H
 github.com/fullstack-lang/gong v0.0.0-20230603143452-e3c35b41bcf3/go.mod h1:pKl99OG0v30n959JlWVBtgj8g+hugANdogZkETZT3fo=
 github.com/fullstack-lang/gong v0.0.0-20230609142634-08bbe42684e6 h1:donCoqkGQPMRZqFXejDe3sP0FaBPzuFMJGALnWH1HVY=
 github.com/fullstack-lang/gong v0.0.0-20230609142634-08bbe42684e6/go.mod h1:pKl99OG0v30n959JlWVBtgj8g+hugANdogZkETZT3fo=
+github.com/fullstack-lang/gong v0.0.0-20230613065257-6c35778fa650 h1:rfhlUGc9YH/XO6tzyRVCsLbVgVYtZPS2Uv35jF4j7s8=
+github.com/fullstack-lang/gong v0.0.0-20230613065257-6c35778fa650/go.mod h1:VyGWc3c7hV/POYoHl+7+l9GuHlilh8lg5WaftbfOtb8=
 github.com/fullstack-lang/gongsvg v0.0.0-20230520091210-d657ccbfe69e h1:JfAfeQnr+wM4V1CVEgxs44YKFkyB0Odt3/F3Y5nqLYo=
 github.com/fullstack-lang/gongsvg v0.0.0-20230520091210-d657ccbfe69e/go.mod h1:/UA7qolJDYupNq9Wg93wHZz0cgtRPAJmZwXGOvAqIfs=
 github.com/fullstack-lang/gongsvg v0.0.0-20230521083131-ce5d124bd53b h1:vYg9FcgoTLWzpTaEd7HgAo24XwO3V/z10mkg7bUXKNw=
@@ -46,6 +48,8 @@ github.com/fullstack-lang/gongsvg v0.0.0-20230529043136-aafd89194d4f h1:+l+pdY4x
 github.com/fullstack-lang/gongsvg v0.0.0-20230529043136-aafd89194d4f/go.mod h1:/UA7qolJDYupNq9Wg93wHZz0cgtRPAJmZwXGOvAqIfs=
 github.com/fullstack-lang/gongsvg v0.0.0-20230609144250-36ae243e8b83 h1:HL4B7U+pEEEd9apqmj1o9sJaXyXpDJGdendLPffrgcw=
 github.com/fullstack-lang/gongsvg v0.0.0-20230609144250-36ae243e8b83/go.mod h1:/UA7qolJDYupNq9Wg93wHZz0cgtRPAJmZwXGOvAqIfs=
+github.com/fullstack-lang/gongsvg v0.0.0-20230613071402-51cc2bb615bd h1:zEOCU/CWhmfF/t3YJald0CA7WCDS8vNeO83dO/RYtP8=
+github.com/fullstack-lang/gongsvg v0.0.0-20230613071402-51cc2bb615bd/go.mod h1:/UA7qolJDYupNq9Wg93wHZz0cgtRPAJmZwXGOvAqIfs=
 github.com/gin-contrib/cors v1.4.0 h1:oJ6gwtUl3lqV0WEIwM/LxPF1QZ5qe2lGWdY2+bz7y0g=
 github.com/gin-contrib/cors v1.4.0/go.mod h1:bs9pNM0x/UsmHPBWT2xZz9ROh8xYjYkiURUfmBoMlcs=
 github.com/gin-contrib/sse v0.1.0 h1:Y/yl/+YNO8GZSjAhjMsSuLt29uWRFHdHYUb5lYOV9qE=

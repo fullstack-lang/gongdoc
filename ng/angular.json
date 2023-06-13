@@ -155,40 +155,68 @@
                 }
             }
         },
-        "gongdocdiagrams": {
+        "gongdocspecific": {
             "projectType": "library",
-            "root": "projects/gongdocdiagrams",
-            "sourceRoot": "projects/gongdocdiagrams/src",
+            "root": "projects/gongdocspecific",
+            "sourceRoot": "projects/gongdocspecific/src",
             "prefix": "lib",
             "architect": {
                 "build": {
-                    "builder": "@angular-devkit/build-angular:browser",
+                    "builder": "@angular-devkit/build-angular:ng-packagr",
                     "options": {
-                        "tsConfig": "projects/gongdocdiagrams/tsconfig.lib.json",
-                        "aot": false,
-                        "vendorChunk": true,
-                        "extractLicenses": false,
-                        "buildOptimizer": false,
-                        "sourceMap": true,
-                        "optimization": false,
-                        "namedChunks": true,
-                        "allowedCommonJsDependencies": [
-                            "lodash"
-                        ]
+                        "project": "projects/gongdocspecific/ng-package.json"
                     },
                     "configurations": {
                         "production": {
-                            "tsConfig": "projects/gongdocdiagrams/tsconfig.lib.prod.json"
+                            "tsConfig": "projects/gongdocspecific/tsconfig.lib.prod.json"
+                        },
+                        "development": {
+                            "tsConfig": "projects/gongdocspecific/tsconfig.lib.json"
                         }
                     },
-                    "defaultConfiguration": ""
+                    "defaultConfiguration": "production"
                 },
                 "test": {
                     "builder": "@angular-devkit/build-angular:karma",
                     "options": {
-                        "main": "projects/gongdocdiagrams/src/test.ts",
-                        "tsConfig": "projects/gongdocdiagrams/tsconfig.spec.json",
-                        "karmaConfig": "projects/gongdocdiagrams/karma.conf.js"
+                        "tsConfig": "projects/gongdocspecific/tsconfig.spec.json",
+                        "polyfills": [
+                            "zone.js",
+                            "zone.js/testing"
+                        ]
+                    }
+                }
+            }
+        },
+        "gongdocdatamodel": {
+            "projectType": "library",
+            "root": "projects/gongdocdatamodel",
+            "sourceRoot": "projects/gongdocdatamodel/src",
+            "prefix": "lib",
+            "architect": {
+                "build": {
+                    "builder": "@angular-devkit/build-angular:ng-packagr",
+                    "options": {
+                        "project": "projects/gongdocdatamodel/ng-package.json"
+                    },
+                    "configurations": {
+                        "production": {
+                            "tsConfig": "projects/gongdocdatamodel/tsconfig.lib.prod.json"
+                        },
+                        "development": {
+                            "tsConfig": "projects/gongdocdatamodel/tsconfig.lib.json"
+                        }
+                    },
+                    "defaultConfiguration": "production"
+                },
+                "test": {
+                    "builder": "@angular-devkit/build-angular:karma",
+                    "options": {
+                        "tsConfig": "projects/gongdocdatamodel/tsconfig.spec.json",
+                        "polyfills": [
+                            "zone.js",
+                            "zone.js/testing"
+                        ]
                     }
                 }
             }
