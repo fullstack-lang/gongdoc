@@ -35,6 +35,9 @@
       "angular-split": [
         "./node_modules/angular-split"
       ],
+      "gongdocdatamodel": [
+        "dist/gongdocdatamodel"
+      ],
       "tslib": [
         "./node_modules/tslib"
       ],
@@ -44,8 +47,8 @@
       "gongdoc": [
         "./projects/gongdoc/src/public-api.ts"
       ],
-      "gongdocdiagrams": [
-        "./projects/gongdocdiagrams/src/public-api.ts"
+      "gongdocspecific": [
+        "./projects/gongdocspecific/src/public-api.ts"
       ],
       "gongsvg": [
         "../vendor/github.com/fullstack-lang/gongsvg/ng/projects/gongsvg/src/public-api.ts"

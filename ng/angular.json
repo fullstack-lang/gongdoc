@@ -192,6 +192,72 @@
                     }
                 }
             }
+        },
+        "gongdocspecific": {
+          "projectType": "library",
+          "root": "projects/gongdocspecific",
+          "sourceRoot": "projects/gongdocspecific/src",
+          "prefix": "lib",
+          "architect": {
+            "build": {
+              "builder": "@angular-devkit/build-angular:ng-packagr",
+              "options": {
+                "project": "projects/gongdocspecific/ng-package.json"
+              },
+              "configurations": {
+                "production": {
+                  "tsConfig": "projects/gongdocspecific/tsconfig.lib.prod.json"
+                },
+                "development": {
+                  "tsConfig": "projects/gongdocspecific/tsconfig.lib.json"
+                }
+              },
+              "defaultConfiguration": "production"
+            },
+            "test": {
+              "builder": "@angular-devkit/build-angular:karma",
+              "options": {
+                "tsConfig": "projects/gongdocspecific/tsconfig.spec.json",
+                "polyfills": [
+                  "zone.js",
+                  "zone.js/testing"
+                ]
+              }
+            }
+          }
+        },
+        "gongdocdatamodel": {
+          "projectType": "library",
+          "root": "projects/gongdocdatamodel",
+          "sourceRoot": "projects/gongdocdatamodel/src",
+          "prefix": "lib",
+          "architect": {
+            "build": {
+              "builder": "@angular-devkit/build-angular:ng-packagr",
+              "options": {
+                "project": "projects/gongdocdatamodel/ng-package.json"
+              },
+              "configurations": {
+                "production": {
+                  "tsConfig": "projects/gongdocdatamodel/tsconfig.lib.prod.json"
+                },
+                "development": {
+                  "tsConfig": "projects/gongdocdatamodel/tsconfig.lib.json"
+                }
+              },
+              "defaultConfiguration": "production"
+            },
+            "test": {
+              "builder": "@angular-devkit/build-angular:karma",
+              "options": {
+                "tsConfig": "projects/gongdocdatamodel/tsconfig.spec.json",
+                "polyfills": [
+                  "zone.js",
+                  "zone.js/testing"
+                ]
+              }
+            }
+          }
         }
     }
 }
