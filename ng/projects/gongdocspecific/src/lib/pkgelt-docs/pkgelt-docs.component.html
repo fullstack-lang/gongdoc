@@ -2,6 +2,16 @@
     <as-split-area [size]="20" [maxSize]="100">
         <as-split direction="vertical" cdkDropListGroup>
             <as-split-area [size]="30" [maxSize]="100">
+                <lib-tree [GONG__StackPath]="GONG__StackPath" name="gongdoc"></lib-tree>
+            </as-split-area>
+            <as-split-area [size]="70" [maxSize]="100">
+                <lib-tree [GONG__StackPath]="GONG__StackPath" name="gong"></lib-tree>
+            </as-split-area>
+        </as-split>
+    </as-split-area>
+    <as-split-area [size]="20" [maxSize]="100">
+        <as-split direction="vertical" cdkDropListGroup>
+            <as-split-area [size]="30" [maxSize]="100">
                 <lib-tree-legacy [GONG__StackPath]="GONG__StackPath" name="gongdoc"></lib-tree-legacy>
             </as-split-area>
             <as-split-area [size]="70" [maxSize]="100">
@@ -9,7 +19,7 @@
             </as-split-area>
         </as-split>
     </as-split-area>
-    <as-split-area [size]="80" [maxSize]="100">
+    <as-split-area [size]="60" [maxSize]="100">
         <lib-svg [GONG__StackPath]="GONG__StackPath">
         </lib-svg>
     </as-split-area>
