@@ -24,6 +24,9 @@ import (
 
 	gongsvg_fullstack "github.com/fullstack-lang/gongsvg/go/fullstack"
 	gongsvg_models "github.com/fullstack-lang/gongsvg/go/models"
+
+	gongtree_fullstack "github.com/fullstack-lang/gongtree/go/fullstack"
+	gongtree_models "github.com/fullstack-lang/gongtree/go/models"
 )
 
 var (
@@ -99,6 +102,8 @@ func main() {
 		gongdocStage := gongdoc_fullstack.NewStackInstance(r, fullPkgPath)
 		gongStage := gong_fullstack.NewStackInstance(r, fullPkgPath)
 		gongsvgStage := gongsvg_fullstack.NewStackInstance(r, fullPkgPath)
+		gongtreeStage := gongtree_fullstack.NewStackInstance(r, fullPkgPath)
+		_ = gongtreeStage
 		stacksConfig.Stacks = append(stacksConfig.Stacks, fullPkgPath)
 
 		// gongdocStage := gongdoc_fullstack.NewStackInstance(r, "")
@@ -144,6 +149,8 @@ func main() {
 		gongStage.Commit()
 		gongdocStage.Commit()
 		gongsvgStage.Commit()
+
+		gongtree_models.SetOrchestratorOnAfterUpdate[gongtree_models.Node](gongtreeStage)
 
 		beforeCommitImplementation := new(BeforeCommitImplementation)
 		beforeCommitImplementation.marshallOnCommit = *marshallOnCommit

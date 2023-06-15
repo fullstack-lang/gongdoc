@@ -15,6 +15,9 @@ import (
 	gongsvg_fullstack "github.com/fullstack-lang/gongsvg/go/fullstack"
 	gongsvg_models "github.com/fullstack-lang/gongsvg/go/models"
 
+	gongtree_fullstack "github.com/fullstack-lang/gongtree/go/fullstack"
+	gongtree_models "github.com/fullstack-lang/gongtree/go/models"
+
 	"github.com/gin-gonic/gin"
 )
 
@@ -49,9 +52,13 @@ func Load(
 	gongStage := gong_fullstack.NewStackInstance(r, pkgPath)
 	gongdocStage := gongdoc_fullstack.NewStackInstance(r, pkgPath)
 	gongsvgStage := gongsvg_fullstack.NewStackInstance(r, pkgPath)
+	gongtreeStage := gongtree_fullstack.NewStackInstance(r, pkgPath)
+	_ = gongtreeStage
 
 	gongdoc_models.SetOrchestratorOnAfterUpdate[gongdoc_models.Button](gongdocStage)
 	gongdoc_models.SetOrchestratorOnAfterUpdate[gongdoc_models.Node](gongdocStage)
+
+	gongtree_models.SetOrchestratorOnAfterUpdate[gongtree_models.Node](gongtreeStage)
 
 	gongsvg_models.SetOrchestratorOnAfterUpdate[gongsvg_models.Rect](gongsvgStage)
 	gongsvg_models.SetOrchestratorOnAfterUpdate[gongsvg_models.Link](gongsvgStage)

@@ -32,7 +32,7 @@ interface FlatNode {
 
 // Tree component is a diagram selector
 @Component({
-  selector: 'lib-tree',
+  selector: 'lib-tree-legacy',
   templateUrl: './tree.component.html',
   styleUrls: ['./tree.component.css']
 })
