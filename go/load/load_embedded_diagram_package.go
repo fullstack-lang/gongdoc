@@ -12,7 +12,11 @@ import (
 	gongdoc_node2gongdoc "github.com/fullstack-lang/gongdoc/go/node2gongdoc"
 )
 
-func LoadEmbeddedDiagramPackage(gongdocStage *gongdoc_models.StageStruct, goModelsDir embed.FS, modelPkg *gong_models.ModelPkg) (diagramPackage *gongdoc_models.DiagramPackage, err error) {
+func LoadEmbeddedDiagramPackage(
+	gongdocStage *gongdoc_models.StageStruct,
+	goModelsDir embed.FS,
+	modelPkg *gong_models.ModelPkg,
+) (diagramPackage *gongdoc_models.DiagramPackage, err error) {
 
 	diagramPackage = (&gongdoc_models.DiagramPackage{}).Stage(gongdocStage)
 	diagramPackage.Map_Identifier_NbInstances = make(map[string]int)

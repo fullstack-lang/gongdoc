@@ -13,10 +13,7 @@ import (
 
 	"github.com/fullstack-lang/gongdoc/go/doc2svg"
 	gongsvg_fullstack "github.com/fullstack-lang/gongsvg/go/fullstack"
-	gongsvg_models "github.com/fullstack-lang/gongsvg/go/models"
-
 	gongtree_fullstack "github.com/fullstack-lang/gongtree/go/fullstack"
-	gongtree_models "github.com/fullstack-lang/gongtree/go/models"
 
 	"github.com/gin-gonic/gin"
 )
@@ -24,11 +21,10 @@ import (
 type BeforeCommitImplementation struct {
 	// for generating SVG
 	docSVGMapper *doc2svg.DocSVGMapper
-	gongsvgStage *gongsvg_models.StageStruct
 }
 
 func (beforeCommitImplementation *BeforeCommitImplementation) BeforeCommit(gongdocStage *gongdoc_models.StageStruct) {
-	beforeCommitImplementation.docSVGMapper.GenerateSvg(gongdocStage, beforeCommitImplementation.gongsvgStage)
+	beforeCommitImplementation.docSVGMapper.GenerateSvg(gongdocStage)
 }
 
 // Load have gongdoc init itself and the gong stack as well
@@ -55,20 +51,11 @@ func Load(
 	gongtreeStage := gongtree_fullstack.NewStackInstance(r, pkgPath)
 	_ = gongtreeStage
 
-	gongdoc_models.SetOrchestratorOnAfterUpdate[gongdoc_models.Button](gongdocStage)
-	gongdoc_models.SetOrchestratorOnAfterUpdate[gongdoc_models.Node](gongdocStage)
-
-	gongtree_models.SetOrchestratorOnAfterUpdate[gongtree_models.Node](gongtreeStage)
-
-	gongsvg_models.SetOrchestratorOnAfterUpdate[gongsvg_models.Rect](gongsvgStage)
-	gongsvg_models.SetOrchestratorOnAfterUpdate[gongsvg_models.Link](gongsvgStage)
-	gongsvg_models.SetOrchestratorOnAfterUpdate[gongsvg_models.LinkAnchoredText](gongsvgStage)
-
 	beforeCommitImplementation := new(BeforeCommitImplementation)
 
-	docSVGMapper := new(doc2svg.DocSVGMapper)
+	docSVGMapper := doc2svg.NewDocSVGMapper(gongtreeStage, gongsvgStage)
+
 	beforeCommitImplementation.docSVGMapper = docSVGMapper
-	beforeCommitImplementation.gongsvgStage = gongsvgStage
 
 	gongdocStage.OnInitCommitFromFrontCallback = beforeCommitImplementation
 	gongdocStage.OnInitCommitFromBackCallback = beforeCommitImplementation

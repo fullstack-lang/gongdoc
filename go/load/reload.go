@@ -8,7 +8,10 @@ import (
 	gongdoc_node2gongdoc "github.com/fullstack-lang/gongdoc/go/node2gongdoc"
 )
 
-func Reload(gongdocStage *gongdoc_models.StageStruct, diagramPackage *gongdoc_models.DiagramPackage) {
+func Reload(
+	gongdocStage *gongdoc_models.StageStruct,
+	diagramPackage *gongdoc_models.DiagramPackage,
+) {
 
 	gong_models.GetDefaultStage().Checkout()
 	gong_models.GetDefaultStage().Reset()

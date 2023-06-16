@@ -15,7 +15,12 @@ import (
 )
 
 // LoadDiagramPackage fill up the stage with the diagrams elements
-func LoadDiagramPackage(gongdocStage *gongdoc_models.StageStruct, pkgPath string, modelPkg *gong_models.ModelPkg, editable bool) (diagramPackage *gongdoc_models.DiagramPackage, err error) {
+func LoadDiagramPackage(
+	gongdocStage *gongdoc_models.StageStruct,
+	pkgPath string,
+	modelPkg *gong_models.ModelPkg,
+	editable bool,
+) (diagramPackage *gongdoc_models.DiagramPackage, err error) {
 
 	diagramPackage = (&gongdoc_models.DiagramPackage{
 		Stage_: gongdocStage,
