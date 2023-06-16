@@ -24,7 +24,7 @@ require (
 
 require (
 	github.com/fullstack-lang/gongsvg v0.0.0-20230616114434-9f04fe33a038
-	github.com/fullstack-lang/gongtree v0.0.0-20230615012939-0e398b68a441
+	github.com/fullstack-lang/gongtree v0.0.0-20230616085657-90b0175cbbea
 	github.com/glebarez/sqlite v1.8.0
 	github.com/xuri/excelize/v2 v2.6.1
 )

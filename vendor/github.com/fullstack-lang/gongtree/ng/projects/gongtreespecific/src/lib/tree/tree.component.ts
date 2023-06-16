@@ -8,7 +8,7 @@ import { MatTreeFlatDataSource, MatTreeFlattener } from '@angular/material/tree'
 import { Router, RouterState } from '@angular/router';
 
 
-import * as gongdoc from 'gongdoc'
+import * as gongtree from 'gongtree'
 
 /**
  * Food data with nested structure.
@@ -17,7 +17,7 @@ import * as gongdoc from 'gongdoc'
 interface Node {
   name: string;
 
-  gongNode: gongdoc.NodeDB;
+  gongNode: gongtree.NodeDB;
   children?: Node[];
 }
 
@@ -26,7 +26,7 @@ interface FlatNode {
   expandable: boolean;
 
   name: string;
-  gongNode: gongdoc.NodeDB;
+  gongNode: gongtree.NodeDB;
   level: number;
 }
 
@@ -40,12 +40,6 @@ export class TreeComponent implements OnInit {
 
   @Input() name: string = ""
   @Input() GONG__StackPath: string = ""
-
-  // the package can be editable or not
-  editable: boolean = false
-
-  public classDiagram: gongdoc.ClassdiagramDB | undefined = undefined
-  public stateDiagram: gongdoc.UmlscDB | undefined = undefined
 
   private _transformer = (node: Node, level: number) => {
     return {
@@ -73,14 +67,14 @@ export class TreeComponent implements OnInit {
 
   hasChild = (_: number, node: FlatNode) => node.expandable;
 
-  public gongdocFrontRepo?: gongdoc.FrontRepo
+  public gongtreeFrontRepo?: gongtree.FrontRepo
 
   constructor(
-    private gongdocFrontRepoService: gongdoc.FrontRepoService,
-    private gongdocCommitNbFromBackService: gongdoc.CommitNbFromBackService,
-    private gongdocPushFromFrontNbService: gongdoc.PushFromFrontNbService,
-    private gongdocNodeService: gongdoc.NodeService,
-    private gongdocButtonService: gongdoc.ButtonService,
+    private gongtreeFrontRepoService: gongtree.FrontRepoService,
+    private gongtreeCommitNbFromBackService: gongtree.CommitNbFromBackService,
+    private gongtreePushFromFrontNbService: gongtree.PushFromFrontNbService,
+    private gongtreeNodeService: gongtree.NodeService,
+    private gongtreeButtonService: gongtree.ButtonService,
     private router: Router,
   ) {
   }
@@ -115,7 +109,7 @@ export class TreeComponent implements OnInit {
 
 
   startAutoRefresh(intervalMs: number): void {
-    this.commutNbFromBackSubscription = this.gongdocCommitNbFromBackService
+    this.commutNbFromBackSubscription = this.gongtreeCommitNbFromBackService
       .getCommitNbFromBack(intervalMs, this.GONG__StackPath)
       .subscribe((commitNbFromBack: number) => {
         // console.log("TreeComponent, last commit nb " + this.lastCommitNbFromBack + " new: " + commitNbFromBack)
@@ -133,19 +127,13 @@ export class TreeComponent implements OnInit {
 
   refresh(): void {
 
-    this.gongdocFrontRepoService.pull(this.GONG__StackPath).subscribe(
-      gongdocsFrontRepo => {
-        this.gongdocFrontRepo = gongdocsFrontRepo
+    this.gongtreeFrontRepoService.pull(this.GONG__StackPath).subscribe(
+      gongtreesFrontRepo => {
+        this.gongtreeFrontRepo = gongtreesFrontRepo
 
-        this.gongdocFrontRepo.DiagramPackages_array.forEach(
-          pkgElt => {
-            this.editable = pkgElt.IsEditable
-          }
-        )
-
-        var treeSingloton: gongdoc.TreeDB = new (gongdoc.TreeDB)
+        var treeSingloton: gongtree.TreeDB = new (gongtree.TreeDB)
         var selected: boolean = false
-        for (var tree of this.gongdocFrontRepo.Trees_array) {
+        for (var tree of this.gongtreeFrontRepo.Trees_array) {
           if (tree.Name == this.name) {
             treeSingloton = tree
             selected = true
@@ -202,7 +190,7 @@ export class TreeComponent implements OnInit {
     )
   }
 
-  gongNodeToMatTreeNode(nodeDB: gongdoc.NodeDB): Node {
+  gongNodeToMatTreeNode(nodeDB: gongtree.NodeDB): Node {
     var matTreeNode: Node = { name: nodeDB.Name, gongNode: nodeDB, children: [] }
     if (nodeDB.Children != undefined) {
       matTreeNode.children = nodeDB.Children.map(child => this.gongNodeToMatTreeNode(child))
@@ -216,8 +204,8 @@ export class TreeComponent implements OnInit {
 
     node.gongNode.IsExpanded = !node.gongNode.IsExpanded
 
-    this.gongdocNodeService.updateNode(node.gongNode, this.GONG__StackPath).subscribe(
-      gongdocNode => {
+    this.gongtreeNodeService.updateNode(node.gongNode, this.GONG__StackPath).subscribe(
+      gongtreeNode => {
         console.log("toggleNodeExpansion: updated node")
       }
     )
@@ -229,18 +217,18 @@ export class TreeComponent implements OnInit {
     const d = new Date()
     console.log("TreeComponent ", this.GONG__StackPath, " name ", this.name, " toggleNodeCheckbox, " + d.toLocaleTimeString() + `.${d.getMilliseconds()}` + " " + this.name)
     node.gongNode.IsChecked = !node.gongNode.IsChecked
-    this.gongdocNodeService.updateNode(node.gongNode, this.GONG__StackPath).subscribe(
-      gongdocNode => {
+    this.gongtreeNodeService.updateNode(node.gongNode, this.GONG__StackPath).subscribe(
+      gongtreeNode => {
         const d = new Date()
         console.log("toggleNodeCheckbox: updated node " + d.toLocaleTimeString() + `.${d.getMilliseconds()}` + " " + this.name)
       }
     )
   }
 
-  onButtonClick(node: FlatNode, button: gongdoc.ButtonDB) {
+  onButtonClick(node: FlatNode, button: gongtree.ButtonDB) {
 
-    this.gongdocButtonService.updateButton(button, this.GONG__StackPath).subscribe(
-      gongdocButton => {
+    this.gongtreeButtonService.updateButton(button, this.GONG__StackPath).subscribe(
+      gongtreeButton => {
         console.log("button pressed")
       }
     )
@@ -248,8 +236,8 @@ export class TreeComponent implements OnInit {
 
   update(node: FlatNode) {
     node.gongNode.IsInEditMode = false
-    this.gongdocNodeService.updateNode(node.gongNode, this.GONG__StackPath).subscribe(
-      gongdocNode => {
+    this.gongtreeNodeService.updateNode(node.gongNode, this.GONG__StackPath).subscribe(
+      gongtreeNode => {
         console.log("node.gongNode.IsInEditMode = false, updated node")
       }
     )
