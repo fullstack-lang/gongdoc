@@ -29,8 +29,13 @@ import { AngularSplitModule } from 'angular-split';
 
 
 import { GongModule } from 'gong'
+
 import { GongdocModule } from 'gongdoc'
+import { GongdocdatamodelModule } from 'gongdocdatamodel'
 import { GongdocspecificModule } from 'gongdocspecific'
+
+import { GongsvgModule } from 'gongsvg'
+import { GongsvgspecificModule } from 'gongsvgspecific'
 
 // mandatory
 import { HttpClientModule } from '@angular/common/http';
@@ -65,7 +70,10 @@ import { HttpClientModule } from '@angular/common/http';
 
     GongModule,
 
+    GongsvgspecificModule,
+
     GongdocModule,
+    GongdocdatamodelModule,
     GongdocspecificModule
   ],
   providers: [],

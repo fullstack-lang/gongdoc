@@ -5,8 +5,6 @@ import { DataModelPanelComponent } from './data-model-panel/data-model-panel.com
 import { GongdocModule } from 'gongdoc'
 import { GongdocspecificModule } from 'gongdocspecific'
 
-import { GongdocModule } from 'gongdoc'
-
 import { MatRadioModule } from '@angular/material/radio';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';

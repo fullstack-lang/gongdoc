@@ -8,3 +8,4 @@ go/cmd/gongdoc/__debug_bin.exe
 go/tests/geometry/go/cmd/geometry/__debug_bin.exe
 go/tests/geometry/go/cmd/geometry/__debug_bin
 go/tests/geometry/go/cmd/geometry/geometry.exe
+go/cmd/gongdoc/test.db
