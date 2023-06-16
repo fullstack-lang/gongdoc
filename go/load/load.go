@@ -61,6 +61,7 @@ func Load(
 	gongdocStage.OnInitCommitFromBackCallback = beforeCommitImplementation
 
 	diagramPackageCallbackSingloton := new(DiagramPackageCallbacksSingloton)
+	diagramPackageCallbackSingloton.gongtreeStage = gongtreeStage
 	gongdocStage.OnAfterDiagramPackageUpdateCallback = diagramPackageCallbackSingloton
 
 	modelPackage, _ := gong_models.LoadEmbedded(gongStage, goModelsDir)
@@ -76,9 +77,9 @@ func Load(
 	gongdocStage.MetaPackageImportPath = pkgPath
 
 	if embeddedDiagrams {
-		diagramPackage, _ = LoadEmbeddedDiagramPackage(gongdocStage, goDiagramsDir, modelPackage)
+		diagramPackage, _ = LoadEmbeddedDiagramPackage(gongdocStage, gongtreeStage, goDiagramsDir, modelPackage)
 	} else {
-		diagramPackage, _ = LoadDiagramPackage(gongdocStage, filepath.Join("../../diagrams"), modelPackage, true)
+		diagramPackage, _ = LoadDiagramPackage(gongdocStage, gongtreeStage, filepath.Join("../../diagrams"), modelPackage, true)
 	}
 	diagramPackage.GongModelPath = pkgPath
 
