@@ -14,16 +14,11 @@ func FillUpTreeOfDiagramNodes(
 
 	// create a tree for classdiagrams
 	gongdocTree := (&gongdoc_models.Tree{Name: "gongdoc"}).Stage(gongdocStage)
-	gongTreeTree := (&gongtree_models.Tree{Name: "gongdoc"}).Stage(gongtreeStage)
 
 	// add the root of class diagrams
 	rootOfClassdiagramsNode = (&gongdoc_models.Node{Name: "Class diagrams"}).Stage(gongdocStage)
 	rootOfClassdiagramsNode.IsExpanded = true
 	gongdocTree.RootNodes = append(gongdocTree.RootNodes, rootOfClassdiagramsNode)
-
-	rootOfClassdiagramsTreeNode := (&gongtree_models.Node{Name: "Class diagrams"}).Stage(gongtreeStage)
-	rootOfClassdiagramsTreeNode.IsExpanded = true
-	gongTreeTree.RootNodes = append(gongTreeTree.RootNodes, rootOfClassdiagramsTreeNode)
 
 	// add add button
 	addDocButton := (&gongdoc_models.Button{
