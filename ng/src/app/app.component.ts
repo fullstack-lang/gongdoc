@@ -1,7 +1,4 @@
-import { Component, OnInit } from '@angular/core';
-
-import * as gongdoc from 'gongdoc';
-import { StackConfigs, StacksService } from './stacks.service';
+import { Component, OnInit, ViewChild } from '@angular/core';
 
 @Component({
   selector: 'app-root',
@@ -9,44 +6,22 @@ import { StackConfigs, StacksService } from './stacks.service';
 })
 export class AppComponent implements OnInit {
 
-  // choices for the top radio button
-  view = 'Default view'
-  default = 'Default view'
-  meta = 'Meta view'
-  gong = 'Gong view'
-  views: string[] = [this.default, this.meta, this.gong];
+  default = 'DOC Data/Model'
+  view = this.default
 
-  stacks: string[] = []
+  views: string[] = [this.default];
 
-  GONG__StackPath: string = ""
-
-  diagramPackage: gongdoc.DiagramPackageDB = new (gongdoc.DiagramPackageDB);
+  GONG__MODEL__StacksPath = "github.com/fullstack-lang/gongdoc/go/models"
+  GONG__DATA__StackPath = "gongdoc"
 
   loading = true
 
-  sizePerStack = 100
-
   constructor(
-    private diagramPackageService: gongdoc.DiagramPackageService,
-    private stacksService: StacksService
   ) {
 
   }
 
   ngOnInit(): void {
-
-    // get all stacks to analyse
-    this.stacksService.getStacks().subscribe(
-      (stacks: string[]) => {
-        for (let stack of stacks) {
-          console.log("Gongdoc component Stack ", stack)
-        }
-        this.stacks = stacks
-        this.GONG__StackPath = this.stacks[0]
-        console.log("Gongdoc AppComponent solo stack ", this.GONG__StackPath)
-        this.sizePerStack = 100 / this.stacks.length
-        this.loading = false
-      }
-    )
+    this.loading = false
   }
 }
