@@ -9,21 +9,21 @@ func FillUpTreeOfDiagramNodes(
 	gongdocStage *gongdoc_models.StageStruct,
 	gongtreeStage *gongtree_models.StageStruct,
 	diagramPackage *gongdoc_models.DiagramPackage,
-	treeOfGongObjects *gongdoc_models.Tree,
-) (rootOfClassdiagramsNode *gongdoc_models.Node) {
+	treeOfGongObjects *gongtree_models.Tree,
+) (rootOfClassdiagramsNode *gongtree_models.Node) {
 
 	// create a tree for classdiagrams
-	gongdocTree := (&gongdoc_models.Tree{Name: "gongdoc"}).Stage(gongdocStage)
+	gongdocTree := (&gongtree_models.Tree{Name: "gongdoc"}).Stage(gongtreeStage)
 
 	// add the root of class diagrams
-	rootOfClassdiagramsNode = (&gongdoc_models.Node{Name: "Class diagrams"}).Stage(gongdocStage)
+	rootOfClassdiagramsNode = (&gongtree_models.Node{Name: "Class diagrams"}).Stage(gongtreeStage)
 	rootOfClassdiagramsNode.IsExpanded = true
 	gongdocTree.RootNodes = append(gongdocTree.RootNodes, rootOfClassdiagramsNode)
 
 	// add add button
-	addDocButton := (&gongdoc_models.Button{
+	addDocButton := (&gongtree_models.Button{
 		Name: diagramPackage.Name + " " + string(BUTTON_add),
-		Icon: string(BUTTON_add)}).Stage(gongdocStage)
+		Icon: string(BUTTON_add)}).Stage(gongtreeStage)
 	rootOfClassdiagramsNode.Buttons = append(rootOfClassdiagramsNode.Buttons, addDocButton)
 	addDocButton.Impl = NewButtonImplRootOfClassdiagrams(
 		diagramPackage,
@@ -34,7 +34,12 @@ func FillUpTreeOfDiagramNodes(
 
 	// add one node for each diagram
 	for classdiagram := range *gongdoc_models.GetGongstructInstancesSet[gongdoc_models.Classdiagram](gongdocStage) {
-		classdiagramNode := NewClassdiagramNode(classdiagram, diagramPackage, rootOfClassdiagramsNode, treeOfGongObjects)
+		classdiagramNode := NewClassdiagramNode(
+			gongtreeStage,
+			classdiagram,
+			diagramPackage,
+			rootOfClassdiagramsNode,
+			treeOfGongObjects)
 		rootOfClassdiagramsNode.Children = append(rootOfClassdiagramsNode.Children, classdiagramNode)
 	}
 

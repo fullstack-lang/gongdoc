@@ -11,13 +11,16 @@ func FillUpNodeTree(
 	diagramPackage *gongdoc_models.DiagramPackage,
 ) {
 
-	treeOfGongObjects := FillUpTreeOfGongObjects(gongdocStage, diagramPackage)
+	treeOfGongObjects := FillUpTreeOfGongObjects(gongdocStage, gongtreeStage, diagramPackage)
 	rootOfClassdiagramsNode := FillUpTreeOfDiagramNodes(gongdocStage, gongtreeStage, diagramPackage, treeOfGongObjects)
 
-	computeNodeConfs(gongdocStage,
+	computeNodeConfs(
+		gongtreeStage,
+		gongdocStage,
 		rootOfClassdiagramsNode,
 		diagramPackage,
 		treeOfGongObjects)
 
+	gongdocStage.Commit()
 	gongtreeStage.Commit()
 }
