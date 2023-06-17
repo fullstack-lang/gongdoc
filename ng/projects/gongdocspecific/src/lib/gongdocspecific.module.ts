@@ -35,7 +35,6 @@ import { AngularSplitModule } from 'angular-split';
 
 import { PkgeltDocsComponent } from './pkgelt-docs/pkgelt-docs.component';
 
-import { TreeComponent } from './tree/tree.component';
 import { PanelComponent } from './panel/panel.component'
 
 
@@ -44,7 +43,6 @@ import { PanelComponent } from './panel/panel.component'
 @NgModule({
   declarations: [
     PkgeltDocsComponent,
-    TreeComponent,
     PanelComponent
   ],
   imports: [
@@ -79,10 +77,10 @@ import { PanelComponent } from './panel/panel.component'
 
     GongsvgModule,
     GongsvgspecificModule,
-    
+
     GongtreeModule,
     GongtreespecificModule,
-    
+
   ],
   exports: [
     PkgeltDocsComponent,

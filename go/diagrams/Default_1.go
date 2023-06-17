@@ -27,12 +27,6 @@ var ___dummy__ref_models_Default_1 ref_models.StageStruct
 var map_DocLink_Identifier_Default_1 map[string]any = map[string]any{
 	// injection point for docLink to identifiers
 
-	"ref_models.Button": &(ref_models.Button{}),
-
-	"ref_models.Button.Icon": (ref_models.Button{}).Icon,
-
-	"ref_models.Button.Name": (ref_models.Button{}).Name,
-
 	"ref_models.Classdiagram": &(ref_models.Classdiagram{}),
 
 	"ref_models.Classdiagram.GongEnumShapes": (ref_models.Classdiagram{}).GongEnumShapes,
@@ -167,24 +161,6 @@ var map_DocLink_Identifier_Default_1 map[string]any = map[string]any{
 
 	"ref_models.NOTE_SHAPE_LINK_TO_GONG_STRUCT_OR_ENUM_SHAPE": ref_models.NOTE_SHAPE_LINK_TO_GONG_STRUCT_OR_ENUM_SHAPE,
 
-	"ref_models.Node": &(ref_models.Node{}),
-
-	"ref_models.Node.Buttons": (ref_models.Node{}).Buttons,
-
-	"ref_models.Node.Children": (ref_models.Node{}).Children,
-
-	"ref_models.Node.HasCheckboxButton": (ref_models.Node{}).HasCheckboxButton,
-
-	"ref_models.Node.IsCheckboxDisabled": (ref_models.Node{}).IsCheckboxDisabled,
-
-	"ref_models.Node.IsChecked": (ref_models.Node{}).IsChecked,
-
-	"ref_models.Node.IsExpanded": (ref_models.Node{}).IsExpanded,
-
-	"ref_models.Node.IsInEditMode": (ref_models.Node{}).IsInEditMode,
-
-	"ref_models.Node.Name": (ref_models.Node{}).Name,
-
 	"ref_models.NoteShape": &(ref_models.NoteShape{}),
 
 	"ref_models.NoteShape.Body": (ref_models.NoteShape{}).Body,
@@ -234,12 +210,6 @@ var map_DocLink_Identifier_Default_1 map[string]any = map[string]any{
 	"ref_models.Position.Y": (ref_models.Position{}).Y,
 
 	"ref_models.String": ref_models.String,
-
-	"ref_models.Tree": &(ref_models.Tree{}),
-
-	"ref_models.Tree.Name": (ref_models.Tree{}).Name,
-
-	"ref_models.Tree.RootNodes": (ref_models.Tree{}).RootNodes,
 
 	"ref_models.UmlState": &(ref_models.UmlState{}),
 
@@ -323,5 +293,3 @@ func Default_1Injection(stage *models.StageStruct) {
 
 	// Setup of pointers
 }
-
-
