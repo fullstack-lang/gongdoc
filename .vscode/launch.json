@@ -44,13 +44,13 @@
             ],
         },
         {
-            "name": "gongdoc on geometry -setUpRandomNumberOfInstances",
+            "name": "gongdoc on geometry ",
             "type": "go",
             "request": "launch",
             "mode": "debug",
             "program": "${workspaceFolder}/go/cmd/gongdoc",
             "args": [
-                "-setUpRandomNumberOfInstances",
+                "",
                 "../../tests/geometry/go/models",
             ]
         },
@@ -109,26 +109,13 @@
             ]
         },
         {
-            "name": "gongdoc on geometry -port=8082 -setUpRandomNumberOfInstances",
+            "name": "gongdoc on geometry -port=8082",
             "type": "go",
             "request": "launch",
             "mode": "debug",
             "program": "${workspaceFolder}/go/cmd/gongdoc",
             "args": [
-                "-setUpRandomNumberOfInstances",
                 "-port=8082",
-                "../../tests/geometry/go/models",
-            ]
-        },
-        {
-            "name": "gongdoc on geometry -setUpRandomNumberOfInstances -editable=false",
-            "type": "go",
-            "request": "launch",
-            "mode": "debug",
-            "program": "${workspaceFolder}/go/cmd/gongdoc",
-            "args": [
-                "-setUpRandomNumberOfInstances",
-                "-editable=false",
                 "../../tests/geometry/go/models",
             ]
         },
@@ -162,13 +149,13 @@
             ]
         },
         {
-            "name": "gongdoc on dummy -setUpRandomNumberOfInstances -editable=false",
+            "name": "gongdoc on dummy  -editable=false",
             "type": "go",
             "request": "launch",
             "mode": "debug",
             "program": "${workspaceFolder}/go/cmd/gongdoc",
             "args": [
-                "-setUpRandomNumberOfInstances",
+                "",
                 "-editable=false",
                 "../../tests/dummy/go/models",
             ]
