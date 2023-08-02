@@ -8,6 +8,7 @@ import (
 	"strconv"
 
 	gongdoc_go "github.com/fullstack-lang/gongdoc/go"
+	gongdoc_data "github.com/fullstack-lang/gongdoc/go/data"
 	gongdoc_fullstack "github.com/fullstack-lang/gongdoc/go/fullstack"
 	gongdoc_models "github.com/fullstack-lang/gongdoc/go/models"
 	gongdoc_static "github.com/fullstack-lang/gongdoc/go/static"
@@ -16,12 +17,9 @@ import (
 )
 
 var (
-	logDBFlag  = flag.Bool("logDB", false, "log mode for db")
 	logGINFlag = flag.Bool("logGIN", false, "log mode for gin")
 
-	marshallOnStartup  = flag.String("marshallOnStartup", "", "at startup, marshall staged data to a go file with the marshall name and '.go' (must be lowercased without spaces). If marshall arg is '', no marshalling")
 	unmarshallFromCode = flag.String("unmarshallFromCode", "", "unmarshall data from go file and '.go' (must be lowercased without spaces), If unmarshallFromCode arg is '', no unmarshalling")
-	unmarshall         = flag.String("unmarshall", "", "unmarshall data from marshall name and '.go' (must be lowercased without spaces), If unmarshall arg is '', no unmarshalling")
 	marshallOnCommit   = flag.String("marshallOnCommit", "", "on all commits, marshall staged data to a go file with the marshall name and '.go' (must be lowercased without spaces). If marshall arg is '', no marshalling")
 
 	diagrams         = flag.Bool("diagrams", true, "parse/analysis go/models and go/diagrams")
@@ -63,7 +61,39 @@ func main() {
 
 	// setup stack
 	var stage *gongdoc_models.StageStruct
-	stage = gongdoc_fullstack.NewStackInstance(r, "gongdoc")
+	if *marshallOnCommit != "" {
+		// persistence in a SQLite file on disk in memory
+		stage = gongdoc_fullstack.NewStackInstance(r, "gongdoc")
+	} else {
+		// persistence in a SQLite file on disk
+		stage = gongdoc_fullstack.NewStackInstance(r, "gongdoc", "./test.db")
+	}
+
+	gongdoc_data.Load(r, gongdoc_go.GoModelsDir, "gongdoc")
+
+	if *unmarshallFromCode != "" {
+		stage.Checkout()
+		stage.Reset()
+		stage.Commit()
+		err := gongdoc_models.ParseAstFile(stage, *unmarshallFromCode)
+
+		// if the application is run with -unmarshallFromCode=xxx.go -marshallOnCommit
+		// xxx.go might be absent the first time. However, this shall not be a show stopper.
+		if err != nil {
+			log.Println("no file to read " + err.Error())
+		}
+
+		stage.Commit()
+	} else {
+		// in case the database is used, checkout the content to the stage
+		stage.Checkout()
+	}
+
+	// hook automatic marshall to go code at every commit
+	if *marshallOnCommit != "" {
+		hook := new(BeforeCommitImplementation)
+		stage.OnInitCommitFromFrontCallback = hook
+	}
 
 	gongdoc_load.Load(
 		"gongdoc",
@@ -74,7 +104,7 @@ func main() {
 		*embeddedDiagrams,
 		&stage.Map_GongStructName_InstancesNb)
 
-	log.Printf("Server ready serve on localhost:"+ strconv.Itoa(*port))
+	log.Printf("Server ready serve on localhost:" + strconv.Itoa(*port))
 	err := r.Run(":" + strconv.Itoa(*port))
 	if err != nil {
 		log.Fatalln(err.Error())
