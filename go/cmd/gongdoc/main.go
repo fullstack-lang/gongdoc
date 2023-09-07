@@ -11,6 +11,7 @@ import (
 	gongdoc_data "github.com/fullstack-lang/gongdoc/go/data"
 	gongdoc_fullstack "github.com/fullstack-lang/gongdoc/go/fullstack"
 	gongdoc_models "github.com/fullstack-lang/gongdoc/go/models"
+	gongdoc_orm "github.com/fullstack-lang/gongdoc/go/orm"
 	gongdoc_static "github.com/fullstack-lang/gongdoc/go/static"
 
 	gongdoc_load "github.com/fullstack-lang/gongdoc/go/load"
@@ -61,15 +62,17 @@ func main() {
 
 	// setup stack
 	var stage *gongdoc_models.StageStruct
+	var backRepo *gongdoc_orm.BackRepoStruct
+
 	if *marshallOnCommit != "" {
 		// persistence in a SQLite file on disk in memory
-		stage = gongdoc_fullstack.NewStackInstance(r, "gongdoc")
+		stage, backRepo = gongdoc_fullstack.NewStackInstance(r, "gongdoc")
 	} else {
 		// persistence in a SQLite file on disk
-		stage = gongdoc_fullstack.NewStackInstance(r, "gongdoc", "./test.db")
+		stage, backRepo = gongdoc_fullstack.NewStackInstance(r, "gongdoc", "./gongdoc.db")
 	}
 
-	gongdoc_data.Load(r, gongdoc_go.GoModelsDir, "gongdoc")
+	gongdoc_data.Load(r, gongdoc_go.GoModelsDir, "gongdoc", stage, backRepo)
 
 	if *unmarshallFromCode != "" {
 		stage.Checkout()
@@ -92,7 +95,7 @@ func main() {
 	// hook automatic marshall to go code at every commit
 	if *marshallOnCommit != "" {
 		hook := new(BeforeCommitImplementation)
-		stage.OnInitCommitFromFrontCallback = hook
+		stage.OnInitCommitCallback = hook
 	}
 
 	gongdoc_load.Load(
