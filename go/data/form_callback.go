@@ -53,8 +53,8 @@ func (classdiagramFormCallback *ClassdiagramFormCallback) OnSave() {
 	if classdiagramFormCallback.classdiagram == nil {
 		classdiagramFormCallback.classdiagram = new(models.Classdiagram).Stage(classdiagramFormCallback.stageOfInterest)
 	}
-	classdiagram := classdiagramFormCallback.classdiagram
-	_ = classdiagram
+	classdiagram_ := classdiagramFormCallback.classdiagram
+	_ = classdiagram_
 
 	// get the formGroup
 	formGroup := classdiagramFormCallback.formStage.FormGroups_mapString[table.FormGroupDefaultName.ToString()]
@@ -63,9 +63,9 @@ func (classdiagramFormCallback *ClassdiagramFormCallback) OnSave() {
 		switch formDiv.Name {
 		// insertion point per field
 		case "Name":
-			FormDivBasicFieldToField(&(classdiagram.Name), formDiv)
+			FormDivBasicFieldToField(&(classdiagram_.Name), formDiv)
 		case "IsInDrawMode":
-			FormDivBasicFieldToField(&(classdiagram.IsInDrawMode), formDiv)
+			FormDivBasicFieldToField(&(classdiagram_.IsInDrawMode), formDiv)
 		}
 	}
 
@@ -117,8 +117,8 @@ func (diagrampackageFormCallback *DiagramPackageFormCallback) OnSave() {
 	if diagrampackageFormCallback.diagrampackage == nil {
 		diagrampackageFormCallback.diagrampackage = new(models.DiagramPackage).Stage(diagrampackageFormCallback.stageOfInterest)
 	}
-	diagrampackage := diagrampackageFormCallback.diagrampackage
-	_ = diagrampackage
+	diagrampackage_ := diagrampackageFormCallback.diagrampackage
+	_ = diagrampackage_
 
 	// get the formGroup
 	formGroup := diagrampackageFormCallback.formStage.FormGroups_mapString[table.FormGroupDefaultName.ToString()]
@@ -127,19 +127,19 @@ func (diagrampackageFormCallback *DiagramPackageFormCallback) OnSave() {
 		switch formDiv.Name {
 		// insertion point per field
 		case "Name":
-			FormDivBasicFieldToField(&(diagrampackage.Name), formDiv)
+			FormDivBasicFieldToField(&(diagrampackage_.Name), formDiv)
 		case "Path":
-			FormDivBasicFieldToField(&(diagrampackage.Path), formDiv)
+			FormDivBasicFieldToField(&(diagrampackage_.Path), formDiv)
 		case "GongModelPath":
-			FormDivBasicFieldToField(&(diagrampackage.GongModelPath), formDiv)
+			FormDivBasicFieldToField(&(diagrampackage_.GongModelPath), formDiv)
 		case "SelectedClassdiagram":
-			FormDivSelectFieldToField(&(diagrampackage.SelectedClassdiagram), diagrampackageFormCallback.stageOfInterest, formDiv)
+			FormDivSelectFieldToField(&(diagrampackage_.SelectedClassdiagram), diagrampackageFormCallback.stageOfInterest, formDiv)
 		case "IsEditable":
-			FormDivBasicFieldToField(&(diagrampackage.IsEditable), formDiv)
+			FormDivBasicFieldToField(&(diagrampackage_.IsEditable), formDiv)
 		case "IsReloaded":
-			FormDivBasicFieldToField(&(diagrampackage.IsReloaded), formDiv)
+			FormDivBasicFieldToField(&(diagrampackage_.IsReloaded), formDiv)
 		case "AbsolutePathToDiagramPackage":
-			FormDivBasicFieldToField(&(diagrampackage.AbsolutePathToDiagramPackage), formDiv)
+			FormDivBasicFieldToField(&(diagrampackage_.AbsolutePathToDiagramPackage), formDiv)
 		}
 	}
 
@@ -191,8 +191,8 @@ func (fieldFormCallback *FieldFormCallback) OnSave() {
 	if fieldFormCallback.field == nil {
 		fieldFormCallback.field = new(models.Field).Stage(fieldFormCallback.stageOfInterest)
 	}
-	field := fieldFormCallback.field
-	_ = field
+	field_ := fieldFormCallback.field
+	_ = field_
 
 	// get the formGroup
 	formGroup := fieldFormCallback.formStage.FormGroups_mapString[table.FormGroupDefaultName.ToString()]
@@ -201,15 +201,15 @@ func (fieldFormCallback *FieldFormCallback) OnSave() {
 		switch formDiv.Name {
 		// insertion point per field
 		case "Name":
-			FormDivBasicFieldToField(&(field.Name), formDiv)
+			FormDivBasicFieldToField(&(field_.Name), formDiv)
 		case "Identifier":
-			FormDivBasicFieldToField(&(field.Identifier), formDiv)
+			FormDivBasicFieldToField(&(field_.Identifier), formDiv)
 		case "FieldTypeAsString":
-			FormDivBasicFieldToField(&(field.FieldTypeAsString), formDiv)
+			FormDivBasicFieldToField(&(field_.FieldTypeAsString), formDiv)
 		case "Structname":
-			FormDivBasicFieldToField(&(field.Structname), formDiv)
+			FormDivBasicFieldToField(&(field_.Structname), formDiv)
 		case "Fieldtypename":
-			FormDivBasicFieldToField(&(field.Fieldtypename), formDiv)
+			FormDivBasicFieldToField(&(field_.Fieldtypename), formDiv)
 		}
 	}
 
@@ -261,8 +261,8 @@ func (gongenumshapeFormCallback *GongEnumShapeFormCallback) OnSave() {
 	if gongenumshapeFormCallback.gongenumshape == nil {
 		gongenumshapeFormCallback.gongenumshape = new(models.GongEnumShape).Stage(gongenumshapeFormCallback.stageOfInterest)
 	}
-	gongenumshape := gongenumshapeFormCallback.gongenumshape
-	_ = gongenumshape
+	gongenumshape_ := gongenumshapeFormCallback.gongenumshape
+	_ = gongenumshape_
 
 	// get the formGroup
 	formGroup := gongenumshapeFormCallback.formStage.FormGroups_mapString[table.FormGroupDefaultName.ToString()]
@@ -271,15 +271,15 @@ func (gongenumshapeFormCallback *GongEnumShapeFormCallback) OnSave() {
 		switch formDiv.Name {
 		// insertion point per field
 		case "Name":
-			FormDivBasicFieldToField(&(gongenumshape.Name), formDiv)
+			FormDivBasicFieldToField(&(gongenumshape_.Name), formDiv)
 		case "Position":
-			FormDivSelectFieldToField(&(gongenumshape.Position), gongenumshapeFormCallback.stageOfInterest, formDiv)
+			FormDivSelectFieldToField(&(gongenumshape_.Position), gongenumshapeFormCallback.stageOfInterest, formDiv)
 		case "Identifier":
-			FormDivBasicFieldToField(&(gongenumshape.Identifier), formDiv)
+			FormDivBasicFieldToField(&(gongenumshape_.Identifier), formDiv)
 		case "Width":
-			FormDivBasicFieldToField(&(gongenumshape.Width), formDiv)
+			FormDivBasicFieldToField(&(gongenumshape_.Width), formDiv)
 		case "Heigth":
-			FormDivBasicFieldToField(&(gongenumshape.Heigth), formDiv)
+			FormDivBasicFieldToField(&(gongenumshape_.Heigth), formDiv)
 		}
 	}
 
@@ -331,8 +331,8 @@ func (gongenumvalueentryFormCallback *GongEnumValueEntryFormCallback) OnSave() {
 	if gongenumvalueentryFormCallback.gongenumvalueentry == nil {
 		gongenumvalueentryFormCallback.gongenumvalueentry = new(models.GongEnumValueEntry).Stage(gongenumvalueentryFormCallback.stageOfInterest)
 	}
-	gongenumvalueentry := gongenumvalueentryFormCallback.gongenumvalueentry
-	_ = gongenumvalueentry
+	gongenumvalueentry_ := gongenumvalueentryFormCallback.gongenumvalueentry
+	_ = gongenumvalueentry_
 
 	// get the formGroup
 	formGroup := gongenumvalueentryFormCallback.formStage.FormGroups_mapString[table.FormGroupDefaultName.ToString()]
@@ -341,9 +341,9 @@ func (gongenumvalueentryFormCallback *GongEnumValueEntryFormCallback) OnSave() {
 		switch formDiv.Name {
 		// insertion point per field
 		case "Name":
-			FormDivBasicFieldToField(&(gongenumvalueentry.Name), formDiv)
+			FormDivBasicFieldToField(&(gongenumvalueentry_.Name), formDiv)
 		case "Identifier":
-			FormDivBasicFieldToField(&(gongenumvalueentry.Identifier), formDiv)
+			FormDivBasicFieldToField(&(gongenumvalueentry_.Identifier), formDiv)
 		}
 	}
 
@@ -395,8 +395,8 @@ func (gongstructshapeFormCallback *GongStructShapeFormCallback) OnSave() {
 	if gongstructshapeFormCallback.gongstructshape == nil {
 		gongstructshapeFormCallback.gongstructshape = new(models.GongStructShape).Stage(gongstructshapeFormCallback.stageOfInterest)
 	}
-	gongstructshape := gongstructshapeFormCallback.gongstructshape
-	_ = gongstructshape
+	gongstructshape_ := gongstructshapeFormCallback.gongstructshape
+	_ = gongstructshape_
 
 	// get the formGroup
 	formGroup := gongstructshapeFormCallback.formStage.FormGroups_mapString[table.FormGroupDefaultName.ToString()]
@@ -405,21 +405,21 @@ func (gongstructshapeFormCallback *GongStructShapeFormCallback) OnSave() {
 		switch formDiv.Name {
 		// insertion point per field
 		case "Name":
-			FormDivBasicFieldToField(&(gongstructshape.Name), formDiv)
+			FormDivBasicFieldToField(&(gongstructshape_.Name), formDiv)
 		case "Position":
-			FormDivSelectFieldToField(&(gongstructshape.Position), gongstructshapeFormCallback.stageOfInterest, formDiv)
+			FormDivSelectFieldToField(&(gongstructshape_.Position), gongstructshapeFormCallback.stageOfInterest, formDiv)
 		case "Identifier":
-			FormDivBasicFieldToField(&(gongstructshape.Identifier), formDiv)
+			FormDivBasicFieldToField(&(gongstructshape_.Identifier), formDiv)
 		case "ShowNbInstances":
-			FormDivBasicFieldToField(&(gongstructshape.ShowNbInstances), formDiv)
+			FormDivBasicFieldToField(&(gongstructshape_.ShowNbInstances), formDiv)
 		case "NbInstances":
-			FormDivBasicFieldToField(&(gongstructshape.NbInstances), formDiv)
+			FormDivBasicFieldToField(&(gongstructshape_.NbInstances), formDiv)
 		case "Width":
-			FormDivBasicFieldToField(&(gongstructshape.Width), formDiv)
+			FormDivBasicFieldToField(&(gongstructshape_.Width), formDiv)
 		case "Heigth":
-			FormDivBasicFieldToField(&(gongstructshape.Heigth), formDiv)
+			FormDivBasicFieldToField(&(gongstructshape_.Heigth), formDiv)
 		case "IsSelected":
-			FormDivBasicFieldToField(&(gongstructshape.IsSelected), formDiv)
+			FormDivBasicFieldToField(&(gongstructshape_.IsSelected), formDiv)
 		}
 	}
 
@@ -471,8 +471,8 @@ func (linkFormCallback *LinkFormCallback) OnSave() {
 	if linkFormCallback.link == nil {
 		linkFormCallback.link = new(models.Link).Stage(linkFormCallback.stageOfInterest)
 	}
-	link := linkFormCallback.link
-	_ = link
+	link_ := linkFormCallback.link
+	_ = link_
 
 	// get the formGroup
 	formGroup := linkFormCallback.formStage.FormGroups_mapString[table.FormGroupDefaultName.ToString()]
@@ -481,39 +481,39 @@ func (linkFormCallback *LinkFormCallback) OnSave() {
 		switch formDiv.Name {
 		// insertion point per field
 		case "Name":
-			FormDivBasicFieldToField(&(link.Name), formDiv)
+			FormDivBasicFieldToField(&(link_.Name), formDiv)
 		case "Identifier":
-			FormDivBasicFieldToField(&(link.Identifier), formDiv)
+			FormDivBasicFieldToField(&(link_.Identifier), formDiv)
 		case "Fieldtypename":
-			FormDivBasicFieldToField(&(link.Fieldtypename), formDiv)
+			FormDivBasicFieldToField(&(link_.Fieldtypename), formDiv)
 		case "FieldOffsetX":
-			FormDivBasicFieldToField(&(link.FieldOffsetX), formDiv)
+			FormDivBasicFieldToField(&(link_.FieldOffsetX), formDiv)
 		case "FieldOffsetY":
-			FormDivBasicFieldToField(&(link.FieldOffsetY), formDiv)
+			FormDivBasicFieldToField(&(link_.FieldOffsetY), formDiv)
 		case "TargetMultiplicity":
-			FormDivEnumStringFieldToField(&(link.TargetMultiplicity), formDiv)
+			FormDivEnumStringFieldToField(&(link_.TargetMultiplicity), formDiv)
 		case "TargetMultiplicityOffsetX":
-			FormDivBasicFieldToField(&(link.TargetMultiplicityOffsetX), formDiv)
+			FormDivBasicFieldToField(&(link_.TargetMultiplicityOffsetX), formDiv)
 		case "TargetMultiplicityOffsetY":
-			FormDivBasicFieldToField(&(link.TargetMultiplicityOffsetY), formDiv)
+			FormDivBasicFieldToField(&(link_.TargetMultiplicityOffsetY), formDiv)
 		case "SourceMultiplicity":
-			FormDivEnumStringFieldToField(&(link.SourceMultiplicity), formDiv)
+			FormDivEnumStringFieldToField(&(link_.SourceMultiplicity), formDiv)
 		case "SourceMultiplicityOffsetX":
-			FormDivBasicFieldToField(&(link.SourceMultiplicityOffsetX), formDiv)
+			FormDivBasicFieldToField(&(link_.SourceMultiplicityOffsetX), formDiv)
 		case "SourceMultiplicityOffsetY":
-			FormDivBasicFieldToField(&(link.SourceMultiplicityOffsetY), formDiv)
+			FormDivBasicFieldToField(&(link_.SourceMultiplicityOffsetY), formDiv)
 		case "Middlevertice":
-			FormDivSelectFieldToField(&(link.Middlevertice), linkFormCallback.stageOfInterest, formDiv)
+			FormDivSelectFieldToField(&(link_.Middlevertice), linkFormCallback.stageOfInterest, formDiv)
 		case "StartOrientation":
-			FormDivEnumStringFieldToField(&(link.StartOrientation), formDiv)
+			FormDivEnumStringFieldToField(&(link_.StartOrientation), formDiv)
 		case "StartRatio":
-			FormDivBasicFieldToField(&(link.StartRatio), formDiv)
+			FormDivBasicFieldToField(&(link_.StartRatio), formDiv)
 		case "EndOrientation":
-			FormDivEnumStringFieldToField(&(link.EndOrientation), formDiv)
+			FormDivEnumStringFieldToField(&(link_.EndOrientation), formDiv)
 		case "EndRatio":
-			FormDivBasicFieldToField(&(link.EndRatio), formDiv)
+			FormDivBasicFieldToField(&(link_.EndRatio), formDiv)
 		case "CornerOffsetRatio":
-			FormDivBasicFieldToField(&(link.CornerOffsetRatio), formDiv)
+			FormDivBasicFieldToField(&(link_.CornerOffsetRatio), formDiv)
 		}
 	}
 
@@ -565,8 +565,8 @@ func (noteshapeFormCallback *NoteShapeFormCallback) OnSave() {
 	if noteshapeFormCallback.noteshape == nil {
 		noteshapeFormCallback.noteshape = new(models.NoteShape).Stage(noteshapeFormCallback.stageOfInterest)
 	}
-	noteshape := noteshapeFormCallback.noteshape
-	_ = noteshape
+	noteshape_ := noteshapeFormCallback.noteshape
+	_ = noteshape_
 
 	// get the formGroup
 	formGroup := noteshapeFormCallback.formStage.FormGroups_mapString[table.FormGroupDefaultName.ToString()]
@@ -575,23 +575,23 @@ func (noteshapeFormCallback *NoteShapeFormCallback) OnSave() {
 		switch formDiv.Name {
 		// insertion point per field
 		case "Name":
-			FormDivBasicFieldToField(&(noteshape.Name), formDiv)
+			FormDivBasicFieldToField(&(noteshape_.Name), formDiv)
 		case "Identifier":
-			FormDivBasicFieldToField(&(noteshape.Identifier), formDiv)
+			FormDivBasicFieldToField(&(noteshape_.Identifier), formDiv)
 		case "Body":
-			FormDivBasicFieldToField(&(noteshape.Body), formDiv)
+			FormDivBasicFieldToField(&(noteshape_.Body), formDiv)
 		case "BodyHTML":
-			FormDivBasicFieldToField(&(noteshape.BodyHTML), formDiv)
+			FormDivBasicFieldToField(&(noteshape_.BodyHTML), formDiv)
 		case "X":
-			FormDivBasicFieldToField(&(noteshape.X), formDiv)
+			FormDivBasicFieldToField(&(noteshape_.X), formDiv)
 		case "Y":
-			FormDivBasicFieldToField(&(noteshape.Y), formDiv)
+			FormDivBasicFieldToField(&(noteshape_.Y), formDiv)
 		case "Width":
-			FormDivBasicFieldToField(&(noteshape.Width), formDiv)
+			FormDivBasicFieldToField(&(noteshape_.Width), formDiv)
 		case "Heigth":
-			FormDivBasicFieldToField(&(noteshape.Heigth), formDiv)
+			FormDivBasicFieldToField(&(noteshape_.Heigth), formDiv)
 		case "Matched":
-			FormDivBasicFieldToField(&(noteshape.Matched), formDiv)
+			FormDivBasicFieldToField(&(noteshape_.Matched), formDiv)
 		}
 	}
 
@@ -643,8 +643,8 @@ func (noteshapelinkFormCallback *NoteShapeLinkFormCallback) OnSave() {
 	if noteshapelinkFormCallback.noteshapelink == nil {
 		noteshapelinkFormCallback.noteshapelink = new(models.NoteShapeLink).Stage(noteshapelinkFormCallback.stageOfInterest)
 	}
-	noteshapelink := noteshapelinkFormCallback.noteshapelink
-	_ = noteshapelink
+	noteshapelink_ := noteshapelinkFormCallback.noteshapelink
+	_ = noteshapelink_
 
 	// get the formGroup
 	formGroup := noteshapelinkFormCallback.formStage.FormGroups_mapString[table.FormGroupDefaultName.ToString()]
@@ -653,11 +653,11 @@ func (noteshapelinkFormCallback *NoteShapeLinkFormCallback) OnSave() {
 		switch formDiv.Name {
 		// insertion point per field
 		case "Name":
-			FormDivBasicFieldToField(&(noteshapelink.Name), formDiv)
+			FormDivBasicFieldToField(&(noteshapelink_.Name), formDiv)
 		case "Identifier":
-			FormDivBasicFieldToField(&(noteshapelink.Identifier), formDiv)
+			FormDivBasicFieldToField(&(noteshapelink_.Identifier), formDiv)
 		case "Type":
-			FormDivEnumStringFieldToField(&(noteshapelink.Type), formDiv)
+			FormDivEnumStringFieldToField(&(noteshapelink_.Type), formDiv)
 		}
 	}
 
@@ -709,8 +709,8 @@ func (positionFormCallback *PositionFormCallback) OnSave() {
 	if positionFormCallback.position == nil {
 		positionFormCallback.position = new(models.Position).Stage(positionFormCallback.stageOfInterest)
 	}
-	position := positionFormCallback.position
-	_ = position
+	position_ := positionFormCallback.position
+	_ = position_
 
 	// get the formGroup
 	formGroup := positionFormCallback.formStage.FormGroups_mapString[table.FormGroupDefaultName.ToString()]
@@ -719,11 +719,11 @@ func (positionFormCallback *PositionFormCallback) OnSave() {
 		switch formDiv.Name {
 		// insertion point per field
 		case "X":
-			FormDivBasicFieldToField(&(position.X), formDiv)
+			FormDivBasicFieldToField(&(position_.X), formDiv)
 		case "Y":
-			FormDivBasicFieldToField(&(position.Y), formDiv)
+			FormDivBasicFieldToField(&(position_.Y), formDiv)
 		case "Name":
-			FormDivBasicFieldToField(&(position.Name), formDiv)
+			FormDivBasicFieldToField(&(position_.Name), formDiv)
 		}
 	}
 
@@ -775,8 +775,8 @@ func (umlstateFormCallback *UmlStateFormCallback) OnSave() {
 	if umlstateFormCallback.umlstate == nil {
 		umlstateFormCallback.umlstate = new(models.UmlState).Stage(umlstateFormCallback.stageOfInterest)
 	}
-	umlstate := umlstateFormCallback.umlstate
-	_ = umlstate
+	umlstate_ := umlstateFormCallback.umlstate
+	_ = umlstate_
 
 	// get the formGroup
 	formGroup := umlstateFormCallback.formStage.FormGroups_mapString[table.FormGroupDefaultName.ToString()]
@@ -785,11 +785,11 @@ func (umlstateFormCallback *UmlStateFormCallback) OnSave() {
 		switch formDiv.Name {
 		// insertion point per field
 		case "Name":
-			FormDivBasicFieldToField(&(umlstate.Name), formDiv)
+			FormDivBasicFieldToField(&(umlstate_.Name), formDiv)
 		case "X":
-			FormDivBasicFieldToField(&(umlstate.X), formDiv)
+			FormDivBasicFieldToField(&(umlstate_.X), formDiv)
 		case "Y":
-			FormDivBasicFieldToField(&(umlstate.Y), formDiv)
+			FormDivBasicFieldToField(&(umlstate_.Y), formDiv)
 		}
 	}
 
@@ -841,8 +841,8 @@ func (umlscFormCallback *UmlscFormCallback) OnSave() {
 	if umlscFormCallback.umlsc == nil {
 		umlscFormCallback.umlsc = new(models.Umlsc).Stage(umlscFormCallback.stageOfInterest)
 	}
-	umlsc := umlscFormCallback.umlsc
-	_ = umlsc
+	umlsc_ := umlscFormCallback.umlsc
+	_ = umlsc_
 
 	// get the formGroup
 	formGroup := umlscFormCallback.formStage.FormGroups_mapString[table.FormGroupDefaultName.ToString()]
@@ -851,11 +851,11 @@ func (umlscFormCallback *UmlscFormCallback) OnSave() {
 		switch formDiv.Name {
 		// insertion point per field
 		case "Name":
-			FormDivBasicFieldToField(&(umlsc.Name), formDiv)
+			FormDivBasicFieldToField(&(umlsc_.Name), formDiv)
 		case "Activestate":
-			FormDivBasicFieldToField(&(umlsc.Activestate), formDiv)
+			FormDivBasicFieldToField(&(umlsc_.Activestate), formDiv)
 		case "IsInDrawMode":
-			FormDivBasicFieldToField(&(umlsc.IsInDrawMode), formDiv)
+			FormDivBasicFieldToField(&(umlsc_.IsInDrawMode), formDiv)
 		}
 	}
 
@@ -907,8 +907,8 @@ func (verticeFormCallback *VerticeFormCallback) OnSave() {
 	if verticeFormCallback.vertice == nil {
 		verticeFormCallback.vertice = new(models.Vertice).Stage(verticeFormCallback.stageOfInterest)
 	}
-	vertice := verticeFormCallback.vertice
-	_ = vertice
+	vertice_ := verticeFormCallback.vertice
+	_ = vertice_
 
 	// get the formGroup
 	formGroup := verticeFormCallback.formStage.FormGroups_mapString[table.FormGroupDefaultName.ToString()]
@@ -917,11 +917,11 @@ func (verticeFormCallback *VerticeFormCallback) OnSave() {
 		switch formDiv.Name {
 		// insertion point per field
 		case "X":
-			FormDivBasicFieldToField(&(vertice.X), formDiv)
+			FormDivBasicFieldToField(&(vertice_.X), formDiv)
 		case "Y":
-			FormDivBasicFieldToField(&(vertice.Y), formDiv)
+			FormDivBasicFieldToField(&(vertice_.Y), formDiv)
 		case "Name":
-			FormDivBasicFieldToField(&(vertice.Name), formDiv)
+			FormDivBasicFieldToField(&(vertice_.Name), formDiv)
 		}
 	}
 
