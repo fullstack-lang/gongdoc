@@ -20,11 +20,17 @@ func NewClassdiagramFormCallback(
 	classdiagramFormCallback = new(ClassdiagramFormCallback)
 	classdiagramFormCallback.playground = playground
 	classdiagramFormCallback.classdiagram = classdiagram
+
+	classdiagramFormCallback.CreationMode = (classdiagram == nil)
+
 	return
 }
 
 type ClassdiagramFormCallback struct {
 	classdiagram *models.Classdiagram
+
+	// If the form call is called on the creation of a new instnace
+	CreationMode bool
 
 	playground *Playground
 }
@@ -61,6 +67,22 @@ func (classdiagramFormCallback *ClassdiagramFormCallback) OnSave() {
 		classdiagramFormCallback.playground,
 	)
 	classdiagramFormCallback.playground.tableStage.Commit()
+
+	// display a new form by reset the form stage
+	if classdiagramFormCallback.CreationMode {
+		classdiagramFormCallback.playground.formStage.Reset()
+		newFormGroup := (&table.FormGroup{
+			Name: table.FormGroupDefaultName.ToString(),
+			OnSave: NewClassdiagramFormCallback(
+				nil,
+				classdiagramFormCallback.playground,
+			),
+		}).Stage(classdiagramFormCallback.playground.formStage)
+		classdiagram := new(models.Classdiagram)
+		FillUpForm(classdiagram, newFormGroup, classdiagramFormCallback.playground)
+		classdiagramFormCallback.playground.formStage.Commit()
+	}
+
 }
 func NewDiagramPackageFormCallback(
 	diagrampackage *models.DiagramPackage,
@@ -69,11 +91,17 @@ func NewDiagramPackageFormCallback(
 	diagrampackageFormCallback = new(DiagramPackageFormCallback)
 	diagrampackageFormCallback.playground = playground
 	diagrampackageFormCallback.diagrampackage = diagrampackage
+
+	diagrampackageFormCallback.CreationMode = (diagrampackage == nil)
+
 	return
 }
 
 type DiagramPackageFormCallback struct {
 	diagrampackage *models.DiagramPackage
+
+	// If the form call is called on the creation of a new instnace
+	CreationMode bool
 
 	playground *Playground
 }
@@ -120,6 +148,22 @@ func (diagrampackageFormCallback *DiagramPackageFormCallback) OnSave() {
 		diagrampackageFormCallback.playground,
 	)
 	diagrampackageFormCallback.playground.tableStage.Commit()
+
+	// display a new form by reset the form stage
+	if diagrampackageFormCallback.CreationMode {
+		diagrampackageFormCallback.playground.formStage.Reset()
+		newFormGroup := (&table.FormGroup{
+			Name: table.FormGroupDefaultName.ToString(),
+			OnSave: NewDiagramPackageFormCallback(
+				nil,
+				diagrampackageFormCallback.playground,
+			),
+		}).Stage(diagrampackageFormCallback.playground.formStage)
+		diagrampackage := new(models.DiagramPackage)
+		FillUpForm(diagrampackage, newFormGroup, diagrampackageFormCallback.playground)
+		diagrampackageFormCallback.playground.formStage.Commit()
+	}
+
 }
 func NewFieldFormCallback(
 	field *models.Field,
@@ -128,11 +172,17 @@ func NewFieldFormCallback(
 	fieldFormCallback = new(FieldFormCallback)
 	fieldFormCallback.playground = playground
 	fieldFormCallback.field = field
+
+	fieldFormCallback.CreationMode = (field == nil)
+
 	return
 }
 
 type FieldFormCallback struct {
 	field *models.Field
+
+	// If the form call is called on the creation of a new instnace
+	CreationMode bool
 
 	playground *Playground
 }
@@ -175,6 +225,22 @@ func (fieldFormCallback *FieldFormCallback) OnSave() {
 		fieldFormCallback.playground,
 	)
 	fieldFormCallback.playground.tableStage.Commit()
+
+	// display a new form by reset the form stage
+	if fieldFormCallback.CreationMode {
+		fieldFormCallback.playground.formStage.Reset()
+		newFormGroup := (&table.FormGroup{
+			Name: table.FormGroupDefaultName.ToString(),
+			OnSave: NewFieldFormCallback(
+				nil,
+				fieldFormCallback.playground,
+			),
+		}).Stage(fieldFormCallback.playground.formStage)
+		field := new(models.Field)
+		FillUpForm(field, newFormGroup, fieldFormCallback.playground)
+		fieldFormCallback.playground.formStage.Commit()
+	}
+
 }
 func NewGongEnumShapeFormCallback(
 	gongenumshape *models.GongEnumShape,
@@ -183,11 +249,17 @@ func NewGongEnumShapeFormCallback(
 	gongenumshapeFormCallback = new(GongEnumShapeFormCallback)
 	gongenumshapeFormCallback.playground = playground
 	gongenumshapeFormCallback.gongenumshape = gongenumshape
+
+	gongenumshapeFormCallback.CreationMode = (gongenumshape == nil)
+
 	return
 }
 
 type GongEnumShapeFormCallback struct {
 	gongenumshape *models.GongEnumShape
+
+	// If the form call is called on the creation of a new instnace
+	CreationMode bool
 
 	playground *Playground
 }
@@ -230,6 +302,22 @@ func (gongenumshapeFormCallback *GongEnumShapeFormCallback) OnSave() {
 		gongenumshapeFormCallback.playground,
 	)
 	gongenumshapeFormCallback.playground.tableStage.Commit()
+
+	// display a new form by reset the form stage
+	if gongenumshapeFormCallback.CreationMode {
+		gongenumshapeFormCallback.playground.formStage.Reset()
+		newFormGroup := (&table.FormGroup{
+			Name: table.FormGroupDefaultName.ToString(),
+			OnSave: NewGongEnumShapeFormCallback(
+				nil,
+				gongenumshapeFormCallback.playground,
+			),
+		}).Stage(gongenumshapeFormCallback.playground.formStage)
+		gongenumshape := new(models.GongEnumShape)
+		FillUpForm(gongenumshape, newFormGroup, gongenumshapeFormCallback.playground)
+		gongenumshapeFormCallback.playground.formStage.Commit()
+	}
+
 }
 func NewGongEnumValueEntryFormCallback(
 	gongenumvalueentry *models.GongEnumValueEntry,
@@ -238,11 +326,17 @@ func NewGongEnumValueEntryFormCallback(
 	gongenumvalueentryFormCallback = new(GongEnumValueEntryFormCallback)
 	gongenumvalueentryFormCallback.playground = playground
 	gongenumvalueentryFormCallback.gongenumvalueentry = gongenumvalueentry
+
+	gongenumvalueentryFormCallback.CreationMode = (gongenumvalueentry == nil)
+
 	return
 }
 
 type GongEnumValueEntryFormCallback struct {
 	gongenumvalueentry *models.GongEnumValueEntry
+
+	// If the form call is called on the creation of a new instnace
+	CreationMode bool
 
 	playground *Playground
 }
@@ -279,6 +373,22 @@ func (gongenumvalueentryFormCallback *GongEnumValueEntryFormCallback) OnSave() {
 		gongenumvalueentryFormCallback.playground,
 	)
 	gongenumvalueentryFormCallback.playground.tableStage.Commit()
+
+	// display a new form by reset the form stage
+	if gongenumvalueentryFormCallback.CreationMode {
+		gongenumvalueentryFormCallback.playground.formStage.Reset()
+		newFormGroup := (&table.FormGroup{
+			Name: table.FormGroupDefaultName.ToString(),
+			OnSave: NewGongEnumValueEntryFormCallback(
+				nil,
+				gongenumvalueentryFormCallback.playground,
+			),
+		}).Stage(gongenumvalueentryFormCallback.playground.formStage)
+		gongenumvalueentry := new(models.GongEnumValueEntry)
+		FillUpForm(gongenumvalueentry, newFormGroup, gongenumvalueentryFormCallback.playground)
+		gongenumvalueentryFormCallback.playground.formStage.Commit()
+	}
+
 }
 func NewGongStructShapeFormCallback(
 	gongstructshape *models.GongStructShape,
@@ -287,11 +397,17 @@ func NewGongStructShapeFormCallback(
 	gongstructshapeFormCallback = new(GongStructShapeFormCallback)
 	gongstructshapeFormCallback.playground = playground
 	gongstructshapeFormCallback.gongstructshape = gongstructshape
+
+	gongstructshapeFormCallback.CreationMode = (gongstructshape == nil)
+
 	return
 }
 
 type GongStructShapeFormCallback struct {
 	gongstructshape *models.GongStructShape
+
+	// If the form call is called on the creation of a new instnace
+	CreationMode bool
 
 	playground *Playground
 }
@@ -340,6 +456,22 @@ func (gongstructshapeFormCallback *GongStructShapeFormCallback) OnSave() {
 		gongstructshapeFormCallback.playground,
 	)
 	gongstructshapeFormCallback.playground.tableStage.Commit()
+
+	// display a new form by reset the form stage
+	if gongstructshapeFormCallback.CreationMode {
+		gongstructshapeFormCallback.playground.formStage.Reset()
+		newFormGroup := (&table.FormGroup{
+			Name: table.FormGroupDefaultName.ToString(),
+			OnSave: NewGongStructShapeFormCallback(
+				nil,
+				gongstructshapeFormCallback.playground,
+			),
+		}).Stage(gongstructshapeFormCallback.playground.formStage)
+		gongstructshape := new(models.GongStructShape)
+		FillUpForm(gongstructshape, newFormGroup, gongstructshapeFormCallback.playground)
+		gongstructshapeFormCallback.playground.formStage.Commit()
+	}
+
 }
 func NewLinkFormCallback(
 	link *models.Link,
@@ -348,11 +480,17 @@ func NewLinkFormCallback(
 	linkFormCallback = new(LinkFormCallback)
 	linkFormCallback.playground = playground
 	linkFormCallback.link = link
+
+	linkFormCallback.CreationMode = (link == nil)
+
 	return
 }
 
 type LinkFormCallback struct {
 	link *models.Link
+
+	// If the form call is called on the creation of a new instnace
+	CreationMode bool
 
 	playground *Playground
 }
@@ -419,6 +557,22 @@ func (linkFormCallback *LinkFormCallback) OnSave() {
 		linkFormCallback.playground,
 	)
 	linkFormCallback.playground.tableStage.Commit()
+
+	// display a new form by reset the form stage
+	if linkFormCallback.CreationMode {
+		linkFormCallback.playground.formStage.Reset()
+		newFormGroup := (&table.FormGroup{
+			Name: table.FormGroupDefaultName.ToString(),
+			OnSave: NewLinkFormCallback(
+				nil,
+				linkFormCallback.playground,
+			),
+		}).Stage(linkFormCallback.playground.formStage)
+		link := new(models.Link)
+		FillUpForm(link, newFormGroup, linkFormCallback.playground)
+		linkFormCallback.playground.formStage.Commit()
+	}
+
 }
 func NewNoteShapeFormCallback(
 	noteshape *models.NoteShape,
@@ -427,11 +581,17 @@ func NewNoteShapeFormCallback(
 	noteshapeFormCallback = new(NoteShapeFormCallback)
 	noteshapeFormCallback.playground = playground
 	noteshapeFormCallback.noteshape = noteshape
+
+	noteshapeFormCallback.CreationMode = (noteshape == nil)
+
 	return
 }
 
 type NoteShapeFormCallback struct {
 	noteshape *models.NoteShape
+
+	// If the form call is called on the creation of a new instnace
+	CreationMode bool
 
 	playground *Playground
 }
@@ -482,6 +642,22 @@ func (noteshapeFormCallback *NoteShapeFormCallback) OnSave() {
 		noteshapeFormCallback.playground,
 	)
 	noteshapeFormCallback.playground.tableStage.Commit()
+
+	// display a new form by reset the form stage
+	if noteshapeFormCallback.CreationMode {
+		noteshapeFormCallback.playground.formStage.Reset()
+		newFormGroup := (&table.FormGroup{
+			Name: table.FormGroupDefaultName.ToString(),
+			OnSave: NewNoteShapeFormCallback(
+				nil,
+				noteshapeFormCallback.playground,
+			),
+		}).Stage(noteshapeFormCallback.playground.formStage)
+		noteshape := new(models.NoteShape)
+		FillUpForm(noteshape, newFormGroup, noteshapeFormCallback.playground)
+		noteshapeFormCallback.playground.formStage.Commit()
+	}
+
 }
 func NewNoteShapeLinkFormCallback(
 	noteshapelink *models.NoteShapeLink,
@@ -490,11 +666,17 @@ func NewNoteShapeLinkFormCallback(
 	noteshapelinkFormCallback = new(NoteShapeLinkFormCallback)
 	noteshapelinkFormCallback.playground = playground
 	noteshapelinkFormCallback.noteshapelink = noteshapelink
+
+	noteshapelinkFormCallback.CreationMode = (noteshapelink == nil)
+
 	return
 }
 
 type NoteShapeLinkFormCallback struct {
 	noteshapelink *models.NoteShapeLink
+
+	// If the form call is called on the creation of a new instnace
+	CreationMode bool
 
 	playground *Playground
 }
@@ -533,6 +715,22 @@ func (noteshapelinkFormCallback *NoteShapeLinkFormCallback) OnSave() {
 		noteshapelinkFormCallback.playground,
 	)
 	noteshapelinkFormCallback.playground.tableStage.Commit()
+
+	// display a new form by reset the form stage
+	if noteshapelinkFormCallback.CreationMode {
+		noteshapelinkFormCallback.playground.formStage.Reset()
+		newFormGroup := (&table.FormGroup{
+			Name: table.FormGroupDefaultName.ToString(),
+			OnSave: NewNoteShapeLinkFormCallback(
+				nil,
+				noteshapelinkFormCallback.playground,
+			),
+		}).Stage(noteshapelinkFormCallback.playground.formStage)
+		noteshapelink := new(models.NoteShapeLink)
+		FillUpForm(noteshapelink, newFormGroup, noteshapelinkFormCallback.playground)
+		noteshapelinkFormCallback.playground.formStage.Commit()
+	}
+
 }
 func NewPositionFormCallback(
 	position *models.Position,
@@ -541,11 +739,17 @@ func NewPositionFormCallback(
 	positionFormCallback = new(PositionFormCallback)
 	positionFormCallback.playground = playground
 	positionFormCallback.position = position
+
+	positionFormCallback.CreationMode = (position == nil)
+
 	return
 }
 
 type PositionFormCallback struct {
 	position *models.Position
+
+	// If the form call is called on the creation of a new instnace
+	CreationMode bool
 
 	playground *Playground
 }
@@ -584,6 +788,22 @@ func (positionFormCallback *PositionFormCallback) OnSave() {
 		positionFormCallback.playground,
 	)
 	positionFormCallback.playground.tableStage.Commit()
+
+	// display a new form by reset the form stage
+	if positionFormCallback.CreationMode {
+		positionFormCallback.playground.formStage.Reset()
+		newFormGroup := (&table.FormGroup{
+			Name: table.FormGroupDefaultName.ToString(),
+			OnSave: NewPositionFormCallback(
+				nil,
+				positionFormCallback.playground,
+			),
+		}).Stage(positionFormCallback.playground.formStage)
+		position := new(models.Position)
+		FillUpForm(position, newFormGroup, positionFormCallback.playground)
+		positionFormCallback.playground.formStage.Commit()
+	}
+
 }
 func NewUmlStateFormCallback(
 	umlstate *models.UmlState,
@@ -592,11 +812,17 @@ func NewUmlStateFormCallback(
 	umlstateFormCallback = new(UmlStateFormCallback)
 	umlstateFormCallback.playground = playground
 	umlstateFormCallback.umlstate = umlstate
+
+	umlstateFormCallback.CreationMode = (umlstate == nil)
+
 	return
 }
 
 type UmlStateFormCallback struct {
 	umlstate *models.UmlState
+
+	// If the form call is called on the creation of a new instnace
+	CreationMode bool
 
 	playground *Playground
 }
@@ -635,6 +861,22 @@ func (umlstateFormCallback *UmlStateFormCallback) OnSave() {
 		umlstateFormCallback.playground,
 	)
 	umlstateFormCallback.playground.tableStage.Commit()
+
+	// display a new form by reset the form stage
+	if umlstateFormCallback.CreationMode {
+		umlstateFormCallback.playground.formStage.Reset()
+		newFormGroup := (&table.FormGroup{
+			Name: table.FormGroupDefaultName.ToString(),
+			OnSave: NewUmlStateFormCallback(
+				nil,
+				umlstateFormCallback.playground,
+			),
+		}).Stage(umlstateFormCallback.playground.formStage)
+		umlstate := new(models.UmlState)
+		FillUpForm(umlstate, newFormGroup, umlstateFormCallback.playground)
+		umlstateFormCallback.playground.formStage.Commit()
+	}
+
 }
 func NewUmlscFormCallback(
 	umlsc *models.Umlsc,
@@ -643,11 +885,17 @@ func NewUmlscFormCallback(
 	umlscFormCallback = new(UmlscFormCallback)
 	umlscFormCallback.playground = playground
 	umlscFormCallback.umlsc = umlsc
+
+	umlscFormCallback.CreationMode = (umlsc == nil)
+
 	return
 }
 
 type UmlscFormCallback struct {
 	umlsc *models.Umlsc
+
+	// If the form call is called on the creation of a new instnace
+	CreationMode bool
 
 	playground *Playground
 }
@@ -686,6 +934,22 @@ func (umlscFormCallback *UmlscFormCallback) OnSave() {
 		umlscFormCallback.playground,
 	)
 	umlscFormCallback.playground.tableStage.Commit()
+
+	// display a new form by reset the form stage
+	if umlscFormCallback.CreationMode {
+		umlscFormCallback.playground.formStage.Reset()
+		newFormGroup := (&table.FormGroup{
+			Name: table.FormGroupDefaultName.ToString(),
+			OnSave: NewUmlscFormCallback(
+				nil,
+				umlscFormCallback.playground,
+			),
+		}).Stage(umlscFormCallback.playground.formStage)
+		umlsc := new(models.Umlsc)
+		FillUpForm(umlsc, newFormGroup, umlscFormCallback.playground)
+		umlscFormCallback.playground.formStage.Commit()
+	}
+
 }
 func NewVerticeFormCallback(
 	vertice *models.Vertice,
@@ -694,11 +958,17 @@ func NewVerticeFormCallback(
 	verticeFormCallback = new(VerticeFormCallback)
 	verticeFormCallback.playground = playground
 	verticeFormCallback.vertice = vertice
+
+	verticeFormCallback.CreationMode = (vertice == nil)
+
 	return
 }
 
 type VerticeFormCallback struct {
 	vertice *models.Vertice
+
+	// If the form call is called on the creation of a new instnace
+	CreationMode bool
 
 	playground *Playground
 }
@@ -737,4 +1007,20 @@ func (verticeFormCallback *VerticeFormCallback) OnSave() {
 		verticeFormCallback.playground,
 	)
 	verticeFormCallback.playground.tableStage.Commit()
+
+	// display a new form by reset the form stage
+	if verticeFormCallback.CreationMode {
+		verticeFormCallback.playground.formStage.Reset()
+		newFormGroup := (&table.FormGroup{
+			Name: table.FormGroupDefaultName.ToString(),
+			OnSave: NewVerticeFormCallback(
+				nil,
+				verticeFormCallback.playground,
+			),
+		}).Stage(verticeFormCallback.playground.formStage)
+		vertice := new(models.Vertice)
+		FillUpForm(vertice, newFormGroup, verticeFormCallback.playground)
+		verticeFormCallback.playground.formStage.Commit()
+	}
+
 }
