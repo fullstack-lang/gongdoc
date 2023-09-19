@@ -69,6 +69,7 @@ export class MaterialTableComponent implements OnInit {
     private gongtableCommitNbFromBackService: gongtable.CommitNbFromBackService,
     private rowService: gongtable.RowService,
     private tableService: gongtable.TableService,
+    private celliconService: gongtable.CellIconService,
 
 
     // not null if the component is called as a selection component of cellboolean instances
@@ -361,8 +362,6 @@ export class MaterialTableComponent implements OnInit {
           if (this.tableDialogData) {
             this.dialogRef?.close('Closing the application')
           }
-
-          this.refresh()
         }
       )
       return
@@ -370,32 +369,30 @@ export class MaterialTableComponent implements OnInit {
 
     // inform the back that the saving is some rows is in progress
     this.selectedTable.SavingInProgress = true
-    this.tableService.updateTable(this.selectedTable, this.DataStack).subscribe(
+
+
+    const promises = []
+    for (let row of modifiedRows) {
+      promises.push(this.rowService.updateRow(row, this.DataStack))
+    }
+
+    forkJoin(promises).subscribe(
       () => {
 
-        const promises = []
-        for (let row of modifiedRows) {
-          promises.push(this.rowService.updateRow(row, this.DataStack))
-        }
-
-        forkJoin(promises).subscribe(
+        this.selectedTable!.SavingInProgress = false
+        this.tableService.updateTable(this.selectedTable!, this.DataStack).subscribe(
           () => {
+            // in case this component is called as a modal window (MatDialog)
+            // exits,
+            if (this.tableDialogData) {
+              this.dialogRef?.close('Closing the application')
+            }
 
-            this.selectedTable!.SavingInProgress = false
-            this.tableService.updateTable(this.selectedTable!, this.DataStack).subscribe(
-              () => {
-                // in case this component is called as a modal window (MatDialog)
-                // exits,
-                if (this.tableDialogData) {
-                  this.dialogRef?.close('Closing the application')
-                }
-
-                this.refresh()
-              }
-            )
+            this.refresh()
           }
         )
       }
+
     )
 
 
@@ -454,5 +451,14 @@ export class MaterialTableComponent implements OnInit {
 
 
     return styles
+  }
+
+  onClickCellIcon(cellIcon: gongtable.CellIconDB) {
+    console.log("Cell Icon clicked")
+    this.celliconService.updateCellIcon(cellIcon, this.DataStack).subscribe(
+      () => {
+
+      }
+    )
   }
 }

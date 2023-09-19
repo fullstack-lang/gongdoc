@@ -8,7 +8,6 @@ import (
 	"strconv"
 
 	gongdoc_go "github.com/fullstack-lang/gongdoc/go"
-	gongdoc_data "github.com/fullstack-lang/gongdoc/go/data"
 	gongdoc_fullstack "github.com/fullstack-lang/gongdoc/go/fullstack"
 	gongdoc_models "github.com/fullstack-lang/gongdoc/go/models"
 	gongdoc_orm "github.com/fullstack-lang/gongdoc/go/orm"
@@ -71,8 +70,6 @@ func main() {
 		// persistence in a SQLite file on disk
 		stage, backRepo = gongdoc_fullstack.NewStackInstance(r, "gongdoc", "./gongdoc.db")
 	}
-
-	gongdoc_data.Load(r, gongdoc_go.GoModelsDir, "gongdoc", stage, backRepo)
 
 	if *unmarshallFromCode != "" {
 		stage.Checkout()
