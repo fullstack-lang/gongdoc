@@ -62,6 +62,7 @@ func main() {
 	// setup stack
 	var stage *gongdoc_models.StageStruct
 	var backRepo *gongdoc_orm.BackRepoStruct
+	_ = backRepo
 
 	if *marshallOnCommit != "" {
 		// persistence in a SQLite file on disk in memory
