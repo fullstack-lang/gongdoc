@@ -8,9 +8,9 @@
 </ng-template>
 
 <as-split unit="pixel" *ngIf="view==default" direction="vertical">
-    <as-split-area [size]=40>
+    <!-- <as-split-area [size]=40>
         <ng-container *ngTemplateOutlet="radioToolbar"></ng-container>
-    </as-split-area>
+    </as-split-area> -->
     <as-split-area [size]="$any('*')">
         <lib-panel [GONG__StackPath]="GONG__MODEL__StacksPath"></lib-panel>
     </as-split-area>
