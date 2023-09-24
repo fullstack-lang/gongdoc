@@ -3,17 +3,22 @@ package probe
 
 import (
 	"log"
+	"slices"
 	"time"
 
 	table "github.com/fullstack-lang/gongtable/go/models"
 
 	"github.com/fullstack-lang/gongdoc/go/models"
+	"github.com/fullstack-lang/gongdoc/go/orm"
 )
 
 const __dummmy__time = time.Nanosecond
 
+var __dummmy__letters = slices.Delete([]string{"a"}, 0, 1)
+var __dummy_orm = orm.BackRepoStruct{}
+
 // insertion point
-func NewClassdiagramFormCallback(
+func __gong__New__ClassdiagramFormCallback(
 	classdiagram *models.Classdiagram,
 	playground *Playground,
 ) (classdiagramFormCallback *ClassdiagramFormCallback) {
@@ -59,6 +64,48 @@ func (classdiagramFormCallback *ClassdiagramFormCallback) OnSave() {
 			FormDivBasicFieldToField(&(classdiagram_.Name), formDiv)
 		case "IsInDrawMode":
 			FormDivBasicFieldToField(&(classdiagram_.IsInDrawMode), formDiv)
+		case "DiagramPackage:Classdiagrams":
+			// we need to retrieve the field owner before the change
+			var pastDiagramPackageOwner *models.DiagramPackage
+			var rf models.ReverseField
+			_ = rf
+			rf.GongstructName = "DiagramPackage"
+			rf.Fieldname = "Classdiagrams"
+			reverseFieldOwner := orm.GetReverseFieldOwner(
+				classdiagramFormCallback.playground.stageOfInterest,
+				classdiagramFormCallback.playground.backRepoOfInterest,
+				classdiagram_,
+				&rf)
+
+			if reverseFieldOwner != nil {
+				pastDiagramPackageOwner = reverseFieldOwner.(*models.DiagramPackage)
+			}
+			if formDiv.FormFields[0].FormFieldSelect.Value == nil {
+				if pastDiagramPackageOwner != nil {
+					idx := slices.Index(pastDiagramPackageOwner.Classdiagrams, classdiagram_)
+					pastDiagramPackageOwner.Classdiagrams = slices.Delete(pastDiagramPackageOwner.Classdiagrams, idx, idx+1)
+				}
+			} else {
+				// we need to retrieve the field owner after the change
+				// parse all astrcut and get the one with the name in the
+				// div
+				for _diagrampackage := range *models.GetGongstructInstancesSet[models.DiagramPackage](classdiagramFormCallback.playground.stageOfInterest) {
+
+					// the match is base on the name
+					if _diagrampackage.GetName() == formDiv.FormFields[0].FormFieldSelect.Value.GetName() {
+						newDiagramPackageOwner := _diagrampackage // we have a match
+						if pastDiagramPackageOwner != nil {
+							if newDiagramPackageOwner != pastDiagramPackageOwner {
+								idx := slices.Index(pastDiagramPackageOwner.Classdiagrams, classdiagram_)
+								pastDiagramPackageOwner.Classdiagrams = slices.Delete(pastDiagramPackageOwner.Classdiagrams, idx, idx+1)
+								newDiagramPackageOwner.Classdiagrams = append(newDiagramPackageOwner.Classdiagrams, classdiagram_)
+							}
+						} else {
+							newDiagramPackageOwner.Classdiagrams = append(newDiagramPackageOwner.Classdiagrams, classdiagram_)
+						}
+					}
+				}
+			}
 		}
 	}
 
@@ -73,7 +120,7 @@ func (classdiagramFormCallback *ClassdiagramFormCallback) OnSave() {
 		classdiagramFormCallback.playground.formStage.Reset()
 		newFormGroup := (&table.FormGroup{
 			Name: table.FormGroupDefaultName.ToString(),
-			OnSave: NewClassdiagramFormCallback(
+			OnSave: __gong__New__ClassdiagramFormCallback(
 				nil,
 				classdiagramFormCallback.playground,
 			),
@@ -84,7 +131,7 @@ func (classdiagramFormCallback *ClassdiagramFormCallback) OnSave() {
 	}
 
 }
-func NewDiagramPackageFormCallback(
+func __gong__New__DiagramPackageFormCallback(
 	diagrampackage *models.DiagramPackage,
 	playground *Playground,
 ) (diagrampackageFormCallback *DiagramPackageFormCallback) {
@@ -154,7 +201,7 @@ func (diagrampackageFormCallback *DiagramPackageFormCallback) OnSave() {
 		diagrampackageFormCallback.playground.formStage.Reset()
 		newFormGroup := (&table.FormGroup{
 			Name: table.FormGroupDefaultName.ToString(),
-			OnSave: NewDiagramPackageFormCallback(
+			OnSave: __gong__New__DiagramPackageFormCallback(
 				nil,
 				diagrampackageFormCallback.playground,
 			),
@@ -165,7 +212,7 @@ func (diagrampackageFormCallback *DiagramPackageFormCallback) OnSave() {
 	}
 
 }
-func NewFieldFormCallback(
+func __gong__New__FieldFormCallback(
 	field *models.Field,
 	playground *Playground,
 ) (fieldFormCallback *FieldFormCallback) {
@@ -217,6 +264,48 @@ func (fieldFormCallback *FieldFormCallback) OnSave() {
 			FormDivBasicFieldToField(&(field_.Structname), formDiv)
 		case "Fieldtypename":
 			FormDivBasicFieldToField(&(field_.Fieldtypename), formDiv)
+		case "GongStructShape:Fields":
+			// we need to retrieve the field owner before the change
+			var pastGongStructShapeOwner *models.GongStructShape
+			var rf models.ReverseField
+			_ = rf
+			rf.GongstructName = "GongStructShape"
+			rf.Fieldname = "Fields"
+			reverseFieldOwner := orm.GetReverseFieldOwner(
+				fieldFormCallback.playground.stageOfInterest,
+				fieldFormCallback.playground.backRepoOfInterest,
+				field_,
+				&rf)
+
+			if reverseFieldOwner != nil {
+				pastGongStructShapeOwner = reverseFieldOwner.(*models.GongStructShape)
+			}
+			if formDiv.FormFields[0].FormFieldSelect.Value == nil {
+				if pastGongStructShapeOwner != nil {
+					idx := slices.Index(pastGongStructShapeOwner.Fields, field_)
+					pastGongStructShapeOwner.Fields = slices.Delete(pastGongStructShapeOwner.Fields, idx, idx+1)
+				}
+			} else {
+				// we need to retrieve the field owner after the change
+				// parse all astrcut and get the one with the name in the
+				// div
+				for _gongstructshape := range *models.GetGongstructInstancesSet[models.GongStructShape](fieldFormCallback.playground.stageOfInterest) {
+
+					// the match is base on the name
+					if _gongstructshape.GetName() == formDiv.FormFields[0].FormFieldSelect.Value.GetName() {
+						newGongStructShapeOwner := _gongstructshape // we have a match
+						if pastGongStructShapeOwner != nil {
+							if newGongStructShapeOwner != pastGongStructShapeOwner {
+								idx := slices.Index(pastGongStructShapeOwner.Fields, field_)
+								pastGongStructShapeOwner.Fields = slices.Delete(pastGongStructShapeOwner.Fields, idx, idx+1)
+								newGongStructShapeOwner.Fields = append(newGongStructShapeOwner.Fields, field_)
+							}
+						} else {
+							newGongStructShapeOwner.Fields = append(newGongStructShapeOwner.Fields, field_)
+						}
+					}
+				}
+			}
 		}
 	}
 
@@ -231,7 +320,7 @@ func (fieldFormCallback *FieldFormCallback) OnSave() {
 		fieldFormCallback.playground.formStage.Reset()
 		newFormGroup := (&table.FormGroup{
 			Name: table.FormGroupDefaultName.ToString(),
-			OnSave: NewFieldFormCallback(
+			OnSave: __gong__New__FieldFormCallback(
 				nil,
 				fieldFormCallback.playground,
 			),
@@ -242,7 +331,7 @@ func (fieldFormCallback *FieldFormCallback) OnSave() {
 	}
 
 }
-func NewGongEnumShapeFormCallback(
+func __gong__New__GongEnumShapeFormCallback(
 	gongenumshape *models.GongEnumShape,
 	playground *Playground,
 ) (gongenumshapeFormCallback *GongEnumShapeFormCallback) {
@@ -294,6 +383,48 @@ func (gongenumshapeFormCallback *GongEnumShapeFormCallback) OnSave() {
 			FormDivBasicFieldToField(&(gongenumshape_.Width), formDiv)
 		case "Heigth":
 			FormDivBasicFieldToField(&(gongenumshape_.Heigth), formDiv)
+		case "Classdiagram:GongEnumShapes":
+			// we need to retrieve the field owner before the change
+			var pastClassdiagramOwner *models.Classdiagram
+			var rf models.ReverseField
+			_ = rf
+			rf.GongstructName = "Classdiagram"
+			rf.Fieldname = "GongEnumShapes"
+			reverseFieldOwner := orm.GetReverseFieldOwner(
+				gongenumshapeFormCallback.playground.stageOfInterest,
+				gongenumshapeFormCallback.playground.backRepoOfInterest,
+				gongenumshape_,
+				&rf)
+
+			if reverseFieldOwner != nil {
+				pastClassdiagramOwner = reverseFieldOwner.(*models.Classdiagram)
+			}
+			if formDiv.FormFields[0].FormFieldSelect.Value == nil {
+				if pastClassdiagramOwner != nil {
+					idx := slices.Index(pastClassdiagramOwner.GongEnumShapes, gongenumshape_)
+					pastClassdiagramOwner.GongEnumShapes = slices.Delete(pastClassdiagramOwner.GongEnumShapes, idx, idx+1)
+				}
+			} else {
+				// we need to retrieve the field owner after the change
+				// parse all astrcut and get the one with the name in the
+				// div
+				for _classdiagram := range *models.GetGongstructInstancesSet[models.Classdiagram](gongenumshapeFormCallback.playground.stageOfInterest) {
+
+					// the match is base on the name
+					if _classdiagram.GetName() == formDiv.FormFields[0].FormFieldSelect.Value.GetName() {
+						newClassdiagramOwner := _classdiagram // we have a match
+						if pastClassdiagramOwner != nil {
+							if newClassdiagramOwner != pastClassdiagramOwner {
+								idx := slices.Index(pastClassdiagramOwner.GongEnumShapes, gongenumshape_)
+								pastClassdiagramOwner.GongEnumShapes = slices.Delete(pastClassdiagramOwner.GongEnumShapes, idx, idx+1)
+								newClassdiagramOwner.GongEnumShapes = append(newClassdiagramOwner.GongEnumShapes, gongenumshape_)
+							}
+						} else {
+							newClassdiagramOwner.GongEnumShapes = append(newClassdiagramOwner.GongEnumShapes, gongenumshape_)
+						}
+					}
+				}
+			}
 		}
 	}
 
@@ -308,7 +439,7 @@ func (gongenumshapeFormCallback *GongEnumShapeFormCallback) OnSave() {
 		gongenumshapeFormCallback.playground.formStage.Reset()
 		newFormGroup := (&table.FormGroup{
 			Name: table.FormGroupDefaultName.ToString(),
-			OnSave: NewGongEnumShapeFormCallback(
+			OnSave: __gong__New__GongEnumShapeFormCallback(
 				nil,
 				gongenumshapeFormCallback.playground,
 			),
@@ -319,7 +450,7 @@ func (gongenumshapeFormCallback *GongEnumShapeFormCallback) OnSave() {
 	}
 
 }
-func NewGongEnumValueEntryFormCallback(
+func __gong__New__GongEnumValueEntryFormCallback(
 	gongenumvalueentry *models.GongEnumValueEntry,
 	playground *Playground,
 ) (gongenumvalueentryFormCallback *GongEnumValueEntryFormCallback) {
@@ -365,6 +496,48 @@ func (gongenumvalueentryFormCallback *GongEnumValueEntryFormCallback) OnSave() {
 			FormDivBasicFieldToField(&(gongenumvalueentry_.Name), formDiv)
 		case "Identifier":
 			FormDivBasicFieldToField(&(gongenumvalueentry_.Identifier), formDiv)
+		case "GongEnumShape:GongEnumValueEntrys":
+			// we need to retrieve the field owner before the change
+			var pastGongEnumShapeOwner *models.GongEnumShape
+			var rf models.ReverseField
+			_ = rf
+			rf.GongstructName = "GongEnumShape"
+			rf.Fieldname = "GongEnumValueEntrys"
+			reverseFieldOwner := orm.GetReverseFieldOwner(
+				gongenumvalueentryFormCallback.playground.stageOfInterest,
+				gongenumvalueentryFormCallback.playground.backRepoOfInterest,
+				gongenumvalueentry_,
+				&rf)
+
+			if reverseFieldOwner != nil {
+				pastGongEnumShapeOwner = reverseFieldOwner.(*models.GongEnumShape)
+			}
+			if formDiv.FormFields[0].FormFieldSelect.Value == nil {
+				if pastGongEnumShapeOwner != nil {
+					idx := slices.Index(pastGongEnumShapeOwner.GongEnumValueEntrys, gongenumvalueentry_)
+					pastGongEnumShapeOwner.GongEnumValueEntrys = slices.Delete(pastGongEnumShapeOwner.GongEnumValueEntrys, idx, idx+1)
+				}
+			} else {
+				// we need to retrieve the field owner after the change
+				// parse all astrcut and get the one with the name in the
+				// div
+				for _gongenumshape := range *models.GetGongstructInstancesSet[models.GongEnumShape](gongenumvalueentryFormCallback.playground.stageOfInterest) {
+
+					// the match is base on the name
+					if _gongenumshape.GetName() == formDiv.FormFields[0].FormFieldSelect.Value.GetName() {
+						newGongEnumShapeOwner := _gongenumshape // we have a match
+						if pastGongEnumShapeOwner != nil {
+							if newGongEnumShapeOwner != pastGongEnumShapeOwner {
+								idx := slices.Index(pastGongEnumShapeOwner.GongEnumValueEntrys, gongenumvalueentry_)
+								pastGongEnumShapeOwner.GongEnumValueEntrys = slices.Delete(pastGongEnumShapeOwner.GongEnumValueEntrys, idx, idx+1)
+								newGongEnumShapeOwner.GongEnumValueEntrys = append(newGongEnumShapeOwner.GongEnumValueEntrys, gongenumvalueentry_)
+							}
+						} else {
+							newGongEnumShapeOwner.GongEnumValueEntrys = append(newGongEnumShapeOwner.GongEnumValueEntrys, gongenumvalueentry_)
+						}
+					}
+				}
+			}
 		}
 	}
 
@@ -379,7 +552,7 @@ func (gongenumvalueentryFormCallback *GongEnumValueEntryFormCallback) OnSave() {
 		gongenumvalueentryFormCallback.playground.formStage.Reset()
 		newFormGroup := (&table.FormGroup{
 			Name: table.FormGroupDefaultName.ToString(),
-			OnSave: NewGongEnumValueEntryFormCallback(
+			OnSave: __gong__New__GongEnumValueEntryFormCallback(
 				nil,
 				gongenumvalueentryFormCallback.playground,
 			),
@@ -390,7 +563,7 @@ func (gongenumvalueentryFormCallback *GongEnumValueEntryFormCallback) OnSave() {
 	}
 
 }
-func NewGongStructShapeFormCallback(
+func __gong__New__GongStructShapeFormCallback(
 	gongstructshape *models.GongStructShape,
 	playground *Playground,
 ) (gongstructshapeFormCallback *GongStructShapeFormCallback) {
@@ -448,6 +621,48 @@ func (gongstructshapeFormCallback *GongStructShapeFormCallback) OnSave() {
 			FormDivBasicFieldToField(&(gongstructshape_.Heigth), formDiv)
 		case "IsSelected":
 			FormDivBasicFieldToField(&(gongstructshape_.IsSelected), formDiv)
+		case "Classdiagram:GongStructShapes":
+			// we need to retrieve the field owner before the change
+			var pastClassdiagramOwner *models.Classdiagram
+			var rf models.ReverseField
+			_ = rf
+			rf.GongstructName = "Classdiagram"
+			rf.Fieldname = "GongStructShapes"
+			reverseFieldOwner := orm.GetReverseFieldOwner(
+				gongstructshapeFormCallback.playground.stageOfInterest,
+				gongstructshapeFormCallback.playground.backRepoOfInterest,
+				gongstructshape_,
+				&rf)
+
+			if reverseFieldOwner != nil {
+				pastClassdiagramOwner = reverseFieldOwner.(*models.Classdiagram)
+			}
+			if formDiv.FormFields[0].FormFieldSelect.Value == nil {
+				if pastClassdiagramOwner != nil {
+					idx := slices.Index(pastClassdiagramOwner.GongStructShapes, gongstructshape_)
+					pastClassdiagramOwner.GongStructShapes = slices.Delete(pastClassdiagramOwner.GongStructShapes, idx, idx+1)
+				}
+			} else {
+				// we need to retrieve the field owner after the change
+				// parse all astrcut and get the one with the name in the
+				// div
+				for _classdiagram := range *models.GetGongstructInstancesSet[models.Classdiagram](gongstructshapeFormCallback.playground.stageOfInterest) {
+
+					// the match is base on the name
+					if _classdiagram.GetName() == formDiv.FormFields[0].FormFieldSelect.Value.GetName() {
+						newClassdiagramOwner := _classdiagram // we have a match
+						if pastClassdiagramOwner != nil {
+							if newClassdiagramOwner != pastClassdiagramOwner {
+								idx := slices.Index(pastClassdiagramOwner.GongStructShapes, gongstructshape_)
+								pastClassdiagramOwner.GongStructShapes = slices.Delete(pastClassdiagramOwner.GongStructShapes, idx, idx+1)
+								newClassdiagramOwner.GongStructShapes = append(newClassdiagramOwner.GongStructShapes, gongstructshape_)
+							}
+						} else {
+							newClassdiagramOwner.GongStructShapes = append(newClassdiagramOwner.GongStructShapes, gongstructshape_)
+						}
+					}
+				}
+			}
 		}
 	}
 
@@ -462,7 +677,7 @@ func (gongstructshapeFormCallback *GongStructShapeFormCallback) OnSave() {
 		gongstructshapeFormCallback.playground.formStage.Reset()
 		newFormGroup := (&table.FormGroup{
 			Name: table.FormGroupDefaultName.ToString(),
-			OnSave: NewGongStructShapeFormCallback(
+			OnSave: __gong__New__GongStructShapeFormCallback(
 				nil,
 				gongstructshapeFormCallback.playground,
 			),
@@ -473,7 +688,7 @@ func (gongstructshapeFormCallback *GongStructShapeFormCallback) OnSave() {
 	}
 
 }
-func NewLinkFormCallback(
+func __gong__New__LinkFormCallback(
 	link *models.Link,
 	playground *Playground,
 ) (linkFormCallback *LinkFormCallback) {
@@ -549,6 +764,48 @@ func (linkFormCallback *LinkFormCallback) OnSave() {
 			FormDivBasicFieldToField(&(link_.EndRatio), formDiv)
 		case "CornerOffsetRatio":
 			FormDivBasicFieldToField(&(link_.CornerOffsetRatio), formDiv)
+		case "GongStructShape:Links":
+			// we need to retrieve the field owner before the change
+			var pastGongStructShapeOwner *models.GongStructShape
+			var rf models.ReverseField
+			_ = rf
+			rf.GongstructName = "GongStructShape"
+			rf.Fieldname = "Links"
+			reverseFieldOwner := orm.GetReverseFieldOwner(
+				linkFormCallback.playground.stageOfInterest,
+				linkFormCallback.playground.backRepoOfInterest,
+				link_,
+				&rf)
+
+			if reverseFieldOwner != nil {
+				pastGongStructShapeOwner = reverseFieldOwner.(*models.GongStructShape)
+			}
+			if formDiv.FormFields[0].FormFieldSelect.Value == nil {
+				if pastGongStructShapeOwner != nil {
+					idx := slices.Index(pastGongStructShapeOwner.Links, link_)
+					pastGongStructShapeOwner.Links = slices.Delete(pastGongStructShapeOwner.Links, idx, idx+1)
+				}
+			} else {
+				// we need to retrieve the field owner after the change
+				// parse all astrcut and get the one with the name in the
+				// div
+				for _gongstructshape := range *models.GetGongstructInstancesSet[models.GongStructShape](linkFormCallback.playground.stageOfInterest) {
+
+					// the match is base on the name
+					if _gongstructshape.GetName() == formDiv.FormFields[0].FormFieldSelect.Value.GetName() {
+						newGongStructShapeOwner := _gongstructshape // we have a match
+						if pastGongStructShapeOwner != nil {
+							if newGongStructShapeOwner != pastGongStructShapeOwner {
+								idx := slices.Index(pastGongStructShapeOwner.Links, link_)
+								pastGongStructShapeOwner.Links = slices.Delete(pastGongStructShapeOwner.Links, idx, idx+1)
+								newGongStructShapeOwner.Links = append(newGongStructShapeOwner.Links, link_)
+							}
+						} else {
+							newGongStructShapeOwner.Links = append(newGongStructShapeOwner.Links, link_)
+						}
+					}
+				}
+			}
 		}
 	}
 
@@ -563,7 +820,7 @@ func (linkFormCallback *LinkFormCallback) OnSave() {
 		linkFormCallback.playground.formStage.Reset()
 		newFormGroup := (&table.FormGroup{
 			Name: table.FormGroupDefaultName.ToString(),
-			OnSave: NewLinkFormCallback(
+			OnSave: __gong__New__LinkFormCallback(
 				nil,
 				linkFormCallback.playground,
 			),
@@ -574,7 +831,7 @@ func (linkFormCallback *LinkFormCallback) OnSave() {
 	}
 
 }
-func NewNoteShapeFormCallback(
+func __gong__New__NoteShapeFormCallback(
 	noteshape *models.NoteShape,
 	playground *Playground,
 ) (noteshapeFormCallback *NoteShapeFormCallback) {
@@ -634,6 +891,48 @@ func (noteshapeFormCallback *NoteShapeFormCallback) OnSave() {
 			FormDivBasicFieldToField(&(noteshape_.Heigth), formDiv)
 		case "Matched":
 			FormDivBasicFieldToField(&(noteshape_.Matched), formDiv)
+		case "Classdiagram:NoteShapes":
+			// we need to retrieve the field owner before the change
+			var pastClassdiagramOwner *models.Classdiagram
+			var rf models.ReverseField
+			_ = rf
+			rf.GongstructName = "Classdiagram"
+			rf.Fieldname = "NoteShapes"
+			reverseFieldOwner := orm.GetReverseFieldOwner(
+				noteshapeFormCallback.playground.stageOfInterest,
+				noteshapeFormCallback.playground.backRepoOfInterest,
+				noteshape_,
+				&rf)
+
+			if reverseFieldOwner != nil {
+				pastClassdiagramOwner = reverseFieldOwner.(*models.Classdiagram)
+			}
+			if formDiv.FormFields[0].FormFieldSelect.Value == nil {
+				if pastClassdiagramOwner != nil {
+					idx := slices.Index(pastClassdiagramOwner.NoteShapes, noteshape_)
+					pastClassdiagramOwner.NoteShapes = slices.Delete(pastClassdiagramOwner.NoteShapes, idx, idx+1)
+				}
+			} else {
+				// we need to retrieve the field owner after the change
+				// parse all astrcut and get the one with the name in the
+				// div
+				for _classdiagram := range *models.GetGongstructInstancesSet[models.Classdiagram](noteshapeFormCallback.playground.stageOfInterest) {
+
+					// the match is base on the name
+					if _classdiagram.GetName() == formDiv.FormFields[0].FormFieldSelect.Value.GetName() {
+						newClassdiagramOwner := _classdiagram // we have a match
+						if pastClassdiagramOwner != nil {
+							if newClassdiagramOwner != pastClassdiagramOwner {
+								idx := slices.Index(pastClassdiagramOwner.NoteShapes, noteshape_)
+								pastClassdiagramOwner.NoteShapes = slices.Delete(pastClassdiagramOwner.NoteShapes, idx, idx+1)
+								newClassdiagramOwner.NoteShapes = append(newClassdiagramOwner.NoteShapes, noteshape_)
+							}
+						} else {
+							newClassdiagramOwner.NoteShapes = append(newClassdiagramOwner.NoteShapes, noteshape_)
+						}
+					}
+				}
+			}
 		}
 	}
 
@@ -648,7 +947,7 @@ func (noteshapeFormCallback *NoteShapeFormCallback) OnSave() {
 		noteshapeFormCallback.playground.formStage.Reset()
 		newFormGroup := (&table.FormGroup{
 			Name: table.FormGroupDefaultName.ToString(),
-			OnSave: NewNoteShapeFormCallback(
+			OnSave: __gong__New__NoteShapeFormCallback(
 				nil,
 				noteshapeFormCallback.playground,
 			),
@@ -659,7 +958,7 @@ func (noteshapeFormCallback *NoteShapeFormCallback) OnSave() {
 	}
 
 }
-func NewNoteShapeLinkFormCallback(
+func __gong__New__NoteShapeLinkFormCallback(
 	noteshapelink *models.NoteShapeLink,
 	playground *Playground,
 ) (noteshapelinkFormCallback *NoteShapeLinkFormCallback) {
@@ -707,6 +1006,48 @@ func (noteshapelinkFormCallback *NoteShapeLinkFormCallback) OnSave() {
 			FormDivBasicFieldToField(&(noteshapelink_.Identifier), formDiv)
 		case "Type":
 			FormDivEnumStringFieldToField(&(noteshapelink_.Type), formDiv)
+		case "NoteShape:NoteShapeLinks":
+			// we need to retrieve the field owner before the change
+			var pastNoteShapeOwner *models.NoteShape
+			var rf models.ReverseField
+			_ = rf
+			rf.GongstructName = "NoteShape"
+			rf.Fieldname = "NoteShapeLinks"
+			reverseFieldOwner := orm.GetReverseFieldOwner(
+				noteshapelinkFormCallback.playground.stageOfInterest,
+				noteshapelinkFormCallback.playground.backRepoOfInterest,
+				noteshapelink_,
+				&rf)
+
+			if reverseFieldOwner != nil {
+				pastNoteShapeOwner = reverseFieldOwner.(*models.NoteShape)
+			}
+			if formDiv.FormFields[0].FormFieldSelect.Value == nil {
+				if pastNoteShapeOwner != nil {
+					idx := slices.Index(pastNoteShapeOwner.NoteShapeLinks, noteshapelink_)
+					pastNoteShapeOwner.NoteShapeLinks = slices.Delete(pastNoteShapeOwner.NoteShapeLinks, idx, idx+1)
+				}
+			} else {
+				// we need to retrieve the field owner after the change
+				// parse all astrcut and get the one with the name in the
+				// div
+				for _noteshape := range *models.GetGongstructInstancesSet[models.NoteShape](noteshapelinkFormCallback.playground.stageOfInterest) {
+
+					// the match is base on the name
+					if _noteshape.GetName() == formDiv.FormFields[0].FormFieldSelect.Value.GetName() {
+						newNoteShapeOwner := _noteshape // we have a match
+						if pastNoteShapeOwner != nil {
+							if newNoteShapeOwner != pastNoteShapeOwner {
+								idx := slices.Index(pastNoteShapeOwner.NoteShapeLinks, noteshapelink_)
+								pastNoteShapeOwner.NoteShapeLinks = slices.Delete(pastNoteShapeOwner.NoteShapeLinks, idx, idx+1)
+								newNoteShapeOwner.NoteShapeLinks = append(newNoteShapeOwner.NoteShapeLinks, noteshapelink_)
+							}
+						} else {
+							newNoteShapeOwner.NoteShapeLinks = append(newNoteShapeOwner.NoteShapeLinks, noteshapelink_)
+						}
+					}
+				}
+			}
 		}
 	}
 
@@ -721,7 +1062,7 @@ func (noteshapelinkFormCallback *NoteShapeLinkFormCallback) OnSave() {
 		noteshapelinkFormCallback.playground.formStage.Reset()
 		newFormGroup := (&table.FormGroup{
 			Name: table.FormGroupDefaultName.ToString(),
-			OnSave: NewNoteShapeLinkFormCallback(
+			OnSave: __gong__New__NoteShapeLinkFormCallback(
 				nil,
 				noteshapelinkFormCallback.playground,
 			),
@@ -732,7 +1073,7 @@ func (noteshapelinkFormCallback *NoteShapeLinkFormCallback) OnSave() {
 	}
 
 }
-func NewPositionFormCallback(
+func __gong__New__PositionFormCallback(
 	position *models.Position,
 	playground *Playground,
 ) (positionFormCallback *PositionFormCallback) {
@@ -794,7 +1135,7 @@ func (positionFormCallback *PositionFormCallback) OnSave() {
 		positionFormCallback.playground.formStage.Reset()
 		newFormGroup := (&table.FormGroup{
 			Name: table.FormGroupDefaultName.ToString(),
-			OnSave: NewPositionFormCallback(
+			OnSave: __gong__New__PositionFormCallback(
 				nil,
 				positionFormCallback.playground,
 			),
@@ -805,7 +1146,7 @@ func (positionFormCallback *PositionFormCallback) OnSave() {
 	}
 
 }
-func NewUmlStateFormCallback(
+func __gong__New__UmlStateFormCallback(
 	umlstate *models.UmlState,
 	playground *Playground,
 ) (umlstateFormCallback *UmlStateFormCallback) {
@@ -853,6 +1194,48 @@ func (umlstateFormCallback *UmlStateFormCallback) OnSave() {
 			FormDivBasicFieldToField(&(umlstate_.X), formDiv)
 		case "Y":
 			FormDivBasicFieldToField(&(umlstate_.Y), formDiv)
+		case "Umlsc:States":
+			// we need to retrieve the field owner before the change
+			var pastUmlscOwner *models.Umlsc
+			var rf models.ReverseField
+			_ = rf
+			rf.GongstructName = "Umlsc"
+			rf.Fieldname = "States"
+			reverseFieldOwner := orm.GetReverseFieldOwner(
+				umlstateFormCallback.playground.stageOfInterest,
+				umlstateFormCallback.playground.backRepoOfInterest,
+				umlstate_,
+				&rf)
+
+			if reverseFieldOwner != nil {
+				pastUmlscOwner = reverseFieldOwner.(*models.Umlsc)
+			}
+			if formDiv.FormFields[0].FormFieldSelect.Value == nil {
+				if pastUmlscOwner != nil {
+					idx := slices.Index(pastUmlscOwner.States, umlstate_)
+					pastUmlscOwner.States = slices.Delete(pastUmlscOwner.States, idx, idx+1)
+				}
+			} else {
+				// we need to retrieve the field owner after the change
+				// parse all astrcut and get the one with the name in the
+				// div
+				for _umlsc := range *models.GetGongstructInstancesSet[models.Umlsc](umlstateFormCallback.playground.stageOfInterest) {
+
+					// the match is base on the name
+					if _umlsc.GetName() == formDiv.FormFields[0].FormFieldSelect.Value.GetName() {
+						newUmlscOwner := _umlsc // we have a match
+						if pastUmlscOwner != nil {
+							if newUmlscOwner != pastUmlscOwner {
+								idx := slices.Index(pastUmlscOwner.States, umlstate_)
+								pastUmlscOwner.States = slices.Delete(pastUmlscOwner.States, idx, idx+1)
+								newUmlscOwner.States = append(newUmlscOwner.States, umlstate_)
+							}
+						} else {
+							newUmlscOwner.States = append(newUmlscOwner.States, umlstate_)
+						}
+					}
+				}
+			}
 		}
 	}
 
@@ -867,7 +1250,7 @@ func (umlstateFormCallback *UmlStateFormCallback) OnSave() {
 		umlstateFormCallback.playground.formStage.Reset()
 		newFormGroup := (&table.FormGroup{
 			Name: table.FormGroupDefaultName.ToString(),
-			OnSave: NewUmlStateFormCallback(
+			OnSave: __gong__New__UmlStateFormCallback(
 				nil,
 				umlstateFormCallback.playground,
 			),
@@ -878,7 +1261,7 @@ func (umlstateFormCallback *UmlStateFormCallback) OnSave() {
 	}
 
 }
-func NewUmlscFormCallback(
+func __gong__New__UmlscFormCallback(
 	umlsc *models.Umlsc,
 	playground *Playground,
 ) (umlscFormCallback *UmlscFormCallback) {
@@ -926,6 +1309,48 @@ func (umlscFormCallback *UmlscFormCallback) OnSave() {
 			FormDivBasicFieldToField(&(umlsc_.Activestate), formDiv)
 		case "IsInDrawMode":
 			FormDivBasicFieldToField(&(umlsc_.IsInDrawMode), formDiv)
+		case "DiagramPackage:Umlscs":
+			// we need to retrieve the field owner before the change
+			var pastDiagramPackageOwner *models.DiagramPackage
+			var rf models.ReverseField
+			_ = rf
+			rf.GongstructName = "DiagramPackage"
+			rf.Fieldname = "Umlscs"
+			reverseFieldOwner := orm.GetReverseFieldOwner(
+				umlscFormCallback.playground.stageOfInterest,
+				umlscFormCallback.playground.backRepoOfInterest,
+				umlsc_,
+				&rf)
+
+			if reverseFieldOwner != nil {
+				pastDiagramPackageOwner = reverseFieldOwner.(*models.DiagramPackage)
+			}
+			if formDiv.FormFields[0].FormFieldSelect.Value == nil {
+				if pastDiagramPackageOwner != nil {
+					idx := slices.Index(pastDiagramPackageOwner.Umlscs, umlsc_)
+					pastDiagramPackageOwner.Umlscs = slices.Delete(pastDiagramPackageOwner.Umlscs, idx, idx+1)
+				}
+			} else {
+				// we need to retrieve the field owner after the change
+				// parse all astrcut and get the one with the name in the
+				// div
+				for _diagrampackage := range *models.GetGongstructInstancesSet[models.DiagramPackage](umlscFormCallback.playground.stageOfInterest) {
+
+					// the match is base on the name
+					if _diagrampackage.GetName() == formDiv.FormFields[0].FormFieldSelect.Value.GetName() {
+						newDiagramPackageOwner := _diagrampackage // we have a match
+						if pastDiagramPackageOwner != nil {
+							if newDiagramPackageOwner != pastDiagramPackageOwner {
+								idx := slices.Index(pastDiagramPackageOwner.Umlscs, umlsc_)
+								pastDiagramPackageOwner.Umlscs = slices.Delete(pastDiagramPackageOwner.Umlscs, idx, idx+1)
+								newDiagramPackageOwner.Umlscs = append(newDiagramPackageOwner.Umlscs, umlsc_)
+							}
+						} else {
+							newDiagramPackageOwner.Umlscs = append(newDiagramPackageOwner.Umlscs, umlsc_)
+						}
+					}
+				}
+			}
 		}
 	}
 
@@ -940,7 +1365,7 @@ func (umlscFormCallback *UmlscFormCallback) OnSave() {
 		umlscFormCallback.playground.formStage.Reset()
 		newFormGroup := (&table.FormGroup{
 			Name: table.FormGroupDefaultName.ToString(),
-			OnSave: NewUmlscFormCallback(
+			OnSave: __gong__New__UmlscFormCallback(
 				nil,
 				umlscFormCallback.playground,
 			),
@@ -951,7 +1376,7 @@ func (umlscFormCallback *UmlscFormCallback) OnSave() {
 	}
 
 }
-func NewVerticeFormCallback(
+func __gong__New__VerticeFormCallback(
 	vertice *models.Vertice,
 	playground *Playground,
 ) (verticeFormCallback *VerticeFormCallback) {
@@ -1013,7 +1438,7 @@ func (verticeFormCallback *VerticeFormCallback) OnSave() {
 		verticeFormCallback.playground.formStage.Reset()
 		newFormGroup := (&table.FormGroup{
 			Name: table.FormGroupDefaultName.ToString(),
-			OnSave: NewVerticeFormCallback(
+			OnSave: __gong__New__VerticeFormCallback(
 				nil,
 				verticeFormCallback.playground,
 			),

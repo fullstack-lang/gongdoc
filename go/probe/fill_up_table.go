@@ -171,7 +171,7 @@ func fillUpTable[T models.Gongstruct](
 				playground.stageOfInterest,
 				playground.backRepoOfInterest,
 				structInstance,
-				reverseField.Fieldname)
+				&reverseField)
 			name := fmt.Sprintf("%d", fieldIndex) + " " + value
 			fieldIndex++
 			// log.Println(fieldName, value)
