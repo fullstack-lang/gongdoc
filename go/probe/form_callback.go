@@ -130,6 +130,7 @@ func (classdiagramFormCallback *ClassdiagramFormCallback) OnSave() {
 		classdiagramFormCallback.playground.formStage.Commit()
 	}
 
+	fillUpTree(classdiagramFormCallback.playground)
 }
 func __gong__New__DiagramPackageFormCallback(
 	diagrampackage *models.DiagramPackage,
@@ -211,6 +212,7 @@ func (diagrampackageFormCallback *DiagramPackageFormCallback) OnSave() {
 		diagrampackageFormCallback.playground.formStage.Commit()
 	}
 
+	fillUpTree(diagrampackageFormCallback.playground)
 }
 func __gong__New__FieldFormCallback(
 	field *models.Field,
@@ -330,6 +332,7 @@ func (fieldFormCallback *FieldFormCallback) OnSave() {
 		fieldFormCallback.playground.formStage.Commit()
 	}
 
+	fillUpTree(fieldFormCallback.playground)
 }
 func __gong__New__GongEnumShapeFormCallback(
 	gongenumshape *models.GongEnumShape,
@@ -449,6 +452,7 @@ func (gongenumshapeFormCallback *GongEnumShapeFormCallback) OnSave() {
 		gongenumshapeFormCallback.playground.formStage.Commit()
 	}
 
+	fillUpTree(gongenumshapeFormCallback.playground)
 }
 func __gong__New__GongEnumValueEntryFormCallback(
 	gongenumvalueentry *models.GongEnumValueEntry,
@@ -562,6 +566,7 @@ func (gongenumvalueentryFormCallback *GongEnumValueEntryFormCallback) OnSave() {
 		gongenumvalueentryFormCallback.playground.formStage.Commit()
 	}
 
+	fillUpTree(gongenumvalueentryFormCallback.playground)
 }
 func __gong__New__GongStructShapeFormCallback(
 	gongstructshape *models.GongStructShape,
@@ -687,6 +692,7 @@ func (gongstructshapeFormCallback *GongStructShapeFormCallback) OnSave() {
 		gongstructshapeFormCallback.playground.formStage.Commit()
 	}
 
+	fillUpTree(gongstructshapeFormCallback.playground)
 }
 func __gong__New__LinkFormCallback(
 	link *models.Link,
@@ -830,6 +836,7 @@ func (linkFormCallback *LinkFormCallback) OnSave() {
 		linkFormCallback.playground.formStage.Commit()
 	}
 
+	fillUpTree(linkFormCallback.playground)
 }
 func __gong__New__NoteShapeFormCallback(
 	noteshape *models.NoteShape,
@@ -957,6 +964,7 @@ func (noteshapeFormCallback *NoteShapeFormCallback) OnSave() {
 		noteshapeFormCallback.playground.formStage.Commit()
 	}
 
+	fillUpTree(noteshapeFormCallback.playground)
 }
 func __gong__New__NoteShapeLinkFormCallback(
 	noteshapelink *models.NoteShapeLink,
@@ -1072,6 +1080,7 @@ func (noteshapelinkFormCallback *NoteShapeLinkFormCallback) OnSave() {
 		noteshapelinkFormCallback.playground.formStage.Commit()
 	}
 
+	fillUpTree(noteshapelinkFormCallback.playground)
 }
 func __gong__New__PositionFormCallback(
 	position *models.Position,
@@ -1145,6 +1154,7 @@ func (positionFormCallback *PositionFormCallback) OnSave() {
 		positionFormCallback.playground.formStage.Commit()
 	}
 
+	fillUpTree(positionFormCallback.playground)
 }
 func __gong__New__UmlStateFormCallback(
 	umlstate *models.UmlState,
@@ -1260,6 +1270,7 @@ func (umlstateFormCallback *UmlStateFormCallback) OnSave() {
 		umlstateFormCallback.playground.formStage.Commit()
 	}
 
+	fillUpTree(umlstateFormCallback.playground)
 }
 func __gong__New__UmlscFormCallback(
 	umlsc *models.Umlsc,
@@ -1375,6 +1386,7 @@ func (umlscFormCallback *UmlscFormCallback) OnSave() {
 		umlscFormCallback.playground.formStage.Commit()
 	}
 
+	fillUpTree(umlscFormCallback.playground)
 }
 func __gong__New__VerticeFormCallback(
 	vertice *models.Vertice,
@@ -1448,4 +1460,5 @@ func (verticeFormCallback *VerticeFormCallback) OnSave() {
 		verticeFormCallback.playground.formStage.Commit()
 	}
 
+	fillUpTree(verticeFormCallback.playground)
 }
