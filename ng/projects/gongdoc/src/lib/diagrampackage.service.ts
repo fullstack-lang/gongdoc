@@ -43,6 +43,10 @@ export class DiagramPackageService {
   }
 
   /** GET diagrampackages from the server */
+  // gets is more robust to refactoring
+  gets(GONG__StackPath: string): Observable<DiagramPackageDB[]> {
+    return this.getDiagramPackages(GONG__StackPath)
+  }
   getDiagramPackages(GONG__StackPath: string): Observable<DiagramPackageDB[]> {
 
     let params = new HttpParams().set("GONG__StackPath", GONG__StackPath)
@@ -56,6 +60,10 @@ export class DiagramPackageService {
   }
 
   /** GET diagrampackage by id. Will 404 if id not found */
+  // more robust API to refactoring
+  get(id: number, GONG__StackPath: string): Observable<DiagramPackageDB> {
+	return this.getDiagramPackage(id, GONG__StackPath)
+  }
   getDiagramPackage(id: number, GONG__StackPath: string): Observable<DiagramPackageDB> {
 
     let params = new HttpParams().set("GONG__StackPath", GONG__StackPath)
@@ -68,6 +76,9 @@ export class DiagramPackageService {
   }
 
   /** POST: add a new diagrampackage to the server */
+  post(diagrampackagedb: DiagramPackageDB, GONG__StackPath: string): Observable<DiagramPackageDB> {
+    return this.postDiagramPackage(diagrampackagedb, GONG__StackPath)	
+  }
   postDiagramPackage(diagrampackagedb: DiagramPackageDB, GONG__StackPath: string): Observable<DiagramPackageDB> {
 
     // insertion point for reset of pointers and reverse pointers (to avoid circular JSON)
@@ -96,6 +107,9 @@ export class DiagramPackageService {
   }
 
   /** DELETE: delete the diagrampackagedb from the server */
+  delete(diagrampackagedb: DiagramPackageDB | number, GONG__StackPath: string): Observable<DiagramPackageDB> {
+    return this.deleteDiagramPackage(diagrampackagedb, GONG__StackPath)
+  }
   deleteDiagramPackage(diagrampackagedb: DiagramPackageDB | number, GONG__StackPath: string): Observable<DiagramPackageDB> {
     const id = typeof diagrampackagedb === 'number' ? diagrampackagedb : diagrampackagedb.ID;
     const url = `${this.diagrampackagesUrl}/${id}`;
@@ -113,6 +127,9 @@ export class DiagramPackageService {
   }
 
   /** PUT: update the diagrampackagedb on the server */
+  update(diagrampackagedb: DiagramPackageDB, GONG__StackPath: string): Observable<DiagramPackageDB> {
+    return this.updateDiagramPackage(diagrampackagedb, GONG__StackPath)
+  }
   updateDiagramPackage(diagrampackagedb: DiagramPackageDB, GONG__StackPath: string): Observable<DiagramPackageDB> {
     const id = typeof diagrampackagedb === 'number' ? diagrampackagedb : diagrampackagedb.ID;
     const url = `${this.diagrampackagesUrl}/${id}`;

@@ -42,6 +42,10 @@ export class VerticeService {
   }
 
   /** GET vertices from the server */
+  // gets is more robust to refactoring
+  gets(GONG__StackPath: string): Observable<VerticeDB[]> {
+    return this.getVertices(GONG__StackPath)
+  }
   getVertices(GONG__StackPath: string): Observable<VerticeDB[]> {
 
     let params = new HttpParams().set("GONG__StackPath", GONG__StackPath)
@@ -55,6 +59,10 @@ export class VerticeService {
   }
 
   /** GET vertice by id. Will 404 if id not found */
+  // more robust API to refactoring
+  get(id: number, GONG__StackPath: string): Observable<VerticeDB> {
+	return this.getVertice(id, GONG__StackPath)
+  }
   getVertice(id: number, GONG__StackPath: string): Observable<VerticeDB> {
 
     let params = new HttpParams().set("GONG__StackPath", GONG__StackPath)
@@ -67,6 +75,9 @@ export class VerticeService {
   }
 
   /** POST: add a new vertice to the server */
+  post(verticedb: VerticeDB, GONG__StackPath: string): Observable<VerticeDB> {
+    return this.postVertice(verticedb, GONG__StackPath)	
+  }
   postVertice(verticedb: VerticeDB, GONG__StackPath: string): Observable<VerticeDB> {
 
     // insertion point for reset of pointers and reverse pointers (to avoid circular JSON)
@@ -87,6 +98,9 @@ export class VerticeService {
   }
 
   /** DELETE: delete the verticedb from the server */
+  delete(verticedb: VerticeDB | number, GONG__StackPath: string): Observable<VerticeDB> {
+    return this.deleteVertice(verticedb, GONG__StackPath)
+  }
   deleteVertice(verticedb: VerticeDB | number, GONG__StackPath: string): Observable<VerticeDB> {
     const id = typeof verticedb === 'number' ? verticedb : verticedb.ID;
     const url = `${this.verticesUrl}/${id}`;
@@ -104,6 +118,9 @@ export class VerticeService {
   }
 
   /** PUT: update the verticedb on the server */
+  update(verticedb: VerticeDB, GONG__StackPath: string): Observable<VerticeDB> {
+    return this.updateVertice(verticedb, GONG__StackPath)
+  }
   updateVertice(verticedb: VerticeDB, GONG__StackPath: string): Observable<VerticeDB> {
     const id = typeof verticedb === 'number' ? verticedb : verticedb.ID;
     const url = `${this.verticesUrl}/${id}`;

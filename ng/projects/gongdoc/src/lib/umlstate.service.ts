@@ -43,6 +43,10 @@ export class UmlStateService {
   }
 
   /** GET umlstates from the server */
+  // gets is more robust to refactoring
+  gets(GONG__StackPath: string): Observable<UmlStateDB[]> {
+    return this.getUmlStates(GONG__StackPath)
+  }
   getUmlStates(GONG__StackPath: string): Observable<UmlStateDB[]> {
 
     let params = new HttpParams().set("GONG__StackPath", GONG__StackPath)
@@ -56,6 +60,10 @@ export class UmlStateService {
   }
 
   /** GET umlstate by id. Will 404 if id not found */
+  // more robust API to refactoring
+  get(id: number, GONG__StackPath: string): Observable<UmlStateDB> {
+	return this.getUmlState(id, GONG__StackPath)
+  }
   getUmlState(id: number, GONG__StackPath: string): Observable<UmlStateDB> {
 
     let params = new HttpParams().set("GONG__StackPath", GONG__StackPath)
@@ -68,6 +76,9 @@ export class UmlStateService {
   }
 
   /** POST: add a new umlstate to the server */
+  post(umlstatedb: UmlStateDB, GONG__StackPath: string): Observable<UmlStateDB> {
+    return this.postUmlState(umlstatedb, GONG__StackPath)	
+  }
   postUmlState(umlstatedb: UmlStateDB, GONG__StackPath: string): Observable<UmlStateDB> {
 
     // insertion point for reset of pointers and reverse pointers (to avoid circular JSON)
@@ -91,6 +102,9 @@ export class UmlStateService {
   }
 
   /** DELETE: delete the umlstatedb from the server */
+  delete(umlstatedb: UmlStateDB | number, GONG__StackPath: string): Observable<UmlStateDB> {
+    return this.deleteUmlState(umlstatedb, GONG__StackPath)
+  }
   deleteUmlState(umlstatedb: UmlStateDB | number, GONG__StackPath: string): Observable<UmlStateDB> {
     const id = typeof umlstatedb === 'number' ? umlstatedb : umlstatedb.ID;
     const url = `${this.umlstatesUrl}/${id}`;
@@ -108,6 +122,9 @@ export class UmlStateService {
   }
 
   /** PUT: update the umlstatedb on the server */
+  update(umlstatedb: UmlStateDB, GONG__StackPath: string): Observable<UmlStateDB> {
+    return this.updateUmlState(umlstatedb, GONG__StackPath)
+  }
   updateUmlState(umlstatedb: UmlStateDB, GONG__StackPath: string): Observable<UmlStateDB> {
     const id = typeof umlstatedb === 'number' ? umlstatedb : umlstatedb.ID;
     const url = `${this.umlstatesUrl}/${id}`;

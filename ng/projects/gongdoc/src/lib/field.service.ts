@@ -43,6 +43,10 @@ export class FieldService {
   }
 
   /** GET fields from the server */
+  // gets is more robust to refactoring
+  gets(GONG__StackPath: string): Observable<FieldDB[]> {
+    return this.getFields(GONG__StackPath)
+  }
   getFields(GONG__StackPath: string): Observable<FieldDB[]> {
 
     let params = new HttpParams().set("GONG__StackPath", GONG__StackPath)
@@ -56,6 +60,10 @@ export class FieldService {
   }
 
   /** GET field by id. Will 404 if id not found */
+  // more robust API to refactoring
+  get(id: number, GONG__StackPath: string): Observable<FieldDB> {
+	return this.getField(id, GONG__StackPath)
+  }
   getField(id: number, GONG__StackPath: string): Observable<FieldDB> {
 
     let params = new HttpParams().set("GONG__StackPath", GONG__StackPath)
@@ -68,6 +76,9 @@ export class FieldService {
   }
 
   /** POST: add a new field to the server */
+  post(fielddb: FieldDB, GONG__StackPath: string): Observable<FieldDB> {
+    return this.postField(fielddb, GONG__StackPath)	
+  }
   postField(fielddb: FieldDB, GONG__StackPath: string): Observable<FieldDB> {
 
     // insertion point for reset of pointers and reverse pointers (to avoid circular JSON)
@@ -91,6 +102,9 @@ export class FieldService {
   }
 
   /** DELETE: delete the fielddb from the server */
+  delete(fielddb: FieldDB | number, GONG__StackPath: string): Observable<FieldDB> {
+    return this.deleteField(fielddb, GONG__StackPath)
+  }
   deleteField(fielddb: FieldDB | number, GONG__StackPath: string): Observable<FieldDB> {
     const id = typeof fielddb === 'number' ? fielddb : fielddb.ID;
     const url = `${this.fieldsUrl}/${id}`;
@@ -108,6 +122,9 @@ export class FieldService {
   }
 
   /** PUT: update the fielddb on the server */
+  update(fielddb: FieldDB, GONG__StackPath: string): Observable<FieldDB> {
+    return this.updateField(fielddb, GONG__StackPath)
+  }
   updateField(fielddb: FieldDB, GONG__StackPath: string): Observable<FieldDB> {
     const id = typeof fielddb === 'number' ? fielddb : fielddb.ID;
     const url = `${this.fieldsUrl}/${id}`;

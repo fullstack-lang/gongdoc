@@ -43,6 +43,10 @@ export class ClassdiagramService {
   }
 
   /** GET classdiagrams from the server */
+  // gets is more robust to refactoring
+  gets(GONG__StackPath: string): Observable<ClassdiagramDB[]> {
+    return this.getClassdiagrams(GONG__StackPath)
+  }
   getClassdiagrams(GONG__StackPath: string): Observable<ClassdiagramDB[]> {
 
     let params = new HttpParams().set("GONG__StackPath", GONG__StackPath)
@@ -56,6 +60,10 @@ export class ClassdiagramService {
   }
 
   /** GET classdiagram by id. Will 404 if id not found */
+  // more robust API to refactoring
+  get(id: number, GONG__StackPath: string): Observable<ClassdiagramDB> {
+	return this.getClassdiagram(id, GONG__StackPath)
+  }
   getClassdiagram(id: number, GONG__StackPath: string): Observable<ClassdiagramDB> {
 
     let params = new HttpParams().set("GONG__StackPath", GONG__StackPath)
@@ -68,6 +76,9 @@ export class ClassdiagramService {
   }
 
   /** POST: add a new classdiagram to the server */
+  post(classdiagramdb: ClassdiagramDB, GONG__StackPath: string): Observable<ClassdiagramDB> {
+    return this.postClassdiagram(classdiagramdb, GONG__StackPath)	
+  }
   postClassdiagram(classdiagramdb: ClassdiagramDB, GONG__StackPath: string): Observable<ClassdiagramDB> {
 
     // insertion point for reset of pointers and reverse pointers (to avoid circular JSON)
@@ -100,6 +111,9 @@ export class ClassdiagramService {
   }
 
   /** DELETE: delete the classdiagramdb from the server */
+  delete(classdiagramdb: ClassdiagramDB | number, GONG__StackPath: string): Observable<ClassdiagramDB> {
+    return this.deleteClassdiagram(classdiagramdb, GONG__StackPath)
+  }
   deleteClassdiagram(classdiagramdb: ClassdiagramDB | number, GONG__StackPath: string): Observable<ClassdiagramDB> {
     const id = typeof classdiagramdb === 'number' ? classdiagramdb : classdiagramdb.ID;
     const url = `${this.classdiagramsUrl}/${id}`;
@@ -117,6 +131,9 @@ export class ClassdiagramService {
   }
 
   /** PUT: update the classdiagramdb on the server */
+  update(classdiagramdb: ClassdiagramDB, GONG__StackPath: string): Observable<ClassdiagramDB> {
+    return this.updateClassdiagram(classdiagramdb, GONG__StackPath)
+  }
   updateClassdiagram(classdiagramdb: ClassdiagramDB, GONG__StackPath: string): Observable<ClassdiagramDB> {
     const id = typeof classdiagramdb === 'number' ? classdiagramdb : classdiagramdb.ID;
     const url = `${this.classdiagramsUrl}/${id}`;

@@ -42,6 +42,10 @@ export class PositionService {
   }
 
   /** GET positions from the server */
+  // gets is more robust to refactoring
+  gets(GONG__StackPath: string): Observable<PositionDB[]> {
+    return this.getPositions(GONG__StackPath)
+  }
   getPositions(GONG__StackPath: string): Observable<PositionDB[]> {
 
     let params = new HttpParams().set("GONG__StackPath", GONG__StackPath)
@@ -55,6 +59,10 @@ export class PositionService {
   }
 
   /** GET position by id. Will 404 if id not found */
+  // more robust API to refactoring
+  get(id: number, GONG__StackPath: string): Observable<PositionDB> {
+	return this.getPosition(id, GONG__StackPath)
+  }
   getPosition(id: number, GONG__StackPath: string): Observable<PositionDB> {
 
     let params = new HttpParams().set("GONG__StackPath", GONG__StackPath)
@@ -67,6 +75,9 @@ export class PositionService {
   }
 
   /** POST: add a new position to the server */
+  post(positiondb: PositionDB, GONG__StackPath: string): Observable<PositionDB> {
+    return this.postPosition(positiondb, GONG__StackPath)	
+  }
   postPosition(positiondb: PositionDB, GONG__StackPath: string): Observable<PositionDB> {
 
     // insertion point for reset of pointers and reverse pointers (to avoid circular JSON)
@@ -87,6 +98,9 @@ export class PositionService {
   }
 
   /** DELETE: delete the positiondb from the server */
+  delete(positiondb: PositionDB | number, GONG__StackPath: string): Observable<PositionDB> {
+    return this.deletePosition(positiondb, GONG__StackPath)
+  }
   deletePosition(positiondb: PositionDB | number, GONG__StackPath: string): Observable<PositionDB> {
     const id = typeof positiondb === 'number' ? positiondb : positiondb.ID;
     const url = `${this.positionsUrl}/${id}`;
@@ -104,6 +118,9 @@ export class PositionService {
   }
 
   /** PUT: update the positiondb on the server */
+  update(positiondb: PositionDB, GONG__StackPath: string): Observable<PositionDB> {
+    return this.updatePosition(positiondb, GONG__StackPath)
+  }
   updatePosition(positiondb: PositionDB, GONG__StackPath: string): Observable<PositionDB> {
     const id = typeof positiondb === 'number' ? positiondb : positiondb.ID;
     const url = `${this.positionsUrl}/${id}`;

@@ -43,6 +43,10 @@ export class NoteShapeService {
   }
 
   /** GET noteshapes from the server */
+  // gets is more robust to refactoring
+  gets(GONG__StackPath: string): Observable<NoteShapeDB[]> {
+    return this.getNoteShapes(GONG__StackPath)
+  }
   getNoteShapes(GONG__StackPath: string): Observable<NoteShapeDB[]> {
 
     let params = new HttpParams().set("GONG__StackPath", GONG__StackPath)
@@ -56,6 +60,10 @@ export class NoteShapeService {
   }
 
   /** GET noteshape by id. Will 404 if id not found */
+  // more robust API to refactoring
+  get(id: number, GONG__StackPath: string): Observable<NoteShapeDB> {
+	return this.getNoteShape(id, GONG__StackPath)
+  }
   getNoteShape(id: number, GONG__StackPath: string): Observable<NoteShapeDB> {
 
     let params = new HttpParams().set("GONG__StackPath", GONG__StackPath)
@@ -68,6 +76,9 @@ export class NoteShapeService {
   }
 
   /** POST: add a new noteshape to the server */
+  post(noteshapedb: NoteShapeDB, GONG__StackPath: string): Observable<NoteShapeDB> {
+    return this.postNoteShape(noteshapedb, GONG__StackPath)	
+  }
   postNoteShape(noteshapedb: NoteShapeDB, GONG__StackPath: string): Observable<NoteShapeDB> {
 
     // insertion point for reset of pointers and reverse pointers (to avoid circular JSON)
@@ -94,6 +105,9 @@ export class NoteShapeService {
   }
 
   /** DELETE: delete the noteshapedb from the server */
+  delete(noteshapedb: NoteShapeDB | number, GONG__StackPath: string): Observable<NoteShapeDB> {
+    return this.deleteNoteShape(noteshapedb, GONG__StackPath)
+  }
   deleteNoteShape(noteshapedb: NoteShapeDB | number, GONG__StackPath: string): Observable<NoteShapeDB> {
     const id = typeof noteshapedb === 'number' ? noteshapedb : noteshapedb.ID;
     const url = `${this.noteshapesUrl}/${id}`;
@@ -111,6 +125,9 @@ export class NoteShapeService {
   }
 
   /** PUT: update the noteshapedb on the server */
+  update(noteshapedb: NoteShapeDB, GONG__StackPath: string): Observable<NoteShapeDB> {
+    return this.updateNoteShape(noteshapedb, GONG__StackPath)
+  }
   updateNoteShape(noteshapedb: NoteShapeDB, GONG__StackPath: string): Observable<NoteShapeDB> {
     const id = typeof noteshapedb === 'number' ? noteshapedb : noteshapedb.ID;
     const url = `${this.noteshapesUrl}/${id}`;

@@ -43,6 +43,10 @@ export class GongEnumValueEntryService {
   }
 
   /** GET gongenumvalueentrys from the server */
+  // gets is more robust to refactoring
+  gets(GONG__StackPath: string): Observable<GongEnumValueEntryDB[]> {
+    return this.getGongEnumValueEntrys(GONG__StackPath)
+  }
   getGongEnumValueEntrys(GONG__StackPath: string): Observable<GongEnumValueEntryDB[]> {
 
     let params = new HttpParams().set("GONG__StackPath", GONG__StackPath)
@@ -56,6 +60,10 @@ export class GongEnumValueEntryService {
   }
 
   /** GET gongenumvalueentry by id. Will 404 if id not found */
+  // more robust API to refactoring
+  get(id: number, GONG__StackPath: string): Observable<GongEnumValueEntryDB> {
+	return this.getGongEnumValueEntry(id, GONG__StackPath)
+  }
   getGongEnumValueEntry(id: number, GONG__StackPath: string): Observable<GongEnumValueEntryDB> {
 
     let params = new HttpParams().set("GONG__StackPath", GONG__StackPath)
@@ -68,6 +76,9 @@ export class GongEnumValueEntryService {
   }
 
   /** POST: add a new gongenumvalueentry to the server */
+  post(gongenumvalueentrydb: GongEnumValueEntryDB, GONG__StackPath: string): Observable<GongEnumValueEntryDB> {
+    return this.postGongEnumValueEntry(gongenumvalueentrydb, GONG__StackPath)	
+  }
   postGongEnumValueEntry(gongenumvalueentrydb: GongEnumValueEntryDB, GONG__StackPath: string): Observable<GongEnumValueEntryDB> {
 
     // insertion point for reset of pointers and reverse pointers (to avoid circular JSON)
@@ -91,6 +102,9 @@ export class GongEnumValueEntryService {
   }
 
   /** DELETE: delete the gongenumvalueentrydb from the server */
+  delete(gongenumvalueentrydb: GongEnumValueEntryDB | number, GONG__StackPath: string): Observable<GongEnumValueEntryDB> {
+    return this.deleteGongEnumValueEntry(gongenumvalueentrydb, GONG__StackPath)
+  }
   deleteGongEnumValueEntry(gongenumvalueentrydb: GongEnumValueEntryDB | number, GONG__StackPath: string): Observable<GongEnumValueEntryDB> {
     const id = typeof gongenumvalueentrydb === 'number' ? gongenumvalueentrydb : gongenumvalueentrydb.ID;
     const url = `${this.gongenumvalueentrysUrl}/${id}`;
@@ -108,6 +122,9 @@ export class GongEnumValueEntryService {
   }
 
   /** PUT: update the gongenumvalueentrydb on the server */
+  update(gongenumvalueentrydb: GongEnumValueEntryDB, GONG__StackPath: string): Observable<GongEnumValueEntryDB> {
+    return this.updateGongEnumValueEntry(gongenumvalueentrydb, GONG__StackPath)
+  }
   updateGongEnumValueEntry(gongenumvalueentrydb: GongEnumValueEntryDB, GONG__StackPath: string): Observable<GongEnumValueEntryDB> {
     const id = typeof gongenumvalueentrydb === 'number' ? gongenumvalueentrydb : gongenumvalueentrydb.ID;
     const url = `${this.gongenumvalueentrysUrl}/${id}`;

@@ -44,6 +44,10 @@ export class GongStructShapeService {
   }
 
   /** GET gongstructshapes from the server */
+  // gets is more robust to refactoring
+  gets(GONG__StackPath: string): Observable<GongStructShapeDB[]> {
+    return this.getGongStructShapes(GONG__StackPath)
+  }
   getGongStructShapes(GONG__StackPath: string): Observable<GongStructShapeDB[]> {
 
     let params = new HttpParams().set("GONG__StackPath", GONG__StackPath)
@@ -57,6 +61,10 @@ export class GongStructShapeService {
   }
 
   /** GET gongstructshape by id. Will 404 if id not found */
+  // more robust API to refactoring
+  get(id: number, GONG__StackPath: string): Observable<GongStructShapeDB> {
+	return this.getGongStructShape(id, GONG__StackPath)
+  }
   getGongStructShape(id: number, GONG__StackPath: string): Observable<GongStructShapeDB> {
 
     let params = new HttpParams().set("GONG__StackPath", GONG__StackPath)
@@ -69,6 +77,9 @@ export class GongStructShapeService {
   }
 
   /** POST: add a new gongstructshape to the server */
+  post(gongstructshapedb: GongStructShapeDB, GONG__StackPath: string): Observable<GongStructShapeDB> {
+    return this.postGongStructShape(gongstructshapedb, GONG__StackPath)	
+  }
   postGongStructShape(gongstructshapedb: GongStructShapeDB, GONG__StackPath: string): Observable<GongStructShapeDB> {
 
     // insertion point for reset of pointers and reverse pointers (to avoid circular JSON)
@@ -100,6 +111,9 @@ export class GongStructShapeService {
   }
 
   /** DELETE: delete the gongstructshapedb from the server */
+  delete(gongstructshapedb: GongStructShapeDB | number, GONG__StackPath: string): Observable<GongStructShapeDB> {
+    return this.deleteGongStructShape(gongstructshapedb, GONG__StackPath)
+  }
   deleteGongStructShape(gongstructshapedb: GongStructShapeDB | number, GONG__StackPath: string): Observable<GongStructShapeDB> {
     const id = typeof gongstructshapedb === 'number' ? gongstructshapedb : gongstructshapedb.ID;
     const url = `${this.gongstructshapesUrl}/${id}`;
@@ -117,6 +131,9 @@ export class GongStructShapeService {
   }
 
   /** PUT: update the gongstructshapedb on the server */
+  update(gongstructshapedb: GongStructShapeDB, GONG__StackPath: string): Observable<GongStructShapeDB> {
+    return this.updateGongStructShape(gongstructshapedb, GONG__StackPath)
+  }
   updateGongStructShape(gongstructshapedb: GongStructShapeDB, GONG__StackPath: string): Observable<GongStructShapeDB> {
     const id = typeof gongstructshapedb === 'number' ? gongstructshapedb : gongstructshapedb.ID;
     const url = `${this.gongstructshapesUrl}/${id}`;

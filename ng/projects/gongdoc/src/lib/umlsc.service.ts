@@ -43,6 +43,10 @@ export class UmlscService {
   }
 
   /** GET umlscs from the server */
+  // gets is more robust to refactoring
+  gets(GONG__StackPath: string): Observable<UmlscDB[]> {
+    return this.getUmlscs(GONG__StackPath)
+  }
   getUmlscs(GONG__StackPath: string): Observable<UmlscDB[]> {
 
     let params = new HttpParams().set("GONG__StackPath", GONG__StackPath)
@@ -56,6 +60,10 @@ export class UmlscService {
   }
 
   /** GET umlsc by id. Will 404 if id not found */
+  // more robust API to refactoring
+  get(id: number, GONG__StackPath: string): Observable<UmlscDB> {
+	return this.getUmlsc(id, GONG__StackPath)
+  }
   getUmlsc(id: number, GONG__StackPath: string): Observable<UmlscDB> {
 
     let params = new HttpParams().set("GONG__StackPath", GONG__StackPath)
@@ -68,6 +76,9 @@ export class UmlscService {
   }
 
   /** POST: add a new umlsc to the server */
+  post(umlscdb: UmlscDB, GONG__StackPath: string): Observable<UmlscDB> {
+    return this.postUmlsc(umlscdb, GONG__StackPath)	
+  }
   postUmlsc(umlscdb: UmlscDB, GONG__StackPath: string): Observable<UmlscDB> {
 
     // insertion point for reset of pointers and reverse pointers (to avoid circular JSON)
@@ -94,6 +105,9 @@ export class UmlscService {
   }
 
   /** DELETE: delete the umlscdb from the server */
+  delete(umlscdb: UmlscDB | number, GONG__StackPath: string): Observable<UmlscDB> {
+    return this.deleteUmlsc(umlscdb, GONG__StackPath)
+  }
   deleteUmlsc(umlscdb: UmlscDB | number, GONG__StackPath: string): Observable<UmlscDB> {
     const id = typeof umlscdb === 'number' ? umlscdb : umlscdb.ID;
     const url = `${this.umlscsUrl}/${id}`;
@@ -111,6 +125,9 @@ export class UmlscService {
   }
 
   /** PUT: update the umlscdb on the server */
+  update(umlscdb: UmlscDB, GONG__StackPath: string): Observable<UmlscDB> {
+    return this.updateUmlsc(umlscdb, GONG__StackPath)
+  }
   updateUmlsc(umlscdb: UmlscDB, GONG__StackPath: string): Observable<UmlscDB> {
     const id = typeof umlscdb === 'number' ? umlscdb : umlscdb.ID;
     const url = `${this.umlscsUrl}/${id}`;

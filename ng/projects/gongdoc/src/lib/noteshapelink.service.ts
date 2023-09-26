@@ -43,6 +43,10 @@ export class NoteShapeLinkService {
   }
 
   /** GET noteshapelinks from the server */
+  // gets is more robust to refactoring
+  gets(GONG__StackPath: string): Observable<NoteShapeLinkDB[]> {
+    return this.getNoteShapeLinks(GONG__StackPath)
+  }
   getNoteShapeLinks(GONG__StackPath: string): Observable<NoteShapeLinkDB[]> {
 
     let params = new HttpParams().set("GONG__StackPath", GONG__StackPath)
@@ -56,6 +60,10 @@ export class NoteShapeLinkService {
   }
 
   /** GET noteshapelink by id. Will 404 if id not found */
+  // more robust API to refactoring
+  get(id: number, GONG__StackPath: string): Observable<NoteShapeLinkDB> {
+	return this.getNoteShapeLink(id, GONG__StackPath)
+  }
   getNoteShapeLink(id: number, GONG__StackPath: string): Observable<NoteShapeLinkDB> {
 
     let params = new HttpParams().set("GONG__StackPath", GONG__StackPath)
@@ -68,6 +76,9 @@ export class NoteShapeLinkService {
   }
 
   /** POST: add a new noteshapelink to the server */
+  post(noteshapelinkdb: NoteShapeLinkDB, GONG__StackPath: string): Observable<NoteShapeLinkDB> {
+    return this.postNoteShapeLink(noteshapelinkdb, GONG__StackPath)	
+  }
   postNoteShapeLink(noteshapelinkdb: NoteShapeLinkDB, GONG__StackPath: string): Observable<NoteShapeLinkDB> {
 
     // insertion point for reset of pointers and reverse pointers (to avoid circular JSON)
@@ -91,6 +102,9 @@ export class NoteShapeLinkService {
   }
 
   /** DELETE: delete the noteshapelinkdb from the server */
+  delete(noteshapelinkdb: NoteShapeLinkDB | number, GONG__StackPath: string): Observable<NoteShapeLinkDB> {
+    return this.deleteNoteShapeLink(noteshapelinkdb, GONG__StackPath)
+  }
   deleteNoteShapeLink(noteshapelinkdb: NoteShapeLinkDB | number, GONG__StackPath: string): Observable<NoteShapeLinkDB> {
     const id = typeof noteshapelinkdb === 'number' ? noteshapelinkdb : noteshapelinkdb.ID;
     const url = `${this.noteshapelinksUrl}/${id}`;
@@ -108,6 +122,9 @@ export class NoteShapeLinkService {
   }
 
   /** PUT: update the noteshapelinkdb on the server */
+  update(noteshapelinkdb: NoteShapeLinkDB, GONG__StackPath: string): Observable<NoteShapeLinkDB> {
+    return this.updateNoteShapeLink(noteshapelinkdb, GONG__StackPath)
+  }
   updateNoteShapeLink(noteshapelinkdb: NoteShapeLinkDB, GONG__StackPath: string): Observable<NoteShapeLinkDB> {
     const id = typeof noteshapelinkdb === 'number' ? noteshapelinkdb : noteshapelinkdb.ID;
     const url = `${this.noteshapelinksUrl}/${id}`;
