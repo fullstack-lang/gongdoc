@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 
-import { Observable, combineLatest, BehaviorSubject } from 'rxjs';
+import { Observable, combineLatest, BehaviorSubject, of } from 'rxjs';
 
 // insertion point sub template for services imports 
 import { AnimateDB } from './animate-db'
@@ -217,7 +217,9 @@ export class FrontRepoService {
   }
 
   // typing of observable can be messy in typescript. Therefore, one force the type
-  observableFrontRepo: [ // insertion point sub template 
+  observableFrontRepo: [ 
+    Observable<null>, // see below for the of(null) observable
+    // insertion point sub template 
     Observable<AnimateDB[]>,
     Observable<CircleDB[]>,
     Observable<EllipseDB[]>,
@@ -235,7 +237,16 @@ export class FrontRepoService {
     Observable<RectLinkLinkDB[]>,
     Observable<SVGDB[]>,
     Observable<TextDB[]>,
-  ] = [ // insertion point sub template
+  ] = [ 
+    // Using "combineLatest" with a placeholder observable.
+    //
+    // This allows the typescript compiler to pass when no GongStruct is present in the front API
+    //
+    // The "of(null)" is a "meaningless" observable that emits a single value (null) and completes.
+    // This is used as a workaround to satisfy TypeScript requirements and the "combineLatest" 
+    // expectation for a non-empty array of observables.
+    of(null), // 
+    // insertion point sub template
       this.animateService.getAnimates(this.GONG__StackPath),
       this.circleService.getCircles(this.GONG__StackPath),
       this.ellipseService.getEllipses(this.GONG__StackPath),
@@ -265,7 +276,9 @@ export class FrontRepoService {
 
     this.GONG__StackPath = GONG__StackPath
 
-    this.observableFrontRepo = [ // insertion point sub template
+    this.observableFrontRepo = [ 
+      of(null), // see above for justification
+      // insertion point sub template
       this.animateService.getAnimates(this.GONG__StackPath),
       this.circleService.getCircles(this.GONG__StackPath),
       this.ellipseService.getEllipses(this.GONG__StackPath),
@@ -290,7 +303,9 @@ export class FrontRepoService {
         combineLatest(
           this.observableFrontRepo
         ).subscribe(
-          ([ // insertion point sub template for declarations 
+          ([ 
+            ___of_null, // see above for the explanation about of
+            // insertion point sub template for declarations 
             animates_,
             circles_,
             ellipses_,

@@ -4,7 +4,7 @@ go 1.21.0
 
 require (
 	github.com/frankban/quicktest v1.14.6 // indirect
-	github.com/fullstack-lang/gong v0.0.0-20230924170135-1298237ba5b6
+	github.com/fullstack-lang/gong v0.0.0-20230926205311-d5aa917a5ff0
 	github.com/gin-contrib/cors v1.4.0
 	github.com/gin-contrib/static v0.0.1
 	github.com/gin-gonic/gin v1.9.1
@@ -23,9 +23,9 @@ require (
 )
 
 require (
-	github.com/fullstack-lang/gongsvg v0.0.0-20230924185642-aa311d80e1a2
-	github.com/fullstack-lang/gongtable v0.0.0-20230924185243-7a48aae8928f
-	github.com/fullstack-lang/gongtree v0.0.0-20230924185551-89c271117669
+	github.com/fullstack-lang/gongsvg v0.0.0-20230926210616-2f9e5108c76d
+	github.com/fullstack-lang/gongtable v0.0.0-20230926013130-7c3b2b8ccd4f
+	github.com/fullstack-lang/gongtree v0.0.0-20230924202511-bfe7f3abf1aa
 	github.com/fullstack-lang/maticons v0.0.0-20230823061653-70c364fbdd00
 	github.com/glebarez/sqlite v1.9.0
 	github.com/xuri/excelize/v2 v2.8.0
@@ -58,6 +58,7 @@ require (
 	github.com/richardlehane/msoleps v1.0.3 // indirect
 	github.com/rogpeppe/fastuuid v1.2.0 // indirect
 	github.com/rogpeppe/go-internal v1.11.0 // indirect
+	github.com/sabhiram/go-gitignore v0.0.0-20210923224102-525f6e181f06 // indirect
 	github.com/twitchyliquid64/golang-asm v0.15.1 // indirect
 	github.com/ugorji/go/codec v1.2.11 // indirect
 	github.com/xuri/efp v0.0.0-20230802181842-ad255f2331ca // indirect
