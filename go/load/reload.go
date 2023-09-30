@@ -38,7 +38,7 @@ func Reload(
 		modelPkg, true)
 
 	// to be removed after fix of [issue](https://github.com/golang/go/issues/57559)
-	gongdoc_models.SetupMapDocLinkRenaming(gong_models.GetDefaultStage(), diagramPackage.Stage_)
+	gongdoc_models.SetupMapDocLinkRenaming(gongStage, diagramPackage.Stage_)
 	// end of the be removed
 	gongdoc_node2gongdoc.FillUpNodeTree(gongdocStage, gongtreeStage, diagramPackage)
 	diagramPackage.Stage_.Commit()
