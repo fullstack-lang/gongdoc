@@ -38,7 +38,7 @@ type PositionAPI struct {
 	models.Position_WOP
 
 	// encoding of pointers
-	PositionPointersEncoding
+	PositionPointersEncoding PositionPointersEncoding
 }
 
 // PositionPointersEncoding encodes pointers to Struct and

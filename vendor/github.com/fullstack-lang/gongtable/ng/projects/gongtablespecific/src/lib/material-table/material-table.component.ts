@@ -141,7 +141,8 @@ export class MaterialTableComponent implements OnInit {
 
         this.selectedTable = undefined
 
-        for (let table of this.gongtableFrontRepo.Tables_array) {
+        // use of the refactorable version
+        for (let table of this.gongtableFrontRepo.getArray<gongtable.TableDB>(gongtable.TableDB.GONGSTRUCT_NAME)) {
           if (table.Name == this.TableName) {
             this.selectedTable = table
           }
@@ -355,7 +356,7 @@ export class MaterialTableComponent implements OnInit {
     const promises = []
     let index = 0
     for (let row of this.selectedTable?.Rows!) {
-      row.Table_RowsDBID_Index.Int64 = index++
+      row.RowPointersEncoding.Table_RowsDBID_Index.Int64 = index++
       promises.push(this.rowService.updateRow(row, this.DataStack))
     }
 

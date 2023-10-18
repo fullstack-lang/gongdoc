@@ -38,7 +38,7 @@ type UmlStateAPI struct {
 	models.UmlState_WOP
 
 	// encoding of pointers
-	UmlStatePointersEncoding
+	UmlStatePointersEncoding UmlStatePointersEncoding
 }
 
 // UmlStatePointersEncoding encodes pointers to Struct and
@@ -47,9 +47,11 @@ type UmlStatePointersEncoding struct {
 	// insertion for pointer fields encoding declaration
 
 	// Implementation of a reverse ID for field Umlsc{}.States []*UmlState
+	// (to be removed)
 	Umlsc_StatesDBID sql.NullInt64
 
 	// implementation of the index of the withing the slice
+	// (to be removed)
 	Umlsc_StatesDBID_Index sql.NullInt64
 }
 

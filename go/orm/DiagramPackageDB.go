@@ -38,7 +38,7 @@ type DiagramPackageAPI struct {
 	models.DiagramPackage_WOP
 
 	// encoding of pointers
-	DiagramPackagePointersEncoding
+	DiagramPackagePointersEncoding DiagramPackagePointersEncoding
 }
 
 // DiagramPackagePointersEncoding encodes pointers to Struct and
@@ -47,14 +47,14 @@ type DiagramPackagePointersEncoding struct {
 	// insertion for pointer fields encoding declaration
 
 	// field Classdiagrams is a slice of pointers to another Struct (optional or 0..1)
-	Classdiagrams IntSlice`gorm:"type:TEXT"`
+	Classdiagrams IntSlice `gorm:"type:TEXT"`
 
 	// field SelectedClassdiagram is a pointer to another Struct (optional or 0..1)
 	// This field is generated into another field to enable AS ONE association
 	SelectedClassdiagramID sql.NullInt64
 
 	// field Umlscs is a slice of pointers to another Struct (optional or 0..1)
-	Umlscs IntSlice`gorm:"type:TEXT"`
+	Umlscs IntSlice `gorm:"type:TEXT"`
 }
 
 // DiagramPackageDB describes a diagrampackage in the database
@@ -260,6 +260,7 @@ func (backRepoDiagramPackage *BackRepoDiagramPackageStruct) CommitPhaseTwoInstan
 				backRepo.BackRepoClassdiagram.GetClassdiagramDBFromClassdiagramPtr(classdiagramAssocEnd)
 
 			// encode reverse pointer in the association end back repo instance
+			// (to be removed)
 			classdiagramAssocEnd_DB.DiagramPackage_ClassdiagramsDBID.Int64 = int64(diagrampackageDB.ID)
 			classdiagramAssocEnd_DB.DiagramPackage_ClassdiagramsDBID.Valid = true
 			classdiagramAssocEnd_DB.DiagramPackage_ClassdiagramsDBID_Index.Int64 = int64(idx)
@@ -301,6 +302,7 @@ func (backRepoDiagramPackage *BackRepoDiagramPackageStruct) CommitPhaseTwoInstan
 				backRepo.BackRepoUmlsc.GetUmlscDBFromUmlscPtr(umlscAssocEnd)
 
 			// encode reverse pointer in the association end back repo instance
+			// (to be removed)
 			umlscAssocEnd_DB.DiagramPackage_UmlscsDBID.Int64 = int64(diagrampackageDB.ID)
 			umlscAssocEnd_DB.DiagramPackage_UmlscsDBID.Valid = true
 			umlscAssocEnd_DB.DiagramPackage_UmlscsDBID_Index.Int64 = int64(idx)

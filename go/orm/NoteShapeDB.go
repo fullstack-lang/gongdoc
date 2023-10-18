@@ -38,7 +38,7 @@ type NoteShapeAPI struct {
 	models.NoteShape_WOP
 
 	// encoding of pointers
-	NoteShapePointersEncoding
+	NoteShapePointersEncoding NoteShapePointersEncoding
 }
 
 // NoteShapePointersEncoding encodes pointers to Struct and
@@ -47,12 +47,14 @@ type NoteShapePointersEncoding struct {
 	// insertion for pointer fields encoding declaration
 
 	// field NoteShapeLinks is a slice of pointers to another Struct (optional or 0..1)
-	NoteShapeLinks IntSlice`gorm:"type:TEXT"`
+	NoteShapeLinks IntSlice `gorm:"type:TEXT"`
 
 	// Implementation of a reverse ID for field Classdiagram{}.NoteShapes []*NoteShape
+	// (to be removed)
 	Classdiagram_NoteShapesDBID sql.NullInt64
 
 	// implementation of the index of the withing the slice
+	// (to be removed)
 	Classdiagram_NoteShapesDBID_Index sql.NullInt64
 }
 
@@ -276,6 +278,7 @@ func (backRepoNoteShape *BackRepoNoteShapeStruct) CommitPhaseTwoInstance(backRep
 				backRepo.BackRepoNoteShapeLink.GetNoteShapeLinkDBFromNoteShapeLinkPtr(noteshapelinkAssocEnd)
 
 			// encode reverse pointer in the association end back repo instance
+			// (to be removed)
 			noteshapelinkAssocEnd_DB.NoteShape_NoteShapeLinksDBID.Int64 = int64(noteshapeDB.ID)
 			noteshapelinkAssocEnd_DB.NoteShape_NoteShapeLinksDBID.Valid = true
 			noteshapelinkAssocEnd_DB.NoteShape_NoteShapeLinksDBID_Index.Int64 = int64(idx)

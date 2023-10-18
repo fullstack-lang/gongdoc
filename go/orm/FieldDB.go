@@ -38,7 +38,7 @@ type FieldAPI struct {
 	models.Field_WOP
 
 	// encoding of pointers
-	FieldPointersEncoding
+	FieldPointersEncoding FieldPointersEncoding
 }
 
 // FieldPointersEncoding encodes pointers to Struct and
@@ -47,9 +47,11 @@ type FieldPointersEncoding struct {
 	// insertion for pointer fields encoding declaration
 
 	// Implementation of a reverse ID for field GongStructShape{}.Fields []*Field
+	// (to be removed)
 	GongStructShape_FieldsDBID sql.NullInt64
 
 	// implementation of the index of the withing the slice
+	// (to be removed)
 	GongStructShape_FieldsDBID_Index sql.NullInt64
 }
 

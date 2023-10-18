@@ -38,7 +38,7 @@ type GongStructShapeAPI struct {
 	models.GongStructShape_WOP
 
 	// encoding of pointers
-	GongStructShapePointersEncoding
+	GongStructShapePointersEncoding GongStructShapePointersEncoding
 }
 
 // GongStructShapePointersEncoding encodes pointers to Struct and
@@ -51,15 +51,17 @@ type GongStructShapePointersEncoding struct {
 	PositionID sql.NullInt64
 
 	// field Fields is a slice of pointers to another Struct (optional or 0..1)
-	Fields IntSlice`gorm:"type:TEXT"`
+	Fields IntSlice `gorm:"type:TEXT"`
 
 	// field Links is a slice of pointers to another Struct (optional or 0..1)
-	Links IntSlice`gorm:"type:TEXT"`
+	Links IntSlice `gorm:"type:TEXT"`
 
 	// Implementation of a reverse ID for field Classdiagram{}.GongStructShapes []*GongStructShape
+	// (to be removed)
 	Classdiagram_GongStructShapesDBID sql.NullInt64
 
 	// implementation of the index of the withing the slice
+	// (to be removed)
 	Classdiagram_GongStructShapesDBID_Index sql.NullInt64
 }
 
@@ -284,6 +286,7 @@ func (backRepoGongStructShape *BackRepoGongStructShapeStruct) CommitPhaseTwoInst
 				backRepo.BackRepoField.GetFieldDBFromFieldPtr(fieldAssocEnd)
 
 			// encode reverse pointer in the association end back repo instance
+			// (to be removed)
 			fieldAssocEnd_DB.GongStructShape_FieldsDBID.Int64 = int64(gongstructshapeDB.ID)
 			fieldAssocEnd_DB.GongStructShape_FieldsDBID.Valid = true
 			fieldAssocEnd_DB.GongStructShape_FieldsDBID_Index.Int64 = int64(idx)
@@ -313,6 +316,7 @@ func (backRepoGongStructShape *BackRepoGongStructShapeStruct) CommitPhaseTwoInst
 				backRepo.BackRepoLink.GetLinkDBFromLinkPtr(linkAssocEnd)
 
 			// encode reverse pointer in the association end back repo instance
+			// (to be removed)
 			linkAssocEnd_DB.GongStructShape_LinksDBID.Int64 = int64(gongstructshapeDB.ID)
 			linkAssocEnd_DB.GongStructShape_LinksDBID.Valid = true
 			linkAssocEnd_DB.GongStructShape_LinksDBID_Index.Int64 = int64(idx)

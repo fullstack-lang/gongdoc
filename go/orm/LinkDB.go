@@ -38,7 +38,7 @@ type LinkAPI struct {
 	models.Link_WOP
 
 	// encoding of pointers
-	LinkPointersEncoding
+	LinkPointersEncoding LinkPointersEncoding
 }
 
 // LinkPointersEncoding encodes pointers to Struct and
@@ -51,9 +51,11 @@ type LinkPointersEncoding struct {
 	MiddleverticeID sql.NullInt64
 
 	// Implementation of a reverse ID for field GongStructShape{}.Links []*Link
+	// (to be removed)
 	GongStructShape_LinksDBID sql.NullInt64
 
 	// implementation of the index of the withing the slice
+	// (to be removed)
 	GongStructShape_LinksDBID_Index sql.NullInt64
 }
 

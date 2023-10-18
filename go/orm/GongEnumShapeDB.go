@@ -38,7 +38,7 @@ type GongEnumShapeAPI struct {
 	models.GongEnumShape_WOP
 
 	// encoding of pointers
-	GongEnumShapePointersEncoding
+	GongEnumShapePointersEncoding GongEnumShapePointersEncoding
 }
 
 // GongEnumShapePointersEncoding encodes pointers to Struct and
@@ -51,12 +51,14 @@ type GongEnumShapePointersEncoding struct {
 	PositionID sql.NullInt64
 
 	// field GongEnumValueEntrys is a slice of pointers to another Struct (optional or 0..1)
-	GongEnumValueEntrys IntSlice`gorm:"type:TEXT"`
+	GongEnumValueEntrys IntSlice `gorm:"type:TEXT"`
 
 	// Implementation of a reverse ID for field Classdiagram{}.GongEnumShapes []*GongEnumShape
+	// (to be removed)
 	Classdiagram_GongEnumShapesDBID sql.NullInt64
 
 	// implementation of the index of the withing the slice
+	// (to be removed)
 	Classdiagram_GongEnumShapesDBID_Index sql.NullInt64
 }
 
@@ -261,6 +263,7 @@ func (backRepoGongEnumShape *BackRepoGongEnumShapeStruct) CommitPhaseTwoInstance
 				backRepo.BackRepoGongEnumValueEntry.GetGongEnumValueEntryDBFromGongEnumValueEntryPtr(gongenumvalueentryAssocEnd)
 
 			// encode reverse pointer in the association end back repo instance
+			// (to be removed)
 			gongenumvalueentryAssocEnd_DB.GongEnumShape_GongEnumValueEntrysDBID.Int64 = int64(gongenumshapeDB.ID)
 			gongenumvalueentryAssocEnd_DB.GongEnumShape_GongEnumValueEntrysDBID.Valid = true
 			gongenumvalueentryAssocEnd_DB.GongEnumShape_GongEnumValueEntrysDBID_Index.Int64 = int64(idx)

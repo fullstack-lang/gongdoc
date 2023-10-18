@@ -1,9 +1,9 @@
-import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { Injectable } from '@angular/core'
+import { HttpClient, HttpHeaders } from '@angular/common/http'
 
-import { Observable, combineLatest, BehaviorSubject, of } from 'rxjs';
+import { Observable, combineLatest, BehaviorSubject, of } from 'rxjs'
 
-// insertion point sub template for services imports 
+// insertion point sub template for services imports
 import { AnimateDB } from './animate-db'
 import { AnimateService } from './animate.service'
 
@@ -57,58 +57,163 @@ import { TextService } from './text.service'
 
 
 // FrontRepo stores all instances in a front repository (design pattern repository)
-export class FrontRepo { // insertion point sub template 
-  Animates_array = new Array<AnimateDB>(); // array of repo instances
-  Animates = new Map<number, AnimateDB>(); // map of repo instances
-  Animates_batch = new Map<number, AnimateDB>(); // same but only in last GET (for finding repo instances to delete)
-  Circles_array = new Array<CircleDB>(); // array of repo instances
-  Circles = new Map<number, CircleDB>(); // map of repo instances
-  Circles_batch = new Map<number, CircleDB>(); // same but only in last GET (for finding repo instances to delete)
-  Ellipses_array = new Array<EllipseDB>(); // array of repo instances
-  Ellipses = new Map<number, EllipseDB>(); // map of repo instances
-  Ellipses_batch = new Map<number, EllipseDB>(); // same but only in last GET (for finding repo instances to delete)
-  Layers_array = new Array<LayerDB>(); // array of repo instances
-  Layers = new Map<number, LayerDB>(); // map of repo instances
-  Layers_batch = new Map<number, LayerDB>(); // same but only in last GET (for finding repo instances to delete)
-  Lines_array = new Array<LineDB>(); // array of repo instances
-  Lines = new Map<number, LineDB>(); // map of repo instances
-  Lines_batch = new Map<number, LineDB>(); // same but only in last GET (for finding repo instances to delete)
-  Links_array = new Array<LinkDB>(); // array of repo instances
-  Links = new Map<number, LinkDB>(); // map of repo instances
-  Links_batch = new Map<number, LinkDB>(); // same but only in last GET (for finding repo instances to delete)
-  LinkAnchoredTexts_array = new Array<LinkAnchoredTextDB>(); // array of repo instances
-  LinkAnchoredTexts = new Map<number, LinkAnchoredTextDB>(); // map of repo instances
-  LinkAnchoredTexts_batch = new Map<number, LinkAnchoredTextDB>(); // same but only in last GET (for finding repo instances to delete)
-  Paths_array = new Array<PathDB>(); // array of repo instances
-  Paths = new Map<number, PathDB>(); // map of repo instances
-  Paths_batch = new Map<number, PathDB>(); // same but only in last GET (for finding repo instances to delete)
-  Points_array = new Array<PointDB>(); // array of repo instances
-  Points = new Map<number, PointDB>(); // map of repo instances
-  Points_batch = new Map<number, PointDB>(); // same but only in last GET (for finding repo instances to delete)
-  Polygones_array = new Array<PolygoneDB>(); // array of repo instances
-  Polygones = new Map<number, PolygoneDB>(); // map of repo instances
-  Polygones_batch = new Map<number, PolygoneDB>(); // same but only in last GET (for finding repo instances to delete)
-  Polylines_array = new Array<PolylineDB>(); // array of repo instances
-  Polylines = new Map<number, PolylineDB>(); // map of repo instances
-  Polylines_batch = new Map<number, PolylineDB>(); // same but only in last GET (for finding repo instances to delete)
-  Rects_array = new Array<RectDB>(); // array of repo instances
-  Rects = new Map<number, RectDB>(); // map of repo instances
-  Rects_batch = new Map<number, RectDB>(); // same but only in last GET (for finding repo instances to delete)
-  RectAnchoredRects_array = new Array<RectAnchoredRectDB>(); // array of repo instances
-  RectAnchoredRects = new Map<number, RectAnchoredRectDB>(); // map of repo instances
-  RectAnchoredRects_batch = new Map<number, RectAnchoredRectDB>(); // same but only in last GET (for finding repo instances to delete)
-  RectAnchoredTexts_array = new Array<RectAnchoredTextDB>(); // array of repo instances
-  RectAnchoredTexts = new Map<number, RectAnchoredTextDB>(); // map of repo instances
-  RectAnchoredTexts_batch = new Map<number, RectAnchoredTextDB>(); // same but only in last GET (for finding repo instances to delete)
-  RectLinkLinks_array = new Array<RectLinkLinkDB>(); // array of repo instances
-  RectLinkLinks = new Map<number, RectLinkLinkDB>(); // map of repo instances
-  RectLinkLinks_batch = new Map<number, RectLinkLinkDB>(); // same but only in last GET (for finding repo instances to delete)
-  SVGs_array = new Array<SVGDB>(); // array of repo instances
-  SVGs = new Map<number, SVGDB>(); // map of repo instances
-  SVGs_batch = new Map<number, SVGDB>(); // same but only in last GET (for finding repo instances to delete)
-  Texts_array = new Array<TextDB>(); // array of repo instances
-  Texts = new Map<number, TextDB>(); // map of repo instances
-  Texts_batch = new Map<number, TextDB>(); // same but only in last GET (for finding repo instances to delete)
+export class FrontRepo { // insertion point sub template
+  Animates_array = new Array<AnimateDB>() // array of repo instances
+  Animates = new Map<number, AnimateDB>() // map of repo instances
+  Animates_batch = new Map<number, AnimateDB>() // same but only in last GET (for finding repo instances to delete)
+
+  Circles_array = new Array<CircleDB>() // array of repo instances
+  Circles = new Map<number, CircleDB>() // map of repo instances
+  Circles_batch = new Map<number, CircleDB>() // same but only in last GET (for finding repo instances to delete)
+
+  Ellipses_array = new Array<EllipseDB>() // array of repo instances
+  Ellipses = new Map<number, EllipseDB>() // map of repo instances
+  Ellipses_batch = new Map<number, EllipseDB>() // same but only in last GET (for finding repo instances to delete)
+
+  Layers_array = new Array<LayerDB>() // array of repo instances
+  Layers = new Map<number, LayerDB>() // map of repo instances
+  Layers_batch = new Map<number, LayerDB>() // same but only in last GET (for finding repo instances to delete)
+
+  Lines_array = new Array<LineDB>() // array of repo instances
+  Lines = new Map<number, LineDB>() // map of repo instances
+  Lines_batch = new Map<number, LineDB>() // same but only in last GET (for finding repo instances to delete)
+
+  Links_array = new Array<LinkDB>() // array of repo instances
+  Links = new Map<number, LinkDB>() // map of repo instances
+  Links_batch = new Map<number, LinkDB>() // same but only in last GET (for finding repo instances to delete)
+
+  LinkAnchoredTexts_array = new Array<LinkAnchoredTextDB>() // array of repo instances
+  LinkAnchoredTexts = new Map<number, LinkAnchoredTextDB>() // map of repo instances
+  LinkAnchoredTexts_batch = new Map<number, LinkAnchoredTextDB>() // same but only in last GET (for finding repo instances to delete)
+
+  Paths_array = new Array<PathDB>() // array of repo instances
+  Paths = new Map<number, PathDB>() // map of repo instances
+  Paths_batch = new Map<number, PathDB>() // same but only in last GET (for finding repo instances to delete)
+
+  Points_array = new Array<PointDB>() // array of repo instances
+  Points = new Map<number, PointDB>() // map of repo instances
+  Points_batch = new Map<number, PointDB>() // same but only in last GET (for finding repo instances to delete)
+
+  Polygones_array = new Array<PolygoneDB>() // array of repo instances
+  Polygones = new Map<number, PolygoneDB>() // map of repo instances
+  Polygones_batch = new Map<number, PolygoneDB>() // same but only in last GET (for finding repo instances to delete)
+
+  Polylines_array = new Array<PolylineDB>() // array of repo instances
+  Polylines = new Map<number, PolylineDB>() // map of repo instances
+  Polylines_batch = new Map<number, PolylineDB>() // same but only in last GET (for finding repo instances to delete)
+
+  Rects_array = new Array<RectDB>() // array of repo instances
+  Rects = new Map<number, RectDB>() // map of repo instances
+  Rects_batch = new Map<number, RectDB>() // same but only in last GET (for finding repo instances to delete)
+
+  RectAnchoredRects_array = new Array<RectAnchoredRectDB>() // array of repo instances
+  RectAnchoredRects = new Map<number, RectAnchoredRectDB>() // map of repo instances
+  RectAnchoredRects_batch = new Map<number, RectAnchoredRectDB>() // same but only in last GET (for finding repo instances to delete)
+
+  RectAnchoredTexts_array = new Array<RectAnchoredTextDB>() // array of repo instances
+  RectAnchoredTexts = new Map<number, RectAnchoredTextDB>() // map of repo instances
+  RectAnchoredTexts_batch = new Map<number, RectAnchoredTextDB>() // same but only in last GET (for finding repo instances to delete)
+
+  RectLinkLinks_array = new Array<RectLinkLinkDB>() // array of repo instances
+  RectLinkLinks = new Map<number, RectLinkLinkDB>() // map of repo instances
+  RectLinkLinks_batch = new Map<number, RectLinkLinkDB>() // same but only in last GET (for finding repo instances to delete)
+
+  SVGs_array = new Array<SVGDB>() // array of repo instances
+  SVGs = new Map<number, SVGDB>() // map of repo instances
+  SVGs_batch = new Map<number, SVGDB>() // same but only in last GET (for finding repo instances to delete)
+
+  Texts_array = new Array<TextDB>() // array of repo instances
+  Texts = new Map<number, TextDB>() // map of repo instances
+  Texts_batch = new Map<number, TextDB>() // same but only in last GET (for finding repo instances to delete)
+
+
+  // getArray allows for a get function that is robust to refactoring of the named struct name
+  // for instance frontRepo.getArray<Astruct>( Astruct.GONGSTRUCT_NAME), is robust to a refactoring of Astruct identifier
+  // contrary to frontRepo.Astructs_array which is not refactored when Astruct identifier is modified
+  getArray<Type>(gongStructName: string): Array<Type> {
+    switch (gongStructName) {
+      // insertion point
+      case 'Animate':
+        return this.Animates_array as unknown as Array<Type>
+      case 'Circle':
+        return this.Circles_array as unknown as Array<Type>
+      case 'Ellipse':
+        return this.Ellipses_array as unknown as Array<Type>
+      case 'Layer':
+        return this.Layers_array as unknown as Array<Type>
+      case 'Line':
+        return this.Lines_array as unknown as Array<Type>
+      case 'Link':
+        return this.Links_array as unknown as Array<Type>
+      case 'LinkAnchoredText':
+        return this.LinkAnchoredTexts_array as unknown as Array<Type>
+      case 'Path':
+        return this.Paths_array as unknown as Array<Type>
+      case 'Point':
+        return this.Points_array as unknown as Array<Type>
+      case 'Polygone':
+        return this.Polygones_array as unknown as Array<Type>
+      case 'Polyline':
+        return this.Polylines_array as unknown as Array<Type>
+      case 'Rect':
+        return this.Rects_array as unknown as Array<Type>
+      case 'RectAnchoredRect':
+        return this.RectAnchoredRects_array as unknown as Array<Type>
+      case 'RectAnchoredText':
+        return this.RectAnchoredTexts_array as unknown as Array<Type>
+      case 'RectLinkLink':
+        return this.RectLinkLinks_array as unknown as Array<Type>
+      case 'SVG':
+        return this.SVGs_array as unknown as Array<Type>
+      case 'Text':
+        return this.Texts_array as unknown as Array<Type>
+      default:
+        throw new Error("Type not recognized");
+    }
+  }
+
+  // getMap allows for a get function that is robust to refactoring of the named struct name
+  getMap<Type>(gongStructName: string): Map<number, Type> {
+    switch (gongStructName) {
+      // insertion point
+      case 'Animate':
+        return this.Animates_array as unknown as Map<number, Type>
+      case 'Circle':
+        return this.Circles_array as unknown as Map<number, Type>
+      case 'Ellipse':
+        return this.Ellipses_array as unknown as Map<number, Type>
+      case 'Layer':
+        return this.Layers_array as unknown as Map<number, Type>
+      case 'Line':
+        return this.Lines_array as unknown as Map<number, Type>
+      case 'Link':
+        return this.Links_array as unknown as Map<number, Type>
+      case 'LinkAnchoredText':
+        return this.LinkAnchoredTexts_array as unknown as Map<number, Type>
+      case 'Path':
+        return this.Paths_array as unknown as Map<number, Type>
+      case 'Point':
+        return this.Points_array as unknown as Map<number, Type>
+      case 'Polygone':
+        return this.Polygones_array as unknown as Map<number, Type>
+      case 'Polyline':
+        return this.Polylines_array as unknown as Map<number, Type>
+      case 'Rect':
+        return this.Rects_array as unknown as Map<number, Type>
+      case 'RectAnchoredRect':
+        return this.RectAnchoredRects_array as unknown as Map<number, Type>
+      case 'RectAnchoredText':
+        return this.RectAnchoredTexts_array as unknown as Map<number, Type>
+      case 'RectLinkLink':
+        return this.RectLinkLinks_array as unknown as Map<number, Type>
+      case 'SVG':
+        return this.SVGs_array as unknown as Map<number, Type>
+      case 'Text':
+        return this.Texts_array as unknown as Map<number, Type>
+      default:
+        throw new Error("Type not recognized");
+    }
+  }
 }
 
 // the table component is called in different ways
@@ -217,7 +322,7 @@ export class FrontRepoService {
   }
 
   // typing of observable can be messy in typescript. Therefore, one force the type
-  observableFrontRepo: [ 
+  observableFrontRepo: [
     Observable<null>, // see below for the of(null) observable
     // insertion point sub template 
     Observable<AnimateDB[]>,
@@ -237,16 +342,16 @@ export class FrontRepoService {
     Observable<RectLinkLinkDB[]>,
     Observable<SVGDB[]>,
     Observable<TextDB[]>,
-  ] = [ 
-    // Using "combineLatest" with a placeholder observable.
-    //
-    // This allows the typescript compiler to pass when no GongStruct is present in the front API
-    //
-    // The "of(null)" is a "meaningless" observable that emits a single value (null) and completes.
-    // This is used as a workaround to satisfy TypeScript requirements and the "combineLatest" 
-    // expectation for a non-empty array of observables.
-    of(null), // 
-    // insertion point sub template
+  ] = [
+      // Using "combineLatest" with a placeholder observable.
+      //
+      // This allows the typescript compiler to pass when no GongStruct is present in the front API
+      //
+      // The "of(null)" is a "meaningless" observable that emits a single value (null) and completes.
+      // This is used as a workaround to satisfy TypeScript requirements and the "combineLatest" 
+      // expectation for a non-empty array of observables.
+      of(null), // 
+      // insertion point sub template
       this.animateService.getAnimates(this.GONG__StackPath),
       this.circleService.getCircles(this.GONG__StackPath),
       this.ellipseService.getEllipses(this.GONG__StackPath),
@@ -276,7 +381,7 @@ export class FrontRepoService {
 
     this.GONG__StackPath = GONG__StackPath
 
-    this.observableFrontRepo = [ 
+    this.observableFrontRepo = [
       of(null), // see above for justification
       // insertion point sub template
       this.animateService.getAnimates(this.GONG__StackPath),
@@ -303,7 +408,7 @@ export class FrontRepoService {
         combineLatest(
           this.observableFrontRepo
         ).subscribe(
-          ([ 
+          ([
             ___of_null, // see above for the explanation about of
             // insertion point sub template for declarations 
             animates_,
@@ -935,132 +1040,152 @@ export class FrontRepoService {
 
                 // insertion point for redeeming ONE-MANY associations
                 // insertion point for slice of pointer field Circle.Animations redeeming
+                // to be removed
                 {
-                  let _circle = this.frontRepo.Circles.get(animate.Circle_AnimationsDBID.Int64)
+                  let _id = animate.AnimatePointersEncoding.Circle_AnimationsDBID.Int64
+                  let _circle = this.frontRepo.Circles.get(_id)
                   if (_circle) {
                     if (_circle.Animations == undefined) {
                       _circle.Animations = new Array<AnimateDB>()
                     }
                     _circle.Animations.push(animate)
-                    if (animate.Circle_Animations_reverse == undefined) {
-                      animate.Circle_Animations_reverse = _circle
+                    if (animate.AnimatePointersEncoding.Circle_Animations_reverse == undefined) {
+                      animate.AnimatePointersEncoding.Circle_Animations_reverse = _circle
                     }
                   }
                 }
                 // insertion point for slice of pointer field Ellipse.Animates redeeming
+                // to be removed
                 {
-                  let _ellipse = this.frontRepo.Ellipses.get(animate.Ellipse_AnimatesDBID.Int64)
+                  let _id = animate.AnimatePointersEncoding.Ellipse_AnimatesDBID.Int64
+                  let _ellipse = this.frontRepo.Ellipses.get(_id)
                   if (_ellipse) {
                     if (_ellipse.Animates == undefined) {
                       _ellipse.Animates = new Array<AnimateDB>()
                     }
                     _ellipse.Animates.push(animate)
-                    if (animate.Ellipse_Animates_reverse == undefined) {
-                      animate.Ellipse_Animates_reverse = _ellipse
+                    if (animate.AnimatePointersEncoding.Ellipse_Animates_reverse == undefined) {
+                      animate.AnimatePointersEncoding.Ellipse_Animates_reverse = _ellipse
                     }
                   }
                 }
                 // insertion point for slice of pointer field Line.Animates redeeming
+                // to be removed
                 {
-                  let _line = this.frontRepo.Lines.get(animate.Line_AnimatesDBID.Int64)
+                  let _id = animate.AnimatePointersEncoding.Line_AnimatesDBID.Int64
+                  let _line = this.frontRepo.Lines.get(_id)
                   if (_line) {
                     if (_line.Animates == undefined) {
                       _line.Animates = new Array<AnimateDB>()
                     }
                     _line.Animates.push(animate)
-                    if (animate.Line_Animates_reverse == undefined) {
-                      animate.Line_Animates_reverse = _line
+                    if (animate.AnimatePointersEncoding.Line_Animates_reverse == undefined) {
+                      animate.AnimatePointersEncoding.Line_Animates_reverse = _line
                     }
                   }
                 }
                 // insertion point for slice of pointer field LinkAnchoredText.Animates redeeming
+                // to be removed
                 {
-                  let _linkanchoredtext = this.frontRepo.LinkAnchoredTexts.get(animate.LinkAnchoredText_AnimatesDBID.Int64)
+                  let _id = animate.AnimatePointersEncoding.LinkAnchoredText_AnimatesDBID.Int64
+                  let _linkanchoredtext = this.frontRepo.LinkAnchoredTexts.get(_id)
                   if (_linkanchoredtext) {
                     if (_linkanchoredtext.Animates == undefined) {
                       _linkanchoredtext.Animates = new Array<AnimateDB>()
                     }
                     _linkanchoredtext.Animates.push(animate)
-                    if (animate.LinkAnchoredText_Animates_reverse == undefined) {
-                      animate.LinkAnchoredText_Animates_reverse = _linkanchoredtext
+                    if (animate.AnimatePointersEncoding.LinkAnchoredText_Animates_reverse == undefined) {
+                      animate.AnimatePointersEncoding.LinkAnchoredText_Animates_reverse = _linkanchoredtext
                     }
                   }
                 }
                 // insertion point for slice of pointer field Path.Animates redeeming
+                // to be removed
                 {
-                  let _path = this.frontRepo.Paths.get(animate.Path_AnimatesDBID.Int64)
+                  let _id = animate.AnimatePointersEncoding.Path_AnimatesDBID.Int64
+                  let _path = this.frontRepo.Paths.get(_id)
                   if (_path) {
                     if (_path.Animates == undefined) {
                       _path.Animates = new Array<AnimateDB>()
                     }
                     _path.Animates.push(animate)
-                    if (animate.Path_Animates_reverse == undefined) {
-                      animate.Path_Animates_reverse = _path
+                    if (animate.AnimatePointersEncoding.Path_Animates_reverse == undefined) {
+                      animate.AnimatePointersEncoding.Path_Animates_reverse = _path
                     }
                   }
                 }
                 // insertion point for slice of pointer field Polygone.Animates redeeming
+                // to be removed
                 {
-                  let _polygone = this.frontRepo.Polygones.get(animate.Polygone_AnimatesDBID.Int64)
+                  let _id = animate.AnimatePointersEncoding.Polygone_AnimatesDBID.Int64
+                  let _polygone = this.frontRepo.Polygones.get(_id)
                   if (_polygone) {
                     if (_polygone.Animates == undefined) {
                       _polygone.Animates = new Array<AnimateDB>()
                     }
                     _polygone.Animates.push(animate)
-                    if (animate.Polygone_Animates_reverse == undefined) {
-                      animate.Polygone_Animates_reverse = _polygone
+                    if (animate.AnimatePointersEncoding.Polygone_Animates_reverse == undefined) {
+                      animate.AnimatePointersEncoding.Polygone_Animates_reverse = _polygone
                     }
                   }
                 }
                 // insertion point for slice of pointer field Polyline.Animates redeeming
+                // to be removed
                 {
-                  let _polyline = this.frontRepo.Polylines.get(animate.Polyline_AnimatesDBID.Int64)
+                  let _id = animate.AnimatePointersEncoding.Polyline_AnimatesDBID.Int64
+                  let _polyline = this.frontRepo.Polylines.get(_id)
                   if (_polyline) {
                     if (_polyline.Animates == undefined) {
                       _polyline.Animates = new Array<AnimateDB>()
                     }
                     _polyline.Animates.push(animate)
-                    if (animate.Polyline_Animates_reverse == undefined) {
-                      animate.Polyline_Animates_reverse = _polyline
+                    if (animate.AnimatePointersEncoding.Polyline_Animates_reverse == undefined) {
+                      animate.AnimatePointersEncoding.Polyline_Animates_reverse = _polyline
                     }
                   }
                 }
                 // insertion point for slice of pointer field Rect.Animations redeeming
+                // to be removed
                 {
-                  let _rect = this.frontRepo.Rects.get(animate.Rect_AnimationsDBID.Int64)
+                  let _id = animate.AnimatePointersEncoding.Rect_AnimationsDBID.Int64
+                  let _rect = this.frontRepo.Rects.get(_id)
                   if (_rect) {
                     if (_rect.Animations == undefined) {
                       _rect.Animations = new Array<AnimateDB>()
                     }
                     _rect.Animations.push(animate)
-                    if (animate.Rect_Animations_reverse == undefined) {
-                      animate.Rect_Animations_reverse = _rect
+                    if (animate.AnimatePointersEncoding.Rect_Animations_reverse == undefined) {
+                      animate.AnimatePointersEncoding.Rect_Animations_reverse = _rect
                     }
                   }
                 }
                 // insertion point for slice of pointer field RectAnchoredText.Animates redeeming
+                // to be removed
                 {
-                  let _rectanchoredtext = this.frontRepo.RectAnchoredTexts.get(animate.RectAnchoredText_AnimatesDBID.Int64)
+                  let _id = animate.AnimatePointersEncoding.RectAnchoredText_AnimatesDBID.Int64
+                  let _rectanchoredtext = this.frontRepo.RectAnchoredTexts.get(_id)
                   if (_rectanchoredtext) {
                     if (_rectanchoredtext.Animates == undefined) {
                       _rectanchoredtext.Animates = new Array<AnimateDB>()
                     }
                     _rectanchoredtext.Animates.push(animate)
-                    if (animate.RectAnchoredText_Animates_reverse == undefined) {
-                      animate.RectAnchoredText_Animates_reverse = _rectanchoredtext
+                    if (animate.AnimatePointersEncoding.RectAnchoredText_Animates_reverse == undefined) {
+                      animate.AnimatePointersEncoding.RectAnchoredText_Animates_reverse = _rectanchoredtext
                     }
                   }
                 }
                 // insertion point for slice of pointer field Text.Animates redeeming
+                // to be removed
                 {
-                  let _text = this.frontRepo.Texts.get(animate.Text_AnimatesDBID.Int64)
+                  let _id = animate.AnimatePointersEncoding.Text_AnimatesDBID.Int64
+                  let _text = this.frontRepo.Texts.get(_id)
                   if (_text) {
                     if (_text.Animates == undefined) {
                       _text.Animates = new Array<AnimateDB>()
                     }
                     _text.Animates.push(animate)
-                    if (animate.Text_Animates_reverse == undefined) {
-                      animate.Text_Animates_reverse = _text
+                    if (animate.AnimatePointersEncoding.Text_Animates_reverse == undefined) {
+                      animate.AnimatePointersEncoding.Text_Animates_reverse = _text
                     }
                   }
                 }
@@ -1072,15 +1197,17 @@ export class FrontRepoService {
 
                 // insertion point for redeeming ONE-MANY associations
                 // insertion point for slice of pointer field Layer.Circles redeeming
+                // to be removed
                 {
-                  let _layer = this.frontRepo.Layers.get(circle.Layer_CirclesDBID.Int64)
+                  let _id = circle.CirclePointersEncoding.Layer_CirclesDBID.Int64
+                  let _layer = this.frontRepo.Layers.get(_id)
                   if (_layer) {
                     if (_layer.Circles == undefined) {
                       _layer.Circles = new Array<CircleDB>()
                     }
                     _layer.Circles.push(circle)
-                    if (circle.Layer_Circles_reverse == undefined) {
-                      circle.Layer_Circles_reverse = _layer
+                    if (circle.CirclePointersEncoding.Layer_Circles_reverse == undefined) {
+                      circle.CirclePointersEncoding.Layer_Circles_reverse = _layer
                     }
                   }
                 }
@@ -1092,15 +1219,17 @@ export class FrontRepoService {
 
                 // insertion point for redeeming ONE-MANY associations
                 // insertion point for slice of pointer field Layer.Ellipses redeeming
+                // to be removed
                 {
-                  let _layer = this.frontRepo.Layers.get(ellipse.Layer_EllipsesDBID.Int64)
+                  let _id = ellipse.EllipsePointersEncoding.Layer_EllipsesDBID.Int64
+                  let _layer = this.frontRepo.Layers.get(_id)
                   if (_layer) {
                     if (_layer.Ellipses == undefined) {
                       _layer.Ellipses = new Array<EllipseDB>()
                     }
                     _layer.Ellipses.push(ellipse)
-                    if (ellipse.Layer_Ellipses_reverse == undefined) {
-                      ellipse.Layer_Ellipses_reverse = _layer
+                    if (ellipse.EllipsePointersEncoding.Layer_Ellipses_reverse == undefined) {
+                      ellipse.EllipsePointersEncoding.Layer_Ellipses_reverse = _layer
                     }
                   }
                 }
@@ -1112,15 +1241,17 @@ export class FrontRepoService {
 
                 // insertion point for redeeming ONE-MANY associations
                 // insertion point for slice of pointer field SVG.Layers redeeming
+                // to be removed
                 {
-                  let _svg = this.frontRepo.SVGs.get(layer.SVG_LayersDBID.Int64)
+                  let _id = layer.LayerPointersEncoding.SVG_LayersDBID.Int64
+                  let _svg = this.frontRepo.SVGs.get(_id)
                   if (_svg) {
                     if (_svg.Layers == undefined) {
                       _svg.Layers = new Array<LayerDB>()
                     }
                     _svg.Layers.push(layer)
-                    if (layer.SVG_Layers_reverse == undefined) {
-                      layer.SVG_Layers_reverse = _svg
+                    if (layer.LayerPointersEncoding.SVG_Layers_reverse == undefined) {
+                      layer.LayerPointersEncoding.SVG_Layers_reverse = _svg
                     }
                   }
                 }
@@ -1132,15 +1263,17 @@ export class FrontRepoService {
 
                 // insertion point for redeeming ONE-MANY associations
                 // insertion point for slice of pointer field Layer.Lines redeeming
+                // to be removed
                 {
-                  let _layer = this.frontRepo.Layers.get(line.Layer_LinesDBID.Int64)
+                  let _id = line.LinePointersEncoding.Layer_LinesDBID.Int64
+                  let _layer = this.frontRepo.Layers.get(_id)
                   if (_layer) {
                     if (_layer.Lines == undefined) {
                       _layer.Lines = new Array<LineDB>()
                     }
                     _layer.Lines.push(line)
-                    if (line.Layer_Lines_reverse == undefined) {
-                      line.Layer_Lines_reverse = _layer
+                    if (line.LinePointersEncoding.Layer_Lines_reverse == undefined) {
+                      line.LinePointersEncoding.Layer_Lines_reverse = _layer
                     }
                   }
                 }
@@ -1151,14 +1284,14 @@ export class FrontRepoService {
                 // insertion point sub sub template for ONE-/ZERO-ONE associations pointers redeeming
                 // insertion point for pointer field Start redeeming
                 {
-                  let _rect = this.frontRepo.Rects.get(link.StartID.Int64)
+                  let _rect = this.frontRepo.Rects.get(link.LinkPointersEncoding.StartID.Int64)
                   if (_rect) {
                     link.Start = _rect
                   }
                 }
                 // insertion point for pointer field End redeeming
                 {
-                  let _rect = this.frontRepo.Rects.get(link.EndID.Int64)
+                  let _rect = this.frontRepo.Rects.get(link.LinkPointersEncoding.EndID.Int64)
                   if (_rect) {
                     link.End = _rect
                   }
@@ -1166,15 +1299,17 @@ export class FrontRepoService {
 
                 // insertion point for redeeming ONE-MANY associations
                 // insertion point for slice of pointer field Layer.Links redeeming
+                // to be removed
                 {
-                  let _layer = this.frontRepo.Layers.get(link.Layer_LinksDBID.Int64)
+                  let _id = link.LinkPointersEncoding.Layer_LinksDBID.Int64
+                  let _layer = this.frontRepo.Layers.get(_id)
                   if (_layer) {
                     if (_layer.Links == undefined) {
                       _layer.Links = new Array<LinkDB>()
                     }
                     _layer.Links.push(link)
-                    if (link.Layer_Links_reverse == undefined) {
-                      link.Layer_Links_reverse = _layer
+                    if (link.LinkPointersEncoding.Layer_Links_reverse == undefined) {
+                      link.LinkPointersEncoding.Layer_Links_reverse = _layer
                     }
                   }
                 }
@@ -1186,28 +1321,32 @@ export class FrontRepoService {
 
                 // insertion point for redeeming ONE-MANY associations
                 // insertion point for slice of pointer field Link.TextAtArrowEnd redeeming
+                // to be removed
                 {
-                  let _link = this.frontRepo.Links.get(linkanchoredtext.Link_TextAtArrowEndDBID.Int64)
+                  let _id = linkanchoredtext.LinkAnchoredTextPointersEncoding.Link_TextAtArrowEndDBID.Int64
+                  let _link = this.frontRepo.Links.get(_id)
                   if (_link) {
                     if (_link.TextAtArrowEnd == undefined) {
                       _link.TextAtArrowEnd = new Array<LinkAnchoredTextDB>()
                     }
                     _link.TextAtArrowEnd.push(linkanchoredtext)
-                    if (linkanchoredtext.Link_TextAtArrowEnd_reverse == undefined) {
-                      linkanchoredtext.Link_TextAtArrowEnd_reverse = _link
+                    if (linkanchoredtext.LinkAnchoredTextPointersEncoding.Link_TextAtArrowEnd_reverse == undefined) {
+                      linkanchoredtext.LinkAnchoredTextPointersEncoding.Link_TextAtArrowEnd_reverse = _link
                     }
                   }
                 }
                 // insertion point for slice of pointer field Link.TextAtArrowStart redeeming
+                // to be removed
                 {
-                  let _link = this.frontRepo.Links.get(linkanchoredtext.Link_TextAtArrowStartDBID.Int64)
+                  let _id = linkanchoredtext.LinkAnchoredTextPointersEncoding.Link_TextAtArrowStartDBID.Int64
+                  let _link = this.frontRepo.Links.get(_id)
                   if (_link) {
                     if (_link.TextAtArrowStart == undefined) {
                       _link.TextAtArrowStart = new Array<LinkAnchoredTextDB>()
                     }
                     _link.TextAtArrowStart.push(linkanchoredtext)
-                    if (linkanchoredtext.Link_TextAtArrowStart_reverse == undefined) {
-                      linkanchoredtext.Link_TextAtArrowStart_reverse = _link
+                    if (linkanchoredtext.LinkAnchoredTextPointersEncoding.Link_TextAtArrowStart_reverse == undefined) {
+                      linkanchoredtext.LinkAnchoredTextPointersEncoding.Link_TextAtArrowStart_reverse = _link
                     }
                   }
                 }
@@ -1219,15 +1358,17 @@ export class FrontRepoService {
 
                 // insertion point for redeeming ONE-MANY associations
                 // insertion point for slice of pointer field Layer.Paths redeeming
+                // to be removed
                 {
-                  let _layer = this.frontRepo.Layers.get(path.Layer_PathsDBID.Int64)
+                  let _id = path.PathPointersEncoding.Layer_PathsDBID.Int64
+                  let _layer = this.frontRepo.Layers.get(_id)
                   if (_layer) {
                     if (_layer.Paths == undefined) {
                       _layer.Paths = new Array<PathDB>()
                     }
                     _layer.Paths.push(path)
-                    if (path.Layer_Paths_reverse == undefined) {
-                      path.Layer_Paths_reverse = _layer
+                    if (path.PathPointersEncoding.Layer_Paths_reverse == undefined) {
+                      path.PathPointersEncoding.Layer_Paths_reverse = _layer
                     }
                   }
                 }
@@ -1239,15 +1380,17 @@ export class FrontRepoService {
 
                 // insertion point for redeeming ONE-MANY associations
                 // insertion point for slice of pointer field Link.ControlPoints redeeming
+                // to be removed
                 {
-                  let _link = this.frontRepo.Links.get(point.Link_ControlPointsDBID.Int64)
+                  let _id = point.PointPointersEncoding.Link_ControlPointsDBID.Int64
+                  let _link = this.frontRepo.Links.get(_id)
                   if (_link) {
                     if (_link.ControlPoints == undefined) {
                       _link.ControlPoints = new Array<PointDB>()
                     }
                     _link.ControlPoints.push(point)
-                    if (point.Link_ControlPoints_reverse == undefined) {
-                      point.Link_ControlPoints_reverse = _link
+                    if (point.PointPointersEncoding.Link_ControlPoints_reverse == undefined) {
+                      point.PointPointersEncoding.Link_ControlPoints_reverse = _link
                     }
                   }
                 }
@@ -1259,15 +1402,17 @@ export class FrontRepoService {
 
                 // insertion point for redeeming ONE-MANY associations
                 // insertion point for slice of pointer field Layer.Polygones redeeming
+                // to be removed
                 {
-                  let _layer = this.frontRepo.Layers.get(polygone.Layer_PolygonesDBID.Int64)
+                  let _id = polygone.PolygonePointersEncoding.Layer_PolygonesDBID.Int64
+                  let _layer = this.frontRepo.Layers.get(_id)
                   if (_layer) {
                     if (_layer.Polygones == undefined) {
                       _layer.Polygones = new Array<PolygoneDB>()
                     }
                     _layer.Polygones.push(polygone)
-                    if (polygone.Layer_Polygones_reverse == undefined) {
-                      polygone.Layer_Polygones_reverse = _layer
+                    if (polygone.PolygonePointersEncoding.Layer_Polygones_reverse == undefined) {
+                      polygone.PolygonePointersEncoding.Layer_Polygones_reverse = _layer
                     }
                   }
                 }
@@ -1279,15 +1424,17 @@ export class FrontRepoService {
 
                 // insertion point for redeeming ONE-MANY associations
                 // insertion point for slice of pointer field Layer.Polylines redeeming
+                // to be removed
                 {
-                  let _layer = this.frontRepo.Layers.get(polyline.Layer_PolylinesDBID.Int64)
+                  let _id = polyline.PolylinePointersEncoding.Layer_PolylinesDBID.Int64
+                  let _layer = this.frontRepo.Layers.get(_id)
                   if (_layer) {
                     if (_layer.Polylines == undefined) {
                       _layer.Polylines = new Array<PolylineDB>()
                     }
                     _layer.Polylines.push(polyline)
-                    if (polyline.Layer_Polylines_reverse == undefined) {
-                      polyline.Layer_Polylines_reverse = _layer
+                    if (polyline.PolylinePointersEncoding.Layer_Polylines_reverse == undefined) {
+                      polyline.PolylinePointersEncoding.Layer_Polylines_reverse = _layer
                     }
                   }
                 }
@@ -1299,15 +1446,17 @@ export class FrontRepoService {
 
                 // insertion point for redeeming ONE-MANY associations
                 // insertion point for slice of pointer field Layer.Rects redeeming
+                // to be removed
                 {
-                  let _layer = this.frontRepo.Layers.get(rect.Layer_RectsDBID.Int64)
+                  let _id = rect.RectPointersEncoding.Layer_RectsDBID.Int64
+                  let _layer = this.frontRepo.Layers.get(_id)
                   if (_layer) {
                     if (_layer.Rects == undefined) {
                       _layer.Rects = new Array<RectDB>()
                     }
                     _layer.Rects.push(rect)
-                    if (rect.Layer_Rects_reverse == undefined) {
-                      rect.Layer_Rects_reverse = _layer
+                    if (rect.RectPointersEncoding.Layer_Rects_reverse == undefined) {
+                      rect.RectPointersEncoding.Layer_Rects_reverse = _layer
                     }
                   }
                 }
@@ -1319,15 +1468,17 @@ export class FrontRepoService {
 
                 // insertion point for redeeming ONE-MANY associations
                 // insertion point for slice of pointer field Rect.RectAnchoredRects redeeming
+                // to be removed
                 {
-                  let _rect = this.frontRepo.Rects.get(rectanchoredrect.Rect_RectAnchoredRectsDBID.Int64)
+                  let _id = rectanchoredrect.RectAnchoredRectPointersEncoding.Rect_RectAnchoredRectsDBID.Int64
+                  let _rect = this.frontRepo.Rects.get(_id)
                   if (_rect) {
                     if (_rect.RectAnchoredRects == undefined) {
                       _rect.RectAnchoredRects = new Array<RectAnchoredRectDB>()
                     }
                     _rect.RectAnchoredRects.push(rectanchoredrect)
-                    if (rectanchoredrect.Rect_RectAnchoredRects_reverse == undefined) {
-                      rectanchoredrect.Rect_RectAnchoredRects_reverse = _rect
+                    if (rectanchoredrect.RectAnchoredRectPointersEncoding.Rect_RectAnchoredRects_reverse == undefined) {
+                      rectanchoredrect.RectAnchoredRectPointersEncoding.Rect_RectAnchoredRects_reverse = _rect
                     }
                   }
                 }
@@ -1339,15 +1490,17 @@ export class FrontRepoService {
 
                 // insertion point for redeeming ONE-MANY associations
                 // insertion point for slice of pointer field Rect.RectAnchoredTexts redeeming
+                // to be removed
                 {
-                  let _rect = this.frontRepo.Rects.get(rectanchoredtext.Rect_RectAnchoredTextsDBID.Int64)
+                  let _id = rectanchoredtext.RectAnchoredTextPointersEncoding.Rect_RectAnchoredTextsDBID.Int64
+                  let _rect = this.frontRepo.Rects.get(_id)
                   if (_rect) {
                     if (_rect.RectAnchoredTexts == undefined) {
                       _rect.RectAnchoredTexts = new Array<RectAnchoredTextDB>()
                     }
                     _rect.RectAnchoredTexts.push(rectanchoredtext)
-                    if (rectanchoredtext.Rect_RectAnchoredTexts_reverse == undefined) {
-                      rectanchoredtext.Rect_RectAnchoredTexts_reverse = _rect
+                    if (rectanchoredtext.RectAnchoredTextPointersEncoding.Rect_RectAnchoredTexts_reverse == undefined) {
+                      rectanchoredtext.RectAnchoredTextPointersEncoding.Rect_RectAnchoredTexts_reverse = _rect
                     }
                   }
                 }
@@ -1358,14 +1511,14 @@ export class FrontRepoService {
                 // insertion point sub sub template for ONE-/ZERO-ONE associations pointers redeeming
                 // insertion point for pointer field Start redeeming
                 {
-                  let _rect = this.frontRepo.Rects.get(rectlinklink.StartID.Int64)
+                  let _rect = this.frontRepo.Rects.get(rectlinklink.RectLinkLinkPointersEncoding.StartID.Int64)
                   if (_rect) {
                     rectlinklink.Start = _rect
                   }
                 }
                 // insertion point for pointer field End redeeming
                 {
-                  let _link = this.frontRepo.Links.get(rectlinklink.EndID.Int64)
+                  let _link = this.frontRepo.Links.get(rectlinklink.RectLinkLinkPointersEncoding.EndID.Int64)
                   if (_link) {
                     rectlinklink.End = _link
                   }
@@ -1373,15 +1526,17 @@ export class FrontRepoService {
 
                 // insertion point for redeeming ONE-MANY associations
                 // insertion point for slice of pointer field Layer.RectLinkLinks redeeming
+                // to be removed
                 {
-                  let _layer = this.frontRepo.Layers.get(rectlinklink.Layer_RectLinkLinksDBID.Int64)
+                  let _id = rectlinklink.RectLinkLinkPointersEncoding.Layer_RectLinkLinksDBID.Int64
+                  let _layer = this.frontRepo.Layers.get(_id)
                   if (_layer) {
                     if (_layer.RectLinkLinks == undefined) {
                       _layer.RectLinkLinks = new Array<RectLinkLinkDB>()
                     }
                     _layer.RectLinkLinks.push(rectlinklink)
-                    if (rectlinklink.Layer_RectLinkLinks_reverse == undefined) {
-                      rectlinklink.Layer_RectLinkLinks_reverse = _layer
+                    if (rectlinklink.RectLinkLinkPointersEncoding.Layer_RectLinkLinks_reverse == undefined) {
+                      rectlinklink.RectLinkLinkPointersEncoding.Layer_RectLinkLinks_reverse = _layer
                     }
                   }
                 }
@@ -1392,14 +1547,14 @@ export class FrontRepoService {
                 // insertion point sub sub template for ONE-/ZERO-ONE associations pointers redeeming
                 // insertion point for pointer field StartRect redeeming
                 {
-                  let _rect = this.frontRepo.Rects.get(svg.StartRectID.Int64)
+                  let _rect = this.frontRepo.Rects.get(svg.SVGPointersEncoding.StartRectID.Int64)
                   if (_rect) {
                     svg.StartRect = _rect
                   }
                 }
                 // insertion point for pointer field EndRect redeeming
                 {
-                  let _rect = this.frontRepo.Rects.get(svg.EndRectID.Int64)
+                  let _rect = this.frontRepo.Rects.get(svg.SVGPointersEncoding.EndRectID.Int64)
                   if (_rect) {
                     svg.EndRect = _rect
                   }
@@ -1414,15 +1569,17 @@ export class FrontRepoService {
 
                 // insertion point for redeeming ONE-MANY associations
                 // insertion point for slice of pointer field Layer.Texts redeeming
+                // to be removed
                 {
-                  let _layer = this.frontRepo.Layers.get(text.Layer_TextsDBID.Int64)
+                  let _id = text.TextPointersEncoding.Layer_TextsDBID.Int64
+                  let _layer = this.frontRepo.Layers.get(_id)
                   if (_layer) {
                     if (_layer.Texts == undefined) {
                       _layer.Texts = new Array<TextDB>()
                     }
                     _layer.Texts.push(text)
-                    if (text.Layer_Texts_reverse == undefined) {
-                      text.Layer_Texts_reverse = _layer
+                    if (text.TextPointersEncoding.Layer_Texts_reverse == undefined) {
+                      text.TextPointersEncoding.Layer_Texts_reverse = _layer
                     }
                   }
                 }
@@ -1440,11 +1597,12 @@ export class FrontRepoService {
             circles.forEach(
               circle => {
                 // insertion point for sorting
+                // to be removed
                 circle.Animations?.sort((t1, t2) => {
-                  if (t1.Circle_AnimationsDBID_Index.Int64 > t2.Circle_AnimationsDBID_Index.Int64) {
+                  if (t1.AnimatePointersEncoding.Circle_AnimationsDBID_Index.Int64 > t2.AnimatePointersEncoding.Circle_AnimationsDBID_Index.Int64) {
                     return 1;
                   }
-                  if (t1.Circle_AnimationsDBID_Index.Int64 < t2.Circle_AnimationsDBID_Index.Int64) {
+                  if (t1.AnimatePointersEncoding.Circle_AnimationsDBID_Index.Int64 < t2.AnimatePointersEncoding.Circle_AnimationsDBID_Index.Int64) {
                     return -1;
                   }
                   return 0;
@@ -1455,11 +1613,12 @@ export class FrontRepoService {
             ellipses.forEach(
               ellipse => {
                 // insertion point for sorting
+                // to be removed
                 ellipse.Animates?.sort((t1, t2) => {
-                  if (t1.Ellipse_AnimatesDBID_Index.Int64 > t2.Ellipse_AnimatesDBID_Index.Int64) {
+                  if (t1.AnimatePointersEncoding.Ellipse_AnimatesDBID_Index.Int64 > t2.AnimatePointersEncoding.Ellipse_AnimatesDBID_Index.Int64) {
                     return 1;
                   }
-                  if (t1.Ellipse_AnimatesDBID_Index.Int64 < t2.Ellipse_AnimatesDBID_Index.Int64) {
+                  if (t1.AnimatePointersEncoding.Ellipse_AnimatesDBID_Index.Int64 < t2.AnimatePointersEncoding.Ellipse_AnimatesDBID_Index.Int64) {
                     return -1;
                   }
                   return 0;
@@ -1470,101 +1629,111 @@ export class FrontRepoService {
             layers.forEach(
               layer => {
                 // insertion point for sorting
+                // to be removed
                 layer.Rects?.sort((t1, t2) => {
-                  if (t1.Layer_RectsDBID_Index.Int64 > t2.Layer_RectsDBID_Index.Int64) {
+                  if (t1.RectPointersEncoding.Layer_RectsDBID_Index.Int64 > t2.RectPointersEncoding.Layer_RectsDBID_Index.Int64) {
                     return 1;
                   }
-                  if (t1.Layer_RectsDBID_Index.Int64 < t2.Layer_RectsDBID_Index.Int64) {
+                  if (t1.RectPointersEncoding.Layer_RectsDBID_Index.Int64 < t2.RectPointersEncoding.Layer_RectsDBID_Index.Int64) {
                     return -1;
                   }
                   return 0;
                 })
 
+                // to be removed
                 layer.Texts?.sort((t1, t2) => {
-                  if (t1.Layer_TextsDBID_Index.Int64 > t2.Layer_TextsDBID_Index.Int64) {
+                  if (t1.TextPointersEncoding.Layer_TextsDBID_Index.Int64 > t2.TextPointersEncoding.Layer_TextsDBID_Index.Int64) {
                     return 1;
                   }
-                  if (t1.Layer_TextsDBID_Index.Int64 < t2.Layer_TextsDBID_Index.Int64) {
+                  if (t1.TextPointersEncoding.Layer_TextsDBID_Index.Int64 < t2.TextPointersEncoding.Layer_TextsDBID_Index.Int64) {
                     return -1;
                   }
                   return 0;
                 })
 
+                // to be removed
                 layer.Circles?.sort((t1, t2) => {
-                  if (t1.Layer_CirclesDBID_Index.Int64 > t2.Layer_CirclesDBID_Index.Int64) {
+                  if (t1.CirclePointersEncoding.Layer_CirclesDBID_Index.Int64 > t2.CirclePointersEncoding.Layer_CirclesDBID_Index.Int64) {
                     return 1;
                   }
-                  if (t1.Layer_CirclesDBID_Index.Int64 < t2.Layer_CirclesDBID_Index.Int64) {
+                  if (t1.CirclePointersEncoding.Layer_CirclesDBID_Index.Int64 < t2.CirclePointersEncoding.Layer_CirclesDBID_Index.Int64) {
                     return -1;
                   }
                   return 0;
                 })
 
+                // to be removed
                 layer.Lines?.sort((t1, t2) => {
-                  if (t1.Layer_LinesDBID_Index.Int64 > t2.Layer_LinesDBID_Index.Int64) {
+                  if (t1.LinePointersEncoding.Layer_LinesDBID_Index.Int64 > t2.LinePointersEncoding.Layer_LinesDBID_Index.Int64) {
                     return 1;
                   }
-                  if (t1.Layer_LinesDBID_Index.Int64 < t2.Layer_LinesDBID_Index.Int64) {
+                  if (t1.LinePointersEncoding.Layer_LinesDBID_Index.Int64 < t2.LinePointersEncoding.Layer_LinesDBID_Index.Int64) {
                     return -1;
                   }
                   return 0;
                 })
 
+                // to be removed
                 layer.Ellipses?.sort((t1, t2) => {
-                  if (t1.Layer_EllipsesDBID_Index.Int64 > t2.Layer_EllipsesDBID_Index.Int64) {
+                  if (t1.EllipsePointersEncoding.Layer_EllipsesDBID_Index.Int64 > t2.EllipsePointersEncoding.Layer_EllipsesDBID_Index.Int64) {
                     return 1;
                   }
-                  if (t1.Layer_EllipsesDBID_Index.Int64 < t2.Layer_EllipsesDBID_Index.Int64) {
+                  if (t1.EllipsePointersEncoding.Layer_EllipsesDBID_Index.Int64 < t2.EllipsePointersEncoding.Layer_EllipsesDBID_Index.Int64) {
                     return -1;
                   }
                   return 0;
                 })
 
+                // to be removed
                 layer.Polylines?.sort((t1, t2) => {
-                  if (t1.Layer_PolylinesDBID_Index.Int64 > t2.Layer_PolylinesDBID_Index.Int64) {
+                  if (t1.PolylinePointersEncoding.Layer_PolylinesDBID_Index.Int64 > t2.PolylinePointersEncoding.Layer_PolylinesDBID_Index.Int64) {
                     return 1;
                   }
-                  if (t1.Layer_PolylinesDBID_Index.Int64 < t2.Layer_PolylinesDBID_Index.Int64) {
+                  if (t1.PolylinePointersEncoding.Layer_PolylinesDBID_Index.Int64 < t2.PolylinePointersEncoding.Layer_PolylinesDBID_Index.Int64) {
                     return -1;
                   }
                   return 0;
                 })
 
+                // to be removed
                 layer.Polygones?.sort((t1, t2) => {
-                  if (t1.Layer_PolygonesDBID_Index.Int64 > t2.Layer_PolygonesDBID_Index.Int64) {
+                  if (t1.PolygonePointersEncoding.Layer_PolygonesDBID_Index.Int64 > t2.PolygonePointersEncoding.Layer_PolygonesDBID_Index.Int64) {
                     return 1;
                   }
-                  if (t1.Layer_PolygonesDBID_Index.Int64 < t2.Layer_PolygonesDBID_Index.Int64) {
+                  if (t1.PolygonePointersEncoding.Layer_PolygonesDBID_Index.Int64 < t2.PolygonePointersEncoding.Layer_PolygonesDBID_Index.Int64) {
                     return -1;
                   }
                   return 0;
                 })
 
+                // to be removed
                 layer.Paths?.sort((t1, t2) => {
-                  if (t1.Layer_PathsDBID_Index.Int64 > t2.Layer_PathsDBID_Index.Int64) {
+                  if (t1.PathPointersEncoding.Layer_PathsDBID_Index.Int64 > t2.PathPointersEncoding.Layer_PathsDBID_Index.Int64) {
                     return 1;
                   }
-                  if (t1.Layer_PathsDBID_Index.Int64 < t2.Layer_PathsDBID_Index.Int64) {
+                  if (t1.PathPointersEncoding.Layer_PathsDBID_Index.Int64 < t2.PathPointersEncoding.Layer_PathsDBID_Index.Int64) {
                     return -1;
                   }
                   return 0;
                 })
 
+                // to be removed
                 layer.Links?.sort((t1, t2) => {
-                  if (t1.Layer_LinksDBID_Index.Int64 > t2.Layer_LinksDBID_Index.Int64) {
+                  if (t1.LinkPointersEncoding.Layer_LinksDBID_Index.Int64 > t2.LinkPointersEncoding.Layer_LinksDBID_Index.Int64) {
                     return 1;
                   }
-                  if (t1.Layer_LinksDBID_Index.Int64 < t2.Layer_LinksDBID_Index.Int64) {
+                  if (t1.LinkPointersEncoding.Layer_LinksDBID_Index.Int64 < t2.LinkPointersEncoding.Layer_LinksDBID_Index.Int64) {
                     return -1;
                   }
                   return 0;
                 })
 
+                // to be removed
                 layer.RectLinkLinks?.sort((t1, t2) => {
-                  if (t1.Layer_RectLinkLinksDBID_Index.Int64 > t2.Layer_RectLinkLinksDBID_Index.Int64) {
+                  if (t1.RectLinkLinkPointersEncoding.Layer_RectLinkLinksDBID_Index.Int64 > t2.RectLinkLinkPointersEncoding.Layer_RectLinkLinksDBID_Index.Int64) {
                     return 1;
                   }
-                  if (t1.Layer_RectLinkLinksDBID_Index.Int64 < t2.Layer_RectLinkLinksDBID_Index.Int64) {
+                  if (t1.RectLinkLinkPointersEncoding.Layer_RectLinkLinksDBID_Index.Int64 < t2.RectLinkLinkPointersEncoding.Layer_RectLinkLinksDBID_Index.Int64) {
                     return -1;
                   }
                   return 0;
@@ -1575,11 +1744,12 @@ export class FrontRepoService {
             lines.forEach(
               line => {
                 // insertion point for sorting
+                // to be removed
                 line.Animates?.sort((t1, t2) => {
-                  if (t1.Line_AnimatesDBID_Index.Int64 > t2.Line_AnimatesDBID_Index.Int64) {
+                  if (t1.AnimatePointersEncoding.Line_AnimatesDBID_Index.Int64 > t2.AnimatePointersEncoding.Line_AnimatesDBID_Index.Int64) {
                     return 1;
                   }
-                  if (t1.Line_AnimatesDBID_Index.Int64 < t2.Line_AnimatesDBID_Index.Int64) {
+                  if (t1.AnimatePointersEncoding.Line_AnimatesDBID_Index.Int64 < t2.AnimatePointersEncoding.Line_AnimatesDBID_Index.Int64) {
                     return -1;
                   }
                   return 0;
@@ -1590,31 +1760,34 @@ export class FrontRepoService {
             links.forEach(
               link => {
                 // insertion point for sorting
+                // to be removed
                 link.TextAtArrowEnd?.sort((t1, t2) => {
-                  if (t1.Link_TextAtArrowEndDBID_Index.Int64 > t2.Link_TextAtArrowEndDBID_Index.Int64) {
+                  if (t1.LinkAnchoredTextPointersEncoding.Link_TextAtArrowEndDBID_Index.Int64 > t2.LinkAnchoredTextPointersEncoding.Link_TextAtArrowEndDBID_Index.Int64) {
                     return 1;
                   }
-                  if (t1.Link_TextAtArrowEndDBID_Index.Int64 < t2.Link_TextAtArrowEndDBID_Index.Int64) {
+                  if (t1.LinkAnchoredTextPointersEncoding.Link_TextAtArrowEndDBID_Index.Int64 < t2.LinkAnchoredTextPointersEncoding.Link_TextAtArrowEndDBID_Index.Int64) {
                     return -1;
                   }
                   return 0;
                 })
 
+                // to be removed
                 link.TextAtArrowStart?.sort((t1, t2) => {
-                  if (t1.Link_TextAtArrowStartDBID_Index.Int64 > t2.Link_TextAtArrowStartDBID_Index.Int64) {
+                  if (t1.LinkAnchoredTextPointersEncoding.Link_TextAtArrowStartDBID_Index.Int64 > t2.LinkAnchoredTextPointersEncoding.Link_TextAtArrowStartDBID_Index.Int64) {
                     return 1;
                   }
-                  if (t1.Link_TextAtArrowStartDBID_Index.Int64 < t2.Link_TextAtArrowStartDBID_Index.Int64) {
+                  if (t1.LinkAnchoredTextPointersEncoding.Link_TextAtArrowStartDBID_Index.Int64 < t2.LinkAnchoredTextPointersEncoding.Link_TextAtArrowStartDBID_Index.Int64) {
                     return -1;
                   }
                   return 0;
                 })
 
+                // to be removed
                 link.ControlPoints?.sort((t1, t2) => {
-                  if (t1.Link_ControlPointsDBID_Index.Int64 > t2.Link_ControlPointsDBID_Index.Int64) {
+                  if (t1.PointPointersEncoding.Link_ControlPointsDBID_Index.Int64 > t2.PointPointersEncoding.Link_ControlPointsDBID_Index.Int64) {
                     return 1;
                   }
-                  if (t1.Link_ControlPointsDBID_Index.Int64 < t2.Link_ControlPointsDBID_Index.Int64) {
+                  if (t1.PointPointersEncoding.Link_ControlPointsDBID_Index.Int64 < t2.PointPointersEncoding.Link_ControlPointsDBID_Index.Int64) {
                     return -1;
                   }
                   return 0;
@@ -1625,11 +1798,12 @@ export class FrontRepoService {
             linkanchoredtexts.forEach(
               linkanchoredtext => {
                 // insertion point for sorting
+                // to be removed
                 linkanchoredtext.Animates?.sort((t1, t2) => {
-                  if (t1.LinkAnchoredText_AnimatesDBID_Index.Int64 > t2.LinkAnchoredText_AnimatesDBID_Index.Int64) {
+                  if (t1.AnimatePointersEncoding.LinkAnchoredText_AnimatesDBID_Index.Int64 > t2.AnimatePointersEncoding.LinkAnchoredText_AnimatesDBID_Index.Int64) {
                     return 1;
                   }
-                  if (t1.LinkAnchoredText_AnimatesDBID_Index.Int64 < t2.LinkAnchoredText_AnimatesDBID_Index.Int64) {
+                  if (t1.AnimatePointersEncoding.LinkAnchoredText_AnimatesDBID_Index.Int64 < t2.AnimatePointersEncoding.LinkAnchoredText_AnimatesDBID_Index.Int64) {
                     return -1;
                   }
                   return 0;
@@ -1640,11 +1814,12 @@ export class FrontRepoService {
             paths.forEach(
               path => {
                 // insertion point for sorting
+                // to be removed
                 path.Animates?.sort((t1, t2) => {
-                  if (t1.Path_AnimatesDBID_Index.Int64 > t2.Path_AnimatesDBID_Index.Int64) {
+                  if (t1.AnimatePointersEncoding.Path_AnimatesDBID_Index.Int64 > t2.AnimatePointersEncoding.Path_AnimatesDBID_Index.Int64) {
                     return 1;
                   }
-                  if (t1.Path_AnimatesDBID_Index.Int64 < t2.Path_AnimatesDBID_Index.Int64) {
+                  if (t1.AnimatePointersEncoding.Path_AnimatesDBID_Index.Int64 < t2.AnimatePointersEncoding.Path_AnimatesDBID_Index.Int64) {
                     return -1;
                   }
                   return 0;
@@ -1660,11 +1835,12 @@ export class FrontRepoService {
             polygones.forEach(
               polygone => {
                 // insertion point for sorting
+                // to be removed
                 polygone.Animates?.sort((t1, t2) => {
-                  if (t1.Polygone_AnimatesDBID_Index.Int64 > t2.Polygone_AnimatesDBID_Index.Int64) {
+                  if (t1.AnimatePointersEncoding.Polygone_AnimatesDBID_Index.Int64 > t2.AnimatePointersEncoding.Polygone_AnimatesDBID_Index.Int64) {
                     return 1;
                   }
-                  if (t1.Polygone_AnimatesDBID_Index.Int64 < t2.Polygone_AnimatesDBID_Index.Int64) {
+                  if (t1.AnimatePointersEncoding.Polygone_AnimatesDBID_Index.Int64 < t2.AnimatePointersEncoding.Polygone_AnimatesDBID_Index.Int64) {
                     return -1;
                   }
                   return 0;
@@ -1675,11 +1851,12 @@ export class FrontRepoService {
             polylines.forEach(
               polyline => {
                 // insertion point for sorting
+                // to be removed
                 polyline.Animates?.sort((t1, t2) => {
-                  if (t1.Polyline_AnimatesDBID_Index.Int64 > t2.Polyline_AnimatesDBID_Index.Int64) {
+                  if (t1.AnimatePointersEncoding.Polyline_AnimatesDBID_Index.Int64 > t2.AnimatePointersEncoding.Polyline_AnimatesDBID_Index.Int64) {
                     return 1;
                   }
-                  if (t1.Polyline_AnimatesDBID_Index.Int64 < t2.Polyline_AnimatesDBID_Index.Int64) {
+                  if (t1.AnimatePointersEncoding.Polyline_AnimatesDBID_Index.Int64 < t2.AnimatePointersEncoding.Polyline_AnimatesDBID_Index.Int64) {
                     return -1;
                   }
                   return 0;
@@ -1690,31 +1867,34 @@ export class FrontRepoService {
             rects.forEach(
               rect => {
                 // insertion point for sorting
+                // to be removed
                 rect.Animations?.sort((t1, t2) => {
-                  if (t1.Rect_AnimationsDBID_Index.Int64 > t2.Rect_AnimationsDBID_Index.Int64) {
+                  if (t1.AnimatePointersEncoding.Rect_AnimationsDBID_Index.Int64 > t2.AnimatePointersEncoding.Rect_AnimationsDBID_Index.Int64) {
                     return 1;
                   }
-                  if (t1.Rect_AnimationsDBID_Index.Int64 < t2.Rect_AnimationsDBID_Index.Int64) {
+                  if (t1.AnimatePointersEncoding.Rect_AnimationsDBID_Index.Int64 < t2.AnimatePointersEncoding.Rect_AnimationsDBID_Index.Int64) {
                     return -1;
                   }
                   return 0;
                 })
 
+                // to be removed
                 rect.RectAnchoredTexts?.sort((t1, t2) => {
-                  if (t1.Rect_RectAnchoredTextsDBID_Index.Int64 > t2.Rect_RectAnchoredTextsDBID_Index.Int64) {
+                  if (t1.RectAnchoredTextPointersEncoding.Rect_RectAnchoredTextsDBID_Index.Int64 > t2.RectAnchoredTextPointersEncoding.Rect_RectAnchoredTextsDBID_Index.Int64) {
                     return 1;
                   }
-                  if (t1.Rect_RectAnchoredTextsDBID_Index.Int64 < t2.Rect_RectAnchoredTextsDBID_Index.Int64) {
+                  if (t1.RectAnchoredTextPointersEncoding.Rect_RectAnchoredTextsDBID_Index.Int64 < t2.RectAnchoredTextPointersEncoding.Rect_RectAnchoredTextsDBID_Index.Int64) {
                     return -1;
                   }
                   return 0;
                 })
 
+                // to be removed
                 rect.RectAnchoredRects?.sort((t1, t2) => {
-                  if (t1.Rect_RectAnchoredRectsDBID_Index.Int64 > t2.Rect_RectAnchoredRectsDBID_Index.Int64) {
+                  if (t1.RectAnchoredRectPointersEncoding.Rect_RectAnchoredRectsDBID_Index.Int64 > t2.RectAnchoredRectPointersEncoding.Rect_RectAnchoredRectsDBID_Index.Int64) {
                     return 1;
                   }
-                  if (t1.Rect_RectAnchoredRectsDBID_Index.Int64 < t2.Rect_RectAnchoredRectsDBID_Index.Int64) {
+                  if (t1.RectAnchoredRectPointersEncoding.Rect_RectAnchoredRectsDBID_Index.Int64 < t2.RectAnchoredRectPointersEncoding.Rect_RectAnchoredRectsDBID_Index.Int64) {
                     return -1;
                   }
                   return 0;
@@ -1730,11 +1910,12 @@ export class FrontRepoService {
             rectanchoredtexts.forEach(
               rectanchoredtext => {
                 // insertion point for sorting
+                // to be removed
                 rectanchoredtext.Animates?.sort((t1, t2) => {
-                  if (t1.RectAnchoredText_AnimatesDBID_Index.Int64 > t2.RectAnchoredText_AnimatesDBID_Index.Int64) {
+                  if (t1.AnimatePointersEncoding.RectAnchoredText_AnimatesDBID_Index.Int64 > t2.AnimatePointersEncoding.RectAnchoredText_AnimatesDBID_Index.Int64) {
                     return 1;
                   }
-                  if (t1.RectAnchoredText_AnimatesDBID_Index.Int64 < t2.RectAnchoredText_AnimatesDBID_Index.Int64) {
+                  if (t1.AnimatePointersEncoding.RectAnchoredText_AnimatesDBID_Index.Int64 < t2.AnimatePointersEncoding.RectAnchoredText_AnimatesDBID_Index.Int64) {
                     return -1;
                   }
                   return 0;
@@ -1750,11 +1931,12 @@ export class FrontRepoService {
             svgs.forEach(
               svg => {
                 // insertion point for sorting
+                // to be removed
                 svg.Layers?.sort((t1, t2) => {
-                  if (t1.SVG_LayersDBID_Index.Int64 > t2.SVG_LayersDBID_Index.Int64) {
+                  if (t1.LayerPointersEncoding.SVG_LayersDBID_Index.Int64 > t2.LayerPointersEncoding.SVG_LayersDBID_Index.Int64) {
                     return 1;
                   }
-                  if (t1.SVG_LayersDBID_Index.Int64 < t2.SVG_LayersDBID_Index.Int64) {
+                  if (t1.LayerPointersEncoding.SVG_LayersDBID_Index.Int64 < t2.LayerPointersEncoding.SVG_LayersDBID_Index.Int64) {
                     return -1;
                   }
                   return 0;
@@ -1765,11 +1947,12 @@ export class FrontRepoService {
             texts.forEach(
               text => {
                 // insertion point for sorting
+                // to be removed
                 text.Animates?.sort((t1, t2) => {
-                  if (t1.Text_AnimatesDBID_Index.Int64 > t2.Text_AnimatesDBID_Index.Int64) {
+                  if (t1.AnimatePointersEncoding.Text_AnimatesDBID_Index.Int64 > t2.AnimatePointersEncoding.Text_AnimatesDBID_Index.Int64) {
                     return 1;
                   }
-                  if (t1.Text_AnimatesDBID_Index.Int64 < t2.Text_AnimatesDBID_Index.Int64) {
+                  if (t1.AnimatePointersEncoding.Text_AnimatesDBID_Index.Int64 < t2.AnimatePointersEncoding.Text_AnimatesDBID_Index.Int64) {
                     return -1;
                   }
                   return 0;
@@ -1816,132 +1999,152 @@ export class FrontRepoService {
 
                 // insertion point for redeeming ONE-MANY associations
                 // insertion point for slice of pointer field Circle.Animations redeeming
+                // to be removed
                 {
-                  let _circle = this.frontRepo.Circles.get(animate.Circle_AnimationsDBID.Int64)
+                  let _id = animate.AnimatePointersEncoding.Circle_AnimationsDBID.Int64
+                  let _circle = this.frontRepo.Circles.get(_id)
                   if (_circle) {
                     if (_circle.Animations == undefined) {
                       _circle.Animations = new Array<AnimateDB>()
                     }
                     _circle.Animations.push(animate)
-                    if (animate.Circle_Animations_reverse == undefined) {
-                      animate.Circle_Animations_reverse = _circle
+                    if (animate.AnimatePointersEncoding.Circle_Animations_reverse == undefined) {
+                      animate.AnimatePointersEncoding.Circle_Animations_reverse = _circle
                     }
                   }
                 }
                 // insertion point for slice of pointer field Ellipse.Animates redeeming
+                // to be removed
                 {
-                  let _ellipse = this.frontRepo.Ellipses.get(animate.Ellipse_AnimatesDBID.Int64)
+                  let _id = animate.AnimatePointersEncoding.Ellipse_AnimatesDBID.Int64
+                  let _ellipse = this.frontRepo.Ellipses.get(_id)
                   if (_ellipse) {
                     if (_ellipse.Animates == undefined) {
                       _ellipse.Animates = new Array<AnimateDB>()
                     }
                     _ellipse.Animates.push(animate)
-                    if (animate.Ellipse_Animates_reverse == undefined) {
-                      animate.Ellipse_Animates_reverse = _ellipse
+                    if (animate.AnimatePointersEncoding.Ellipse_Animates_reverse == undefined) {
+                      animate.AnimatePointersEncoding.Ellipse_Animates_reverse = _ellipse
                     }
                   }
                 }
                 // insertion point for slice of pointer field Line.Animates redeeming
+                // to be removed
                 {
-                  let _line = this.frontRepo.Lines.get(animate.Line_AnimatesDBID.Int64)
+                  let _id = animate.AnimatePointersEncoding.Line_AnimatesDBID.Int64
+                  let _line = this.frontRepo.Lines.get(_id)
                   if (_line) {
                     if (_line.Animates == undefined) {
                       _line.Animates = new Array<AnimateDB>()
                     }
                     _line.Animates.push(animate)
-                    if (animate.Line_Animates_reverse == undefined) {
-                      animate.Line_Animates_reverse = _line
+                    if (animate.AnimatePointersEncoding.Line_Animates_reverse == undefined) {
+                      animate.AnimatePointersEncoding.Line_Animates_reverse = _line
                     }
                   }
                 }
                 // insertion point for slice of pointer field LinkAnchoredText.Animates redeeming
+                // to be removed
                 {
-                  let _linkanchoredtext = this.frontRepo.LinkAnchoredTexts.get(animate.LinkAnchoredText_AnimatesDBID.Int64)
+                  let _id = animate.AnimatePointersEncoding.LinkAnchoredText_AnimatesDBID.Int64
+                  let _linkanchoredtext = this.frontRepo.LinkAnchoredTexts.get(_id)
                   if (_linkanchoredtext) {
                     if (_linkanchoredtext.Animates == undefined) {
                       _linkanchoredtext.Animates = new Array<AnimateDB>()
                     }
                     _linkanchoredtext.Animates.push(animate)
-                    if (animate.LinkAnchoredText_Animates_reverse == undefined) {
-                      animate.LinkAnchoredText_Animates_reverse = _linkanchoredtext
+                    if (animate.AnimatePointersEncoding.LinkAnchoredText_Animates_reverse == undefined) {
+                      animate.AnimatePointersEncoding.LinkAnchoredText_Animates_reverse = _linkanchoredtext
                     }
                   }
                 }
                 // insertion point for slice of pointer field Path.Animates redeeming
+                // to be removed
                 {
-                  let _path = this.frontRepo.Paths.get(animate.Path_AnimatesDBID.Int64)
+                  let _id = animate.AnimatePointersEncoding.Path_AnimatesDBID.Int64
+                  let _path = this.frontRepo.Paths.get(_id)
                   if (_path) {
                     if (_path.Animates == undefined) {
                       _path.Animates = new Array<AnimateDB>()
                     }
                     _path.Animates.push(animate)
-                    if (animate.Path_Animates_reverse == undefined) {
-                      animate.Path_Animates_reverse = _path
+                    if (animate.AnimatePointersEncoding.Path_Animates_reverse == undefined) {
+                      animate.AnimatePointersEncoding.Path_Animates_reverse = _path
                     }
                   }
                 }
                 // insertion point for slice of pointer field Polygone.Animates redeeming
+                // to be removed
                 {
-                  let _polygone = this.frontRepo.Polygones.get(animate.Polygone_AnimatesDBID.Int64)
+                  let _id = animate.AnimatePointersEncoding.Polygone_AnimatesDBID.Int64
+                  let _polygone = this.frontRepo.Polygones.get(_id)
                   if (_polygone) {
                     if (_polygone.Animates == undefined) {
                       _polygone.Animates = new Array<AnimateDB>()
                     }
                     _polygone.Animates.push(animate)
-                    if (animate.Polygone_Animates_reverse == undefined) {
-                      animate.Polygone_Animates_reverse = _polygone
+                    if (animate.AnimatePointersEncoding.Polygone_Animates_reverse == undefined) {
+                      animate.AnimatePointersEncoding.Polygone_Animates_reverse = _polygone
                     }
                   }
                 }
                 // insertion point for slice of pointer field Polyline.Animates redeeming
+                // to be removed
                 {
-                  let _polyline = this.frontRepo.Polylines.get(animate.Polyline_AnimatesDBID.Int64)
+                  let _id = animate.AnimatePointersEncoding.Polyline_AnimatesDBID.Int64
+                  let _polyline = this.frontRepo.Polylines.get(_id)
                   if (_polyline) {
                     if (_polyline.Animates == undefined) {
                       _polyline.Animates = new Array<AnimateDB>()
                     }
                     _polyline.Animates.push(animate)
-                    if (animate.Polyline_Animates_reverse == undefined) {
-                      animate.Polyline_Animates_reverse = _polyline
+                    if (animate.AnimatePointersEncoding.Polyline_Animates_reverse == undefined) {
+                      animate.AnimatePointersEncoding.Polyline_Animates_reverse = _polyline
                     }
                   }
                 }
                 // insertion point for slice of pointer field Rect.Animations redeeming
+                // to be removed
                 {
-                  let _rect = this.frontRepo.Rects.get(animate.Rect_AnimationsDBID.Int64)
+                  let _id = animate.AnimatePointersEncoding.Rect_AnimationsDBID.Int64
+                  let _rect = this.frontRepo.Rects.get(_id)
                   if (_rect) {
                     if (_rect.Animations == undefined) {
                       _rect.Animations = new Array<AnimateDB>()
                     }
                     _rect.Animations.push(animate)
-                    if (animate.Rect_Animations_reverse == undefined) {
-                      animate.Rect_Animations_reverse = _rect
+                    if (animate.AnimatePointersEncoding.Rect_Animations_reverse == undefined) {
+                      animate.AnimatePointersEncoding.Rect_Animations_reverse = _rect
                     }
                   }
                 }
                 // insertion point for slice of pointer field RectAnchoredText.Animates redeeming
+                // to be removed
                 {
-                  let _rectanchoredtext = this.frontRepo.RectAnchoredTexts.get(animate.RectAnchoredText_AnimatesDBID.Int64)
+                  let _id = animate.AnimatePointersEncoding.RectAnchoredText_AnimatesDBID.Int64
+                  let _rectanchoredtext = this.frontRepo.RectAnchoredTexts.get(_id)
                   if (_rectanchoredtext) {
                     if (_rectanchoredtext.Animates == undefined) {
                       _rectanchoredtext.Animates = new Array<AnimateDB>()
                     }
                     _rectanchoredtext.Animates.push(animate)
-                    if (animate.RectAnchoredText_Animates_reverse == undefined) {
-                      animate.RectAnchoredText_Animates_reverse = _rectanchoredtext
+                    if (animate.AnimatePointersEncoding.RectAnchoredText_Animates_reverse == undefined) {
+                      animate.AnimatePointersEncoding.RectAnchoredText_Animates_reverse = _rectanchoredtext
                     }
                   }
                 }
                 // insertion point for slice of pointer field Text.Animates redeeming
+                // to be removed
                 {
-                  let _text = this.frontRepo.Texts.get(animate.Text_AnimatesDBID.Int64)
+                  let _id = animate.AnimatePointersEncoding.Text_AnimatesDBID.Int64
+                  let _text = this.frontRepo.Texts.get(_id)
                   if (_text) {
                     if (_text.Animates == undefined) {
                       _text.Animates = new Array<AnimateDB>()
                     }
                     _text.Animates.push(animate)
-                    if (animate.Text_Animates_reverse == undefined) {
-                      animate.Text_Animates_reverse = _text
+                    if (animate.AnimatePointersEncoding.Text_Animates_reverse == undefined) {
+                      animate.AnimatePointersEncoding.Text_Animates_reverse = _text
                     }
                   }
                 }
@@ -1997,15 +2200,17 @@ export class FrontRepoService {
 
                 // insertion point for redeeming ONE-MANY associations
                 // insertion point for slice of pointer field Layer.Circles redeeming
+                // to be removed
                 {
-                  let _layer = this.frontRepo.Layers.get(circle.Layer_CirclesDBID.Int64)
+                  let _id = circle.CirclePointersEncoding.Layer_CirclesDBID.Int64
+                  let _layer = this.frontRepo.Layers.get(_id)
                   if (_layer) {
                     if (_layer.Circles == undefined) {
                       _layer.Circles = new Array<CircleDB>()
                     }
                     _layer.Circles.push(circle)
-                    if (circle.Layer_Circles_reverse == undefined) {
-                      circle.Layer_Circles_reverse = _layer
+                    if (circle.CirclePointersEncoding.Layer_Circles_reverse == undefined) {
+                      circle.CirclePointersEncoding.Layer_Circles_reverse = _layer
                     }
                   }
                 }
@@ -2061,15 +2266,17 @@ export class FrontRepoService {
 
                 // insertion point for redeeming ONE-MANY associations
                 // insertion point for slice of pointer field Layer.Ellipses redeeming
+                // to be removed
                 {
-                  let _layer = this.frontRepo.Layers.get(ellipse.Layer_EllipsesDBID.Int64)
+                  let _id = ellipse.EllipsePointersEncoding.Layer_EllipsesDBID.Int64
+                  let _layer = this.frontRepo.Layers.get(_id)
                   if (_layer) {
                     if (_layer.Ellipses == undefined) {
                       _layer.Ellipses = new Array<EllipseDB>()
                     }
                     _layer.Ellipses.push(ellipse)
-                    if (ellipse.Layer_Ellipses_reverse == undefined) {
-                      ellipse.Layer_Ellipses_reverse = _layer
+                    if (ellipse.EllipsePointersEncoding.Layer_Ellipses_reverse == undefined) {
+                      ellipse.EllipsePointersEncoding.Layer_Ellipses_reverse = _layer
                     }
                   }
                 }
@@ -2125,15 +2332,17 @@ export class FrontRepoService {
 
                 // insertion point for redeeming ONE-MANY associations
                 // insertion point for slice of pointer field SVG.Layers redeeming
+                // to be removed
                 {
-                  let _svg = this.frontRepo.SVGs.get(layer.SVG_LayersDBID.Int64)
+                  let _id = layer.LayerPointersEncoding.SVG_LayersDBID.Int64
+                  let _svg = this.frontRepo.SVGs.get(_id)
                   if (_svg) {
                     if (_svg.Layers == undefined) {
                       _svg.Layers = new Array<LayerDB>()
                     }
                     _svg.Layers.push(layer)
-                    if (layer.SVG_Layers_reverse == undefined) {
-                      layer.SVG_Layers_reverse = _svg
+                    if (layer.LayerPointersEncoding.SVG_Layers_reverse == undefined) {
+                      layer.LayerPointersEncoding.SVG_Layers_reverse = _svg
                     }
                   }
                 }
@@ -2189,15 +2398,17 @@ export class FrontRepoService {
 
                 // insertion point for redeeming ONE-MANY associations
                 // insertion point for slice of pointer field Layer.Lines redeeming
+                // to be removed
                 {
-                  let _layer = this.frontRepo.Layers.get(line.Layer_LinesDBID.Int64)
+                  let _id = line.LinePointersEncoding.Layer_LinesDBID.Int64
+                  let _layer = this.frontRepo.Layers.get(_id)
                   if (_layer) {
                     if (_layer.Lines == undefined) {
                       _layer.Lines = new Array<LineDB>()
                     }
                     _layer.Lines.push(line)
-                    if (line.Layer_Lines_reverse == undefined) {
-                      line.Layer_Lines_reverse = _layer
+                    if (line.LinePointersEncoding.Layer_Lines_reverse == undefined) {
+                      line.LinePointersEncoding.Layer_Lines_reverse = _layer
                     }
                   }
                 }
@@ -2252,14 +2463,14 @@ export class FrontRepoService {
                 // insertion point for redeeming ONE/ZERO-ONE associations
                 // insertion point for pointer field Start redeeming
                 {
-                  let _rect = this.frontRepo.Rects.get(link.StartID.Int64)
+                  let _rect = this.frontRepo.Rects.get(link.LinkPointersEncoding.StartID.Int64)
                   if (_rect) {
                     link.Start = _rect
                   }
                 }
                 // insertion point for pointer field End redeeming
                 {
-                  let _rect = this.frontRepo.Rects.get(link.EndID.Int64)
+                  let _rect = this.frontRepo.Rects.get(link.LinkPointersEncoding.EndID.Int64)
                   if (_rect) {
                     link.End = _rect
                   }
@@ -2267,15 +2478,17 @@ export class FrontRepoService {
 
                 // insertion point for redeeming ONE-MANY associations
                 // insertion point for slice of pointer field Layer.Links redeeming
+                // to be removed
                 {
-                  let _layer = this.frontRepo.Layers.get(link.Layer_LinksDBID.Int64)
+                  let _id = link.LinkPointersEncoding.Layer_LinksDBID.Int64
+                  let _layer = this.frontRepo.Layers.get(_id)
                   if (_layer) {
                     if (_layer.Links == undefined) {
                       _layer.Links = new Array<LinkDB>()
                     }
                     _layer.Links.push(link)
-                    if (link.Layer_Links_reverse == undefined) {
-                      link.Layer_Links_reverse = _layer
+                    if (link.LinkPointersEncoding.Layer_Links_reverse == undefined) {
+                      link.LinkPointersEncoding.Layer_Links_reverse = _layer
                     }
                   }
                 }
@@ -2331,28 +2544,32 @@ export class FrontRepoService {
 
                 // insertion point for redeeming ONE-MANY associations
                 // insertion point for slice of pointer field Link.TextAtArrowEnd redeeming
+                // to be removed
                 {
-                  let _link = this.frontRepo.Links.get(linkanchoredtext.Link_TextAtArrowEndDBID.Int64)
+                  let _id = linkanchoredtext.LinkAnchoredTextPointersEncoding.Link_TextAtArrowEndDBID.Int64
+                  let _link = this.frontRepo.Links.get(_id)
                   if (_link) {
                     if (_link.TextAtArrowEnd == undefined) {
                       _link.TextAtArrowEnd = new Array<LinkAnchoredTextDB>()
                     }
                     _link.TextAtArrowEnd.push(linkanchoredtext)
-                    if (linkanchoredtext.Link_TextAtArrowEnd_reverse == undefined) {
-                      linkanchoredtext.Link_TextAtArrowEnd_reverse = _link
+                    if (linkanchoredtext.LinkAnchoredTextPointersEncoding.Link_TextAtArrowEnd_reverse == undefined) {
+                      linkanchoredtext.LinkAnchoredTextPointersEncoding.Link_TextAtArrowEnd_reverse = _link
                     }
                   }
                 }
                 // insertion point for slice of pointer field Link.TextAtArrowStart redeeming
+                // to be removed
                 {
-                  let _link = this.frontRepo.Links.get(linkanchoredtext.Link_TextAtArrowStartDBID.Int64)
+                  let _id = linkanchoredtext.LinkAnchoredTextPointersEncoding.Link_TextAtArrowStartDBID.Int64
+                  let _link = this.frontRepo.Links.get(_id)
                   if (_link) {
                     if (_link.TextAtArrowStart == undefined) {
                       _link.TextAtArrowStart = new Array<LinkAnchoredTextDB>()
                     }
                     _link.TextAtArrowStart.push(linkanchoredtext)
-                    if (linkanchoredtext.Link_TextAtArrowStart_reverse == undefined) {
-                      linkanchoredtext.Link_TextAtArrowStart_reverse = _link
+                    if (linkanchoredtext.LinkAnchoredTextPointersEncoding.Link_TextAtArrowStart_reverse == undefined) {
+                      linkanchoredtext.LinkAnchoredTextPointersEncoding.Link_TextAtArrowStart_reverse = _link
                     }
                   }
                 }
@@ -2408,15 +2625,17 @@ export class FrontRepoService {
 
                 // insertion point for redeeming ONE-MANY associations
                 // insertion point for slice of pointer field Layer.Paths redeeming
+                // to be removed
                 {
-                  let _layer = this.frontRepo.Layers.get(path.Layer_PathsDBID.Int64)
+                  let _id = path.PathPointersEncoding.Layer_PathsDBID.Int64
+                  let _layer = this.frontRepo.Layers.get(_id)
                   if (_layer) {
                     if (_layer.Paths == undefined) {
                       _layer.Paths = new Array<PathDB>()
                     }
                     _layer.Paths.push(path)
-                    if (path.Layer_Paths_reverse == undefined) {
-                      path.Layer_Paths_reverse = _layer
+                    if (path.PathPointersEncoding.Layer_Paths_reverse == undefined) {
+                      path.PathPointersEncoding.Layer_Paths_reverse = _layer
                     }
                   }
                 }
@@ -2472,15 +2691,17 @@ export class FrontRepoService {
 
                 // insertion point for redeeming ONE-MANY associations
                 // insertion point for slice of pointer field Link.ControlPoints redeeming
+                // to be removed
                 {
-                  let _link = this.frontRepo.Links.get(point.Link_ControlPointsDBID.Int64)
+                  let _id = point.PointPointersEncoding.Link_ControlPointsDBID.Int64
+                  let _link = this.frontRepo.Links.get(_id)
                   if (_link) {
                     if (_link.ControlPoints == undefined) {
                       _link.ControlPoints = new Array<PointDB>()
                     }
                     _link.ControlPoints.push(point)
-                    if (point.Link_ControlPoints_reverse == undefined) {
-                      point.Link_ControlPoints_reverse = _link
+                    if (point.PointPointersEncoding.Link_ControlPoints_reverse == undefined) {
+                      point.PointPointersEncoding.Link_ControlPoints_reverse = _link
                     }
                   }
                 }
@@ -2536,15 +2757,17 @@ export class FrontRepoService {
 
                 // insertion point for redeeming ONE-MANY associations
                 // insertion point for slice of pointer field Layer.Polygones redeeming
+                // to be removed
                 {
-                  let _layer = this.frontRepo.Layers.get(polygone.Layer_PolygonesDBID.Int64)
+                  let _id = polygone.PolygonePointersEncoding.Layer_PolygonesDBID.Int64
+                  let _layer = this.frontRepo.Layers.get(_id)
                   if (_layer) {
                     if (_layer.Polygones == undefined) {
                       _layer.Polygones = new Array<PolygoneDB>()
                     }
                     _layer.Polygones.push(polygone)
-                    if (polygone.Layer_Polygones_reverse == undefined) {
-                      polygone.Layer_Polygones_reverse = _layer
+                    if (polygone.PolygonePointersEncoding.Layer_Polygones_reverse == undefined) {
+                      polygone.PolygonePointersEncoding.Layer_Polygones_reverse = _layer
                     }
                   }
                 }
@@ -2600,15 +2823,17 @@ export class FrontRepoService {
 
                 // insertion point for redeeming ONE-MANY associations
                 // insertion point for slice of pointer field Layer.Polylines redeeming
+                // to be removed
                 {
-                  let _layer = this.frontRepo.Layers.get(polyline.Layer_PolylinesDBID.Int64)
+                  let _id = polyline.PolylinePointersEncoding.Layer_PolylinesDBID.Int64
+                  let _layer = this.frontRepo.Layers.get(_id)
                   if (_layer) {
                     if (_layer.Polylines == undefined) {
                       _layer.Polylines = new Array<PolylineDB>()
                     }
                     _layer.Polylines.push(polyline)
-                    if (polyline.Layer_Polylines_reverse == undefined) {
-                      polyline.Layer_Polylines_reverse = _layer
+                    if (polyline.PolylinePointersEncoding.Layer_Polylines_reverse == undefined) {
+                      polyline.PolylinePointersEncoding.Layer_Polylines_reverse = _layer
                     }
                   }
                 }
@@ -2664,15 +2889,17 @@ export class FrontRepoService {
 
                 // insertion point for redeeming ONE-MANY associations
                 // insertion point for slice of pointer field Layer.Rects redeeming
+                // to be removed
                 {
-                  let _layer = this.frontRepo.Layers.get(rect.Layer_RectsDBID.Int64)
+                  let _id = rect.RectPointersEncoding.Layer_RectsDBID.Int64
+                  let _layer = this.frontRepo.Layers.get(_id)
                   if (_layer) {
                     if (_layer.Rects == undefined) {
                       _layer.Rects = new Array<RectDB>()
                     }
                     _layer.Rects.push(rect)
-                    if (rect.Layer_Rects_reverse == undefined) {
-                      rect.Layer_Rects_reverse = _layer
+                    if (rect.RectPointersEncoding.Layer_Rects_reverse == undefined) {
+                      rect.RectPointersEncoding.Layer_Rects_reverse = _layer
                     }
                   }
                 }
@@ -2728,15 +2955,17 @@ export class FrontRepoService {
 
                 // insertion point for redeeming ONE-MANY associations
                 // insertion point for slice of pointer field Rect.RectAnchoredRects redeeming
+                // to be removed
                 {
-                  let _rect = this.frontRepo.Rects.get(rectanchoredrect.Rect_RectAnchoredRectsDBID.Int64)
+                  let _id = rectanchoredrect.RectAnchoredRectPointersEncoding.Rect_RectAnchoredRectsDBID.Int64
+                  let _rect = this.frontRepo.Rects.get(_id)
                   if (_rect) {
                     if (_rect.RectAnchoredRects == undefined) {
                       _rect.RectAnchoredRects = new Array<RectAnchoredRectDB>()
                     }
                     _rect.RectAnchoredRects.push(rectanchoredrect)
-                    if (rectanchoredrect.Rect_RectAnchoredRects_reverse == undefined) {
-                      rectanchoredrect.Rect_RectAnchoredRects_reverse = _rect
+                    if (rectanchoredrect.RectAnchoredRectPointersEncoding.Rect_RectAnchoredRects_reverse == undefined) {
+                      rectanchoredrect.RectAnchoredRectPointersEncoding.Rect_RectAnchoredRects_reverse = _rect
                     }
                   }
                 }
@@ -2792,15 +3021,17 @@ export class FrontRepoService {
 
                 // insertion point for redeeming ONE-MANY associations
                 // insertion point for slice of pointer field Rect.RectAnchoredTexts redeeming
+                // to be removed
                 {
-                  let _rect = this.frontRepo.Rects.get(rectanchoredtext.Rect_RectAnchoredTextsDBID.Int64)
+                  let _id = rectanchoredtext.RectAnchoredTextPointersEncoding.Rect_RectAnchoredTextsDBID.Int64
+                  let _rect = this.frontRepo.Rects.get(_id)
                   if (_rect) {
                     if (_rect.RectAnchoredTexts == undefined) {
                       _rect.RectAnchoredTexts = new Array<RectAnchoredTextDB>()
                     }
                     _rect.RectAnchoredTexts.push(rectanchoredtext)
-                    if (rectanchoredtext.Rect_RectAnchoredTexts_reverse == undefined) {
-                      rectanchoredtext.Rect_RectAnchoredTexts_reverse = _rect
+                    if (rectanchoredtext.RectAnchoredTextPointersEncoding.Rect_RectAnchoredTexts_reverse == undefined) {
+                      rectanchoredtext.RectAnchoredTextPointersEncoding.Rect_RectAnchoredTexts_reverse = _rect
                     }
                   }
                 }
@@ -2855,14 +3086,14 @@ export class FrontRepoService {
                 // insertion point for redeeming ONE/ZERO-ONE associations
                 // insertion point for pointer field Start redeeming
                 {
-                  let _rect = this.frontRepo.Rects.get(rectlinklink.StartID.Int64)
+                  let _rect = this.frontRepo.Rects.get(rectlinklink.RectLinkLinkPointersEncoding.StartID.Int64)
                   if (_rect) {
                     rectlinklink.Start = _rect
                   }
                 }
                 // insertion point for pointer field End redeeming
                 {
-                  let _link = this.frontRepo.Links.get(rectlinklink.EndID.Int64)
+                  let _link = this.frontRepo.Links.get(rectlinklink.RectLinkLinkPointersEncoding.EndID.Int64)
                   if (_link) {
                     rectlinklink.End = _link
                   }
@@ -2870,15 +3101,17 @@ export class FrontRepoService {
 
                 // insertion point for redeeming ONE-MANY associations
                 // insertion point for slice of pointer field Layer.RectLinkLinks redeeming
+                // to be removed
                 {
-                  let _layer = this.frontRepo.Layers.get(rectlinklink.Layer_RectLinkLinksDBID.Int64)
+                  let _id = rectlinklink.RectLinkLinkPointersEncoding.Layer_RectLinkLinksDBID.Int64
+                  let _layer = this.frontRepo.Layers.get(_id)
                   if (_layer) {
                     if (_layer.RectLinkLinks == undefined) {
                       _layer.RectLinkLinks = new Array<RectLinkLinkDB>()
                     }
                     _layer.RectLinkLinks.push(rectlinklink)
-                    if (rectlinklink.Layer_RectLinkLinks_reverse == undefined) {
-                      rectlinklink.Layer_RectLinkLinks_reverse = _layer
+                    if (rectlinklink.RectLinkLinkPointersEncoding.Layer_RectLinkLinks_reverse == undefined) {
+                      rectlinklink.RectLinkLinkPointersEncoding.Layer_RectLinkLinks_reverse = _layer
                     }
                   }
                 }
@@ -2933,14 +3166,14 @@ export class FrontRepoService {
                 // insertion point for redeeming ONE/ZERO-ONE associations
                 // insertion point for pointer field StartRect redeeming
                 {
-                  let _rect = this.frontRepo.Rects.get(svg.StartRectID.Int64)
+                  let _rect = this.frontRepo.Rects.get(svg.SVGPointersEncoding.StartRectID.Int64)
                   if (_rect) {
                     svg.StartRect = _rect
                   }
                 }
                 // insertion point for pointer field EndRect redeeming
                 {
-                  let _rect = this.frontRepo.Rects.get(svg.EndRectID.Int64)
+                  let _rect = this.frontRepo.Rects.get(svg.SVGPointersEncoding.EndRectID.Int64)
                   if (_rect) {
                     svg.EndRect = _rect
                   }
@@ -2999,15 +3232,17 @@ export class FrontRepoService {
 
                 // insertion point for redeeming ONE-MANY associations
                 // insertion point for slice of pointer field Layer.Texts redeeming
+                // to be removed
                 {
-                  let _layer = this.frontRepo.Layers.get(text.Layer_TextsDBID.Int64)
+                  let _id = text.TextPointersEncoding.Layer_TextsDBID.Int64
+                  let _layer = this.frontRepo.Layers.get(_id)
                   if (_layer) {
                     if (_layer.Texts == undefined) {
                       _layer.Texts = new Array<TextDB>()
                     }
                     _layer.Texts.push(text)
-                    if (text.Layer_Texts_reverse == undefined) {
-                      text.Layer_Texts_reverse = _layer
+                    if (text.TextPointersEncoding.Layer_Texts_reverse == undefined) {
+                      text.TextPointersEncoding.Layer_Texts_reverse = _layer
                     }
                   }
                 }

@@ -38,7 +38,7 @@ type GongEnumValueEntryAPI struct {
 	models.GongEnumValueEntry_WOP
 
 	// encoding of pointers
-	GongEnumValueEntryPointersEncoding
+	GongEnumValueEntryPointersEncoding GongEnumValueEntryPointersEncoding
 }
 
 // GongEnumValueEntryPointersEncoding encodes pointers to Struct and
@@ -47,9 +47,11 @@ type GongEnumValueEntryPointersEncoding struct {
 	// insertion for pointer fields encoding declaration
 
 	// Implementation of a reverse ID for field GongEnumShape{}.GongEnumValueEntrys []*GongEnumValueEntry
+	// (to be removed)
 	GongEnumShape_GongEnumValueEntrysDBID sql.NullInt64
 
 	// implementation of the index of the withing the slice
+	// (to be removed)
 	GongEnumShape_GongEnumValueEntrysDBID_Index sql.NullInt64
 }
 

@@ -38,7 +38,7 @@ type VerticeAPI struct {
 	models.Vertice_WOP
 
 	// encoding of pointers
-	VerticePointersEncoding
+	VerticePointersEncoding VerticePointersEncoding
 }
 
 // VerticePointersEncoding encodes pointers to Struct and

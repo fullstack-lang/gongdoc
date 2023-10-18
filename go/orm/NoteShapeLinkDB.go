@@ -38,7 +38,7 @@ type NoteShapeLinkAPI struct {
 	models.NoteShapeLink_WOP
 
 	// encoding of pointers
-	NoteShapeLinkPointersEncoding
+	NoteShapeLinkPointersEncoding NoteShapeLinkPointersEncoding
 }
 
 // NoteShapeLinkPointersEncoding encodes pointers to Struct and
@@ -47,9 +47,11 @@ type NoteShapeLinkPointersEncoding struct {
 	// insertion for pointer fields encoding declaration
 
 	// Implementation of a reverse ID for field NoteShape{}.NoteShapeLinks []*NoteShapeLink
+	// (to be removed)
 	NoteShape_NoteShapeLinksDBID sql.NullInt64
 
 	// implementation of the index of the withing the slice
+	// (to be removed)
 	NoteShape_NoteShapeLinksDBID_Index sql.NullInt64
 }
 

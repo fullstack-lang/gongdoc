@@ -38,7 +38,7 @@ type ClassdiagramAPI struct {
 	models.Classdiagram_WOP
 
 	// encoding of pointers
-	ClassdiagramPointersEncoding
+	ClassdiagramPointersEncoding ClassdiagramPointersEncoding
 }
 
 // ClassdiagramPointersEncoding encodes pointers to Struct and
@@ -47,18 +47,20 @@ type ClassdiagramPointersEncoding struct {
 	// insertion for pointer fields encoding declaration
 
 	// field GongStructShapes is a slice of pointers to another Struct (optional or 0..1)
-	GongStructShapes IntSlice`gorm:"type:TEXT"`
+	GongStructShapes IntSlice `gorm:"type:TEXT"`
 
 	// field GongEnumShapes is a slice of pointers to another Struct (optional or 0..1)
-	GongEnumShapes IntSlice`gorm:"type:TEXT"`
+	GongEnumShapes IntSlice `gorm:"type:TEXT"`
 
 	// field NoteShapes is a slice of pointers to another Struct (optional or 0..1)
-	NoteShapes IntSlice`gorm:"type:TEXT"`
+	NoteShapes IntSlice `gorm:"type:TEXT"`
 
 	// Implementation of a reverse ID for field DiagramPackage{}.Classdiagrams []*Classdiagram
+	// (to be removed)
 	DiagramPackage_ClassdiagramsDBID sql.NullInt64
 
 	// implementation of the index of the withing the slice
+	// (to be removed)
 	DiagramPackage_ClassdiagramsDBID_Index sql.NullInt64
 }
 
@@ -240,6 +242,7 @@ func (backRepoClassdiagram *BackRepoClassdiagramStruct) CommitPhaseTwoInstance(b
 				backRepo.BackRepoGongStructShape.GetGongStructShapeDBFromGongStructShapePtr(gongstructshapeAssocEnd)
 
 			// encode reverse pointer in the association end back repo instance
+			// (to be removed)
 			gongstructshapeAssocEnd_DB.Classdiagram_GongStructShapesDBID.Int64 = int64(classdiagramDB.ID)
 			gongstructshapeAssocEnd_DB.Classdiagram_GongStructShapesDBID.Valid = true
 			gongstructshapeAssocEnd_DB.Classdiagram_GongStructShapesDBID_Index.Int64 = int64(idx)
@@ -269,6 +272,7 @@ func (backRepoClassdiagram *BackRepoClassdiagramStruct) CommitPhaseTwoInstance(b
 				backRepo.BackRepoGongEnumShape.GetGongEnumShapeDBFromGongEnumShapePtr(gongenumshapeAssocEnd)
 
 			// encode reverse pointer in the association end back repo instance
+			// (to be removed)
 			gongenumshapeAssocEnd_DB.Classdiagram_GongEnumShapesDBID.Int64 = int64(classdiagramDB.ID)
 			gongenumshapeAssocEnd_DB.Classdiagram_GongEnumShapesDBID.Valid = true
 			gongenumshapeAssocEnd_DB.Classdiagram_GongEnumShapesDBID_Index.Int64 = int64(idx)
@@ -298,6 +302,7 @@ func (backRepoClassdiagram *BackRepoClassdiagramStruct) CommitPhaseTwoInstance(b
 				backRepo.BackRepoNoteShape.GetNoteShapeDBFromNoteShapePtr(noteshapeAssocEnd)
 
 			// encode reverse pointer in the association end back repo instance
+			// (to be removed)
 			noteshapeAssocEnd_DB.Classdiagram_NoteShapesDBID.Int64 = int64(classdiagramDB.ID)
 			noteshapeAssocEnd_DB.Classdiagram_NoteShapesDBID.Valid = true
 			noteshapeAssocEnd_DB.Classdiagram_NoteShapesDBID_Index.Int64 = int64(idx)

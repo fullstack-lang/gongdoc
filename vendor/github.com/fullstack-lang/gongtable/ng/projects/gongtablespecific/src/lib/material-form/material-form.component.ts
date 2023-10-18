@@ -107,7 +107,8 @@ export class MaterialFormComponent implements OnInit {
 
         this.selectedFormGroup = undefined
 
-        for (let form of this.gongtableFrontRepo.FormGroups_array) {
+        // refactorable version
+        for (let form of this.gongtableFrontRepo.getArray<gongtable.FormGroupDB>(gongtable.FormGroupDB.GONGSTRUCT_NAME)) {
           if (form.Name == this.FormName) {
             this.selectedFormGroup = form
           }
@@ -319,14 +320,14 @@ export class MaterialFormComponent implements OnInit {
               }
 
               if (formFieldSelect.CanBeEmpty && formFieldSelect.Value == undefined) {
-                formFieldSelect.ValueID.Int64 = 0
+                formFieldSelect.FormFieldSelectPointersEncoding.ValueID.Int64 = 0
               }
 
               if (formFieldSelect.Options) {
                 for (let option of formFieldSelect.Options) {
                   if (option.Name == newValue) {
                     formFieldSelect.Value = option
-                    formFieldSelect.ValueID.Int64 = option.ID
+                    formFieldSelect.FormFieldSelectPointersEncoding.ValueID.Int64 = option.ID
                   }
                 }
               }

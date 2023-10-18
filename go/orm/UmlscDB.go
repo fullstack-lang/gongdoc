@@ -38,7 +38,7 @@ type UmlscAPI struct {
 	models.Umlsc_WOP
 
 	// encoding of pointers
-	UmlscPointersEncoding
+	UmlscPointersEncoding UmlscPointersEncoding
 }
 
 // UmlscPointersEncoding encodes pointers to Struct and
@@ -47,12 +47,14 @@ type UmlscPointersEncoding struct {
 	// insertion for pointer fields encoding declaration
 
 	// field States is a slice of pointers to another Struct (optional or 0..1)
-	States IntSlice`gorm:"type:TEXT"`
+	States IntSlice `gorm:"type:TEXT"`
 
 	// Implementation of a reverse ID for field DiagramPackage{}.Umlscs []*Umlsc
+	// (to be removed)
 	DiagramPackage_UmlscsDBID sql.NullInt64
 
 	// implementation of the index of the withing the slice
+	// (to be removed)
 	DiagramPackage_UmlscsDBID_Index sql.NullInt64
 }
 
@@ -240,6 +242,7 @@ func (backRepoUmlsc *BackRepoUmlscStruct) CommitPhaseTwoInstance(backRepo *BackR
 				backRepo.BackRepoUmlState.GetUmlStateDBFromUmlStatePtr(umlstateAssocEnd)
 
 			// encode reverse pointer in the association end back repo instance
+			// (to be removed)
 			umlstateAssocEnd_DB.Umlsc_StatesDBID.Int64 = int64(umlscDB.ID)
 			umlstateAssocEnd_DB.Umlsc_StatesDBID.Valid = true
 			umlstateAssocEnd_DB.Umlsc_StatesDBID_Index.Int64 = int64(idx)
