@@ -38,7 +38,7 @@ type GongNoteAPI struct {
 	models.GongNote_WOP
 
 	// encoding of pointers
-	GongNotePointersEncoding
+	GongNotePointersEncoding GongNotePointersEncoding
 }
 
 // GongNotePointersEncoding encodes pointers to Struct and
@@ -47,7 +47,7 @@ type GongNotePointersEncoding struct {
 	// insertion for pointer fields encoding declaration
 
 	// field Links is a slice of pointers to another Struct (optional or 0..1)
-	Links IntSlice`gorm:"type:TEXT"`
+	Links IntSlice `gorm:"type:TEXT"`
 }
 
 // GongNoteDB describes a gongnote in the database
@@ -223,25 +223,6 @@ func (backRepoGongNote *BackRepoGongNoteStruct) CommitPhaseTwoInstance(backRepo 
 		gongnoteDB.CopyBasicFieldsFromGongNote(gongnote)
 
 		// insertion point for translating pointers encodings into actual pointers
-		// This loop encodes the slice of pointers gongnote.Links into the back repo.
-		// Each back repo instance at the end of the association encode the ID of the association start
-		// into a dedicated field for coding the association. The back repo instance is then saved to the db
-		for idx, gonglinkAssocEnd := range gongnote.Links {
-
-			// get the back repo instance at the association end
-			gonglinkAssocEnd_DB :=
-				backRepo.BackRepoGongLink.GetGongLinkDBFromGongLinkPtr(gonglinkAssocEnd)
-
-			// encode reverse pointer in the association end back repo instance
-			gonglinkAssocEnd_DB.GongNote_LinksDBID.Int64 = int64(gongnoteDB.ID)
-			gonglinkAssocEnd_DB.GongNote_LinksDBID.Valid = true
-			gonglinkAssocEnd_DB.GongNote_LinksDBID_Index.Int64 = int64(idx)
-			gonglinkAssocEnd_DB.GongNote_LinksDBID_Index.Valid = true
-			if q := backRepoGongNote.db.Save(gonglinkAssocEnd_DB); q.Error != nil {
-				return q.Error
-			}
-		}
-
 		// 1. reset
 		gongnoteDB.GongNotePointersEncoding.Links = make([]int, 0)
 		// 2. encode
@@ -364,27 +345,9 @@ func (backRepoGongNote *BackRepoGongNoteStruct) CheckoutPhaseTwoInstance(backRep
 	// it appends the stage instance
 	// 1. reset the slice
 	gongnote.Links = gongnote.Links[:0]
-	// 2. loop all instances in the type in the association end
-	for _, gonglinkDB_AssocEnd := range backRepo.BackRepoGongLink.Map_GongLinkDBID_GongLinkDB {
-		// 3. Does the ID encoding at the end and the ID at the start matches ?
-		if gonglinkDB_AssocEnd.GongNote_LinksDBID.Int64 == int64(gongnoteDB.ID) {
-			// 4. fetch the associated instance in the stage
-			gonglink_AssocEnd := backRepo.BackRepoGongLink.Map_GongLinkDBID_GongLinkPtr[gonglinkDB_AssocEnd.ID]
-			// 5. append it the association slice
-			gongnote.Links = append(gongnote.Links, gonglink_AssocEnd)
-		}
+	for _, _GongLinkid := range gongnoteDB.GongNotePointersEncoding.Links {
+		gongnote.Links = append(gongnote.Links, backRepo.BackRepoGongLink.Map_GongLinkDBID_GongLinkPtr[uint(_GongLinkid)])
 	}
-
-	// sort the array according to the order
-	sort.Slice(gongnote.Links, func(i, j int) bool {
-		gonglinkDB_i_ID := backRepo.BackRepoGongLink.Map_GongLinkPtr_GongLinkDBID[gongnote.Links[i]]
-		gonglinkDB_j_ID := backRepo.BackRepoGongLink.Map_GongLinkPtr_GongLinkDBID[gongnote.Links[j]]
-
-		gonglinkDB_i := backRepo.BackRepoGongLink.Map_GongLinkDBID_GongLinkDB[gonglinkDB_i_ID]
-		gonglinkDB_j := backRepo.BackRepoGongLink.Map_GongLinkDBID_GongLinkDB[gonglinkDB_j_ID]
-
-		return gonglinkDB_i.GongNote_LinksDBID_Index.Int64 < gonglinkDB_j.GongNote_LinksDBID_Index.Int64
-	})
 
 	return
 }

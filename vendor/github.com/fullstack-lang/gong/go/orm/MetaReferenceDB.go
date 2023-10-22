@@ -38,19 +38,13 @@ type MetaReferenceAPI struct {
 	models.MetaReference_WOP
 
 	// encoding of pointers
-	MetaReferencePointersEncoding
+	MetaReferencePointersEncoding MetaReferencePointersEncoding
 }
 
 // MetaReferencePointersEncoding encodes pointers to Struct and
 // reverse pointers of slice of poitners to Struct
 type MetaReferencePointersEncoding struct {
 	// insertion for pointer fields encoding declaration
-
-	// Implementation of a reverse ID for field Meta{}.MetaReferences []*MetaReference
-	Meta_MetaReferencesDBID sql.NullInt64
-
-	// implementation of the index of the withing the slice
-	Meta_MetaReferencesDBID_Index sql.NullInt64
 }
 
 // MetaReferenceDB describes a metareference in the database
@@ -549,12 +543,6 @@ func (backRepoMetaReference *BackRepoMetaReferenceStruct) RestorePhaseTwo() {
 		_ = metareferenceDB
 
 		// insertion point for reindexing pointers encoding
-		// This reindex metareference.MetaReferences
-		if metareferenceDB.Meta_MetaReferencesDBID.Int64 != 0 {
-			metareferenceDB.Meta_MetaReferencesDBID.Int64 =
-				int64(BackRepoMetaid_atBckpTime_newID[uint(metareferenceDB.Meta_MetaReferencesDBID.Int64)])
-		}
-
 		// update databse with new index encoding
 		query := backRepoMetaReference.db.Model(metareferenceDB).Updates(*metareferenceDB)
 		if query.Error != nil {
@@ -582,15 +570,6 @@ func (backRepoMetaReference *BackRepoMetaReferenceStruct) ResetReversePointersIn
 		_ = metareferenceDB // to avoid unused variable error if there are no reverse to reset
 
 		// insertion point for reverse pointers reset
-		if metareferenceDB.Meta_MetaReferencesDBID.Int64 != 0 {
-			metareferenceDB.Meta_MetaReferencesDBID.Int64 = 0
-			metareferenceDB.Meta_MetaReferencesDBID.Valid = true
-
-			// save the reset
-			if q := backRepoMetaReference.db.Save(metareferenceDB); q.Error != nil {
-				return q.Error
-			}
-		}
 		// end of insertion point for reverse pointers reset
 	}
 

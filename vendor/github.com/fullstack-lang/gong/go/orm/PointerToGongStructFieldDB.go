@@ -38,7 +38,7 @@ type PointerToGongStructFieldAPI struct {
 	models.PointerToGongStructField_WOP
 
 	// encoding of pointers
-	PointerToGongStructFieldPointersEncoding
+	PointerToGongStructFieldPointersEncoding PointerToGongStructFieldPointersEncoding
 }
 
 // PointerToGongStructFieldPointersEncoding encodes pointers to Struct and
@@ -49,12 +49,6 @@ type PointerToGongStructFieldPointersEncoding struct {
 	// field GongStruct is a pointer to another Struct (optional or 0..1)
 	// This field is generated into another field to enable AS ONE association
 	GongStructID sql.NullInt64
-
-	// Implementation of a reverse ID for field GongStruct{}.PointerToGongStructFields []*PointerToGongStructField
-	GongStruct_PointerToGongStructFieldsDBID sql.NullInt64
-
-	// implementation of the index of the withing the slice
-	GongStruct_PointerToGongStructFieldsDBID_Index sql.NullInt64
 }
 
 // PointerToGongStructFieldDB describes a pointertogongstructfield in the database
@@ -612,12 +606,6 @@ func (backRepoPointerToGongStructField *BackRepoPointerToGongStructFieldStruct) 
 			pointertogongstructfieldDB.GongStructID.Valid = true
 		}
 
-		// This reindex pointertogongstructfield.PointerToGongStructFields
-		if pointertogongstructfieldDB.GongStruct_PointerToGongStructFieldsDBID.Int64 != 0 {
-			pointertogongstructfieldDB.GongStruct_PointerToGongStructFieldsDBID.Int64 =
-				int64(BackRepoGongStructid_atBckpTime_newID[uint(pointertogongstructfieldDB.GongStruct_PointerToGongStructFieldsDBID.Int64)])
-		}
-
 		// update databse with new index encoding
 		query := backRepoPointerToGongStructField.db.Model(pointertogongstructfieldDB).Updates(*pointertogongstructfieldDB)
 		if query.Error != nil {
@@ -645,15 +633,6 @@ func (backRepoPointerToGongStructField *BackRepoPointerToGongStructFieldStruct) 
 		_ = pointertogongstructfieldDB // to avoid unused variable error if there are no reverse to reset
 
 		// insertion point for reverse pointers reset
-		if pointertogongstructfieldDB.GongStruct_PointerToGongStructFieldsDBID.Int64 != 0 {
-			pointertogongstructfieldDB.GongStruct_PointerToGongStructFieldsDBID.Int64 = 0
-			pointertogongstructfieldDB.GongStruct_PointerToGongStructFieldsDBID.Valid = true
-
-			// save the reset
-			if q := backRepoPointerToGongStructField.db.Save(pointertogongstructfieldDB); q.Error != nil {
-				return q.Error
-			}
-		}
 		// end of insertion point for reverse pointers reset
 	}
 
