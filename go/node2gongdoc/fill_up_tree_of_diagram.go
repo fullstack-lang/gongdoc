@@ -40,7 +40,6 @@ func FillUpTreeOfDiagramNodes(
 			diagramPackage,
 			rootOfClassdiagramsNode,
 			treeOfGongObjects)
-		rootOfClassdiagramsNode.Children = append(rootOfClassdiagramsNode.Children, classdiagramNode)
 	}
 
 	return
