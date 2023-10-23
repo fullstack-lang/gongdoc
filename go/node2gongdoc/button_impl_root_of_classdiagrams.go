@@ -99,7 +99,7 @@ func (buttonImpl *ButtonImplRootOfClassdiagrams) ButtonUpdated(
 		gongdocStage.Unstage()
 		gongdocStage.Checkout()
 
-		classdiagramNode := NewClassdiagramNode(
+		NewClassdiagramNode(
 			gongtreeStage,
 			classdiagram,
 			buttonImpl.diagramPackage,
