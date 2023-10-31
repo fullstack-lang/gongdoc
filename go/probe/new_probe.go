@@ -7,6 +7,7 @@ import (
 	"github.com/gin-gonic/gin"
 
 	gongtable_fullstack "github.com/fullstack-lang/gongtable/go/fullstack"
+	gongtable_models "github.com/fullstack-lang/gongtable/go/models"
 	gongtree_fullstack "github.com/fullstack-lang/gongtree/go/fullstack"
 
 	gong_fullstack "github.com/fullstack-lang/gong/go/fullstack"
@@ -32,14 +33,14 @@ func NewProbe(
 	gong_models.LoadEmbedded(gongStage, goModelsDir)
 
 	// treeForSelectingDate that is on the sidebar
-	treeStage, _ := gongtree_fullstack.NewStackInstance(r, stackPath+"-sidebar")
+	treeStage, _ := gongtree_fullstack.NewStackInstance(r, stackPath+gongtable_models.StackNamePostFixForTableForMainTree.ToString())
 
 	// stage for main table
-	tableStage, _ := gongtable_fullstack.NewStackInstance(r, stackPath+"-table")
+	tableStage, _ := gongtable_fullstack.NewStackInstance(r, stackPath+gongtable_models.StackNamePostFixForTableForMainTable.ToString())
 	tableStage.Commit()
 
 	// stage for reusable form
-	formStage, _ := gongtable_fullstack.NewStackInstance(r, stackPath+"-form")
+	formStage, _ := gongtable_fullstack.NewStackInstance(r, stackPath+gongtable_models.StackNamePostFixForTableForMainForm.ToString())
 	formStage.Commit()
 
 	playground := NewPlayground(
