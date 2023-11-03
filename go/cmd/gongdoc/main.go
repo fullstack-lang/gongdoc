@@ -2,18 +2,11 @@ package main
 
 import (
 	"flag"
-	"fmt"
 	"log"
-	"os"
 	"strconv"
 
-	gongdoc_go "github.com/fullstack-lang/gongdoc/go"
-	gongdoc_fullstack "github.com/fullstack-lang/gongdoc/go/fullstack"
-	gongdoc_models "github.com/fullstack-lang/gongdoc/go/models"
-	gongdoc_orm "github.com/fullstack-lang/gongdoc/go/orm"
+	gongdoc_stack "github.com/fullstack-lang/gongdoc/go/stack"
 	gongdoc_static "github.com/fullstack-lang/gongdoc/go/static"
-
-	gongdoc_load "github.com/fullstack-lang/gongdoc/go/load"
 )
 
 var (
@@ -28,26 +21,6 @@ var (
 	port = flag.Int("port", 8080, "port server")
 )
 
-// InjectionGateway is the singloton that stores all functions
-// that can set the objects the stage
-// InjectionGateway stores function as a map of names
-var InjectionGateway = make(map[string](func()))
-
-// hook marhalling to stage
-type BeforeCommitImplementation struct {
-}
-
-func (impl *BeforeCommitImplementation) BeforeCommit(stage *gongdoc_models.StageStruct) {
-	file, err := os.Create(fmt.Sprintf("./%s.go", *marshallOnCommit))
-	if err != nil {
-		log.Fatal(err.Error())
-	}
-	defer file.Close()
-
-	stage.Checkout()
-	stage.Marshall(file, "github.com/fullstack-lang/gongdoc/go/models", "main")
-}
-
 func main() {
 
 	log.SetPrefix("gongdoc: ")
@@ -60,50 +33,8 @@ func main() {
 	r := gongdoc_static.ServeStaticFiles(*logGINFlag)
 
 	// setup stack
-	var stage *gongdoc_models.StageStruct
-	var backRepo *gongdoc_orm.BackRepoStruct
-	_ = backRepo
-
-	if *marshallOnCommit != "" {
-		// persistence in a SQLite file on disk in memory
-		stage, backRepo = gongdoc_fullstack.NewStackInstance(r, "gongdoc")
-	} else {
-		// persistence in a SQLite file on disk
-		stage, backRepo = gongdoc_fullstack.NewStackInstance(r, "gongdoc", "./gongdoc.db")
-	}
-
-	if *unmarshallFromCode != "" {
-		stage.Checkout()
-		stage.Reset()
-		stage.Commit()
-		err := gongdoc_models.ParseAstFile(stage, *unmarshallFromCode)
-
-		// if the application is run with -unmarshallFromCode=xxx.go -marshallOnCommit
-		// xxx.go might be absent the first time. However, this shall not be a show stopper.
-		if err != nil {
-			log.Println("no file to read " + err.Error())
-		}
-
-		stage.Commit()
-	} else {
-		// in case the database is used, checkout the content to the stage
-		stage.Checkout()
-	}
-
-	// hook automatic marshall to go code at every commit
-	if *marshallOnCommit != "" {
-		hook := new(BeforeCommitImplementation)
-		stage.OnInitCommitCallback = hook
-	}
-
-	gongdoc_load.Load(
-		"gongdoc",
-		"github.com/fullstack-lang/gongdoc/go/models",
-		gongdoc_go.GoModelsDir,
-		gongdoc_go.GoDiagramsDir,
-		r,
-		*embeddedDiagrams,
-		&stage.Map_GongStructName_InstancesNb)
+	stage := gongdoc_stack.NewStage(r, "gongdoc", *unmarshallFromCode, *marshallOnCommit, "", *embeddedDiagrams, true)
+	_ = stage
 
 	log.Printf("Server ready serve on localhost:" + strconv.Itoa(*port))
 	err := r.Run(":" + strconv.Itoa(*port))

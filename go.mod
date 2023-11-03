@@ -4,7 +4,7 @@ go 1.21.0
 
 require (
 	github.com/frankban/quicktest v1.14.6 // indirect
-	github.com/fullstack-lang/gong v0.0.0-20231023134638-62f95f303cf1
+	github.com/fullstack-lang/gong v0.0.0-20231102161903-38f9816a1311
 	github.com/gin-contrib/cors v1.4.0
 	github.com/gin-contrib/static v0.0.1
 	github.com/gin-gonic/gin v1.9.1
@@ -15,7 +15,7 @@ require (
 	github.com/kr/text v0.2.0 // indirect
 	github.com/mattn/go-isatty v0.0.20 // indirect
 	github.com/shabbyrobe/xmlwriter v0.0.0-20230525083848-85336ec334fa // indirect
-	github.com/tealeg/xlsx/v3 v3.3.2
+	github.com/tealeg/xlsx/v3 v3.3.4
 	golang.org/x/crypto v0.14.0 // indirect
 	golang.org/x/sys v0.13.0 // indirect
 	golang.org/x/text v0.13.0 // indirect
@@ -23,18 +23,18 @@ require (
 )
 
 require (
-	github.com/fullstack-lang/gongsvg v0.0.0-20231023033444-85a4afa297e7
+	github.com/fullstack-lang/gongsvg v0.0.0-20231103073327-3d762bb654de
 	github.com/fullstack-lang/gongtable v0.0.0-20231023033444-ebb9ca5f0e39
 	github.com/fullstack-lang/gongtree v0.0.0-20231023033444-0a79ad5dd896
 	github.com/fullstack-lang/maticons v0.0.0-20230823061653-70c364fbdd00
-	github.com/glebarez/sqlite v1.9.0
+	github.com/glebarez/sqlite v1.10.0
 	github.com/xuri/excelize/v2 v2.8.0
 )
 
 require (
 	github.com/bytedance/sonic v1.10.2 // indirect
 	github.com/chenzhuoyu/base64x v0.0.0-20230717121745-296ad89f973d // indirect
-	github.com/chenzhuoyu/iasm v0.9.0 // indirect
+	github.com/chenzhuoyu/iasm v0.9.1 // indirect
 	github.com/dustin/go-humanize v1.0.1 // indirect
 	github.com/gabriel-vasile/mimetype v1.4.3 // indirect
 	github.com/gin-contrib/sse v0.1.0 // indirect
@@ -42,7 +42,7 @@ require (
 	github.com/go-playground/locales v0.14.1 // indirect
 	github.com/go-playground/universal-translator v0.18.1 // indirect
 	github.com/goccy/go-json v0.10.2 // indirect
-	github.com/google/uuid v1.3.1 // indirect
+	github.com/google/uuid v1.4.0 // indirect
 	github.com/jinzhu/inflection v1.0.0 // indirect
 	github.com/jinzhu/now v1.1.5 // indirect
 	github.com/klauspost/cpuid/v2 v2.2.5 // indirect
@@ -61,15 +61,15 @@ require (
 	github.com/sabhiram/go-gitignore v0.0.0-20210923224102-525f6e181f06 // indirect
 	github.com/twitchyliquid64/golang-asm v0.15.1 // indirect
 	github.com/ugorji/go/codec v1.2.11 // indirect
-	github.com/xuri/efp v0.0.0-20230802181842-ad255f2331ca // indirect
+	github.com/xuri/efp v0.0.0-20231025114914-d1ff6096ae53 // indirect
 	github.com/xuri/nfp v0.0.0-20230919160717-d98342af3f05 // indirect
 	golang.org/x/arch v0.5.0 // indirect
 	golang.org/x/mod v0.13.0 // indirect
 	golang.org/x/net v0.17.0 // indirect
 	google.golang.org/protobuf v1.31.0 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
-	modernc.org/libc v1.28.0 // indirect
+	modernc.org/libc v1.29.0 // indirect
 	modernc.org/mathutil v1.6.0 // indirect
 	modernc.org/memory v1.7.2 // indirect
-	modernc.org/sqlite v1.26.0 // indirect
+	modernc.org/sqlite v1.27.0 // indirect
 )
