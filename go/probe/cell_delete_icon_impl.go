@@ -11,17 +11,17 @@ import (
 
 func NewCellDeleteIconImpl[T models.Gongstruct](
 	Instance *T,
-	playground *Playground,
+	probe *Probe,
 ) (cellDeleteIconImpl *CellDeleteIconImpl[T]) {
 	cellDeleteIconImpl = new(CellDeleteIconImpl[T])
 	cellDeleteIconImpl.Instance = Instance
-	cellDeleteIconImpl.playground = playground
+	cellDeleteIconImpl.probe = probe
 	return
 }
 
 type CellDeleteIconImpl[T models.Gongstruct] struct {
 	Instance   *T
-	playground *Playground
+	probe *Probe
 }
 
 func (cellDeleteIconImpl *CellDeleteIconImpl[T]) CellIconUpdated(stage *gongtable.StageStruct,
@@ -31,38 +31,38 @@ func (cellDeleteIconImpl *CellDeleteIconImpl[T]) CellIconUpdated(stage *gongtabl
 	switch instancesTyped := any(cellDeleteIconImpl.Instance).(type) {
 	// insertion point
 	case *models.Classdiagram:
-		instancesTyped.Unstage(cellDeleteIconImpl.playground.stageOfInterest)
+		instancesTyped.Unstage(cellDeleteIconImpl.probe.stageOfInterest)
 	case *models.DiagramPackage:
-		instancesTyped.Unstage(cellDeleteIconImpl.playground.stageOfInterest)
+		instancesTyped.Unstage(cellDeleteIconImpl.probe.stageOfInterest)
 	case *models.Field:
-		instancesTyped.Unstage(cellDeleteIconImpl.playground.stageOfInterest)
+		instancesTyped.Unstage(cellDeleteIconImpl.probe.stageOfInterest)
 	case *models.GongEnumShape:
-		instancesTyped.Unstage(cellDeleteIconImpl.playground.stageOfInterest)
+		instancesTyped.Unstage(cellDeleteIconImpl.probe.stageOfInterest)
 	case *models.GongEnumValueEntry:
-		instancesTyped.Unstage(cellDeleteIconImpl.playground.stageOfInterest)
+		instancesTyped.Unstage(cellDeleteIconImpl.probe.stageOfInterest)
 	case *models.GongStructShape:
-		instancesTyped.Unstage(cellDeleteIconImpl.playground.stageOfInterest)
+		instancesTyped.Unstage(cellDeleteIconImpl.probe.stageOfInterest)
 	case *models.Link:
-		instancesTyped.Unstage(cellDeleteIconImpl.playground.stageOfInterest)
+		instancesTyped.Unstage(cellDeleteIconImpl.probe.stageOfInterest)
 	case *models.NoteShape:
-		instancesTyped.Unstage(cellDeleteIconImpl.playground.stageOfInterest)
+		instancesTyped.Unstage(cellDeleteIconImpl.probe.stageOfInterest)
 	case *models.NoteShapeLink:
-		instancesTyped.Unstage(cellDeleteIconImpl.playground.stageOfInterest)
+		instancesTyped.Unstage(cellDeleteIconImpl.probe.stageOfInterest)
 	case *models.Position:
-		instancesTyped.Unstage(cellDeleteIconImpl.playground.stageOfInterest)
+		instancesTyped.Unstage(cellDeleteIconImpl.probe.stageOfInterest)
 	case *models.UmlState:
-		instancesTyped.Unstage(cellDeleteIconImpl.playground.stageOfInterest)
+		instancesTyped.Unstage(cellDeleteIconImpl.probe.stageOfInterest)
 	case *models.Umlsc:
-		instancesTyped.Unstage(cellDeleteIconImpl.playground.stageOfInterest)
+		instancesTyped.Unstage(cellDeleteIconImpl.probe.stageOfInterest)
 	case *models.Vertice:
-		instancesTyped.Unstage(cellDeleteIconImpl.playground.stageOfInterest)
+		instancesTyped.Unstage(cellDeleteIconImpl.probe.stageOfInterest)
 	default:
 		_ = instancesTyped
 	}
-	cellDeleteIconImpl.playground.stageOfInterest.Commit()
+	cellDeleteIconImpl.probe.stageOfInterest.Commit()
 
-	fillUpTable[T](cellDeleteIconImpl.playground)
-	fillUpTree(cellDeleteIconImpl.playground)
-	cellDeleteIconImpl.playground.tableStage.Commit()
+	fillUpTable[T](cellDeleteIconImpl.probe)
+	fillUpTree(cellDeleteIconImpl.probe)
+	cellDeleteIconImpl.probe.tableStage.Commit()
 }
 

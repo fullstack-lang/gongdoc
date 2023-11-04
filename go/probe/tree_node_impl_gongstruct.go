@@ -12,17 +12,17 @@ import (
 
 type TreeNodeImplGongstruct struct {
 	gongStruct *gong_models.GongStruct
-	playground *Playground
+	probe *Probe
 }
 
 func NewTreeNodeImplGongstruct(
 	gongStruct *gong_models.GongStruct,
-	playground *Playground,
+	probe *Probe,
 ) (nodeImplGongstruct *TreeNodeImplGongstruct) {
 
 	nodeImplGongstruct = new(TreeNodeImplGongstruct)
 	nodeImplGongstruct.gongStruct = gongStruct
-	nodeImplGongstruct.playground = playground
+	nodeImplGongstruct.probe = probe
 	return
 }
 
@@ -53,43 +53,43 @@ func (nodeImplGongstruct *TreeNodeImplGongstruct) OnAfterUpdate(
 
 	// insertion point
 	if nodeImplGongstruct.gongStruct.GetName() == "Classdiagram" {
-		fillUpTable[models.Classdiagram](nodeImplGongstruct.playground)
+		fillUpTable[models.Classdiagram](nodeImplGongstruct.probe)
 	}
 	if nodeImplGongstruct.gongStruct.GetName() == "DiagramPackage" {
-		fillUpTable[models.DiagramPackage](nodeImplGongstruct.playground)
+		fillUpTable[models.DiagramPackage](nodeImplGongstruct.probe)
 	}
 	if nodeImplGongstruct.gongStruct.GetName() == "Field" {
-		fillUpTable[models.Field](nodeImplGongstruct.playground)
+		fillUpTable[models.Field](nodeImplGongstruct.probe)
 	}
 	if nodeImplGongstruct.gongStruct.GetName() == "GongEnumShape" {
-		fillUpTable[models.GongEnumShape](nodeImplGongstruct.playground)
+		fillUpTable[models.GongEnumShape](nodeImplGongstruct.probe)
 	}
 	if nodeImplGongstruct.gongStruct.GetName() == "GongEnumValueEntry" {
-		fillUpTable[models.GongEnumValueEntry](nodeImplGongstruct.playground)
+		fillUpTable[models.GongEnumValueEntry](nodeImplGongstruct.probe)
 	}
 	if nodeImplGongstruct.gongStruct.GetName() == "GongStructShape" {
-		fillUpTable[models.GongStructShape](nodeImplGongstruct.playground)
+		fillUpTable[models.GongStructShape](nodeImplGongstruct.probe)
 	}
 	if nodeImplGongstruct.gongStruct.GetName() == "Link" {
-		fillUpTable[models.Link](nodeImplGongstruct.playground)
+		fillUpTable[models.Link](nodeImplGongstruct.probe)
 	}
 	if nodeImplGongstruct.gongStruct.GetName() == "NoteShape" {
-		fillUpTable[models.NoteShape](nodeImplGongstruct.playground)
+		fillUpTable[models.NoteShape](nodeImplGongstruct.probe)
 	}
 	if nodeImplGongstruct.gongStruct.GetName() == "NoteShapeLink" {
-		fillUpTable[models.NoteShapeLink](nodeImplGongstruct.playground)
+		fillUpTable[models.NoteShapeLink](nodeImplGongstruct.probe)
 	}
 	if nodeImplGongstruct.gongStruct.GetName() == "Position" {
-		fillUpTable[models.Position](nodeImplGongstruct.playground)
+		fillUpTable[models.Position](nodeImplGongstruct.probe)
 	}
 	if nodeImplGongstruct.gongStruct.GetName() == "UmlState" {
-		fillUpTable[models.UmlState](nodeImplGongstruct.playground)
+		fillUpTable[models.UmlState](nodeImplGongstruct.probe)
 	}
 	if nodeImplGongstruct.gongStruct.GetName() == "Umlsc" {
-		fillUpTable[models.Umlsc](nodeImplGongstruct.playground)
+		fillUpTable[models.Umlsc](nodeImplGongstruct.probe)
 	}
 	if nodeImplGongstruct.gongStruct.GetName() == "Vertice" {
-		fillUpTable[models.Vertice](nodeImplGongstruct.playground)
+		fillUpTable[models.Vertice](nodeImplGongstruct.probe)
 	}
 
 	// set color for node and reset all other nodes color
@@ -99,5 +99,5 @@ func (nodeImplGongstruct *TreeNodeImplGongstruct) OnAfterUpdate(
 	stagedNode.BackgroundColor = "lightgrey"
 	gongtreeStage.Commit()
 
-	nodeImplGongstruct.playground.tableStage.Commit()
+	nodeImplGongstruct.probe.tableStage.Commit()
 }

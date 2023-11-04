@@ -8,11 +8,11 @@ import (
 )
 
 func FillUpFormFromGongstructName(
-	playground *Playground,
+	probe *Probe,
 	gongstructName string,
 	isNewInstance bool,
 ) {
-	formStage := playground.formStage
+	formStage := probe.formStage
 	formStage.Reset()
 	formStage.Commit()
 
@@ -32,143 +32,143 @@ func FillUpFormFromGongstructName(
 			Label: prefix + " Classdiagram Form",
 			OnSave: __gong__New__ClassdiagramFormCallback(
 				nil,
-				playground,
+				probe,
 			),
 		}).Stage(formStage)
 		classdiagram := new(models.Classdiagram)
-		FillUpForm(classdiagram, formGroup, playground)
+		FillUpForm(classdiagram, formGroup, probe)
 	case "DiagramPackage":
 		formGroup := (&form.FormGroup{
 			Name:  form.FormGroupDefaultName.ToString(),
 			Label: prefix + " DiagramPackage Form",
 			OnSave: __gong__New__DiagramPackageFormCallback(
 				nil,
-				playground,
+				probe,
 			),
 		}).Stage(formStage)
 		diagrampackage := new(models.DiagramPackage)
-		FillUpForm(diagrampackage, formGroup, playground)
+		FillUpForm(diagrampackage, formGroup, probe)
 	case "Field":
 		formGroup := (&form.FormGroup{
 			Name:  form.FormGroupDefaultName.ToString(),
 			Label: prefix + " Field Form",
 			OnSave: __gong__New__FieldFormCallback(
 				nil,
-				playground,
+				probe,
 			),
 		}).Stage(formStage)
 		field := new(models.Field)
-		FillUpForm(field, formGroup, playground)
+		FillUpForm(field, formGroup, probe)
 	case "GongEnumShape":
 		formGroup := (&form.FormGroup{
 			Name:  form.FormGroupDefaultName.ToString(),
 			Label: prefix + " GongEnumShape Form",
 			OnSave: __gong__New__GongEnumShapeFormCallback(
 				nil,
-				playground,
+				probe,
 			),
 		}).Stage(formStage)
 		gongenumshape := new(models.GongEnumShape)
-		FillUpForm(gongenumshape, formGroup, playground)
+		FillUpForm(gongenumshape, formGroup, probe)
 	case "GongEnumValueEntry":
 		formGroup := (&form.FormGroup{
 			Name:  form.FormGroupDefaultName.ToString(),
 			Label: prefix + " GongEnumValueEntry Form",
 			OnSave: __gong__New__GongEnumValueEntryFormCallback(
 				nil,
-				playground,
+				probe,
 			),
 		}).Stage(formStage)
 		gongenumvalueentry := new(models.GongEnumValueEntry)
-		FillUpForm(gongenumvalueentry, formGroup, playground)
+		FillUpForm(gongenumvalueentry, formGroup, probe)
 	case "GongStructShape":
 		formGroup := (&form.FormGroup{
 			Name:  form.FormGroupDefaultName.ToString(),
 			Label: prefix + " GongStructShape Form",
 			OnSave: __gong__New__GongStructShapeFormCallback(
 				nil,
-				playground,
+				probe,
 			),
 		}).Stage(formStage)
 		gongstructshape := new(models.GongStructShape)
-		FillUpForm(gongstructshape, formGroup, playground)
+		FillUpForm(gongstructshape, formGroup, probe)
 	case "Link":
 		formGroup := (&form.FormGroup{
 			Name:  form.FormGroupDefaultName.ToString(),
 			Label: prefix + " Link Form",
 			OnSave: __gong__New__LinkFormCallback(
 				nil,
-				playground,
+				probe,
 			),
 		}).Stage(formStage)
 		link := new(models.Link)
-		FillUpForm(link, formGroup, playground)
+		FillUpForm(link, formGroup, probe)
 	case "NoteShape":
 		formGroup := (&form.FormGroup{
 			Name:  form.FormGroupDefaultName.ToString(),
 			Label: prefix + " NoteShape Form",
 			OnSave: __gong__New__NoteShapeFormCallback(
 				nil,
-				playground,
+				probe,
 			),
 		}).Stage(formStage)
 		noteshape := new(models.NoteShape)
-		FillUpForm(noteshape, formGroup, playground)
+		FillUpForm(noteshape, formGroup, probe)
 	case "NoteShapeLink":
 		formGroup := (&form.FormGroup{
 			Name:  form.FormGroupDefaultName.ToString(),
 			Label: prefix + " NoteShapeLink Form",
 			OnSave: __gong__New__NoteShapeLinkFormCallback(
 				nil,
-				playground,
+				probe,
 			),
 		}).Stage(formStage)
 		noteshapelink := new(models.NoteShapeLink)
-		FillUpForm(noteshapelink, formGroup, playground)
+		FillUpForm(noteshapelink, formGroup, probe)
 	case "Position":
 		formGroup := (&form.FormGroup{
 			Name:  form.FormGroupDefaultName.ToString(),
 			Label: prefix + " Position Form",
 			OnSave: __gong__New__PositionFormCallback(
 				nil,
-				playground,
+				probe,
 			),
 		}).Stage(formStage)
 		position := new(models.Position)
-		FillUpForm(position, formGroup, playground)
+		FillUpForm(position, formGroup, probe)
 	case "UmlState":
 		formGroup := (&form.FormGroup{
 			Name:  form.FormGroupDefaultName.ToString(),
 			Label: prefix + " UmlState Form",
 			OnSave: __gong__New__UmlStateFormCallback(
 				nil,
-				playground,
+				probe,
 			),
 		}).Stage(formStage)
 		umlstate := new(models.UmlState)
-		FillUpForm(umlstate, formGroup, playground)
+		FillUpForm(umlstate, formGroup, probe)
 	case "Umlsc":
 		formGroup := (&form.FormGroup{
 			Name:  form.FormGroupDefaultName.ToString(),
 			Label: prefix + " Umlsc Form",
 			OnSave: __gong__New__UmlscFormCallback(
 				nil,
-				playground,
+				probe,
 			),
 		}).Stage(formStage)
 		umlsc := new(models.Umlsc)
-		FillUpForm(umlsc, formGroup, playground)
+		FillUpForm(umlsc, formGroup, probe)
 	case "Vertice":
 		formGroup := (&form.FormGroup{
 			Name:  form.FormGroupDefaultName.ToString(),
 			Label: prefix + " Vertice Form",
 			OnSave: __gong__New__VerticeFormCallback(
 				nil,
-				playground,
+				probe,
 			),
 		}).Stage(formStage)
 		vertice := new(models.Vertice)
-		FillUpForm(vertice, formGroup, playground)
+		FillUpForm(vertice, formGroup, probe)
 	}
 	formStage.Commit()
 }
