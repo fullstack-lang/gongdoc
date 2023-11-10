@@ -9,7 +9,7 @@ package libc // import "modernc.org/libc"
 
 import (
 	"bufio"
-	"encoding/hex"
+	// "encoding/hex"
 	"io/ioutil"
 	"math"
 	"math/rand"
@@ -1147,20 +1147,20 @@ func Xpread(t *TLS, fd int32, buf uintptr, count types.Size_t, offset types.Off_
 		n, err = unix.Pread(int(fd), nil, int64(offset))
 	default:
 		n, err = unix.Pread(int(fd), (*RawMem)(unsafe.Pointer(buf))[:count:count], int64(offset))
-		if dmesgs && err == nil {
-			dmesg("%v: fd %v, off %#x, count %#x, n %#x\n%s", origin(1), fd, offset, count, n, hex.Dump((*RawMem)(unsafe.Pointer(buf))[:n:n]))
-		}
+		// 		if dmesgs && err == nil {
+		// 			dmesg("%v: fd %v, off %#x, count %#x, n %#x\n%s", origin(1), fd, offset, count, n, hex.Dump((*RawMem)(unsafe.Pointer(buf))[:n:n]))
+		// 		}
 	}
 	if err != nil {
-		if dmesgs {
-			dmesg("%v: %v FAIL", origin(1), err)
-		}
+		// if dmesgs {
+		// 	dmesg("%v: %v FAIL", origin(1), err)
+		// }
 		t.setErrno(err)
 		return -1
 	}
 
-	if dmesgs {
-		dmesg("%v: ok", origin(1))
-	}
+	// if dmesgs {
+	// 	dmesg("%v: ok", origin(1))
+	// }
 	return types.Ssize_t(n)
 }
