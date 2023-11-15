@@ -91,8 +91,8 @@ export class TreeComponent implements OnInit {
   dateOfLastTimerEmission: Date = new Date
 
   ngOnInit(): void {
-    console.log("TreeComponent->name : ", this.name)
-    console.log("TreeComponent->GONG__StackPath : ", this.GONG__StackPath)
+    // console.log("TreeComponent->name : ", this.name)
+    // console.log("TreeComponent->GONG__StackPath : ", this.GONG__StackPath)
     this.startAutoRefresh(500); // Refresh every 500 ms (half second)
   }
 
@@ -116,8 +116,8 @@ export class TreeComponent implements OnInit {
 
         if (this.lastCommitNbFromBack < commitNbFromBack) {
           const d = new Date()
-          console.log("TreeComponent, ", this.GONG__StackPath, " name ", this.name + d.toLocaleTimeString() + `.${d.getMilliseconds()}` +
-            ", last commit increased nb " + this.lastCommitNbFromBack + " new: " + commitNbFromBack)
+          // console.log("TreeComponent, ", this.GONG__StackPath, " name ", this.name + d.toLocaleTimeString() + `.${d.getMilliseconds()}` +
+          //   ", last commit increased nb " + this.lastCommitNbFromBack + " new: " + commitNbFromBack)
           this.lastCommitNbFromBack = commitNbFromBack
           this.refresh()
         }
@@ -140,12 +140,12 @@ export class TreeComponent implements OnInit {
           }
         }
         if (!selected) {
-          console.log("no tree matching with name \"" + this.name + "\"")
+          // console.log("no tree matching with name \"" + this.name + "\"")
           return
         }
 
         if (treeSingloton.RootNodes == undefined) {
-          console.log("no nodes on tree " + this.name)
+          // console.log("no nodes on tree " + this.name)
           return
         }
 
@@ -172,7 +172,7 @@ export class TreeComponent implements OnInit {
             }
 
             if (gongNode && gongNode.IsWithPreceedingIcon) {
-              console.log("Node with preceeding icon", gongNode.Name, gongNode.PreceedingIcon)
+              // console.log("Node with preceeding icon", gongNode.Name, gongNode.PreceedingIcon)
             }
 
             if (node.gongNode.IsExpanded) {
@@ -195,13 +195,13 @@ export class TreeComponent implements OnInit {
   }
 
   toggleNodeExpansion(node: FlatNode): void {
-    console.log(node.name)
+    // console.log(node.name)
 
     node.gongNode.IsExpanded = !node.gongNode.IsExpanded
 
     this.gongtreeNodeService.updateNode(node.gongNode, this.GONG__StackPath, this.gongtreeFrontRepoService.frontRepo).subscribe(
       gongtreeNode => {
-        console.log("toggleNodeExpansion: updated node")
+        // console.log("toggleNodeExpansion: updated node")
       }
     )
   }
@@ -211,12 +211,12 @@ export class TreeComponent implements OnInit {
     let buttons = node.gongNode.Buttons
 
     const d = new Date()
-    console.log("TreeComponent ", this.GONG__StackPath, " name ", this.name, " toggleNodeCheckbox, " + d.toLocaleTimeString() + `.${d.getMilliseconds()}` + " " + this.name)
+    // console.log("TreeComponent ", this.GONG__StackPath, " name ", this.name, " toggleNodeCheckbox, " + d.toLocaleTimeString() + `.${d.getMilliseconds()}` + " " + this.name)
     node.gongNode.IsChecked = !node.gongNode.IsChecked
     this.gongtreeNodeService.updateNode(node.gongNode, this.GONG__StackPath, this.gongtreeFrontRepoService.frontRepo).subscribe(
       gongtreeNode => {
         const d = new Date()
-        console.log("toggleNodeCheckbox: updated node " + d.toLocaleTimeString() + `.${d.getMilliseconds()}` + " " + this.name)
+        // console.log("toggleNodeCheckbox: updated node " + d.toLocaleTimeString() + `.${d.getMilliseconds()}` + " " + this.name)
         // is necessary because the update loses links to buttons
         if (buttons) {
           node.gongNode.Buttons = buttons
@@ -229,7 +229,7 @@ export class TreeComponent implements OnInit {
 
     this.gongtreeButtonService.updateButton(button, this.GONG__StackPath, this.gongtreeFrontRepoService.frontRepo).subscribe(
       gongtreeButton => {
-        console.log("button pressed")
+        // console.log("button pressed")
       }
     )
   }
@@ -239,7 +239,7 @@ export class TreeComponent implements OnInit {
     node.gongNode.IsInEditMode = false
     this.gongtreeNodeService.updateNode(node.gongNode, this.GONG__StackPath, this.gongtreeFrontRepoService.frontRepo).subscribe(
       gongtreeNode => {
-        console.log("node.gongNode.IsInEditMode = false, updated node")
+        // console.log("node.gongNode.IsInEditMode = false, updated node")
       }
     )
   }
@@ -248,7 +248,7 @@ export class TreeComponent implements OnInit {
 
     this.gongtreeNodeService.updateNode(node.gongNode, this.GONG__StackPath, this.gongtreeFrontRepoService.frontRepo).subscribe(
       gongtreeNode => {
-        console.log("onNodeClick: updated node")
+        // console.log("onNodeClick: updated node")
       }
     )
   }
