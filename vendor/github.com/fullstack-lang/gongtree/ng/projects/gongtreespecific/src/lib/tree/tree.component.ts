@@ -9,6 +9,7 @@ import { Router, RouterState } from '@angular/router';
 
 
 import * as gongtree from 'gongtree'
+import { IconService } from '../icon-service.service';
 
 /**
  * Food data with nested structure.
@@ -75,7 +76,7 @@ export class TreeComponent implements OnInit {
     private gongtreePushFromFrontNbService: gongtree.PushFromFrontNbService,
     private gongtreeNodeService: gongtree.NodeService,
     private gongtreeButtonService: gongtree.ButtonService,
-    private router: Router,
+    private iconService: IconService,
   ) {
   }
 
@@ -150,6 +151,11 @@ export class TreeComponent implements OnInit {
         }
 
         var rootNodes = new Array<Node>()
+
+        // register all icons
+        for (let svgIcon of this.gongtreeFrontRepo.SVGIcons_array) {
+          this.iconService.registerIcon(svgIcon.Name, svgIcon.SVG)
+        }
 
         if (treeSingloton.RootNodes != undefined) {
           for (var nodeDB of treeSingloton.RootNodes) {

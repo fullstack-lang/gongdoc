@@ -7,23 +7,23 @@ import (
 	"sync"
 	"time"
 
-	"github.com/fullstack-lang/gong/go/models"
-	"github.com/fullstack-lang/gong/go/orm"
+	"github.com/fullstack-lang/gongtree/go/models"
+	"github.com/fullstack-lang/gongtree/go/orm"
 
 	"github.com/gin-gonic/gin"
 )
 
 // declaration in order to justify use of the models import
-var __Meta__dummysDeclaration__ models.Meta
-var __Meta_time__dummyDeclaration time.Duration
+var __SVGIcon__dummysDeclaration__ models.SVGIcon
+var __SVGIcon_time__dummyDeclaration time.Duration
 
-var mutexMeta sync.Mutex
+var mutexSVGIcon sync.Mutex
 
-// An MetaID parameter model.
+// An SVGIconID parameter model.
 //
 // This is used for operations that want the ID of an order in the path
-// swagger:parameters getMeta updateMeta deleteMeta
-type MetaID struct {
+// swagger:parameters getSVGIcon updateSVGIcon deleteSVGIcon
+type SVGIconID struct {
 	// The ID of the order
 	//
 	// in: path
@@ -31,29 +31,29 @@ type MetaID struct {
 	ID int64
 }
 
-// MetaInput is a schema that can validate the user’s
+// SVGIconInput is a schema that can validate the user’s
 // input to prevent us from getting invalid data
-// swagger:parameters postMeta updateMeta
-type MetaInput struct {
-	// The Meta to submit or modify
+// swagger:parameters postSVGIcon updateSVGIcon
+type SVGIconInput struct {
+	// The SVGIcon to submit or modify
 	// in: body
-	Meta *orm.MetaAPI
+	SVGIcon *orm.SVGIconAPI
 }
 
-// GetMetas
+// GetSVGIcons
 //
-// swagger:route GET /metas metas getMetas
+// swagger:route GET /svgicons svgicons getSVGIcons
 //
-// # Get all metas
+// # Get all svgicons
 //
 // Responses:
 // default: genericError
 //
-//	200: metaDBResponse
-func (controller *Controller) GetMetas(c *gin.Context) {
+//	200: svgiconDBResponse
+func (controller *Controller) GetSVGIcons(c *gin.Context) {
 
 	// source slice
-	var metaDBs []orm.MetaDB
+	var svgiconDBs []orm.SVGIconDB
 
 	values := c.Request.URL.Query()
 	stackPath := ""
@@ -61,16 +61,16 @@ func (controller *Controller) GetMetas(c *gin.Context) {
 		value := values["GONG__StackPath"]
 		if len(value) == 1 {
 			stackPath = value[0]
-			// log.Println("GetMetas", "GONG__StackPath", stackPath)
+			// log.Println("GetSVGIcons", "GONG__StackPath", stackPath)
 		}
 	}
 	backRepo := controller.Map_BackRepos[stackPath]
 	if backRepo == nil {
-		log.Panic("Stack github.com/fullstack-lang/gong/go/models, Unkown stack", stackPath)
+		log.Panic("Stack github.com/fullstack-lang/gongtree/go/models, Unkown stack", stackPath)
 	}
-	db := backRepo.BackRepoMeta.GetDB()
+	db := backRepo.BackRepoSVGIcon.GetDB()
 
-	query := db.Find(&metaDBs)
+	query := db.Find(&svgiconDBs)
 	if query.Error != nil {
 		var returnError GenericError
 		returnError.Body.Code = http.StatusBadRequest
@@ -81,29 +81,29 @@ func (controller *Controller) GetMetas(c *gin.Context) {
 	}
 
 	// slice that will be transmitted to the front
-	metaAPIs := make([]orm.MetaAPI, 0)
+	svgiconAPIs := make([]orm.SVGIconAPI, 0)
 
-	// for each meta, update fields from the database nullable fields
-	for idx := range metaDBs {
-		metaDB := &metaDBs[idx]
-		_ = metaDB
-		var metaAPI orm.MetaAPI
+	// for each svgicon, update fields from the database nullable fields
+	for idx := range svgiconDBs {
+		svgiconDB := &svgiconDBs[idx]
+		_ = svgiconDB
+		var svgiconAPI orm.SVGIconAPI
 
 		// insertion point for updating fields
-		metaAPI.ID = metaDB.ID
-		metaDB.CopyBasicFieldsToMeta_WOP(&metaAPI.Meta_WOP)
-		metaAPI.MetaPointersEncoding = metaDB.MetaPointersEncoding
-		metaAPIs = append(metaAPIs, metaAPI)
+		svgiconAPI.ID = svgiconDB.ID
+		svgiconDB.CopyBasicFieldsToSVGIcon_WOP(&svgiconAPI.SVGIcon_WOP)
+		svgiconAPI.SVGIconPointersEncoding = svgiconDB.SVGIconPointersEncoding
+		svgiconAPIs = append(svgiconAPIs, svgiconAPI)
 	}
 
-	c.JSON(http.StatusOK, metaAPIs)
+	c.JSON(http.StatusOK, svgiconAPIs)
 }
 
-// PostMeta
+// PostSVGIcon
 //
-// swagger:route POST /metas metas postMeta
+// swagger:route POST /svgicons svgicons postSVGIcon
 //
-// Creates a meta
+// Creates a svgicon
 //
 //	Consumes:
 //	- application/json
@@ -113,9 +113,9 @@ func (controller *Controller) GetMetas(c *gin.Context) {
 //
 //	Responses:
 //	  200: nodeDBResponse
-func (controller *Controller) PostMeta(c *gin.Context) {
+func (controller *Controller) PostSVGIcon(c *gin.Context) {
 
-	mutexMeta.Lock()
+	mutexSVGIcon.Lock()
 
 	values := c.Request.URL.Query()
 	stackPath := ""
@@ -123,17 +123,17 @@ func (controller *Controller) PostMeta(c *gin.Context) {
 		value := values["GONG__StackPath"]
 		if len(value) == 1 {
 			stackPath = value[0]
-			// log.Println("PostMetas", "GONG__StackPath", stackPath)
+			// log.Println("PostSVGIcons", "GONG__StackPath", stackPath)
 		}
 	}
 	backRepo := controller.Map_BackRepos[stackPath]
 	if backRepo == nil {
-		log.Panic("Stack github.com/fullstack-lang/gong/go/models, Unkown stack", stackPath)
+		log.Panic("Stack github.com/fullstack-lang/gongtree/go/models, Unkown stack", stackPath)
 	}
-	db := backRepo.BackRepoMeta.GetDB()
+	db := backRepo.BackRepoSVGIcon.GetDB()
 
 	// Validate input
-	var input orm.MetaAPI
+	var input orm.SVGIconAPI
 
 	err := c.ShouldBindJSON(&input)
 	if err != nil {
@@ -145,12 +145,12 @@ func (controller *Controller) PostMeta(c *gin.Context) {
 		return
 	}
 
-	// Create meta
-	metaDB := orm.MetaDB{}
-	metaDB.MetaPointersEncoding = input.MetaPointersEncoding
-	metaDB.CopyBasicFieldsFromMeta_WOP(&input.Meta_WOP)
+	// Create svgicon
+	svgiconDB := orm.SVGIconDB{}
+	svgiconDB.SVGIconPointersEncoding = input.SVGIconPointersEncoding
+	svgiconDB.CopyBasicFieldsFromSVGIcon_WOP(&input.SVGIcon_WOP)
 
-	query := db.Create(&metaDB)
+	query := db.Create(&svgiconDB)
 	if query.Error != nil {
 		var returnError GenericError
 		returnError.Body.Code = http.StatusBadRequest
@@ -161,33 +161,33 @@ func (controller *Controller) PostMeta(c *gin.Context) {
 	}
 
 	// get an instance (not staged) from DB instance, and call callback function
-	backRepo.BackRepoMeta.CheckoutPhaseOneInstance(&metaDB)
-	meta := backRepo.BackRepoMeta.Map_MetaDBID_MetaPtr[metaDB.ID]
+	backRepo.BackRepoSVGIcon.CheckoutPhaseOneInstance(&svgiconDB)
+	svgicon := backRepo.BackRepoSVGIcon.Map_SVGIconDBID_SVGIconPtr[svgiconDB.ID]
 
-	if meta != nil {
-		models.AfterCreateFromFront(backRepo.GetStage(), meta)
+	if svgicon != nil {
+		models.AfterCreateFromFront(backRepo.GetStage(), svgicon)
 	}
 
 	// a POST is equivalent to a back repo commit increase
 	// (this will be improved with implementation of unit of work design pattern)
 	backRepo.IncrementPushFromFrontNb()
 
-	c.JSON(http.StatusOK, metaDB)
+	c.JSON(http.StatusOK, svgiconDB)
 
-	mutexMeta.Unlock()
+	mutexSVGIcon.Unlock()
 }
 
-// GetMeta
+// GetSVGIcon
 //
-// swagger:route GET /metas/{ID} metas getMeta
+// swagger:route GET /svgicons/{ID} svgicons getSVGIcon
 //
-// Gets the details for a meta.
+// Gets the details for a svgicon.
 //
 // Responses:
 // default: genericError
 //
-//	200: metaDBResponse
-func (controller *Controller) GetMeta(c *gin.Context) {
+//	200: svgiconDBResponse
+func (controller *Controller) GetSVGIcon(c *gin.Context) {
 
 	values := c.Request.URL.Query()
 	stackPath := ""
@@ -195,18 +195,18 @@ func (controller *Controller) GetMeta(c *gin.Context) {
 		value := values["GONG__StackPath"]
 		if len(value) == 1 {
 			stackPath = value[0]
-			// log.Println("GetMeta", "GONG__StackPath", stackPath)
+			// log.Println("GetSVGIcon", "GONG__StackPath", stackPath)
 		}
 	}
 	backRepo := controller.Map_BackRepos[stackPath]
 	if backRepo == nil {
-		log.Panic("Stack github.com/fullstack-lang/gong/go/models, Unkown stack", stackPath)
+		log.Panic("Stack github.com/fullstack-lang/gongtree/go/models, Unkown stack", stackPath)
 	}
-	db := backRepo.BackRepoMeta.GetDB()
+	db := backRepo.BackRepoSVGIcon.GetDB()
 
-	// Get metaDB in DB
-	var metaDB orm.MetaDB
-	if err := db.First(&metaDB, c.Param("id")).Error; err != nil {
+	// Get svgiconDB in DB
+	var svgiconDB orm.SVGIconDB
+	if err := db.First(&svgiconDB, c.Param("id")).Error; err != nil {
 		var returnError GenericError
 		returnError.Body.Code = http.StatusBadRequest
 		returnError.Body.Message = err.Error()
@@ -215,27 +215,27 @@ func (controller *Controller) GetMeta(c *gin.Context) {
 		return
 	}
 
-	var metaAPI orm.MetaAPI
-	metaAPI.ID = metaDB.ID
-	metaAPI.MetaPointersEncoding = metaDB.MetaPointersEncoding
-	metaDB.CopyBasicFieldsToMeta_WOP(&metaAPI.Meta_WOP)
+	var svgiconAPI orm.SVGIconAPI
+	svgiconAPI.ID = svgiconDB.ID
+	svgiconAPI.SVGIconPointersEncoding = svgiconDB.SVGIconPointersEncoding
+	svgiconDB.CopyBasicFieldsToSVGIcon_WOP(&svgiconAPI.SVGIcon_WOP)
 
-	c.JSON(http.StatusOK, metaAPI)
+	c.JSON(http.StatusOK, svgiconAPI)
 }
 
-// UpdateMeta
+// UpdateSVGIcon
 //
-// swagger:route PATCH /metas/{ID} metas updateMeta
+// swagger:route PATCH /svgicons/{ID} svgicons updateSVGIcon
 //
-// # Update a meta
+// # Update a svgicon
 //
 // Responses:
 // default: genericError
 //
-//	200: metaDBResponse
-func (controller *Controller) UpdateMeta(c *gin.Context) {
+//	200: svgiconDBResponse
+func (controller *Controller) UpdateSVGIcon(c *gin.Context) {
 
-	mutexMeta.Lock()
+	mutexSVGIcon.Lock()
 
 	values := c.Request.URL.Query()
 	stackPath := ""
@@ -243,17 +243,17 @@ func (controller *Controller) UpdateMeta(c *gin.Context) {
 		value := values["GONG__StackPath"]
 		if len(value) == 1 {
 			stackPath = value[0]
-			// log.Println("UpdateMeta", "GONG__StackPath", stackPath)
+			// log.Println("UpdateSVGIcon", "GONG__StackPath", stackPath)
 		}
 	}
 	backRepo := controller.Map_BackRepos[stackPath]
 	if backRepo == nil {
-		log.Panic("Stack github.com/fullstack-lang/gong/go/models, Unkown stack", stackPath)
+		log.Panic("Stack github.com/fullstack-lang/gongtree/go/models, Unkown stack", stackPath)
 	}
-	db := backRepo.BackRepoMeta.GetDB()
+	db := backRepo.BackRepoSVGIcon.GetDB()
 
 	// Validate input
-	var input orm.MetaAPI
+	var input orm.SVGIconAPI
 	if err := c.ShouldBindJSON(&input); err != nil {
 		log.Println(err.Error())
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
@@ -261,10 +261,10 @@ func (controller *Controller) UpdateMeta(c *gin.Context) {
 	}
 
 	// Get model if exist
-	var metaDB orm.MetaDB
+	var svgiconDB orm.SVGIconDB
 
-	// fetch the meta
-	query := db.First(&metaDB, c.Param("id"))
+	// fetch the svgicon
+	query := db.First(&svgiconDB, c.Param("id"))
 
 	if query.Error != nil {
 		var returnError GenericError
@@ -276,10 +276,10 @@ func (controller *Controller) UpdateMeta(c *gin.Context) {
 	}
 
 	// update
-	metaDB.CopyBasicFieldsFromMeta_WOP(&input.Meta_WOP)
-	metaDB.MetaPointersEncoding = input.MetaPointersEncoding
+	svgiconDB.CopyBasicFieldsFromSVGIcon_WOP(&input.SVGIcon_WOP)
+	svgiconDB.SVGIconPointersEncoding = input.SVGIconPointersEncoding
 
-	query = db.Model(&metaDB).Updates(metaDB)
+	query = db.Model(&svgiconDB).Updates(svgiconDB)
 	if query.Error != nil {
 		var returnError GenericError
 		returnError.Body.Code = http.StatusBadRequest
@@ -290,16 +290,16 @@ func (controller *Controller) UpdateMeta(c *gin.Context) {
 	}
 
 	// get an instance (not staged) from DB instance, and call callback function
-	metaNew := new(models.Meta)
-	metaDB.CopyBasicFieldsToMeta(metaNew)
+	svgiconNew := new(models.SVGIcon)
+	svgiconDB.CopyBasicFieldsToSVGIcon(svgiconNew)
 
 	// redeem pointers
-	metaDB.DecodePointers(backRepo, metaNew)
+	svgiconDB.DecodePointers(backRepo, svgiconNew)
 
 	// get stage instance from DB instance, and call callback function
-	metaOld := backRepo.BackRepoMeta.Map_MetaDBID_MetaPtr[metaDB.ID]
-	if metaOld != nil {
-		models.AfterUpdateFromFront(backRepo.GetStage(), metaOld, metaNew)
+	svgiconOld := backRepo.BackRepoSVGIcon.Map_SVGIconDBID_SVGIconPtr[svgiconDB.ID]
+	if svgiconOld != nil {
+		models.AfterUpdateFromFront(backRepo.GetStage(), svgiconOld, svgiconNew)
 	}
 
 	// an UPDATE generates a back repo commit increase
@@ -308,24 +308,24 @@ func (controller *Controller) UpdateMeta(c *gin.Context) {
 	// generates a checkout
 	backRepo.IncrementPushFromFrontNb()
 
-	// return status OK with the marshalling of the the metaDB
-	c.JSON(http.StatusOK, metaDB)
+	// return status OK with the marshalling of the the svgiconDB
+	c.JSON(http.StatusOK, svgiconDB)
 
-	mutexMeta.Unlock()
+	mutexSVGIcon.Unlock()
 }
 
-// DeleteMeta
+// DeleteSVGIcon
 //
-// swagger:route DELETE /metas/{ID} metas deleteMeta
+// swagger:route DELETE /svgicons/{ID} svgicons deleteSVGIcon
 //
-// # Delete a meta
+// # Delete a svgicon
 //
 // default: genericError
 //
-//	200: metaDBResponse
-func (controller *Controller) DeleteMeta(c *gin.Context) {
+//	200: svgiconDBResponse
+func (controller *Controller) DeleteSVGIcon(c *gin.Context) {
 
-	mutexMeta.Lock()
+	mutexSVGIcon.Lock()
 
 	values := c.Request.URL.Query()
 	stackPath := ""
@@ -333,18 +333,18 @@ func (controller *Controller) DeleteMeta(c *gin.Context) {
 		value := values["GONG__StackPath"]
 		if len(value) == 1 {
 			stackPath = value[0]
-			// log.Println("DeleteMeta", "GONG__StackPath", stackPath)
+			// log.Println("DeleteSVGIcon", "GONG__StackPath", stackPath)
 		}
 	}
 	backRepo := controller.Map_BackRepos[stackPath]
 	if backRepo == nil {
-		log.Panic("Stack github.com/fullstack-lang/gong/go/models, Unkown stack", stackPath)
+		log.Panic("Stack github.com/fullstack-lang/gongtree/go/models, Unkown stack", stackPath)
 	}
-	db := backRepo.BackRepoMeta.GetDB()
+	db := backRepo.BackRepoSVGIcon.GetDB()
 
 	// Get model if exist
-	var metaDB orm.MetaDB
-	if err := db.First(&metaDB, c.Param("id")).Error; err != nil {
+	var svgiconDB orm.SVGIconDB
+	if err := db.First(&svgiconDB, c.Param("id")).Error; err != nil {
 		var returnError GenericError
 		returnError.Body.Code = http.StatusBadRequest
 		returnError.Body.Message = err.Error()
@@ -354,16 +354,16 @@ func (controller *Controller) DeleteMeta(c *gin.Context) {
 	}
 
 	// with gorm.Model field, default delete is a soft delete. Unscoped() force delete
-	db.Unscoped().Delete(&metaDB)
+	db.Unscoped().Delete(&svgiconDB)
 
 	// get an instance (not staged) from DB instance, and call callback function
-	metaDeleted := new(models.Meta)
-	metaDB.CopyBasicFieldsToMeta(metaDeleted)
+	svgiconDeleted := new(models.SVGIcon)
+	svgiconDB.CopyBasicFieldsToSVGIcon(svgiconDeleted)
 
 	// get stage instance from DB instance, and call callback function
-	metaStaged := backRepo.BackRepoMeta.Map_MetaDBID_MetaPtr[metaDB.ID]
-	if metaStaged != nil {
-		models.AfterDeleteFromFront(backRepo.GetStage(), metaStaged, metaDeleted)
+	svgiconStaged := backRepo.BackRepoSVGIcon.Map_SVGIconDBID_SVGIconPtr[svgiconDB.ID]
+	if svgiconStaged != nil {
+		models.AfterDeleteFromFront(backRepo.GetStage(), svgiconStaged, svgiconDeleted)
 	}
 
 	// a DELETE generates a back repo commit increase
@@ -372,5 +372,5 @@ func (controller *Controller) DeleteMeta(c *gin.Context) {
 
 	c.JSON(http.StatusOK, gin.H{"data": true})
 
-	mutexMeta.Unlock()
+	mutexSVGIcon.Unlock()
 }
