@@ -392,8 +392,8 @@ func DefaultInjection(stage *models.StageStruct) {
 	__Position__000000_Pos_Default_Classdiagram.Name = `Pos-Default-Classdiagram`
 
 	// Position values setup
-	__Position__000001_Pos_Default_DiagramPackage.X = 31.000000
-	__Position__000001_Pos_Default_DiagramPackage.Y = 90.000000
+	__Position__000001_Pos_Default_DiagramPackage.X = 68.000000
+	__Position__000001_Pos_Default_DiagramPackage.Y = 193.000000
 	__Position__000001_Pos_Default_DiagramPackage.Name = `Pos-Default-DiagramPackage`
 
 	// Position values setup
