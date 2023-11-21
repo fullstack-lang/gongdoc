@@ -158,7 +158,7 @@ func FillUpForm[T models.Gongstruct](
 		AssociationSliceToForm("Fields", instanceWithInferedType, &instanceWithInferedType.Fields, formGroup, probe)
 		AssociationSliceToForm("Links", instanceWithInferedType, &instanceWithInferedType.Links, formGroup, probe)
 		BasicFieldtoForm("Width", instanceWithInferedType.Width, instanceWithInferedType, probe.formStage, formGroup, false)
-		BasicFieldtoForm("Heigth", instanceWithInferedType.Heigth, instanceWithInferedType, probe.formStage, formGroup, false)
+		BasicFieldtoForm("Height", instanceWithInferedType.Height, instanceWithInferedType, probe.formStage, formGroup, false)
 		BasicFieldtoForm("IsSelected", instanceWithInferedType.IsSelected, instanceWithInferedType, probe.formStage, formGroup, false)
 		{
 			var rf models.ReverseField

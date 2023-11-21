@@ -2024,7 +2024,7 @@ func GetFields[Type Gongstruct]() (res []string) {
 	case GongEnumValueEntry:
 		res = []string{"Name", "Identifier"}
 	case GongStructShape:
-		res = []string{"Name", "Position", "Identifier", "ShowNbInstances", "NbInstances", "Fields", "Links", "Width", "Heigth", "IsSelected"}
+		res = []string{"Name", "Position", "Identifier", "ShowNbInstances", "NbInstances", "Fields", "Links", "Width", "Height", "IsSelected"}
 	case Link:
 		res = []string{"Name", "Identifier", "Fieldtypename", "FieldOffsetX", "FieldOffsetY", "TargetMultiplicity", "TargetMultiplicityOffsetX", "TargetMultiplicityOffsetY", "SourceMultiplicity", "SourceMultiplicityOffsetX", "SourceMultiplicityOffsetY", "Middlevertice", "StartOrientation", "StartRatio", "EndOrientation", "EndRatio", "CornerOffsetRatio"}
 	case NoteShape:
@@ -2148,7 +2148,7 @@ func GetFieldsFromPointer[Type PointerToGongstruct]() (res []string) {
 	case *GongEnumValueEntry:
 		res = []string{"Name", "Identifier"}
 	case *GongStructShape:
-		res = []string{"Name", "Position", "Identifier", "ShowNbInstances", "NbInstances", "Fields", "Links", "Width", "Heigth", "IsSelected"}
+		res = []string{"Name", "Position", "Identifier", "ShowNbInstances", "NbInstances", "Fields", "Links", "Width", "Height", "IsSelected"}
 	case *Link:
 		res = []string{"Name", "Identifier", "Fieldtypename", "FieldOffsetX", "FieldOffsetY", "TargetMultiplicity", "TargetMultiplicityOffsetX", "TargetMultiplicityOffsetY", "SourceMultiplicity", "SourceMultiplicityOffsetX", "SourceMultiplicityOffsetY", "Middlevertice", "StartOrientation", "StartRatio", "EndOrientation", "EndRatio", "CornerOffsetRatio"}
 	case *NoteShape:
@@ -2310,8 +2310,8 @@ func GetFieldStringValueFromPointer[Type PointerToGongstruct](instance Type, fie
 			}
 		case "Width":
 			res = fmt.Sprintf("%f", inferedInstance.Width)
-		case "Heigth":
-			res = fmt.Sprintf("%f", inferedInstance.Heigth)
+		case "Height":
+			res = fmt.Sprintf("%f", inferedInstance.Height)
 		case "IsSelected":
 			res = fmt.Sprintf("%t", inferedInstance.IsSelected)
 		}
@@ -2595,8 +2595,8 @@ func GetFieldStringValue[Type Gongstruct](instance Type, fieldName string) (res 
 			}
 		case "Width":
 			res = fmt.Sprintf("%f", inferedInstance.Width)
-		case "Heigth":
-			res = fmt.Sprintf("%f", inferedInstance.Heigth)
+		case "Height":
+			res = fmt.Sprintf("%f", inferedInstance.Height)
 		case "IsSelected":
 			res = fmt.Sprintf("%t", inferedInstance.IsSelected)
 		}

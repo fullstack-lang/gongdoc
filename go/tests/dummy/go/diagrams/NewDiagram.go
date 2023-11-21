@@ -105,7 +105,7 @@ func NewDiagramInjection(stage *models.StageStruct) {
 	__GongStructShape__000000_NewDiagram_Dummy.ShowNbInstances = false
 	__GongStructShape__000000_NewDiagram_Dummy.NbInstances = 0
 	__GongStructShape__000000_NewDiagram_Dummy.Width = 240.000000
-	__GongStructShape__000000_NewDiagram_Dummy.Heigth = 78.000000
+	__GongStructShape__000000_NewDiagram_Dummy.Height = 78.000000
 	__GongStructShape__000000_NewDiagram_Dummy.IsSelected = false
 
 	// Position values setup
@@ -118,5 +118,3 @@ func NewDiagramInjection(stage *models.StageStruct) {
 	__GongStructShape__000000_NewDiagram_Dummy.Position = __Position__000000_Pos_NewDiagram_Dummy
 	__GongStructShape__000000_NewDiagram_Dummy.Fields = append(__GongStructShape__000000_NewDiagram_Dummy.Fields, __Field__000000_Name)
 }
-
-

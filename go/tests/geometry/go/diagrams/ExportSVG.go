@@ -161,7 +161,7 @@ func ExportSVGInjection(stage *models.StageStruct) {
 	__GongStructShape__000000_ExportSVG_Line.ShowNbInstances = false
 	__GongStructShape__000000_ExportSVG_Line.NbInstances = 0
 	__GongStructShape__000000_ExportSVG_Line.Width = 264.000000
-	__GongStructShape__000000_ExportSVG_Line.Heigth = 127.000000
+	__GongStructShape__000000_ExportSVG_Line.Height = 127.000000
 	__GongStructShape__000000_ExportSVG_Line.IsSelected = false
 
 	// Position values setup
@@ -173,5 +173,3 @@ func ExportSVGInjection(stage *models.StageStruct) {
 	__Classdiagram__000000_ExportSVG.GongStructShapes = append(__Classdiagram__000000_ExportSVG.GongStructShapes, __GongStructShape__000000_ExportSVG_Line)
 	__GongStructShape__000000_ExportSVG_Line.Position = __Position__000000_Pos_ExportSVG_Line
 }
-
-

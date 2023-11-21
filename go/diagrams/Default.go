@@ -97,7 +97,7 @@ var map_DocLink_Identifier_Default map[string]any = map[string]any{
 
 	"ref_models.GongStructShape.Fields": (ref_models.GongStructShape{}).Fields,
 
-	"ref_models.GongStructShape.Heigth": (ref_models.GongStructShape{}).Heigth,
+	"ref_models.GongStructShape.Heigth": (ref_models.GongStructShape{}).Height,
 
 	"ref_models.GongStructShape.Identifier": (ref_models.GongStructShape{}).Identifier,
 
@@ -305,7 +305,7 @@ func DefaultInjection(stage *models.StageStruct) {
 	__GongStructShape__000000_Default_Classdiagram.ShowNbInstances = true
 	__GongStructShape__000000_Default_Classdiagram.NbInstances = 0
 	__GongStructShape__000000_Default_Classdiagram.Width = 240.000000
-	__GongStructShape__000000_Default_Classdiagram.Heigth = 63.000000
+	__GongStructShape__000000_Default_Classdiagram.Height = 63.000000
 	__GongStructShape__000000_Default_Classdiagram.IsSelected = false
 
 	// GongStructShape values setup
@@ -318,7 +318,7 @@ func DefaultInjection(stage *models.StageStruct) {
 	__GongStructShape__000001_Default_DiagramPackage.ShowNbInstances = true
 	__GongStructShape__000001_Default_DiagramPackage.NbInstances = 0
 	__GongStructShape__000001_Default_DiagramPackage.Width = 240.000000
-	__GongStructShape__000001_Default_DiagramPackage.Heigth = 63.000000
+	__GongStructShape__000001_Default_DiagramPackage.Height = 63.000000
 	__GongStructShape__000001_Default_DiagramPackage.IsSelected = false
 
 	// GongStructShape values setup
@@ -331,7 +331,7 @@ func DefaultInjection(stage *models.StageStruct) {
 	__GongStructShape__000002_Default_NoteShape.ShowNbInstances = true
 	__GongStructShape__000002_Default_NoteShape.NbInstances = 0
 	__GongStructShape__000002_Default_NoteShape.Width = 240.000000
-	__GongStructShape__000002_Default_NoteShape.Heigth = 63.000000
+	__GongStructShape__000002_Default_NoteShape.Height = 63.000000
 	__GongStructShape__000002_Default_NoteShape.IsSelected = false
 
 	// Link values setup
@@ -423,5 +423,3 @@ func DefaultInjection(stage *models.StageStruct) {
 	__Link__000000_Classdiagrams.Middlevertice = __Vertice__000001_Verticle_in_class_diagram_Default_in_middle_between_Default_DiagramPackage_and_Default_Classdiagram
 	__Link__000001_NoteShapes.Middlevertice = __Vertice__000000_Verticle_in_class_diagram_Default_in_middle_between_Default_Classdiagram_and_Default_NoteShape
 }
-
-

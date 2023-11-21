@@ -97,7 +97,7 @@ var map_DocLink_Identifier_Default_1 map[string]any = map[string]any{
 
 	"ref_models.GongStructShape.Fields": (ref_models.GongStructShape{}).Fields,
 
-	"ref_models.GongStructShape.Heigth": (ref_models.GongStructShape{}).Heigth,
+	"ref_models.GongStructShape.Heigth": (ref_models.GongStructShape{}).Height,
 
 	"ref_models.GongStructShape.Identifier": (ref_models.GongStructShape{}).Identifier,
 

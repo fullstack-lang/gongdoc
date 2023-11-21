@@ -203,7 +203,7 @@ func LinePointDiagramInjection(stage *models.StageStruct) {
 	__GongStructShape__000000_Default_Line.ShowNbInstances = false
 	__GongStructShape__000000_Default_Line.NbInstances = 0
 	__GongStructShape__000000_Default_Line.Width = 240.000000
-	__GongStructShape__000000_Default_Line.Heigth = 108.000000
+	__GongStructShape__000000_Default_Line.Height = 108.000000
 	__GongStructShape__000000_Default_Line.IsSelected = false
 
 	// GongStructShape values setup
@@ -216,7 +216,7 @@ func LinePointDiagramInjection(stage *models.StageStruct) {
 	__GongStructShape__000001_Default_Point.ShowNbInstances = false
 	__GongStructShape__000001_Default_Point.NbInstances = 0
 	__GongStructShape__000001_Default_Point.Width = 240.000000
-	__GongStructShape__000001_Default_Point.Heigth = 63.000000
+	__GongStructShape__000001_Default_Point.Height = 63.000000
 	__GongStructShape__000001_Default_Point.IsSelected = false
 
 	// Link values setup
@@ -304,5 +304,3 @@ func LinePointDiagramInjection(stage *models.StageStruct) {
 	__Link__000000_End.Middlevertice = __Vertice__000000_Verticle_in_class_diagram_Default_in_middle_between_Default_Line_and_Default_Point
 	__Link__000001_Start.Middlevertice = __Vertice__000001_Verticle_in_class_diagram_Default_in_middle_between_Default_Line_and_Default_Point
 }
-
-

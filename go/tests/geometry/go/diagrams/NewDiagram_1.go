@@ -328,7 +328,7 @@ func NewDiagram_1Injection(stage *models.StageStruct) {
 	__GongStructShape__000000_NewDiagram_1_Line.ShowNbInstances = true
 	__GongStructShape__000000_NewDiagram_1_Line.NbInstances = 0
 	__GongStructShape__000000_NewDiagram_1_Line.Width = 335.000000
-	__GongStructShape__000000_NewDiagram_1_Line.Heigth = 138.000000
+	__GongStructShape__000000_NewDiagram_1_Line.Height = 138.000000
 	__GongStructShape__000000_NewDiagram_1_Line.IsSelected = false
 
 	// GongStructShape values setup
@@ -341,7 +341,7 @@ func NewDiagram_1Injection(stage *models.StageStruct) {
 	__GongStructShape__000001_NewDiagram_1_Point.ShowNbInstances = true
 	__GongStructShape__000001_NewDiagram_1_Point.NbInstances = 0
 	__GongStructShape__000001_NewDiagram_1_Point.Width = 320.000000
-	__GongStructShape__000001_NewDiagram_1_Point.Heigth = 123.000000
+	__GongStructShape__000001_NewDiagram_1_Point.Height = 123.000000
 	__GongStructShape__000001_NewDiagram_1_Point.IsSelected = false
 
 	// Link values setup
@@ -516,5 +516,3 @@ are referenced in the go code
 	__NoteShape__000000_ShortNodeOnModels.NoteShapeLinks = append(__NoteShape__000000_ShortNodeOnModels.NoteShapeLinks, __NoteShapeLink__000001_Line_Start)
 	__NoteShape__000000_ShortNodeOnModels.NoteShapeLinks = append(__NoteShape__000000_ShortNodeOnModels.NoteShapeLinks, __NoteShapeLink__000003_Point)
 }
-
-

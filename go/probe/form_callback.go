@@ -622,8 +622,8 @@ func (gongstructshapeFormCallback *GongStructShapeFormCallback) OnSave() {
 			FormDivBasicFieldToField(&(gongstructshape_.NbInstances), formDiv)
 		case "Width":
 			FormDivBasicFieldToField(&(gongstructshape_.Width), formDiv)
-		case "Heigth":
-			FormDivBasicFieldToField(&(gongstructshape_.Heigth), formDiv)
+		case "Height":
+			FormDivBasicFieldToField(&(gongstructshape_.Height), formDiv)
 		case "IsSelected":
 			FormDivBasicFieldToField(&(gongstructshape_.IsSelected), formDiv)
 		case "Classdiagram:GongStructShapes":
