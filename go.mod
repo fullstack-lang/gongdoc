@@ -4,7 +4,7 @@ go 1.21.0
 
 require (
 	github.com/frankban/quicktest v1.14.6 // indirect
-	github.com/fullstack-lang/gong v0.0.0-20231117042855-2effddf96d9c
+	github.com/fullstack-lang/gong v0.0.0-20231121185001-2ffdfa9a2e6b
 	github.com/gin-contrib/cors v1.4.0
 	github.com/gin-contrib/static v0.0.1
 	github.com/gin-gonic/gin v1.9.1
@@ -23,13 +23,13 @@ require (
 )
 
 require (
-	github.com/fullstack-lang/gongsvg v0.0.0-20231116010249-feea037a7a20
+	github.com/fullstack-lang/gongsvg v0.0.0-20231118170738-6fac74d96498
 	github.com/fullstack-lang/gongtable v0.0.0-20231110024948-a7a414cc3516
 	github.com/fullstack-lang/gongtree v0.0.0-20231117042431-586d8529de87
 	github.com/fullstack-lang/maticons v0.0.0-20230823061653-70c364fbdd00
 	github.com/glebarez/sqlite v1.10.0
 	github.com/xuri/excelize/v2 v2.8.0
-	golang.org/x/exp v0.0.0-20231108232855-2478ac86f678
+	golang.org/x/exp v0.0.0-20231110203233-9a3e6036ecaa
 )
 
 require (
@@ -69,7 +69,7 @@ require (
 	golang.org/x/net v0.18.0 // indirect
 	google.golang.org/protobuf v1.31.0 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
-	modernc.org/libc v1.32.0 // indirect
+	modernc.org/libc v1.34.9 // indirect
 	modernc.org/mathutil v1.6.0 // indirect
 	modernc.org/memory v1.7.2 // indirect
 	modernc.org/sqlite v1.27.0 // indirect
