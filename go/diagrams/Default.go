@@ -75,7 +75,7 @@ var map_DocLink_Identifier_Default map[string]any = map[string]any{
 
 	"ref_models.GongEnumShape.GongEnumValueEntrys": (ref_models.GongEnumShape{}).GongEnumValueEntrys,
 
-	"ref_models.GongEnumShape.Heigth": (ref_models.GongEnumShape{}).Heigth,
+	"ref_models.GongEnumShape.Height": (ref_models.GongEnumShape{}).Height,
 
 	"ref_models.GongEnumShape.Identifier": (ref_models.GongEnumShape{}).Identifier,
 
@@ -97,7 +97,7 @@ var map_DocLink_Identifier_Default map[string]any = map[string]any{
 
 	"ref_models.GongStructShape.Fields": (ref_models.GongStructShape{}).Fields,
 
-	"ref_models.GongStructShape.Heigth": (ref_models.GongStructShape{}).Height,
+	"ref_models.GongStructShape.Height": (ref_models.GongStructShape{}).Height,
 
 	"ref_models.GongStructShape.Identifier": (ref_models.GongStructShape{}).Identifier,
 
@@ -167,7 +167,7 @@ var map_DocLink_Identifier_Default map[string]any = map[string]any{
 
 	"ref_models.NoteShape.BodyHTML": (ref_models.NoteShape{}).BodyHTML,
 
-	"ref_models.NoteShape.Heigth": (ref_models.NoteShape{}).Heigth,
+	"ref_models.NoteShape.Height": (ref_models.NoteShape{}).Height,
 
 	"ref_models.NoteShape.Identifier": (ref_models.NoteShape{}).Identifier,
 

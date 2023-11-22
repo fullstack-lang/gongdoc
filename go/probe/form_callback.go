@@ -384,8 +384,8 @@ func (gongenumshapeFormCallback *GongEnumShapeFormCallback) OnSave() {
 			FormDivBasicFieldToField(&(gongenumshape_.Identifier), formDiv)
 		case "Width":
 			FormDivBasicFieldToField(&(gongenumshape_.Width), formDiv)
-		case "Heigth":
-			FormDivBasicFieldToField(&(gongenumshape_.Heigth), formDiv)
+		case "Height":
+			FormDivBasicFieldToField(&(gongenumshape_.Height), formDiv)
 		case "Classdiagram:GongEnumShapes":
 			// we need to retrieve the field owner before the change
 			var pastClassdiagramOwner *models.Classdiagram
@@ -894,8 +894,8 @@ func (noteshapeFormCallback *NoteShapeFormCallback) OnSave() {
 			FormDivBasicFieldToField(&(noteshape_.Y), formDiv)
 		case "Width":
 			FormDivBasicFieldToField(&(noteshape_.Width), formDiv)
-		case "Heigth":
-			FormDivBasicFieldToField(&(noteshape_.Heigth), formDiv)
+		case "Height":
+			FormDivBasicFieldToField(&(noteshape_.Height), formDiv)
 		case "Matched":
 			FormDivBasicFieldToField(&(noteshape_.Matched), formDiv)
 		case "Classdiagram:NoteShapes":

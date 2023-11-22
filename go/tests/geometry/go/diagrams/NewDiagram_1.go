@@ -274,7 +274,7 @@ func NewDiagram_1Injection(stage *models.StageStruct) {
 	//gong:ident [ref_models.LineTypeInt]
 	__GongEnumShape__000000_NewDiagram_1_LineTypeInt.Identifier = `ref_models.LineTypeInt`
 	__GongEnumShape__000000_NewDiagram_1_LineTypeInt.Width = 240.000000
-	__GongEnumShape__000000_NewDiagram_1_LineTypeInt.Heigth = 93.000000
+	__GongEnumShape__000000_NewDiagram_1_LineTypeInt.Height = 93.000000
 
 	// GongEnumShape values setup
 	__GongEnumShape__000001_NewDiagram_1_LineTypeString.Name = `NewDiagram_1-LineTypeString`
@@ -284,7 +284,7 @@ func NewDiagram_1Injection(stage *models.StageStruct) {
 	//gong:ident [ref_models.LineTypeString]
 	__GongEnumShape__000001_NewDiagram_1_LineTypeString.Identifier = `ref_models.LineTypeString`
 	__GongEnumShape__000001_NewDiagram_1_LineTypeString.Width = 335.000000
-	__GongEnumShape__000001_NewDiagram_1_LineTypeString.Heigth = 138.000000
+	__GongEnumShape__000001_NewDiagram_1_LineTypeString.Height = 138.000000
 
 	// GongEnumValueEntry values setup
 	__GongEnumValueEntry__000000_CONTINUOUS.Name = `CONTINUOUS`
@@ -416,7 +416,7 @@ are referenced in the go code
 	__NoteShape__000000_ShortNodeOnModels.X = 496.000000
 	__NoteShape__000000_ShortNodeOnModels.Y = 531.000000
 	__NoteShape__000000_ShortNodeOnModels.Width = 626.000000
-	__NoteShape__000000_ShortNodeOnModels.Heigth = 111.000000
+	__NoteShape__000000_ShortNodeOnModels.Height = 111.000000
 	__NoteShape__000000_ShortNodeOnModels.Matched = false
 
 	// NoteShapeLink values setup

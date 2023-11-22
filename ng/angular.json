@@ -56,7 +56,34 @@
                                 {
                                     "type": "initial",
                                     "maximumWarning": "2mb",
-                                    "maximumError": "5mb"
+                                    "maximumError": "10mb"
+                                },
+                                {
+                                    "type": "anyComponentStyle",
+                                    "maximumWarning": "6kb",
+                                    "maximumError": "10kb"
+                                }
+                            ]
+                        },
+                        "development": {
+                            "fileReplacements": [
+                                {
+                                    "replace": "src/environments/environment.ts",
+                                    "with": "src/environments/environment.prod.ts"
+                                }
+                            ],
+                            "optimization": false,
+                            "outputHashing": "all",
+                            "sourceMap": false,
+                            "namedChunks": false,
+                            "extractLicenses": true,
+                            "vendorChunk": false,
+                            "buildOptimizer": true,
+                            "budgets": [
+                                {
+                                    "type": "initial",
+                                    "maximumWarning": "2mb",
+                                    "maximumError": "10mb"
                                 },
                                 {
                                     "type": "anyComponentStyle",
@@ -76,6 +103,9 @@
                     "configurations": {
                         "production": {
                             "browserTarget": "ng:build:production"
+                        },
+                        "development": {
+                            "browserTarget": "ng:build:development"
                         }
                     }
                 },
@@ -141,6 +171,9 @@
                     "configurations": {
                         "production": {
                             "tsConfig": "projects/gongdoc/tsconfig.lib.prod.json"
+                        },
+                        "development": {
+                            "tsConfig": "projects/gongdoc/tsconfig.lib.json"
                         }
                     },
                     "defaultConfiguration": ""

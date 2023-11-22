@@ -97,7 +97,7 @@ func FillUpForm[T models.Gongstruct](
 		BasicFieldtoForm("Identifier", instanceWithInferedType.Identifier, instanceWithInferedType, probe.formStage, formGroup, false)
 		AssociationSliceToForm("GongEnumValueEntrys", instanceWithInferedType, &instanceWithInferedType.GongEnumValueEntrys, formGroup, probe)
 		BasicFieldtoForm("Width", instanceWithInferedType.Width, instanceWithInferedType, probe.formStage, formGroup, false)
-		BasicFieldtoForm("Heigth", instanceWithInferedType.Heigth, instanceWithInferedType, probe.formStage, formGroup, false)
+		BasicFieldtoForm("Height", instanceWithInferedType.Height, instanceWithInferedType, probe.formStage, formGroup, false)
 		{
 			var rf models.ReverseField
 			_ = rf
@@ -234,7 +234,7 @@ func FillUpForm[T models.Gongstruct](
 		BasicFieldtoForm("X", instanceWithInferedType.X, instanceWithInferedType, probe.formStage, formGroup, false)
 		BasicFieldtoForm("Y", instanceWithInferedType.Y, instanceWithInferedType, probe.formStage, formGroup, false)
 		BasicFieldtoForm("Width", instanceWithInferedType.Width, instanceWithInferedType, probe.formStage, formGroup, false)
-		BasicFieldtoForm("Heigth", instanceWithInferedType.Heigth, instanceWithInferedType, probe.formStage, formGroup, false)
+		BasicFieldtoForm("Height", instanceWithInferedType.Height, instanceWithInferedType, probe.formStage, formGroup, false)
 		BasicFieldtoForm("Matched", instanceWithInferedType.Matched, instanceWithInferedType, probe.formStage, formGroup, false)
 		AssociationSliceToForm("NoteShapeLinks", instanceWithInferedType, &instanceWithInferedType.NoteShapeLinks, formGroup, probe)
 		{
