@@ -21,6 +21,8 @@ func GenerateFieldParser(fieldList *[]*ast.Field, owningGongstruct *GongStruct,
 		// get the comment group and check wether it is "swagger:ignore" or "gong:ignore"
 		var isIgnoredField bool
 		var isTextArea bool
+		var isBespokeWidth bool
+		var bespokeWidth int
 		if field.Comment != nil {
 			for _, comment := range field.Comment.List {
 				if strings.Contains(comment.Text, "swagger:ignore") || strings.Contains(comment.Text, "gong:ignore") {
@@ -28,6 +30,13 @@ func GenerateFieldParser(fieldList *[]*ast.Field, owningGongstruct *GongStruct,
 				}
 				if strings.Contains(comment.Text, "gong:text") {
 					isTextArea = true
+				}
+				if strings.Contains(comment.Text, "gong:width") {
+					width, err := extractWidthNumber(comment.Text)
+					if err == nil {
+						isBespokeWidth = true
+						bespokeWidth = width
+					}
 				}
 			}
 		}
@@ -38,6 +47,13 @@ func GenerateFieldParser(fieldList *[]*ast.Field, owningGongstruct *GongStruct,
 				}
 				if strings.Contains(comment.Text, "gong:text") {
 					isTextArea = true
+				}
+				if strings.Contains(comment.Text, "gong:width") {
+					width, err := extractWidthNumber(comment.Text)
+					if err == nil {
+						isBespokeWidth = true
+						bespokeWidth = width
+					}
 				}
 			}
 		}
@@ -80,6 +96,8 @@ func GenerateFieldParser(fieldList *[]*ast.Field, owningGongstruct *GongStruct,
 							Index:               len(owningGongstruct.Fields),
 							CompositeStructName: compositeTypeStructName,
 							IsTextArea:          isTextArea,
+							IsBespokeWidth:      isBespokeWidth,
+							BespokeWidth:        bespokeWidth,
 						}
 
 					if field.Doc != nil {
