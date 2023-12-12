@@ -346,14 +346,14 @@ func DefaultInjection(stage *models.StageStruct) {
 
 	//gong:ident [ref_models.Classdiagram]
 	__Link__000000_Classdiagrams.Fieldtypename = `ref_models.Classdiagram`
-	__Link__000000_Classdiagrams.FieldOffsetX = -113.000000
-	__Link__000000_Classdiagrams.FieldOffsetY = -19.000000
+	__Link__000000_Classdiagrams.FieldOffsetX = -141.000000
+	__Link__000000_Classdiagrams.FieldOffsetY = -13.000000
 	__Link__000000_Classdiagrams.TargetMultiplicity = models.MANY
-	__Link__000000_Classdiagrams.TargetMultiplicityOffsetX = -29.000000
-	__Link__000000_Classdiagrams.TargetMultiplicityOffsetY = 27.000000
+	__Link__000000_Classdiagrams.TargetMultiplicityOffsetX = -46.000000
+	__Link__000000_Classdiagrams.TargetMultiplicityOffsetY = 40.000000
 	__Link__000000_Classdiagrams.SourceMultiplicity = models.ZERO_ONE
-	__Link__000000_Classdiagrams.SourceMultiplicityOffsetX = 14.000000
-	__Link__000000_Classdiagrams.SourceMultiplicityOffsetY = 23.000000
+	__Link__000000_Classdiagrams.SourceMultiplicityOffsetX = 21.000000
+	__Link__000000_Classdiagrams.SourceMultiplicityOffsetY = -24.000000
 	__Link__000000_Classdiagrams.StartOrientation = models.ORIENTATION_HORIZONTAL
 	__Link__000000_Classdiagrams.StartRatio = 0.500000
 	__Link__000000_Classdiagrams.EndOrientation = models.ORIENTATION_HORIZONTAL
@@ -387,18 +387,18 @@ func DefaultInjection(stage *models.StageStruct) {
 	__Link__000001_NoteShapes.CornerOffsetRatio = 1.262818
 
 	// Position values setup
-	__Position__000000_Pos_Default_Classdiagram.X = 456.000000
-	__Position__000000_Pos_Default_Classdiagram.Y = 92.000000
+	__Position__000000_Pos_Default_Classdiagram.X = 558.000031
+	__Position__000000_Pos_Default_Classdiagram.Y = 319.000000
 	__Position__000000_Pos_Default_Classdiagram.Name = `Pos-Default-Classdiagram`
 
 	// Position values setup
-	__Position__000001_Pos_Default_DiagramPackage.X = 68.000000
-	__Position__000001_Pos_Default_DiagramPackage.Y = 193.000000
+	__Position__000001_Pos_Default_DiagramPackage.X = 43.000000
+	__Position__000001_Pos_Default_DiagramPackage.Y = 149.000000
 	__Position__000001_Pos_Default_DiagramPackage.Name = `Pos-Default-DiagramPackage`
 
 	// Position values setup
-	__Position__000002_Pos_Default_NoteShape.X = 878.000000
-	__Position__000002_Pos_Default_NoteShape.Y = 212.000000
+	__Position__000002_Pos_Default_NoteShape.X = 869.000000
+	__Position__000002_Pos_Default_NoteShape.Y = 122.000000
 	__Position__000002_Pos_Default_NoteShape.Name = `Pos-Default-NoteShape`
 
 	// Vertice values setup
@@ -423,3 +423,5 @@ func DefaultInjection(stage *models.StageStruct) {
 	__Link__000000_Classdiagrams.Middlevertice = __Vertice__000001_Verticle_in_class_diagram_Default_in_middle_between_Default_DiagramPackage_and_Default_Classdiagram
 	__Link__000001_NoteShapes.Middlevertice = __Vertice__000000_Verticle_in_class_diagram_Default_in_middle_between_Default_Classdiagram_and_Default_NoteShape
 }
+
+
