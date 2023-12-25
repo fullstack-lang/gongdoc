@@ -113,7 +113,7 @@ func (docSVGMapper *DocSVGMapper) GenerateSvg(
 		title.Content = title.Name
 		title.X_Offset = 0
 		title.Y_Offset = 20
-		title.RectAnchorType = gongsvg_models.RECT_ANCHOR_TOP
+		title.RectAnchorType = gongsvg_models.RECT_TOP
 		title.TextAnchorType = gongsvg_models.TEXT_ANCHOR_CENTER
 		title.FontWeight = "bold"
 		title.Color = gongsvg_models.Black.ToString()
@@ -127,7 +127,7 @@ func (docSVGMapper *DocSVGMapper) GenerateSvg(
 		titleBox.Y_Offset = 0
 		titleBox.Width = rect.Width
 		titleBox.Height = 30
-		titleBox.RectAnchorType = gongsvg_models.RECT_ANCHOR_TOP_LEFT
+		titleBox.RectAnchorType = gongsvg_models.RECT_TOP_LEFT
 		titleBox.Color = "#ff8450"
 		titleBox.WidthFollowRect = true
 		titleBox.FillOpacity = 100
@@ -145,7 +145,7 @@ func (docSVGMapper *DocSVGMapper) GenerateSvg(
 			// field position
 			fieldText.X_Offset = 10
 			fieldText.Y_Offset = 20 + 30 + float64(idx)*15
-			fieldText.RectAnchorType = gongsvg_models.RECT_ANCHOR_TOP_LEFT
+			fieldText.RectAnchorType = gongsvg_models.RECT_TOP_LEFT
 			fieldText.TextAnchorType = gongsvg_models.TEXT_ANCHOR_START
 
 			fieldText.Color = "black"
@@ -164,7 +164,7 @@ func (docSVGMapper *DocSVGMapper) GenerateSvg(
 			// text position
 			nbInstancesText.X_Offset = -5
 			nbInstancesText.Y_Offset = 20
-			nbInstancesText.RectAnchorType = gongsvg_models.RECT_ANCHOR_TOP_RIGHT
+			nbInstancesText.RectAnchorType = gongsvg_models.RECT_TOP_RIGHT
 			nbInstancesText.TextAnchorType = gongsvg_models.TEXT_ANCHOR_END
 
 			nbInstancesText.Color = "black"
@@ -317,7 +317,7 @@ func (docSVGMapper *DocSVGMapper) GenerateSvg(
 		title.Content = title.Name
 		title.X_Offset = 0
 		title.Y_Offset = 20
-		title.RectAnchorType = gongsvg_models.RECT_ANCHOR_TOP
+		title.RectAnchorType = gongsvg_models.RECT_TOP
 		title.TextAnchorType = gongsvg_models.TEXT_ANCHOR_CENTER
 		title.FontWeight = "bold"
 		title.Color = gongsvg_models.Black.ToString()
@@ -331,7 +331,7 @@ func (docSVGMapper *DocSVGMapper) GenerateSvg(
 		titleBox.Y_Offset = 0
 		titleBox.Width = rect.Width
 		titleBox.Height = 30
-		titleBox.RectAnchorType = gongsvg_models.RECT_ANCHOR_TOP_LEFT
+		titleBox.RectAnchorType = gongsvg_models.RECT_TOP_LEFT
 		titleBox.Color = gongsvg_models.Steelblue.ToString()
 		titleBox.WidthFollowRect = true
 		titleBox.FillOpacity = 100
@@ -349,7 +349,7 @@ func (docSVGMapper *DocSVGMapper) GenerateSvg(
 			// field position
 			fieldText.X_Offset = 10
 			fieldText.Y_Offset = 20 + 30 + float64(idx)*15
-			fieldText.RectAnchorType = gongsvg_models.RECT_ANCHOR_TOP_LEFT
+			fieldText.RectAnchorType = gongsvg_models.RECT_TOP_LEFT
 			fieldText.TextAnchorType = gongsvg_models.TEXT_ANCHOR_START
 
 			fieldText.Color = "black"
@@ -408,7 +408,7 @@ func (docSVGMapper *DocSVGMapper) GenerateSvg(
 		title.Content = title.Name
 		title.X_Offset = 0
 		title.Y_Offset = 20
-		title.RectAnchorType = gongsvg_models.RECT_ANCHOR_TOP
+		title.RectAnchorType = gongsvg_models.RECT_TOP
 		title.TextAnchorType = gongsvg_models.TEXT_ANCHOR_CENTER
 		title.FontWeight = "bold"
 		title.Color = gongsvg_models.Black.ToString()
@@ -423,7 +423,7 @@ func (docSVGMapper *DocSVGMapper) GenerateSvg(
 		content.Content = content.Name
 		content.X_Offset = 0
 		content.Y_Offset = 40
-		content.RectAnchorType = gongsvg_models.RECT_ANCHOR_TOP
+		content.RectAnchorType = gongsvg_models.RECT_TOP
 		content.TextAnchorType = gongsvg_models.TEXT_ANCHOR_CENTER
 		content.FontWeight = "normal"
 		content.Color = gongsvg_models.Black.ToString()
@@ -437,7 +437,7 @@ func (docSVGMapper *DocSVGMapper) GenerateSvg(
 		// titleBox.Y_Offset = 0
 		// titleBox.Width = rect.Width
 		// titleBox.Height = 30
-		// titleBox.RectAnchorType = gongsvg_models.RECT_ANCHOR_TOP_LEFT
+		// titleBox.RectAnchorType = gongsvg_models.RECT_TOP_LEFT
 		// titleBox.Color = gongsvg_models.Skyblue.ToString()
 		// titleBox.WidthFollowRect = true
 		// titleBox.FillOpacity = 100

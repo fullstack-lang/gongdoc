@@ -49,7 +49,7 @@ svg {
         </rect>
 
                 <ng-container *ngFor='let rect of Rect.RectAnchoredRects!; let i = index'>
-                <ng-container *ngIf="rect.RectAnchorType == RectAnchorType.RECT_ANCHOR_TOP" 
+                <ng-container *ngIf="rect.RectAnchorType == RectAnchorType.RECT_TOP" 
                         [ngTemplateOutlet]="anchoredRect" 
                         [ngTemplateOutletContext]="{ 
                                 rect: rect, 
@@ -58,7 +58,7 @@ svg {
                                 width: (rect.WidthFollowRect ? Rect.Width : rect.Width) }
                         ">
                 </ng-container>
-                <ng-container *ngIf="rect.RectAnchorType == RectAnchorType.RECT_ANCHOR_TOP_LEFT" 
+                <ng-container *ngIf="rect.RectAnchorType == RectAnchorType.RECT_TOP_LEFT" 
                         [ngTemplateOutlet]="anchoredRect" 
                         [ngTemplateOutletContext]="{ 
                                 rect: rect, 
@@ -67,7 +67,7 @@ svg {
                                 width: (rect.WidthFollowRect ? Rect.Width : rect.Width) }
                         ">
                 </ng-container>
-                <ng-container *ngIf="rect.RectAnchorType == RectAnchorType.RECT_ANCHOR_BOTTOM" 
+                <ng-container *ngIf="rect.RectAnchorType == RectAnchorType.RECT_BOTTOM" 
                         [ngTemplateOutlet]="anchoredRect" 
                         [ngTemplateOutletContext]="{ 
                                 rect: rect, 
@@ -79,7 +79,7 @@ svg {
         </ng-container>
 
         <ng-container *ngFor='let text of Rect.RectAnchoredTexts!; let i = index'>
-                <ng-container *ngIf="text.RectAnchorType == RectAnchorType.RECT_ANCHOR_TOP_LEFT" 
+                <ng-container *ngIf="text.RectAnchorType == RectAnchorType.RECT_TOP_LEFT" 
                         [ngTemplateOutlet]="anchoredText" 
                         [ngTemplateOutletContext]="{ 
                                 text: text, 
@@ -87,7 +87,7 @@ svg {
                                 anchorY: Rect.Y + text.Y_Offset }
                         ">
                 </ng-container>
-                <ng-container *ngIf="text.RectAnchorType == RectAnchorType.RECT_ANCHOR_TOP" 
+                <ng-container *ngIf="text.RectAnchorType == RectAnchorType.RECT_TOP" 
                         [ngTemplateOutlet]="anchoredText" 
                         [ngTemplateOutletContext]="{ 
                                 text: text, 
@@ -95,7 +95,7 @@ svg {
                                 anchorY: Rect.Y + text.Y_Offset }
                         ">
                 </ng-container>
-                <ng-container *ngIf="text.RectAnchorType == RectAnchorType.RECT_ANCHOR_TOP_RIGHT" 
+                <ng-container *ngIf="text.RectAnchorType == RectAnchorType.RECT_TOP_RIGHT" 
                         [ngTemplateOutlet]="anchoredText" 
                         [ngTemplateOutletContext]="{ 
                                 text: text, 
@@ -103,7 +103,7 @@ svg {
                                 anchorY: Rect.Y + text.Y_Offset }
                         ">
                 </ng-container>
-                <ng-container *ngIf="text.RectAnchorType == RectAnchorType.RECT_ANCHOR_BOTTOM" 
+                <ng-container *ngIf="text.RectAnchorType == RectAnchorType.RECT_BOTTOM" 
                         [ngTemplateOutlet]="anchoredText" 
                         [ngTemplateOutletContext]="{ 
                                 text: text, 

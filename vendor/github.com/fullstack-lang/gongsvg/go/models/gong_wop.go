@@ -181,6 +181,7 @@ type Rect_WOP struct {
 	HasRightHandle bool
 	CanHaveTopHandle bool
 	HasTopHandle bool
+	IsScalingProportionally bool
 	CanHaveBottomHandle bool
 	HasBottomHandle bool
 	CanMoveHorizontaly bool
@@ -194,9 +195,8 @@ type RectAnchoredPath_WOP struct {
 	X_Offset float64
 	Y_Offset float64
 	RectAnchorType RectAnchorType
-	WidthFollowRect bool
-	HeightFollowRect bool
 	ScalePropotionnally bool
+	AppliedScaling float64
 	Color string
 	FillOpacity float64
 	Stroke string

@@ -223,7 +223,7 @@ export class RectComponent implements OnInit, OnDestroy, DoCheck, OnChanges {
   }
 
   ngOnDestroy() {
-    gongsvg.RectAnchorType.RECT_ANCHOR_TOP
+    gongsvg.RectAnchorType.RECT_TOP
     this.subscriptions.forEach((subscription) => subscription.unsubscribe());
   }
 

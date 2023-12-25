@@ -19,8 +19,8 @@ github.com/frankban/quicktest v1.14.6 h1:7Xjx+VpznH+oBnejlPUj8oUpdxnVs4f8XU8WnHk
 github.com/frankban/quicktest v1.14.6/go.mod h1:4ptaffx2x8+WTWXmUCuVU6aPUX1/Mz7zb5vbUoiM6w0=
 github.com/fullstack-lang/gong v0.0.0-20231213090220-3856473bbf07 h1:q5Ic40+1BsPZ7yMeGfKr0W7aPxd+gAcag920h1fq6n0=
 github.com/fullstack-lang/gong v0.0.0-20231213090220-3856473bbf07/go.mod h1:0GS2GO+WcQ0jiBqw2CmxE/1cBdJr6g/pVeR9l67uDoI=
-github.com/fullstack-lang/gongsvg v0.0.0-20231212090334-208f4b72e281 h1:4lWRthFoUKUnjl4+5JK8v8x9Pcnb+R2ZN4tC6fP1uFI=
-github.com/fullstack-lang/gongsvg v0.0.0-20231212090334-208f4b72e281/go.mod h1:S19O+qWnLP01Uf+2r6S6kICT07DFmCXKs6IO4wW7MVU=
+github.com/fullstack-lang/gongsvg v0.0.0-20231225211402-afa3d2d6e868 h1:HcA6/TW6NBggKy5GxWjBThc54ZZycAPsLzurxMto6Yw=
+github.com/fullstack-lang/gongsvg v0.0.0-20231225211402-afa3d2d6e868/go.mod h1:pfTWEYWfeJbs6zY8B5W4paKfyt/KfEvxo5Yv4VJeBZs=
 github.com/fullstack-lang/gongtable v0.0.0-20231214233720-0cdd8c1bf695 h1:Y3ufOnaJg4LA6S50QVE2g5jUPB5R7xo5cDCCj8Ek37w=
 github.com/fullstack-lang/gongtable v0.0.0-20231214233720-0cdd8c1bf695/go.mod h1:+k0ELKDa8kFHK3adSiV6H9o+eTWU/7jv/nIs+cwwXKU=
 github.com/fullstack-lang/gongtree v0.0.0-20231206130925-9ded3e8642ab h1:0QjZgCHk96Jp3q31D/Dq6Sx6rQ6SVLr6Qkx3J5yjaRM=

@@ -1,9 +1,15 @@
 <!-- <div>Width: {{ svgWidth}}</div>
 <div>Height: {{ svgHeight }}</div> -->
+
+            <!-- (dragend)="backgroundOnDragEnd($event)"
+            (click)="backgroundOnClick($event)"
+            (dragover)="backgroundDragOver($event)" -->
+
 <svg [attr.width]="svgWidth" [attr.height]="svgHeight" >
     <g>
+
         <!-- this rect is for catching mouse event that are in the void -->
-        <rect 
+        <rect
             [attr.x]=0
             [attr.y]=0
             [attr.width]="svgWidth"
@@ -11,9 +17,11 @@
 
             [attr.fill-opacity]=0
 
-            (mousedown)="mousedown($event)"
-            (mousemove)="mousemove($event)"
-            (mouseup)="onmouseup($event)">
+            (mousedown)="backgroundOnMouseDown($event)"
+            (mousemove)="onmousemove($event, 'background')"
+            (mouseup)="backgroundOnMouseUp($event)"
+
+            >
         </rect>
         <ng-container *ngFor="let layer of svg.Layers" class="noevents-area">
             <ng-container *ngFor="let circle of layer.Circles">
@@ -131,7 +139,7 @@
                     [attr.repeatCount]="animate.RepeatCount" />
             </ng-container>
             <ng-container *ngFor="let rect of layer.Rects">
-                <rect 
+                <rect
                     [attr.x]="rect.X"
                     [attr.y]="rect.Y"
                     [attr.width]="rect.Width"
@@ -145,7 +153,7 @@
                     [attr.transform]="rect.Transform"
 
                     (mousedown)="rectMouseDown($event, rect)"
-                    (mousemove)="rectMouseMove($event, rect)"
+                    (mousemove)="onmousemove($event)"
                     (mouseup)="rectMouseUp($event, rect)">
 
                     <animate
@@ -210,6 +218,22 @@
                             anchorY: rect.Y + rect.Height + rectAnchoredPath.Y_Offset , }
                         ">
                     </ng-container>
+                    <ng-container *ngIf="rectAnchoredPath.RectAnchorType == RectAnchorType.RECT_BOTTOM_LEFT" 
+                    [ngTemplateOutlet]="anchoredPath" 
+                    [ngTemplateOutletContext]="{ 
+                        path: rectAnchoredPath, 
+                        anchorX: rect.X + rectAnchoredPath.X_Offset, 
+                        anchorY: rect.Y + rect.Height + rectAnchoredPath.Y_Offset ,}
+                    ">
+                </ng-container>
+                    <ng-container *ngIf="rectAnchoredPath.RectAnchorType == RectAnchorType.RECT_CENTER" 
+                        [ngTemplateOutlet]="anchoredPath" 
+                        [ngTemplateOutletContext]="{ 
+                            path: rectAnchoredPath, 
+                            anchorX: rect.X + rect.Width/2 + rectAnchoredPath.X_Offset, 
+                            anchorY: rect.Y + rect.Height/2 + rectAnchoredPath.Y_Offset , }
+                        ">
+                    </ng-container>
                 </ng-container>
                 <ng-container *ngFor='let text of rect.RectAnchoredTexts!; let i = index'>
                     <ng-container *ngIf="text.RectAnchorType == RectAnchorType.RECT_TOP_LEFT" 
@@ -255,7 +279,7 @@
                         [attr.fill]="(anchorDragging && activeAnchor === 'left') ? draggingAnchorFillColor : anchorFillColor"
 
                         (mousedown)="anchorMouseDown($event, 'left', rect)"
-                        (mousemove)="anchorMouseMove($event, 'left', rect)"
+                        (mousemove)="onmousemove($event)"
                         (mouseup)="anchorMouseUp($event, rect)"/>
 
                     <!-- Right anchor -->
@@ -268,7 +292,7 @@
                             [attr.fill]="(anchorDragging && activeAnchor === 'right') ? draggingAnchorFillColor : anchorFillColor"
 
                             (mousedown)="anchorMouseDown($event, 'right', rect)"
-                            (mousemove)="anchorMouseMove($event, 'right', rect)"
+                            (mousemove)="onmousemove($event)"
                             (mouseup)="anchorMouseUp($event, rect)"/>
 
                     <!-- Top anchor -->
@@ -281,7 +305,7 @@
                             [attr.fill]="(anchorDragging && activeAnchor === 'top') ? draggingAnchorFillColor : anchorFillColor"
 
                             (mousedown)="anchorMouseDown($event, 'top', rect)"
-                            (mousemove)="anchorMouseMove($event, 'top', rect)"
+                            (mousemove)="onmousemove($event)"
                             (mouseup)="anchorMouseUp($event, rect)"/>
 
                     <!-- Bottom anchor -->
@@ -294,7 +318,7 @@
                             [attr.fill]="(anchorDragging && activeAnchor === 'bottom') ? draggingAnchorFillColor : anchorFillColor"
 
                             (mousedown)="anchorMouseDown($event, 'bottom', rect)"
-                            (mousemove)="anchorMouseMove($event, 'bottom', rect)"
+                            (mousemove)="onmousemove($event)"
                             (mouseup)="anchorMouseUp($event, rect)"/>
                 </ng-container>
             </ng-container>
@@ -315,7 +339,7 @@
                             [attr.segment-number]="segment.Number"
                             
                             (mousedown)="linkMouseDown($event, segment.Number, link)" 
-                            (mousemove)="linkMouseMove($event, link)" 
+                            (mousemove)="onmousemove($event)" 
                             (mouseup)="linkMouseUp($event, link)"
                         
                         />
@@ -333,7 +357,7 @@
                         [attr.segment-number]="segment.Number"
                         
                         (mousedown)="linkMouseDown($event, segment.Number, link)" 
-                        (mousemove)="linkMouseMove($event, link)" 
+                        (mousemove)="onmousemove($event)" 
                         (mouseup)="linkMouseUp($event, link)"
                         
                         />
@@ -381,7 +405,7 @@
                                         [attr.transform]="text.Transform"
                                         
                                         (mousedown)="textAnchoredMouseDown(link, $event, i, 'POSITION_ON_ARROW_END')" 
-                                        (mousemove)="textAnchoredMouseMove(link, $event)" 
+                                        (mousemove)="onmousemove($event)" 
                                         (mouseup)="textAnchoredMouseUp(link, $event)"
                                         >
                                         <tspan *ngFor='let line of lines; let j = index' 
@@ -405,7 +429,7 @@
                                         [attr.transform]="text.Transform"
                                         
                                         (mousedown)="textAnchoredMouseDown(link, $event, i, 'POSITION_ON_ARROW_START')" 
-                                        (mousemove)="textAnchoredMouseMove(link, $event)" 
+                                        (mousemove)="onmousemove($event)" 
                                         (mouseup)="textAnchoredMouseUp(link, $event)"
                                         >
                                         <tspan *ngFor='let line of lines; let j = index' 
@@ -436,12 +460,22 @@
                 </ng-container>
             </ng-container>
         </ng-container>
-        <rect *ngIf="selectionRectDrawing" 
-            [attr.x]="rectX" [attr.y]="rectY" [attr.width]="width" [attr.height]="height" 
-            stroke-dasharray="5,5" stroke="black" stroke-width="2" fill="none" />
-        <line *ngIf="linkDrawing"
-            [attr.x1]="startX" [attr.y1]="startY" [attr.x2]="endX" [attr.y2]="endY" 
-            stroke="black" stroke-dasharray="5,5" [attr.stroke-width]="2"/>
+        <!-- the following rect is drawn when a user multi select rects -->
+        <rect *ngIf="State == StateEnumType.MULTI_RECTS_SELECTION" 
+            pointer-events="none"
+            [attr.x]="Math.min(PointAtMouseDown.X, PointAtMouseMove.X)" 
+            [attr.y]="Math.min(PointAtMouseDown.Y, PointAtMouseMove.Y)" 
+            [attr.width]="Math.abs(PointAtMouseMove.X - PointAtMouseDown.X)" 
+            [attr.height]="Math.abs(PointAtMouseMove.Y - PointAtMouseDown.Y)" 
+            stroke-dasharray="5,5" stroke="black" stroke-width="2" fill="none" 
+            />
+        <!-- the following line is drawn when a user draws a link between rects -->
+        <line *ngIf="State == StateEnumType.LINK_DRAWING"
+            pointer-events="none"
+            [attr.x1]="PointAtMouseDown.X" [attr.y1]="PointAtMouseDown.Y" 
+            [attr.x2]="PointAtMouseMove.X" [attr.y2]="PointAtMouseMove.Y" 
+            stroke="black" stroke-dasharray="5,5" 
+            [attr.stroke-width]="2"/>
     </g>
 </svg>
 
@@ -484,15 +518,32 @@
 </ng-template>
 
 <ng-template #anchoredPath let-path="path" let-anchorX="anchorX" let-anchorY="anchorY">
-    <svg:g  [attr.transform]="'translate(' + anchorX + ' ' + anchorY + ')'">
-        <svg:path   
-            pointer-events="none"
-            [attr.d]="path.Definition"
-            [attr.fill]="path.Color"
-            [attr.fill-opacity]="path.FillOpacity"
-            [attr.stroke]="path.Stroke"
-            [attr.stroke-width]="path.StrokeWidth"
-            [attr.transform]="path.Transform"
-        > </path>
-    </svg:g>
+    <ng-container *ngIf="!path.ScalePropotionnally">
+        <svg:g [attr.transform]="'translate(' + anchorX + ' ' + anchorY + ')'">
+            <svg:path   
+                class="click-through"
+                [attr.d]="path.Definition"
+                [attr.fill]="path.Color"
+                [attr.fill-opacity]="path.FillOpacity"
+                [attr.stroke]="path.Stroke"
+                [attr.stroke-width]="path.StrokeWidth"
+                [attr.transform]="path.Transform"
+            > </path>
+        </svg:g>
+    </ng-container>
+    <ng-container *ngIf="path.ScalePropotionnally">
+        <!-- <svg:g [attr.transform]="'translate(-' + anchorX + ' -' + anchorY + ') scale( ' + path.AppliedScaling + ' ' + path.AppliedScaling + ') translate(' + anchorX + ' ' + anchorY + ') translate(' + anchorX + ' ' + anchorY + ')'"> -->
+
+        <svg:g [attr.transform]="'translate(' + anchorX + ' ' + anchorY + ') scale(' + path.AppliedScaling + ' ' + path.AppliedScaling + ')'">
+            <svg:path   
+                class="click-through"
+                [attr.d]="path.Definition"
+                [attr.fill]="path.Color"
+                [attr.fill-opacity]="path.FillOpacity"
+                [attr.stroke]="path.Stroke"
+                [attr.stroke-width]="path.StrokeWidth"
+                
+            > </path>
+        </svg:g>
+    </ng-container>
 </ng-template>

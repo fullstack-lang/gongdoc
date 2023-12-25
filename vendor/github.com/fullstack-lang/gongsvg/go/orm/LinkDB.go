@@ -377,6 +377,14 @@ func (backRepoLink *BackRepoLinkStruct) CommitPhaseTwoInstance(backRepo *BackRep
 		for _, linkanchoredtextAssocEnd := range link.TextAtArrowEnd {
 			linkanchoredtextAssocEnd_DB :=
 				backRepo.BackRepoLinkAnchoredText.GetLinkAnchoredTextDBFromLinkAnchoredTextPtr(linkanchoredtextAssocEnd)
+			
+			// the stage might be inconsistant, meaning that the linkanchoredtextAssocEnd_DB might
+			// be missing from the stage. In this case, the commit operation is robust
+			// An alternative would be to crash here to reveal the missing element.
+			if linkanchoredtextAssocEnd_DB == nil {
+				continue
+			}
+			
 			linkDB.LinkPointersEncoding.TextAtArrowEnd =
 				append(linkDB.LinkPointersEncoding.TextAtArrowEnd, int(linkanchoredtextAssocEnd_DB.ID))
 		}
@@ -387,6 +395,14 @@ func (backRepoLink *BackRepoLinkStruct) CommitPhaseTwoInstance(backRepo *BackRep
 		for _, linkanchoredtextAssocEnd := range link.TextAtArrowStart {
 			linkanchoredtextAssocEnd_DB :=
 				backRepo.BackRepoLinkAnchoredText.GetLinkAnchoredTextDBFromLinkAnchoredTextPtr(linkanchoredtextAssocEnd)
+			
+			// the stage might be inconsistant, meaning that the linkanchoredtextAssocEnd_DB might
+			// be missing from the stage. In this case, the commit operation is robust
+			// An alternative would be to crash here to reveal the missing element.
+			if linkanchoredtextAssocEnd_DB == nil {
+				continue
+			}
+			
 			linkDB.LinkPointersEncoding.TextAtArrowStart =
 				append(linkDB.LinkPointersEncoding.TextAtArrowStart, int(linkanchoredtextAssocEnd_DB.ID))
 		}
@@ -397,6 +413,14 @@ func (backRepoLink *BackRepoLinkStruct) CommitPhaseTwoInstance(backRepo *BackRep
 		for _, pointAssocEnd := range link.ControlPoints {
 			pointAssocEnd_DB :=
 				backRepo.BackRepoPoint.GetPointDBFromPointPtr(pointAssocEnd)
+			
+			// the stage might be inconsistant, meaning that the pointAssocEnd_DB might
+			// be missing from the stage. In this case, the commit operation is robust
+			// An alternative would be to crash here to reveal the missing element.
+			if pointAssocEnd_DB == nil {
+				continue
+			}
+			
 			linkDB.LinkPointersEncoding.ControlPoints =
 				append(linkDB.LinkPointersEncoding.ControlPoints, int(pointAssocEnd_DB.ID))
 		}
