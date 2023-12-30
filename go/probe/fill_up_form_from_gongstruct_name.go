@@ -30,11 +30,12 @@ func FillUpFormFromGongstructName(
 		formGroup := (&form.FormGroup{
 			Name:  form.FormGroupDefaultName.ToString(),
 			Label: prefix + "Classdiagram Form",
-			OnSave: __gong__New__ClassdiagramFormCallback(
-				nil,
-				probe,
-			),
 		}).Stage(formStage)
+		formGroup.OnSave = __gong__New__ClassdiagramFormCallback(
+			nil,
+			probe,
+			formGroup,
+		)
 		classdiagram := new(models.Classdiagram)
 		formGroup.HasSuppressButton = !isNewInstance
 		FillUpForm(classdiagram, formGroup, probe)
@@ -42,11 +43,12 @@ func FillUpFormFromGongstructName(
 		formGroup := (&form.FormGroup{
 			Name:  form.FormGroupDefaultName.ToString(),
 			Label: prefix + "DiagramPackage Form",
-			OnSave: __gong__New__DiagramPackageFormCallback(
-				nil,
-				probe,
-			),
 		}).Stage(formStage)
+		formGroup.OnSave = __gong__New__DiagramPackageFormCallback(
+			nil,
+			probe,
+			formGroup,
+		)
 		diagrampackage := new(models.DiagramPackage)
 		formGroup.HasSuppressButton = !isNewInstance
 		FillUpForm(diagrampackage, formGroup, probe)
@@ -54,11 +56,12 @@ func FillUpFormFromGongstructName(
 		formGroup := (&form.FormGroup{
 			Name:  form.FormGroupDefaultName.ToString(),
 			Label: prefix + "Field Form",
-			OnSave: __gong__New__FieldFormCallback(
-				nil,
-				probe,
-			),
 		}).Stage(formStage)
+		formGroup.OnSave = __gong__New__FieldFormCallback(
+			nil,
+			probe,
+			formGroup,
+		)
 		field := new(models.Field)
 		formGroup.HasSuppressButton = !isNewInstance
 		FillUpForm(field, formGroup, probe)
@@ -66,11 +69,12 @@ func FillUpFormFromGongstructName(
 		formGroup := (&form.FormGroup{
 			Name:  form.FormGroupDefaultName.ToString(),
 			Label: prefix + "GongEnumShape Form",
-			OnSave: __gong__New__GongEnumShapeFormCallback(
-				nil,
-				probe,
-			),
 		}).Stage(formStage)
+		formGroup.OnSave = __gong__New__GongEnumShapeFormCallback(
+			nil,
+			probe,
+			formGroup,
+		)
 		gongenumshape := new(models.GongEnumShape)
 		formGroup.HasSuppressButton = !isNewInstance
 		FillUpForm(gongenumshape, formGroup, probe)
@@ -78,11 +82,12 @@ func FillUpFormFromGongstructName(
 		formGroup := (&form.FormGroup{
 			Name:  form.FormGroupDefaultName.ToString(),
 			Label: prefix + "GongEnumValueEntry Form",
-			OnSave: __gong__New__GongEnumValueEntryFormCallback(
-				nil,
-				probe,
-			),
 		}).Stage(formStage)
+		formGroup.OnSave = __gong__New__GongEnumValueEntryFormCallback(
+			nil,
+			probe,
+			formGroup,
+		)
 		gongenumvalueentry := new(models.GongEnumValueEntry)
 		formGroup.HasSuppressButton = !isNewInstance
 		FillUpForm(gongenumvalueentry, formGroup, probe)
@@ -90,11 +95,12 @@ func FillUpFormFromGongstructName(
 		formGroup := (&form.FormGroup{
 			Name:  form.FormGroupDefaultName.ToString(),
 			Label: prefix + "GongStructShape Form",
-			OnSave: __gong__New__GongStructShapeFormCallback(
-				nil,
-				probe,
-			),
 		}).Stage(formStage)
+		formGroup.OnSave = __gong__New__GongStructShapeFormCallback(
+			nil,
+			probe,
+			formGroup,
+		)
 		gongstructshape := new(models.GongStructShape)
 		formGroup.HasSuppressButton = !isNewInstance
 		FillUpForm(gongstructshape, formGroup, probe)
@@ -102,11 +108,12 @@ func FillUpFormFromGongstructName(
 		formGroup := (&form.FormGroup{
 			Name:  form.FormGroupDefaultName.ToString(),
 			Label: prefix + "Link Form",
-			OnSave: __gong__New__LinkFormCallback(
-				nil,
-				probe,
-			),
 		}).Stage(formStage)
+		formGroup.OnSave = __gong__New__LinkFormCallback(
+			nil,
+			probe,
+			formGroup,
+		)
 		link := new(models.Link)
 		formGroup.HasSuppressButton = !isNewInstance
 		FillUpForm(link, formGroup, probe)
@@ -114,11 +121,12 @@ func FillUpFormFromGongstructName(
 		formGroup := (&form.FormGroup{
 			Name:  form.FormGroupDefaultName.ToString(),
 			Label: prefix + "NoteShape Form",
-			OnSave: __gong__New__NoteShapeFormCallback(
-				nil,
-				probe,
-			),
 		}).Stage(formStage)
+		formGroup.OnSave = __gong__New__NoteShapeFormCallback(
+			nil,
+			probe,
+			formGroup,
+		)
 		noteshape := new(models.NoteShape)
 		formGroup.HasSuppressButton = !isNewInstance
 		FillUpForm(noteshape, formGroup, probe)
@@ -126,11 +134,12 @@ func FillUpFormFromGongstructName(
 		formGroup := (&form.FormGroup{
 			Name:  form.FormGroupDefaultName.ToString(),
 			Label: prefix + "NoteShapeLink Form",
-			OnSave: __gong__New__NoteShapeLinkFormCallback(
-				nil,
-				probe,
-			),
 		}).Stage(formStage)
+		formGroup.OnSave = __gong__New__NoteShapeLinkFormCallback(
+			nil,
+			probe,
+			formGroup,
+		)
 		noteshapelink := new(models.NoteShapeLink)
 		formGroup.HasSuppressButton = !isNewInstance
 		FillUpForm(noteshapelink, formGroup, probe)
@@ -138,11 +147,12 @@ func FillUpFormFromGongstructName(
 		formGroup := (&form.FormGroup{
 			Name:  form.FormGroupDefaultName.ToString(),
 			Label: prefix + "Position Form",
-			OnSave: __gong__New__PositionFormCallback(
-				nil,
-				probe,
-			),
 		}).Stage(formStage)
+		formGroup.OnSave = __gong__New__PositionFormCallback(
+			nil,
+			probe,
+			formGroup,
+		)
 		position := new(models.Position)
 		formGroup.HasSuppressButton = !isNewInstance
 		FillUpForm(position, formGroup, probe)
@@ -150,11 +160,12 @@ func FillUpFormFromGongstructName(
 		formGroup := (&form.FormGroup{
 			Name:  form.FormGroupDefaultName.ToString(),
 			Label: prefix + "UmlState Form",
-			OnSave: __gong__New__UmlStateFormCallback(
-				nil,
-				probe,
-			),
 		}).Stage(formStage)
+		formGroup.OnSave = __gong__New__UmlStateFormCallback(
+			nil,
+			probe,
+			formGroup,
+		)
 		umlstate := new(models.UmlState)
 		formGroup.HasSuppressButton = !isNewInstance
 		FillUpForm(umlstate, formGroup, probe)
@@ -162,11 +173,12 @@ func FillUpFormFromGongstructName(
 		formGroup := (&form.FormGroup{
 			Name:  form.FormGroupDefaultName.ToString(),
 			Label: prefix + "Umlsc Form",
-			OnSave: __gong__New__UmlscFormCallback(
-				nil,
-				probe,
-			),
 		}).Stage(formStage)
+		formGroup.OnSave = __gong__New__UmlscFormCallback(
+			nil,
+			probe,
+			formGroup,
+		)
 		umlsc := new(models.Umlsc)
 		formGroup.HasSuppressButton = !isNewInstance
 		FillUpForm(umlsc, formGroup, probe)
@@ -174,11 +186,12 @@ func FillUpFormFromGongstructName(
 		formGroup := (&form.FormGroup{
 			Name:  form.FormGroupDefaultName.ToString(),
 			Label: prefix + "Vertice Form",
-			OnSave: __gong__New__VerticeFormCallback(
-				nil,
-				probe,
-			),
 		}).Stage(formStage)
+		formGroup.OnSave = __gong__New__VerticeFormCallback(
+			nil,
+			probe,
+			formGroup,
+		)
 		vertice := new(models.Vertice)
 		formGroup.HasSuppressButton = !isNewInstance
 		FillUpForm(vertice, formGroup, probe)

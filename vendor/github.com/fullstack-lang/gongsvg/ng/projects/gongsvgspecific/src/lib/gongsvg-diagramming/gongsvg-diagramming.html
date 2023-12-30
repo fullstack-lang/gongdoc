@@ -219,10 +219,34 @@
                         ">
                     </ng-container>
                     <ng-container *ngIf="rectAnchoredPath.RectAnchorType == RectAnchorType.RECT_BOTTOM_LEFT" 
+                        [ngTemplateOutlet]="anchoredPath" 
+                        [ngTemplateOutletContext]="{ 
+                            path: rectAnchoredPath, 
+                            anchorX: rect.X + rectAnchoredPath.X_Offset, 
+                            anchorY: rect.Y + rect.Height + rectAnchoredPath.Y_Offset ,}
+                        ">
+                    </ng-container>
+                    <ng-container *ngIf="rectAnchoredPath.RectAnchorType == RectAnchorType.RECT_BOTTOM_LEFT_LEFT" 
+                        [ngTemplateOutlet]="anchoredPath" 
+                        [ngTemplateOutletContext]="{ 
+                            path: rectAnchoredPath, 
+                            anchorX: rect.X - rect.Height + rectAnchoredPath.X_Offset, 
+                            anchorY: rect.Y + rect.Height + rectAnchoredPath.Y_Offset ,}
+                        ">
+                    </ng-container>
+                    <ng-container *ngIf="rectAnchoredPath.RectAnchorType == RectAnchorType.RECT_BOTTOM_BOTTOM_LEFT" 
+                        [ngTemplateOutlet]="anchoredPath" 
+                        [ngTemplateOutletContext]="{ 
+                            path: rectAnchoredPath, 
+                            anchorX: rect.X + rectAnchoredPath.X_Offset, 
+                            anchorY: rect.Y + rect.Height + rect.Height + rectAnchoredPath.Y_Offset ,}
+                        ">
+                    </ng-container>
+                    <ng-container *ngIf="rectAnchoredPath.RectAnchorType == RectAnchorType.RECT_BOTTOM_RIGHT" 
                     [ngTemplateOutlet]="anchoredPath" 
                     [ngTemplateOutletContext]="{ 
                         path: rectAnchoredPath, 
-                        anchorX: rect.X + rectAnchoredPath.X_Offset, 
+                        anchorX: rect.X + +rect.Width + rectAnchoredPath.X_Offset, 
                         anchorY: rect.Y + rect.Height + rectAnchoredPath.Y_Offset ,}
                     ">
                 </ng-container>
@@ -534,7 +558,7 @@
     <ng-container *ngIf="path.ScalePropotionnally">
         <!-- <svg:g [attr.transform]="'translate(-' + anchorX + ' -' + anchorY + ') scale( ' + path.AppliedScaling + ' ' + path.AppliedScaling + ') translate(' + anchorX + ' ' + anchorY + ') translate(' + anchorX + ' ' + anchorY + ')'"> -->
 
-        <svg:g [attr.transform]="'translate(' + anchorX + ' ' + anchorY + ') scale(' + path.AppliedScaling + ' ' + path.AppliedScaling + ')'">
+        <svg:g >
             <svg:path   
                 class="click-through"
                 [attr.d]="path.Definition"
@@ -542,7 +566,7 @@
                 [attr.fill-opacity]="path.FillOpacity"
                 [attr.stroke]="path.Stroke"
                 [attr.stroke-width]="path.StrokeWidth"
-                
+                [attr.transform]="path.Transform + ' translate(' + anchorX + ' ' + anchorY + ') scale(' + path.AppliedScaling + ' ' + path.AppliedScaling + ')'"
             > </path>
         </svg:g>
     </ng-container>

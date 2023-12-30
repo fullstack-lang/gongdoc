@@ -260,8 +260,14 @@ func DefaultInjection(stage *models.StageStruct) {
 	// Declarations of staged instances of Field
 
 	// Declarations of staged instances of GongEnumShape
+	__GongEnumShape__000000_Default_GongEnumShapeType := (&models.GongEnumShape{Name: `Default-GongEnumShapeType`}).Stage(stage)
+	__GongEnumShape__000001_Default_MultiplicityType := (&models.GongEnumShape{Name: `Default-MultiplicityType`}).Stage(stage)
 
 	// Declarations of staged instances of GongEnumValueEntry
+	__GongEnumValueEntry__000000_Int := (&models.GongEnumValueEntry{Name: `Int`}).Stage(stage)
+	__GongEnumValueEntry__000001_ONE := (&models.GongEnumValueEntry{Name: `ONE`}).Stage(stage)
+	__GongEnumValueEntry__000002_String := (&models.GongEnumValueEntry{Name: `String`}).Stage(stage)
+	__GongEnumValueEntry__000003_ZERO_ONE := (&models.GongEnumValueEntry{Name: `ZERO_ONE`}).Stage(stage)
 
 	// Declarations of staged instances of GongStructShape
 	__GongStructShape__000000_Default_Classdiagram := (&models.GongStructShape{Name: `Default-Classdiagram`}).Stage(stage)
@@ -279,7 +285,9 @@ func DefaultInjection(stage *models.StageStruct) {
 	// Declarations of staged instances of Position
 	__Position__000000_Pos_Default_Classdiagram := (&models.Position{Name: `Pos-Default-Classdiagram`}).Stage(stage)
 	__Position__000001_Pos_Default_DiagramPackage := (&models.Position{Name: `Pos-Default-DiagramPackage`}).Stage(stage)
-	__Position__000002_Pos_Default_NoteShape := (&models.Position{Name: `Pos-Default-NoteShape`}).Stage(stage)
+	__Position__000002_Pos_Default_GongEnumShapeType := (&models.Position{Name: `Pos-Default-GongEnumShapeType`}).Stage(stage)
+	__Position__000003_Pos_Default_MultiplicityType := (&models.Position{Name: `Pos-Default-MultiplicityType`}).Stage(stage)
+	__Position__000004_Pos_Default_NoteShape := (&models.Position{Name: `Pos-Default-NoteShape`}).Stage(stage)
 
 	// Declarations of staged instances of UmlState
 
@@ -294,6 +302,58 @@ func DefaultInjection(stage *models.StageStruct) {
 	// Classdiagram values setup
 	__Classdiagram__000000_Default.Name = `Default`
 	__Classdiagram__000000_Default.IsInDrawMode = true
+
+	// GongEnumShape values setup
+	__GongEnumShape__000000_Default_GongEnumShapeType.Name = `Default-GongEnumShapeType`
+
+	// comment added to overcome the problem with the comment map association
+
+	//gong:ident [ref_models.GongEnumShapeType]
+	__GongEnumShape__000000_Default_GongEnumShapeType.Identifier = `ref_models.GongEnumShapeType`
+	__GongEnumShape__000000_Default_GongEnumShapeType.Width = 240.000000
+	__GongEnumShape__000000_Default_GongEnumShapeType.Height = 93.000000
+
+	// GongEnumShape values setup
+	__GongEnumShape__000001_Default_MultiplicityType.Name = `Default-MultiplicityType`
+
+	// comment added to overcome the problem with the comment map association
+
+	//gong:ident [ref_models.MultiplicityType]
+	__GongEnumShape__000001_Default_MultiplicityType.Identifier = `ref_models.MultiplicityType`
+	__GongEnumShape__000001_Default_MultiplicityType.Width = 240.000000
+	__GongEnumShape__000001_Default_MultiplicityType.Height = 93.000000
+
+	// GongEnumValueEntry values setup
+	__GongEnumValueEntry__000000_Int.Name = `Int`
+
+	// comment added to overcome the problem with the comment map association
+
+	//gong:ident [ref_models.GongEnumShapeType.Int]
+	__GongEnumValueEntry__000000_Int.Identifier = `ref_models.GongEnumShapeType.Int`
+
+	// GongEnumValueEntry values setup
+	__GongEnumValueEntry__000001_ONE.Name = `ONE`
+
+	// comment added to overcome the problem with the comment map association
+
+	//gong:ident [ref_models.MultiplicityType.ONE]
+	__GongEnumValueEntry__000001_ONE.Identifier = `ref_models.MultiplicityType.ONE`
+
+	// GongEnumValueEntry values setup
+	__GongEnumValueEntry__000002_String.Name = `String`
+
+	// comment added to overcome the problem with the comment map association
+
+	//gong:ident [ref_models.GongEnumShapeType.String]
+	__GongEnumValueEntry__000002_String.Identifier = `ref_models.GongEnumShapeType.String`
+
+	// GongEnumValueEntry values setup
+	__GongEnumValueEntry__000003_ZERO_ONE.Name = `ZERO_ONE`
+
+	// comment added to overcome the problem with the comment map association
+
+	//gong:ident [ref_models.MultiplicityType.ZERO_ONE]
+	__GongEnumValueEntry__000003_ZERO_ONE.Identifier = `ref_models.MultiplicityType.ZERO_ONE`
 
 	// GongStructShape values setup
 	__GongStructShape__000000_Default_Classdiagram.Name = `Default-Classdiagram`
@@ -397,9 +457,19 @@ func DefaultInjection(stage *models.StageStruct) {
 	__Position__000001_Pos_Default_DiagramPackage.Name = `Pos-Default-DiagramPackage`
 
 	// Position values setup
-	__Position__000002_Pos_Default_NoteShape.X = 869.000000
-	__Position__000002_Pos_Default_NoteShape.Y = 122.000000
-	__Position__000002_Pos_Default_NoteShape.Name = `Pos-Default-NoteShape`
+	__Position__000002_Pos_Default_GongEnumShapeType.X = 54.000000
+	__Position__000002_Pos_Default_GongEnumShapeType.Y = 390.000000
+	__Position__000002_Pos_Default_GongEnumShapeType.Name = `Pos-Default-GongEnumShapeType`
+
+	// Position values setup
+	__Position__000003_Pos_Default_MultiplicityType.X = 106.000000
+	__Position__000003_Pos_Default_MultiplicityType.Y = 15.000000
+	__Position__000003_Pos_Default_MultiplicityType.Name = `Pos-Default-MultiplicityType`
+
+	// Position values setup
+	__Position__000004_Pos_Default_NoteShape.X = 869.000000
+	__Position__000004_Pos_Default_NoteShape.Y = 122.000000
+	__Position__000004_Pos_Default_NoteShape.Name = `Pos-Default-NoteShape`
 
 	// Vertice values setup
 	__Vertice__000000_Verticle_in_class_diagram_Default_in_middle_between_Default_Classdiagram_and_Default_NoteShape.X = 867.000000
@@ -415,11 +485,19 @@ func DefaultInjection(stage *models.StageStruct) {
 	__Classdiagram__000000_Default.GongStructShapes = append(__Classdiagram__000000_Default.GongStructShapes, __GongStructShape__000002_Default_NoteShape)
 	__Classdiagram__000000_Default.GongStructShapes = append(__Classdiagram__000000_Default.GongStructShapes, __GongStructShape__000001_Default_DiagramPackage)
 	__Classdiagram__000000_Default.GongStructShapes = append(__Classdiagram__000000_Default.GongStructShapes, __GongStructShape__000000_Default_Classdiagram)
+	__Classdiagram__000000_Default.GongEnumShapes = append(__Classdiagram__000000_Default.GongEnumShapes, __GongEnumShape__000000_Default_GongEnumShapeType)
+	__Classdiagram__000000_Default.GongEnumShapes = append(__Classdiagram__000000_Default.GongEnumShapes, __GongEnumShape__000001_Default_MultiplicityType)
+	__GongEnumShape__000000_Default_GongEnumShapeType.Position = __Position__000002_Pos_Default_GongEnumShapeType
+	__GongEnumShape__000000_Default_GongEnumShapeType.GongEnumValueEntrys = append(__GongEnumShape__000000_Default_GongEnumShapeType.GongEnumValueEntrys, __GongEnumValueEntry__000000_Int)
+	__GongEnumShape__000000_Default_GongEnumShapeType.GongEnumValueEntrys = append(__GongEnumShape__000000_Default_GongEnumShapeType.GongEnumValueEntrys, __GongEnumValueEntry__000002_String)
+	__GongEnumShape__000001_Default_MultiplicityType.Position = __Position__000003_Pos_Default_MultiplicityType
+	__GongEnumShape__000001_Default_MultiplicityType.GongEnumValueEntrys = append(__GongEnumShape__000001_Default_MultiplicityType.GongEnumValueEntrys, __GongEnumValueEntry__000003_ZERO_ONE)
+	__GongEnumShape__000001_Default_MultiplicityType.GongEnumValueEntrys = append(__GongEnumShape__000001_Default_MultiplicityType.GongEnumValueEntrys, __GongEnumValueEntry__000001_ONE)
 	__GongStructShape__000000_Default_Classdiagram.Position = __Position__000000_Pos_Default_Classdiagram
 	__GongStructShape__000000_Default_Classdiagram.Links = append(__GongStructShape__000000_Default_Classdiagram.Links, __Link__000001_NoteShapes)
 	__GongStructShape__000001_Default_DiagramPackage.Position = __Position__000001_Pos_Default_DiagramPackage
 	__GongStructShape__000001_Default_DiagramPackage.Links = append(__GongStructShape__000001_Default_DiagramPackage.Links, __Link__000000_Classdiagrams)
-	__GongStructShape__000002_Default_NoteShape.Position = __Position__000002_Pos_Default_NoteShape
+	__GongStructShape__000002_Default_NoteShape.Position = __Position__000004_Pos_Default_NoteShape
 	__Link__000000_Classdiagrams.Middlevertice = __Vertice__000001_Verticle_in_class_diagram_Default_in_middle_between_Default_DiagramPackage_and_Default_Classdiagram
 	__Link__000001_NoteShapes.Middlevertice = __Vertice__000000_Verticle_in_class_diagram_Default_in_middle_between_Default_Classdiagram_and_Default_NoteShape
 }
