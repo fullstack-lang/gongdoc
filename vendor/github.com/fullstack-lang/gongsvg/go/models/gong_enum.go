@@ -1716,6 +1716,84 @@ func (drawingstate DrawingState) CodeValues() (res []string) {
 	return
 }
 
+// Utility function for LinkAnchorType
+// if enum values are string, it is stored with the value
+// if enum values are int, they are stored with the code of the value
+func (linkanchortype LinkAnchorType) ToString() (res string) {
+
+	// migration of former implementation of enum
+	switch linkanchortype {
+	// insertion code per enum code
+	case LINK_LEFT_OR_TOP:
+		res = "LINK_LEFT_OR_TOP"
+	case LINK_RIGHT_OR_BOTTOM:
+		res = "LINK_RIGHT_OR_BOTTOM"
+	}
+	return
+}
+
+func (linkanchortype *LinkAnchorType) FromString(input string) (err error) {
+
+	switch input {
+	// insertion code per enum code
+	case "LINK_LEFT_OR_TOP":
+		*linkanchortype = LINK_LEFT_OR_TOP
+	case "LINK_RIGHT_OR_BOTTOM":
+		*linkanchortype = LINK_RIGHT_OR_BOTTOM
+	default:
+		return errUnkownEnum
+	}
+	return
+}
+
+func (linkanchortype *LinkAnchorType) FromCodeString(input string) (err error) {
+
+	switch input {
+	// insertion code per enum code
+	case "LINK_LEFT_OR_TOP":
+		*linkanchortype = LINK_LEFT_OR_TOP
+	case "LINK_RIGHT_OR_BOTTOM":
+		*linkanchortype = LINK_RIGHT_OR_BOTTOM
+	default:
+		return errUnkownEnum
+	}
+	return
+}
+
+func (linkanchortype *LinkAnchorType) ToCodeString() (res string) {
+
+	switch *linkanchortype {
+	// insertion code per enum code
+	case LINK_LEFT_OR_TOP:
+		res = "LINK_LEFT_OR_TOP"
+	case LINK_RIGHT_OR_BOTTOM:
+		res = "LINK_RIGHT_OR_BOTTOM"
+	}
+	return
+}
+
+func (linkanchortype LinkAnchorType) Codes() (res []string) {
+
+	res = make([]string, 0)
+
+	// insertion code per enum code
+	res = append(res, "LINK_LEFT_OR_TOP")
+	res = append(res, "LINK_RIGHT_OR_BOTTOM")
+
+	return
+}
+
+func (linkanchortype LinkAnchorType) CodeValues() (res []string) {
+
+	res = make([]string, 0)
+
+	// insertion code per enum code
+	res = append(res, "LINK_LEFT_OR_TOP")
+	res = append(res, "LINK_RIGHT_OR_BOTTOM")
+
+	return
+}
+
 // Utility function for LinkType
 // if enum values are string, it is stored with the value
 // if enum values are int, they are stored with the code of the value
@@ -2375,13 +2453,13 @@ func (textanchortype TextAnchorType) CodeValues() (res []string) {
 // end of insertion point for enum utility functions
 
 type GongstructEnumStringField interface {
-	string | AnchorType | ColorType | DrawingState | LinkType | OrientationType | PositionOnArrowType | RectAnchorType | SideType | StackName | TextAnchorType
+	string | AnchorType | ColorType | DrawingState | LinkAnchorType | LinkType | OrientationType | PositionOnArrowType | RectAnchorType | SideType | StackName | TextAnchorType
 	Codes() []string
 	CodeValues() []string
 }
 
 type PointerToGongstructEnumStringField interface {
-	*AnchorType | *ColorType | *DrawingState | *LinkType | *OrientationType | *PositionOnArrowType | *RectAnchorType | *SideType | *StackName | *TextAnchorType
+	*AnchorType | *ColorType | *DrawingState | *LinkAnchorType | *LinkType | *OrientationType | *PositionOnArrowType | *RectAnchorType | *SideType | *StackName | *TextAnchorType
 	FromCodeString(input string) (err error)
 }
 

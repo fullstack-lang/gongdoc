@@ -225,6 +225,9 @@ func (docSVGMapper *DocSVGMapper) GenerateSvg(
 
 			// add text to the arrow
 			targetMulitplicity := new(gongsvg_models.LinkAnchoredText).Stage(docSVGMapper.gongsvgStage)
+			targetMulitplicity.AutomaticLayout = true
+			targetMulitplicity.LinkAnchorType = gongsvg_models.LINK_RIGHT_OR_BOTTOM
+
 			targetMulitplicity.Impl = NewAnchoredTextImplLinkTargetMultiplicity(docLink, gongdocStage)
 			link.TextAtArrowEnd = append(link.TextAtArrowEnd, targetMulitplicity)
 			targetMulitplicity.Name = docLink.TargetMultiplicity.ToString()
@@ -238,6 +241,9 @@ func (docSVGMapper *DocSVGMapper) GenerateSvg(
 			targetMulitplicity.FontWeight = "normal"
 
 			fieldName := new(gongsvg_models.LinkAnchoredText).Stage(docSVGMapper.gongsvgStage)
+			fieldName.AutomaticLayout = true
+			fieldName.LinkAnchorType = gongsvg_models.LINK_LEFT_OR_TOP
+
 			fieldName.Impl = NewAnchoredTextImplLinkFieldName(docLink, gongdocStage)
 
 			link.TextAtArrowEnd = append(link.TextAtArrowEnd, fieldName)
@@ -254,6 +260,9 @@ func (docSVGMapper *DocSVGMapper) GenerateSvg(
 			// add the callback
 
 			sourceMultiplicity := new(gongsvg_models.LinkAnchoredText).Stage(docSVGMapper.gongsvgStage)
+			sourceMultiplicity.AutomaticLayout = true
+			sourceMultiplicity.LinkAnchorType = gongsvg_models.LINK_RIGHT_OR_BOTTOM
+
 			sourceMultiplicity.Impl = NewAnchoredTextImplLinkSourceMultiplicity(docLink, gongdocStage)
 
 			link.TextAtArrowStart = append(link.TextAtArrowStart, sourceMultiplicity)

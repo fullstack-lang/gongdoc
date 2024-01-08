@@ -4,6 +4,7 @@
             <!-- (dragend)="backgroundOnDragEnd($event)"
             (click)="backgroundOnClick($event)"
             (dragover)="backgroundDragOver($event)" -->
+            <lib-text-width-calculator #textWidthCalculator></lib-text-width-calculator>
 
 <svg [attr.width]="svgWidth" [attr.height]="svgHeight" >
     <g>
@@ -348,45 +349,55 @@
             </ng-container>
             <ng-container *ngFor="let link of layer.Links">
                 <ng-container *ngIf="link.Type == LinkType.LINK_TYPE_FLOATING_ORTHOGONAL" >
-                    <ng-container *ngIf="link | linkSegments: map_Link_Segment as segments">
-                        <line *ngFor='let segment of segments;' class="moveable-line" 
-                            [attr.x1]="segment.StartPoint.X" 
-                            [attr.y1]="segment.StartPoint.Y" 
-                            [attr.x2]="segment.EndPoint.X" 
-                            [attr.y2]="segment.EndPoint.Y"
+                    <ng-container *ngIf="link.IsBezierCurve">
+                        <path
+                            [attr.d]="getBezierPath(link)" 
                             [attr.fill]="link.Color"
                             [attr.fill-opacity]="link.FillOpacity" 
                             [attr.stroke]="link.Stroke" 
                             [attr.stroke-width]="link.StrokeWidth"
                             [attr.stroke-dasharray]="link.StrokeDashArray" 
-                            [attr.segment-orientation]="getOrientation(segment)"
-                            [attr.segment-number]="segment.Number"
-                            
-                            (mousedown)="linkMouseDown($event, segment.Number, link)" 
-                            (mousemove)="onmousemove($event)" 
-                            (mouseup)="linkMouseUp($event, link)"
-                        
-                        />
-                    <line *ngFor='let segment of segments;' class="moveable-line" 
-                        [attr.x1]="segment.StartPoint.X" 
-                        [attr.y1]="segment.StartPoint.Y" 
-                        [attr.x2]="segment.EndPoint.X" 
-                        [attr.y2]="segment.EndPoint.Y"
-                        [attr.fill]="link.Color"
-                        [attr.fill-opacity]="link.FillOpacity" 
-                        [attr.stroke]="link.Stroke" 
-                        [attr.stroke-width]="link.StrokeWidth"
-                        [attr.stroke-dasharray]="link.StrokeDashArray" 
-                        [attr.segment-orientation]="getOrientation(segment)"
-                        [attr.segment-number]="segment.Number"
-                        
-                        (mousedown)="linkMouseDown($event, segment.Number, link)" 
-                        (mousemove)="onmousemove($event)" 
-                        (mouseup)="linkMouseUp($event, link)"
-                        
-                        />
+                            />
+                    </ng-container>
+                    <ng-container *ngIf="link | linkSegments: map_Link_Segment as segments">
+                        <ng-container *ngIf="!link.IsBezierCurve || svg.IsEditable">
+                            <line *ngFor='let segment of segments;' class="moveable-line" 
+                                [attr.x1]="segment.StartPoint.X" 
+                                [attr.y1]="segment.StartPoint.Y" 
+                                [attr.x2]="segment.EndPoint.X" 
+                                [attr.y2]="segment.EndPoint.Y"
+                                [attr.fill]="link.Color"
+                                [attr.fill-opacity]="link.FillOpacity" 
+                                [attr.stroke]="link.Stroke" 
+                                [attr.stroke-width]="link.StrokeWidth"
+                                [attr.stroke-dasharray]="link.StrokeDashArray" 
+                                [attr.segment-orientation]="getOrientation(segment)"
+                                [attr.segment-number]="segment.Number"
+                                
+                                (mousedown)="linkMouseDown($event, segment.Number, link)" 
+                                (mousemove)="onmousemove($event)" 
+                                (mouseup)="linkMouseUp($event, link)"/>
+                            <line *ngFor='let segment of segments;' class="moveable-line" 
+                                [attr.x1]="segment.StartPoint.X" 
+                                [attr.y1]="segment.StartPoint.Y" 
+                                [attr.x2]="segment.EndPoint.X" 
+                                [attr.y2]="segment.EndPoint.Y"
+                                [attr.fill]="link.Color"
+                                [attr.fill-opacity]="link.FillOpacity" 
+                                [attr.stroke]="link.Stroke" 
+                                [attr.stroke-width]="link.StrokeWidth"
+                                [attr.stroke-dasharray]="link.StrokeDashArray" 
+                                [attr.segment-orientation]="getOrientation(segment)"
+                                [attr.segment-number]="segment.Number"
+                                
+                                (mousedown)="linkMouseDown($event, segment.Number, link)" 
+                                (mousemove)="onmousemove($event)" 
+                                (mouseup)="linkMouseUp($event, link)"/>
+                    </ng-container>
             
                     <ng-container *ngFor='let segment of segments; let i = index'>
+                        <ng-container *ngIf="!link.IsBezierCurve">
+                        
                             <path *ngIf="segments[i + 1] as nextSegment"
                             [attr.d]="getArcPath(link, segment, nextSegment)" 
                             [attr.fill]="link.Color"
@@ -395,6 +406,7 @@
                             [attr.stroke-width]="link.StrokeWidth"
                             [attr.stroke-dasharray]="link.StrokeDashArray" 
                             />
+                        </ng-container>
                         <ng-container *ngIf="(i == (segments.length - 1)) && this.link!.HasEndArrow">
                             <path
                                 [attr.d]="getEndArrowPath(link, segment, this.link!.EndArrowSize)"
@@ -415,9 +427,12 @@
                                 [attr.stroke-dasharray]="link.StrokeDashArray" 
                             />
                         </ng-container>
+
+                        <!-- text at arrow ends -->
+
                         <ng-container *ngIf="(i == (segments.length - 1))">
-                            <ng-container *ngFor='let text of this.link.TextAtArrowEnd!; let i = index'>
-                                <ng-container *ngIf='splitTextIntoLines(text.Content) as lines'>
+                            <ng-container *ngFor='let text of this.link.TextAtArrowEnd!; let k = index'>
+                                <ng-container *ngIf='!text.AutomaticLayout && splitTextIntoLines(text.Content) as lines'>
                                     <text class="movable-text"
                                         [attr.x]="segment.EndPoint.X + text.X_Offset" 
                                         [attr.y]="segment.EndPoint.Y + text.Y_Offset" 
@@ -428,7 +443,7 @@
                                         [attr.stroke-dasharray]="text.StrokeDashArray"
                                         [attr.transform]="text.Transform"
                                         
-                                        (mousedown)="textAnchoredMouseDown(link, $event, i, 'POSITION_ON_ARROW_END')" 
+                                        (mousedown)="textAnchoredMouseDown(link, $event, k, PositionOnArrowType.POSITION_ON_ARROW_END)" 
                                         (mousemove)="onmousemove($event)" 
                                         (mouseup)="textAnchoredMouseUp(link, $event)"
                                         >
@@ -437,11 +452,27 @@
                                             [attr.dy]="j > 0 ? '1em' : '0'">{{line}}</tspan>  
                                         </text>
                                 </ng-container>
+                                <ng-container *ngIf='text.AutomaticLayout && splitTextIntoLines(text.Content) as lines'>
+                                    <text class="noevents-area"
+                                        [attr.x]="segment.EndPoint.X" 
+                                        [attr.y]="segment.EndPoint.Y + auto_Y_offset(link, segment, text, PositionOnArrowType.POSITION_ON_ARROW_END)" 
+                                        [attr.fill]="text.Color"    
+                                        [attr.fill-opacity]="text.FillOpacity"
+                                        [attr.stroke]="text.Stroke"
+                                        [attr.stroke-width]="text.StrokeWidth"
+                                        [attr.stroke-dasharray]="text.StrokeDashArray"
+                                        [attr.transform]="text.Transform"
+                                        >
+                                        <tspan *ngFor='let line of lines; let j = index' 
+                                            [attr.x]="segment.EndPoint.X + auto_X_offset(link, segment, text, line, PositionOnArrowType.POSITION_ON_ARROW_END)"
+                                            [attr.dy]="j > 0 ? '1em' : '0'">{{line}}</tspan>  
+                                        </text>
+                                </ng-container>
                             </ng-container>
                         </ng-container>
                         <ng-container *ngIf="i == 0">
-                            <ng-container *ngFor='let text of this.link.TextAtArrowStart!; let i = index'>
-                                    <ng-container *ngIf='splitTextIntoLines(text.Content) as lines'>
+                            <ng-container *ngFor='let text of this.link.TextAtArrowStart!; let k = index'>
+                                <ng-container *ngIf='!text.AutomaticLayout && splitTextIntoLines(text.Content) as lines'>
                                     <text class="movable-text"
                                         [attr.x]="segment.StartPoint.X + text.X_Offset" 
                                         [attr.y]="segment.StartPoint.Y + text.Y_Offset" 
@@ -452,7 +483,7 @@
                                         [attr.stroke-dasharray]="text.StrokeDashArray"
                                         [attr.transform]="text.Transform"
                                         
-                                        (mousedown)="textAnchoredMouseDown(link, $event, i, 'POSITION_ON_ARROW_START')" 
+                                        (mousedown)="textAnchoredMouseDown(link, $event, k, PositionOnArrowType.POSITION_ON_ARROW_START)" 
                                         (mousemove)="onmousemove($event)" 
                                         (mouseup)="textAnchoredMouseUp(link, $event)"
                                         >
@@ -461,10 +492,26 @@
                                             [attr.dy]="j > 0 ? '1em' : '0'">{{line}}</tspan>                        
                                     </text>
                                 </ng-container>
+                                <ng-container *ngIf='text.AutomaticLayout && splitTextIntoLines(text.Content) as lines'>
+                                    <text class="noevents-area"
+                                        [attr.x]="segment.StartPoint.X" 
+                                        [attr.y]="segment.StartPoint.Y + auto_Y_offset(link, segment, text, PositionOnArrowType.POSITION_ON_ARROW_START)" 
+                                        [attr.fill]="text.Color"    
+                                        [attr.fill-opacity]="text.FillOpacity"
+                                        [attr.stroke]="text.Stroke"
+                                        [attr.stroke-width]="text.StrokeWidth"
+                                        [attr.stroke-dasharray]="text.StrokeDashArray"
+                                        [attr.transform]="text.Transform"
+                                        >
+                                        <tspan *ngFor='let line of lines; let j = index' 
+                                            [attr.x]="segment.StartPoint.X + auto_X_offset(link, segment, text, line, PositionOnArrowType.POSITION_ON_ARROW_START)"
+                                            [attr.dy]="j > 0 ? '1em' : '0'">{{line}}</tspan>                        
+                                    </text>
+                                </ng-container>
                             </ng-container> 
                         </ng-container>
                     </ng-container>
-                </ng-container>
+                    </ng-container>
                 </ng-container>
             </ng-container>
             <ng-container *ngFor="let rectLinkLink of layer.RectLinkLinks">
@@ -571,3 +618,4 @@
         </svg:g>
     </ng-container>
 </ng-template>
+
