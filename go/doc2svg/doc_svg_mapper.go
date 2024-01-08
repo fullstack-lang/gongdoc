@@ -218,7 +218,7 @@ func (docSVGMapper *DocSVGMapper) GenerateSvg(
 
 			link.CornerOffsetRatio = docLink.CornerOffsetRatio
 
-			link.CornerRadius = 3
+			link.CornerRadius = 8
 
 			link.Start = startRect
 			link.End = endRect
