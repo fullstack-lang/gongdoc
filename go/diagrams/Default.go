@@ -406,7 +406,7 @@ func DefaultInjection(stage *models.StageStruct) {
 
 	//gong:ident [ref_models.Field]
 	__GongStructShape__000002_Default_Field.Identifier = `ref_models.Field`
-	__GongStructShape__000002_Default_Field.ShowNbInstances = false
+	__GongStructShape__000002_Default_Field.ShowNbInstances = true
 	__GongStructShape__000002_Default_Field.NbInstances = 0
 	__GongStructShape__000002_Default_Field.Width = 240.000000
 	__GongStructShape__000002_Default_Field.Height = 63.000000
@@ -419,7 +419,7 @@ func DefaultInjection(stage *models.StageStruct) {
 
 	//gong:ident [ref_models.GongStructShape]
 	__GongStructShape__000003_Default_GongStructShape.Identifier = `ref_models.GongStructShape`
-	__GongStructShape__000003_Default_GongStructShape.ShowNbInstances = false
+	__GongStructShape__000003_Default_GongStructShape.ShowNbInstances = true
 	__GongStructShape__000003_Default_GongStructShape.NbInstances = 0
 	__GongStructShape__000003_Default_GongStructShape.Width = 240.000000
 	__GongStructShape__000003_Default_GongStructShape.Height = 78.000000
@@ -522,8 +522,8 @@ func DefaultInjection(stage *models.StageStruct) {
 	__Position__000000_Pos_Default_Classdiagram.Name = `Pos-Default-Classdiagram`
 
 	// Position values setup
-	__Position__000001_Pos_Default_DiagramPackage.X = 43.000000
-	__Position__000001_Pos_Default_DiagramPackage.Y = 149.000000
+	__Position__000001_Pos_Default_DiagramPackage.X = 122.000000
+	__Position__000001_Pos_Default_DiagramPackage.Y = 181.000000
 	__Position__000001_Pos_Default_DiagramPackage.Name = `Pos-Default-DiagramPackage`
 
 	// Position values setup
