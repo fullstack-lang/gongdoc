@@ -4,7 +4,7 @@ go 1.21.0
 
 require (
 	github.com/frankban/quicktest v1.14.6 // indirect
-	github.com/fullstack-lang/gong v0.0.0-20240123072354-4d23e9bd0dc9
+	github.com/fullstack-lang/gong v0.0.0-20240127175449-d48dac74ff5f
 	github.com/gin-contrib/cors v1.5.0
 	github.com/gin-contrib/static v0.0.1
 	github.com/gin-gonic/gin v1.9.1
@@ -19,13 +19,13 @@ require (
 	golang.org/x/crypto v0.18.0 // indirect
 	golang.org/x/sys v0.16.0 // indirect
 	golang.org/x/text v0.14.0 // indirect
-	gorm.io/gorm v1.25.5
+	gorm.io/gorm v1.25.6
 )
 
 require (
-	github.com/fullstack-lang/gongsvg v0.0.0-20240123072356-214ae3157251
-	github.com/fullstack-lang/gongtable v0.0.0-20240123072357-e856413912aa
-	github.com/fullstack-lang/gongtree v0.0.0-20240123072357-1be43648ba63
+	github.com/fullstack-lang/gongsvg v0.0.0-20240127175549-616185e1147c
+	github.com/fullstack-lang/gongtable v0.0.0-20240127175549-6fea7a8bc9ff
+	github.com/fullstack-lang/gongtree v0.0.0-20240127175549-0b9c685be7d3
 	github.com/fullstack-lang/maticons v0.0.0-20230823061653-70c364fbdd00
 	github.com/glebarez/sqlite v1.10.0
 	github.com/xuri/excelize/v2 v2.8.0
@@ -43,12 +43,12 @@ require (
 	github.com/go-playground/locales v0.14.1 // indirect
 	github.com/go-playground/universal-translator v0.18.1 // indirect
 	github.com/goccy/go-json v0.10.2 // indirect
-	github.com/google/uuid v1.5.0 // indirect
+	github.com/google/uuid v1.6.0 // indirect
 	github.com/jinzhu/inflection v1.0.0 // indirect
 	github.com/jinzhu/now v1.1.5 // indirect
 	github.com/klauspost/cpuid/v2 v2.2.6 // indirect
 	github.com/kr/pretty v0.3.1 // indirect
-	github.com/leodido/go-urn v1.2.4 // indirect
+	github.com/leodido/go-urn v1.3.0 // indirect
 	github.com/modern-go/concurrent v0.0.0-20180306012644-bacd9c7ef1dd // indirect
 	github.com/modern-go/reflect2 v1.0.2 // indirect
 	github.com/mohae/deepcopy v0.0.0-20170929034955-c48cc78d4826 // indirect
