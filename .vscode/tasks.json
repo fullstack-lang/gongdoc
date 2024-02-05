@@ -264,9 +264,9 @@
 				"get",
 				"-d",
 				"github.com/fullstack-lang/gong@HEAD",
-				"github.com/fullstack-lang/gongsvg@HEAD",
-				"github.com/fullstack-lang/gongtree@HEAD",
-				"github.com/fullstack-lang/gongtable@HEAD",
+				"github.com/fullstack-lang/gongsvg@thomaspeugeot_issue142",
+				"github.com/fullstack-lang/gongtree@thomaspeugeot_issue8",
+				"github.com/fullstack-lang/gongtable@thomaspeugeot_issue26",
 			],
 			"group": "build"
 		},

@@ -522,8 +522,8 @@ func DefaultInjection(stage *models.StageStruct) {
 	__Position__000000_Pos_Default_Classdiagram.Name = `Pos-Default-Classdiagram`
 
 	// Position values setup
-	__Position__000001_Pos_Default_DiagramPackage.X = 122.000000
-	__Position__000001_Pos_Default_DiagramPackage.Y = 181.000000
+	__Position__000001_Pos_Default_DiagramPackage.X = 63.000000
+	__Position__000001_Pos_Default_DiagramPackage.Y = 186.000000
 	__Position__000001_Pos_Default_DiagramPackage.Name = `Pos-Default-DiagramPackage`
 
 	// Position values setup
@@ -532,8 +532,8 @@ func DefaultInjection(stage *models.StageStruct) {
 	__Position__000002_Pos_Default_Field.Name = `Pos-Default-Field`
 
 	// Position values setup
-	__Position__000003_Pos_Default_GongEnumShapeType.X = 54.000000
-	__Position__000003_Pos_Default_GongEnumShapeType.Y = 390.000000
+	__Position__000003_Pos_Default_GongEnumShapeType.X = 80.000000
+	__Position__000003_Pos_Default_GongEnumShapeType.Y = 348.000000
 	__Position__000003_Pos_Default_GongEnumShapeType.Name = `Pos-Default-GongEnumShapeType`
 
 	// Position values setup
@@ -542,8 +542,8 @@ func DefaultInjection(stage *models.StageStruct) {
 	__Position__000004_Pos_Default_GongStructShape.Name = `Pos-Default-GongStructShape`
 
 	// Position values setup
-	__Position__000005_Pos_Default_MultiplicityType.X = 106.000000
-	__Position__000005_Pos_Default_MultiplicityType.Y = 15.000000
+	__Position__000005_Pos_Default_MultiplicityType.X = 378.000000
+	__Position__000005_Pos_Default_MultiplicityType.Y = 55.000000
 	__Position__000005_Pos_Default_MultiplicityType.Name = `Pos-Default-MultiplicityType`
 
 	// Position values setup
