@@ -4,6 +4,8 @@ import (
 	"slices"
 
 	gong_models "github.com/fullstack-lang/gong/go/models"
+	"github.com/fullstack-lang/gongdoc/go/adapter"
+	"github.com/fullstack-lang/gongdoc/go/bridge"
 	gongdoc_models "github.com/fullstack-lang/gongdoc/go/models"
 	gongtree_models "github.com/fullstack-lang/gongtree/go/models"
 )
@@ -13,6 +15,11 @@ func FillUpTreeOfGongObjects(
 	gongtreeStage *gongtree_models.StageStruct,
 	diagramPackage *gongdoc_models.DiagramPackage,
 ) (treeOfGongObjects *gongtree_models.Tree) {
+
+	a_ := adapter.NewAdapter(diagramPackage.ModelPkg.GetStage())
+	bridge := bridge.NewBridge(a_, gongtreeStage)
+	treeOfGongObjects_ := (&gongtree_models.Tree{Name: "model"}).Stage(gongtreeStage)
+	bridge.FillUpTree(treeOfGongObjects_)
 
 	// set up the gongTree to display elements
 	treeOfGongObjects = (&gongtree_models.Tree{Name: "gong"}).Stage(gongtreeStage)
