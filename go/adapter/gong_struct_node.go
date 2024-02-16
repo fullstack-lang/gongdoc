@@ -7,10 +7,10 @@ import (
 
 func NewGongStructNode(
 	stage *gong_models.StageStruct,
-	name string) (categoryNode *GongStructNode) {
-	categoryNode = new(GongStructNode)
-	categoryNode.stage = stage
-	categoryNode.Name = name
+	name string) (gongStructNode *GongStructNode) {
+	gongStructNode = new(GongStructNode)
+	gongStructNode.stage = stage
+	gongStructNode.Name = name
 	return
 }
 
@@ -19,10 +19,15 @@ type GongStructNode struct {
 	Name  string
 }
 
-// GetChildren implements bridge.Node.
-func (categoryNode *GongStructNode) GetChildren() (children []bridge.Node) {
+// IsExpanded implements bridge.Node.
+func (gongStructNode *GongStructNode) IsExpanded() bool {
+	return true
+}
 
-	// for gongStruct := range *gong_models.GetGongstructInstancesSet[gong_models.GongStruct](categoryNode.stage) {
+// GetChildren implements bridge.Node.
+func (gongStructNode *GongStructNode) GetChildren() (children []bridge.Node) {
+
+	// for gongStruct := range *gong_models.GetGongstructInstancesSet[gong_models.GongStruct](gongStructNode.stage) {
 
 	// 	gongstructRootNode.Children = append(gongstructRootNode.Children, nodeGongstruct)
 	// }
@@ -31,11 +36,11 @@ func (categoryNode *GongStructNode) GetChildren() (children []bridge.Node) {
 }
 
 // GetName implements bridge.Node.
-func (categoryNode *GongStructNode) GetName() string {
-	return categoryNode.Name
+func (gongStructNode *GongStructNode) GetName() string {
+	return gongStructNode.Name
 }
 
 // IsNameEditable implements bridge.Node.
-func (categoryNode *GongStructNode) IsNameEditable() bool {
+func (gongStructNode *GongStructNode) IsNameEditable() bool {
 	return false
 }

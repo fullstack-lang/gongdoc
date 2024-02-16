@@ -24,7 +24,7 @@ func NewAdapter(stage *gong_models.StageStruct) (adapter *Adapter) {
 }
 
 // GetRootNodes implements bridge.Model.
-func (adapter *Adapter) GetRootNodes() (rootNodes []bridge.Node) {
+func (adapter *Adapter) GetChildren() (rootNodes []bridge.Node) {
 	gongStructCategoryNode := NewGongStructCategoryNode(adapter.stage, "gongstructs")
 	rootNodes = append(rootNodes, gongStructCategoryNode)
 

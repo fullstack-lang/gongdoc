@@ -22,6 +22,11 @@ type GongStructCategoryNode struct {
 	Name  string
 }
 
+// IsExpanded implements bridge.Node.
+func (gongStructCategoryNode *GongStructCategoryNode) IsExpanded() bool {
+	return true
+}
+
 // GetChildren implements bridge.Node.
 func (categoryNode *GongStructCategoryNode) GetChildren() (children []bridge.Node) {
 

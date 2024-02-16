@@ -16,13 +16,14 @@ import (
 )
 
 type Model interface {
-	GetRootNodes() []Node
+	GetChildren() []Node
 }
 
 type Node interface {
 	GetChildren() []Node
 	GetName() string
 	IsNameEditable() bool
+	IsExpanded() bool
 }
 
 type Bridge struct {
@@ -45,17 +46,20 @@ func NewBridge(
 // and recursively fill up the modelTree
 func (bridge *Bridge) FillUpTree(modelTree *gongtree_models.Tree) {
 
-	for _, rootNode := range bridge.Model.GetRootNodes() {
-		treeNode := (&gongtree_models.Node{Name: rootNode.GetName()}).Stage(bridge.treeStage)
-		FillUpTreeRecursively(rootNode, treeNode, bridge.treeStage)
+	for _, node := range bridge.Model.GetChildren() {
+		treeNode := Node2NodeTree(node, bridge.treeStage)
 		modelTree.RootNodes = append(modelTree.RootNodes, treeNode)
 	}
 }
 
-func FillUpTreeRecursively(node Node, treeNode *gongtree_models.Node, treeStage *gongtree_models.StageStruct) {
+func Node2NodeTree(node Node, treeStage *gongtree_models.StageStruct) (treeNode *gongtree_models.Node) {
+	treeNode = (&gongtree_models.Node{Name: node.GetName()}).Stage(treeStage)
+	treeNode.IsExpanded = node.IsExpanded()
+
 	for _, children := range node.GetChildren() {
-		childrenTreeNode := (&gongtree_models.Node{Name: children.GetName()}).Stage(treeStage)
-		FillUpTreeRecursively(children, childrenTreeNode, treeStage)
+		childrenTreeNode := Node2NodeTree(children, treeStage)
 		treeNode.Children = append(treeNode.Children, childrenTreeNode)
 	}
+
+	return
 }
