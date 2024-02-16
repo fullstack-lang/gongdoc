@@ -30,11 +30,6 @@ func (fieldNode *FieldNode) HasCheckboxButton() bool {
 // GetChildren implements bridge.Node.
 func (fieldNode *FieldNode) GetChildren() (children []bridge.Node) {
 
-	// for field := range *gong_models.GetFieldInstancesSet[gong_models.Field](fieldNode.stage) {
-
-	// 	fieldRootNode.Children = append(fieldRootNode.Children, nodeField)
-	// }
-
 	return
 }
 

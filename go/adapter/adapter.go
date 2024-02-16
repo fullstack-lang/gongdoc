@@ -24,5 +24,8 @@ func (adapter *Adapter) GetChildren() (rootNodes []bridge.Node) {
 	gongEnumCategoryNode := NewGongEnumCategoryNode(adapter.stage, "gongenums")
 	rootNodes = append(rootNodes, gongEnumCategoryNode)
 
+	gongNoteCategoryNode := NewGongNoteCategoryNode(adapter.stage, "gongnotes")
+	rootNodes = append(rootNodes, gongNoteCategoryNode)
+
 	return
 }
