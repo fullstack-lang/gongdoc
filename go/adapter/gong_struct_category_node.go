@@ -22,9 +22,12 @@ type GongStructCategoryNode struct {
 	Name  string
 }
 
-// IsExpanded implements bridge.Node.
 func (gongStructCategoryNode *GongStructCategoryNode) IsExpanded() bool {
 	return true
+}
+
+func (gongStructCategoryNode *GongStructCategoryNode) HasCheckboxButton() bool {
+	return false
 }
 
 // GetChildren implements bridge.Node.
@@ -32,7 +35,7 @@ func (categoryNode *GongStructCategoryNode) GetChildren() (children []bridge.Nod
 
 	for gongStruct := range *gong_models.GetGongstructInstancesSet[gong_models.GongStruct](categoryNode.stage) {
 
-		gongStructNode := NewGongStructNode(categoryNode.stage, gongStruct.Name)
+		gongStructNode := NewGongStructNode(categoryNode.stage, gongStruct)
 		children = append(children, gongStructNode)
 	}
 

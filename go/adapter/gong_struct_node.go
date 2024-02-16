@@ -7,37 +7,41 @@ import (
 
 func NewGongStructNode(
 	stage *gong_models.StageStruct,
-	name string) (gongStructNode *GongStructNode) {
+	gongStruct *gong_models.GongStruct) (gongStructNode *GongStructNode) {
 	gongStructNode = new(GongStructNode)
+
 	gongStructNode.stage = stage
-	gongStructNode.Name = name
+	gongStructNode.gongStruct = gongStruct
 	return
 }
 
 type GongStructNode struct {
-	stage *gong_models.StageStruct
-	Name  string
+	stage      *gong_models.StageStruct
+	gongStruct *gong_models.GongStruct
 }
 
-// IsExpanded implements bridge.Node.
 func (gongStructNode *GongStructNode) IsExpanded() bool {
+	return false
+}
+
+func (gongStructNode *GongStructNode) HasCheckboxButton() bool {
 	return true
 }
 
 // GetChildren implements bridge.Node.
 func (gongStructNode *GongStructNode) GetChildren() (children []bridge.Node) {
 
-	// for gongStruct := range *gong_models.GetGongstructInstancesSet[gong_models.GongStruct](gongStructNode.stage) {
-
-	// 	gongstructRootNode.Children = append(gongstructRootNode.Children, nodeGongstruct)
-	// }
+	for _, field := range gongStructNode.gongStruct.Fields {
+		fieldNode := NewFieldNode(gongStructNode.stage, field)
+		children = append(children, fieldNode)
+	}
 
 	return
 }
 
 // GetName implements bridge.Node.
 func (gongStructNode *GongStructNode) GetName() string {
-	return gongStructNode.Name
+	return gongStructNode.gongStruct.GetName()
 }
 
 // IsNameEditable implements bridge.Node.

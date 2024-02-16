@@ -24,6 +24,7 @@ type Node interface {
 	GetName() string
 	IsNameEditable() bool
 	IsExpanded() bool
+	HasCheckboxButton() bool
 }
 
 type Bridge struct {
@@ -55,6 +56,8 @@ func (bridge *Bridge) FillUpTree(modelTree *gongtree_models.Tree) {
 func Node2NodeTree(node Node, treeStage *gongtree_models.StageStruct) (treeNode *gongtree_models.Node) {
 	treeNode = (&gongtree_models.Node{Name: node.GetName()}).Stage(treeStage)
 	treeNode.IsExpanded = node.IsExpanded()
+	treeNode.HasCheckboxButton = node.HasCheckboxButton()
+	treeNode.IsCheckboxDisabled = true
 
 	for _, children := range node.GetChildren() {
 		childrenTreeNode := Node2NodeTree(children, treeStage)
