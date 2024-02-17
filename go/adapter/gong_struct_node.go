@@ -29,7 +29,7 @@ func (gongStructNode *GongStructNode) HasCheckboxButton() bool {
 }
 
 // GetChildren implements bridge.Node.
-func (gongStructNode *GongStructNode) GetChildren() (children []bridge.Node) {
+func (gongStructNode *GongStructNode) GetChildren() (children []bridge.ModelNode) {
 
 	for _, field := range gongStructNode.gongStruct.Fields {
 		fieldNode := NewFieldNode(gongStructNode.stage, field)

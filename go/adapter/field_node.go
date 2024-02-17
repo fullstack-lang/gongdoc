@@ -28,7 +28,7 @@ func (fieldNode *FieldNode) HasCheckboxButton() bool {
 }
 
 // GetChildren implements bridge.Node.
-func (fieldNode *FieldNode) GetChildren() (children []bridge.Node) {
+func (fieldNode *FieldNode) GetChildren() (children []bridge.ModelNode) {
 
 	return
 }

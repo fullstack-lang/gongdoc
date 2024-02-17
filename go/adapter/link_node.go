@@ -28,7 +28,7 @@ func (linkNode *LinkNode) HasCheckboxButton() bool {
 }
 
 // GetChildren implements bridge.Node.
-func (linkNode *LinkNode) GetChildren() (children []bridge.Node) {
+func (linkNode *LinkNode) GetChildren() (children []bridge.ModelNode) {
 
 	// for link := range *gong_models.GetLinkInstancesSet[gong_models.Link](linkNode.stage) {
 

@@ -29,7 +29,7 @@ func (gongEnumNode *GongEnumNode) HasCheckboxButton() bool {
 }
 
 // GetChildren implements bridge.Node.
-func (gongEnumNode *GongEnumNode) GetChildren() (children []bridge.Node) {
+func (gongEnumNode *GongEnumNode) GetChildren() (children []bridge.ModelNode) {
 
 	for _, gongEnumValue := range gongEnumNode.gongEnum.GongEnumValues {
 		enumValueNode := NewEnumValueNode(gongEnumNode.stage, gongEnumValue)

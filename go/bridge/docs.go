@@ -1,8 +1,8 @@
 // bridge is a package that manages
 //
 // a model contains element
-// a diagram package that contains diagrams with shapes
-// a "diagrams" tree displays all diagrams in the diagram package
+// a folder that contains diagrams with shapes
+// a "diagrams" tree displays all diagrams in the folder
 // a "model" tree displays all elements of the models
 //
 // the "diagrams" tree allows for the selection of a diagram within the diagram package
@@ -16,11 +16,11 @@ import (
 )
 
 type Model interface {
-	GetChildren() []Node
+	GetChildren() []ModelNode
 }
 
-type Node interface {
-	GetChildren() []Node
+type ModelNode interface {
+	GetChildren() []ModelNode
 	GetName() string
 	IsNameEditable() bool
 	IsExpanded() bool
@@ -53,7 +53,7 @@ func (bridge *Bridge) FillUpTree(modelTree *gongtree_models.Tree) {
 	}
 }
 
-func Node2NodeTree(node Node, treeStage *gongtree_models.StageStruct) (treeNode *gongtree_models.Node) {
+func Node2NodeTree(node ModelNode, treeStage *gongtree_models.StageStruct) (treeNode *gongtree_models.Node) {
 	treeNode = (&gongtree_models.Node{Name: node.GetName()}).Stage(treeStage)
 	treeNode.IsExpanded = node.IsExpanded()
 	treeNode.HasCheckboxButton = node.HasCheckboxButton()

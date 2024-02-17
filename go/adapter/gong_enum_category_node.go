@@ -31,7 +31,7 @@ func (gongEnumCategoryNode *GongEnumCategoryNode) HasCheckboxButton() bool {
 }
 
 // GetChildren implements bridge.Node.
-func (categoryNode *GongEnumCategoryNode) GetChildren() (children []bridge.Node) {
+func (categoryNode *GongEnumCategoryNode) GetChildren() (children []bridge.ModelNode) {
 
 	for gongEnum := range *gong_models.GetGongstructInstancesSet[gong_models.GongEnum](categoryNode.stage) {
 
@@ -39,7 +39,7 @@ func (categoryNode *GongEnumCategoryNode) GetChildren() (children []bridge.Node)
 		children = append(children, gongEnumNode)
 	}
 
-	slices.SortFunc(children, func(a, b bridge.Node) int {
+	slices.SortFunc(children, func(a, b bridge.ModelNode) int {
 		return cmp.Compare(a.GetName(), b.GetName())
 	})
 

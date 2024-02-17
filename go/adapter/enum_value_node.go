@@ -28,7 +28,7 @@ func (enumvalueNode *EnumValueNode) HasCheckboxButton() bool {
 }
 
 // GetChildren implements bridge.Node.
-func (enumvalueNode *EnumValueNode) GetChildren() (children []bridge.Node) {
+func (enumvalueNode *EnumValueNode) GetChildren() (children []bridge.ModelNode) {
 	return
 }
 

@@ -29,7 +29,7 @@ func (gongNoteNode *GongNoteNode) HasCheckboxButton() bool {
 }
 
 // GetChildren implements bridge.Node.
-func (gongNoteNode *GongNoteNode) GetChildren() (children []bridge.Node) {
+func (gongNoteNode *GongNoteNode) GetChildren() (children []bridge.ModelNode) {
 
 	for _, link := range gongNoteNode.gongNote.Links {
 		fieldNode := NewLinkNode(gongNoteNode.stage, link)
