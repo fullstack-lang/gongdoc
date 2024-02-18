@@ -1,8 +1,9 @@
 // bridge is a package that manages
 //
-// a model contains element
-// a folder that contains diagrams with shapes
-// a "diagrams" tree displays all diagrams in the folder
+// a model that contains elements of different categories
+// a folder that contains diagrams with shapes.
+// Each shape is related to one element, one kind of shape for each kind of element
+// a "portfolio" tree displays all diagrams in the folder
 // a "model" tree displays all elements of the models
 //
 // the "diagrams" tree allows for the selection of a diagram within the diagram package

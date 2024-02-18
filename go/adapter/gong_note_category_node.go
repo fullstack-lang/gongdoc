@@ -8,26 +8,12 @@ import (
 	"github.com/fullstack-lang/gongdoc/go/bridge"
 )
 
-func NewGongNoteCategoryNode(
-	stage *gong_models.StageStruct,
-	name string) (categoryNode *GongNoteCategoryNode) {
-	categoryNode = new(GongNoteCategoryNode)
-	categoryNode.stage = stage
-	categoryNode.Name = name
-	return
+func NewGongNoteCategoryNode(stage *gong_models.StageStruct, name string) *GongNoteCategoryNode {
+	return &GongNoteCategoryNode{CategoryNodeBase: CategoryNodeBase{stage: stage, Name: name}}
 }
 
 type GongNoteCategoryNode struct {
-	stage *gong_models.StageStruct
-	Name  string
-}
-
-func (gongNoteCategoryNode *GongNoteCategoryNode) IsExpanded() bool {
-	return true
-}
-
-func (gongNoteCategoryNode *GongNoteCategoryNode) HasCheckboxButton() bool {
-	return false
+	CategoryNodeBase
 }
 
 // GetChildren implements bridge.Node.
@@ -44,14 +30,4 @@ func (categoryNode *GongNoteCategoryNode) GetChildren() (children []bridge.Model
 	})
 
 	return
-}
-
-// GetName implements bridge.Node.
-func (categoryNode *GongNoteCategoryNode) GetName() string {
-	return categoryNode.Name
-}
-
-// IsNameEditable implements bridge.Node.
-func (categoryNode *GongNoteCategoryNode) IsNameEditable() bool {
-	return false
 }
