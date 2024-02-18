@@ -2,7 +2,7 @@ package adapter
 
 import (
 	gong_models "github.com/fullstack-lang/gong/go/models"
-	"github.com/fullstack-lang/gongdoc/go/bridge"
+	"github.com/fullstack-lang/gongdoc/go/diagrammer"
 )
 
 type GongNoteNode struct {
@@ -21,7 +21,7 @@ func NewGongNoteNode(
 }
 
 // GetChildren implements bridge.Node.
-func (gongNoteNode *GongNoteNode) GetChildren() (children []bridge.ModelNode) {
+func (gongNoteNode *GongNoteNode) GetChildren() (children []diagrammer.ModelNode) {
 
 	for _, link := range gongNoteNode.gongNote.Links {
 		fieldNode := NewLinkNode(gongNoteNode.stage, link)

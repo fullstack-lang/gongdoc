@@ -2,7 +2,7 @@ package adapter
 
 import (
 	gong_models "github.com/fullstack-lang/gong/go/models"
-	"github.com/fullstack-lang/gongdoc/go/bridge"
+	"github.com/fullstack-lang/gongdoc/go/diagrammer"
 )
 
 type GongEnumNode struct {
@@ -21,7 +21,7 @@ func NewGongEnumNode(
 }
 
 // GetChildren implements bridge.Node.
-func (gongEnumNode *GongEnumNode) GetChildren() (children []bridge.ModelNode) {
+func (gongEnumNode *GongEnumNode) GetChildren() (children []diagrammer.ModelNode) {
 
 	for _, gongEnumValue := range gongEnumNode.gongEnum.GongEnumValues {
 		enumValueNode := NewEnumValueNode(gongEnumNode.stage, gongEnumValue)

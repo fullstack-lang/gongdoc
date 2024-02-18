@@ -2,7 +2,7 @@ package adapter
 
 import (
 	gong_models "github.com/fullstack-lang/gong/go/models"
-	"github.com/fullstack-lang/gongdoc/go/bridge"
+	"github.com/fullstack-lang/gongdoc/go/diagrammer"
 )
 
 type FieldNode struct {
@@ -20,7 +20,7 @@ func NewFieldNode(
 }
 
 // GetChildren implements bridge.Node.
-func (fieldNode *FieldNode) GetChildren() (children []bridge.ModelNode) {
+func (fieldNode *FieldNode) GetChildren() (children []diagrammer.ModelNode) {
 	return
 }
 

@@ -6,7 +6,7 @@ import (
 
 	gong_models "github.com/fullstack-lang/gong/go/models"
 
-	"github.com/fullstack-lang/gongdoc/go/bridge"
+	"github.com/fullstack-lang/gongdoc/go/diagrammer"
 )
 
 type GongEnumCategoryNode struct {
@@ -18,7 +18,7 @@ func NewGongEnumCategoryNode(stage *gong_models.StageStruct, name string) *GongE
 }
 
 // GetChildren implements bridge.Node.
-func (categoryNode *GongEnumCategoryNode) GetChildren() (children []bridge.ModelNode) {
+func (categoryNode *GongEnumCategoryNode) GetChildren() (children []diagrammer.ModelNode) {
 
 	for gongEnum := range *gong_models.GetGongstructInstancesSet[gong_models.GongEnum](categoryNode.stage) {
 
@@ -26,7 +26,7 @@ func (categoryNode *GongEnumCategoryNode) GetChildren() (children []bridge.Model
 		children = append(children, gongEnumNode)
 	}
 
-	slices.SortFunc(children, func(a, b bridge.ModelNode) int {
+	slices.SortFunc(children, func(a, b diagrammer.ModelNode) int {
 		return cmp.Compare(a.GetName(), b.GetName())
 	})
 

@@ -2,7 +2,7 @@ package adapter
 
 import (
 	gong_models "github.com/fullstack-lang/gong/go/models"
-	"github.com/fullstack-lang/gongdoc/go/bridge"
+	"github.com/fullstack-lang/gongdoc/go/diagrammer"
 )
 
 func NewLinkNode(
@@ -28,7 +28,7 @@ func (linkNode *LinkNode) HasCheckboxButton() bool {
 }
 
 // GetChildren implements bridge.Node.
-func (linkNode *LinkNode) GetChildren() (children []bridge.ModelNode) {
+func (linkNode *LinkNode) GetChildren() (children []diagrammer.ModelNode) {
 
 	// for link := range *gong_models.GetLinkInstancesSet[gong_models.Link](linkNode.stage) {
 

@@ -2,7 +2,7 @@ package adapter
 
 import (
 	gong_models "github.com/fullstack-lang/gong/go/models"
-	"github.com/fullstack-lang/gongdoc/go/bridge"
+	"github.com/fullstack-lang/gongdoc/go/diagrammer"
 )
 
 type EnumValueNode struct {
@@ -20,7 +20,7 @@ func NewEnumValueNode(
 }
 
 // GetChildren implements bridge.Node.
-func (enumvalueNode *EnumValueNode) GetChildren() (children []bridge.ModelNode) {
+func (enumvalueNode *EnumValueNode) GetChildren() (children []diagrammer.ModelNode) {
 	return
 }
 

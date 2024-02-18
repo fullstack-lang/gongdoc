@@ -10,7 +10,7 @@
 // the "model" tree allows for the addition/suppression of shapes in the diagram
 //
 // the "model" tree is construed by getting informations from the model
-package bridge
+package diagrammer
 
 import (
 	gongtree_models "github.com/fullstack-lang/gongtree/go/models"

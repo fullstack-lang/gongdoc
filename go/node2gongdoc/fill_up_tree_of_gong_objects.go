@@ -5,7 +5,7 @@ import (
 
 	gong_models "github.com/fullstack-lang/gong/go/models"
 	"github.com/fullstack-lang/gongdoc/go/adapter"
-	"github.com/fullstack-lang/gongdoc/go/bridge"
+	"github.com/fullstack-lang/gongdoc/go/diagrammer"
 	gongdoc_models "github.com/fullstack-lang/gongdoc/go/models"
 	gongtree_models "github.com/fullstack-lang/gongtree/go/models"
 )
@@ -18,7 +18,7 @@ func FillUpTreeOfGongObjects(
 
 	a_ := adapter.NewModelAdapter(diagramPackage.ModelPkg.GetStage())
 	b_ := adapter.NewPortfolioAdapter(gongdocStage)
-	bridge := bridge.NewBridge(a_, b_, gongtreeStage)
+	bridge := diagrammer.NewBridge(a_, b_, gongtreeStage)
 
 	treeOfModelObjects := (&gongtree_models.Tree{Name: "model"}).Stage(gongtreeStage)
 	bridge.FillUpModelTree(treeOfModelObjects)

@@ -3,7 +3,7 @@ package adapter
 import (
 	gong_models "github.com/fullstack-lang/gong/go/models"
 
-	"github.com/fullstack-lang/gongdoc/go/bridge"
+	"github.com/fullstack-lang/gongdoc/go/diagrammer"
 )
 
 type ModelAdapter struct {
@@ -17,7 +17,7 @@ func NewModelAdapter(stage *gong_models.StageStruct) (adapter *ModelAdapter) {
 }
 
 // GetRootNodes implements bridge.Model.
-func (modelAdapter *ModelAdapter) GetChildren() (rootNodes []bridge.ModelNode) {
+func (modelAdapter *ModelAdapter) GetChildren() (rootNodes []diagrammer.ModelNode) {
 	gongStructCategoryNode := NewGongStructCategoryNode(modelAdapter.stage, "gongstructs")
 	rootNodes = append(rootNodes, gongStructCategoryNode)
 

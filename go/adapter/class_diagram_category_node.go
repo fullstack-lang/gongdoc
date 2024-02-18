@@ -6,7 +6,7 @@ import (
 
 	gongdoc_models "github.com/fullstack-lang/gongdoc/go/models"
 
-	"github.com/fullstack-lang/gongdoc/go/bridge"
+	"github.com/fullstack-lang/gongdoc/go/diagrammer"
 )
 
 type ClassDiagramCategoryNode struct {
@@ -32,7 +32,7 @@ func (ClassDiagramCategoryNode *ClassDiagramCategoryNode) HasCheckboxButton() bo
 }
 
 // GetChildren implements bridge.Node.
-func (categoryNode *ClassDiagramCategoryNode) GetChildren() (children []bridge.PortfolioNode) {
+func (categoryNode *ClassDiagramCategoryNode) GetChildren() (children []diagrammer.PortfolioNode) {
 
 	for classDiagram := range *gongdoc_models.GetGongstructInstancesSet[gongdoc_models.Classdiagram](categoryNode.stage) {
 
@@ -40,7 +40,7 @@ func (categoryNode *ClassDiagramCategoryNode) GetChildren() (children []bridge.P
 		children = append(children, classDiagramNode)
 	}
 
-	slices.SortFunc(children, func(a, b bridge.PortfolioNode) int {
+	slices.SortFunc(children, func(a, b diagrammer.PortfolioNode) int {
 		return cmp.Compare(a.GetName(), b.GetName())
 	})
 

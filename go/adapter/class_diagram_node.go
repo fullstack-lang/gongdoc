@@ -3,7 +3,7 @@ package adapter
 import (
 	gongdoc_models "github.com/fullstack-lang/gongdoc/go/models"
 
-	"github.com/fullstack-lang/gongdoc/go/bridge"
+	"github.com/fullstack-lang/gongdoc/go/diagrammer"
 )
 
 type ClassDiagramNode struct {
@@ -20,7 +20,7 @@ func NewClassDiagramNode(
 }
 
 // GetChildren implements bridge.Node.
-func (classDiagramNode *ClassDiagramNode) GetChildren() (children []bridge.PortfolioNode) {
+func (classDiagramNode *ClassDiagramNode) GetChildren() (children []diagrammer.PortfolioNode) {
 	return
 }
 
