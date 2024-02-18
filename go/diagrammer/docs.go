@@ -1,10 +1,13 @@
-// bridge is a package that manages
+// diagrammer is a package that manages
 //
-// a model that contains elements of different categories
-// a folder that contains diagrams with shapes.
+// A model that contains elements of different categories
+// A portfolio that contains diagrams with shapes.
 // Each shape is related to one element, one kind of shape for each kind of element
-// a "portfolio" tree displays all diagrams in the folder
-// a "model" tree displays all elements of the models
+//
+// Two trees:
+//
+// - a "model" tree displays all elements of the models
+// - a "portfolio" tree displays all diagrams in the folder
 //
 // the "diagrams" tree allows for the selection of a diagram within the diagram package
 // the "model" tree allows for the addition/suppression of shapes in the diagram
@@ -28,8 +31,16 @@ type ModelNode interface {
 	HasCheckboxButton() bool
 }
 
+// Porfolio
+//
+// IsInSelectionMode()
 type Portfolio interface {
 	GetChildren() []PortfolioNode
+	GetSelectedDiagram() Diagram
+	IsInSelectionMode() bool // the end user can select a diagram to display
+}
+
+type Diagram interface {
 }
 
 type PortfolioNode interface {
@@ -40,67 +51,67 @@ type PortfolioNode interface {
 	HasCheckboxButton() bool
 }
 
-type Bridge struct {
+type Diagrammer struct {
 	Model     Model
 	Portfolio Portfolio
 	treeStage *gongtree_models.StageStruct
 }
 
-func NewBridge(
+func NewDiagrammer(
 	model Model,
 	portfolio Portfolio,
 	treeStage *gongtree_models.StageStruct,
-) (bridge *Bridge) {
-	bridge = new(Bridge)
+) (diagrammer *Diagrammer) {
+	diagrammer = new(Diagrammer)
 
-	bridge.Model = model
-	bridge.Portfolio = portfolio
-	bridge.treeStage = treeStage
+	diagrammer.Model = model
+	diagrammer.Portfolio = portfolio
+	diagrammer.treeStage = treeStage
 	return
 }
 
 // FillUpModelTree ranges over Model Root Nodes
 // and recursively fill up the modelTree
-func (bridge *Bridge) FillUpModelTree(modelTree *gongtree_models.Tree) {
+func (diagrammer *Diagrammer) FillUpModelTree(modelTree *gongtree_models.Tree) {
 
-	for _, node := range bridge.Model.GetChildren() {
-		treeNode := ModelNode2NodeTree(node, bridge.treeStage)
+	for _, node := range diagrammer.Model.GetChildren() {
+		treeNode := diagrammer.ModelNode2NodeTree(node, diagrammer.treeStage)
 		modelTree.RootNodes = append(modelTree.RootNodes, treeNode)
 	}
 }
 
-// FillUpPortfolioTree ranges over Portfolio Root Nodes
-// and recursively fill up the PortfolioTree
-func (bridge *Bridge) FillUpPortfolioTree(modelTree *gongtree_models.Tree) {
-
-	for _, node := range bridge.Portfolio.GetChildren() {
-		treeNode := PortfolioNode2NodeTree(node, bridge.treeStage)
-		modelTree.RootNodes = append(modelTree.RootNodes, treeNode)
-	}
-}
-
-func ModelNode2NodeTree(node ModelNode, treeStage *gongtree_models.StageStruct) (treeNode *gongtree_models.Node) {
+func (diagrammer *Diagrammer) ModelNode2NodeTree(node ModelNode, treeStage *gongtree_models.StageStruct) (treeNode *gongtree_models.Node) {
 	treeNode = (&gongtree_models.Node{Name: node.GetName()}).Stage(treeStage)
 	treeNode.IsExpanded = node.IsExpanded()
 	treeNode.HasCheckboxButton = node.HasCheckboxButton()
 	treeNode.IsCheckboxDisabled = true
 
 	for _, children := range node.GetChildren() {
-		childrenTreeNode := ModelNode2NodeTree(children, treeStage)
+		childrenTreeNode := diagrammer.ModelNode2NodeTree(children, treeStage)
 		treeNode.Children = append(treeNode.Children, childrenTreeNode)
 	}
 
 	return
 }
 
-func PortfolioNode2NodeTree(node PortfolioNode, treeStage *gongtree_models.StageStruct) (treeNode *gongtree_models.Node) {
+// FillUpPortfolioTree ranges over Portfolio Root Nodes
+// and recursively fill up the PortfolioTree
+func (diagrammer *Diagrammer) FillUpPortfolioTree(modelTree *gongtree_models.Tree) {
+
+	for _, node := range diagrammer.Portfolio.GetChildren() {
+		treeNode := diagrammer.PortfolioNode2NodeTree(node, diagrammer.treeStage)
+		modelTree.RootNodes = append(modelTree.RootNodes, treeNode)
+	}
+}
+
+func (diagrammer *Diagrammer) PortfolioNode2NodeTree(node PortfolioNode, treeStage *gongtree_models.StageStruct) (treeNode *gongtree_models.Node) {
 	treeNode = (&gongtree_models.Node{Name: node.GetName()}).Stage(treeStage)
 	treeNode.IsExpanded = node.IsExpanded()
 	treeNode.HasCheckboxButton = node.HasCheckboxButton()
-	treeNode.IsCheckboxDisabled = true
+	treeNode.IsCheckboxDisabled = !diagrammer.Portfolio.IsInSelectionMode()
 
 	for _, children := range node.GetChildren() {
-		childrenTreeNode := PortfolioNode2NodeTree(children, treeStage)
+		childrenTreeNode := diagrammer.PortfolioNode2NodeTree(children, treeStage)
 		treeNode.Children = append(treeNode.Children, childrenTreeNode)
 	}
 
