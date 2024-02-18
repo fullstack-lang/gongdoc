@@ -16,10 +16,17 @@ func FillUpTreeOfGongObjects(
 	diagramPackage *gongdoc_models.DiagramPackage,
 ) (treeOfGongObjects *gongtree_models.Tree) {
 
-	a_ := adapter.NewAdapter(diagramPackage.ModelPkg.GetStage())
-	bridge := bridge.NewBridge(a_, gongtreeStage)
-	treeOfGongObjects_ := (&gongtree_models.Tree{Name: "model"}).Stage(gongtreeStage)
-	bridge.FillUpTree(treeOfGongObjects_)
+	a_ := adapter.NewModelAdapter(diagramPackage.ModelPkg.GetStage())
+	b_ := adapter.NewPortfolioAdapter(gongdocStage)
+	bridge := bridge.NewBridge(a_, b_, gongtreeStage)
+
+	treeOfModelObjects := (&gongtree_models.Tree{Name: "model"}).Stage(gongtreeStage)
+	bridge.FillUpModelTree(treeOfModelObjects)
+	treeOfPortfolioObjects := (&gongtree_models.Tree{Name: "portfolio"}).Stage(gongtreeStage)
+	bridge.FillUpPortfolioTree(treeOfPortfolioObjects)
+
+	// treeOfPorfolioObjects_ := (&gongtree_models.Tree{Name: "portfolio"}).Stage(gongtreeStage)
+	// bridge.FillPortfolioUpTree(treeOfPorfolioObjects_)
 
 	// set up the gongTree to display elements
 	treeOfGongObjects = (&gongtree_models.Tree{Name: "gong"}).Stage(gongtreeStage)
