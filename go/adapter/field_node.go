@@ -5,40 +5,26 @@ import (
 	"github.com/fullstack-lang/gongdoc/go/bridge"
 )
 
+type FieldNode struct {
+	ElementNodeBase
+	Field gong_models.FieldInterface
+}
+
 func NewFieldNode(
 	stage *gong_models.StageStruct,
 	field gong_models.FieldInterface) (fieldNode *FieldNode) {
-	fieldNode = new(FieldNode)
+	fieldNode = &FieldNode{ElementNodeBase: ElementNodeBase{stage: stage}}
 	fieldNode.stage = stage
 	fieldNode.Field = field
 	return
 }
 
-type FieldNode struct {
-	stage *gong_models.StageStruct
-	Field gong_models.FieldInterface
-}
-
-func (fieldNode *FieldNode) IsExpanded() bool {
-	return true
-}
-
-func (fieldNode *FieldNode) HasCheckboxButton() bool {
-	return true
-}
-
 // GetChildren implements bridge.Node.
 func (fieldNode *FieldNode) GetChildren() (children []bridge.ModelNode) {
-
 	return
 }
 
 // GetName implements bridge.Node.
 func (fieldNode *FieldNode) GetName() string {
 	return fieldNode.Field.GetName()
-}
-
-// IsNameEditable implements bridge.Node.
-func (fieldNode *FieldNode) IsNameEditable() bool {
-	return false
 }

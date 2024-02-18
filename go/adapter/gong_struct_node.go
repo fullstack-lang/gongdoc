@@ -8,7 +8,7 @@ import (
 func NewGongStructNode(
 	stage *gong_models.StageStruct,
 	gongStruct *gong_models.GongStruct) (gongStructNode *GongStructNode) {
-	gongStructNode = new(GongStructNode)
+	gongStructNode = &GongStructNode{ElementNodeBase: ElementNodeBase{stage: stage}}
 
 	gongStructNode.stage = stage
 	gongStructNode.gongStruct = gongStruct
@@ -16,16 +16,8 @@ func NewGongStructNode(
 }
 
 type GongStructNode struct {
-	stage      *gong_models.StageStruct
+	ElementNodeBase
 	gongStruct *gong_models.GongStruct
-}
-
-func (gongStructNode *GongStructNode) IsExpanded() bool {
-	return false
-}
-
-func (gongStructNode *GongStructNode) HasCheckboxButton() bool {
-	return true
 }
 
 // GetChildren implements bridge.Node.
@@ -42,9 +34,4 @@ func (gongStructNode *GongStructNode) GetChildren() (children []bridge.ModelNode
 // GetName implements bridge.Node.
 func (gongStructNode *GongStructNode) GetName() string {
 	return gongStructNode.gongStruct.GetName()
-}
-
-// IsNameEditable implements bridge.Node.
-func (gongStructNode *GongStructNode) IsNameEditable() bool {
-	return false
 }

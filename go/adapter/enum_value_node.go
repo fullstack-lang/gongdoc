@@ -5,26 +5,18 @@ import (
 	"github.com/fullstack-lang/gongdoc/go/bridge"
 )
 
-func NewEnumValueNode(
-	stage *gong_models.StageStruct,
-	enumvalue *gong_models.GongEnumValue) (enumvalueNode *EnumValueNode) {
-	enumvalueNode = new(EnumValueNode)
-	enumvalueNode.stage = stage
-	enumvalueNode.EnumValue = enumvalue
-	return
-}
-
 type EnumValueNode struct {
-	stage     *gong_models.StageStruct
+	ElementNodeBase
 	EnumValue *gong_models.GongEnumValue
 }
 
-func (enumvalueNode *EnumValueNode) IsExpanded() bool {
-	return true
-}
-
-func (enumvalueNode *EnumValueNode) HasCheckboxButton() bool {
-	return true
+func NewEnumValueNode(
+	stage *gong_models.StageStruct,
+	enumvalue *gong_models.GongEnumValue) (enumvalueNode *EnumValueNode) {
+	enumvalueNode = &EnumValueNode{ElementNodeBase: ElementNodeBase{stage: stage}}
+	enumvalueNode.stage = stage
+	enumvalueNode.EnumValue = enumvalue
+	return
 }
 
 // GetChildren implements bridge.Node.
@@ -35,9 +27,4 @@ func (enumvalueNode *EnumValueNode) GetChildren() (children []bridge.ModelNode) 
 // GetName implements bridge.Node.
 func (enumvalueNode *EnumValueNode) GetName() string {
 	return enumvalueNode.EnumValue.GetName()
-}
-
-// IsNameEditable implements bridge.Node.
-func (enumvalueNode *EnumValueNode) IsNameEditable() bool {
-	return false
 }

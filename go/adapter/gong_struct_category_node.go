@@ -8,12 +8,12 @@ import (
 	"github.com/fullstack-lang/gongdoc/go/bridge"
 )
 
-func NewGongStructCategoryNode(stage *gong_models.StageStruct, name string) *GongStructCategoryNode {
-	return &GongStructCategoryNode{CategoryNodeBase: CategoryNodeBase{stage: stage, Name: name}}
-}
-
 type GongStructCategoryNode struct {
 	CategoryNodeBase
+}
+
+func NewGongStructCategoryNode(stage *gong_models.StageStruct, name string) *GongStructCategoryNode {
+	return &GongStructCategoryNode{CategoryNodeBase: CategoryNodeBase{stage: stage, Name: name}}
 }
 
 // GetChildren implements bridge.Node.

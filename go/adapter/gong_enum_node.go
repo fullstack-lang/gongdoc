@@ -5,27 +5,19 @@ import (
 	"github.com/fullstack-lang/gongdoc/go/bridge"
 )
 
+type GongEnumNode struct {
+	ElementNodeBase
+	gongEnum *gong_models.GongEnum
+}
+
 func NewGongEnumNode(
 	stage *gong_models.StageStruct,
 	gongEnum *gong_models.GongEnum) (gongEnumNode *GongEnumNode) {
-	gongEnumNode = new(GongEnumNode)
+	gongEnumNode = &GongEnumNode{ElementNodeBase: ElementNodeBase{stage: stage}}
 
 	gongEnumNode.stage = stage
 	gongEnumNode.gongEnum = gongEnum
 	return
-}
-
-type GongEnumNode struct {
-	stage    *gong_models.StageStruct
-	gongEnum *gong_models.GongEnum
-}
-
-func (gongEnumNode *GongEnumNode) IsExpanded() bool {
-	return false
-}
-
-func (gongEnumNode *GongEnumNode) HasCheckboxButton() bool {
-	return true
 }
 
 // GetChildren implements bridge.Node.
@@ -42,9 +34,4 @@ func (gongEnumNode *GongEnumNode) GetChildren() (children []bridge.ModelNode) {
 // GetName implements bridge.Node.
 func (gongEnumNode *GongEnumNode) GetName() string {
 	return gongEnumNode.gongEnum.GetName()
-}
-
-// IsNameEditable implements bridge.Node.
-func (gongEnumNode *GongEnumNode) IsNameEditable() bool {
-	return false
 }

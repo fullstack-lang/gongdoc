@@ -9,12 +9,12 @@ import (
 	"github.com/fullstack-lang/gongdoc/go/bridge"
 )
 
-func NewGongEnumCategoryNode(stage *gong_models.StageStruct, name string) *GongEnumCategoryNode {
-	return &GongEnumCategoryNode{CategoryNodeBase: CategoryNodeBase{stage: stage, Name: name}}
-}
-
 type GongEnumCategoryNode struct {
 	CategoryNodeBase
+}
+
+func NewGongEnumCategoryNode(stage *gong_models.StageStruct, name string) *GongEnumCategoryNode {
+	return &GongEnumCategoryNode{CategoryNodeBase: CategoryNodeBase{stage: stage, Name: name}}
 }
 
 // GetChildren implements bridge.Node.

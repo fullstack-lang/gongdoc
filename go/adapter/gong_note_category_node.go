@@ -8,12 +8,12 @@ import (
 	"github.com/fullstack-lang/gongdoc/go/bridge"
 )
 
-func NewGongNoteCategoryNode(stage *gong_models.StageStruct, name string) *GongNoteCategoryNode {
-	return &GongNoteCategoryNode{CategoryNodeBase: CategoryNodeBase{stage: stage, Name: name}}
-}
-
 type GongNoteCategoryNode struct {
 	CategoryNodeBase
+}
+
+func NewGongNoteCategoryNode(stage *gong_models.StageStruct, name string) *GongNoteCategoryNode {
+	return &GongNoteCategoryNode{CategoryNodeBase: CategoryNodeBase{stage: stage, Name: name}}
 }
 
 // GetChildren implements bridge.Node.
