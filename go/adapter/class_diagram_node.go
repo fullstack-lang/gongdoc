@@ -43,3 +43,8 @@ func (*ClassDiagramNode) IsExpanded() bool {
 func (*ClassDiagramNode) IsNameEditable() bool {
 	return false
 }
+
+// OnCheckboxButtonCheck implements diagrammer.PortfolioNode.
+func (*ClassDiagramNode) OnCheckboxButtonCheck() {
+	// panic("unimplemented")
+}

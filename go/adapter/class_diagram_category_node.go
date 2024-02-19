@@ -56,3 +56,8 @@ func (categoryNode *ClassDiagramCategoryNode) GetName() string {
 func (categoryNode *ClassDiagramCategoryNode) IsNameEditable() bool {
 	return false
 }
+
+// OnCheckboxButtonCheck implements diagrammer.PortfolioNode.
+func (*ClassDiagramCategoryNode) OnCheckboxButtonCheck() {
+	panic("unimplemented")
+}

@@ -36,11 +36,9 @@ type ModelNode interface {
 // IsInSelectionMode()
 type Portfolio interface {
 	GetChildren() []PortfolioNode
-	GetSelectedDiagram() Diagram
+	GetSelectedPortfolioNode() PortfolioNode
+	SetSelectedPortfolioNode(portfolioNode PortfolioNode)
 	IsInSelectionMode() bool // the end user can select a diagram to display
-}
-
-type Diagram interface {
 }
 
 type PortfolioNode interface {
@@ -49,6 +47,38 @@ type PortfolioNode interface {
 	IsNameEditable() bool
 	IsExpanded() bool
 	HasCheckboxButton() bool
+	OnCheckboxButtonCheck()
+}
+
+type PortfolioNodeImpl struct {
+	portfolio     Portfolio
+	portfolioNode PortfolioNode
+}
+
+// OnAfterUpdate implements models.NodeImplInterface
+func (portfolioNodeImpl *PortfolioNodeImpl) OnAfterUpdate(stage *gongtree_models.StageStruct, stagedNode *gongtree_models.Node, frontNode *gongtree_models.Node) {
+	if frontNode.IsChecked && !stagedNode.IsChecked {
+
+		// let the adapter do what it has to to
+		portfolioNodeImpl.portfolioNode.OnCheckboxButtonCheck()
+
+		// manages the radio button stuff --> only one button at a time
+		stagedNode.IsChecked = true
+		portfolioNodeImpl.portfolio.SetSelectedPortfolioNode(portfolioNodeImpl.portfolioNode)
+
+		// for _, otherDiagramNode := range nodeImplClasssiagram.diagramPackageNode.Children {
+		// 	if otherDiagramNode == stagedNode {
+		// 		continue
+		// 	}
+
+		// 	// uncheck the other node
+		// 	if otherDiagramNode.IsChecked {
+		// 		// log.Println("Node " + node.Name + " is checked and should be unchecked")
+		// 		otherDiagramNode.IsChecked = false
+		// 		otherDiagramNode.Commit(gongtreeStage)
+		// 	}
+		// }
+	}
 }
 
 type Diagrammer struct {
@@ -104,13 +134,16 @@ func (diagrammer *Diagrammer) FillUpPortfolioTree(modelTree *gongtree_models.Tre
 	}
 }
 
-func (diagrammer *Diagrammer) PortfolioNode2NodeTree(node PortfolioNode, treeStage *gongtree_models.StageStruct) (treeNode *gongtree_models.Node) {
-	treeNode = (&gongtree_models.Node{Name: node.GetName()}).Stage(treeStage)
-	treeNode.IsExpanded = node.IsExpanded()
-	treeNode.HasCheckboxButton = node.HasCheckboxButton()
+func (diagrammer *Diagrammer) PortfolioNode2NodeTree(portfolioNode PortfolioNode, treeStage *gongtree_models.StageStruct) (treeNode *gongtree_models.Node) {
+	treeNode = (&gongtree_models.Node{Name: portfolioNode.GetName()}).Stage(treeStage)
+	treeNode.IsExpanded = portfolioNode.IsExpanded()
+	treeNode.HasCheckboxButton = portfolioNode.HasCheckboxButton()
 	treeNode.IsCheckboxDisabled = !diagrammer.Portfolio.IsInSelectionMode()
+	treeNode.Impl = &PortfolioNodeImpl{
+		portfolio:     diagrammer.Portfolio,
+		portfolioNode: portfolioNode}
 
-	for _, children := range node.GetChildren() {
+	for _, children := range portfolioNode.GetChildren() {
 		childrenTreeNode := diagrammer.PortfolioNode2NodeTree(children, treeStage)
 		treeNode.Children = append(treeNode.Children, childrenTreeNode)
 	}

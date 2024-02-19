@@ -7,7 +7,18 @@ import (
 )
 
 type PortfolioAdapter struct {
-	stage *gongdoc_models.StageStruct
+	stage                 *gongdoc_models.StageStruct
+	selectedPortfolioNode diagrammer.PortfolioNode
+}
+
+// GetSelectedPortfolioNode implements diagrammer.Portfolio.
+func (portfolioAdapter *PortfolioAdapter) GetSelectedPortfolioNode() diagrammer.PortfolioNode {
+	return portfolioAdapter.selectedPortfolioNode
+}
+
+// SetSelectedPortfolioNode implements diagrammer.Portfolio.
+func (portfolioAdapter *PortfolioAdapter) SetSelectedPortfolioNode(portfolioNode diagrammer.PortfolioNode) {
+	portfolioAdapter.selectedPortfolioNode = portfolioNode
 }
 
 // IsInSelectionMode implements diagrammer.Portfolio.
@@ -16,7 +27,7 @@ func (*PortfolioAdapter) IsInSelectionMode() bool {
 }
 
 // GetSelectedDiagram implements diagrammer.Portfolio.
-func (portfolioAdapter *PortfolioAdapter) GetSelectedDiagram() (diagram diagrammer.Diagram) {
+func (portfolioAdapter *PortfolioAdapter) GetSelectedDiagram() (diagram diagrammer.PortfolioNode) {
 	return
 }
 
