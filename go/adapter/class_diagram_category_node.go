@@ -10,16 +10,22 @@ import (
 )
 
 type ClassDiagramCategoryNode struct {
-	stage *gongdoc_models.StageStruct
-	Name  string
+	stage      *gongdoc_models.StageStruct
+	Name       string
+	diagrammer *diagrammer.Diagrammer
 }
 
 func NewClassDiagramCategoryNode(
 	stage *gongdoc_models.StageStruct,
-	name string) (categoryNode *ClassDiagramCategoryNode) {
+	name string,
+	diagrammer *diagrammer.Diagrammer,
+) (categoryNode *ClassDiagramCategoryNode) {
 	categoryNode = new(ClassDiagramCategoryNode)
+
 	categoryNode.stage = stage
 	categoryNode.Name = name
+	categoryNode.diagrammer = diagrammer
+
 	return
 }
 
@@ -36,7 +42,7 @@ func (categoryNode *ClassDiagramCategoryNode) GetChildren() (children []diagramm
 
 	for classDiagram := range *gongdoc_models.GetGongstructInstancesSet[gongdoc_models.Classdiagram](categoryNode.stage) {
 
-		classDiagramNode := NewClassDiagramNode(categoryNode.stage, classDiagram)
+		classDiagramNode := NewClassDiagramNode(categoryNode.stage, classDiagram, categoryNode.diagrammer)
 		children = append(children, classDiagramNode)
 	}
 

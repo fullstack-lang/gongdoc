@@ -1,10 +1,12 @@
 package diagrammer
 
-import gongtree_models "github.com/fullstack-lang/gongtree/go/models"
+import (
+	gongtree_models "github.com/fullstack-lang/gongtree/go/models"
+)
 
 type Diagrammer struct {
-	Model     Model
-	Portfolio Portfolio
+	model     Model
+	portfolio Portfolio
 	treeStage *gongtree_models.StageStruct
 
 	selectedPortfolioNode      PortfolioNode
@@ -15,11 +17,12 @@ func NewDiagrammer(
 	model Model,
 	portfolio Portfolio,
 	treeStage *gongtree_models.StageStruct,
+
 ) (diagrammer *Diagrammer) {
 	diagrammer = new(Diagrammer)
 
-	diagrammer.Model = model
-	diagrammer.Portfolio = portfolio
+	diagrammer.model = model
+	diagrammer.portfolio = portfolio
 	diagrammer.treeStage = treeStage
 
 	diagrammer.map_portfolioNode_treeNode = make(map[PortfolioNode]*gongtree_models.Node)
@@ -30,7 +33,7 @@ func NewDiagrammer(
 // and recursively fill up the modelTree
 func (diagrammer *Diagrammer) FillUpModelTree(modelTree *gongtree_models.Tree) {
 
-	for _, node := range diagrammer.Model.GetChildren() {
+	for _, node := range diagrammer.model.GetChildren() {
 		treeNode := diagrammer.modelNode2NodeTree(node, diagrammer.treeStage)
 		modelTree.RootNodes = append(modelTree.RootNodes, treeNode)
 	}
@@ -54,7 +57,7 @@ func (diagrammer *Diagrammer) modelNode2NodeTree(node ModelNode, treeStage *gong
 // and recursively fill up the PortfolioTree
 func (diagrammer *Diagrammer) FillUpPortfolioTree(modelTree *gongtree_models.Tree) {
 
-	for _, portfolioNode := range diagrammer.Portfolio.GetChildren() {
+	for _, portfolioNode := range diagrammer.portfolio.GetChildren() {
 		treeNode := diagrammer.portfolioNode2NodeTree(portfolioNode, diagrammer.treeStage)
 		modelTree.RootNodes = append(modelTree.RootNodes, treeNode)
 		diagrammer.map_portfolioNode_treeNode[portfolioNode] = treeNode
@@ -65,7 +68,7 @@ func (diagrammer *Diagrammer) portfolioNode2NodeTree(portfolioNode PortfolioNode
 	treeNode = (&gongtree_models.Node{Name: portfolioNode.GetName()}).Stage(treeStage)
 	treeNode.IsExpanded = portfolioNode.IsExpanded()
 	treeNode.HasCheckboxButton = portfolioNode.HasCheckboxButton()
-	treeNode.IsCheckboxDisabled = !diagrammer.Portfolio.IsInSelectionMode()
+	treeNode.IsCheckboxDisabled = !diagrammer.portfolio.IsInSelectionMode()
 	treeNode.Impl = &PortfolioNodeImpl{
 		diagrammer:    diagrammer,
 		portfolioNode: portfolioNode}
@@ -88,4 +91,12 @@ func (diagrammer *Diagrammer) computeCheckedStatusOfNodes() {
 		}
 	}
 	diagrammer.treeStage.Commit()
+}
+
+func (diagrammer *Diagrammer) CommitTreeStage() {
+	diagrammer.treeStage.Commit()
+}
+
+func (diagrammer *Diagrammer) GenerateSVG() {
+	diagrammer.portfolio.GenerateSVG()
 }

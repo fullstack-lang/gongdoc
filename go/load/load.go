@@ -8,12 +8,17 @@ import (
 	gong_models "github.com/fullstack-lang/gong/go/models"
 
 	// for diagrams
+	"github.com/fullstack-lang/gongdoc/go/adapter"
+	"github.com/fullstack-lang/gongdoc/go/diagrammer"
+
 	gongdoc_fullstack "github.com/fullstack-lang/gongdoc/go/fullstack"
 	gongdoc_models "github.com/fullstack-lang/gongdoc/go/models"
 
 	"github.com/fullstack-lang/gongdoc/go/doc2svg"
 	gongsvg_fullstack "github.com/fullstack-lang/gongsvg/go/fullstack"
+
 	gongtree_fullstack "github.com/fullstack-lang/gongtree/go/fullstack"
+	gongtree_models "github.com/fullstack-lang/gongtree/go/models"
 
 	"github.com/gin-gonic/gin"
 )
@@ -52,7 +57,8 @@ func Load(
 
 	beforeCommitImplementation := new(BeforeCommitImplementation)
 
-	docSVGMapper := doc2svg.NewDocSVGMapper(gongtreeStage, gongsvgStage)
+	docSVGMapper := doc2svg.NewDocSVGMapper(gongsvgStage)
+	_ = docSVGMapper
 
 	beforeCommitImplementation.docSVGMapper = docSVGMapper
 
@@ -82,6 +88,18 @@ func Load(
 		diagramPackage, _ = LoadDiagramPackage(gongdocStage, gongtreeStage, filepath.Join("../../diagrams"), modelPackage, true)
 	}
 	diagramPackage.GongModelPath = pkgPath
+
+	modelAdapter := adapter.NewModelAdapter(diagramPackage.ModelPkg.GetStage())
+	portfolioAdapter := adapter.NewPortfolioAdapter(gongdocStage, gongsvgStage)
+	diagrammer := diagrammer.NewDiagrammer(modelAdapter, portfolioAdapter, gongtreeStage)
+	portfolioAdapter.SetDiagrammer(diagrammer)
+
+	treeOfModelObjects := (&gongtree_models.Tree{Name: "model"}).Stage(gongtreeStage)
+	diagrammer.FillUpModelTree(treeOfModelObjects)
+
+	treeOfPortfolioObjects := (&gongtree_models.Tree{Name: "portfolio"}).Stage(gongtreeStage)
+	diagrammer.FillUpPortfolioTree(treeOfPortfolioObjects)
+	diagrammer.CommitTreeStage()
 
 	// first, get all gong struct in the model
 	for gongStruct := range gongStage.GongStructs {

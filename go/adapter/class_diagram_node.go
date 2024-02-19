@@ -8,14 +8,21 @@ import (
 
 type ClassDiagramNode struct {
 	stage        *gongdoc_models.StageStruct
-	ClassDiagram *gongdoc_models.Classdiagram
+	classDiagram *gongdoc_models.Classdiagram
+	diagrammer   *diagrammer.Diagrammer
 }
 
 func NewClassDiagramNode(
 	stage *gongdoc_models.StageStruct,
-	classDiagram *gongdoc_models.Classdiagram) (classDiagramNode *ClassDiagramNode) {
+	classDiagram *gongdoc_models.Classdiagram,
+	diagrammer *diagrammer.Diagrammer,
+
+) (classDiagramNode *ClassDiagramNode) {
 	classDiagramNode = &ClassDiagramNode{stage: stage}
-	classDiagramNode.ClassDiagram = classDiagram
+
+	classDiagramNode.classDiagram = classDiagram
+	classDiagramNode.diagrammer = diagrammer
+
 	return
 }
 
@@ -26,7 +33,7 @@ func (classDiagramNode *ClassDiagramNode) GetChildren() (children []diagrammer.P
 
 // GetName implements bridge.Node.
 func (classDiagramNode *ClassDiagramNode) GetName() string {
-	return classDiagramNode.ClassDiagram.GetName()
+	return classDiagramNode.classDiagram.GetName()
 }
 
 // HasCheckboxButton implements bridge.PortfolioNode.
@@ -45,6 +52,12 @@ func (*ClassDiagramNode) IsNameEditable() bool {
 }
 
 // OnCheckboxButtonCheck implements diagrammer.PortfolioNode.
-func (*ClassDiagramNode) OnCheckboxButtonCheck() {
+func (classDiagramNode *ClassDiagramNode) OnCheckboxButtonCheck() {
+	var diagramPackage *gongdoc_models.DiagramPackage
+	for diagramPackage_ := range *gongdoc_models.GetGongstructInstancesSet[gongdoc_models.DiagramPackage](classDiagramNode.stage) {
+		diagramPackage = diagramPackage_
+	}
+	diagramPackage.SelectedClassdiagram = classDiagramNode.classDiagram
+	classDiagramNode.diagrammer.GenerateSVG()
 	// panic("unimplemented")
 }

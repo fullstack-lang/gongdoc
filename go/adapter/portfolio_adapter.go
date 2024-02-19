@@ -1,13 +1,34 @@
 package adapter
 
 import (
+	gongsvg_models "github.com/fullstack-lang/gongsvg/go/models"
+
+	"github.com/fullstack-lang/gongdoc/go/doc2svg"
 	gongdoc_models "github.com/fullstack-lang/gongdoc/go/models"
 
 	"github.com/fullstack-lang/gongdoc/go/diagrammer"
 )
 
 type PortfolioAdapter struct {
-	stage *gongdoc_models.StageStruct
+	gongdocStage *gongdoc_models.StageStruct
+	svgStage     *gongsvg_models.StageStruct
+	diagrammer   *diagrammer.Diagrammer
+}
+
+func NewPortfolioAdapter(
+	stage *gongdoc_models.StageStruct,
+	svgStage *gongsvg_models.StageStruct,
+) (adapter *PortfolioAdapter) {
+	adapter = new(PortfolioAdapter)
+
+	adapter.gongdocStage = stage
+	adapter.svgStage = svgStage
+
+	return
+}
+
+func (portfolioAdapter *PortfolioAdapter) SetDiagrammer(diagrammer *diagrammer.Diagrammer) {
+	portfolioAdapter.diagrammer = diagrammer
 }
 
 // IsInSelectionMode implements diagrammer.Portfolio.
@@ -20,16 +41,16 @@ func (portfolioAdapter *PortfolioAdapter) GetSelectedDiagram() (diagram diagramm
 	return
 }
 
-func NewPortfolioAdapter(stage *gongdoc_models.StageStruct) (adapter *PortfolioAdapter) {
-	adapter = new(PortfolioAdapter)
-	adapter.stage = stage
-	return
-}
-
 // GetRootNodes implements bridge.Portfolio.
 func (portfolioAdapter *PortfolioAdapter) GetChildren() (rootNodes []diagrammer.PortfolioNode) {
-	classDiagramCategoryNode := NewClassDiagramCategoryNode(portfolioAdapter.stage, "class diagrams")
+	classDiagramCategoryNode := NewClassDiagramCategoryNode(portfolioAdapter.gongdocStage, "class diagrams", portfolioAdapter.diagrammer)
 	rootNodes = append(rootNodes, classDiagramCategoryNode)
 
 	return
+}
+
+// GenerateSVG implements diagrammer.Portfolio.
+func (portfolioAdapter *PortfolioAdapter) GenerateSVG() {
+	docSVGMapper := doc2svg.NewDocSVGMapper(portfolioAdapter.svgStage)
+	docSVGMapper.GenerateSvg(portfolioAdapter.gongdocStage)
 }
