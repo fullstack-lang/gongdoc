@@ -12,7 +12,7 @@ type PortfolioNode interface {
 }
 
 type PortfolioNodeImpl struct {
-	portfolio     Portfolio
+	diagrammer    *Diagrammer
 	portfolioNode PortfolioNode
 }
 
@@ -25,7 +25,8 @@ func (portfolioNodeImpl *PortfolioNodeImpl) OnAfterUpdate(stage *gongtree_models
 
 		// manages the radio button stuff --> only one button at a time
 		stagedNode.IsChecked = true
-		portfolioNodeImpl.portfolio.SetSelectedPortfolioNode(portfolioNodeImpl.portfolioNode)
+		portfolioNodeImpl.diagrammer.selectedPortfolioNode = portfolioNodeImpl.portfolioNode
+		portfolioNodeImpl.diagrammer.computeCheckedStatusOfNodes()
 
 		// for _, otherDiagramNode := range nodeImplClasssiagram.diagramPackageNode.Children {
 		// 	if otherDiagramNode == stagedNode {
