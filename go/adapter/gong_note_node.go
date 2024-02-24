@@ -24,8 +24,8 @@ func NewGongNoteNode(
 func (gongNoteNode *GongNoteNode) GetChildren() (children []diagrammer.ModelNode) {
 
 	for _, link := range gongNoteNode.gongNote.Links {
-		fieldNode := NewLinkNode(gongNoteNode.stage, link)
-		children = append(children, fieldNode)
+		linkNode := NewLinkNode(gongNoteNode.stage, link)
+		children = append(children, linkNode)
 	}
 
 	return
