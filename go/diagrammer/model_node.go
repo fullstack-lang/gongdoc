@@ -1,12 +1,33 @@
 package diagrammer
 
+import gongtree_models "github.com/fullstack-lang/gongtree/go/models"
+
 type ModelNode interface {
 	GetChildren() []ModelNode
 	GetName() string
 	IsNameEditable() bool
+
 	IsExpanded() bool
+	SetIsExpanded(isExpanded bool)
+
 	HasCheckboxButton() bool
 
 	// GetElement return the pointer to the model element
 	GetElement() any
+}
+
+type ModelNodeImpl struct {
+	diagrammer *Diagrammer
+	modelNode  ModelNode
+}
+
+// OnAfterUpdate implements models.NodeImplInterface
+func (modelNodeImpl *ModelNodeImpl) OnAfterUpdate(stage *gongtree_models.StageStruct, stagedNode *gongtree_models.Node, frontNode *gongtree_models.Node) {
+
+	if frontNode.IsExpanded != stagedNode.IsExpanded {
+		modelNodeImpl.modelNode.SetIsExpanded(!modelNodeImpl.modelNode.IsExpanded())
+		stagedNode.IsExpanded = frontNode.IsExpanded
+		stagedNode.Commit(modelNodeImpl.diagrammer.treeStage)
+	}
+
 }

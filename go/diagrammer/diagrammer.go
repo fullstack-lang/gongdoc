@@ -52,6 +52,9 @@ func (diagrammer *Diagrammer) modelNode2NodeTree(modelNode ModelNode, treeStage 
 	treeNode.HasCheckboxButton = modelNode.HasCheckboxButton()
 	treeNode.IsCheckboxDisabled = true
 	diagrammer.map_modelNode_treeNode[modelNode] = treeNode
+	treeNode.Impl = &ModelNodeImpl{
+		diagrammer: diagrammer,
+		modelNode:  modelNode}
 
 	for _, childrenModelNode := range modelNode.GetChildren() {
 		childrenTreeNode := diagrammer.modelNode2NodeTree(childrenModelNode, treeStage)

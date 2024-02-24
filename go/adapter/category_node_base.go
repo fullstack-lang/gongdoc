@@ -3,12 +3,17 @@ package adapter
 import gong_models "github.com/fullstack-lang/gong/go/models"
 
 type CategoryNodeBase struct {
-	stage *gong_models.StageStruct
-	Name  string
+	stage      *gong_models.StageStruct
+	Name       string
+	isExpanded bool
 }
 
 func (base *CategoryNodeBase) IsExpanded() bool {
 	return true
+}
+
+func (base *CategoryNodeBase) SetIsExpanded(isExpanded bool) {
+	base.isExpanded = isExpanded
 }
 
 func (base *CategoryNodeBase) HasCheckboxButton() bool {

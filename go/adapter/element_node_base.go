@@ -10,6 +10,8 @@ func (base *ElementNodeBase) IsExpanded() bool {
 	return false
 }
 
+func (base *ElementNodeBase) SetIsExpanded(bool) {}
+
 func (base *ElementNodeBase) HasCheckboxButton() bool {
 	return true
 }
