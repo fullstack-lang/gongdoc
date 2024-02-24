@@ -35,3 +35,7 @@ func (gongStructNode *GongStructNode) GetChildren() (children []diagrammer.Model
 func (gongStructNode *GongStructNode) GetName() string {
 	return gongStructNode.gongStruct.GetName()
 }
+
+func (gongStructNode *GongStructNode) GetElement() any {
+	return gongStructNode.gongStruct
+}

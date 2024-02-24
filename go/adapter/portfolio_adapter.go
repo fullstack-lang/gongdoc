@@ -122,3 +122,17 @@ func (portfolioAdapter *PortfolioAdapter) AddDiagram(parentPortfolioNode diagram
 
 	return classDiagramNode
 }
+
+// GetModelElementsInSelectedDiagram implements diagrammer.Portfolio.
+func (portfolioAdapter *PortfolioAdapter) GetModelElementsInSelectedDiagram() (modelElementSet *map[diagrammer.ModelNode]struct{}) {
+	var selectedDiagram *gongdoc_models.Classdiagram
+	if portfolioAdapter.GetSelectedDiagram() == nil {
+		return
+	}
+
+	for _, gongstructShape := range selectedDiagram.GongStructShapes {
+		_ = gongstructShape
+	}
+
+	return
+}

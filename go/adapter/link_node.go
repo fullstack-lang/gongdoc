@@ -48,3 +48,7 @@ func (linkNode *LinkNode) GetName() string {
 func (linkNode *LinkNode) IsNameEditable() bool {
 	return false
 }
+
+func (linkNode *LinkNode) GetElement() any {
+	return linkNode.Link
+}

@@ -28,3 +28,7 @@ func (fieldNode *FieldNode) GetChildren() (children []diagrammer.ModelNode) {
 func (fieldNode *FieldNode) GetName() string {
 	return fieldNode.Field.GetName()
 }
+
+func (fieldNode *FieldNode) GetElement() any {
+	return fieldNode.Field
+}

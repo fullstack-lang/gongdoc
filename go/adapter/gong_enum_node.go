@@ -35,3 +35,7 @@ func (gongEnumNode *GongEnumNode) GetChildren() (children []diagrammer.ModelNode
 func (gongEnumNode *GongEnumNode) GetName() string {
 	return gongEnumNode.gongEnum.GetName()
 }
+
+func (gongEnumNode *GongEnumNode) GetElement() any {
+	return gongEnumNode.gongEnum
+}

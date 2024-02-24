@@ -6,12 +6,16 @@ type Portfolio interface {
 	// GetChildren returns the root nodes of the tree for navigating the portfolio
 	GetChildren() []PortfolioNode
 
-	// IsInSelectionMode is true is at least diagram has been selected
+	// IsInSelectionMode is true is at least one diagram has been selected
 	IsInSelectionMode() bool // the end user can select a diagram to display
 
 	// GenerateSVG is called from the adapter and implemented by the adapter
 	// Its use is to allow for the clean switch off of the function
 	GenerateSVG()
+
+	// GetModelElementsInSelectedDiagram returns the list of Model Elements that have a
+	// corresponding shape in the selected diagram
+	GetModelElementsInSelectedDiagram() *map[ModelNode]struct{}
 
 	// AddDiagram allows the end user to request the creation a new Diagram/PortfolioNode
 	AddDiagram(parentPortfolioNode PortfolioNode) PortfolioNode

@@ -28,3 +28,8 @@ func (enumvalueNode *EnumValueNode) GetChildren() (children []diagrammer.ModelNo
 func (enumvalueNode *EnumValueNode) GetName() string {
 	return enumvalueNode.EnumValue.GetName()
 }
+
+// GetElement implements diagrammer.ModelNode.
+func (enumvalueNode *EnumValueNode) GetElement() any {
+	return enumvalueNode.EnumValue
+}

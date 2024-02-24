@@ -14,15 +14,3 @@
 //
 // the "model" tree is construed by getting informations from the model
 package diagrammer
-
-type Model interface {
-	GetChildren() []ModelNode
-}
-
-type ModelNode interface {
-	GetChildren() []ModelNode
-	GetName() string
-	IsNameEditable() bool
-	IsExpanded() bool
-	HasCheckboxButton() bool
-}

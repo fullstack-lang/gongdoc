@@ -22,3 +22,7 @@ func (base *CategoryNodeBase) IsNameEditable() bool {
 func (base *CategoryNodeBase) GetName() string {
 	return base.Name
 }
+
+func (*CategoryNodeBase) GetElement() any {
+	return nil
+}
