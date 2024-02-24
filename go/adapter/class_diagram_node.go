@@ -12,6 +12,11 @@ type ClassDiagramNode struct {
 	diagrammer   *diagrammer.Diagrammer
 }
 
+// HasHadButton implements diagrammer.PortfolioNode.
+func (*ClassDiagramNode) HasHadButton() bool {
+	return false
+}
+
 func NewClassDiagramNode(
 	stage *gongdoc_models.StageStruct,
 	classDiagram *gongdoc_models.Classdiagram,

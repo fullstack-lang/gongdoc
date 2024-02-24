@@ -67,3 +67,8 @@ func (categoryNode *ClassDiagramCategoryNode) IsNameEditable() bool {
 func (*ClassDiagramCategoryNode) OnCheckboxButtonCheck() {
 	panic("unimplemented")
 }
+
+// HasHadButton implements diagrammer.PortfolioNode.
+func (*ClassDiagramCategoryNode) HasHadButton() bool {
+	return true
+}

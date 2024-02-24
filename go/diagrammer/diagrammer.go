@@ -2,6 +2,8 @@ package diagrammer
 
 import (
 	gongtree_models "github.com/fullstack-lang/gongtree/go/models"
+
+	"github.com/fullstack-lang/maticons/maticons"
 )
 
 type Diagrammer struct {
@@ -72,6 +74,19 @@ func (diagrammer *Diagrammer) portfolioNode2NodeTree(portfolioNode PortfolioNode
 	treeNode.Impl = &PortfolioNodeImpl{
 		diagrammer:    diagrammer,
 		portfolioNode: portfolioNode}
+
+	if portfolioNode.HasHadButton() {
+		// add add button
+		addDocButton := (&gongtree_models.Button{
+			Name: portfolioNode.GetName() + " " + string(maticons.BUTTON_add),
+			Icon: string(maticons.BUTTON_add)}).Stage(treeStage)
+		treeNode.Buttons = append(treeNode.Buttons, addDocButton)
+		addDocButton.Impl = NewAddButtonImpl(
+			diagrammer,
+			treeNode,
+			treeStage,
+		)
+	}
 
 	for _, childrenPortfolioNode := range portfolioNode.GetChildren() {
 		childrenTreeNode := diagrammer.portfolioNode2NodeTree(childrenPortfolioNode, treeStage)

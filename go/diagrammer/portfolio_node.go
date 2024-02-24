@@ -9,6 +9,7 @@ type PortfolioNode interface {
 	IsExpanded() bool
 	HasCheckboxButton() bool
 	OnCheckboxButtonCheck()
+	HasHadButton() bool
 }
 
 type PortfolioNodeImpl struct {
