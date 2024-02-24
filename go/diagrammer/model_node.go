@@ -26,8 +26,12 @@ func (modelNodeImpl *ModelNodeImpl) OnAfterUpdate(stage *gongtree_models.StageSt
 
 	if frontNode.IsExpanded != stagedNode.IsExpanded {
 		modelNodeImpl.modelNode.SetIsExpanded(!modelNodeImpl.modelNode.IsExpanded())
+
+		// we need to update the stage node because when the tree stage is committed later
+		// the expanded configuration of the node will be correct
+		// if not, the front node will be in the configuration of the stage node
+		// whatever action the end user performs
 		stagedNode.IsExpanded = frontNode.IsExpanded
-		stagedNode.Commit(modelNodeImpl.diagrammer.treeStage)
 	}
 
 }
