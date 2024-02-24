@@ -61,7 +61,7 @@ func (portfolioAdapter *PortfolioAdapter) GenerateSVG() {
 }
 
 // AddDiagram implements diagrammer.Portfolio.
-func (portfolioAdapter *PortfolioAdapter) AddDiagram() diagrammer.PortfolioNode {
+func (portfolioAdapter *PortfolioAdapter) AddDiagram(parentPortfolioNode diagrammer.PortfolioNode) diagrammer.PortfolioNode {
 
 	gongdocStage := portfolioAdapter.gongdocStage
 	var diagramPackage *gongdoc_models.DiagramPackage

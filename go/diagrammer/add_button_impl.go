@@ -5,6 +5,8 @@ import (
 )
 
 type AddButtonImpl struct {
+	portfolioNode PortfolioNode
+
 	diagrammer *Diagrammer
 
 	treeNode *gongtree_models.Node
@@ -13,6 +15,7 @@ type AddButtonImpl struct {
 }
 
 func NewAddButtonImpl(
+	portfolioNode PortfolioNode,
 	diagrammer *Diagrammer,
 	treeNode *gongtree_models.Node,
 	treeStage *gongtree_models.StageStruct,
@@ -31,7 +34,7 @@ func (buttonImpl *AddButtonImpl) ButtonUpdated(
 	gongtreeStage *gongtree_models.StageStruct,
 	stageButton, front *gongtree_models.Button) {
 
-	if childrenPortfolioNode := buttonImpl.diagrammer.portfolio.AddDiagram(); childrenPortfolioNode != nil {
+	if childrenPortfolioNode := buttonImpl.diagrammer.portfolio.AddDiagram(buttonImpl.portfolioNode); childrenPortfolioNode != nil {
 		childrenTreeNode := buttonImpl.diagrammer.portfolioNode2NodeTree(childrenPortfolioNode, buttonImpl.treeStage)
 		buttonImpl.treeNode.Children = append(buttonImpl.treeNode.Children, childrenTreeNode)
 		buttonImpl.diagrammer.map_portfolioNode_treeNode[childrenPortfolioNode] = childrenTreeNode

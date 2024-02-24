@@ -64,6 +64,7 @@ func (diagrammer *Diagrammer) FillUpPortfolioTree(modelTree *gongtree_models.Tre
 		modelTree.RootNodes = append(modelTree.RootNodes, treeNode)
 		diagrammer.map_portfolioNode_treeNode[portfolioNode] = treeNode
 	}
+	diagrammer.generatePortfolioNodesButtons()
 }
 
 func (diagrammer *Diagrammer) portfolioNode2NodeTree(portfolioNode PortfolioNode, treeStage *gongtree_models.StageStruct) (treeNode *gongtree_models.Node) {
@@ -75,19 +76,6 @@ func (diagrammer *Diagrammer) portfolioNode2NodeTree(portfolioNode PortfolioNode
 		diagrammer:    diagrammer,
 		portfolioNode: portfolioNode}
 
-	if portfolioNode.HasAddButton() {
-		// add add button
-		addDocButton := (&gongtree_models.Button{
-			Name: portfolioNode.GetName() + " " + string(maticons.BUTTON_add),
-			Icon: string(maticons.BUTTON_add)}).Stage(treeStage)
-		treeNode.Buttons = append(treeNode.Buttons, addDocButton)
-		addDocButton.Impl = NewAddButtonImpl(
-			diagrammer,
-			treeNode,
-			treeStage,
-		)
-	}
-
 	for _, childrenPortfolioNode := range portfolioNode.GetChildren() {
 		childrenTreeNode := diagrammer.portfolioNode2NodeTree(childrenPortfolioNode, treeStage)
 		treeNode.Children = append(treeNode.Children, childrenTreeNode)
@@ -97,10 +85,33 @@ func (diagrammer *Diagrammer) portfolioNode2NodeTree(portfolioNode PortfolioNode
 	return
 }
 
-func (diagrammer *Diagrammer) computeCheckedStatusOfNodes() {
+func (diagrammer *Diagrammer) generatePortfolioNodesButtons() {
 	for portfolioNode, treeNode := range diagrammer.map_portfolioNode_treeNode {
+
+		// remove all buttons
+		for _, _button := range treeNode.Buttons {
+			_button.Unstage(diagrammer.treeStage)
+		}
+		treeNode.Buttons = make([]*gongtree_models.Button, 0)
+
+		if portfolioNode.HasAddButton() {
+			addDocButton := (&gongtree_models.Button{
+				Name: portfolioNode.GetName() + " " + string(maticons.BUTTON_add),
+				Icon: string(maticons.BUTTON_add)}).Stage(diagrammer.treeStage)
+			treeNode.Buttons = append(treeNode.Buttons, addDocButton)
+			addDocButton.Impl = NewAddButtonImpl(
+				portfolioNode,
+				diagrammer,
+				treeNode,
+				diagrammer.treeStage,
+			)
+		}
+
 		if portfolioNode == diagrammer.selectedPortfolioNode {
 			treeNode.IsChecked = true
+			if portfolioNode.IsNameEditable() {
+
+			}
 		} else {
 			treeNode.IsChecked = false
 		}

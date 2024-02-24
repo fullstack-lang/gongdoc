@@ -14,5 +14,9 @@ type Portfolio interface {
 	GenerateSVG()
 
 	// AddDiagram allows the end user to request the creation a new Diagram/PortfolioNode
-	AddDiagram() PortfolioNode
+	AddDiagram(parentPortfolioNode PortfolioNode) PortfolioNode
+
+	// IsOneDiagramEdited is true if one diagram in the portfolio is being edited
+	// In this case, the portfolio nodes unrelated to the edited diagram are disabled
+	// IsOneDiagramEdited() bool
 }
