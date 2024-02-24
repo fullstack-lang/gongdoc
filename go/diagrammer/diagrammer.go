@@ -75,7 +75,7 @@ func (diagrammer *Diagrammer) portfolioNode2NodeTree(portfolioNode PortfolioNode
 		diagrammer:    diagrammer,
 		portfolioNode: portfolioNode}
 
-	if portfolioNode.HasHadButton() {
+	if portfolioNode.HasAddButton() {
 		// add add button
 		addDocButton := (&gongtree_models.Button{
 			Name: portfolioNode.GetName() + " " + string(maticons.BUTTON_add),

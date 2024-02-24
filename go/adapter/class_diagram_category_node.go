@@ -68,7 +68,7 @@ func (*ClassDiagramCategoryNode) OnCheckboxButtonCheck() {
 	panic("unimplemented")
 }
 
-// HasHadButton implements diagrammer.PortfolioNode.
-func (*ClassDiagramCategoryNode) HasHadButton() bool {
+// HasAddButton implements diagrammer.PortfolioNode.
+func (*ClassDiagramCategoryNode) HasAddButton() bool {
 	return true
 }

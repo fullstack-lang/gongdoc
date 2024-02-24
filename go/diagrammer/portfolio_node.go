@@ -2,14 +2,29 @@ package diagrammer
 
 import gongtree_models "github.com/fullstack-lang/gongtree/go/models"
 
+// PortfolioNode has to be implemented by the Adapter Nodes
 type PortfolioNode interface {
-	GetChildren() []PortfolioNode
+
+	// GetName() returns the Name that is displayed on the node
 	GetName() string
+
+	// GetChildren returns the nodes below the node
+	GetChildren() []PortfolioNode
+
+	// IsNameEditable is the adapter provides function for updating the name
 	IsNameEditable() bool
+
+	// IsExpanded is true if the the node is visualy expanded
 	IsExpanded() bool
+
+	// HasCheckboxButton is true if the node has a checkbox button
 	HasCheckboxButton() bool
+
+	// OnCheckboxButtonCheck is call if the check button is checked
 	OnCheckboxButtonCheck()
-	HasHadButton() bool
+
+	// HasAddButton is true if a "Add" button has to be displayed
+	HasAddButton() bool
 }
 
 type PortfolioNodeImpl struct {
@@ -28,18 +43,5 @@ func (portfolioNodeImpl *PortfolioNodeImpl) OnAfterUpdate(stage *gongtree_models
 		stagedNode.IsChecked = true
 		portfolioNodeImpl.diagrammer.selectedPortfolioNode = portfolioNodeImpl.portfolioNode
 		portfolioNodeImpl.diagrammer.computeCheckedStatusOfNodes()
-
-		// for _, otherDiagramNode := range nodeImplClasssiagram.diagramPackageNode.Children {
-		// 	if otherDiagramNode == stagedNode {
-		// 		continue
-		// 	}
-
-		// 	// uncheck the other node
-		// 	if otherDiagramNode.IsChecked {
-		// 		// log.Println("Node " + node.Name + " is checked and should be unchecked")
-		// 		otherDiagramNode.IsChecked = false
-		// 		otherDiagramNode.Commit(gongtreeStage)
-		// 	}
-		// }
 	}
 }

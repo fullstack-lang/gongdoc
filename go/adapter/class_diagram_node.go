@@ -12,8 +12,8 @@ type ClassDiagramNode struct {
 	diagrammer   *diagrammer.Diagrammer
 }
 
-// HasHadButton implements diagrammer.PortfolioNode.
-func (*ClassDiagramNode) HasHadButton() bool {
+// HasAddButton implements diagrammer.PortfolioNode.
+func (*ClassDiagramNode) HasAddButton() bool {
 	return false
 }
 
