@@ -15,6 +15,7 @@ func NewLinkNode(
 }
 
 type LinkNode struct {
+	ElementNodeBase
 	stage *gong_models.StageStruct
 	Link  *gong_models.GongLink
 }
