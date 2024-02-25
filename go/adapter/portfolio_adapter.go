@@ -55,9 +55,47 @@ func (portfolioAdapter *PortfolioAdapter) GetChildren() (rootNodes []diagrammer.
 }
 
 // GenerateSVG implements diagrammer.Portfolio.
-func (portfolioAdapter *PortfolioAdapter) GenerateSVG() {
+func (portfolioAdapter *PortfolioAdapter) GenerateSVG(portfolioNode diagrammer.PortfolioNode) (setOfModelNode map[diagrammer.ModelNode]struct{}) {
+
+	selectedDiagramNode, ok := portfolioNode.(*ClassDiagramNode)
+	if !ok {
+		log.Fatalln("Not a classdiagram node")
+	}
+	selectedDiagram := selectedDiagramNode.classDiagram
+
+	var diagramPackage *gongdoc_models.DiagramPackage
+	for diagramPackage_ := range *gongdoc_models.GetGongstructInstancesSet[gongdoc_models.DiagramPackage](selectedDiagramNode.stage) {
+		diagramPackage = diagramPackage_
+	}
+
+	diagramPackage.SelectedClassdiagram = selectedDiagram
+
 	docSVGMapper := doc2svg.NewDocSVGMapper(portfolioAdapter.svgStage)
 	docSVGMapper.GenerateSvg(portfolioAdapter.gongdocStage)
+
+	// compute the set of Model Node
+	setOfModelNode = make(map[diagrammer.ModelNode]struct{})
+
+	// 1. Create the map of model element to model node
+	map_ModelElement_ModelNode := make(map[any]diagrammer.ModelNode)
+	for modelNode := range portfolioAdapter.diagrammer.GetMap_modelNode_treeNode() {
+		if modelElement := modelNode.GetElement(); modelElement != nil {
+			map_ModelElement_ModelNode[modelElement] = modelNode
+		}
+	}
+
+	// 2. Parse the selected diagram, for every shape, get the element model of the shape
+	// use the aforementioned map to populate the set
+	for _, gongstructShape := range selectedDiagram.GongStructShapes {
+		elementNode, ok := map_ModelElement_ModelNode[gongstructShape.Identifier]
+		if !ok {
+			// log.Fatalln("unkown element", gongstructShape.Identifier)
+		}
+
+		setOfModelNode[elementNode] = struct{}{}
+	}
+
+	return
 }
 
 // AddDiagram implements diagrammer.Portfolio.
@@ -121,18 +159,4 @@ func (portfolioAdapter *PortfolioAdapter) AddDiagram(parentPortfolioNode diagram
 	classDiagramNode := NewClassDiagramNode(gongdocStage, classdiagram, portfolioAdapter.diagrammer)
 
 	return classDiagramNode
-}
-
-// GetModelElementsInSelectedDiagram implements diagrammer.Portfolio.
-func (portfolioAdapter *PortfolioAdapter) GetModelElementsInSelectedDiagram() (modelElementSet *map[diagrammer.ModelNode]struct{}) {
-	var selectedDiagram *gongdoc_models.Classdiagram
-	if portfolioAdapter.GetSelectedDiagram() == nil {
-		return
-	}
-
-	for _, gongstructShape := range selectedDiagram.GongStructShapes {
-		_ = gongstructShape
-	}
-
-	return
 }

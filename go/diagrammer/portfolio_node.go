@@ -20,9 +20,6 @@ type PortfolioNode interface {
 	// HasCheckboxButton is true if the node has a checkbox button
 	HasCheckboxButton() bool
 
-	// OnCheckboxButtonCheck is call if the check button is checked
-	OnCheckboxButtonCheck()
-
 	// HasAddButton is true if a "Add" button has to be displayed
 	HasAddButton() bool
 }
@@ -36,12 +33,10 @@ type PortfolioNodeImpl struct {
 func (portfolioNodeImpl *PortfolioNodeImpl) OnAfterUpdate(stage *gongtree_models.StageStruct, stagedNode *gongtree_models.Node, frontNode *gongtree_models.Node) {
 	if frontNode.IsChecked && !stagedNode.IsChecked {
 
-		// let the adapter do what it has to to
-		portfolioNodeImpl.portfolioNode.OnCheckboxButtonCheck()
-
 		// manages the radio button stuff --> only one button at a time
 		stagedNode.IsChecked = true
 		portfolioNodeImpl.diagrammer.selectedDiagram = portfolioNodeImpl.portfolioNode
+		portfolioNodeImpl.diagrammer.portfolio.GenerateSVG(portfolioNodeImpl.portfolioNode)
 		portfolioNodeImpl.diagrammer.generatePortfolioNodesButtons()
 	}
 }

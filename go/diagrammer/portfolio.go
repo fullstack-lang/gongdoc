@@ -11,11 +11,8 @@ type Portfolio interface {
 
 	// GenerateSVG is called from the adapter and implemented by the adapter
 	// Its use is to allow for the clean switch off of the function
-	GenerateSVG()
-
-	// GetModelElementsInSelectedDiagram returns the list of Model Elements that have a
-	// corresponding shape in the selected diagram
-	GetModelElementsInSelectedDiagram() *map[ModelNode]struct{}
+	// It returns the set of elements present in the diagram
+	GenerateSVG(portfolioNode PortfolioNode) map[ModelNode]struct{}
 
 	// AddDiagram allows the end user to request the creation a new Diagram/PortfolioNode
 	AddDiagram(parentPortfolioNode PortfolioNode) PortfolioNode

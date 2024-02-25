@@ -132,6 +132,6 @@ func (diagrammer *Diagrammer) CommitTreeStage() {
 	diagrammer.treeStage.Commit()
 }
 
-func (diagrammer *Diagrammer) GenerateSVG() {
-	diagrammer.portfolio.GenerateSVG()
+func (diagrammer *Diagrammer) GetMap_modelNode_treeNode() map[ModelNode]*gongtree_models.Node {
+	return diagrammer.map_modelNode_treeNode
 }

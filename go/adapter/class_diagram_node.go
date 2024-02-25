@@ -55,14 +55,3 @@ func (*ClassDiagramNode) IsExpanded() bool {
 func (*ClassDiagramNode) IsNameEditable() bool {
 	return false
 }
-
-// OnCheckboxButtonCheck implements diagrammer.PortfolioNode.
-func (classDiagramNode *ClassDiagramNode) OnCheckboxButtonCheck() {
-	var diagramPackage *gongdoc_models.DiagramPackage
-	for diagramPackage_ := range *gongdoc_models.GetGongstructInstancesSet[gongdoc_models.DiagramPackage](classDiagramNode.stage) {
-		diagramPackage = diagramPackage_
-	}
-	diagramPackage.SelectedClassdiagram = classDiagramNode.classDiagram
-	classDiagramNode.diagrammer.GenerateSVG()
-	// panic("unimplemented")
-}
