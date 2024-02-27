@@ -121,12 +121,30 @@ func (portfolioAdapter *PortfolioAdapter) GenerateDiagram(diagramNode diagrammer
 
 					gongStructFieldNode, ok := map_ModelElement_ModelNode[field]
 					if !ok {
-						log.Fatalln("unkown element", gongStructShape.Identifier)
+						log.Fatalln("unkown element", fieldShape.Identifier)
 					}
 
 					setOfModelNode[gongStructFieldNode] = &GongStructFieldShapeAdapter{
 						fieldShape: fieldShape,
 						element:    field,
+					}
+				}
+			}
+		}
+
+		for _, linkShape := range gongStructShape.Links {
+			linkShapeName := gongdoc_models.IdentifierToFieldName(linkShape.Identifier)
+
+			for _, link := range gongStruct.SliceOfPointerToGongStructFields {
+				if link.GetName() == linkShapeName {
+					linkNode, ok := map_ModelElement_ModelNode[link]
+					if !ok {
+						log.Fatalln("unkown element", linkShape.Identifier)
+					}
+
+					setOfModelNode[linkNode] = &LinkShapeAdapter{
+						linkShape: linkShape,
+						element:   link,
 					}
 				}
 			}
