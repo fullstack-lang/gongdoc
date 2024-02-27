@@ -55,13 +55,14 @@ func (portfolioAdapter *PortfolioAdapter) GetChildren() (rootNodes []diagrammer.
 }
 
 // GenerateSVG implements diagrammer.Portfolio.
-func (portfolioAdapter *PortfolioAdapter) GenerateSVG(portfolioNode diagrammer.PortfolioNode) (setOfModelNode map[diagrammer.ModelNode]struct{}) {
+func (portfolioAdapter *PortfolioAdapter) GenerateSVG(diagramNode diagrammer.DiagramNode) (setOfModelNode map[diagrammer.ModelNode]diagrammer.Shape) {
 
-	selectedDiagramNode, ok := portfolioNode.(*ClassDiagramNode)
+	selectedDiagramNode, ok := diagramNode.(*ClassDiagramNode)
 	if !ok {
 		log.Fatalln("Not a classdiagram node")
 	}
-	selectedDiagram := selectedDiagramNode.classDiagram
+
+	selectedDiagram := selectedDiagramNode.classdiagramAdapter.classdiagram
 
 	var diagramPackage *gongdoc_models.DiagramPackage
 	for diagramPackage_ := range *gongdoc_models.GetGongstructInstancesSet[gongdoc_models.DiagramPackage](selectedDiagramNode.stage) {
@@ -74,7 +75,7 @@ func (portfolioAdapter *PortfolioAdapter) GenerateSVG(portfolioNode diagrammer.P
 	docSVGMapper.GenerateSvg(portfolioAdapter.gongdocStage)
 
 	// compute the set of Model Node
-	setOfModelNode = make(map[diagrammer.ModelNode]struct{})
+	setOfModelNode = make(map[diagrammer.ModelNode]diagrammer.Shape)
 
 	// 1. Create the map of model element to model node
 	map_ModelElement_ModelNode := make(map[any]diagrammer.ModelNode)
@@ -87,12 +88,12 @@ func (portfolioAdapter *PortfolioAdapter) GenerateSVG(portfolioNode diagrammer.P
 	// 2. Parse the selected diagram, for every shape, get the element model of the shape
 	// use the aforementioned map to populate the set
 	for _, gongstructShape := range selectedDiagram.GongStructShapes {
-		elementNode, ok := map_ModelElement_ModelNode[gongstructShape.Identifier]
+		elementNode, ok := map_ModelElement_ModelNode[gongstructShape.GetElement()]
 		if !ok {
-			// log.Fatalln("unkown element", gongstructShape.Identifier)
+			log.Fatalln("unkown element", gongstructShape.Identifier)
 		}
 
-		setOfModelNode[elementNode] = struct{}{}
+		setOfModelNode[elementNode] = gongstructShape
 	}
 
 	return

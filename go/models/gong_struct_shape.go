@@ -1,5 +1,7 @@
 package models
 
+import "github.com/fullstack-lang/gongdoc/go/diagrammer"
+
 const GongStructShapeDefaultWidth = 240.0
 const GongStructShapeDefaultHeight = 48.0
 
@@ -34,4 +36,7 @@ type GongStructShape struct {
 	IsSelected bool
 }
 
-func (gongStructShape *GongStructShape) diagramElt() {}
+// GetElement implements diagrammer.Shape.
+func (gongStructShape *GongStructShape) GetElement() diagrammer.ModelElement {
+	panic("unimplemented")
+}

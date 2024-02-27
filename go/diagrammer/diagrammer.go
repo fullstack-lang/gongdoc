@@ -12,7 +12,7 @@ type Diagrammer struct {
 	treeStage *gongtree_models.StageStruct
 
 	// selectedDiagram is the currently selected diagram
-	selectedDiagram PortfolioNode
+	selectedDiagram Diagram
 
 	map_portfolioNode_treeNode map[PortfolioNode]*gongtree_models.Node
 	map_modelNode_treeNode     map[ModelNode]*gongtree_models.Node
@@ -78,12 +78,17 @@ func (diagrammer *Diagrammer) FillUpPortfolioTree(modelTree *gongtree_models.Tre
 func (diagrammer *Diagrammer) portfolioNode2NodeTree(portfolioNode PortfolioNode, treeStage *gongtree_models.StageStruct) (treeNode *gongtree_models.Node) {
 	treeNode = (&gongtree_models.Node{Name: portfolioNode.GetName()}).Stage(treeStage)
 	treeNode.IsExpanded = portfolioNode.IsExpanded()
-	treeNode.HasCheckboxButton = portfolioNode.HasCheckboxButton()
+
+	if diagramNode, ok := portfolioNode.(DiagramNode); ok {
+		_ = diagramNode
+		treeNode.HasCheckboxButton = true
+		treeNode.Impl = &DiagramNodeImpl{
+			diagrammer:  diagrammer,
+			diagramNode: diagramNode}
+	}
+
 	treeNode.IsCheckboxDisabled = !diagrammer.portfolio.IsInSelectionMode()
 	diagrammer.map_portfolioNode_treeNode[portfolioNode] = treeNode
-	treeNode.Impl = &PortfolioNodeImpl{
-		diagrammer:    diagrammer,
-		portfolioNode: portfolioNode}
 
 	for _, childrenPortfolioNode := range portfolioNode.GetChildren() {
 		childrenTreeNode := diagrammer.portfolioNode2NodeTree(childrenPortfolioNode, treeStage)
@@ -116,14 +121,14 @@ func (diagrammer *Diagrammer) generatePortfolioNodesButtons() {
 			)
 		}
 
-		if portfolioNode == diagrammer.selectedDiagram {
-			treeNode.IsChecked = true
-			if portfolioNode.IsNameEditable() {
-
+		if diagramNode, ok := portfolioNode.(DiagramNode); ok {
+			if diagramNode.GetDiagram() == diagrammer.selectedDiagram {
+				treeNode.IsChecked = true
+			} else {
+				treeNode.IsChecked = false
 			}
-		} else {
-			treeNode.IsChecked = false
 		}
+
 	}
 	diagrammer.treeStage.Commit()
 }

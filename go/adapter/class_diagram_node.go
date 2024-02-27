@@ -7,9 +7,9 @@ import (
 )
 
 type ClassDiagramNode struct {
-	stage        *gongdoc_models.StageStruct
-	classDiagram *gongdoc_models.Classdiagram
-	diagrammer   *diagrammer.Diagrammer
+	stage               *gongdoc_models.StageStruct
+	diagrammer          *diagrammer.Diagrammer
+	classdiagramAdapter *ClassdiagramAdapter
 }
 
 // HasAddButton implements diagrammer.PortfolioNode.
@@ -25,7 +25,9 @@ func NewClassDiagramNode(
 ) (classDiagramNode *ClassDiagramNode) {
 	classDiagramNode = &ClassDiagramNode{stage: stage}
 
-	classDiagramNode.classDiagram = classDiagram
+	classDiagramNode.classdiagramAdapter = &ClassdiagramAdapter{
+		classdiagram: classDiagram,
+	}
 	classDiagramNode.diagrammer = diagrammer
 
 	return
@@ -38,12 +40,12 @@ func (classDiagramNode *ClassDiagramNode) GetChildren() (children []diagrammer.P
 
 // GetName implements bridge.Node.
 func (classDiagramNode *ClassDiagramNode) GetName() string {
-	return classDiagramNode.classDiagram.GetName()
+	return classDiagramNode.classdiagramAdapter.GetName()
 }
 
-// HasCheckboxButton implements bridge.PortfolioNode.
-func (*ClassDiagramNode) HasCheckboxButton() bool {
-	return true
+// GetDiagram implements bridge.PortfolioNode.
+func (classDiagramNode *ClassDiagramNode) GetDiagram() diagrammer.Diagram {
+	return classDiagramNode.classdiagramAdapter
 }
 
 // IsExpanded implements bridge.PortfolioNode.
