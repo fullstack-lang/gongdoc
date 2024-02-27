@@ -140,3 +140,19 @@ func (diagrammer *Diagrammer) CommitTreeStage() {
 func (diagrammer *Diagrammer) GetMap_modelNode_treeNode() map[ModelNode]*gongtree_models.Node {
 	return diagrammer.map_modelNode_treeNode
 }
+
+// computeModelNodeStatus parses all nodes in the Model Tree
+// and unchecks all nodes unless nodes matches an element in the diagram
+func (diagrammer *Diagrammer) computeModelNodeStatus(map_ModelNode_Shape map[ModelNode]Shape) {
+	for modelNode, treeNode := range diagrammer.map_modelNode_treeNode {
+
+		if !treeNode.HasCheckboxButton {
+			continue
+		}
+
+		treeNode.IsChecked = false
+		if _, ok := map_ModelNode_Shape[modelNode]; ok {
+			treeNode.IsChecked = true
+		}
+	}
+}

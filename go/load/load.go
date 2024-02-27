@@ -90,7 +90,7 @@ func Load(
 	diagramPackage.GongModelPath = pkgPath
 
 	modelAdapter := adapter.NewModelAdapter(diagramPackage.ModelPkg.GetStage())
-	portfolioAdapter := adapter.NewPortfolioAdapter(gongdocStage, gongsvgStage)
+	portfolioAdapter := adapter.NewPortfolioAdapter(gongStage, gongdocStage, gongsvgStage)
 	diagrammer := diagrammer.NewDiagrammer(modelAdapter, portfolioAdapter, gongtreeStage)
 	portfolioAdapter.SetDiagrammer(diagrammer)
 

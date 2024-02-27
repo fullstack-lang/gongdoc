@@ -6,26 +6,32 @@ import (
 	"os"
 	"path/filepath"
 
+	gong_models "github.com/fullstack-lang/gong/go/models"
+
 	gongsvg_models "github.com/fullstack-lang/gongsvg/go/models"
 
 	"github.com/fullstack-lang/gongdoc/go/doc2svg"
+
 	gongdoc_models "github.com/fullstack-lang/gongdoc/go/models"
 
 	"github.com/fullstack-lang/gongdoc/go/diagrammer"
 )
 
 type PortfolioAdapter struct {
+	gongStage    *gong_models.StageStruct
 	gongdocStage *gongdoc_models.StageStruct
 	svgStage     *gongsvg_models.StageStruct
 	diagrammer   *diagrammer.Diagrammer
 }
 
 func NewPortfolioAdapter(
+	gongStage *gong_models.StageStruct,
 	stage *gongdoc_models.StageStruct,
 	svgStage *gongsvg_models.StageStruct,
 ) (adapter *PortfolioAdapter) {
 	adapter = new(PortfolioAdapter)
 
+	adapter.gongStage = gongStage
 	adapter.gongdocStage = stage
 	adapter.svgStage = svgStage
 
@@ -54,8 +60,11 @@ func (portfolioAdapter *PortfolioAdapter) GetChildren() (rootNodes []diagrammer.
 	return
 }
 
-// GenerateSVG implements diagrammer.Portfolio.
-func (portfolioAdapter *PortfolioAdapter) GenerateSVG(diagramNode diagrammer.DiagramNode) (setOfModelNode map[diagrammer.ModelNode]diagrammer.Shape) {
+// GenerateDiagram implements diagrammer.Portfolio.
+//
+// It generated the SVG
+func (portfolioAdapter *PortfolioAdapter) GenerateDiagram(diagramNode diagrammer.DiagramNode) (
+	setOfModelNode map[diagrammer.ModelNode]diagrammer.Shape) {
 
 	selectedDiagramNode, ok := diagramNode.(*ClassDiagramNode)
 	if !ok {
@@ -87,13 +96,21 @@ func (portfolioAdapter *PortfolioAdapter) GenerateSVG(diagramNode diagrammer.Dia
 
 	// 2. Parse the selected diagram, for every shape, get the element model of the shape
 	// use the aforementioned map to populate the set
-	for _, gongstructShape := range selectedDiagram.GongStructShapes {
-		elementNode, ok := map_ModelElement_ModelNode[gongstructShape.GetElement()]
+	gongStructSet := *gong_models.GetGongstructInstancesMap[gong_models.GongStruct](portfolioAdapter.gongStage)
+	for _, gongStructShape := range selectedDiagram.GongStructShapes {
+
+		gongStructName := gongdoc_models.IdentifierToGongObjectName(gongStructShape.Identifier)
+		gongStruct, ok := gongStructSet[gongStructName]
+
+		elementNode, ok := map_ModelElement_ModelNode[gongStruct]
 		if !ok {
-			log.Fatalln("unkown element", gongstructShape.Identifier)
+			log.Fatalln("unkown element", gongStructShape.Identifier)
 		}
 
-		setOfModelNode[elementNode] = gongstructShape
+		setOfModelNode[elementNode] = &GongStructShapeAdapter{
+			gongStructShape: gongStructShape,
+			element:         gongStruct,
+		}
 	}
 
 	return
