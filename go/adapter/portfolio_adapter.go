@@ -148,7 +148,6 @@ func (portfolioAdapter *PortfolioAdapter) GenerateDiagram(diagramNode diagrammer
 					}
 				}
 			}
-
 		}
 	}
 
@@ -185,6 +184,60 @@ func (portfolioAdapter *PortfolioAdapter) GenerateDiagram(diagramNode diagrammer
 						element:    value,
 					}
 				}
+			}
+		}
+	}
+
+	gongNoteSet := *gong_models.GetGongstructInstancesMap[gong_models.GongNote](portfolioAdapter.gongStage)
+	for _, gongNoteShape := range selectedDiagram.NoteShapes {
+
+		gongNoteName := gongdoc_models.IdentifierToGongObjectName(gongNoteShape.Identifier)
+		gongNote, ok := gongNoteSet[gongNoteName]
+
+		gongNoteNode, ok := map_ModelElement_ModelNode[gongNote]
+		if !ok {
+			log.Fatalln("unkown element", gongNoteShape.Identifier)
+		}
+
+		setOfModelNode[gongNoteNode] = &GongNoteShapeAdapter{
+			gongNoteShape: gongNoteShape,
+			element:       gongNote,
+		}
+
+		for _, noteLinkShape := range gongNoteShape.NoteShapeLinks {
+
+			switch noteLinkShape.Type {
+			case gongdoc_models.NOTE_SHAPE_LINK_TO_GONG_STRUCT_OR_ENUM_SHAPE:
+				nodeLinkShapeTarget := gongdoc_models.IdentifierToGongObjectName(noteLinkShape.Identifier)
+				for _, link := range gongNote.Links {
+					if link.GetName() == nodeLinkShapeTarget {
+						linkNode, ok := map_ModelElement_ModelNode[link]
+						if !ok {
+							log.Fatalln("unkown element", noteLinkShape.Identifier)
+						}
+
+						setOfModelNode[linkNode] = &NoteLinkShapeAdapter{
+							nodeShapeLink: noteLinkShape,
+							element:       link,
+						}
+					}
+				}
+			case gongdoc_models.NOTE_SHAPE_LINK_TO_GONG_FIELD:
+				receiver, fieldName := gongdoc_models.IdentifierToReceiverAndFieldName(noteLinkShape.Identifier)
+				for _, link := range gongNote.Links {
+					if link.GetName() == receiver+"."+fieldName {
+						linkNode, ok := map_ModelElement_ModelNode[link]
+						if !ok {
+							log.Fatalln("unkown element", noteLinkShape.Identifier)
+						}
+
+						setOfModelNode[linkNode] = &NoteLinkShapeAdapter{
+							nodeShapeLink: noteLinkShape,
+							element:       link,
+						}
+					}
+				}
+
 			}
 		}
 	}
