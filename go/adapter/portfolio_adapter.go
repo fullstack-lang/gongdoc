@@ -152,6 +152,43 @@ func (portfolioAdapter *PortfolioAdapter) GenerateDiagram(diagramNode diagrammer
 		}
 	}
 
+	gongEnumSet := *gong_models.GetGongstructInstancesMap[gong_models.GongEnum](portfolioAdapter.gongStage)
+	for _, gongEnumShape := range selectedDiagram.GongEnumShapes {
+
+		gongEnumName := gongdoc_models.IdentifierToGongObjectName(gongEnumShape.Identifier)
+		gongEnum, ok := gongEnumSet[gongEnumName]
+
+		gongEnumNode, ok := map_ModelElement_ModelNode[gongEnum]
+		if !ok {
+			log.Fatalln("unkown element", gongEnumShape.Identifier)
+		}
+
+		setOfModelNode[gongEnumNode] = &GongEnumShapeAdapter{
+			gongEnumShape: gongEnumShape,
+			element:       gongEnum,
+		}
+
+		for _, valueShape := range gongEnumShape.GongEnumValueEntrys {
+			valueShapeName := gongdoc_models.IdentifierToFieldName(valueShape.Identifier)
+
+			// parse values of gongstruct to match the value shape
+			for _, value := range gongEnum.GongEnumValues {
+				if value.GetName() == valueShapeName {
+
+					gongEnumValueNode, ok := map_ModelElement_ModelNode[value]
+					if !ok {
+						log.Fatalln("unkown element", valueShape.Identifier)
+					}
+
+					setOfModelNode[gongEnumValueNode] = &GongEnumValueShapeAdapter{
+						valueShape: valueShape,
+						element:    value,
+					}
+				}
+			}
+		}
+	}
+
 	return
 }
 
