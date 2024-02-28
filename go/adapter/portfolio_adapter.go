@@ -239,7 +239,7 @@ func (portfolioAdapter *PortfolioAdapter) GenerateDiagram(diagramNode diagrammer
 			case gongdoc_models.NOTE_SHAPE_LINK_TO_GONG_FIELD:
 				receiver, fieldName := gongdoc_models.IdentifierToReceiverAndFieldName(noteLinkShape.Identifier)
 				for _, link := range gongNote.Links {
-					if link.GetName() == receiver+"."+fieldName {
+					if link.GetName() == fieldName && link.Recv == receiver {
 						linkNode, ok := map_ModelElement_ModelNode[link]
 						if !ok {
 							log.Fatalln("unkown element", noteLinkShape.Identifier)

@@ -289,7 +289,8 @@ func DefaultInjection(stage *models.StageStruct) {
 	__NoteShape__000000_NoteOnGongdoc := (&models.NoteShape{Name: `NoteOnGongdoc`}).Stage(stage)
 
 	// Declarations of staged instances of NoteShapeLink
-	__NoteShapeLink__000000_NoteShape := (&models.NoteShapeLink{Name: `NoteShape`}).Stage(stage)
+	__NoteShapeLink__000000_Classdiagram_NoteShapes := (&models.NoteShapeLink{Name: `Classdiagram.NoteShapes`}).Stage(stage)
+	__NoteShapeLink__000001_NoteShape := (&models.NoteShapeLink{Name: `NoteShape`}).Stage(stage)
 
 	// Declarations of staged instances of Position
 	__Position__000000_Pos_Default_Classdiagram := (&models.Position{Name: `Pos-Default-Classdiagram`}).Stage(stage)
@@ -558,24 +559,35 @@ func DefaultInjection(stage *models.StageStruct) {
 	__NoteShape__000000_NoteOnGongdoc.Body = `Note Example
 
 This note can refers to [models.NoteShape]
+or to [models.Classdiagram.NoteShapes]
 `
 	__NoteShape__000000_NoteOnGongdoc.BodyHTML = `<p>Note Example
 <p>This note can refers to <a href="/models#NoteShape">models.NoteShape</a>
+or to <a href="/models#Classdiagram.NoteShapes">models.Classdiagram.NoteShapes</a>
 `
 	__NoteShape__000000_NoteOnGongdoc.X = 759.999939
 	__NoteShape__000000_NoteOnGongdoc.Y = 48.000000
 	__NoteShape__000000_NoteOnGongdoc.Width = 347.000000
-	__NoteShape__000000_NoteOnGongdoc.Height = 63.000000
+	__NoteShape__000000_NoteOnGongdoc.Height = 88.000000
 	__NoteShape__000000_NoteOnGongdoc.Matched = false
 
 	// NoteShapeLink values setup
-	__NoteShapeLink__000000_NoteShape.Name = `NoteShape`
+	__NoteShapeLink__000000_Classdiagram_NoteShapes.Name = `Classdiagram.NoteShapes`
+
+	// comment added to overcome the problem with the comment map association
+
+	//gong:ident [ref_models.Classdiagram.NoteShapes]
+	__NoteShapeLink__000000_Classdiagram_NoteShapes.Identifier = `ref_models.Classdiagram.NoteShapes`
+	__NoteShapeLink__000000_Classdiagram_NoteShapes.Type = models.NOTE_SHAPE_LINK_TO_GONG_FIELD
+
+	// NoteShapeLink values setup
+	__NoteShapeLink__000001_NoteShape.Name = `NoteShape`
 
 	// comment added to overcome the problem with the comment map association
 
 	//gong:ident [ref_models.NoteShape]
-	__NoteShapeLink__000000_NoteShape.Identifier = `ref_models.NoteShape`
-	__NoteShapeLink__000000_NoteShape.Type = models.NOTE_SHAPE_LINK_TO_GONG_STRUCT_OR_ENUM_SHAPE
+	__NoteShapeLink__000001_NoteShape.Identifier = `ref_models.NoteShape`
+	__NoteShapeLink__000001_NoteShape.Type = models.NOTE_SHAPE_LINK_TO_GONG_STRUCT_OR_ENUM_SHAPE
 
 	// Position values setup
 	__Position__000000_Pos_Default_Classdiagram.X = 558.000031
@@ -661,7 +673,8 @@ This note can refers to [models.NoteShape]
 	__Link__000001_Fields.Middlevertice = __Vertice__000003_Verticle_in_class_diagram_Default_in_middle_between_Default_GongStructShape_and_Default_Field
 	__Link__000002_NoteShapes.Middlevertice = __Vertice__000000_Verticle_in_class_diagram_Default_in_middle_between_Default_Classdiagram_and_Default_NoteShape
 	__Link__000003_SelectedClassdiagram.Middlevertice = __Vertice__000002_Verticle_in_class_diagram_Default_in_middle_between_Default_DiagramPackage_and_Default_Classdiagram
-	__NoteShape__000000_NoteOnGongdoc.NoteShapeLinks = append(__NoteShape__000000_NoteOnGongdoc.NoteShapeLinks, __NoteShapeLink__000000_NoteShape)
+	__NoteShape__000000_NoteOnGongdoc.NoteShapeLinks = append(__NoteShape__000000_NoteOnGongdoc.NoteShapeLinks, __NoteShapeLink__000001_NoteShape)
+	__NoteShape__000000_NoteOnGongdoc.NoteShapeLinks = append(__NoteShape__000000_NoteOnGongdoc.NoteShapeLinks, __NoteShapeLink__000000_Classdiagram_NoteShapes)
 }
 
 
