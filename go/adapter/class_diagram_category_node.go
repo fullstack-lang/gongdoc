@@ -33,10 +33,6 @@ func (ClassDiagramCategoryNode *ClassDiagramCategoryNode) IsExpanded() bool {
 	return true
 }
 
-func (ClassDiagramCategoryNode *ClassDiagramCategoryNode) HasCheckboxButton() bool {
-	return false
-}
-
 // GetChildren implements bridge.Node.
 func (categoryNode *ClassDiagramCategoryNode) GetChildren() (children []diagrammer.PortfolioNode) {
 

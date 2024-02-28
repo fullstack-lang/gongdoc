@@ -88,9 +88,12 @@ func (portfolioAdapter *PortfolioAdapter) GenerateDiagram(diagramNode diagrammer
 
 	// 1. Create the map of model element to model node
 	map_ModelElement_ModelNode := make(map[any]diagrammer.ModelNode)
-	for modelNode := range portfolioAdapter.diagrammer.GetMap_modelNode_treeNode() {
-		if modelElement := modelNode.GetElement(); modelElement != nil {
-			map_ModelElement_ModelNode[modelElement] = modelNode
+	for modelNode := range portfolioAdapter.diagrammer.GetMap_elementNode_treeNode() {
+
+		if elementNode, ok := modelNode.(diagrammer.ElementNode); ok {
+			if modelElement := elementNode.GetElement(); modelElement != nil {
+				map_ModelElement_ModelNode[modelElement] = modelNode
+			}
 		}
 	}
 

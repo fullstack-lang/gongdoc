@@ -15,7 +15,7 @@ type Diagrammer struct {
 	selectedDiagram Diagram
 
 	map_portfolioNode_treeNode map[PortfolioNode]*gongtree_models.Node
-	map_modelNode_treeNode     map[ModelNode]*gongtree_models.Node
+	map_elementNode_treeNode   map[ElementNode]*gongtree_models.Node
 }
 
 func NewDiagrammer(
@@ -31,7 +31,7 @@ func NewDiagrammer(
 	diagrammer.treeStage = treeStage
 
 	diagrammer.map_portfolioNode_treeNode = make(map[PortfolioNode]*gongtree_models.Node)
-	diagrammer.map_modelNode_treeNode = make(map[ModelNode]*gongtree_models.Node)
+	diagrammer.map_elementNode_treeNode = make(map[ElementNode]*gongtree_models.Node)
 
 	return
 }
@@ -49,9 +49,13 @@ func (diagrammer *Diagrammer) FillUpModelTree(modelTree *gongtree_models.Tree) {
 func (diagrammer *Diagrammer) modelNode2NodeTree(modelNode ModelNode, treeStage *gongtree_models.StageStruct) (treeNode *gongtree_models.Node) {
 	treeNode = (&gongtree_models.Node{Name: modelNode.GetName()}).Stage(treeStage)
 	treeNode.IsExpanded = modelNode.IsExpanded()
-	treeNode.HasCheckboxButton = modelNode.HasCheckboxButton()
-	treeNode.IsCheckboxDisabled = true
-	diagrammer.map_modelNode_treeNode[modelNode] = treeNode
+
+	if elementNode, ok := modelNode.(ElementNode); ok {
+		treeNode.HasCheckboxButton = true
+		treeNode.IsCheckboxDisabled = true
+		diagrammer.map_elementNode_treeNode[elementNode] = treeNode
+	}
+
 	treeNode.Impl = &ModelNodeImpl{
 		diagrammer: diagrammer,
 		modelNode:  modelNode}
@@ -137,19 +141,14 @@ func (diagrammer *Diagrammer) CommitTreeStage() {
 	diagrammer.treeStage.Commit()
 }
 
-func (diagrammer *Diagrammer) GetMap_modelNode_treeNode() map[ModelNode]*gongtree_models.Node {
-	return diagrammer.map_modelNode_treeNode
+func (diagrammer *Diagrammer) GetMap_elementNode_treeNode() map[ElementNode]*gongtree_models.Node {
+	return diagrammer.map_elementNode_treeNode
 }
 
 // computeModelNodeStatus parses all nodes in the Model Tree
 // and unchecks all nodes unless nodes matches an element in the diagram
 func (diagrammer *Diagrammer) computeModelNodeStatus(map_ModelNode_Shape map[ModelNode]Shape) {
-	for modelNode, treeNode := range diagrammer.map_modelNode_treeNode {
-
-		if !treeNode.HasCheckboxButton {
-			continue
-		}
-
+	for modelNode, treeNode := range diagrammer.map_elementNode_treeNode {
 		treeNode.IsChecked = false
 		if _, ok := map_ModelNode_Shape[modelNode]; ok {
 			treeNode.IsChecked = true

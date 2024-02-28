@@ -12,10 +12,6 @@ func (base *ElementNodeBase) IsExpanded() bool {
 
 func (base *ElementNodeBase) SetIsExpanded(bool) {}
 
-func (base *ElementNodeBase) HasCheckboxButton() bool {
-	return true
-}
-
 func (base *ElementNodeBase) IsNameEditable() bool {
 	return false
 }

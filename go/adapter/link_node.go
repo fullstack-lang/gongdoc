@@ -24,10 +24,6 @@ func (linkNode *LinkNode) IsExpanded() bool {
 	return true
 }
 
-func (linkNode *LinkNode) HasCheckboxButton() bool {
-	return true
-}
-
 // GetChildren implements bridge.Node.
 func (linkNode *LinkNode) GetChildren() (children []diagrammer.ModelNode) {
 

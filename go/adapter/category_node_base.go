@@ -16,18 +16,10 @@ func (base *CategoryNodeBase) SetIsExpanded(isExpanded bool) {
 	base.isExpanded = isExpanded
 }
 
-func (base *CategoryNodeBase) HasCheckboxButton() bool {
-	return false
-}
-
 func (base *CategoryNodeBase) IsNameEditable() bool {
 	return false
 }
 
 func (base *CategoryNodeBase) GetName() string {
 	return base.Name
-}
-
-func (*CategoryNodeBase) GetElement() any {
-	return nil
 }

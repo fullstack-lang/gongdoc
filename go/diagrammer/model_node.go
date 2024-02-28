@@ -9,11 +9,6 @@ type ModelNode interface {
 
 	IsExpanded() bool
 	SetIsExpanded(isExpanded bool)
-
-	HasCheckboxButton() bool
-
-	// GetElement return the pointer to the model element
-	GetElement() any
 }
 
 type ModelNodeImpl struct {
