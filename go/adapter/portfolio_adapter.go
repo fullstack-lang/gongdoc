@@ -148,6 +148,20 @@ func (portfolioAdapter *PortfolioAdapter) GenerateDiagram(diagramNode diagrammer
 					}
 				}
 			}
+
+			for _, link := range gongStruct.PointerToGongStructFields {
+				if link.GetName() == linkShapeName {
+					linkNode, ok := map_ModelElement_ModelNode[link]
+					if !ok {
+						log.Fatalln("unkown element", linkShape.Identifier)
+					}
+
+					setOfModelNode[linkNode] = &LinkShapeAdapter{
+						linkShape: linkShape,
+						element:   link,
+					}
+				}
+			}
 		}
 	}
 
