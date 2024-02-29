@@ -13,14 +13,12 @@ import (
 
 type ClassDiagramNode struct {
 	portfolioAdapter    *PortfolioAdapter
-	diagrammer          *diagrammer.Diagrammer
 	classdiagramAdapter *ClassdiagramAdapter
 }
 
 func NewClassDiagramNode(
 	portfolioAdapter *PortfolioAdapter,
 	classDiagram *gongdoc_models.Classdiagram,
-	diagrammer *diagrammer.Diagrammer,
 
 ) (classDiagramNode *ClassDiagramNode) {
 	classDiagramNode = &ClassDiagramNode{
@@ -30,7 +28,6 @@ func NewClassDiagramNode(
 	classDiagramNode.classdiagramAdapter = &ClassdiagramAdapter{
 		classdiagram: classDiagram,
 	}
-	classDiagramNode.diagrammer = diagrammer
 
 	return
 }
@@ -86,7 +83,7 @@ func (classDiagramNode *ClassDiagramNode) DisplayDiagram() (
 
 	// 1. Create the map of model element to model node
 	map_ModelElement_ModelNode := make(map[any]diagrammer.ModelNode)
-	for modelNode := range classDiagramNode.diagrammer.GetMap_elementNode_treeNode() {
+	for modelNode := range classDiagramNode.portfolioAdapter.diagrammer.GetMap_elementNode_treeNode() {
 
 		if elementNode, ok := modelNode.(diagrammer.ElementNode); ok {
 			if modelElement := elementNode.GetElement(); modelElement != nil {

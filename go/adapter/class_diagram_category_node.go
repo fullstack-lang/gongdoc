@@ -16,19 +16,16 @@ import (
 type ClassDiagramCategoryNode struct {
 	portfolioAdapter *PortfolioAdapter
 	Name             string
-	diagrammer       *diagrammer.Diagrammer
 }
 
 func NewClassDiagramCategoryNode(
 	portfolioAdapter *PortfolioAdapter,
 	name string,
-	diagrammer *diagrammer.Diagrammer,
 ) (categoryNode *ClassDiagramCategoryNode) {
 	categoryNode = new(ClassDiagramCategoryNode)
 
 	categoryNode.portfolioAdapter = portfolioAdapter
 	categoryNode.Name = name
-	categoryNode.diagrammer = diagrammer
 
 	return
 }
@@ -45,8 +42,7 @@ func (categoryNode *ClassDiagramCategoryNode) GetChildren() (children []diagramm
 
 		classDiagramNode := NewClassDiagramNode(
 			categoryNode.portfolioAdapter,
-			classDiagram,
-			categoryNode.diagrammer)
+			classDiagram)
 		children = append(children, classDiagramNode)
 	}
 
@@ -58,28 +54,23 @@ func (categoryNode *ClassDiagramCategoryNode) GetChildren() (children []diagramm
 }
 
 // GetName implements bridge.Node.
-func (categoryNode *ClassDiagramCategoryNode) GetName() string {
-	return categoryNode.Name
-}
-
-// IsNameEditable implements bridge.Node.
-func (categoryNode *ClassDiagramCategoryNode) IsNameEditable() bool {
-	return false
+func (classDiagramCategoryNode *ClassDiagramCategoryNode) GetName() string {
+	return classDiagramCategoryNode.Name
 }
 
 // HasAddDiagramButton
-func (*ClassDiagramCategoryNode) HasAddDiagramButton() bool {
-	return true
+func (classDiagramCategoryNode *ClassDiagramCategoryNode) HasAddDiagramButton() bool {
+
+	diagramPackage := classDiagramCategoryNode.getDiagramPackage()
+
+	return diagramPackage.IsEditable
 }
 
 // AddDiagram implements diagrammer.Portfolio.
 func (classDiagramCategoryNode *ClassDiagramCategoryNode) AddDiagram() diagrammer.PortfolioNode {
 
 	gongdocStage := classDiagramCategoryNode.portfolioAdapter.gongdocStage
-	var diagramPackage *gongdoc_models.DiagramPackage
-	for diagramPackage_ := range *gongdoc_models.GetGongstructInstancesSet[gongdoc_models.DiagramPackage](gongdocStage) {
-		diagramPackage = diagramPackage_
-	}
+	diagramPackage := classDiagramCategoryNode.getDiagramPackage()
 
 	// check unicity of name, otherwise, add an index
 	var hasNameCollision bool
@@ -130,7 +121,16 @@ func (classDiagramCategoryNode *ClassDiagramCategoryNode) AddDiagram() diagramme
 	gongdocStage.Unstage()
 	gongdocStage.Checkout()
 
-	classDiagramNode := NewClassDiagramNode(classDiagramCategoryNode.portfolioAdapter, classdiagram, classDiagramCategoryNode.diagrammer)
+	classDiagramNode := NewClassDiagramNode(classDiagramCategoryNode.portfolioAdapter, classdiagram)
 
 	return classDiagramNode
+}
+
+func (classDiagramCategoryNode *ClassDiagramCategoryNode) getDiagramPackage() *gongdoc_models.DiagramPackage {
+	gongdocStage := classDiagramCategoryNode.portfolioAdapter.gongdocStage
+	var diagramPackage *gongdoc_models.DiagramPackage
+	for diagramPackage_ := range *gongdoc_models.GetGongstructInstancesSet[gongdoc_models.DiagramPackage](gongdocStage) {
+		diagramPackage = diagramPackage_
+	}
+	return diagramPackage
 }
