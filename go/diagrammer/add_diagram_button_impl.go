@@ -4,8 +4,8 @@ import (
 	gongtree_models "github.com/fullstack-lang/gongtree/go/models"
 )
 
-type AddButtonImpl struct {
-	portfolioNode PortfolioNode
+type AddDiagramButtonImpl struct {
+	portfolioCategoryNode PortfolioCategoryNode
 
 	diagrammer *Diagrammer
 
@@ -15,26 +15,27 @@ type AddButtonImpl struct {
 }
 
 func NewAddButtonImpl(
-	portfolioNode PortfolioNode,
+	portfolioCategoryNode PortfolioCategoryNode,
 	diagrammer *Diagrammer,
 	treeNode *gongtree_models.Node,
 	treeStage *gongtree_models.StageStruct,
-) (AddbuttonImpl *AddButtonImpl) {
+) (adbuttonImpl *AddDiagramButtonImpl) {
 
-	AddbuttonImpl = new(AddButtonImpl)
+	adbuttonImpl = new(AddDiagramButtonImpl)
 
-	AddbuttonImpl.diagrammer = diagrammer
-	AddbuttonImpl.treeNode = treeNode
-	AddbuttonImpl.treeStage = treeStage
+	adbuttonImpl.portfolioCategoryNode = portfolioCategoryNode
+	adbuttonImpl.diagrammer = diagrammer
+	adbuttonImpl.treeNode = treeNode
+	adbuttonImpl.treeStage = treeStage
 
 	return
 }
 
-func (buttonImpl *AddButtonImpl) ButtonUpdated(
+func (buttonImpl *AddDiagramButtonImpl) ButtonUpdated(
 	gongtreeStage *gongtree_models.StageStruct,
 	stageButton, front *gongtree_models.Button) {
 
-	if childrenPortfolioNode := buttonImpl.diagrammer.portfolio.AddDiagram(buttonImpl.portfolioNode); childrenPortfolioNode != nil {
+	if childrenPortfolioNode := buttonImpl.portfolioCategoryNode.AddDiagram(); childrenPortfolioNode != nil {
 		childrenTreeNode := buttonImpl.diagrammer.portfolioNode2NodeTree(childrenPortfolioNode, buttonImpl.treeStage)
 		buttonImpl.treeNode.Children = append(buttonImpl.treeNode.Children, childrenTreeNode)
 		buttonImpl.diagrammer.map_portfolioNode_treeNode[childrenPortfolioNode] = childrenTreeNode

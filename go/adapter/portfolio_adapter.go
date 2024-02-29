@@ -1,10 +1,7 @@
 package adapter
 
 import (
-	"fmt"
 	"log"
-	"os"
-	"path/filepath"
 
 	gong_models "github.com/fullstack-lang/gong/go/models"
 
@@ -60,10 +57,10 @@ func (portfolioAdapter *PortfolioAdapter) GetChildren() (rootNodes []diagrammer.
 	return
 }
 
-// GenerateDiagram implements diagrammer.Portfolio.
+// DisplayDiagram implements diagrammer.Portfolio.
 //
 // It generated the SVG
-func (portfolioAdapter *PortfolioAdapter) GenerateDiagram(diagramNode diagrammer.DiagramNode) (
+func (portfolioAdapter *PortfolioAdapter) DisplayDiagram(diagramNode diagrammer.DiagramNode) (
 	setOfModelNode map[diagrammer.ModelNode]diagrammer.Shape) {
 
 	selectedDiagramNode, ok := diagramNode.(*ClassDiagramNode)
@@ -260,67 +257,4 @@ func (portfolioAdapter *PortfolioAdapter) GenerateDiagram(diagramNode diagrammer
 	}
 
 	return
-}
-
-// AddDiagram implements diagrammer.Portfolio.
-func (portfolioAdapter *PortfolioAdapter) AddDiagram(parentPortfolioNode diagrammer.PortfolioNode) diagrammer.PortfolioNode {
-
-	gongdocStage := portfolioAdapter.gongdocStage
-	var diagramPackage *gongdoc_models.DiagramPackage
-	for diagramPackage_ := range *gongdoc_models.GetGongstructInstancesSet[gongdoc_models.DiagramPackage](gongdocStage) {
-		diagramPackage = diagramPackage_
-	}
-
-	// check unicity of name, otherwise, add an index
-	var hasNameCollision bool
-	initialName := "Default"
-	name := initialName
-	index := 0
-	// loop until the name of the new diagram is not in collision with an existing
-	// diagram name
-	for index == 0 || hasNameCollision {
-		index++
-		hasNameCollision = false
-		for classdiagram := range *gongdoc_models.GetGongstructInstancesSet[gongdoc_models.Classdiagram](gongdocStage) {
-			if classdiagram.Name == name {
-				hasNameCollision = true
-			}
-		}
-		if hasNameCollision {
-			name = initialName + fmt.Sprintf("_%d", index)
-		}
-	}
-
-	classdiagram := (&gongdoc_models.Classdiagram{Name: name}).Stage(gongdocStage)
-	diagramPackage.Classdiagrams =
-		append(diagramPackage.Classdiagrams, classdiagram)
-
-	filepath := filepath.Join(
-		filepath.Join(diagramPackage.AbsolutePathToDiagramPackage,
-			"../diagrams"),
-		classdiagram.Name) + ".go"
-	file, err := os.Create(filepath)
-	if err != nil {
-		log.Fatal("Cannot open diagram file" + err.Error())
-	}
-	defer file.Close()
-
-	gongdocStage.Commit()
-
-	// now save the diagram
-	gongdocStage.Checkout()
-	gongdocStage.Unstage()
-	gongdoc_models.StageBranch(gongdocStage, classdiagram)
-
-	gongdoc_models.SetupMapDocLinkRenaming(diagramPackage.ModelPkg.Stage_, gongdocStage)
-
-	gongdocStage.Marshall(file, "github.com/fullstack-lang/gongdoc/go/models", "diagrams")
-
-	// restore the original stage
-	gongdocStage.Unstage()
-	gongdocStage.Checkout()
-
-	classDiagramNode := NewClassDiagramNode(gongdocStage, classdiagram, portfolioAdapter.diagrammer)
-
-	return classDiagramNode
 }

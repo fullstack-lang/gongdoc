@@ -11,7 +11,4 @@ type PortfolioNode interface {
 
 	// IsExpanded is true if the the node is visualy expanded
 	IsExpanded() bool
-
-	// HasAddButton is true if a "Add" button has to be displayed
-	HasAddButton() bool
 }

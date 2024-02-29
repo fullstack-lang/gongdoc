@@ -9,15 +9,6 @@ type Portfolio interface {
 	// IsInSelectionMode is true is at least one diagram has been selected
 	IsInSelectionMode() bool // the end user can select a diagram to display
 
-	// GenerateDiagram is called from the adapter and implemented by the adapter
-	// Its use is to allow for the clean switch off of the function
-	// It returns the set of elements present in the diagram
-	GenerateDiagram(diagramNode DiagramNode) map[ModelNode]Shape
-
-	// AddDiagram allows the end user to request the creation a new Diagram/PortfolioNode
-	AddDiagram(parentPortfolioNode PortfolioNode) PortfolioNode
-
-	// IsOneDiagramEdited is true if one diagram in the portfolio is being edited
-	// In this case, the portfolio nodes unrelated to the edited diagram are disabled
-	// IsOneDiagramEdited() bool
+	// DisplayDiagram
+	DisplayDiagram(diagramNode DiagramNode) map[ModelNode]Shape
 }

@@ -112,17 +112,20 @@ func (diagrammer *Diagrammer) generatePortfolioNodesButtons() {
 		}
 		treeNode.Buttons = make([]*gongtree_models.Button, 0)
 
-		if portfolioNode.HasAddButton() {
-			addDocButton := (&gongtree_models.Button{
-				Name: portfolioNode.GetName() + " " + string(maticons.BUTTON_add),
-				Icon: string(maticons.BUTTON_add)}).Stage(diagrammer.treeStage)
-			treeNode.Buttons = append(treeNode.Buttons, addDocButton)
-			addDocButton.Impl = NewAddButtonImpl(
-				portfolioNode,
-				diagrammer,
-				treeNode,
-				diagrammer.treeStage,
-			)
+		if portfolioCategoryNode, ok := portfolioNode.(PortfolioCategoryNode); ok {
+
+			if portfolioCategoryNode.HasAddDiagramButton() {
+				addDocButton := (&gongtree_models.Button{
+					Name: portfolioCategoryNode.GetName() + " " + string(maticons.BUTTON_add),
+					Icon: string(maticons.BUTTON_add)}).Stage(diagrammer.treeStage)
+				treeNode.Buttons = append(treeNode.Buttons, addDocButton)
+				addDocButton.Impl = NewAddButtonImpl(
+					portfolioCategoryNode,
+					diagrammer,
+					treeNode,
+					diagrammer.treeStage,
+				)
+			}
 		}
 
 		if diagramNode, ok := portfolioNode.(DiagramNode); ok {

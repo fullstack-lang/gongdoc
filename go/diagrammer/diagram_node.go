@@ -18,7 +18,7 @@ func (diagramNodeImpl *DiagramNodeImpl) OnAfterUpdate(stage *gongtree_models.Sta
 	if frontNode.IsChecked && !stagedNode.IsChecked {
 		stagedNode.IsChecked = true
 		diagramNodeImpl.diagrammer.selectedDiagram = diagramNodeImpl.diagramNode.GetDiagram()
-		map_ModelNode_Shape := diagramNodeImpl.diagrammer.portfolio.GenerateDiagram(diagramNodeImpl.diagramNode)
+		map_ModelNode_Shape := diagramNodeImpl.diagrammer.portfolio.DisplayDiagram(diagramNodeImpl.diagramNode)
 		diagramNodeImpl.diagrammer.generatePortfolioNodesButtons()
 		diagramNodeImpl.diagrammer.computeModelNodeStatus(map_ModelNode_Shape)
 		diagramNodeImpl.diagrammer.treeStage.Commit()
