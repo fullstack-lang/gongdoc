@@ -14,19 +14,19 @@ import (
 )
 
 type ClassDiagramCategoryNode struct {
-	gongdocStage *gongdoc_models.StageStruct
-	Name         string
-	diagrammer   *diagrammer.Diagrammer
+	portfolioAdapter *PortfolioAdapter
+	Name             string
+	diagrammer       *diagrammer.Diagrammer
 }
 
 func NewClassDiagramCategoryNode(
-	stage *gongdoc_models.StageStruct,
+	portfolioAdapter *PortfolioAdapter,
 	name string,
 	diagrammer *diagrammer.Diagrammer,
 ) (categoryNode *ClassDiagramCategoryNode) {
 	categoryNode = new(ClassDiagramCategoryNode)
 
-	categoryNode.gongdocStage = stage
+	categoryNode.portfolioAdapter = portfolioAdapter
 	categoryNode.Name = name
 	categoryNode.diagrammer = diagrammer
 
@@ -40,9 +40,13 @@ func (ClassDiagramCategoryNode *ClassDiagramCategoryNode) IsExpanded() bool {
 // GetChildren implements bridge.Node.
 func (categoryNode *ClassDiagramCategoryNode) GetChildren() (children []diagrammer.PortfolioNode) {
 
-	for classDiagram := range *gongdoc_models.GetGongstructInstancesSet[gongdoc_models.Classdiagram](categoryNode.gongdocStage) {
+	gongdocStage := categoryNode.portfolioAdapter.gongdocStage
+	for classDiagram := range *gongdoc_models.GetGongstructInstancesSet[gongdoc_models.Classdiagram](gongdocStage) {
 
-		classDiagramNode := NewClassDiagramNode(categoryNode.gongdocStage, classDiagram, categoryNode.diagrammer)
+		classDiagramNode := NewClassDiagramNode(
+			categoryNode.portfolioAdapter,
+			classDiagram,
+			categoryNode.diagrammer)
 		children = append(children, classDiagramNode)
 	}
 
@@ -71,7 +75,7 @@ func (*ClassDiagramCategoryNode) HasAddDiagramButton() bool {
 // AddDiagram implements diagrammer.Portfolio.
 func (classDiagramCategoryNode *ClassDiagramCategoryNode) AddDiagram() diagrammer.PortfolioNode {
 
-	gongdocStage := classDiagramCategoryNode.gongdocStage
+	gongdocStage := classDiagramCategoryNode.portfolioAdapter.gongdocStage
 	var diagramPackage *gongdoc_models.DiagramPackage
 	for diagramPackage_ := range *gongdoc_models.GetGongstructInstancesSet[gongdoc_models.DiagramPackage](gongdocStage) {
 		diagramPackage = diagramPackage_
@@ -126,7 +130,7 @@ func (classDiagramCategoryNode *ClassDiagramCategoryNode) AddDiagram() diagramme
 	gongdocStage.Unstage()
 	gongdocStage.Checkout()
 
-	classDiagramNode := NewClassDiagramNode(gongdocStage, classdiagram, classDiagramCategoryNode.diagrammer)
+	classDiagramNode := NewClassDiagramNode(classDiagramCategoryNode.portfolioAdapter, classdiagram, classDiagramCategoryNode.diagrammer)
 
 	return classDiagramNode
 }

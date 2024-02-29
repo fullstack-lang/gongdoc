@@ -83,12 +83,12 @@ func (diagrammer *Diagrammer) portfolioNode2NodeTree(portfolioNode PortfolioNode
 	treeNode = (&gongtree_models.Node{Name: portfolioNode.GetName()}).Stage(treeStage)
 	treeNode.IsExpanded = portfolioNode.IsExpanded()
 
-	if diagramNode, ok := portfolioNode.(DiagramNode); ok {
+	if diagramNode, ok := portfolioNode.(PortfolioDiagramNode); ok {
 		_ = diagramNode
 		treeNode.HasCheckboxButton = true
-		treeNode.Impl = &DiagramNodeImpl{
-			diagrammer:  diagrammer,
-			diagramNode: diagramNode}
+		treeNode.Impl = &PortfolioDiagramNodeImpl{
+			diagrammer:           diagrammer,
+			portfolioDiagramNode: diagramNode}
 	}
 
 	treeNode.IsCheckboxDisabled = !diagrammer.portfolio.IsInSelectionMode()
@@ -128,7 +128,7 @@ func (diagrammer *Diagrammer) generatePortfolioNodesButtons() {
 			}
 		}
 
-		if diagramNode, ok := portfolioNode.(DiagramNode); ok {
+		if diagramNode, ok := portfolioNode.(PortfolioDiagramNode); ok {
 			if diagramNode.GetDiagram() == diagrammer.selectedDiagram {
 				treeNode.IsChecked = true
 			} else {

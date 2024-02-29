@@ -8,7 +8,4 @@ type Portfolio interface {
 
 	// IsInSelectionMode is true is at least one diagram has been selected
 	IsInSelectionMode() bool // the end user can select a diagram to display
-
-	// DisplayDiagram
-	DisplayDiagram(diagramNode DiagramNode) map[ModelNode]Shape
 }
