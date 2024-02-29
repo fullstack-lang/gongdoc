@@ -4,7 +4,7 @@ import (
 	gongtree_models "github.com/fullstack-lang/gongtree/go/models"
 )
 
-type AddDiagramButtonImpl struct {
+type DiagramButtonAddImpl struct {
 	portfolioCategoryNode PortfolioCategoryNode
 
 	diagrammer *Diagrammer
@@ -14,14 +14,14 @@ type AddDiagramButtonImpl struct {
 	treeStage *gongtree_models.StageStruct
 }
 
-func NewAddButtonImpl(
+func NewDiagramButtonAddImpl(
 	portfolioCategoryNode PortfolioCategoryNode,
 	diagrammer *Diagrammer,
 	treeNode *gongtree_models.Node,
 	treeStage *gongtree_models.StageStruct,
-) (adbuttonImpl *AddDiagramButtonImpl) {
+) (adbuttonImpl *DiagramButtonAddImpl) {
 
-	adbuttonImpl = new(AddDiagramButtonImpl)
+	adbuttonImpl = new(DiagramButtonAddImpl)
 
 	adbuttonImpl.portfolioCategoryNode = portfolioCategoryNode
 	adbuttonImpl.diagrammer = diagrammer
@@ -31,7 +31,7 @@ func NewAddButtonImpl(
 	return
 }
 
-func (buttonImpl *AddDiagramButtonImpl) ButtonUpdated(
+func (buttonImpl *DiagramButtonAddImpl) ButtonUpdated(
 	gongtreeStage *gongtree_models.StageStruct,
 	stageButton, front *gongtree_models.Button) {
 

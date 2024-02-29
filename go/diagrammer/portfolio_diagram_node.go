@@ -9,6 +9,11 @@ type PortfolioDiagramNode interface {
 
 	// DisplayDiagram request the portfolio to display the diagram
 	DisplayDiagram() map[ModelNode]Shape
+
+	HasDiagramRenameButton() bool
+	RenameDiagram(newName string)
+	IsInRenameMode() bool
+	SetIsInRenameMode(isInRenameMode bool)
 }
 
 type PortfolioDiagramNodeImpl struct {

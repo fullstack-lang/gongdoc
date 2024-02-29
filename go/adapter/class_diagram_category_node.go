@@ -61,7 +61,7 @@ func (classDiagramCategoryNode *ClassDiagramCategoryNode) GetName() string {
 // HasAddDiagramButton
 func (classDiagramCategoryNode *ClassDiagramCategoryNode) HasAddDiagramButton() bool {
 
-	diagramPackage := classDiagramCategoryNode.getDiagramPackage()
+	diagramPackage := classDiagramCategoryNode.portfolioAdapter.getDiagramPackage()
 
 	return diagramPackage.IsEditable
 }
@@ -70,7 +70,7 @@ func (classDiagramCategoryNode *ClassDiagramCategoryNode) HasAddDiagramButton() 
 func (classDiagramCategoryNode *ClassDiagramCategoryNode) AddDiagram() diagrammer.PortfolioNode {
 
 	gongdocStage := classDiagramCategoryNode.portfolioAdapter.gongdocStage
-	diagramPackage := classDiagramCategoryNode.getDiagramPackage()
+	diagramPackage := classDiagramCategoryNode.portfolioAdapter.getDiagramPackage()
 
 	// check unicity of name, otherwise, add an index
 	var hasNameCollision bool
@@ -124,13 +124,4 @@ func (classDiagramCategoryNode *ClassDiagramCategoryNode) AddDiagram() diagramme
 	classDiagramNode := NewClassDiagramNode(classDiagramCategoryNode.portfolioAdapter, classdiagram)
 
 	return classDiagramNode
-}
-
-func (classDiagramCategoryNode *ClassDiagramCategoryNode) getDiagramPackage() *gongdoc_models.DiagramPackage {
-	gongdocStage := classDiagramCategoryNode.portfolioAdapter.gongdocStage
-	var diagramPackage *gongdoc_models.DiagramPackage
-	for diagramPackage_ := range *gongdoc_models.GetGongstructInstancesSet[gongdoc_models.DiagramPackage](gongdocStage) {
-		diagramPackage = diagramPackage_
-	}
-	return diagramPackage
 }

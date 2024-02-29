@@ -115,11 +115,11 @@ func (diagrammer *Diagrammer) generatePortfolioNodesButtons() {
 		if portfolioCategoryNode, ok := portfolioNode.(PortfolioCategoryNode); ok {
 
 			if portfolioCategoryNode.HasAddDiagramButton() {
-				addDocButton := (&gongtree_models.Button{
+				addDiagramButton := (&gongtree_models.Button{
 					Name: portfolioCategoryNode.GetName() + " " + string(maticons.BUTTON_add),
 					Icon: string(maticons.BUTTON_add)}).Stage(diagrammer.treeStage)
-				treeNode.Buttons = append(treeNode.Buttons, addDocButton)
-				addDocButton.Impl = NewAddButtonImpl(
+				treeNode.Buttons = append(treeNode.Buttons, addDiagramButton)
+				addDiagramButton.Impl = NewDiagramButtonAddImpl(
 					portfolioCategoryNode,
 					diagrammer,
 					treeNode,
@@ -128,9 +128,36 @@ func (diagrammer *Diagrammer) generatePortfolioNodesButtons() {
 			}
 		}
 
-		if diagramNode, ok := portfolioNode.(PortfolioDiagramNode); ok {
-			if diagramNode.GetDiagram() == diagrammer.selectedDiagram {
+		if portfolioDiagramNode, ok := portfolioNode.(PortfolioDiagramNode); ok {
+			if portfolioDiagramNode.GetDiagram() == diagrammer.selectedDiagram {
 				treeNode.IsChecked = true
+
+				if portfolioDiagramNode.HasDiagramRenameButton() {
+					if portfolioDiagramNode.IsInRenameMode() {
+						renameCancelDiagramButton := (&gongtree_models.Button{
+							Name: portfolioDiagramNode.GetName() + " " + string(maticons.BUTTON_add),
+							Icon: string(maticons.BUTTON_edit_off)}).Stage(diagrammer.treeStage)
+						treeNode.Buttons = append(treeNode.Buttons, renameCancelDiagramButton)
+						renameCancelDiagramButton.Impl = NewDiagramButtonRenameCancelImpl(
+							portfolioDiagramNode,
+							diagrammer,
+							treeNode,
+							diagrammer.treeStage,
+						)
+					} else {
+						renameDiagramButton := (&gongtree_models.Button{
+							Name: portfolioDiagramNode.GetName() + " " + string(maticons.BUTTON_add),
+							Icon: string(maticons.BUTTON_edit)}).Stage(diagrammer.treeStage)
+						treeNode.Buttons = append(treeNode.Buttons, renameDiagramButton)
+						renameDiagramButton.Impl = NewDiagramButtonRenameImpl(
+							portfolioDiagramNode,
+							diagrammer,
+							treeNode,
+							diagrammer.treeStage,
+						)
+					}
+
+				}
 			} else {
 				treeNode.IsChecked = false
 			}

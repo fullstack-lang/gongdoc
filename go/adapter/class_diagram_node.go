@@ -14,13 +14,37 @@ import (
 type ClassDiagramNode struct {
 	portfolioAdapter    *PortfolioAdapter
 	classdiagramAdapter *ClassdiagramAdapter
+	isInRenameMode      bool
 }
+
+// IsInRenameMode implements diagrammer.PortfolioDiagramNode.
+func (classDiagramNode *ClassDiagramNode) IsInRenameMode() bool {
+	return classDiagramNode.isInRenameMode
+}
+
+func (classDiagramNode *ClassDiagramNode) SetIsInRenameMode(isInRenameMode bool) {
+	classDiagramNode.isInRenameMode = isInRenameMode
+}
+
+// HasDiagramRenameButton implements diagrammer.PortfolioDiagramNode.
+func (classDiagramNode *ClassDiagramNode) HasDiagramRenameButton() bool {
+	return classDiagramNode.portfolioAdapter.getDiagramPackage().IsEditable
+}
+
+// RenameDiagram implements diagrammer.PortfolioDiagramNode.
+func (classDiagramNode *ClassDiagramNode) RenameDiagram(newName string) {
+	classDiagramNode.isInRenameMode = true
+}
+
+// static check that it meets the intended interface
+var _ diagrammer.PortfolioDiagramNode = &(ClassDiagramNode{})
 
 func NewClassDiagramNode(
 	portfolioAdapter *PortfolioAdapter,
 	classDiagram *gongdoc_models.Classdiagram,
 
 ) (classDiagramNode *ClassDiagramNode) {
+
 	classDiagramNode = &ClassDiagramNode{
 		portfolioAdapter: portfolioAdapter,
 	}

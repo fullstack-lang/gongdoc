@@ -11,11 +11,11 @@ import (
 
 // generated in order to avoid error in the package import
 // if there are no elements in the stage to marshall
-var ___dummy__Stage_Default_1 models.StageStruct
-var ___dummy__Time_Default_1 time.Time
+var ___dummy__Stage_Default_2 models.StageStruct
+var ___dummy__Time_Default_2 time.Time
 
 // Injection point for meta package dummy declaration
-var ___dummy__ref_models_Default_1 ref_models.StageStruct
+var ___dummy__ref_models_Default_2 ref_models.StageStruct
 
 // currently, DocLink renaming is not enabled in gopls
 // the following map are devised to overcome this limitation
@@ -24,7 +24,7 @@ var ___dummy__ref_models_Default_1 ref_models.StageStruct
 // [Corresponding Issue](https://github.com/golang/go/issues/57559)
 //
 // When parsed, those maps will help with the renaming process
-var map_DocLink_Identifier_Default_1 map[string]any = map[string]any{
+var map_DocLink_Identifier_Default_2 map[string]any = map[string]any{
 	// injection point for docLink to identifiers
 
 	"ref_models.Classdiagram": &(ref_models.Classdiagram{}),
@@ -161,6 +161,8 @@ var map_DocLink_Identifier_Default_1 map[string]any = map[string]any{
 
 	"ref_models.NOTE_SHAPE_LINK_TO_GONG_STRUCT_OR_ENUM_SHAPE": ref_models.NOTE_SHAPE_LINK_TO_GONG_STRUCT_OR_ENUM_SHAPE,
 
+	"ref_models.NoteOnGongdoc": ref_models.NoteOnGongdoc,
+
 	"ref_models.NoteShape": &(ref_models.NoteShape{}),
 
 	"ref_models.NoteShape.Body": (ref_models.NoteShape{}).Body,
@@ -244,18 +246,16 @@ var map_DocLink_Identifier_Default_1 map[string]any = map[string]any{
 // but it has to properly reference the Injection gateway in the main package
 // func init() {
 // 	_ = __Dummy_time_variable
-// 	InjectionGateway["Default_1"] = Default_1Injection
+// 	InjectionGateway["Default_2"] = Default_2Injection
 // }
 
-// Default_1Injection will stage objects of database "Default_1"
-func Default_1Injection(stage *models.StageStruct) {
+// Default_2Injection will stage objects of database "Default_2"
+func Default_2Injection(stage *models.StageStruct) {
 
 	// Declaration of instances to stage
 
-	// Declarations of staged instances of Button
-
 	// Declarations of staged instances of Classdiagram
-	__Classdiagram__000000_Default_1 := (&models.Classdiagram{Name: `Default_1`}).Stage(stage)
+	__Classdiagram__000000_Default_2 := (&models.Classdiagram{Name: `Default_2`}).Stage(stage)
 
 	// Declarations of staged instances of DiagramPackage
 
@@ -269,15 +269,11 @@ func Default_1Injection(stage *models.StageStruct) {
 
 	// Declarations of staged instances of Link
 
-	// Declarations of staged instances of Node
-
 	// Declarations of staged instances of NoteShape
 
 	// Declarations of staged instances of NoteShapeLink
 
 	// Declarations of staged instances of Position
-
-	// Declarations of staged instances of Tree
 
 	// Declarations of staged instances of UmlState
 
@@ -288,8 +284,10 @@ func Default_1Injection(stage *models.StageStruct) {
 	// Setup of values
 
 	// Classdiagram values setup
-	__Classdiagram__000000_Default_1.Name = `Default_1`
-	__Classdiagram__000000_Default_1.IsInDrawMode = false
+	__Classdiagram__000000_Default_2.Name = `Default_2`
+	__Classdiagram__000000_Default_2.IsInDrawMode = false
 
 	// Setup of pointers
 }
+
+

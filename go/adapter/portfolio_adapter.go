@@ -52,3 +52,12 @@ func (portfolioAdapter *PortfolioAdapter) GetChildren() (rootNodes []diagrammer.
 
 	return
 }
+
+func (portfolioAdapter *PortfolioAdapter) getDiagramPackage() *gongdoc_models.DiagramPackage {
+	gongdocStage := portfolioAdapter.gongdocStage
+	var diagramPackage *gongdoc_models.DiagramPackage
+	for diagramPackage_ := range *gongdoc_models.GetGongstructInstancesSet[gongdoc_models.DiagramPackage](gongdocStage) {
+		diagramPackage = diagramPackage_
+	}
+	return diagramPackage
+}
