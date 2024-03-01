@@ -1,19 +1,17 @@
 package adapter
 
-type Foo interface {
+type Foo struct {
 }
 
-type Bar interface {
+type Bar struct {
 }
 
-type Krog struct {
-	Name string
+func (*Bar) Get() map[*Foo]*Foo {
+	return nil
 }
 
-func test() {
-
-	var k Krog
-	map_Foo_Bar := make(map[Foo]Bar)
-	map_Foo_Bar[&struct{}{}] = &k
-
+type MapAnyToAny interface {
+	Get() map[any]any
 }
+
+// var _ MapAnyToAny = &(Bar{})
