@@ -36,6 +36,8 @@ func (buttonImpl *DiagramButtonRenameCancelImpl) ButtonUpdated(
 	stageButton, front *gongtree_models.Button) {
 
 	buttonImpl.portfolioDiagramNode.SetIsInRenameMode(false)
+	buttonImpl.treeNode.IsInEditMode = false
+
 	buttonImpl.diagrammer.generatePortfolioNodesButtons()
 	buttonImpl.treeStage.Commit()
 

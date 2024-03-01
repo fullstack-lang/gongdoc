@@ -1,7 +1,10 @@
 package adapter
 
 import (
+	"errors"
 	"log"
+	"os"
+	"path/filepath"
 
 	gong_models "github.com/fullstack-lang/gong/go/models"
 	"github.com/fullstack-lang/gongdoc/go/doc2svg"
@@ -32,8 +35,65 @@ func (classDiagramNode *ClassDiagramNode) HasDiagramRenameButton() bool {
 }
 
 // RenameDiagram implements diagrammer.PortfolioDiagramNode.
-func (classDiagramNode *ClassDiagramNode) RenameDiagram(newName string) {
-	classDiagramNode.isInRenameMode = true
+func (classDiagramNode *ClassDiagramNode) RenameDiagram(newName string) (err error) {
+
+	// check that the name is a correct identifer in go
+	for _, b := range newName {
+		if 'a' <= b && b <= 'z' || 'A' <= b && b <= 'Z' || b == '_' || '0' <= b && b <= '9' {
+			// Avoid assigning a rune for the common case of an ascii character.
+			continue
+		} else {
+			err = errors.New("The name of the diagram is not a correct identifier in go: " + newName)
+			return
+		}
+	}
+
+	classdiagram := classDiagramNode.classdiagramAdapter.classdiagram
+	gongdocStage := classDiagramNode.portfolioAdapter.gongdocStage
+	diagramPackage := classDiagramNode.portfolioAdapter.getDiagramPackage()
+
+	// rename the diagram file if it exists
+	// remove the actual classdiagram file if it exsits
+	oldClassdiagramFilePath := filepath.Join(diagramPackage.Path,
+		"../diagrams", classdiagram.Name) + ".go"
+	newClassdiagramFilePath := filepath.Join(diagramPackage.Path,
+		"../diagrams", newName) + ".go"
+
+	if _, err := os.Stat(oldClassdiagramFilePath); err != nil {
+		return err
+	}
+	if err := os.Remove(oldClassdiagramFilePath); err != nil {
+		return err
+	}
+
+	file, err := os.Create(newClassdiagramFilePath)
+	if err != nil {
+		return err
+	}
+	defer file.Close()
+
+	// checkout in order to get the latest version of the diagram before
+	// modifying it updated by the front
+	gongdocStage.Checkout()
+	gongdocStage.Unstage()
+	gongdoc_models.StageBranch(gongdocStage, classdiagram)
+	classdiagram.Name = newName
+
+	gongdoc_models.SetupMapDocLinkRenaming(diagramPackage.ModelPkg.Stage_, gongdocStage)
+
+	// save the diagram
+	gongdocStage.Marshall(file, "github.com/fullstack-lang/gongdoc/go/models", "diagrams")
+
+	// restore the original stage
+	gongdocStage.Unstage()
+	gongdocStage.Checkout()
+
+	classdiagram.Name = newName
+	gongdocStage.Commit()
+
+	classDiagramNode.isInRenameMode = false
+
+	return
 }
 
 // static check that it meets the intended interface
