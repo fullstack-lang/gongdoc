@@ -4,7 +4,6 @@ type PortfolioDiagramNode interface {
 	PortfolioNode
 
 	GetDiagram() Diagram
-	GetCategory() PortfolioCategoryNode
 
 	// DisplayDiagram request the portfolio to display the diagram
 	DisplayDiagram() map[ModelNode]Shape

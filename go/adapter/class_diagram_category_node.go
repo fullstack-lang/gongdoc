@@ -45,7 +45,6 @@ func (categoryNode *ClassDiagramCategoryNode) GetChildren() (children []diagramm
 
 		classDiagramNode := NewClassDiagramNode(
 			categoryNode.portfolioAdapter,
-			categoryNode,
 			classDiagram)
 		children = append(children, classDiagramNode)
 	}
@@ -126,8 +125,7 @@ func (classDiagramCategoryNode *ClassDiagramCategoryNode) AddDiagram() diagramme
 	gongdocStage.Unstage()
 	gongdocStage.Checkout()
 
-	classDiagramNode := NewClassDiagramNode(classDiagramCategoryNode.portfolioAdapter,
-		classDiagramCategoryNode, newClassdiagram)
+	classDiagramNode := NewClassDiagramNode(classDiagramCategoryNode.portfolioAdapter, newClassdiagram)
 
 	return classDiagramNode
 }

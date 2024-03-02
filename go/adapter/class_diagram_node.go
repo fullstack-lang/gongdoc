@@ -16,15 +16,9 @@ import (
 )
 
 type ClassDiagramNode struct {
-	portfolioAdapter         *PortfolioAdapter
-	classDiagramCategoryNode *ClassDiagramCategoryNode
-	classdiagramAdapter      *ClassdiagramAdapter
-	isInRenameMode           bool
-}
-
-// GetCategory implements diagrammer.PortfolioDiagramNode.
-func (classDiagramNode *ClassDiagramNode) GetCategory() diagrammer.PortfolioCategoryNode {
-	return classDiagramNode.classDiagramCategoryNode
+	portfolioAdapter    *PortfolioAdapter
+	classdiagramAdapter *ClassdiagramAdapter
+	isInRenameMode      bool
 }
 
 // static check that it meets the intended interface
@@ -32,7 +26,6 @@ var _ diagrammer.PortfolioDiagramNode = &(ClassDiagramNode{})
 
 func NewClassDiagramNode(
 	portfolioAdapter *PortfolioAdapter,
-	classDiagramCategoryNode *ClassDiagramCategoryNode,
 	classDiagram *gongdoc_models.Classdiagram,
 
 ) (classDiagramNode *ClassDiagramNode) {
@@ -40,7 +33,6 @@ func NewClassDiagramNode(
 	classDiagramNode = &ClassDiagramNode{
 		portfolioAdapter: portfolioAdapter,
 	}
-	classDiagramNode.classDiagramCategoryNode = classDiagramCategoryNode
 
 	classDiagramNode.classdiagramAdapter = &ClassdiagramAdapter{
 		classdiagram: classDiagram,
@@ -409,8 +401,7 @@ func (classDiagramNode *ClassDiagramNode) DuplicateDiagram() diagrammer.Portfoli
 	gongdocStage.Checkout()
 	gongdocStage.Commit()
 
-	newClassDiagramNode := NewClassDiagramNode(classDiagramNode.portfolioAdapter,
-		classDiagramNode.classDiagramCategoryNode, selectedClassdiagram)
+	newClassDiagramNode := NewClassDiagramNode(classDiagramNode.portfolioAdapter, selectedClassdiagram)
 
 	return newClassDiagramNode
 }
