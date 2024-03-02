@@ -18,6 +18,9 @@ type ClassDiagramCategoryNode struct {
 	Name             string
 }
 
+// static check for interface inmplementation
+var _ diagrammer.PortfolioCategoryNode = &(ClassDiagramCategoryNode{})
+
 func NewClassDiagramCategoryNode(
 	portfolioAdapter *PortfolioAdapter,
 	name string,
@@ -42,6 +45,7 @@ func (categoryNode *ClassDiagramCategoryNode) GetChildren() (children []diagramm
 
 		classDiagramNode := NewClassDiagramNode(
 			categoryNode.portfolioAdapter,
+			categoryNode,
 			classDiagram)
 		children = append(children, classDiagramNode)
 	}
@@ -67,7 +71,7 @@ func (classDiagramCategoryNode *ClassDiagramCategoryNode) HasAddDiagramButton() 
 }
 
 // AddDiagram implements diagrammer.Portfolio.
-func (classDiagramCategoryNode *ClassDiagramCategoryNode) AddDiagram() diagrammer.PortfolioNode {
+func (classDiagramCategoryNode *ClassDiagramCategoryNode) AddDiagram() diagrammer.PortfolioDiagramNode {
 
 	gongdocStage := classDiagramCategoryNode.portfolioAdapter.gongdocStage
 	diagramPackage := classDiagramCategoryNode.portfolioAdapter.getDiagramPackage()
@@ -75,7 +79,7 @@ func (classDiagramCategoryNode *ClassDiagramCategoryNode) AddDiagram() diagramme
 	// check unicity of name, otherwise, add an index
 	var hasNameCollision bool
 	initialName := "Default"
-	name := initialName
+	newClassdiagramName := initialName
 	index := 0
 	// loop until the name of the new diagram is not in collision with an existing
 	// diagram name
@@ -83,35 +87,36 @@ func (classDiagramCategoryNode *ClassDiagramCategoryNode) AddDiagram() diagramme
 		index++
 		hasNameCollision = false
 		for classdiagram := range *gongdoc_models.GetGongstructInstancesSet[gongdoc_models.Classdiagram](gongdocStage) {
-			if classdiagram.Name == name {
+			if classdiagram.Name == newClassdiagramName {
 				hasNameCollision = true
 			}
 		}
 		if hasNameCollision {
-			name = initialName + fmt.Sprintf("_%d", index)
+			newClassdiagramName = initialName + fmt.Sprintf("_%d", index)
 		}
 	}
 
-	classdiagram := (&gongdoc_models.Classdiagram{Name: name}).Stage(gongdocStage)
-	diagramPackage.Classdiagrams =
-		append(diagramPackage.Classdiagrams, classdiagram)
+	newClassdiagram := (&gongdoc_models.Classdiagram{Name: newClassdiagramName}).Stage(gongdocStage)
+	diagramPackage.Classdiagrams = append(diagramPackage.Classdiagrams, newClassdiagram)
 
 	filepath := filepath.Join(
-		filepath.Join(diagramPackage.AbsolutePathToDiagramPackage,
-			"../diagrams"),
-		classdiagram.Name) + ".go"
+		filepath.Join(diagramPackage.AbsolutePathToDiagramPackage, "../diagrams"),
+		newClassdiagram.Name) + ".go"
 	file, err := os.Create(filepath)
 	if err != nil {
 		log.Fatal("Cannot open diagram file" + err.Error())
 	}
 	defer file.Close()
 
+	// the gongstage has now the new class diagram within
 	gongdocStage.Commit()
 
-	// now save the diagram
+	// now save the diagram into a file
+	// to do that, one need to empty the stage of all diagramms but the
+	// new classdiagram
 	gongdocStage.Checkout()
 	gongdocStage.Unstage()
-	gongdoc_models.StageBranch(gongdocStage, classdiagram)
+	gongdoc_models.StageBranch(gongdocStage, newClassdiagram)
 
 	gongdoc_models.SetupMapDocLinkRenaming(diagramPackage.ModelPkg.Stage_, gongdocStage)
 
@@ -121,7 +126,8 @@ func (classDiagramCategoryNode *ClassDiagramCategoryNode) AddDiagram() diagramme
 	gongdocStage.Unstage()
 	gongdocStage.Checkout()
 
-	classDiagramNode := NewClassDiagramNode(classDiagramCategoryNode.portfolioAdapter, classdiagram)
+	classDiagramNode := NewClassDiagramNode(classDiagramCategoryNode.portfolioAdapter,
+		classDiagramCategoryNode, newClassdiagram)
 
 	return classDiagramNode
 }

@@ -4,6 +4,7 @@ type PortfolioDiagramNode interface {
 	PortfolioNode
 
 	GetDiagram() Diagram
+	GetCategory() PortfolioCategoryNode
 
 	// DisplayDiagram request the portfolio to display the diagram
 	DisplayDiagram() map[ModelNode]Shape
@@ -12,4 +13,7 @@ type PortfolioDiagramNode interface {
 	RenameDiagram(newName string) error
 	IsInRenameMode() bool
 	SetIsInRenameMode(isInRenameMode bool)
+
+	HasDuplicateButton() bool
+	DuplicateDiagram() PortfolioDiagramNode // returns the new diagram
 }

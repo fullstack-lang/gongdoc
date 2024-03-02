@@ -2,6 +2,7 @@ package adapter
 
 import (
 	"errors"
+	"fmt"
 	"log"
 	"os"
 	"path/filepath"
@@ -15,9 +16,37 @@ import (
 )
 
 type ClassDiagramNode struct {
-	portfolioAdapter    *PortfolioAdapter
-	classdiagramAdapter *ClassdiagramAdapter
-	isInRenameMode      bool
+	portfolioAdapter         *PortfolioAdapter
+	classDiagramCategoryNode *ClassDiagramCategoryNode
+	classdiagramAdapter      *ClassdiagramAdapter
+	isInRenameMode           bool
+}
+
+// GetCategory implements diagrammer.PortfolioDiagramNode.
+func (classDiagramNode *ClassDiagramNode) GetCategory() diagrammer.PortfolioCategoryNode {
+	return classDiagramNode.classDiagramCategoryNode
+}
+
+// static check that it meets the intended interface
+var _ diagrammer.PortfolioDiagramNode = &(ClassDiagramNode{})
+
+func NewClassDiagramNode(
+	portfolioAdapter *PortfolioAdapter,
+	classDiagramCategoryNode *ClassDiagramCategoryNode,
+	classDiagram *gongdoc_models.Classdiagram,
+
+) (classDiagramNode *ClassDiagramNode) {
+
+	classDiagramNode = &ClassDiagramNode{
+		portfolioAdapter: portfolioAdapter,
+	}
+	classDiagramNode.classDiagramCategoryNode = classDiagramCategoryNode
+
+	classDiagramNode.classdiagramAdapter = &ClassdiagramAdapter{
+		classdiagram: classDiagram,
+	}
+
+	return
 }
 
 // IsInRenameMode implements diagrammer.PortfolioDiagramNode.
@@ -96,26 +125,6 @@ func (classDiagramNode *ClassDiagramNode) RenameDiagram(newName string) (err err
 	return
 }
 
-// static check that it meets the intended interface
-var _ diagrammer.PortfolioDiagramNode = &(ClassDiagramNode{})
-
-func NewClassDiagramNode(
-	portfolioAdapter *PortfolioAdapter,
-	classDiagram *gongdoc_models.Classdiagram,
-
-) (classDiagramNode *ClassDiagramNode) {
-
-	classDiagramNode = &ClassDiagramNode{
-		portfolioAdapter: portfolioAdapter,
-	}
-
-	classDiagramNode.classdiagramAdapter = &ClassdiagramAdapter{
-		classdiagram: classDiagram,
-	}
-
-	return
-}
-
 // GetChildren implements bridge.Node.
 func (classDiagramNode *ClassDiagramNode) GetChildren() (children []diagrammer.PortfolioNode) {
 	return
@@ -151,10 +160,7 @@ func (classDiagramNode *ClassDiagramNode) DisplayDiagram() (
 	gongsvgStage := classDiagramNode.portfolioAdapter.gongsvgStage
 	gongStage := classDiagramNode.portfolioAdapter.gongStage
 
-	var diagramPackage *gongdoc_models.DiagramPackage
-	for diagramPackage_ := range *gongdoc_models.GetGongstructInstancesSet[gongdoc_models.DiagramPackage](gongdocStage) {
-		diagramPackage = diagramPackage_
-	}
+	diagramPackage := classDiagramNode.portfolioAdapter.getDiagramPackage()
 
 	diagramPackage.SelectedClassdiagram = classDiagramNode.classdiagramAdapter.classdiagram
 	selectedClassdiagram := diagramPackage.SelectedClassdiagram
@@ -339,4 +345,72 @@ func (classDiagramNode *ClassDiagramNode) DisplayDiagram() (
 	}
 
 	return
+}
+
+// HasDuplicateButton implements diagrammer.PortfolioDiagramNode.
+func (classDiagramNode *ClassDiagramNode) HasDuplicateButton() bool {
+	return classDiagramNode.portfolioAdapter.getDiagramPackage().IsEditable
+}
+
+// DuplicateDiagram implements diagrammer.PortfolioDiagramNode
+//
+// DuplicateDiagram performs the duplication with a deep copy
+func (classDiagramNode *ClassDiagramNode) DuplicateDiagram() diagrammer.PortfolioDiagramNode {
+
+	gongdocStage := classDiagramNode.portfolioAdapter.gongdocStage
+
+	diagramPackage := classDiagramNode.portfolioAdapter.getDiagramPackage()
+	diagramPackage.SelectedClassdiagram = classDiagramNode.classdiagramAdapter.classdiagram
+	selectedClassdiagram := diagramPackage.SelectedClassdiagram
+
+	var hasNameCollision bool
+	initialName := selectedClassdiagram.Name
+	newClassdiagramName := initialName
+	index := 0
+	// loop until the name of the new diagram is not in collision with an existing
+	// diagram name
+	for index == 0 || hasNameCollision {
+		index++
+		hasNameCollision = false
+		for classdiagram := range *gongdoc_models.GetGongstructInstancesSet[gongdoc_models.Classdiagram](gongdocStage) {
+			if classdiagram.Name == newClassdiagramName {
+				hasNameCollision = true
+			}
+		}
+		if hasNameCollision {
+			newClassdiagramName = initialName + fmt.Sprintf("_%d", index)
+		}
+	}
+
+	log.Println("New name is", newClassdiagramName)
+	newClassdiagramFilePath := filepath.Join(diagramPackage.Path, "../diagrams", newClassdiagramName) + ".go"
+
+	file, err := os.Create(newClassdiagramFilePath)
+	if err != nil {
+		log.Fatal("Cannot open diagram file" + err.Error())
+	}
+	defer file.Close()
+
+	gongdocStage.Checkout()
+	gongdocStage.Unstage()
+
+	gongdoc_models.StageBranch(gongdocStage, selectedClassdiagram)
+	selectedClassdiagram.Name = newClassdiagramName
+
+	gongdoc_models.SetupMapDocLinkRenaming(diagramPackage.ModelPkg.Stage_, gongdocStage)
+	gongdocStage.Marshall(file, "github.com/fullstack-lang/gongdoc/go/models", "diagrams")
+
+	// restore the gongdoc stage
+	gongdocStage.Checkout()
+	gongdocStage.Unstage()
+	gongdoc_models.StageBranch(gongdocStage, selectedClassdiagram)
+	selectedClassdiagram.Name = newClassdiagramName
+
+	gongdocStage.Checkout()
+	gongdocStage.Commit()
+
+	newClassDiagramNode := NewClassDiagramNode(classDiagramNode.portfolioAdapter,
+		classDiagramNode.classDiagramCategoryNode, selectedClassdiagram)
+
+	return newClassDiagramNode
 }

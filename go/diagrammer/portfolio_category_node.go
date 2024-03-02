@@ -8,5 +8,5 @@ type PortfolioCategoryNode interface {
 	HasAddDiagramButton() bool
 
 	// AddDiagram allows the end user to request the creation a new Diagram/PortfolioNode
-	AddDiagram() PortfolioNode
+	AddDiagram() PortfolioDiagramNode
 }

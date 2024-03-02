@@ -4,7 +4,7 @@ import (
 	gongtree_models "github.com/fullstack-lang/gongtree/go/models"
 )
 
-type DiagramButtonRenameCancelImpl struct {
+type PortfolioDiagramNodeButtonRenameCancelImpl struct {
 	portfolioDiagramNode PortfolioDiagramNode
 
 	diagrammer *Diagrammer
@@ -14,14 +14,14 @@ type DiagramButtonRenameCancelImpl struct {
 	treeStage *gongtree_models.StageStruct
 }
 
-func NewDiagramButtonRenameCancelImpl(
+func NewPortfolioDiagramNodeButtonRenameCancelImpl(
 	portfolioDiagramNode PortfolioDiagramNode,
 	diagrammer *Diagrammer,
 	treeNode *gongtree_models.Node,
 	treeStage *gongtree_models.StageStruct,
-) (adbuttonImpl *DiagramButtonRenameCancelImpl) {
+) (adbuttonImpl *PortfolioDiagramNodeButtonRenameCancelImpl) {
 
-	adbuttonImpl = new(DiagramButtonRenameCancelImpl)
+	adbuttonImpl = new(PortfolioDiagramNodeButtonRenameCancelImpl)
 
 	adbuttonImpl.portfolioDiagramNode = portfolioDiagramNode
 	adbuttonImpl.diagrammer = diagrammer
@@ -31,7 +31,7 @@ func NewDiagramButtonRenameCancelImpl(
 	return
 }
 
-func (buttonImpl *DiagramButtonRenameCancelImpl) ButtonUpdated(
+func (buttonImpl *PortfolioDiagramNodeButtonRenameCancelImpl) ButtonUpdated(
 	gongtreeStage *gongtree_models.StageStruct,
 	stageButton, front *gongtree_models.Button) {
 

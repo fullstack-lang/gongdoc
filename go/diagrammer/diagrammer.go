@@ -97,7 +97,6 @@ func (diagrammer *Diagrammer) portfolioNode2NodeTree(portfolioNode PortfolioNode
 	for _, childrenPortfolioNode := range portfolioNode.GetChildren() {
 		childrenTreeNode := diagrammer.portfolioNode2NodeTree(childrenPortfolioNode, treeStage)
 		treeNode.Children = append(treeNode.Children, childrenTreeNode)
-
 	}
 
 	return
@@ -138,7 +137,7 @@ func (diagrammer *Diagrammer) generatePortfolioNodesButtons() {
 							Name: portfolioDiagramNode.GetName() + " " + string(maticons.BUTTON_add),
 							Icon: string(maticons.BUTTON_edit_off)}).Stage(diagrammer.treeStage)
 						treeNode.Buttons = append(treeNode.Buttons, renameCancelDiagramButton)
-						renameCancelDiagramButton.Impl = NewDiagramButtonRenameCancelImpl(
+						renameCancelDiagramButton.Impl = NewPortfolioDiagramNodeButtonRenameCancelImpl(
 							portfolioDiagramNode,
 							diagrammer,
 							treeNode,
@@ -149,14 +148,27 @@ func (diagrammer *Diagrammer) generatePortfolioNodesButtons() {
 							Name: portfolioDiagramNode.GetName() + " " + string(maticons.BUTTON_add),
 							Icon: string(maticons.BUTTON_edit)}).Stage(diagrammer.treeStage)
 						treeNode.Buttons = append(treeNode.Buttons, renameDiagramButton)
-						renameDiagramButton.Impl = NewDiagramButtonRenameImpl(
+						renameDiagramButton.Impl = NewPortfolioDiagramNodeButtonRenameImpl(
 							portfolioDiagramNode,
 							diagrammer,
 							treeNode,
 							diagrammer.treeStage,
 						)
 					}
+				}
 
+				if portfolioDiagramNode.HasDuplicateButton() {
+					button := (&gongtree_models.Button{
+						Name: portfolioDiagramNode.GetName() + " " + string(maticons.BUTTON_file_copy),
+						Icon: string(maticons.BUTTON_file_copy)}).Stage(diagrammer.treeStage)
+					treeNode.Buttons = append(treeNode.Buttons, button)
+					button.Impl = NewPortfolioDiagramNodeButtonDuplicateImpl(
+						portfolioDiagramNode,
+						portfolioDiagramNode.GetCategory(),
+						diagrammer,
+						treeNode,
+						diagrammer.treeStage,
+					)
 				}
 			} else {
 				treeNode.IsChecked = false
