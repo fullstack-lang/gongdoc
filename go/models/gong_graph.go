@@ -144,7 +144,7 @@ func IsStaged[Type Gongstruct](stage *StageStruct, instance *Type) (ok bool) {
 
 
 // StageBranch stages instance and apply StageBranch on all gongstruct instances that are
-// referenced by pointers or slices of pointers of the insance
+// referenced by pointers or slices of pointers of the instance
 //
 // the algorithm stops along the course of graph if a vertex is already staged
 func StageBranch[Type Gongstruct](stage *StageStruct, instance *Type) {
@@ -431,6 +431,273 @@ func (stage *StageStruct) StageBranchVertice(vertice *Vertice) {
 
 	//insertion point for the staging of instances referenced by slice of pointers
 
+}
+
+
+// CopyBranch stages instance and apply CopyBranch on all gongstruct instances that are
+// referenced by pointers or slices of pointers of the instance
+//
+// the algorithm stops along the course of graph if a vertex is already staged
+func CopyBranch[Type Gongstruct](from *Type) (to *Type) {
+
+	switch fromT := any(from).(type) {
+	// insertion point for stage branch
+	case *Classdiagram:
+		toT := CopyBranchClassdiagram(fromT)
+		return any(toT).(*Type)
+
+	case *DiagramPackage:
+		toT := CopyBranchDiagramPackage(fromT)
+		return any(toT).(*Type)
+
+	case *Field:
+		toT := CopyBranchField(fromT)
+		return any(toT).(*Type)
+
+	case *GongEnumShape:
+		toT := CopyBranchGongEnumShape(fromT)
+		return any(toT).(*Type)
+
+	case *GongEnumValueEntry:
+		toT := CopyBranchGongEnumValueEntry(fromT)
+		return any(toT).(*Type)
+
+	case *GongStructShape:
+		toT := CopyBranchGongStructShape(fromT)
+		return any(toT).(*Type)
+
+	case *Link:
+		toT := CopyBranchLink(fromT)
+		return any(toT).(*Type)
+
+	case *NoteShape:
+		toT := CopyBranchNoteShape(fromT)
+		return any(toT).(*Type)
+
+	case *NoteShapeLink:
+		toT := CopyBranchNoteShapeLink(fromT)
+		return any(toT).(*Type)
+
+	case *Position:
+		toT := CopyBranchPosition(fromT)
+		return any(toT).(*Type)
+
+	case *UmlState:
+		toT := CopyBranchUmlState(fromT)
+		return any(toT).(*Type)
+
+	case *Umlsc:
+		toT := CopyBranchUmlsc(fromT)
+		return any(toT).(*Type)
+
+	case *Vertice:
+		toT := CopyBranchVertice(fromT)
+		return any(toT).(*Type)
+
+	default:
+		_ = fromT // to espace compilation issue when model is empty
+	}
+	return
+}
+
+
+// insertion point for stage branch per struct
+func CopyBranchClassdiagram(classdiagramFrom *Classdiagram) (classdiagramTo  *Classdiagram){
+
+	classdiagramTo = new(Classdiagram)
+	classdiagramFrom.CopyBasicFields(classdiagramTo)
+
+	//insertion point for the staging of instances referenced by pointers
+
+	//insertion point for the staging of instances referenced by slice of pointers
+	for _, _gongstructshape := range classdiagramFrom.GongStructShapes {
+		classdiagramTo.GongStructShapes = append( classdiagramTo.GongStructShapes, CopyBranchGongStructShape(_gongstructshape))
+	}
+	for _, _gongenumshape := range classdiagramFrom.GongEnumShapes {
+		classdiagramTo.GongEnumShapes = append( classdiagramTo.GongEnumShapes, CopyBranchGongEnumShape(_gongenumshape))
+	}
+	for _, _noteshape := range classdiagramFrom.NoteShapes {
+		classdiagramTo.NoteShapes = append( classdiagramTo.NoteShapes, CopyBranchNoteShape(_noteshape))
+	}
+
+	return
+}
+
+func CopyBranchDiagramPackage(diagrampackageFrom *DiagramPackage) (diagrampackageTo  *DiagramPackage){
+
+	diagrampackageTo = new(DiagramPackage)
+	diagrampackageFrom.CopyBasicFields(diagrampackageTo)
+
+	//insertion point for the staging of instances referenced by pointers
+	if diagrampackageFrom.SelectedClassdiagram != nil {
+		diagrampackageTo.SelectedClassdiagram = CopyBranchClassdiagram(diagrampackageFrom.SelectedClassdiagram)
+	}
+
+	//insertion point for the staging of instances referenced by slice of pointers
+	for _, _classdiagram := range diagrampackageFrom.Classdiagrams {
+		diagrampackageTo.Classdiagrams = append( diagrampackageTo.Classdiagrams, CopyBranchClassdiagram(_classdiagram))
+	}
+	for _, _umlsc := range diagrampackageFrom.Umlscs {
+		diagrampackageTo.Umlscs = append( diagrampackageTo.Umlscs, CopyBranchUmlsc(_umlsc))
+	}
+
+	return
+}
+
+func CopyBranchField(fieldFrom *Field) (fieldTo  *Field){
+
+	fieldTo = new(Field)
+	fieldFrom.CopyBasicFields(fieldTo)
+
+	//insertion point for the staging of instances referenced by pointers
+
+	//insertion point for the staging of instances referenced by slice of pointers
+
+	return
+}
+
+func CopyBranchGongEnumShape(gongenumshapeFrom *GongEnumShape) (gongenumshapeTo  *GongEnumShape){
+
+	gongenumshapeTo = new(GongEnumShape)
+	gongenumshapeFrom.CopyBasicFields(gongenumshapeTo)
+
+	//insertion point for the staging of instances referenced by pointers
+	if gongenumshapeFrom.Position != nil {
+		gongenumshapeTo.Position = CopyBranchPosition(gongenumshapeFrom.Position)
+	}
+
+	//insertion point for the staging of instances referenced by slice of pointers
+	for _, _gongenumvalueentry := range gongenumshapeFrom.GongEnumValueEntrys {
+		gongenumshapeTo.GongEnumValueEntrys = append( gongenumshapeTo.GongEnumValueEntrys, CopyBranchGongEnumValueEntry(_gongenumvalueentry))
+	}
+
+	return
+}
+
+func CopyBranchGongEnumValueEntry(gongenumvalueentryFrom *GongEnumValueEntry) (gongenumvalueentryTo  *GongEnumValueEntry){
+
+	gongenumvalueentryTo = new(GongEnumValueEntry)
+	gongenumvalueentryFrom.CopyBasicFields(gongenumvalueentryTo)
+
+	//insertion point for the staging of instances referenced by pointers
+
+	//insertion point for the staging of instances referenced by slice of pointers
+
+	return
+}
+
+func CopyBranchGongStructShape(gongstructshapeFrom *GongStructShape) (gongstructshapeTo  *GongStructShape){
+
+	gongstructshapeTo = new(GongStructShape)
+	gongstructshapeFrom.CopyBasicFields(gongstructshapeTo)
+
+	//insertion point for the staging of instances referenced by pointers
+	if gongstructshapeFrom.Position != nil {
+		gongstructshapeTo.Position = CopyBranchPosition(gongstructshapeFrom.Position)
+	}
+
+	//insertion point for the staging of instances referenced by slice of pointers
+	for _, _field := range gongstructshapeFrom.Fields {
+		gongstructshapeTo.Fields = append( gongstructshapeTo.Fields, CopyBranchField(_field))
+	}
+	for _, _link := range gongstructshapeFrom.Links {
+		gongstructshapeTo.Links = append( gongstructshapeTo.Links, CopyBranchLink(_link))
+	}
+
+	return
+}
+
+func CopyBranchLink(linkFrom *Link) (linkTo  *Link){
+
+	linkTo = new(Link)
+	linkFrom.CopyBasicFields(linkTo)
+
+	//insertion point for the staging of instances referenced by pointers
+	if linkFrom.Middlevertice != nil {
+		linkTo.Middlevertice = CopyBranchVertice(linkFrom.Middlevertice)
+	}
+
+	//insertion point for the staging of instances referenced by slice of pointers
+
+	return
+}
+
+func CopyBranchNoteShape(noteshapeFrom *NoteShape) (noteshapeTo  *NoteShape){
+
+	noteshapeTo = new(NoteShape)
+	noteshapeFrom.CopyBasicFields(noteshapeTo)
+
+	//insertion point for the staging of instances referenced by pointers
+
+	//insertion point for the staging of instances referenced by slice of pointers
+	for _, _noteshapelink := range noteshapeFrom.NoteShapeLinks {
+		noteshapeTo.NoteShapeLinks = append( noteshapeTo.NoteShapeLinks, CopyBranchNoteShapeLink(_noteshapelink))
+	}
+
+	return
+}
+
+func CopyBranchNoteShapeLink(noteshapelinkFrom *NoteShapeLink) (noteshapelinkTo  *NoteShapeLink){
+
+	noteshapelinkTo = new(NoteShapeLink)
+	noteshapelinkFrom.CopyBasicFields(noteshapelinkTo)
+
+	//insertion point for the staging of instances referenced by pointers
+
+	//insertion point for the staging of instances referenced by slice of pointers
+
+	return
+}
+
+func CopyBranchPosition(positionFrom *Position) (positionTo  *Position){
+
+	positionTo = new(Position)
+	positionFrom.CopyBasicFields(positionTo)
+
+	//insertion point for the staging of instances referenced by pointers
+
+	//insertion point for the staging of instances referenced by slice of pointers
+
+	return
+}
+
+func CopyBranchUmlState(umlstateFrom *UmlState) (umlstateTo  *UmlState){
+
+	umlstateTo = new(UmlState)
+	umlstateFrom.CopyBasicFields(umlstateTo)
+
+	//insertion point for the staging of instances referenced by pointers
+
+	//insertion point for the staging of instances referenced by slice of pointers
+
+	return
+}
+
+func CopyBranchUmlsc(umlscFrom *Umlsc) (umlscTo  *Umlsc){
+
+	umlscTo = new(Umlsc)
+	umlscFrom.CopyBasicFields(umlscTo)
+
+	//insertion point for the staging of instances referenced by pointers
+
+	//insertion point for the staging of instances referenced by slice of pointers
+	for _, _umlstate := range umlscFrom.States {
+		umlscTo.States = append( umlscTo.States, CopyBranchUmlState(_umlstate))
+	}
+
+	return
+}
+
+func CopyBranchVertice(verticeFrom *Vertice) (verticeTo  *Vertice){
+
+	verticeTo = new(Vertice)
+	verticeFrom.CopyBasicFields(verticeTo)
+
+	//insertion point for the staging of instances referenced by pointers
+
+	//insertion point for the staging of instances referenced by slice of pointers
+
+	return
 }
 
 

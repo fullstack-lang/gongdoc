@@ -19,6 +19,11 @@ type ClassDiagramCategoryNode struct {
 	children         []diagrammer.PortfolioNode
 }
 
+// AppendChildren implements diagrammer.PortfolioCategoryNode.
+func (classDiagramCategoryNode *ClassDiagramCategoryNode) AppendChildren(children diagrammer.PortfolioNode) {
+	classDiagramCategoryNode.children = append(classDiagramCategoryNode.children, children)
+}
+
 // GetParent implements diagrammer.PortfolioCategoryNode.
 func (classDiagramCategoryNode *ClassDiagramCategoryNode) GetParent() diagrammer.PortfolioNode {
 	return nil
@@ -56,7 +61,7 @@ func (categoryNode *ClassDiagramCategoryNode) generateChildren() {
 			categoryNode.portfolioAdapter,
 			categoryNode,
 			classDiagram)
-		categoryNode.children = append(categoryNode.children, classDiagramNode)
+		categoryNode.AppendChildren(classDiagramNode)
 	}
 
 	slices.SortFunc(categoryNode.children, func(a, b diagrammer.PortfolioNode) int {

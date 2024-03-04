@@ -49,6 +49,11 @@ func (classDiagramNode *ClassDiagramNode) GetParent() diagrammer.PortfolioNode {
 	return classDiagramNode.parentNode
 }
 
+// AppendChildren implements diagrammer.PortfolioDiagramNode.
+func (classDiagramNode *ClassDiagramNode) AppendChildren(diagrammer.PortfolioNode) {
+	panic("unimplemented")
+}
+
 // IsInRenameMode implements diagrammer.PortfolioDiagramNode.
 func (classDiagramNode *ClassDiagramNode) IsInRenameMode() bool {
 	return classDiagramNode.isInRenameMode
@@ -422,8 +427,9 @@ func (classDiagramNode *ClassDiagramNode) DuplicateDiagram() diagrammer.Portfoli
 	// 4. restore the stage
 	gongdocStage.Checkout()
 
-	newClassDiagramNode := NewClassDiagramNode(classDiagramNode.portfolioAdapter,
-		classDiagramNode.GetParent(), newClassdiagram)
+	parent := classDiagramNode.GetParent()
+	newClassDiagramNode := NewClassDiagramNode(classDiagramNode.portfolioAdapter, parent, newClassdiagram)
+	parent.AppendChildren(newClassDiagramNode)
 
 	return newClassDiagramNode
 }

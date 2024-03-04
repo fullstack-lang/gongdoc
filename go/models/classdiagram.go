@@ -191,8 +191,7 @@ func (classdiagram *Classdiagram) RemoveGongEnumShape(stage *StageStruct, gongen
 // DuplicateDiagram generates a new diagram with duplicated shapes
 func (classdiagram *Classdiagram) DuplicateDiagram() (newClassdiagram *Classdiagram) {
 
-	newClassdiagram = new(Classdiagram)
-	classdiagram.CopyBasicFields(newClassdiagram)
+	newClassdiagram = CopyBranch(classdiagram)
 
 	return
 }

@@ -12,6 +12,9 @@ type PortfolioNode interface {
 	// GetChildren returns the nodes below the node
 	GetChildren() []PortfolioNode
 
+	// AppendChildren
+	AppendChildren(PortfolioNode)
+
 	// IsExpanded is true if the the node is visualy expanded
 	IsExpanded() bool
 }
