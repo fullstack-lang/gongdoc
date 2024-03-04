@@ -1,6 +1,8 @@
 package diagrammer
 
 import (
+	"log"
+
 	gongtree_models "github.com/fullstack-lang/gongtree/go/models"
 
 	"github.com/fullstack-lang/maticons/maticons"
@@ -34,6 +36,30 @@ func NewDiagrammer(
 	diagrammer.map_elementNode_treeNode = make(map[ElementNode]*gongtree_models.Node)
 
 	return
+}
+
+func (diagrammer *Diagrammer) AddPortfiolioNodeTreeNodeEntry(portfolioNode PortfolioNode, treeNode *gongtree_models.Node) {
+	// log.Printf("diagrammer: AddPortfiolioNodeTreeNodeEntry %s, %p", portfolioNode.GetName(), portfolioNode)
+	diagrammer.map_portfolioNode_treeNode[portfolioNode] = treeNode
+}
+
+func (diagrammer *Diagrammer) GetPortfiolioNodeTreeNodeEntry(portfolioNode PortfolioNode) (treeNode *gongtree_models.Node) {
+	log.Printf("diagrammer: GetPortfiolioNodeTreeNodeEntry %s, %p", portfolioNode.GetName(), portfolioNode)
+
+	var ok bool
+	treeNode, ok = diagrammer.map_portfolioNode_treeNode[portfolioNode]
+	if !ok {
+		log.Println("unknown node", portfolioNode.GetName())
+		for tn, pn := range diagrammer.map_portfolioNode_treeNode {
+			log.Println(tn.GetName(), pn.GetName())
+			log.Printf("%p %p\n", pn, tn)
+		}
+		log.Printf("entry node %s, %p\n", portfolioNode.GetName(), portfolioNode)
+
+		return
+	} else {
+		return
+	}
 }
 
 // FillUpModelTree ranges over Model Root Nodes
@@ -70,11 +96,12 @@ func (diagrammer *Diagrammer) modelNode2NodeTree(modelNode ModelNode, treeStage 
 
 // FillUpPortfolioTree ranges over Portfolio Root Nodes
 // and recursively fill up the PortfolioTree
-func (diagrammer *Diagrammer) FillUpPortfolioTree(modelTree *gongtree_models.Tree) {
+func (diagrammer *Diagrammer) FillUpPortfolioTree(portfolioTree *gongtree_models.Tree) {
 
 	for _, portfolioNode := range diagrammer.portfolio.GetChildren() {
+		log.Printf("FillUpPortfolioTree %s %p\n", portfolioNode.GetName(), portfolioNode)
 		treeNode := diagrammer.portfolioNode2NodeTree(portfolioNode, diagrammer.treeStage)
-		modelTree.RootNodes = append(modelTree.RootNodes, treeNode)
+		portfolioTree.RootNodes = append(portfolioTree.RootNodes, treeNode)
 	}
 	diagrammer.generatePortfolioNodesButtons()
 }
@@ -82,6 +109,9 @@ func (diagrammer *Diagrammer) FillUpPortfolioTree(modelTree *gongtree_models.Tre
 func (diagrammer *Diagrammer) portfolioNode2NodeTree(portfolioNode PortfolioNode, treeStage *gongtree_models.StageStruct) (treeNode *gongtree_models.Node) {
 	treeNode = (&gongtree_models.Node{Name: portfolioNode.GetName()}).Stage(treeStage)
 	treeNode.IsExpanded = portfolioNode.IsExpanded()
+
+	// log.Printf("portfolioNode2NodeTree %s %p\n", portfolioNode.GetName(), portfolioNode)
+	diagrammer.AddPortfiolioNodeTreeNodeEntry(portfolioNode, treeNode)
 
 	if diagramNode, ok := portfolioNode.(PortfolioDiagramNode); ok {
 		_ = diagramNode
@@ -92,7 +122,6 @@ func (diagrammer *Diagrammer) portfolioNode2NodeTree(portfolioNode PortfolioNode
 	}
 
 	treeNode.IsCheckboxDisabled = !diagrammer.portfolio.IsInSelectionMode()
-	diagrammer.map_portfolioNode_treeNode[portfolioNode] = treeNode
 
 	for _, childrenPortfolioNode := range portfolioNode.GetChildren() {
 		childrenTreeNode := diagrammer.portfolioNode2NodeTree(childrenPortfolioNode, treeStage)
@@ -103,78 +132,93 @@ func (diagrammer *Diagrammer) portfolioNode2NodeTree(portfolioNode PortfolioNode
 }
 
 func (diagrammer *Diagrammer) generatePortfolioNodesButtons() {
-	for portfolioNode, treeNode := range diagrammer.map_portfolioNode_treeNode {
 
-		// remove all buttons
-		for _, _button := range treeNode.Buttons {
-			_button.Unstage(diagrammer.treeStage)
+	for _, portfolioNode := range diagrammer.portfolio.GetChildren() {
+		log.Printf("generatePortfolioNodesButtons %s %p\n", portfolioNode.GetName(), portfolioNode)
+
+		// here the value of "class diagrams" node has changed, 0xc0014665e8
+		diagrammer.generatePortfolioNodesButtonsRecursive(nil, portfolioNode)
+	}
+}
+
+func (diagrammer *Diagrammer) generatePortfolioNodesButtonsRecursive(
+	parentPortfolioNode PortfolioNode, portfolioNode PortfolioNode) {
+
+	log.Printf("generatePortfolioNodesButtonsRecursive %s %p\n", portfolioNode.GetName(), portfolioNode)
+
+	treeNode := diagrammer.GetPortfiolioNodeTreeNodeEntry(portfolioNode)
+
+	// remove all buttons
+	// github.com/fullstack-lang/gongdoc/go/diagrammer.PortfolioNode(*github.com/fullstack-lang/gongdoc/go/adapter.ClassDiagramCategoryNode) *{portfolioAdapter: *github.com/fullstack-lang/gongdoc/go/adapter.PortfolioAdapter {gongStage: *(*"github.com/fullstack-lang/gong/go/models.StageStruct")(0xc0004b4f00), gongdocStage: *(*"github.com/fullstack-lang/gongdoc/go/models.StageStruct")(0xc0004b5400), gongsvgStage: *(*"github.com/fullstack-lang/gongsvg/go/models.StageStruct")(0xc00178a800), diagrammer: *(*"github.com/fullstack-lang/gongdoc/go/diagrammer.Diagrammer")(0xc0014c0e60)}, Name: "class diagrams"}
+	// github.com/fullstack-lang/gongdoc/go/diagrammer.PortfolioNode(*github.com/fullstack-lang/gongdoc/go/adapter.ClassDiagramCategoryNode) *{portfolioAdapter: *github.com/fullstack-lang/gongdoc/go/adapter.PortfolioAdapter {gongStage: *(*"github.com/fullstack-lang/gong/go/models.StageStruct")(0xc0004b4f00), gongdocStage: *(*"github.com/fullstack-lang/gongdoc/go/models.StageStruct")(0xc0004b5400), gongsvgStage: *(*"github.com/fullstack-lang/gongsvg/go/models.StageStruct")(0xc00178a800), diagrammer: *(*"github.com/fullstack-lang/gongdoc/go/diagrammer.Diagrammer")(0xc0014c0e60)}, Name: "class diagrams"}
+	for _, _button := range treeNode.Buttons {
+		_button.Unstage(diagrammer.treeStage)
+	}
+	treeNode.Buttons = make([]*gongtree_models.Button, 0)
+
+	if portfolioCategoryNode, ok := portfolioNode.(PortfolioCategoryNode); ok {
+
+		if portfolioCategoryNode.HasAddDiagramButton() {
+			addDiagramButton := (&gongtree_models.Button{
+				Name: portfolioNode.GetName() + " " + string(maticons.BUTTON_add),
+				Icon: string(maticons.BUTTON_add)}).Stage(diagrammer.treeStage)
+			treeNode.Buttons = append(treeNode.Buttons, addDiagramButton)
+			addDiagramButton.Impl = NewDiagramButtonAddImpl(
+				portfolioCategoryNode,
+				diagrammer,
+				treeNode,
+				diagrammer.treeStage,
+			)
 		}
-		treeNode.Buttons = make([]*gongtree_models.Button, 0)
+	}
 
-		if portfolioCategoryNode, ok := portfolioNode.(PortfolioCategoryNode); ok {
+	if portfolioDiagramNode, ok := portfolioNode.(PortfolioDiagramNode); ok {
+		if portfolioDiagramNode.GetDiagram() == diagrammer.selectedDiagram {
+			treeNode.IsChecked = true
 
-			if portfolioCategoryNode.HasAddDiagramButton() {
-				addDiagramButton := (&gongtree_models.Button{
-					Name: portfolioCategoryNode.GetName() + " " + string(maticons.BUTTON_add),
-					Icon: string(maticons.BUTTON_add)}).Stage(diagrammer.treeStage)
-				treeNode.Buttons = append(treeNode.Buttons, addDiagramButton)
-				addDiagramButton.Impl = NewDiagramButtonAddImpl(
-					portfolioCategoryNode,
-					diagrammer,
-					treeNode,
-					diagrammer.treeStage,
-				)
-			}
-		}
-
-		if portfolioDiagramNode, ok := portfolioNode.(PortfolioDiagramNode); ok {
-			if portfolioDiagramNode.GetDiagram() == diagrammer.selectedDiagram {
-				treeNode.IsChecked = true
-
-				if portfolioDiagramNode.HasDiagramRenameButton() {
-					if portfolioDiagramNode.IsInRenameMode() {
-						renameCancelDiagramButton := (&gongtree_models.Button{
-							Name: portfolioDiagramNode.GetName() + " " + string(maticons.BUTTON_add),
-							Icon: string(maticons.BUTTON_edit_off)}).Stage(diagrammer.treeStage)
-						treeNode.Buttons = append(treeNode.Buttons, renameCancelDiagramButton)
-						renameCancelDiagramButton.Impl = NewPortfolioDiagramNodeButtonRenameCancelImpl(
-							portfolioDiagramNode,
-							diagrammer,
-							treeNode,
-							diagrammer.treeStage,
-						)
-					} else {
-						renameDiagramButton := (&gongtree_models.Button{
-							Name: portfolioDiagramNode.GetName() + " " + string(maticons.BUTTON_add),
-							Icon: string(maticons.BUTTON_edit)}).Stage(diagrammer.treeStage)
-						treeNode.Buttons = append(treeNode.Buttons, renameDiagramButton)
-						renameDiagramButton.Impl = NewPortfolioDiagramNodeButtonRenameImpl(
-							portfolioDiagramNode,
-							diagrammer,
-							treeNode,
-							diagrammer.treeStage,
-						)
-					}
-				}
-
-				if portfolioDiagramNode.HasDuplicateButton() {
-					button := (&gongtree_models.Button{
-						Name: portfolioDiagramNode.GetName() + " " + string(maticons.BUTTON_file_copy),
-						Icon: string(maticons.BUTTON_file_copy)}).Stage(diagrammer.treeStage)
-					treeNode.Buttons = append(treeNode.Buttons, button)
-					button.Impl = NewPortfolioDiagramNodeButtonDuplicateImpl(
+			if portfolioDiagramNode.HasDiagramRenameButton() {
+				if portfolioDiagramNode.IsInRenameMode() {
+					renameCancelDiagramButton := (&gongtree_models.Button{
+						Name: portfolioDiagramNode.GetName() + " " + string(maticons.BUTTON_add),
+						Icon: string(maticons.BUTTON_edit_off)}).Stage(diagrammer.treeStage)
+					treeNode.Buttons = append(treeNode.Buttons, renameCancelDiagramButton)
+					renameCancelDiagramButton.Impl = NewPortfolioDiagramNodeButtonRenameCancelImpl(
 						portfolioDiagramNode,
-						portfolioDiagramNode.GetCategory(),
+						diagrammer,
+						treeNode,
+						diagrammer.treeStage,
+					)
+				} else {
+					renameDiagramButton := (&gongtree_models.Button{
+						Name: portfolioDiagramNode.GetName() + " " + string(maticons.BUTTON_add),
+						Icon: string(maticons.BUTTON_edit)}).Stage(diagrammer.treeStage)
+					treeNode.Buttons = append(treeNode.Buttons, renameDiagramButton)
+					renameDiagramButton.Impl = NewPortfolioDiagramNodeButtonRenameImpl(
+						portfolioDiagramNode,
 						diagrammer,
 						treeNode,
 						diagrammer.treeStage,
 					)
 				}
-			} else {
-				treeNode.IsChecked = false
 			}
-		}
 
+			if portfolioDiagramNode.HasDuplicateButton() {
+
+				button := (&gongtree_models.Button{
+					Name: portfolioDiagramNode.GetName() + " " + string(maticons.BUTTON_file_copy),
+					Icon: string(maticons.BUTTON_file_copy)}).Stage(diagrammer.treeStage)
+				treeNode.Buttons = append(treeNode.Buttons, button)
+				button.Impl = NewPortfolioDiagramNodeButtonDuplicateImpl(
+					portfolioDiagramNode,
+					parentPortfolioNode,
+					diagrammer,
+					treeNode,
+					diagrammer.treeStage,
+				)
+			}
+		} else {
+			treeNode.IsChecked = false
+		}
 	}
 	diagrammer.treeStage.Commit()
 }

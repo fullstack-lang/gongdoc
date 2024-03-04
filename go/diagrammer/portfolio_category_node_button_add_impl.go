@@ -37,8 +37,8 @@ func (buttonImpl *PortfolioCategoryNodeButtonAddImpl) ButtonUpdated(
 
 	if childrenPortfolioNode := buttonImpl.portfolioCategoryNode.AddDiagram(); childrenPortfolioNode != nil {
 		childrenTreeNode := buttonImpl.diagrammer.portfolioNode2NodeTree(childrenPortfolioNode, buttonImpl.treeStage)
-		childrenPortfolioNode.GetCategory()..Children = append(childrenPortfolioNode.GetCategory()..Children, childrenTreeNode)
-		buttonImpl.diagrammer.map_portfolioNode_treeNode[childrenPortfolioNode] = childrenTreeNode
+		buttonImpl.treeNode.Children = append(buttonImpl.treeNode.Children, childrenTreeNode)
+		buttonImpl.diagrammer.AddPortfiolioNodeTreeNodeEntry(childrenPortfolioNode, childrenTreeNode)
 		buttonImpl.treeStage.Commit()
 	}
 }
