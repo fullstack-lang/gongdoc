@@ -383,40 +383,47 @@ func (classDiagramNode *ClassDiagramNode) DuplicateDiagram() diagrammer.Portfoli
 	}
 
 	log.Println("New name is", newClassdiagramName)
-	selectedClassdiagram.Name = newClassdiagramName
-	newClassdiagramFilePath := filepath.Join(diagramPackage.Path, "../diagrams", newClassdiagramName) + ".go"
 
-	file, err := os.Create(newClassdiagramFilePath)
-	if err != nil {
-		log.Fatal("Cannot open diagram file" + err.Error())
-	}
-	defer file.Close()
+	newClassdiagram := selectedClassdiagram.DuplicateDiagram()
+	newClassdiagram.Name = newClassdiagramName
+	gongdoc_models.StageBranch(gongdocStage, newClassdiagram)
+
+	// the gongstage has now the new class diagram within
+	gongdocStage.Commit()
 
 	//
 	// to generate the diagram file, one uses the function that marshall the whole gongdoc stage
 	// into a file.
 	// in order to do that:
 	//
-	// 1. one empties the stage and one fill up the stage with only this diagram
-	// 2. one restore the stage
+	// 1. one empties the stage
+	// 2. fill up the stage with only this diagram
+	// 3. marshall the stage into the dedicated file
+	// 3. restore the stage
 	gongdocStage.Checkout()
 
-	// 1.
+	// 1. empties the stage
 	gongdocStage.Unstage()
 
-	newClassdiagram := selectedClassdiagram.DuplicateDiagram()
-	newClassdiagram.Name = newClassdiagramName
+	// 2. stage the branch with the duplicated diagram
 	gongdoc_models.StageBranch(gongdocStage, newClassdiagram)
 
-	gongdoc_models.SetupMapDocLinkRenaming(diagramPackage.ModelPkg.Stage_, gongdocStage)
-	gongdocStage.Marshall(file, "github.com/fullstack-lang/gongdoc/go/models", "diagrams")
+	// 3. marshall the stage
+	// gongdoc_models.SetupMapDocLinkRenaming(diagramPackage.ModelPkg.Stage_, gongdocStage)
+	newClassdiagramFilePath := filepath.Join(diagramPackage.Path, "../diagrams", newClassdiagramName) + ".go"
 
-	// 2.
+	file, err := os.Create(newClassdiagramFilePath)
+	if err != nil {
+		log.Fatal("Cannot open diagram file" + err.Error())
+	}
+	gongdocStage.Marshall(file, "github.com/fullstack-lang/gongdoc/go/models", "diagrams")
+	file.Close()
+
+	// 4. restore the stage
 	gongdocStage.Checkout()
-	gongdocStage.Commit()
 
 	newClassDiagramNode := NewClassDiagramNode(classDiagramNode.portfolioAdapter,
-		classDiagramNode.GetParent(), selectedClassdiagram)
+		classDiagramNode.GetParent(), newClassdiagram)
 
 	return newClassDiagramNode
 }
