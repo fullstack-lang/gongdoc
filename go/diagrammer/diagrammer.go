@@ -39,12 +39,10 @@ func NewDiagrammer(
 }
 
 func (diagrammer *Diagrammer) AddPortfiolioNodeTreeNodeEntry(portfolioNode PortfolioNode, treeNode *gongtree_models.Node) {
-	// log.Printf("diagrammer: AddPortfiolioNodeTreeNodeEntry %s, %p", portfolioNode.GetName(), portfolioNode)
 	diagrammer.map_portfolioNode_treeNode[portfolioNode] = treeNode
 }
 
-func (diagrammer *Diagrammer) GetPortfiolioNodeTreeNodeEntry(portfolioNode PortfolioNode) (treeNode *gongtree_models.Node) {
-	log.Printf("diagrammer: GetPortfiolioNodeTreeNodeEntry %s, %p", portfolioNode.GetName(), portfolioNode)
+func (diagrammer *Diagrammer) GetPortfiolioNodeFromTreeNode(portfolioNode PortfolioNode) (treeNode *gongtree_models.Node) {
 
 	var ok bool
 	treeNode, ok = diagrammer.map_portfolioNode_treeNode[portfolioNode]
@@ -95,11 +93,12 @@ func (diagrammer *Diagrammer) modelNode2NodeTree(modelNode ModelNode, treeStage 
 }
 
 // FillUpPortfolioTree ranges over Portfolio Root Nodes
-// and recursively fill up the PortfolioTree
+// and recursively fill up the Tree UI from the Portfolio tree
 func (diagrammer *Diagrammer) FillUpPortfolioTree(portfolioTree *gongtree_models.Tree) {
+	diagrammer.portfolio.GenerateTree()
 
 	for _, portfolioNode := range diagrammer.portfolio.GetChildren() {
-		log.Printf("FillUpPortfolioTree %s %p\n", portfolioNode.GetName(), portfolioNode)
+		// log.Printf("FillUpPortfolioTree %s %p\n", portfolioNode.GetName(), portfolioNode)
 		treeNode := diagrammer.portfolioNode2NodeTree(portfolioNode, diagrammer.treeStage)
 		portfolioTree.RootNodes = append(portfolioTree.RootNodes, treeNode)
 	}
@@ -134,23 +133,21 @@ func (diagrammer *Diagrammer) portfolioNode2NodeTree(portfolioNode PortfolioNode
 func (diagrammer *Diagrammer) generatePortfolioNodesButtons() {
 
 	for _, portfolioNode := range diagrammer.portfolio.GetChildren() {
-		log.Printf("generatePortfolioNodesButtons %s %p\n", portfolioNode.GetName(), portfolioNode)
+		// log.Printf("generatePortfolioNodesButtons %s %p\n", portfolioNode.GetName(), portfolioNode)
 
 		// here the value of "class diagrams" node has changed, 0xc0014665e8
-		diagrammer.generatePortfolioNodesButtonsRecursive(nil, portfolioNode)
+		diagrammer.generatePortfolioNodesButtonsRecursive(portfolioNode)
 	}
+	diagrammer.treeStage.Commit()
 }
 
-func (diagrammer *Diagrammer) generatePortfolioNodesButtonsRecursive(
-	parentPortfolioNode PortfolioNode, portfolioNode PortfolioNode) {
+func (diagrammer *Diagrammer) generatePortfolioNodesButtonsRecursive(portfolioNode PortfolioNode) {
 
-	log.Printf("generatePortfolioNodesButtonsRecursive %s %p\n", portfolioNode.GetName(), portfolioNode)
+	// log.Printf("generatePortfolioNodesButtonsRecursive %s %p\n", portfolioNode.GetName(), portfolioNode)
 
-	treeNode := diagrammer.GetPortfiolioNodeTreeNodeEntry(portfolioNode)
+	treeNode := diagrammer.GetPortfiolioNodeFromTreeNode(portfolioNode)
 
 	// remove all buttons
-	// github.com/fullstack-lang/gongdoc/go/diagrammer.PortfolioNode(*github.com/fullstack-lang/gongdoc/go/adapter.ClassDiagramCategoryNode) *{portfolioAdapter: *github.com/fullstack-lang/gongdoc/go/adapter.PortfolioAdapter {gongStage: *(*"github.com/fullstack-lang/gong/go/models.StageStruct")(0xc0004b4f00), gongdocStage: *(*"github.com/fullstack-lang/gongdoc/go/models.StageStruct")(0xc0004b5400), gongsvgStage: *(*"github.com/fullstack-lang/gongsvg/go/models.StageStruct")(0xc00178a800), diagrammer: *(*"github.com/fullstack-lang/gongdoc/go/diagrammer.Diagrammer")(0xc0014c0e60)}, Name: "class diagrams"}
-	// github.com/fullstack-lang/gongdoc/go/diagrammer.PortfolioNode(*github.com/fullstack-lang/gongdoc/go/adapter.ClassDiagramCategoryNode) *{portfolioAdapter: *github.com/fullstack-lang/gongdoc/go/adapter.PortfolioAdapter {gongStage: *(*"github.com/fullstack-lang/gong/go/models.StageStruct")(0xc0004b4f00), gongdocStage: *(*"github.com/fullstack-lang/gongdoc/go/models.StageStruct")(0xc0004b5400), gongsvgStage: *(*"github.com/fullstack-lang/gongsvg/go/models.StageStruct")(0xc00178a800), diagrammer: *(*"github.com/fullstack-lang/gongdoc/go/diagrammer.Diagrammer")(0xc0014c0e60)}, Name: "class diagrams"}
 	for _, _button := range treeNode.Buttons {
 		_button.Unstage(diagrammer.treeStage)
 	}
@@ -210,7 +207,6 @@ func (diagrammer *Diagrammer) generatePortfolioNodesButtonsRecursive(
 				treeNode.Buttons = append(treeNode.Buttons, button)
 				button.Impl = NewPortfolioDiagramNodeButtonDuplicateImpl(
 					portfolioDiagramNode,
-					parentPortfolioNode,
 					diagrammer,
 					treeNode,
 					diagrammer.treeStage,
@@ -220,7 +216,10 @@ func (diagrammer *Diagrammer) generatePortfolioNodesButtonsRecursive(
 			treeNode.IsChecked = false
 		}
 	}
-	diagrammer.treeStage.Commit()
+
+	for _, childrenPortfolioNode := range portfolioNode.GetChildren() {
+		diagrammer.generatePortfolioNodesButtonsRecursive(childrenPortfolioNode)
+	}
 }
 
 func (diagrammer *Diagrammer) CommitTreeStage() {

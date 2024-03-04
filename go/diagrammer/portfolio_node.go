@@ -6,6 +6,9 @@ type PortfolioNode interface {
 	// GetName() returns the Name that is displayed on the node
 	GetName() string
 
+	// GetParent returns the node above
+	GetParent() PortfolioNode
+
 	// GetChildren returns the nodes below the node
 	GetChildren() []PortfolioNode
 

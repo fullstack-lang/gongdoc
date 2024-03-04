@@ -9,11 +9,11 @@ import (
 )
 
 type GongNoteCategoryNode struct {
-	CategoryNodeBase
+	ModelCategoryNodeBase
 }
 
 func NewGongNoteCategoryNode(stage *gong_models.StageStruct, name string) *GongNoteCategoryNode {
-	return &GongNoteCategoryNode{CategoryNodeBase: CategoryNodeBase{stage: stage, Name: name}}
+	return &GongNoteCategoryNode{ModelCategoryNodeBase: ModelCategoryNodeBase{stage: stage, Name: name}}
 }
 
 // GetChildren implements bridge.Node.

@@ -10,11 +10,11 @@ import (
 )
 
 type GongEnumCategoryNode struct {
-	CategoryNodeBase
+	ModelCategoryNodeBase
 }
 
 func NewGongEnumCategoryNode(stage *gong_models.StageStruct, name string) *GongEnumCategoryNode {
-	return &GongEnumCategoryNode{CategoryNodeBase: CategoryNodeBase{stage: stage, Name: name}}
+	return &GongEnumCategoryNode{ModelCategoryNodeBase: ModelCategoryNodeBase{stage: stage, Name: name}}
 }
 
 // GetChildren implements bridge.Node.

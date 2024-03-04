@@ -2,6 +2,7 @@ package diagrammer
 
 // Portfolio interface to be implemented by the Portfolio adapter
 type Portfolio interface {
+	GenerateTree()
 
 	// GetChildren returns the root nodes of the tree for navigating the portfolio
 	GetChildren() []PortfolioNode

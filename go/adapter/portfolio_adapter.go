@@ -15,7 +15,11 @@ type PortfolioAdapter struct {
 	gongdocStage *gongdoc_models.StageStruct
 	gongsvgStage *gongsvg_models.StageStruct
 	diagrammer   *diagrammer.Diagrammer
+
+	rootNodes []diagrammer.PortfolioNode
 }
+
+var _ diagrammer.Portfolio = &PortfolioAdapter{}
 
 func NewPortfolioAdapter(
 	gongStage *gong_models.StageStruct,
@@ -46,9 +50,16 @@ func (portfolioAdapter *PortfolioAdapter) GetSelectedDiagram() (diagram diagramm
 }
 
 // GetRootNodes implements bridge.Portfolio.
-func (portfolioAdapter *PortfolioAdapter) GetChildren() (rootNodes []diagrammer.PortfolioNode) {
+func (portfolioAdapter *PortfolioAdapter) GetChildren() []diagrammer.PortfolioNode {
+
+	return portfolioAdapter.rootNodes
+}
+
+func (portfolioAdapter *PortfolioAdapter) GenerateTree() {
+
 	classDiagramCategoryNode := NewClassDiagramCategoryNode(portfolioAdapter, "class diagrams")
-	rootNodes = append(rootNodes, classDiagramCategoryNode)
+	portfolioAdapter.rootNodes = append(portfolioAdapter.rootNodes, classDiagramCategoryNode)
+	classDiagramCategoryNode.generateChildren()
 
 	return
 }

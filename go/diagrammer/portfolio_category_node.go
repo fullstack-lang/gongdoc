@@ -1,6 +1,7 @@
 package diagrammer
 
 type PortfolioCategoryNode interface {
+	PortfolioNode
 
 	// HasAddDiagramButton is true if a "Add" button has to be displayed
 	// when the add button is pressed, it calls AddDiagram()

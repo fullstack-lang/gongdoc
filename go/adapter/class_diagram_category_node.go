@@ -16,6 +16,12 @@ import (
 type ClassDiagramCategoryNode struct {
 	portfolioAdapter *PortfolioAdapter
 	Name             string
+	children         []diagrammer.PortfolioNode
+}
+
+// GetParent implements diagrammer.PortfolioCategoryNode.
+func (classDiagramCategoryNode *ClassDiagramCategoryNode) GetParent() diagrammer.PortfolioNode {
+	return nil
 }
 
 // static check for interface inmplementation
@@ -37,19 +43,23 @@ func (ClassDiagramCategoryNode *ClassDiagramCategoryNode) IsExpanded() bool {
 	return true
 }
 
-// GetChildren implements bridge.Node.
 func (categoryNode *ClassDiagramCategoryNode) GetChildren() (children []diagrammer.PortfolioNode) {
+	return categoryNode.children
+}
+
+func (categoryNode *ClassDiagramCategoryNode) generateChildren() {
 
 	gongdocStage := categoryNode.portfolioAdapter.gongdocStage
 	for classDiagram := range *gongdoc_models.GetGongstructInstancesSet[gongdoc_models.Classdiagram](gongdocStage) {
 
 		classDiagramNode := NewClassDiagramNode(
 			categoryNode.portfolioAdapter,
+			categoryNode,
 			classDiagram)
-		children = append(children, classDiagramNode)
+		categoryNode.children = append(categoryNode.children, classDiagramNode)
 	}
 
-	slices.SortFunc(children, func(a, b diagrammer.PortfolioNode) int {
+	slices.SortFunc(categoryNode.children, func(a, b diagrammer.PortfolioNode) int {
 		return cmp.Compare(a.GetName(), b.GetName())
 	})
 
@@ -125,7 +135,7 @@ func (classDiagramCategoryNode *ClassDiagramCategoryNode) AddDiagram() diagramme
 	gongdocStage.Unstage()
 	gongdocStage.Checkout()
 
-	classDiagramNode := NewClassDiagramNode(classDiagramCategoryNode.portfolioAdapter, newClassdiagram)
+	classDiagramNode := NewClassDiagramNode(classDiagramCategoryNode.portfolioAdapter, classDiagramCategoryNode, newClassdiagram)
 
 	return classDiagramNode
 }

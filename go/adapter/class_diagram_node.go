@@ -19,6 +19,8 @@ type ClassDiagramNode struct {
 	portfolioAdapter    *PortfolioAdapter
 	classdiagramAdapter *ClassdiagramAdapter
 	isInRenameMode      bool
+
+	parentNode diagrammer.PortfolioNode
 }
 
 // static check that it meets the intended interface
@@ -26,12 +28,13 @@ var _ diagrammer.PortfolioDiagramNode = &(ClassDiagramNode{})
 
 func NewClassDiagramNode(
 	portfolioAdapter *PortfolioAdapter,
+	parentNode diagrammer.PortfolioNode,
 	classDiagram *gongdoc_models.Classdiagram,
-
 ) (classDiagramNode *ClassDiagramNode) {
 
 	classDiagramNode = &ClassDiagramNode{
 		portfolioAdapter: portfolioAdapter,
+		parentNode:       parentNode,
 	}
 
 	classDiagramNode.classdiagramAdapter = &ClassdiagramAdapter{
@@ -39,6 +42,11 @@ func NewClassDiagramNode(
 	}
 
 	return
+}
+
+// GetParent implements diagrammer.PortfolioDiagramNode.
+func (classDiagramNode *ClassDiagramNode) GetParent() diagrammer.PortfolioNode {
+	return classDiagramNode.parentNode
 }
 
 // IsInRenameMode implements diagrammer.PortfolioDiagramNode.
@@ -401,7 +409,8 @@ func (classDiagramNode *ClassDiagramNode) DuplicateDiagram() diagrammer.Portfoli
 	gongdocStage.Checkout()
 	gongdocStage.Commit()
 
-	newClassDiagramNode := NewClassDiagramNode(classDiagramNode.portfolioAdapter, selectedClassdiagram)
+	newClassDiagramNode := NewClassDiagramNode(classDiagramNode.portfolioAdapter,
+		classDiagramNode.GetParent(), selectedClassdiagram)
 
 	return newClassDiagramNode
 }

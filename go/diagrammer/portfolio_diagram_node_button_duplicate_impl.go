@@ -5,8 +5,7 @@ import (
 )
 
 type PortfolioDiagramNodeButtonDuplicateImpl struct {
-	portfolioDiagramNode        PortfolioDiagramNode
-	parentPortfolioCategoryNode PortfolioNode
+	portfolioDiagramNode PortfolioDiagramNode
 
 	diagrammer *Diagrammer
 
@@ -17,7 +16,6 @@ type PortfolioDiagramNodeButtonDuplicateImpl struct {
 
 func NewPortfolioDiagramNodeButtonDuplicateImpl(
 	portfolioDiagramNode PortfolioDiagramNode,
-	parentPortfolioCategoryNode PortfolioNode,
 	diagrammer *Diagrammer,
 	treeNode *gongtree_models.Node,
 	treeStage *gongtree_models.StageStruct,
@@ -26,7 +24,6 @@ func NewPortfolioDiagramNodeButtonDuplicateImpl(
 	buttonImpl = new(PortfolioDiagramNodeButtonDuplicateImpl)
 
 	buttonImpl.portfolioDiagramNode = portfolioDiagramNode
-	buttonImpl.parentPortfolioCategoryNode = parentPortfolioCategoryNode
 	buttonImpl.diagrammer = diagrammer
 	buttonImpl.treeNode = treeNode
 	buttonImpl.treeStage = treeStage
@@ -38,7 +35,7 @@ func (buttonImpl *PortfolioDiagramNodeButtonDuplicateImpl) ButtonUpdated(
 	gongtreeStage *gongtree_models.StageStruct,
 	stageButton, front *gongtree_models.Button) {
 
-	parentTreeNode := buttonImpl.diagrammer.GetPortfiolioNodeTreeNodeEntry(buttonImpl.parentPortfolioCategoryNode)
+	parentTreeNode := buttonImpl.diagrammer.GetPortfiolioNodeFromTreeNode(buttonImpl.portfolioDiagramNode.GetParent())
 
 	if childrenPortfolioNode := buttonImpl.portfolioDiagramNode.DuplicateDiagram(); childrenPortfolioNode != nil {
 		childrenTreeNode := buttonImpl.diagrammer.portfolioNode2NodeTree(childrenPortfolioNode, buttonImpl.treeStage)
