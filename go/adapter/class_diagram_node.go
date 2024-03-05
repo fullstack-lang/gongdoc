@@ -20,6 +20,7 @@ type ClassDiagramNode struct {
 	portfolioAdapter    *PortfolioAdapter
 	classdiagramAdapter *ClassdiagramAdapter
 	isInRenameMode      bool
+	isInEditMode        bool
 
 	parentNode diagrammer.PortfolioNode
 }
@@ -473,4 +474,23 @@ func (classDiagramNode *ClassDiagramNode) DeleteDiagram() {
 	}
 
 	gongdocStage.Commit()
+}
+
+// HasEditButton implements diagrammer.PortfolioDiagramNode.
+func (classDiagramNode *ClassDiagramNode) HasEditButton() bool {
+	return classDiagramNode.portfolioAdapter.getDiagramPackage().IsEditable
+}
+
+// IsInEditMode implements diagrammer.PortfolioDiagramNode.
+func (classDiagramNode *ClassDiagramNode) IsInEditMode() bool {
+	return classDiagramNode.isInEditMode
+}
+
+// SetIsInEditMode implements diagrammer.PortfolioDiagramNode.
+func (classDiagramNode *ClassDiagramNode) SetIsInEditMode(isInEditMode bool) {
+	classDiagramNode.isInEditMode = isInEditMode
+}
+
+// EditDiagram implements diagrammer.PortfolioDiagramNode.
+func (classDiagramNode *ClassDiagramNode) EditDiagram() {
 }

@@ -8,6 +8,11 @@ type PortfolioDiagramNode interface {
 	// DisplayDiagram request the portfolio to display the diagram
 	DisplayDiagram() map[ModelNode]Shape
 
+	HasEditButton() bool
+	EditDiagram()
+	IsInEditMode() bool
+	SetIsInEditMode(isInEditMode bool)
+
 	HasDiagramRenameButton() bool
 	RenameDiagram(newName string) error
 	IsInRenameMode() bool
