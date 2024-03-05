@@ -6,6 +6,7 @@ import (
 	"log"
 	"os"
 	"path/filepath"
+	"slices"
 
 	gong_models "github.com/fullstack-lang/gong/go/models"
 	"github.com/fullstack-lang/gongdoc/go/doc2svg"
@@ -153,6 +154,11 @@ func (*ClassDiagramNode) IsExpanded() bool {
 // IsNameEditable implements bridge.PortfolioNode.
 func (*ClassDiagramNode) IsNameEditable() bool {
 	return false
+}
+
+// RemoveChildren implements diagrammer.PortfolioDiagramNode.
+func (classDiagramNode *ClassDiagramNode) RemoveChildren(diagrammer.PortfolioNode) {
+	panic("unimplemented")
 }
 
 // DisplayDiagram implements diagrammer.Portfolio.
@@ -391,6 +397,7 @@ func (classDiagramNode *ClassDiagramNode) DuplicateDiagram() diagrammer.Portfoli
 
 	newClassdiagram := selectedClassdiagram.DuplicateDiagram()
 	newClassdiagram.Name = newClassdiagramName
+	diagramPackage.Classdiagrams = append(diagramPackage.Classdiagrams, newClassdiagram)
 	gongdoc_models.StageBranch(gongdocStage, newClassdiagram)
 
 	// the gongstage has now the new class diagram within
@@ -432,4 +439,38 @@ func (classDiagramNode *ClassDiagramNode) DuplicateDiagram() diagrammer.Portfoli
 	parent.AppendChildren(newClassDiagramNode)
 
 	return newClassDiagramNode
+}
+
+// HasDeleteButton implements diagrammer.PortfolioDiagramNode.
+func (classDiagramNode *ClassDiagramNode) HasDeleteButton() bool {
+	return classDiagramNode.portfolioAdapter.getDiagramPackage().IsEditable
+}
+
+// DeleteDiagram implements diagrammer.PortfolioDiagramNode.
+func (classDiagramNode *ClassDiagramNode) DeleteDiagram() {
+
+	gongdocStage := classDiagramNode.portfolioAdapter.gongdocStage
+
+	// checkout the stage, it shall remove the link between
+	// the parent node and the staged node because 0..1->0..N association
+	// is stored in the staged node as a reverse pointer
+	gongdocStage.Checkout()
+	diagramPackage := classDiagramNode.portfolioAdapter.getDiagramPackage()
+	diagramPackage.SelectedClassdiagram = classDiagramNode.classdiagramAdapter.classdiagram
+	selectedClassdiagram := diagramPackage.SelectedClassdiagram
+
+	// remove the classdiagram node from the pkg element node
+	idx := slices.Index(diagramPackage.Classdiagrams, selectedClassdiagram)
+	diagramPackage.Classdiagrams = slices.Delete(diagramPackage.Classdiagrams, idx, idx+1)
+	gongdoc_models.UnstageBranch(gongdocStage, selectedClassdiagram)
+
+	// remove the actual classdiagram file if it exsits
+	classdiagramFilePath := filepath.Join(diagramPackage.Path, "../diagrams", selectedClassdiagram.Name) + ".go"
+	if _, err := os.Stat(classdiagramFilePath); err == nil {
+		if err := os.Remove(classdiagramFilePath); err != nil {
+			log.Println("Error while deleting file " + classdiagramFilePath + " : " + err.Error())
+		}
+	}
+
+	gongdocStage.Commit()
 }

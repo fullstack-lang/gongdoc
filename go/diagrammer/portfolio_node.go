@@ -15,6 +15,9 @@ type PortfolioNode interface {
 	// AppendChildren
 	AppendChildren(PortfolioNode)
 
+	// RemoveChildren
+	RemoveChildren(PortfolioNode)
+
 	// IsExpanded is true if the the node is visualy expanded
 	IsExpanded() bool
 }

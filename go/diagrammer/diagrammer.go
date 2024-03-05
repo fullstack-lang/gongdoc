@@ -42,6 +42,10 @@ func (diagrammer *Diagrammer) AddPortfiolioNodeTreeNodeEntry(portfolioNode Portf
 	diagrammer.map_portfolioNode_treeNode[portfolioNode] = treeNode
 }
 
+func (diagrammer *Diagrammer) RemovePortfiolioNodeTreeNodeEntry(portfolioNode PortfolioNode) {
+	delete(diagrammer.map_portfolioNode_treeNode, portfolioNode)
+}
+
 func (diagrammer *Diagrammer) GetPortfiolioNodeFromTreeNode(portfolioNode PortfolioNode) (treeNode *gongtree_models.Node) {
 
 	var ok bool
@@ -206,6 +210,20 @@ func (diagrammer *Diagrammer) generatePortfolioNodesButtonsRecursive(portfolioNo
 					Icon: string(maticons.BUTTON_file_copy)}).Stage(diagrammer.treeStage)
 				treeNode.Buttons = append(treeNode.Buttons, button)
 				button.Impl = NewPortfolioDiagramNodeButtonDuplicateImpl(
+					portfolioDiagramNode,
+					diagrammer,
+					treeNode,
+					diagrammer.treeStage,
+				)
+			}
+
+			if portfolioDiagramNode.HasDeleteButton() {
+
+				button := (&gongtree_models.Button{
+					Name: portfolioDiagramNode.GetName() + " " + string(maticons.BUTTON_file_copy),
+					Icon: string(maticons.BUTTON_delete)}).Stage(diagrammer.treeStage)
+				treeNode.Buttons = append(treeNode.Buttons, button)
+				button.Impl = NewPortfolioDiagramNodeButtonRemoveImpl(
 					portfolioDiagramNode,
 					diagrammer,
 					treeNode,

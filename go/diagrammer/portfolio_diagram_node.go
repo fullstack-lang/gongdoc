@@ -15,4 +15,7 @@ type PortfolioDiagramNode interface {
 
 	HasDuplicateButton() bool
 	DuplicateDiagram() PortfolioDiagramNode // returns the new diagram
+
+	HasDeleteButton() bool
+	DeleteDiagram()
 }

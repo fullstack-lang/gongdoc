@@ -19,6 +19,12 @@ type ClassDiagramCategoryNode struct {
 	children         []diagrammer.PortfolioNode
 }
 
+// RemoveChildren implements diagrammer.PortfolioCategoryNode.
+func (classDiagramCategoryNode *ClassDiagramCategoryNode) RemoveChildren(portfolioNode diagrammer.PortfolioNode) {
+	idx := diagrammer.IndexOf(classDiagramCategoryNode.children, portfolioNode)
+	classDiagramCategoryNode.children = diagrammer.Remove(classDiagramCategoryNode.children, idx)
+}
+
 // AppendChildren implements diagrammer.PortfolioCategoryNode.
 func (classDiagramCategoryNode *ClassDiagramCategoryNode) AppendChildren(children diagrammer.PortfolioNode) {
 	classDiagramCategoryNode.children = append(classDiagramCategoryNode.children, children)
