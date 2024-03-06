@@ -247,7 +247,7 @@ func (diagrammer *Diagrammer) generatePortfolioNodesButtonsRecursive(portfolioNo
 			case IN_EDIT_MODE:
 				saveDiagramButton := (&gongtree_models.Button{
 					Name: portfolioDiagramNode.GetName() + " " + string(maticons.BUTTON_add),
-					Icon: string(maticons.BUTTON_draw)}).Stage(diagrammer.treeStage)
+					Icon: string(maticons.BUTTON_save)}).Stage(diagrammer.treeStage)
 				treeNode.Buttons = append(treeNode.Buttons, saveDiagramButton)
 				saveDiagramButton.Impl = NewPortfolioDiagramNodeButtonSaveImpl(
 					portfolioDiagramNode,

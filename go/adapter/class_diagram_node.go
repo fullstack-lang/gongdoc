@@ -489,8 +489,16 @@ func (classDiagramNode *ClassDiagramNode) IsInEditMode() bool {
 // SetIsInEditMode implements diagrammer.PortfolioDiagramNode.
 func (classDiagramNode *ClassDiagramNode) SetIsInEditMode(isInEditMode bool) {
 	classDiagramNode.isInEditMode = isInEditMode
+	classDiagramNode.classdiagramAdapter.classdiagram.IsInDrawMode = true
 }
 
-// EditDiagram implements diagrammer.PortfolioDiagramNode.
-func (classDiagramNode *ClassDiagramNode) EditDiagram() {
+// CancelEdit implements diagrammer.PortfolioDiagramNode.
+func (classDiagramNode *ClassDiagramNode) CancelEdit() {
+	classDiagramNode.isInEditMode = false
+	classDiagramNode.classdiagramAdapter.classdiagram.IsInDrawMode = false
+}
+
+// SaveDiagram implements diagrammer.PortfolioDiagramNode.
+func (classDiagramNode *ClassDiagramNode) SaveDiagram() {
+	panic("unimplemented")
 }
