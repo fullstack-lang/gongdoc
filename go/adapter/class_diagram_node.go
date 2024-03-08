@@ -487,15 +487,27 @@ func (classDiagramNode *ClassDiagramNode) IsInEditMode() bool {
 }
 
 // SetIsInEditMode implements diagrammer.PortfolioDiagramNode.
-func (classDiagramNode *ClassDiagramNode) SetIsInEditMode(isInEditMode bool) {
-	classDiagramNode.isInEditMode = isInEditMode
+func (classDiagramNode *ClassDiagramNode) EditDiagram() {
+	classDiagramNode.isInEditMode = true
 	classDiagramNode.classdiagramAdapter.classdiagram.IsInDrawMode = true
+
+	gongsvgStage := classDiagramNode.portfolioAdapter.gongsvgStage
+	gongdocStage := classDiagramNode.portfolioAdapter.gongdocStage
+
+	docSVGMapper := doc2svg.NewDocSVGMapper(gongsvgStage)
+	docSVGMapper.GenerateSvg(gongdocStage)
 }
 
 // CancelEdit implements diagrammer.PortfolioDiagramNode.
 func (classDiagramNode *ClassDiagramNode) CancelEdit() {
 	classDiagramNode.isInEditMode = false
 	classDiagramNode.classdiagramAdapter.classdiagram.IsInDrawMode = false
+
+	gongsvgStage := classDiagramNode.portfolioAdapter.gongsvgStage
+	gongdocStage := classDiagramNode.portfolioAdapter.gongdocStage
+
+	docSVGMapper := doc2svg.NewDocSVGMapper(gongsvgStage)
+	docSVGMapper.GenerateSvg(gongdocStage)
 }
 
 // SaveDiagram implements diagrammer.PortfolioDiagramNode.

@@ -35,7 +35,7 @@ func (buttonImpl *PortfolioDiagramNodeButtonSaveImpl) ButtonUpdated(
 	gongtreeStage *gongtree_models.StageStruct,
 	stageButton, front *gongtree_models.Button) {
 
-	buttonImpl.portfolioDiagramNode.SetIsInEditMode(false)
+	buttonImpl.portfolioDiagramNode.CancelEdit()
 
 	buttonImpl.diagrammer.generatePortfolioNodesButtons()
 	buttonImpl.treeStage.Commit()
