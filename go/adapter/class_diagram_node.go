@@ -207,10 +207,7 @@ func (classDiagramNode *ClassDiagramNode) DisplayDiagram() (
 			log.Fatalln("unkown element", gongStructShape.Identifier)
 		}
 
-		setOfModelNode[gongStructNode] = &GongStructShapeAdapter{
-			gongStructShape: gongStructShape,
-			element:         gongStruct,
-		}
+		setOfModelNode[gongStructNode] = gongStructShape
 
 		for _, fieldShape := range gongStructShape.Fields {
 			fieldShapeName := gongdoc_models.IdentifierToFieldName(fieldShape.Identifier)
@@ -224,10 +221,7 @@ func (classDiagramNode *ClassDiagramNode) DisplayDiagram() (
 						log.Fatalln("unkown element", fieldShape.Identifier)
 					}
 
-					setOfModelNode[gongStructFieldNode] = &GongStructFieldShapeAdapter{
-						fieldShape: fieldShape,
-						element:    field,
-					}
+					setOfModelNode[gongStructFieldNode] = fieldShape
 				}
 			}
 		}
@@ -242,10 +236,7 @@ func (classDiagramNode *ClassDiagramNode) DisplayDiagram() (
 						log.Fatalln("unkown element", linkShape.Identifier)
 					}
 
-					setOfModelNode[linkNode] = &LinkShapeAdapter{
-						linkShape: linkShape,
-						element:   link,
-					}
+					setOfModelNode[linkNode] = linkShape
 				}
 			}
 
@@ -256,10 +247,7 @@ func (classDiagramNode *ClassDiagramNode) DisplayDiagram() (
 						log.Fatalln("unkown element", linkShape.Identifier)
 					}
 
-					setOfModelNode[linkNode] = &LinkShapeAdapter{
-						linkShape: linkShape,
-						element:   link,
-					}
+					setOfModelNode[linkNode] = linkShape
 				}
 			}
 		}
@@ -276,10 +264,7 @@ func (classDiagramNode *ClassDiagramNode) DisplayDiagram() (
 			log.Fatalln("unkown element", gongEnumShape.Identifier)
 		}
 
-		setOfModelNode[gongEnumNode] = &GongEnumShapeAdapter{
-			gongEnumShape: gongEnumShape,
-			element:       gongEnum,
-		}
+		setOfModelNode[gongEnumNode] = gongEnumShape
 
 		for _, valueShape := range gongEnumShape.GongEnumValueEntrys {
 			valueShapeName := gongdoc_models.IdentifierToFieldName(valueShape.Identifier)
@@ -293,10 +278,7 @@ func (classDiagramNode *ClassDiagramNode) DisplayDiagram() (
 						log.Fatalln("unkown element", valueShape.Identifier)
 					}
 
-					setOfModelNode[gongEnumValueNode] = &GongEnumValueShapeAdapter{
-						valueShape: valueShape,
-						element:    value,
-					}
+					setOfModelNode[gongEnumValueNode] = valueShape
 				}
 			}
 		}
@@ -313,10 +295,7 @@ func (classDiagramNode *ClassDiagramNode) DisplayDiagram() (
 			log.Fatalln("unkown element", gongNoteShape.Identifier)
 		}
 
-		setOfModelNode[gongNoteNode] = &GongNoteShapeAdapter{
-			gongNoteShape: gongNoteShape,
-			element:       gongNote,
-		}
+		setOfModelNode[gongNoteNode] = gongNoteShape
 
 		for _, noteLinkShape := range gongNoteShape.NoteShapeLinks {
 
@@ -330,10 +309,7 @@ func (classDiagramNode *ClassDiagramNode) DisplayDiagram() (
 							log.Fatalln("unkown element", noteLinkShape.Identifier)
 						}
 
-						setOfModelNode[linkNode] = &NoteLinkShapeAdapter{
-							nodeShapeLink: noteLinkShape,
-							element:       link,
-						}
+						setOfModelNode[linkNode] = noteLinkShape
 					}
 				}
 			case gongdoc_models.NOTE_SHAPE_LINK_TO_GONG_FIELD:
@@ -345,10 +321,7 @@ func (classDiagramNode *ClassDiagramNode) DisplayDiagram() (
 							log.Fatalln("unkown element", noteLinkShape.Identifier)
 						}
 
-						setOfModelNode[linkNode] = &NoteLinkShapeAdapter{
-							nodeShapeLink: noteLinkShape,
-							element:       link,
-						}
+						setOfModelNode[linkNode] = noteLinkShape
 					}
 				}
 
