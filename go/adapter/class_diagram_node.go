@@ -378,26 +378,39 @@ func (classDiagramNode *ClassDiagramNode) DuplicateDiagram() diagrammer.Portfoli
 	// the gongstage has now the new class diagram within
 	gongdocStage.Commit()
 
-	//
-	// to generate the diagram file, one uses the function that marshall the whole gongdoc stage
-	// into a file.
-	// in order to do that:
-	//
-	// 1. one empties the stage
-	// 2. fill up the stage with only this diagram
-	// 3. marshall the stage into the dedicated file
-	// 3. restore the stage
+	classDiagramNode.marshallDiagram(gongdocStage, newClassdiagram, diagramPackage)
+
+	parent := classDiagramNode.GetParent()
+	newClassDiagramNode := NewClassDiagramNode(classDiagramNode.portfolioAdapter, parent, newClassdiagram)
+	parent.AppendChildren(newClassDiagramNode)
+
+	return newClassDiagramNode
+}
+
+// to generate the diagram file, one uses the function that marshall the whole gongdoc stage
+// into a file.
+// in order to do that:
+//
+// 1. one empties the stage
+// 2. fill up the stage with only this diagram
+// 3. marshall the stage into the dedicated file
+// 4. restore the stage
+// 5. empties the stage
+// 6. stage the branch with the duplicated diagram
+// 7. marshall the stage
+// gongdoc_models.SetupMapDocLinkRenaming(diagramPackage.ModelPkg.Stage_, gongdocStage)
+// 8. restore the stage
+func (*ClassDiagramNode) marshallDiagram(
+	gongdocStage *gongdoc_models.StageStruct,
+	newClassdiagram *gongdoc_models.Classdiagram,
+	diagramPackage *gongdoc_models.DiagramPackage) {
 	gongdocStage.Checkout()
 
-	// 1. empties the stage
 	gongdocStage.Unstage()
 
-	// 2. stage the branch with the duplicated diagram
 	gongdoc_models.StageBranch(gongdocStage, newClassdiagram)
 
-	// 3. marshall the stage
-	// gongdoc_models.SetupMapDocLinkRenaming(diagramPackage.ModelPkg.Stage_, gongdocStage)
-	newClassdiagramFilePath := filepath.Join(diagramPackage.Path, "../diagrams", newClassdiagramName) + ".go"
+	newClassdiagramFilePath := filepath.Join(diagramPackage.Path, "../diagrams", newClassdiagram.GetName()) + ".go"
 
 	file, err := os.Create(newClassdiagramFilePath)
 	if err != nil {
@@ -406,14 +419,7 @@ func (classDiagramNode *ClassDiagramNode) DuplicateDiagram() diagrammer.Portfoli
 	gongdocStage.Marshall(file, "github.com/fullstack-lang/gongdoc/go/models", "diagrams")
 	file.Close()
 
-	// 4. restore the stage
 	gongdocStage.Checkout()
-
-	parent := classDiagramNode.GetParent()
-	newClassDiagramNode := NewClassDiagramNode(classDiagramNode.portfolioAdapter, parent, newClassdiagram)
-	parent.AppendChildren(newClassDiagramNode)
-
-	return newClassDiagramNode
 }
 
 // HasDeleteButton implements diagrammer.PortfolioDiagramNode.
@@ -510,5 +516,11 @@ func (classDiagramNode *ClassDiagramNode) CancelEdit() {
 
 // SaveDiagram implements diagrammer.PortfolioDiagramNode.
 func (classDiagramNode *ClassDiagramNode) SaveDiagram() {
-	panic("unimplemented")
+	gongdocStage := classDiagramNode.portfolioAdapter.gongdocStage
+
+	diagramPackage := classDiagramNode.portfolioAdapter.getDiagramPackage()
+	diagramPackage.SelectedClassdiagram = classDiagramNode.classdiagram
+	selectedClassdiagram := diagramPackage.SelectedClassdiagram
+
+	classDiagramNode.marshallDiagram(gongdocStage, selectedClassdiagram, diagramPackage)
 }
