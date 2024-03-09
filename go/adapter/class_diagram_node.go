@@ -22,6 +22,9 @@ type ClassDiagramNode struct {
 	isInRenameMode   bool
 	isInEditMode     bool
 
+	// mementos is the implementation of the mementos pattern
+	mementos []*gongdoc_models.Classdiagram
+
 	parentNode diagrammer.PortfolioNode
 }
 
@@ -465,6 +468,12 @@ func (classDiagramNode *ClassDiagramNode) EditDiagram() {
 	gongsvgStage := classDiagramNode.portfolioAdapter.gongsvgStage
 	gongdocStage := classDiagramNode.portfolioAdapter.gongdocStage
 
+	// initiate the mementos
+	// clear it
+	classDiagramNode.mementos = classDiagramNode.mementos[:0]
+	classDiagramNode.mementos = append(classDiagramNode.mementos,
+		classDiagramNode.classdiagram.DuplicateDiagram())
+
 	docSVGMapper := doc2svg.NewDocSVGMapper(gongsvgStage)
 	docSVGMapper.GenerateSvg(gongdocStage)
 }
@@ -476,6 +485,24 @@ func (classDiagramNode *ClassDiagramNode) CancelEdit() {
 
 	gongsvgStage := classDiagramNode.portfolioAdapter.gongsvgStage
 	gongdocStage := classDiagramNode.portfolioAdapter.gongdocStage
+
+	gongdocStage.Checkout()
+	diagramPackage := classDiagramNode.portfolioAdapter.getDiagramPackage()
+	selectedClassdiagram := diagramPackage.SelectedClassdiagram
+
+	// remove the classdiagram node from the pkg element node
+	idx := slices.Index(diagramPackage.Classdiagrams, selectedClassdiagram)
+	diagramPackage.Classdiagrams = slices.Delete(diagramPackage.Classdiagrams, idx, idx+1)
+	gongdoc_models.UnstageBranch(gongdocStage, selectedClassdiagram)
+
+	revertedClassdiagram := classDiagramNode.mementos[0]
+	gongdoc_models.StageBranch(gongdocStage, revertedClassdiagram)
+
+	diagramPackage.Classdiagrams = append(diagramPackage.Classdiagrams, revertedClassdiagram)
+	diagramPackage.SelectedClassdiagram = revertedClassdiagram
+	classDiagramNode.classdiagram = revertedClassdiagram
+
+	gongdocStage.Commit()
 
 	docSVGMapper := doc2svg.NewDocSVGMapper(gongsvgStage)
 	docSVGMapper.GenerateSvg(gongdocStage)
