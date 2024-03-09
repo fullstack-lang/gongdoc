@@ -17,10 +17,10 @@ import (
 )
 
 type ClassDiagramNode struct {
-	portfolioAdapter    *PortfolioAdapter
-	classdiagramAdapter *ClassdiagramAdapter
-	isInRenameMode      bool
-	isInEditMode        bool
+	portfolioAdapter *PortfolioAdapter
+	classdiagram     *gongdoc_models.Classdiagram
+	isInRenameMode   bool
+	isInEditMode     bool
 
 	parentNode diagrammer.PortfolioNode
 }
@@ -39,9 +39,7 @@ func NewClassDiagramNode(
 		parentNode:       parentNode,
 	}
 
-	classDiagramNode.classdiagramAdapter = &ClassdiagramAdapter{
-		classdiagram: classDiagram,
-	}
+	classDiagramNode.classdiagram = classDiagram
 
 	return
 }
@@ -84,7 +82,7 @@ func (classDiagramNode *ClassDiagramNode) RenameDiagram(newName string) (err err
 		}
 	}
 
-	classdiagram := classDiagramNode.classdiagramAdapter.classdiagram
+	classdiagram := classDiagramNode.classdiagram
 	gongdocStage := classDiagramNode.portfolioAdapter.gongdocStage
 	diagramPackage := classDiagramNode.portfolioAdapter.getDiagramPackage()
 
@@ -139,12 +137,12 @@ func (classDiagramNode *ClassDiagramNode) GetChildren() (children []diagrammer.P
 
 // GetName implements bridge.Node.
 func (classDiagramNode *ClassDiagramNode) GetName() string {
-	return classDiagramNode.classdiagramAdapter.GetName()
+	return classDiagramNode.classdiagram.GetName()
 }
 
 // GetDiagram implements bridge.PortfolioNode.
 func (classDiagramNode *ClassDiagramNode) GetDiagram() diagrammer.Diagram {
-	return classDiagramNode.classdiagramAdapter
+	return classDiagramNode.classdiagram
 }
 
 // IsExpanded implements bridge.PortfolioNode.
@@ -174,7 +172,7 @@ func (classDiagramNode *ClassDiagramNode) DisplayDiagram() (
 
 	diagramPackage := classDiagramNode.portfolioAdapter.getDiagramPackage()
 
-	diagramPackage.SelectedClassdiagram = classDiagramNode.classdiagramAdapter.classdiagram
+	diagramPackage.SelectedClassdiagram = classDiagramNode.classdiagram
 	selectedClassdiagram := diagramPackage.SelectedClassdiagram
 
 	docSVGMapper := doc2svg.NewDocSVGMapper(gongsvgStage)
@@ -345,7 +343,7 @@ func (classDiagramNode *ClassDiagramNode) DuplicateDiagram() diagrammer.Portfoli
 	gongdocStage := classDiagramNode.portfolioAdapter.gongdocStage
 
 	diagramPackage := classDiagramNode.portfolioAdapter.getDiagramPackage()
-	diagramPackage.SelectedClassdiagram = classDiagramNode.classdiagramAdapter.classdiagram
+	diagramPackage.SelectedClassdiagram = classDiagramNode.classdiagram
 	selectedClassdiagram := diagramPackage.SelectedClassdiagram
 
 	var hasNameCollision bool
@@ -430,7 +428,7 @@ func (classDiagramNode *ClassDiagramNode) DeleteDiagram() {
 	// is stored in the staged node as a reverse pointer
 	gongdocStage.Checkout()
 	diagramPackage := classDiagramNode.portfolioAdapter.getDiagramPackage()
-	diagramPackage.SelectedClassdiagram = classDiagramNode.classdiagramAdapter.classdiagram
+	diagramPackage.SelectedClassdiagram = classDiagramNode.classdiagram
 	selectedClassdiagram := diagramPackage.SelectedClassdiagram
 
 	// remove the classdiagram node from the pkg element node
@@ -462,7 +460,7 @@ func (classDiagramNode *ClassDiagramNode) IsInEditMode() bool {
 // SetIsInEditMode implements diagrammer.PortfolioDiagramNode.
 func (classDiagramNode *ClassDiagramNode) EditDiagram() {
 	classDiagramNode.isInEditMode = true
-	classDiagramNode.classdiagramAdapter.classdiagram.IsInDrawMode = true
+	classDiagramNode.classdiagram.IsInDrawMode = true
 
 	gongsvgStage := classDiagramNode.portfolioAdapter.gongsvgStage
 	gongdocStage := classDiagramNode.portfolioAdapter.gongdocStage
@@ -474,7 +472,7 @@ func (classDiagramNode *ClassDiagramNode) EditDiagram() {
 // CancelEdit implements diagrammer.PortfolioDiagramNode.
 func (classDiagramNode *ClassDiagramNode) CancelEdit() {
 	classDiagramNode.isInEditMode = false
-	classDiagramNode.classdiagramAdapter.classdiagram.IsInDrawMode = false
+	classDiagramNode.classdiagram.IsInDrawMode = false
 
 	gongsvgStage := classDiagramNode.portfolioAdapter.gongsvgStage
 	gongdocStage := classDiagramNode.portfolioAdapter.gongdocStage
