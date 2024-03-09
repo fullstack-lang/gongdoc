@@ -48,8 +48,10 @@ func (docSVGMapper *DocSVGMapper) GenerateSvg(
 	for diagramPackage = range *gongdoc_models.GetGongstructInstancesSet[gongdoc_models.DiagramPackage](gongdocStage) {
 
 		selectedDiagram = diagramPackage.SelectedClassdiagram
+
+		// if no class diagram is selected generate a blank diagram
 		if selectedDiagram == nil {
-			return
+			selectedDiagram = new(gongdoc_models.Classdiagram)
 		}
 	}
 	if diagramPackage == nil {

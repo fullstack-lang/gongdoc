@@ -437,6 +437,7 @@ func (classDiagramNode *ClassDiagramNode) HasDeleteButton() bool {
 func (classDiagramNode *ClassDiagramNode) DeleteDiagram() {
 
 	gongdocStage := classDiagramNode.portfolioAdapter.gongdocStage
+	gongsvgStage := classDiagramNode.portfolioAdapter.gongsvgStage
 
 	// checkout the stage, it shall remove the link between
 	// the parent node and the staged node because 0..1->0..N association
@@ -459,11 +460,16 @@ func (classDiagramNode *ClassDiagramNode) DeleteDiagram() {
 		}
 	}
 
+	diagramPackage.SelectedClassdiagram = nil
 	gongdocStage.Commit()
+
+	docSVGMapper := doc2svg.NewDocSVGMapper(gongsvgStage)
+	docSVGMapper.GenerateSvg(gongdocStage)
+
 }
 
-// HasEditButton implements diagrammer.PortfolioDiagramNode.
-func (classDiagramNode *ClassDiagramNode) HasEditButton() bool {
+// HasDrawButton implements diagrammer.PortfolioDiagramNode.
+func (classDiagramNode *ClassDiagramNode) HasDrawButton() bool {
 	return classDiagramNode.portfolioAdapter.getDiagramPackage().IsEditable
 }
 
@@ -473,7 +479,7 @@ func (classDiagramNode *ClassDiagramNode) IsInDrawingMode() bool {
 }
 
 // SetIsInEditMode implements diagrammer.PortfolioDiagramNode.
-func (classDiagramNode *ClassDiagramNode) EditDiagram() (
+func (classDiagramNode *ClassDiagramNode) DrawDiagram() (
 	setOfModelNode map[diagrammer.ModelNode]diagrammer.Shape) {
 
 	gongsvgStage := classDiagramNode.portfolioAdapter.gongsvgStage

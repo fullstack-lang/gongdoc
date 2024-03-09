@@ -8,8 +8,8 @@ type PortfolioDiagramNode interface {
 	// DisplayDiagram request the portfolio to display the diagram
 	DisplayDiagram() map[ModelNode]Shape
 
-	HasEditButton() bool
-	EditDiagram() map[ModelNode]Shape
+	HasDrawButton() bool
+	DrawDiagram() map[ModelNode]Shape
 	CancelEdit() map[ModelNode]Shape
 	SaveDiagram() map[ModelNode]Shape
 	IsInDrawingMode() bool

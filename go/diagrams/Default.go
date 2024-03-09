@@ -615,8 +615,8 @@ or to <a href="/models#Classdiagram.NoteShapes">models.Classdiagram.NoteShapes</
 	__Position__000004_Pos_Default_GongStructShape.Name = `Pos-Default-GongStructShape`
 
 	// Position values setup
-	__Position__000005_Pos_Default_MultiplicityType.X = 106.000000
-	__Position__000005_Pos_Default_MultiplicityType.Y = 15.000000
+	__Position__000005_Pos_Default_MultiplicityType.X = 364.000000
+	__Position__000005_Pos_Default_MultiplicityType.Y = 37.000000
 	__Position__000005_Pos_Default_MultiplicityType.Name = `Pos-Default-MultiplicityType`
 
 	// Position values setup
