@@ -35,8 +35,9 @@ func (buttonImpl *PortfolioDiagramNodeButtonEditImpl) ButtonUpdated(
 	gongtreeStage *gongtree_models.StageStruct,
 	stageButton, front *gongtree_models.Button) {
 
-	buttonImpl.portfolioDiagramNode.EditDiagram()
+	map_ModelNode_Shape := buttonImpl.portfolioDiagramNode.EditDiagram()
 
 	buttonImpl.diagrammer.generatePortfolioNodesButtons()
+	buttonImpl.diagrammer.computeModelNodeStatus(map_ModelNode_Shape)
 	buttonImpl.treeStage.Commit()
 }

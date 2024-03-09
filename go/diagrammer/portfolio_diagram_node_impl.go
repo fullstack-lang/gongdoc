@@ -11,7 +11,6 @@ type PortfolioDiagramNodeImpl struct {
 func (portfolioDiagramNodeImpl *PortfolioDiagramNodeImpl) OnAfterUpdate(stage *gongtree_models.StageStruct, stagedNode *gongtree_models.Node, frontNode *gongtree_models.Node) {
 	if frontNode.IsChecked && !stagedNode.IsChecked {
 		stagedNode.IsChecked = true
-		portfolioDiagramNodeImpl.diagrammer.selectedDiagram = portfolioDiagramNodeImpl.portfolioDiagramNode.GetDiagram()
 		map_ModelNode_Shape := portfolioDiagramNodeImpl.portfolioDiagramNode.DisplayDiagram()
 
 		portfolioDiagramNodeImpl.diagrammer.generatePortfolioNodesButtons()

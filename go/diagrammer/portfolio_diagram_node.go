@@ -9,10 +9,10 @@ type PortfolioDiagramNode interface {
 	DisplayDiagram() map[ModelNode]Shape
 
 	HasEditButton() bool
-	EditDiagram()
-	CancelEdit()
+	EditDiagram() map[ModelNode]Shape
+	CancelEdit() map[ModelNode]Shape
 	SaveDiagram()
-	IsInEditMode() bool
+	IsInDrawingMode() bool
 
 	HasDiagramRenameButton() bool
 	RenameDiagram(newName string) error

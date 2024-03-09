@@ -20,7 +20,6 @@ type ClassDiagramNode struct {
 	portfolioAdapter *PortfolioAdapter
 	classdiagram     *gongdoc_models.Classdiagram
 	isInRenameMode   bool
-	isInEditMode     bool
 
 	// mementos is the implementation of the mementos pattern
 	mementos []*gongdoc_models.Classdiagram
@@ -181,10 +180,22 @@ func (classDiagramNode *ClassDiagramNode) DisplayDiagram() (
 	docSVGMapper := doc2svg.NewDocSVGMapper(gongsvgStage)
 	docSVGMapper.GenerateSvg(gongdocStage)
 
-	// compute the set of Model Node
+	setOfModelNode = classDiagramNode.getSetOfModelNodesInDiagram(gongStage, selectedClassdiagram)
+
+	return
+}
+
+// compute the set of Model Node
+// 1. Create the map of model element to model node
+// 2. Parse the selected diagram, for every shape, get the element model of the shape
+// use the aforementioned map to populate the set
+// parse fields of gongstruct to match the field shape
+// parse values of gongstruct to match the value shape
+func (classDiagramNode *ClassDiagramNode) getSetOfModelNodesInDiagram(
+	gongStage *gong_models.StageStruct, selectedClassdiagram *gongdoc_models.Classdiagram) (
+	setOfModelNode map[diagrammer.ModelNode]diagrammer.Shape) {
 	setOfModelNode = make(map[diagrammer.ModelNode]diagrammer.Shape)
 
-	// 1. Create the map of model element to model node
 	map_ModelElement_ModelNode := make(map[any]diagrammer.ModelNode)
 	for modelNode := range classDiagramNode.portfolioAdapter.diagrammer.GetMap_elementNode_treeNode() {
 
@@ -195,8 +206,6 @@ func (classDiagramNode *ClassDiagramNode) DisplayDiagram() (
 		}
 	}
 
-	// 2. Parse the selected diagram, for every shape, get the element model of the shape
-	// use the aforementioned map to populate the set
 	gongStructSet := *gong_models.GetGongstructInstancesMap[gong_models.GongStruct](gongStage)
 	for _, gongStructShape := range selectedClassdiagram.GongStructShapes {
 
@@ -213,7 +222,6 @@ func (classDiagramNode *ClassDiagramNode) DisplayDiagram() (
 		for _, fieldShape := range gongStructShape.Fields {
 			fieldShapeName := gongdoc_models.IdentifierToFieldName(fieldShape.Identifier)
 
-			// parse fields of gongstruct to match the field shape
 			for _, field := range gongStruct.Fields {
 				if field.GetName() == fieldShapeName {
 
@@ -270,7 +278,6 @@ func (classDiagramNode *ClassDiagramNode) DisplayDiagram() (
 		for _, valueShape := range gongEnumShape.GongEnumValueEntrys {
 			valueShapeName := gongdoc_models.IdentifierToFieldName(valueShape.Identifier)
 
-			// parse values of gongstruct to match the value shape
 			for _, value := range gongEnum.GongEnumValues {
 				if value.GetName() == valueShapeName {
 
@@ -329,7 +336,6 @@ func (classDiagramNode *ClassDiagramNode) DisplayDiagram() (
 			}
 		}
 	}
-
 	return
 }
 
@@ -461,38 +467,46 @@ func (classDiagramNode *ClassDiagramNode) HasEditButton() bool {
 	return classDiagramNode.portfolioAdapter.getDiagramPackage().IsEditable
 }
 
-// IsInEditMode implements diagrammer.PortfolioDiagramNode.
-func (classDiagramNode *ClassDiagramNode) IsInEditMode() bool {
-	return classDiagramNode.isInEditMode
+// IsInDrawingMode implements diagrammer.PortfolioDiagramNode.
+func (classDiagramNode *ClassDiagramNode) IsInDrawingMode() bool {
+	return classDiagramNode.classdiagram.IsInDrawMode
 }
 
 // SetIsInEditMode implements diagrammer.PortfolioDiagramNode.
-func (classDiagramNode *ClassDiagramNode) EditDiagram() {
-	classDiagramNode.isInEditMode = true
-	classDiagramNode.classdiagram.IsInDrawMode = true
+func (classDiagramNode *ClassDiagramNode) EditDiagram() (
+	setOfModelNode map[diagrammer.ModelNode]diagrammer.Shape) {
 
 	gongsvgStage := classDiagramNode.portfolioAdapter.gongsvgStage
 	gongdocStage := classDiagramNode.portfolioAdapter.gongdocStage
+	gongStage := classDiagramNode.portfolioAdapter.gongStage
 
 	// initiate the mementos
-	// clear it
 	classDiagramNode.mementos = classDiagramNode.mementos[:0]
 	classDiagramNode.mementos = append(classDiagramNode.mementos,
 		classDiagramNode.classdiagram.DuplicateDiagram())
 
+	// set the diagram node in draw mode
+	classDiagramNode.classdiagram.IsInDrawMode = true
+	gongdocStage.Commit()
+
 	docSVGMapper := doc2svg.NewDocSVGMapper(gongsvgStage)
 	docSVGMapper.GenerateSvg(gongdocStage)
+
+	diagramPackage := classDiagramNode.portfolioAdapter.getDiagramPackage()
+	selectedClassdiagram := diagramPackage.SelectedClassdiagram
+	setOfModelNode = classDiagramNode.getSetOfModelNodesInDiagram(gongStage, selectedClassdiagram)
+
+	return
 }
 
 // CancelEdit implements diagrammer.PortfolioDiagramNode.
-func (classDiagramNode *ClassDiagramNode) CancelEdit() {
-	classDiagramNode.isInEditMode = false
-	classDiagramNode.classdiagram.IsInDrawMode = false
+func (classDiagramNode *ClassDiagramNode) CancelEdit() (
+	setOfModelNode map[diagrammer.ModelNode]diagrammer.Shape) {
 
 	gongsvgStage := classDiagramNode.portfolioAdapter.gongsvgStage
 	gongdocStage := classDiagramNode.portfolioAdapter.gongdocStage
+	gongStage := classDiagramNode.portfolioAdapter.gongStage
 
-	gongdocStage.Checkout()
 	diagramPackage := classDiagramNode.portfolioAdapter.getDiagramPackage()
 	selectedClassdiagram := diagramPackage.SelectedClassdiagram
 
@@ -508,10 +522,15 @@ func (classDiagramNode *ClassDiagramNode) CancelEdit() {
 	diagramPackage.SelectedClassdiagram = revertedClassdiagram
 	classDiagramNode.classdiagram = revertedClassdiagram
 
+	classDiagramNode.classdiagram.IsInDrawMode = false
 	gongdocStage.Commit()
 
 	docSVGMapper := doc2svg.NewDocSVGMapper(gongsvgStage)
 	docSVGMapper.GenerateSvg(gongdocStage)
+
+	setOfModelNode = classDiagramNode.getSetOfModelNodesInDiagram(gongStage, selectedClassdiagram)
+
+	return
 }
 
 // SaveDiagram implements diagrammer.PortfolioDiagramNode.

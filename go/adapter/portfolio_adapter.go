@@ -19,6 +19,16 @@ type PortfolioAdapter struct {
 	rootNodes []diagrammer.PortfolioNode
 }
 
+// IsInDrawingMode implements diagrammer.Portfolio.
+func (portfolioAdapter *PortfolioAdapter) IsInDrawingMode() bool {
+	selectedClassdiagram := portfolioAdapter.getDiagramPackage().SelectedClassdiagram
+	if selectedClassdiagram == nil {
+		return false
+	}
+
+	return selectedClassdiagram.IsInDrawMode
+}
+
 var _ diagrammer.Portfolio = &PortfolioAdapter{}
 
 func NewPortfolioAdapter(
@@ -45,8 +55,10 @@ func (*PortfolioAdapter) IsInSelectionMode() bool {
 }
 
 // GetSelectedDiagram implements diagrammer.Portfolio.
-func (portfolioAdapter *PortfolioAdapter) GetSelectedDiagram() (diagram diagrammer.PortfolioNode) {
-	return
+func (portfolioAdapter *PortfolioAdapter) GetSelectedDiagram() (diagram diagrammer.Diagram) {
+	diagramPackage := portfolioAdapter.getDiagramPackage()
+
+	return diagramPackage.SelectedClassdiagram
 }
 
 // GetRootNodes implements bridge.Portfolio.
