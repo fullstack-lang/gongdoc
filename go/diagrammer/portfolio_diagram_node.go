@@ -11,7 +11,7 @@ type PortfolioDiagramNode interface {
 	HasEditButton() bool
 	EditDiagram() map[ModelNode]Shape
 	CancelEdit() map[ModelNode]Shape
-	SaveDiagram()
+	SaveDiagram() map[ModelNode]Shape
 	IsInDrawingMode() bool
 
 	HasDiagramRenameButton() bool

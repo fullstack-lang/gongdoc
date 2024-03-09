@@ -534,12 +534,20 @@ func (classDiagramNode *ClassDiagramNode) CancelEdit() (
 }
 
 // SaveDiagram implements diagrammer.PortfolioDiagramNode.
-func (classDiagramNode *ClassDiagramNode) SaveDiagram() {
+func (classDiagramNode *ClassDiagramNode) SaveDiagram() (
+	setOfModelNode map[diagrammer.ModelNode]diagrammer.Shape) {
 	gongdocStage := classDiagramNode.portfolioAdapter.gongdocStage
+	gongStage := classDiagramNode.portfolioAdapter.gongStage
 
 	diagramPackage := classDiagramNode.portfolioAdapter.getDiagramPackage()
 	diagramPackage.SelectedClassdiagram = classDiagramNode.classdiagram
 	selectedClassdiagram := diagramPackage.SelectedClassdiagram
+	selectedClassdiagram.IsInDrawMode = false
+	gongdocStage.Commit()
 
 	classDiagramNode.marshallDiagram(gongdocStage, selectedClassdiagram, diagramPackage)
+
+	setOfModelNode = classDiagramNode.getSetOfModelNodesInDiagram(gongStage, selectedClassdiagram)
+
+	return
 }

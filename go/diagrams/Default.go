@@ -315,7 +315,7 @@ func DefaultInjection(stage *models.StageStruct) {
 
 	// Classdiagram values setup
 	__Classdiagram__000000_Default.Name = `Default`
-	__Classdiagram__000000_Default.IsInDrawMode = true
+	__Classdiagram__000000_Default.IsInDrawMode = false
 
 	// Field values setup
 	__Field__000000_Name.Name = `Name`
