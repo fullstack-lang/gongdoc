@@ -5,7 +5,6 @@ import (
 
 	gongsvg_models "github.com/fullstack-lang/gongsvg/go/models"
 
-	"github.com/fullstack-lang/gongdoc/go/doc2svg"
 	gongdoc_models "github.com/fullstack-lang/gongdoc/go/models"
 
 	"github.com/fullstack-lang/gongdoc/go/diagrammer"
@@ -94,23 +93,18 @@ func (portfolioAdapter *PortfolioAdapter) AddElement(modelNode diagrammer.ModelN
 	setOfModelNode map[diagrammer.ModelNode]diagrammer.Shape) {
 	diagramPackage := portfolioAdapter.getDiagramPackage()
 	gongStage := portfolioAdapter.gongStage
-	gongdocStage := portfolioAdapter.gongdocStage
-	gongsvgStage := portfolioAdapter.gongsvgStage
 
 	if gongStructNode, ok := modelNode.(*GongStructNode); ok {
 		diagramPackage.SelectedClassdiagram.AddGongStructShape(
 			portfolioAdapter.gongdocStage, diagramPackage, gongStructNode.gongStruct.Name)
-
-		docSVGMapper := doc2svg.NewDocSVGMapper(gongsvgStage)
-		docSVGMapper.GenerateSvg(gongdocStage)
-
-		portfolioDiagramNode := portfolioAdapter.GetSelectedPortfolioDiagramNode()
-
-		if classDiagramNode, ok := portfolioDiagramNode.(*ClassDiagramNode); ok {
-			setOfModelNode = classDiagramNode.getSetOfModelNodesInDiagram(gongStage, classDiagramNode.classdiagram)
-		}
-
 	}
+
+	portfolioDiagramNode := portfolioAdapter.GetSelectedPortfolioDiagramNode()
+
+	if classDiagramNode, ok := portfolioDiagramNode.(*ClassDiagramNode); ok {
+		setOfModelNode = classDiagramNode.getSetOfModelNodesInDiagram(gongStage, classDiagramNode.classdiagram)
+	}
+
 	return
 }
 

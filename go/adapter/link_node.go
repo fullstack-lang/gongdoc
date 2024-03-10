@@ -24,8 +24,8 @@ func (linkNode *LinkNode) IsExpanded() bool {
 	return true
 }
 
-// GetChildren implements bridge.Node.
-func (linkNode *LinkNode) GetChildren() (children []diagrammer.ModelNode) {
+// GenerateChildren implements diagrammer.Node.
+func (linkNode *LinkNode) GenerateChildren() (children []diagrammer.ModelNode) {
 
 	// for link := range *gong_models.GetLinkInstancesSet[gong_models.Link](linkNode.stage) {
 
@@ -35,12 +35,12 @@ func (linkNode *LinkNode) GetChildren() (children []diagrammer.ModelNode) {
 	return
 }
 
-// GetName implements bridge.Node.
+// GetName implements diagrammer.Node.
 func (linkNode *LinkNode) GetName() string {
 	return linkNode.Link.GetName()
 }
 
-// IsNameEditable implements bridge.Node.
+// IsNameEditable implements diagrammer.Node.
 func (linkNode *LinkNode) IsNameEditable() bool {
 	return false
 }

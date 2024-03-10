@@ -20,8 +20,8 @@ func NewGongEnumNode(
 	return
 }
 
-// GetChildren implements bridge.Node.
-func (gongEnumNode *GongEnumNode) GetChildren() (children []diagrammer.ModelNode) {
+// GenerateChildren implements diagrammer.Node.
+func (gongEnumNode *GongEnumNode) GenerateChildren() (children []diagrammer.ModelNode) {
 
 	for _, gongEnumValue := range gongEnumNode.gongEnum.GongEnumValues {
 		enumValueNode := NewEnumValueNode(gongEnumNode.stage, gongEnumValue)
@@ -31,7 +31,7 @@ func (gongEnumNode *GongEnumNode) GetChildren() (children []diagrammer.ModelNode
 	return
 }
 
-// GetName implements bridge.Node.
+// GetName implements diagrammer.Node.
 func (gongEnumNode *GongEnumNode) GetName() string {
 	return gongEnumNode.gongEnum.GetName()
 }

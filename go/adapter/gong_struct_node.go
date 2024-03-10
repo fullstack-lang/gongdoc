@@ -22,8 +22,8 @@ type GongStructNode struct {
 	gongStruct *gong_models.GongStruct
 }
 
-// GetChildren implements bridge.Node.
-func (gongStructNode *GongStructNode) GetChildren() (children []diagrammer.ModelNode) {
+// GenerateChildren implements diagrammer.Node.
+func (gongStructNode *GongStructNode) GenerateChildren() (children []diagrammer.ModelNode) {
 
 	for _, field := range gongStructNode.gongStruct.Fields {
 		fieldNode := NewFieldNode(gongStructNode.stage, field)
@@ -33,7 +33,7 @@ func (gongStructNode *GongStructNode) GetChildren() (children []diagrammer.Model
 	return
 }
 
-// GetName implements bridge.Node.
+// GetName implements diagrammer.Node.
 func (gongStructNode *GongStructNode) GetName() string {
 	return gongStructNode.gongStruct.GetName()
 }

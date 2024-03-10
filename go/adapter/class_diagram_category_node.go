@@ -77,7 +77,7 @@ func (categoryNode *ClassDiagramCategoryNode) generateChildren() {
 	return
 }
 
-// GetName implements bridge.Node.
+// GetName implements diagrammer.Node.
 func (classDiagramCategoryNode *ClassDiagramCategoryNode) GetName() string {
 	return classDiagramCategoryNode.Name
 }

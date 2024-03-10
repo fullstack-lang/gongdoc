@@ -16,8 +16,8 @@ func NewGongNoteCategoryNode(stage *gong_models.StageStruct, name string) *GongN
 	return &GongNoteCategoryNode{ModelCategoryNodeBase: ModelCategoryNodeBase{stage: stage, Name: name}}
 }
 
-// GetChildren implements bridge.Node.
-func (categoryNode *GongNoteCategoryNode) GetChildren() (children []diagrammer.ModelNode) {
+// GenerateChildren implements diagrammer.Node.
+func (categoryNode *GongNoteCategoryNode) GenerateChildren() (children []diagrammer.ModelNode) {
 
 	for gongNote := range *gong_models.GetGongstructInstancesSet[gong_models.GongNote](categoryNode.stage) {
 

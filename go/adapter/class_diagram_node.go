@@ -132,12 +132,12 @@ func (classDiagramNode *ClassDiagramNode) RenameDiagram(newName string) (err err
 	return
 }
 
-// GetChildren implements bridge.Node.
+// GetChildren implements diagrammer.Node.
 func (classDiagramNode *ClassDiagramNode) GetChildren() (children []diagrammer.PortfolioNode) {
 	return
 }
 
-// GetName implements bridge.Node.
+// GetName implements diagrammer.Node.
 func (classDiagramNode *ClassDiagramNode) GetName() string {
 	return classDiagramNode.classdiagram.GetName()
 }

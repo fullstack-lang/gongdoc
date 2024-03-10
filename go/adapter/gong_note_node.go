@@ -20,8 +20,8 @@ func NewGongNoteNode(
 	return
 }
 
-// GetChildren implements bridge.Node.
-func (gongNoteNode *GongNoteNode) GetChildren() (children []diagrammer.ModelNode) {
+// GenerateChildren implements diagrammer.Node.
+func (gongNoteNode *GongNoteNode) GenerateChildren() (children []diagrammer.ModelNode) {
 
 	for _, link := range gongNoteNode.gongNote.Links {
 		linkNode := NewLinkNode(gongNoteNode.stage, link)
@@ -31,7 +31,7 @@ func (gongNoteNode *GongNoteNode) GetChildren() (children []diagrammer.ModelNode
 	return
 }
 
-// GetName implements bridge.Node.
+// GetName implements diagrammer.Node.
 func (gongNoteNode *GongNoteNode) GetName() string {
 	return gongNoteNode.gongNote.GetName()
 }

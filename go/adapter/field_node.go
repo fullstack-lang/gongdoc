@@ -19,12 +19,12 @@ func NewFieldNode(
 	return
 }
 
-// GetChildren implements bridge.Node.
-func (fieldNode *FieldNode) GetChildren() (children []diagrammer.ModelNode) {
+// GenerateChildren implements diagrammer.Node.
+func (fieldNode *FieldNode) GenerateChildren() (children []diagrammer.ModelNode) {
 	return
 }
 
-// GetName implements bridge.Node.
+// GetName implements diagrammer.Node.
 func (fieldNode *FieldNode) GetName() string {
 	return fieldNode.Field.GetName()
 }

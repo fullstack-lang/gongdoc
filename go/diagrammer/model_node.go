@@ -3,7 +3,7 @@ package diagrammer
 import gongtree_models "github.com/fullstack-lang/gongtree/go/models"
 
 type ModelNode interface {
-	GetChildren() []ModelNode
+	GenerateChildren() []ModelNode
 	GetName() string
 	IsNameEditable() bool
 

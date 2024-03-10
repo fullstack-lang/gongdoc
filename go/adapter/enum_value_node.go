@@ -10,6 +10,8 @@ type EnumValueNode struct {
 	EnumValue *gong_models.GongEnumValue
 }
 
+var _ diagrammer.ElementNode = &EnumValueNode{}
+
 func NewEnumValueNode(
 	stage *gong_models.StageStruct,
 	enumvalue *gong_models.GongEnumValue) (enumvalueNode *EnumValueNode) {
@@ -19,12 +21,12 @@ func NewEnumValueNode(
 	return
 }
 
-// GetChildren implements bridge.Node.
-func (enumvalueNode *EnumValueNode) GetChildren() (children []diagrammer.ModelNode) {
+// GenerateChildren implements diagrammer.Node.
+func (enumvalueNode *EnumValueNode) GenerateChildren() (children []diagrammer.ModelNode) {
 	return
 }
 
-// GetName implements bridge.Node.
+// GetName implements diagrammer.Node.
 func (enumvalueNode *EnumValueNode) GetName() string {
 	return enumvalueNode.EnumValue.GetName()
 }
