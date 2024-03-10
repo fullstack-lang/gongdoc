@@ -91,12 +91,11 @@ func (portfolioAdapter *PortfolioAdapter) getDiagramPackage() *gongdoc_models.Di
 // AddElement implements diagrammer.Portfolio.
 func (portfolioAdapter *PortfolioAdapter) AddElement(modelElementNode diagrammer.ModelElementNode) (
 	setOfModelElementNode map[diagrammer.ModelElementNode]diagrammer.Shape) {
-	gongStage := portfolioAdapter.gongStage
 
 	modelElementNode.AddToDiagram()
 
 	portfolioDiagramNode := portfolioAdapter.GetSelectedPortfolioDiagramNode()
-
+	gongStage := portfolioAdapter.gongStage
 	if classDiagramNode, ok := portfolioDiagramNode.(*ClassDiagramNode); ok {
 		setOfModelElementNode = classDiagramNode.getSetOfModelElementNodesInDiagram(gongStage, classDiagramNode.classdiagram)
 	}
@@ -104,17 +103,13 @@ func (portfolioAdapter *PortfolioAdapter) AddElement(modelElementNode diagrammer
 	return
 }
 
-func (portfolioAdapter *PortfolioAdapter) RemoveElement(modelNode diagrammer.ModelElementNode) (
+func (portfolioAdapter *PortfolioAdapter) RemoveElement(modelElementNode diagrammer.ModelElementNode) (
 	setOfModelElementNode map[diagrammer.ModelElementNode]diagrammer.Shape) {
-	diagramPackage := portfolioAdapter.getDiagramPackage()
-	gongStage := portfolioAdapter.gongStage
 
-	if gongStructNode, ok := modelNode.(*GongStructNode); ok {
-		diagramPackage.SelectedClassdiagram.RemoveGongStructShape(
-			portfolioAdapter.gongdocStage, gongStructNode.gongStruct.Name)
-	}
+	modelElementNode.RemoveFromDiagram()
 
 	portfolioDiagramNode := portfolioAdapter.GetSelectedPortfolioDiagramNode()
+	gongStage := portfolioAdapter.gongStage
 
 	if classDiagramNode, ok := portfolioDiagramNode.(*ClassDiagramNode); ok {
 		setOfModelElementNode = classDiagramNode.getSetOfModelElementNodesInDiagram(gongStage, classDiagramNode.classdiagram)

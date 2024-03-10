@@ -22,6 +22,14 @@ type GongStructNode struct {
 	gongStruct *gong_models.GongStruct
 }
 
+// RemoveFromDiagram implements diagrammer.ModelElementNode.
+func (gongStructNode *GongStructNode) RemoveFromDiagram() {
+	diagramPackage := gongStructNode.portfolioAdapter.getDiagramPackage()
+
+	diagramPackage.SelectedClassdiagram.RemoveGongStructShape(
+		gongStructNode.portfolioAdapter.gongdocStage, gongStructNode.gongStruct.Name)
+}
+
 // AddToDiagram implements diagrammer.ElementNode.
 func (gongStructNode *GongStructNode) AddToDiagram() {
 	diagramPackage := gongStructNode.portfolioAdapter.getDiagramPackage()

@@ -11,6 +11,11 @@ type LinkNode struct {
 	Link  *gong_models.GongLink
 }
 
+// RemoveFromDiagram implements diagrammer.ModelElementNode.
+func (linkNode *LinkNode) RemoveFromDiagram() {
+	panic("unimplemented")
+}
+
 // AddToDiagram implements diagrammer.ElementNode.
 func (linkNode *LinkNode) AddToDiagram() {
 	panic("unimplemented")

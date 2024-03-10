@@ -10,6 +10,11 @@ type FieldNode struct {
 	Field gong_models.FieldInterface
 }
 
+// RemoveFromDiagram implements diagrammer.ModelElementNode.
+func (fieldNode *FieldNode) RemoveFromDiagram() {
+	panic("unimplemented")
+}
+
 // AddToDiagram implements diagrammer.ElementNode.
 func (fieldNode *FieldNode) AddToDiagram() {
 	panic("unimplemented")

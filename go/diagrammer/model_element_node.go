@@ -5,4 +5,5 @@ type ModelElementNode interface {
 
 	GetElement() any
 	AddToDiagram()
+	RemoveFromDiagram()
 }

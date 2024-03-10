@@ -10,6 +10,11 @@ type GongEnumNode struct {
 	gongEnum *gong_models.GongEnum
 }
 
+// RemoveFromDiagram implements diagrammer.ModelElementNode.
+func (gongEnumNode *GongEnumNode) RemoveFromDiagram() {
+	panic("unimplemented")
+}
+
 // AddToDiagram implements diagrammer.ElementNode.
 func (gongEnumNode *GongEnumNode) AddToDiagram() {
 	panic("unimplemented")
