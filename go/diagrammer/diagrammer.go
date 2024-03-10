@@ -13,8 +13,8 @@ type Diagrammer struct {
 	portfolio Portfolio
 	treeStage *gongtree_models.StageStruct
 
-	map_portfolioNode_treeNode map[PortfolioNode]*gongtree_models.Node
-	map_elementNode_treeNode   map[ModelElementNode]*gongtree_models.Node
+	map_portfolioNode_treeNode    map[PortfolioNode]*gongtree_models.Node
+	map_modelElementNode_treeNode map[ModelElementNode]*gongtree_models.Node
 }
 
 func NewDiagrammer(
@@ -30,7 +30,7 @@ func NewDiagrammer(
 	diagrammer.treeStage = treeStage
 
 	diagrammer.map_portfolioNode_treeNode = make(map[PortfolioNode]*gongtree_models.Node)
-	diagrammer.map_elementNode_treeNode = make(map[ModelElementNode]*gongtree_models.Node)
+	diagrammer.map_modelElementNode_treeNode = make(map[ModelElementNode]*gongtree_models.Node)
 
 	return
 }
@@ -62,32 +62,33 @@ func (diagrammer *Diagrammer) GetPortfiolioNodeFromTreeNode(portfolioNode Portfo
 }
 
 // FillUpModelTree ranges over Model Root Nodes
-// and recursively fill up the modelTree
+// and recursively fill up the Model Tree
 func (diagrammer *Diagrammer) FillUpModelTree(modelTree *gongtree_models.Tree) {
 
 	for _, node := range diagrammer.model.GenerateChildren() {
-		treeNode := diagrammer.modelNode2NodeTree(node, diagrammer.treeStage)
+		treeNode := diagrammer.modelNode2ModelTreeNode(node, diagrammer.treeStage)
 		modelTree.RootNodes = append(modelTree.RootNodes, treeNode)
 	}
 }
 
-func (diagrammer *Diagrammer) modelNode2NodeTree(modelNode ModelNode, treeStage *gongtree_models.StageStruct) (treeNode *gongtree_models.Node) {
-	treeNode = (&gongtree_models.Node{Name: modelNode.GetName()}).Stage(treeStage)
-	treeNode.IsExpanded = modelNode.IsExpanded()
+func (diagrammer *Diagrammer) modelNode2ModelTreeNode(modelNode ModelNode, treeStage *gongtree_models.StageStruct) (
+	modelTreeNode *gongtree_models.Node) {
+	modelTreeNode = (&gongtree_models.Node{Name: modelNode.GetName()}).Stage(treeStage)
+	modelTreeNode.IsExpanded = modelNode.IsExpanded()
 
 	if elementNode, ok := modelNode.(ModelElementNode); ok {
-		treeNode.HasCheckboxButton = true
-		treeNode.IsCheckboxDisabled = true
-		diagrammer.map_elementNode_treeNode[elementNode] = treeNode
+		modelTreeNode.HasCheckboxButton = true
+		modelTreeNode.IsCheckboxDisabled = true
+		diagrammer.map_modelElementNode_treeNode[elementNode] = modelTreeNode
 	}
 
-	treeNode.Impl = &ModelNodeImpl{
+	modelTreeNode.Impl = &ModelNodeImpl{
 		diagrammer: diagrammer,
 		modelNode:  modelNode}
 
 	for _, childrenModelNode := range modelNode.GenerateChildren() {
-		childrenTreeNode := diagrammer.modelNode2NodeTree(childrenModelNode, treeStage)
-		treeNode.Children = append(treeNode.Children, childrenTreeNode)
+		childrenTreeNode := diagrammer.modelNode2ModelTreeNode(childrenModelNode, treeStage)
+		modelTreeNode.Children = append(modelTreeNode.Children, childrenTreeNode)
 	}
 
 	return
@@ -296,14 +297,14 @@ func (diagrammer *Diagrammer) CommitTreeStage() {
 }
 
 func (diagrammer *Diagrammer) GetMap_elementNode_treeNode() map[ModelElementNode]*gongtree_models.Node {
-	return diagrammer.map_elementNode_treeNode
+	return diagrammer.map_modelElementNode_treeNode
 }
 
 // computeModelNodeStatus parses all nodes in the Model Tree
 // and unchecks all nodes unless nodes matches an element in the diagram
 func (diagrammer *Diagrammer) computeModelNodeStatus(map_ModelNode_Shape map[ModelNode]Shape) {
 	isInDrawingMode := diagrammer.portfolio.IsInDrawingMode()
-	for modelNode, treeNode := range diagrammer.map_elementNode_treeNode {
+	for modelNode, treeNode := range diagrammer.map_modelElementNode_treeNode {
 		treeNode.IsChecked = false
 		treeNode.IsCheckboxDisabled = !isInDrawingMode
 		if _, ok := map_ModelNode_Shape[modelNode]; ok {
