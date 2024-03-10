@@ -91,15 +91,9 @@ func (portfolioAdapter *PortfolioAdapter) getDiagramPackage() *gongdoc_models.Di
 // AddElement implements diagrammer.Portfolio.
 func (portfolioAdapter *PortfolioAdapter) AddElement(modelElementNode diagrammer.ModelElementNode) (
 	setOfModelElementNode map[diagrammer.ModelElementNode]diagrammer.Shape) {
-	diagramPackage := portfolioAdapter.getDiagramPackage()
 	gongStage := portfolioAdapter.gongStage
 
 	modelElementNode.AddToDiagram()
-
-	if gongStructNode, ok := modelElementNode.(*GongStructNode); ok {
-		diagramPackage.SelectedClassdiagram.AddGongStructShape(
-			portfolioAdapter.gongdocStage, diagramPackage, gongStructNode.gongStruct.Name)
-	}
 
 	portfolioDiagramNode := portfolioAdapter.GetSelectedPortfolioDiagramNode()
 

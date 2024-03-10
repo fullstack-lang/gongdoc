@@ -24,8 +24,10 @@ type GongStructNode struct {
 
 // AddToDiagram implements diagrammer.ElementNode.
 func (gongStructNode *GongStructNode) AddToDiagram() {
-	// diagramPackage.SelectedClassdiagram.AddGongStructShape(
-	// 	portfolioAdapter.gongdocStage, diagramPackage, gongStructNode.gongStruct.Name)
+	diagramPackage := gongStructNode.portfolioAdapter.getDiagramPackage()
+
+	diagramPackage.SelectedClassdiagram.AddGongStructShape(
+		gongStructNode.portfolioAdapter.gongdocStage, diagramPackage, gongStructNode.gongStruct.Name)
 }
 
 // GenerateChildren implements diagrammer.Node.
