@@ -12,6 +12,6 @@ type Portfolio interface {
 	GetSelectedPortfolioDiagramNode() PortfolioDiagramNode
 
 	IsInDrawingMode() bool
-	AddElement(ModelNode) map[ModelNode]Shape
-	RemoveElement(ModelNode) map[ModelNode]Shape
+	AddElement(ModelElementNode) map[ModelElementNode]Shape
+	RemoveElement(ModelElementNode) map[ModelElementNode]Shape
 }

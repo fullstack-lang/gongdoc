@@ -302,12 +302,12 @@ func (diagrammer *Diagrammer) GetMap_elementNode_treeNode() map[ModelElementNode
 
 // computeModelNodeStatus parses all nodes in the Model Tree
 // and unchecks all nodes unless nodes matches an element in the diagram
-func (diagrammer *Diagrammer) computeModelNodeStatus(map_ModelNode_Shape map[ModelNode]Shape) {
+func (diagrammer *Diagrammer) computeModelNodeStatus(map_ModelElementNode_Shape map[ModelElementNode]Shape) {
 	isInDrawingMode := diagrammer.portfolio.IsInDrawingMode()
-	for modelNode, treeNode := range diagrammer.map_modelElementNode_treeNode {
+	for modelElementNode, treeNode := range diagrammer.map_modelElementNode_treeNode {
 		treeNode.IsChecked = false
 		treeNode.IsCheckboxDisabled = !isInDrawingMode
-		if _, ok := map_ModelNode_Shape[modelNode]; ok {
+		if _, ok := map_ModelElementNode_Shape[modelElementNode]; ok {
 			treeNode.IsChecked = true
 		}
 	}

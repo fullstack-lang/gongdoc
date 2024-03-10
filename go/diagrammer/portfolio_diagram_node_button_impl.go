@@ -94,8 +94,8 @@ func (buttonImpl *PortfolioDiagramNodeButtonImpl) ButtonUpdated(
 		buttonImpl.diagrammer.generatePortfolioNodesButtons()
 
 		// generate empty model tree
-		map_ModelNode_Shape := make(map[ModelNode]Shape)
-		buttonImpl.diagrammer.computeModelNodeStatus(map_ModelNode_Shape)
+		map_ModelElementNode_Shape := make(map[ModelElementNode]Shape)
+		buttonImpl.diagrammer.computeModelNodeStatus(map_ModelElementNode_Shape)
 		buttonImpl.treeStage.Commit()
 	case RENAME_CANCEL:
 		buttonImpl.portfolioDiagramNode.SetIsInRenameMode(false)

@@ -6,12 +6,12 @@ type PortfolioDiagramNode interface {
 	GetDiagram() Diagram
 
 	// DisplayDiagram request the portfolio to display the diagram
-	DisplayDiagram() map[ModelNode]Shape
+	DisplayDiagram() map[ModelElementNode]Shape
 
 	HasDrawButton() bool
-	DrawDiagram() map[ModelNode]Shape
-	CancelEdit() map[ModelNode]Shape
-	SaveDiagram() map[ModelNode]Shape
+	DrawDiagram() map[ModelElementNode]Shape
+	CancelEdit() map[ModelElementNode]Shape
+	SaveDiagram() map[ModelElementNode]Shape
 	IsInDrawingMode() bool
 
 	HasDiagramRenameButton() bool

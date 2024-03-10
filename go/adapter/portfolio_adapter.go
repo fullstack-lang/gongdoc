@@ -89,12 +89,12 @@ func (portfolioAdapter *PortfolioAdapter) getDiagramPackage() *gongdoc_models.Di
 }
 
 // AddElement implements diagrammer.Portfolio.
-func (portfolioAdapter *PortfolioAdapter) AddElement(modelNode diagrammer.ModelNode) (
-	setOfModelNode map[diagrammer.ModelNode]diagrammer.Shape) {
+func (portfolioAdapter *PortfolioAdapter) AddElement(modelElementNode diagrammer.ModelElementNode) (
+	setOfModelElementNode map[diagrammer.ModelElementNode]diagrammer.Shape) {
 	diagramPackage := portfolioAdapter.getDiagramPackage()
 	gongStage := portfolioAdapter.gongStage
 
-	if gongStructNode, ok := modelNode.(*GongStructNode); ok {
+	if gongStructNode, ok := modelElementNode.(*GongStructNode); ok {
 		diagramPackage.SelectedClassdiagram.AddGongStructShape(
 			portfolioAdapter.gongdocStage, diagramPackage, gongStructNode.gongStruct.Name)
 	}
@@ -102,14 +102,14 @@ func (portfolioAdapter *PortfolioAdapter) AddElement(modelNode diagrammer.ModelN
 	portfolioDiagramNode := portfolioAdapter.GetSelectedPortfolioDiagramNode()
 
 	if classDiagramNode, ok := portfolioDiagramNode.(*ClassDiagramNode); ok {
-		setOfModelNode = classDiagramNode.getSetOfModelNodesInDiagram(gongStage, classDiagramNode.classdiagram)
+		setOfModelElementNode = classDiagramNode.getSetOfModelElementNodesInDiagram(gongStage, classDiagramNode.classdiagram)
 	}
 
 	return
 }
 
-func (portfolioAdapter *PortfolioAdapter) RemoveElement(modelNode diagrammer.ModelNode) (
-	setOfModelNode map[diagrammer.ModelNode]diagrammer.Shape) {
+func (portfolioAdapter *PortfolioAdapter) RemoveElement(modelNode diagrammer.ModelElementNode) (
+	setOfModelElementNode map[diagrammer.ModelElementNode]diagrammer.Shape) {
 	diagramPackage := portfolioAdapter.getDiagramPackage()
 	gongStage := portfolioAdapter.gongStage
 
@@ -121,7 +121,7 @@ func (portfolioAdapter *PortfolioAdapter) RemoveElement(modelNode diagrammer.Mod
 	portfolioDiagramNode := portfolioAdapter.GetSelectedPortfolioDiagramNode()
 
 	if classDiagramNode, ok := portfolioDiagramNode.(*ClassDiagramNode); ok {
-		setOfModelNode = classDiagramNode.getSetOfModelNodesInDiagram(gongStage, classDiagramNode.classdiagram)
+		setOfModelElementNode = classDiagramNode.getSetOfModelElementNodesInDiagram(gongStage, classDiagramNode.classdiagram)
 	}
 	return
 }
