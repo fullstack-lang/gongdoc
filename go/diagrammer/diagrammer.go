@@ -307,6 +307,7 @@ func (diagrammer *Diagrammer) computeModelNodeStatus(map_ModelElementNode_Shape 
 	for modelElementNode, treeNode := range diagrammer.map_modelElementNode_treeNode {
 		treeNode.IsChecked = false
 		treeNode.IsCheckboxDisabled = !isInDrawingMode
+
 		if _, ok := map_ModelElementNode_Shape[modelElementNode]; ok {
 			treeNode.IsChecked = true
 		}

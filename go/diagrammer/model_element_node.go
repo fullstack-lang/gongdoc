@@ -6,4 +6,7 @@ type ModelElementNode interface {
 	GetElement() any
 	AddToDiagram()
 	RemoveFromDiagram()
+
+	// CanBeDisplayed returns true if the model element can be displayed
+	CanBeDisplayed() bool
 }

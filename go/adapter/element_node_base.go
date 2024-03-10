@@ -13,3 +13,7 @@ func (base *ElementNodeBase) SetIsExpanded(bool) {}
 func (base *ElementNodeBase) IsNameEditable() bool {
 	return false
 }
+
+func (base *ElementNodeBase) CanBeDisplayed() bool {
+	return true
+}
