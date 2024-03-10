@@ -536,7 +536,7 @@ func (classDiagramNode *ClassDiagramNode) CancelEdit() (
 	docSVGMapper := doc2svg.NewDocSVGMapper(gongsvgStage)
 	docSVGMapper.GenerateSvg(gongdocStage)
 
-	setOfModelNode = classDiagramNode.getSetOfModelNodesInDiagram(gongStage, selectedClassdiagram)
+	setOfModelNode = classDiagramNode.getSetOfModelNodesInDiagram(gongStage, revertedClassdiagram)
 
 	return
 }
