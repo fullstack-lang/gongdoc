@@ -108,20 +108,28 @@ func (portfolioAdapter *PortfolioAdapter) AddElement(modelNode diagrammer.ModelN
 
 		if classDiagramNode, ok := portfolioDiagramNode.(*ClassDiagramNode); ok {
 			setOfModelNode = classDiagramNode.getSetOfModelNodesInDiagram(gongStage, classDiagramNode.classdiagram)
-
 		}
 
 	}
 	return
 }
 
-func (portfolioAdapter *PortfolioAdapter) RemoveElement(modelNode diagrammer.ModelNode) {
+func (portfolioAdapter *PortfolioAdapter) RemoveElement(modelNode diagrammer.ModelNode) (
+	setOfModelNode map[diagrammer.ModelNode]diagrammer.Shape) {
 	diagramPackage := portfolioAdapter.getDiagramPackage()
+	gongStage := portfolioAdapter.gongStage
 
 	if gongStructNode, ok := modelNode.(*GongStructNode); ok {
 		diagramPackage.SelectedClassdiagram.RemoveGongStructShape(
 			portfolioAdapter.gongdocStage, gongStructNode.gongStruct.Name)
 	}
+
+	portfolioDiagramNode := portfolioAdapter.GetSelectedPortfolioDiagramNode()
+
+	if classDiagramNode, ok := portfolioDiagramNode.(*ClassDiagramNode); ok {
+		setOfModelNode = classDiagramNode.getSetOfModelNodesInDiagram(gongStage, classDiagramNode.classdiagram)
+	}
+	return
 }
 
 func (portfolioAdapter *PortfolioAdapter) setSelectedClassdiagramNode(classDiagramNode *ClassDiagramNode) {

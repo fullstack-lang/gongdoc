@@ -13,5 +13,5 @@ type Portfolio interface {
 
 	IsInDrawingMode() bool
 	AddElement(ModelNode) map[ModelNode]Shape
-	RemoveElement(ModelNode)
+	RemoveElement(ModelNode) map[ModelNode]Shape
 }
