@@ -15,11 +15,16 @@ func NewGongStructNode(
 	return
 }
 
-var _ diagrammer.ModelNode = &GongStructNode{}
+var _ diagrammer.ModelElementNode = &GongStructNode{}
 
 type GongStructNode struct {
 	ElementNodeBase
 	gongStruct *gong_models.GongStruct
+}
+
+// AddToDiagram implements diagrammer.ElementNode.
+func (gongStructNode *GongStructNode) AddToDiagram() {
+	panic("unimplemented")
 }
 
 // GenerateChildren implements diagrammer.Node.

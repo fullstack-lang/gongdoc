@@ -14,7 +14,7 @@ type Diagrammer struct {
 	treeStage *gongtree_models.StageStruct
 
 	map_portfolioNode_treeNode map[PortfolioNode]*gongtree_models.Node
-	map_elementNode_treeNode   map[ElementNode]*gongtree_models.Node
+	map_elementNode_treeNode   map[ModelElementNode]*gongtree_models.Node
 }
 
 func NewDiagrammer(
@@ -30,7 +30,7 @@ func NewDiagrammer(
 	diagrammer.treeStage = treeStage
 
 	diagrammer.map_portfolioNode_treeNode = make(map[PortfolioNode]*gongtree_models.Node)
-	diagrammer.map_elementNode_treeNode = make(map[ElementNode]*gongtree_models.Node)
+	diagrammer.map_elementNode_treeNode = make(map[ModelElementNode]*gongtree_models.Node)
 
 	return
 }
@@ -75,7 +75,7 @@ func (diagrammer *Diagrammer) modelNode2NodeTree(modelNode ModelNode, treeStage 
 	treeNode = (&gongtree_models.Node{Name: modelNode.GetName()}).Stage(treeStage)
 	treeNode.IsExpanded = modelNode.IsExpanded()
 
-	if elementNode, ok := modelNode.(ElementNode); ok {
+	if elementNode, ok := modelNode.(ModelElementNode); ok {
 		treeNode.HasCheckboxButton = true
 		treeNode.IsCheckboxDisabled = true
 		diagrammer.map_elementNode_treeNode[elementNode] = treeNode
@@ -295,7 +295,7 @@ func (diagrammer *Diagrammer) CommitTreeStage() {
 	diagrammer.treeStage.Commit()
 }
 
-func (diagrammer *Diagrammer) GetMap_elementNode_treeNode() map[ElementNode]*gongtree_models.Node {
+func (diagrammer *Diagrammer) GetMap_elementNode_treeNode() map[ModelElementNode]*gongtree_models.Node {
 	return diagrammer.map_elementNode_treeNode
 }
 

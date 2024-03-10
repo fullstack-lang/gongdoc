@@ -10,6 +10,13 @@ type GongEnumNode struct {
 	gongEnum *gong_models.GongEnum
 }
 
+// AddToDiagram implements diagrammer.ElementNode.
+func (gongEnumNode *GongEnumNode) AddToDiagram() {
+	panic("unimplemented")
+}
+
+var _ diagrammer.ModelElementNode = &GongEnumNode{}
+
 func NewGongEnumNode(
 	stage *gong_models.StageStruct,
 	gongEnum *gong_models.GongEnum) (gongEnumNode *GongEnumNode) {

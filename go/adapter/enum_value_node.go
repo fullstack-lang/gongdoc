@@ -10,7 +10,12 @@ type EnumValueNode struct {
 	EnumValue *gong_models.GongEnumValue
 }
 
-var _ diagrammer.ElementNode = &EnumValueNode{}
+// AddToDiagram implements diagrammer.ElementNode.
+func (enumvalueNode *EnumValueNode) AddToDiagram() {
+	panic("unimplemented")
+}
+
+var _ diagrammer.ModelElementNode = &EnumValueNode{}
 
 func NewEnumValueNode(
 	stage *gong_models.StageStruct,

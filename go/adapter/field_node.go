@@ -10,6 +10,13 @@ type FieldNode struct {
 	Field gong_models.FieldInterface
 }
 
+// AddToDiagram implements diagrammer.ElementNode.
+func (fieldNode *FieldNode) AddToDiagram() {
+	panic("unimplemented")
+}
+
+var _ diagrammer.ModelElementNode = &FieldNode{}
+
 func NewFieldNode(
 	stage *gong_models.StageStruct,
 	field gong_models.FieldInterface) (fieldNode *FieldNode) {

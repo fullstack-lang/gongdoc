@@ -311,7 +311,7 @@ func Default_2Injection(stage *models.StageStruct) {
 
 	//gong:ident [ref_models.Field]
 	__GongStructShape__000001_Default_2_Field.Identifier = `ref_models.Field`
-	__GongStructShape__000001_Default_2_Field.ShowNbInstances = false
+	__GongStructShape__000001_Default_2_Field.ShowNbInstances = true
 	__GongStructShape__000001_Default_2_Field.NbInstances = 0
 	__GongStructShape__000001_Default_2_Field.Width = 240.000000
 	__GongStructShape__000001_Default_2_Field.Height = 63.000000

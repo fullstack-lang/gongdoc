@@ -1,6 +1,6 @@
 package diagrammer
 
-type ElementNode interface {
+type ModelElementNode interface {
 	ModelNode
 
 	GetElement() any

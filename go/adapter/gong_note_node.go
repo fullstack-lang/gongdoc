@@ -10,6 +10,13 @@ type GongNoteNode struct {
 	gongNote *gong_models.GongNote
 }
 
+// AddToDiagram implements diagrammer.ElementNode.
+func (gongNoteNode *GongNoteNode) AddToDiagram() {
+	panic("unimplemented")
+}
+
+var _ diagrammer.ModelElementNode = &GongNoteNode{}
+
 func NewGongNoteNode(
 	stage *gong_models.StageStruct,
 	gongNote *gong_models.GongNote) (gongNoteNode *GongNoteNode) {

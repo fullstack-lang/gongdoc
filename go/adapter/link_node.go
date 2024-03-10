@@ -5,6 +5,17 @@ import (
 	"github.com/fullstack-lang/gongdoc/go/diagrammer"
 )
 
+type LinkNode struct {
+	ElementNodeBase
+	stage *gong_models.StageStruct
+	Link  *gong_models.GongLink
+}
+
+// AddToDiagram implements diagrammer.ElementNode.
+func (linkNode *LinkNode) AddToDiagram() {
+	panic("unimplemented")
+}
+
 func NewLinkNode(
 	stage *gong_models.StageStruct,
 	link *gong_models.GongLink) (linkNode *LinkNode) {
@@ -14,11 +25,7 @@ func NewLinkNode(
 	return
 }
 
-type LinkNode struct {
-	ElementNodeBase
-	stage *gong_models.StageStruct
-	Link  *gong_models.GongLink
-}
+var _ diagrammer.ModelElementNode = &LinkNode{}
 
 func (linkNode *LinkNode) IsExpanded() bool {
 	return true

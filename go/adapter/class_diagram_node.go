@@ -201,7 +201,7 @@ func (classDiagramNode *ClassDiagramNode) getSetOfModelNodesInDiagram(
 	map_ModelElement_ModelNode := make(map[any]diagrammer.ModelNode)
 	for modelNode := range classDiagramNode.portfolioAdapter.diagrammer.GetMap_elementNode_treeNode() {
 
-		if elementNode, ok := modelNode.(diagrammer.ElementNode); ok {
+		if elementNode, ok := modelNode.(diagrammer.ModelElementNode); ok {
 			if modelElement := elementNode.GetElement(); modelElement != nil {
 				map_ModelElement_ModelNode[modelElement] = modelNode
 			}
