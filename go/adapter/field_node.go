@@ -18,10 +18,9 @@ func (fieldNode *FieldNode) AddToDiagram() {
 var _ diagrammer.ModelElementNode = &FieldNode{}
 
 func NewFieldNode(
-	stage *gong_models.StageStruct,
+	portfolioAdapter *PortfolioAdapter,
 	field gong_models.FieldInterface) (fieldNode *FieldNode) {
-	fieldNode = &FieldNode{ElementNodeBase: ElementNodeBase{stage: stage}}
-	fieldNode.stage = stage
+	fieldNode = &FieldNode{ElementNodeBase: ElementNodeBase{portfolioAdapter: portfolioAdapter}}
 	fieldNode.Field = field
 	return
 }

@@ -1,30 +1,28 @@
 package adapter
 
 import (
-	gong_models "github.com/fullstack-lang/gong/go/models"
-
 	"github.com/fullstack-lang/gongdoc/go/diagrammer"
 )
 
 type ModelAdapter struct {
-	stage *gong_models.StageStruct
+	portfolioAdapter *PortfolioAdapter
 }
 
-func NewModelAdapter(stage *gong_models.StageStruct) (adapter *ModelAdapter) {
+func NewModelAdapter(portfolioAdapter *PortfolioAdapter) (adapter *ModelAdapter) {
 	adapter = new(ModelAdapter)
-	adapter.stage = stage
+	adapter.portfolioAdapter = portfolioAdapter
 	return
 }
 
 // GetRootNodes implements bridge.Model.
 func (modelAdapter *ModelAdapter) GenerateChildren() (rootNodes []diagrammer.ModelNode) {
-	gongStructCategoryNode := NewGongStructCategoryNode(modelAdapter.stage, "gongstructs")
+	gongStructCategoryNode := NewGongStructCategoryNode(modelAdapter.portfolioAdapter, "gongstructs")
 	rootNodes = append(rootNodes, gongStructCategoryNode)
 
-	gongEnumCategoryNode := NewGongEnumCategoryNode(modelAdapter.stage, "gongenums")
+	gongEnumCategoryNode := NewGongEnumCategoryNode(modelAdapter.portfolioAdapter, "gongenums")
 	rootNodes = append(rootNodes, gongEnumCategoryNode)
 
-	gongNoteCategoryNode := NewGongNoteCategoryNode(modelAdapter.stage, "gongnotes")
+	gongNoteCategoryNode := NewGongNoteCategoryNode(modelAdapter.portfolioAdapter, "gongnotes")
 	rootNodes = append(rootNodes, gongNoteCategoryNode)
 
 	return

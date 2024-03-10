@@ -18,11 +18,10 @@ func (gongEnumNode *GongEnumNode) AddToDiagram() {
 var _ diagrammer.ModelElementNode = &GongEnumNode{}
 
 func NewGongEnumNode(
-	stage *gong_models.StageStruct,
+	portfolioAdapter *PortfolioAdapter,
 	gongEnum *gong_models.GongEnum) (gongEnumNode *GongEnumNode) {
-	gongEnumNode = &GongEnumNode{ElementNodeBase: ElementNodeBase{stage: stage}}
+	gongEnumNode = &GongEnumNode{ElementNodeBase: ElementNodeBase{portfolioAdapter: portfolioAdapter}}
 
-	gongEnumNode.stage = stage
 	gongEnumNode.gongEnum = gongEnum
 	return
 }
@@ -31,7 +30,7 @@ func NewGongEnumNode(
 func (gongEnumNode *GongEnumNode) GenerateChildren() (children []diagrammer.ModelNode) {
 
 	for _, gongEnumValue := range gongEnumNode.gongEnum.GongEnumValues {
-		enumValueNode := NewEnumValueNode(gongEnumNode.stage, gongEnumValue)
+		enumValueNode := NewEnumValueNode(gongEnumNode.portfolioAdapter, gongEnumValue)
 		children = append(children, enumValueNode)
 	}
 

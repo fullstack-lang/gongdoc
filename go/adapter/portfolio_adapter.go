@@ -94,6 +94,8 @@ func (portfolioAdapter *PortfolioAdapter) AddElement(modelElementNode diagrammer
 	diagramPackage := portfolioAdapter.getDiagramPackage()
 	gongStage := portfolioAdapter.gongStage
 
+	modelElementNode.AddToDiagram()
+
 	if gongStructNode, ok := modelElementNode.(*GongStructNode); ok {
 		diagramPackage.SelectedClassdiagram.AddGongStructShape(
 			portfolioAdapter.gongdocStage, diagramPackage, gongStructNode.gongStruct.Name)

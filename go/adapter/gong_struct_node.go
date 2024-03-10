@@ -6,11 +6,11 @@ import (
 )
 
 func NewGongStructNode(
-	stage *gong_models.StageStruct,
+	portfolioAdapter *PortfolioAdapter,
 	gongStruct *gong_models.GongStruct) (gongStructNode *GongStructNode) {
-	gongStructNode = &GongStructNode{ElementNodeBase: ElementNodeBase{stage: stage}}
+	gongStructNode = &GongStructNode{
+		ElementNodeBase: ElementNodeBase{portfolioAdapter: portfolioAdapter}}
 
-	gongStructNode.stage = stage
 	gongStructNode.gongStruct = gongStruct
 	return
 }
@@ -24,14 +24,15 @@ type GongStructNode struct {
 
 // AddToDiagram implements diagrammer.ElementNode.
 func (gongStructNode *GongStructNode) AddToDiagram() {
-	panic("unimplemented")
+	// diagramPackage.SelectedClassdiagram.AddGongStructShape(
+	// 	portfolioAdapter.gongdocStage, diagramPackage, gongStructNode.gongStruct.Name)
 }
 
 // GenerateChildren implements diagrammer.Node.
 func (gongStructNode *GongStructNode) GenerateChildren() (children []diagrammer.ModelNode) {
 
 	for _, field := range gongStructNode.gongStruct.Fields {
-		fieldNode := NewFieldNode(gongStructNode.stage, field)
+		fieldNode := NewFieldNode(gongStructNode.portfolioAdapter, field)
 		children = append(children, fieldNode)
 	}
 

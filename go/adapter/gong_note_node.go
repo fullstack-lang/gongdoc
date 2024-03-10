@@ -18,11 +18,10 @@ func (gongNoteNode *GongNoteNode) AddToDiagram() {
 var _ diagrammer.ModelElementNode = &GongNoteNode{}
 
 func NewGongNoteNode(
-	stage *gong_models.StageStruct,
+	portfolioAdapter *PortfolioAdapter,
 	gongNote *gong_models.GongNote) (gongNoteNode *GongNoteNode) {
-	gongNoteNode = &GongNoteNode{ElementNodeBase: ElementNodeBase{stage: stage}}
+	gongNoteNode = &GongNoteNode{ElementNodeBase: ElementNodeBase{portfolioAdapter: portfolioAdapter}}
 
-	gongNoteNode.stage = stage
 	gongNoteNode.gongNote = gongNote
 	return
 }
@@ -31,7 +30,7 @@ func NewGongNoteNode(
 func (gongNoteNode *GongNoteNode) GenerateChildren() (children []diagrammer.ModelNode) {
 
 	for _, link := range gongNoteNode.gongNote.Links {
-		linkNode := NewLinkNode(gongNoteNode.stage, link)
+		linkNode := NewLinkNode(gongNoteNode.portfolioAdapter, link)
 		children = append(children, linkNode)
 	}
 

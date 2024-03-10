@@ -17,10 +17,10 @@ func (linkNode *LinkNode) AddToDiagram() {
 }
 
 func NewLinkNode(
-	stage *gong_models.StageStruct,
+	portfolioAdapter *PortfolioAdapter,
 	link *gong_models.GongLink) (linkNode *LinkNode) {
 	linkNode = new(LinkNode)
-	linkNode.stage = stage
+
 	linkNode.Link = link
 	return
 }

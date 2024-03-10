@@ -18,10 +18,9 @@ func (enumvalueNode *EnumValueNode) AddToDiagram() {
 var _ diagrammer.ModelElementNode = &EnumValueNode{}
 
 func NewEnumValueNode(
-	stage *gong_models.StageStruct,
+	portfolioAdapter *PortfolioAdapter,
 	enumvalue *gong_models.GongEnumValue) (enumvalueNode *EnumValueNode) {
-	enumvalueNode = &EnumValueNode{ElementNodeBase: ElementNodeBase{stage: stage}}
-	enumvalueNode.stage = stage
+	enumvalueNode = &EnumValueNode{ElementNodeBase: ElementNodeBase{portfolioAdapter: portfolioAdapter}}
 	enumvalueNode.EnumValue = enumvalue
 	return
 }

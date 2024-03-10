@@ -1,11 +1,9 @@
 package adapter
 
-import gong_models "github.com/fullstack-lang/gong/go/models"
-
 type ModelCategoryNodeBase struct {
-	stage      *gong_models.StageStruct
-	Name       string
-	isExpanded bool
+	portfolioAdapter *PortfolioAdapter
+	Name             string
+	isExpanded       bool
 }
 
 func (base *ModelCategoryNodeBase) IsExpanded() bool {

@@ -13,16 +13,16 @@ type GongEnumCategoryNode struct {
 	ModelCategoryNodeBase
 }
 
-func NewGongEnumCategoryNode(stage *gong_models.StageStruct, name string) *GongEnumCategoryNode {
-	return &GongEnumCategoryNode{ModelCategoryNodeBase: ModelCategoryNodeBase{stage: stage, Name: name}}
+func NewGongEnumCategoryNode(portfolioAdapter *PortfolioAdapter, name string) *GongEnumCategoryNode {
+	return &GongEnumCategoryNode{ModelCategoryNodeBase: ModelCategoryNodeBase{portfolioAdapter: portfolioAdapter, Name: name}}
 }
 
 // GenerateChildren implements diagrammer.Node.
 func (categoryNode *GongEnumCategoryNode) GenerateChildren() (children []diagrammer.ModelNode) {
 
-	for gongEnum := range *gong_models.GetGongstructInstancesSet[gong_models.GongEnum](categoryNode.stage) {
+	for gongEnum := range *gong_models.GetGongstructInstancesSet[gong_models.GongEnum](categoryNode.portfolioAdapter.gongStage) {
 
-		gongEnumNode := NewGongEnumNode(categoryNode.stage, gongEnum)
+		gongEnumNode := NewGongEnumNode(categoryNode.portfolioAdapter, gongEnum)
 		children = append(children, gongEnumNode)
 	}
 

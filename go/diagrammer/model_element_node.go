@@ -4,4 +4,5 @@ type ModelElementNode interface {
 	ModelNode
 
 	GetElement() any
+	AddToDiagram()
 }

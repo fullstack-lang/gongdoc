@@ -12,16 +12,16 @@ type GongStructCategoryNode struct {
 	ModelCategoryNodeBase
 }
 
-func NewGongStructCategoryNode(stage *gong_models.StageStruct, name string) *GongStructCategoryNode {
-	return &GongStructCategoryNode{ModelCategoryNodeBase: ModelCategoryNodeBase{stage: stage, Name: name}}
+func NewGongStructCategoryNode(portfolioAdapter *PortfolioAdapter, name string) *GongStructCategoryNode {
+	return &GongStructCategoryNode{ModelCategoryNodeBase: ModelCategoryNodeBase{portfolioAdapter: portfolioAdapter, Name: name}}
 }
 
 // GenerateChildren implements diagrammer.Node.
 func (categoryNode *GongStructCategoryNode) GenerateChildren() (children []diagrammer.ModelNode) {
 
-	for gongStruct := range *gong_models.GetGongstructInstancesSet[gong_models.GongStruct](categoryNode.stage) {
+	for gongStruct := range *gong_models.GetGongstructInstancesSet[gong_models.GongStruct](categoryNode.portfolioAdapter.gongStage) {
 
-		gongStructNode := NewGongStructNode(categoryNode.stage, gongStruct)
+		gongStructNode := NewGongStructNode(categoryNode.portfolioAdapter, gongStruct)
 		children = append(children, gongStructNode)
 	}
 
