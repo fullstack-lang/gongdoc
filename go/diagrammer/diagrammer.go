@@ -15,6 +15,7 @@ type Diagrammer struct {
 
 	map_portfolioNode_treeNode    map[PortfolioNode]*gongtree_models.Node
 	map_modelElementNode_treeNode map[ModelElementNode]*gongtree_models.Node
+	map_ModelElementNode_Shape    map[ModelElementNode]Shape
 }
 
 func NewDiagrammer(
@@ -304,12 +305,21 @@ func (diagrammer *Diagrammer) GetMap_elementNode_treeNode() map[ModelElementNode
 // and unchecks all nodes unless nodes matches an element in the diagram
 func (diagrammer *Diagrammer) computeModelNodeStatus(map_ModelElementNode_Shape map[ModelElementNode]Shape) {
 	isInDrawingMode := diagrammer.portfolio.IsInDrawingMode()
+	diagrammer.map_ModelElementNode_Shape = map_ModelElementNode_Shape
+
 	for modelElementNode, treeNode := range diagrammer.map_modelElementNode_treeNode {
 		treeNode.IsChecked = false
-		treeNode.IsCheckboxDisabled = !isInDrawingMode
+		treeNode.IsCheckboxDisabled = !isInDrawingMode || !modelElementNode.CanBeDisplayed()
 
 		if _, ok := map_ModelElementNode_Shape[modelElementNode]; ok {
 			treeNode.IsChecked = true
 		}
 	}
+}
+
+func (diagrammer *Diagrammer) IsElementNodeDisplayed(modelElementNode ModelElementNode) (ok bool) {
+
+	_, ok = diagrammer.map_ModelElementNode_Shape[modelElementNode]
+
+	return
 }

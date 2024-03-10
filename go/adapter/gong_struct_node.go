@@ -42,7 +42,7 @@ func (gongStructNode *GongStructNode) AddToDiagram() {
 func (gongStructNode *GongStructNode) GenerateChildren() (children []diagrammer.ModelNode) {
 
 	for _, field := range gongStructNode.gongStruct.Fields {
-		fieldNode := NewFieldNode(gongStructNode.portfolioAdapter, field)
+		fieldNode := NewFieldNode(gongStructNode.portfolioAdapter, gongStructNode, field)
 		children = append(children, fieldNode)
 	}
 

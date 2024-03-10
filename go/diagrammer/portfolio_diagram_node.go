@@ -3,8 +3,6 @@ package diagrammer
 type PortfolioDiagramNode interface {
 	PortfolioNode
 
-	GetDiagram() Diagram
-
 	// DisplayDiagram request the portfolio to display the diagram
 	DisplayDiagram() map[ModelElementNode]Shape
 

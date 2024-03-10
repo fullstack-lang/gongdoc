@@ -142,11 +142,6 @@ func (classDiagramNode *ClassDiagramNode) GetName() string {
 	return classDiagramNode.classdiagram.GetName()
 }
 
-// GetDiagram implements bridge.PortfolioNode.
-func (classDiagramNode *ClassDiagramNode) GetDiagram() diagrammer.Diagram {
-	return classDiagramNode.classdiagram
-}
-
 // IsExpanded implements bridge.PortfolioNode.
 func (*ClassDiagramNode) IsExpanded() bool {
 	return true

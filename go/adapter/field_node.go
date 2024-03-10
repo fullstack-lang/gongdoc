@@ -7,7 +7,8 @@ import (
 
 type FieldNode struct {
 	ElementNodeBase
-	Field gong_models.FieldInterface
+	gongStructNode *GongStructNode // parent node
+	Field          gong_models.FieldInterface
 }
 
 // RemoveFromDiagram implements diagrammer.ModelElementNode.
@@ -24,8 +25,11 @@ var _ diagrammer.ModelElementNode = &FieldNode{}
 
 func NewFieldNode(
 	portfolioAdapter *PortfolioAdapter,
+	gongStructNode *GongStructNode,
 	field gong_models.FieldInterface) (fieldNode *FieldNode) {
 	fieldNode = &FieldNode{ElementNodeBase: ElementNodeBase{portfolioAdapter: portfolioAdapter}}
+
+	fieldNode.gongStructNode = gongStructNode
 	fieldNode.Field = field
 	return
 }
@@ -42,4 +46,11 @@ func (fieldNode *FieldNode) GetName() string {
 
 func (fieldNode *FieldNode) GetElement() any {
 	return fieldNode.Field
+}
+
+func (fieldNode *FieldNode) CanBeDisplayed() (ok bool) {
+
+	// the parent node must already be displayed in order to be able to display the node
+	ok = fieldNode.portfolioAdapter.diagrammer.IsElementNodeDisplayed(fieldNode.gongStructNode)
+	return
 }
