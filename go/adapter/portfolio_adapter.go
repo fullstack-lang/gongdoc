@@ -5,6 +5,7 @@ import (
 
 	gongsvg_models "github.com/fullstack-lang/gongsvg/go/models"
 
+	"github.com/fullstack-lang/gongdoc/go/doc2svg"
 	gongdoc_models "github.com/fullstack-lang/gongdoc/go/models"
 
 	"github.com/fullstack-lang/gongdoc/go/diagrammer"
@@ -17,6 +18,8 @@ type PortfolioAdapter struct {
 	diagrammer   *diagrammer.Diagrammer
 
 	rootNodes []diagrammer.PortfolioNode
+
+	selectedPortfolioDiagramNode diagrammer.PortfolioDiagramNode
 }
 
 // IsInDrawingMode implements diagrammer.Portfolio.
@@ -54,11 +57,12 @@ func (*PortfolioAdapter) IsInSelectionMode() bool {
 	return true // temp, will be false when a diagram is selected
 }
 
-// GetSelectedDiagram implements diagrammer.Portfolio.
-func (portfolioAdapter *PortfolioAdapter) GetSelectedDiagram() (diagram diagrammer.Diagram) {
-	diagramPackage := portfolioAdapter.getDiagramPackage()
+// GetSelectedPortfolioDiagramNode implements diagrammer.Portfolio.
+func (portfolioAdapter *PortfolioAdapter) GetSelectedPortfolioDiagramNode() (portfolioDiagramNode diagrammer.PortfolioDiagramNode) {
 
-	return diagramPackage.SelectedClassdiagram
+	portfolioDiagramNode = portfolioAdapter.selectedPortfolioDiagramNode
+
+	return
 }
 
 // GetRootNodes implements bridge.Portfolio.
@@ -83,4 +87,43 @@ func (portfolioAdapter *PortfolioAdapter) getDiagramPackage() *gongdoc_models.Di
 		diagramPackage = diagramPackage_
 	}
 	return diagramPackage
+}
+
+// AddElement implements diagrammer.Portfolio.
+func (portfolioAdapter *PortfolioAdapter) AddElement(modelNode diagrammer.ModelNode) (
+	setOfModelNode map[diagrammer.ModelNode]diagrammer.Shape) {
+	diagramPackage := portfolioAdapter.getDiagramPackage()
+	gongStage := portfolioAdapter.gongStage
+	gongdocStage := portfolioAdapter.gongdocStage
+	gongsvgStage := portfolioAdapter.gongsvgStage
+
+	if gongStructNode, ok := modelNode.(*GongStructNode); ok {
+		diagramPackage.SelectedClassdiagram.AddGongStructShape(
+			portfolioAdapter.gongdocStage, diagramPackage, gongStructNode.gongStruct.Name)
+
+		docSVGMapper := doc2svg.NewDocSVGMapper(gongsvgStage)
+		docSVGMapper.GenerateSvg(gongdocStage)
+
+		portfolioDiagramNode := portfolioAdapter.GetSelectedPortfolioDiagramNode()
+
+		if classDiagramNode, ok := portfolioDiagramNode.(*ClassDiagramNode); ok {
+			setOfModelNode = classDiagramNode.getSetOfModelNodesInDiagram(gongStage, classDiagramNode.classdiagram)
+
+		}
+
+	}
+	return
+}
+
+func (portfolioAdapter *PortfolioAdapter) RemoveElement(modelNode diagrammer.ModelNode) {
+	diagramPackage := portfolioAdapter.getDiagramPackage()
+
+	if gongStructNode, ok := modelNode.(*GongStructNode); ok {
+		diagramPackage.SelectedClassdiagram.RemoveGongStructShape(
+			portfolioAdapter.gongdocStage, gongStructNode.gongStruct.Name)
+	}
+}
+
+func (portfolioAdapter *PortfolioAdapter) setSelectedClassdiagramNode(classDiagramNode *ClassDiagramNode) {
+	portfolioAdapter.selectedPortfolioDiagramNode = classDiagramNode
 }

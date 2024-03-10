@@ -182,6 +182,8 @@ func (classDiagramNode *ClassDiagramNode) DisplayDiagram() (
 
 	setOfModelNode = classDiagramNode.getSetOfModelNodesInDiagram(gongStage, selectedClassdiagram)
 
+	classDiagramNode.portfolioAdapter.setSelectedClassdiagramNode(classDiagramNode)
+
 	return
 }
 

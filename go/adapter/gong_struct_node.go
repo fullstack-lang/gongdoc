@@ -15,6 +15,8 @@ func NewGongStructNode(
 	return
 }
 
+var _ diagrammer.ModelNode = &GongStructNode{}
+
 type GongStructNode struct {
 	ElementNodeBase
 	gongStruct *gong_models.GongStruct

@@ -171,7 +171,7 @@ func (diagrammer *Diagrammer) generatePortfolioNodesButtonsRecursive(portfolioNo
 	}
 
 	if portfolioDiagramNode, ok := portfolioNode.(PortfolioDiagramNode); ok {
-		if portfolioDiagramNode.GetDiagram() == diagrammer.portfolio.GetSelectedDiagram() {
+		if portfolioDiagramNode == diagrammer.portfolio.GetSelectedPortfolioDiagramNode() {
 			treeNode.IsChecked = true
 
 			type nodeStateEnum int

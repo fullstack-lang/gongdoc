@@ -29,4 +29,13 @@ func (modelNodeImpl *ModelNodeImpl) OnAfterUpdate(stage *gongtree_models.StageSt
 		stagedNode.IsExpanded = frontNode.IsExpanded
 	}
 
+	if !stagedNode.IsChecked && frontNode.IsChecked {
+
+		map_ModelNode_Shape := modelNodeImpl.diagrammer.portfolio.AddElement(modelNodeImpl.modelNode)
+
+		stagedNode.IsChecked = frontNode.IsChecked
+		modelNodeImpl.diagrammer.generatePortfolioNodesButtons()
+		modelNodeImpl.diagrammer.computeModelNodeStatus(map_ModelNode_Shape)
+		modelNodeImpl.diagrammer.treeStage.Commit()
+	}
 }
