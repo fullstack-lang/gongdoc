@@ -48,9 +48,19 @@ func (fieldNode *FieldNode) GetElement() any {
 	return fieldNode.Field
 }
 
-func (fieldNode *FieldNode) CanBeAddedToDiagram() (ok bool) {
+func (fieldNode *FieldNode) CanBeAddedToDiagram() (result bool) {
 
+	diagrammer := fieldNode.portfolioAdapter.diagrammer
 	// the parent node must already be displayed in order to be able to display the node
-	ok = fieldNode.portfolioAdapter.diagrammer.IsElementNodeDisplayed(fieldNode.gongStructNode)
+	result = diagrammer.IsElementNodeDisplayed(fieldNode.gongStructNode)
+
+	if pointerToGongStructField, ok := fieldNode.Field.(*gong_models.PointerToGongStructField); ok {
+		result = result && diagrammer.IsElementDisplayed(pointerToGongStructField.GongStruct)
+	}
+
+	if sliceOfPointerToGongStructField, ok := fieldNode.Field.(*gong_models.SliceOfPointerToGongStructField); ok {
+		result = result && diagrammer.IsElementDisplayed(sliceOfPointerToGongStructField.GongStruct)
+	}
+
 	return
 }
