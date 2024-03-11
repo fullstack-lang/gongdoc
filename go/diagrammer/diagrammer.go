@@ -101,7 +101,7 @@ func (diagrammer *Diagrammer) modelNode2ModelTreeNode(modelNode ModelNode, treeS
 func (diagrammer *Diagrammer) FillUpPortfolioTree(portfolioTree *gongtree_models.Tree) {
 	diagrammer.portfolio.GenerateTree()
 
-	for _, portfolioNode := range diagrammer.portfolio.GetChildren() {
+	for _, portfolioNode := range diagrammer.portfolio.GenerateChildren() {
 		// log.Printf("FillUpPortfolioTree %s %p\n", portfolioNode.GetName(), portfolioNode)
 		treeNode := diagrammer.portfolioNode2NodeTree(portfolioNode, diagrammer.treeStage)
 		portfolioTree.RootNodes = append(portfolioTree.RootNodes, treeNode)
@@ -126,7 +126,7 @@ func (diagrammer *Diagrammer) portfolioNode2NodeTree(portfolioNode PortfolioNode
 
 	portfolioTreeNode.IsCheckboxDisabled = !diagrammer.portfolio.IsInSelectionMode()
 
-	for _, childrenPortfolioNode := range portfolioNode.GetChildren() {
+	for _, childrenPortfolioNode := range portfolioNode.GenerateChildren() {
 		childrenTreeNode := diagrammer.portfolioNode2NodeTree(childrenPortfolioNode, treeStage)
 		portfolioTreeNode.Children = append(portfolioTreeNode.Children, childrenTreeNode)
 	}
@@ -136,7 +136,7 @@ func (diagrammer *Diagrammer) portfolioNode2NodeTree(portfolioNode PortfolioNode
 
 func (diagrammer *Diagrammer) generatePortfolioNodesButtons() {
 
-	for _, portfolioNode := range diagrammer.portfolio.GetChildren() {
+	for _, portfolioNode := range diagrammer.portfolio.GenerateChildren() {
 		// log.Printf("generatePortfolioNodesButtons %s %p\n", portfolioNode.GetName(), portfolioNode)
 
 		// here the value of "class diagrams" node has changed, 0xc0014665e8
@@ -289,7 +289,7 @@ func (diagrammer *Diagrammer) generatePortfolioNodesButtonsRecursive(portfolioNo
 		}
 	}
 
-	for _, childrenPortfolioNode := range portfolioNode.GetChildren() {
+	for _, childrenPortfolioNode := range portfolioNode.GenerateChildren() {
 		diagrammer.generatePortfolioNodesButtonsRecursive(childrenPortfolioNode)
 	}
 }

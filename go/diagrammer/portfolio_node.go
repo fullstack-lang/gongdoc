@@ -9,8 +9,8 @@ type PortfolioNode interface {
 	// GetParent returns the node above
 	GetParent() PortfolioNode
 
-	// GetChildren returns the nodes below the node
-	GetChildren() []PortfolioNode
+	// GenerateChildren returns the nodes below the node
+	GenerateChildren() []PortfolioNode
 
 	// AppendChildren
 	AppendChildren(PortfolioNode)

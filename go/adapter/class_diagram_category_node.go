@@ -54,7 +54,7 @@ func (ClassDiagramCategoryNode *ClassDiagramCategoryNode) IsExpanded() bool {
 	return true
 }
 
-func (categoryNode *ClassDiagramCategoryNode) GetChildren() (children []diagrammer.PortfolioNode) {
+func (categoryNode *ClassDiagramCategoryNode) GenerateChildren() (children []diagrammer.PortfolioNode) {
 	return categoryNode.children
 }
 

@@ -4,8 +4,8 @@ package diagrammer
 type Portfolio interface {
 	GenerateTree()
 
-	// GetChildren returns the root nodes of the tree for navigating the portfolio
-	GetChildren() []PortfolioNode
+	// GenerateChildren returns the root nodes of the tree for navigating the portfolio
+	GenerateChildren() []PortfolioNode
 
 	// IsInSelectionMode is true is at least one diagram has been selected
 	IsInSelectionMode() bool // the end user can select a diagram to display

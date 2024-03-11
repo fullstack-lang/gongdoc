@@ -132,8 +132,8 @@ func (classDiagramNode *ClassDiagramNode) RenameDiagram(newName string) (err err
 	return
 }
 
-// GetChildren implements diagrammer.Node.
-func (classDiagramNode *ClassDiagramNode) GetChildren() (children []diagrammer.PortfolioNode) {
+// GenerateChildren implements diagrammer.Node.
+func (classDiagramNode *ClassDiagramNode) GenerateChildren() (children []diagrammer.PortfolioNode) {
 	return
 }
 

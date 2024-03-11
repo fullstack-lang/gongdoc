@@ -65,7 +65,7 @@ func (portfolioAdapter *PortfolioAdapter) GetSelectedPortfolioDiagramNode() (por
 }
 
 // GetRootNodes implements bridge.Portfolio.
-func (portfolioAdapter *PortfolioAdapter) GetChildren() []diagrammer.PortfolioNode {
+func (portfolioAdapter *PortfolioAdapter) GenerateChildren() []diagrammer.PortfolioNode {
 
 	return portfolioAdapter.rootNodes
 }
