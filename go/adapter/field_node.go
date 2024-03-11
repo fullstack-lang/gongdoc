@@ -48,7 +48,7 @@ func (fieldNode *FieldNode) GetElement() any {
 	return fieldNode.Field
 }
 
-func (fieldNode *FieldNode) CanBeDisplayed() (ok bool) {
+func (fieldNode *FieldNode) CanBeAddedToDiagram() (ok bool) {
 
 	// the parent node must already be displayed in order to be able to display the node
 	ok = fieldNode.portfolioAdapter.diagrammer.IsElementNodeDisplayed(fieldNode.gongStructNode)

@@ -14,6 +14,6 @@ func (base *ElementNodeBase) IsNameEditable() bool {
 	return false
 }
 
-func (base *ElementNodeBase) CanBeDisplayed() bool {
+func (base *ElementNodeBase) CanBeAddedToDiagram() bool {
 	return true
 }
