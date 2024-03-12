@@ -330,6 +330,13 @@ func (diagrammer *Diagrammer) IsElementNodeDisplayed(modelElementNode ModelEleme
 	return
 }
 
+func (diagrammer *Diagrammer) GetElementNodeDisplayed(modelElementNode ModelElementNode) (shape Shape, ok bool) {
+
+	shape, ok = diagrammer.map_modelElementNode_Shape[modelElementNode]
+
+	return
+}
+
 func (diagrammer *Diagrammer) IsElementDisplayed(modelElement any) (ok bool) {
 
 	_, ok = diagrammer.map_modelElements_Shape[modelElement]

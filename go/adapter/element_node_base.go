@@ -24,3 +24,7 @@ func (base *ElementNodeBase) CanBeAddedToDiagram() bool {
 func (base *ElementNodeBase) GetChildren() []diagrammer.ModelNode {
 	return base.children
 }
+
+func (base *ElementNodeBase) GetParent() diagrammer.ModelNode {
+	return nil
+}

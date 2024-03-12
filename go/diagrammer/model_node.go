@@ -3,6 +3,8 @@ package diagrammer
 type ModelNode interface {
 	GenerateProgeny() []ModelNode
 	GetChildren() []ModelNode
+	// GetParent returns the node above
+	GetParent() ModelNode
 
 	GetName() string
 	IsNameEditable() bool

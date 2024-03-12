@@ -28,3 +28,7 @@ func (base *ModelCategoryNodeBase) GetName() string {
 func (base *ModelCategoryNodeBase) GetChildren() []diagrammer.ModelNode {
 	return base.children
 }
+
+func (base *ModelCategoryNodeBase) GetParent() diagrammer.ModelNode {
+	return nil
+}
