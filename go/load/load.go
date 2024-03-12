@@ -99,7 +99,7 @@ func Load(
 	diagrammer.FillUpModelTree(treeOfModelObjects)
 
 	treeOfPortfolioObjects := (&gongtree_models.Tree{Name: "portfolio"}).Stage(gongtreeStage)
-	diagrammer.FillUpPortfolioTree(treeOfPortfolioObjects)
+	diagrammer.FillUpPortfolioUITree(treeOfPortfolioObjects)
 	diagrammer.CommitTreeStage()
 
 	// first, get all gong struct in the model

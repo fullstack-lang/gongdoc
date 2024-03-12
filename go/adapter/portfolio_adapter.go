@@ -67,16 +67,16 @@ func (portfolioAdapter *PortfolioAdapter) GetSelectedPortfolioDiagramNode() (por
 // GetRootNodes implements bridge.Portfolio.
 func (portfolioAdapter *PortfolioAdapter) GenerateChildren() []diagrammer.PortfolioNode {
 
+	classDiagramCategoryNode := NewClassDiagramCategoryNode(portfolioAdapter, "class diagrams")
+	portfolioAdapter.rootNodes = append(portfolioAdapter.rootNodes, classDiagramCategoryNode)
+	classDiagramCategoryNode.GenerateChildren()
+
 	return portfolioAdapter.rootNodes
 }
 
-func (portfolioAdapter *PortfolioAdapter) GenerateTree() {
+func (portfolioAdapter *PortfolioAdapter) GetChildren() []diagrammer.PortfolioNode {
 
-	classDiagramCategoryNode := NewClassDiagramCategoryNode(portfolioAdapter, "class diagrams")
-	portfolioAdapter.rootNodes = append(portfolioAdapter.rootNodes, classDiagramCategoryNode)
-	classDiagramCategoryNode.generateChildren()
-
-	return
+	return portfolioAdapter.rootNodes
 }
 
 func (portfolioAdapter *PortfolioAdapter) getDiagramPackage() *gongdoc_models.DiagramPackage {

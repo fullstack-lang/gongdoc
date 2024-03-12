@@ -96,15 +96,14 @@ func (diagrammer *Diagrammer) modelNode2ModelTreeNode(modelNode ModelNode, treeS
 	return
 }
 
-// FillUpPortfolioTree ranges over Portfolio Root Nodes
+// FillUpPortfolioUITree ranges over Portfolio Root Nodes
 // and recursively fill up the Tree UI from the Portfolio tree
-func (diagrammer *Diagrammer) FillUpPortfolioTree(portfolioTree *gongtree_models.Tree) {
-	diagrammer.portfolio.GenerateTree()
+func (diagrammer *Diagrammer) FillUpPortfolioUITree(portfolioUITree *gongtree_models.Tree) {
 
 	for _, portfolioNode := range diagrammer.portfolio.GenerateChildren() {
 		// log.Printf("FillUpPortfolioTree %s %p\n", portfolioNode.GetName(), portfolioNode)
 		treeNode := diagrammer.portfolioNode2NodeTree(portfolioNode, diagrammer.treeStage)
-		portfolioTree.RootNodes = append(portfolioTree.RootNodes, treeNode)
+		portfolioUITree.RootNodes = append(portfolioUITree.RootNodes, treeNode)
 	}
 	diagrammer.generatePortfolioNodesButtons()
 }
@@ -126,7 +125,7 @@ func (diagrammer *Diagrammer) portfolioNode2NodeTree(portfolioNode PortfolioNode
 
 	portfolioTreeNode.IsCheckboxDisabled = !diagrammer.portfolio.IsInSelectionMode()
 
-	for _, childrenPortfolioNode := range portfolioNode.GenerateChildren() {
+	for _, childrenPortfolioNode := range portfolioNode.GetChildren() {
 		childrenTreeNode := diagrammer.portfolioNode2NodeTree(childrenPortfolioNode, treeStage)
 		portfolioTreeNode.Children = append(portfolioTreeNode.Children, childrenTreeNode)
 	}
@@ -136,7 +135,7 @@ func (diagrammer *Diagrammer) portfolioNode2NodeTree(portfolioNode PortfolioNode
 
 func (diagrammer *Diagrammer) generatePortfolioNodesButtons() {
 
-	for _, portfolioNode := range diagrammer.portfolio.GenerateChildren() {
+	for _, portfolioNode := range diagrammer.portfolio.GetChildren() {
 		// log.Printf("generatePortfolioNodesButtons %s %p\n", portfolioNode.GetName(), portfolioNode)
 
 		// here the value of "class diagrams" node has changed, 0xc0014665e8
@@ -289,7 +288,7 @@ func (diagrammer *Diagrammer) generatePortfolioNodesButtonsRecursive(portfolioNo
 		}
 	}
 
-	for _, childrenPortfolioNode := range portfolioNode.GenerateChildren() {
+	for _, childrenPortfolioNode := range portfolioNode.GetChildren() {
 		diagrammer.generatePortfolioNodesButtonsRecursive(childrenPortfolioNode)
 	}
 }

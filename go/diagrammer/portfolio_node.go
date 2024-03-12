@@ -9,13 +9,14 @@ type PortfolioNode interface {
 	// GetParent returns the node above
 	GetParent() PortfolioNode
 
-	// GenerateChildren returns the nodes below the node
+	// GenerateChildren generates and returns the nodes below the node
 	GenerateChildren() []PortfolioNode
+	GetChildren() []PortfolioNode
 
-	// AppendChildren
+	// AppendChildren allows for dynmicaly adding a node below the node
 	AppendChildren(PortfolioNode)
 
-	// RemoveChildren
+	// RemoveChildren allows for dynmicaly adding a node below the node
 	RemoveChildren(PortfolioNode)
 
 	// IsExpanded is true if the the node is visualy expanded

@@ -19,6 +19,26 @@ type ClassDiagramCategoryNode struct {
 	children         []diagrammer.PortfolioNode
 }
 
+func NewClassDiagramCategoryNode(
+	portfolioAdapter *PortfolioAdapter,
+	name string,
+) (categoryNode *ClassDiagramCategoryNode) {
+	categoryNode = new(ClassDiagramCategoryNode)
+
+	categoryNode.portfolioAdapter = portfolioAdapter
+	categoryNode.Name = name
+
+	return
+}
+
+// GetChildren implements diagrammer.PortfolioCategoryNode.
+func (classDiagramCategoryNode *ClassDiagramCategoryNode) GetChildren() []diagrammer.PortfolioNode {
+	return classDiagramCategoryNode.children
+}
+
+// static check that it meets the intended interface
+var _ diagrammer.PortfolioCategoryNode = &(ClassDiagramCategoryNode{})
+
 // RemoveChildren implements diagrammer.PortfolioCategoryNode.
 func (classDiagramCategoryNode *ClassDiagramCategoryNode) RemoveChildren(portfolioNode diagrammer.PortfolioNode) {
 	idx := diagrammer.IndexOf(classDiagramCategoryNode.children, portfolioNode)
@@ -35,30 +55,11 @@ func (classDiagramCategoryNode *ClassDiagramCategoryNode) GetParent() diagrammer
 	return nil
 }
 
-// static check for interface inmplementation
-var _ diagrammer.PortfolioCategoryNode = &(ClassDiagramCategoryNode{})
-
-func NewClassDiagramCategoryNode(
-	portfolioAdapter *PortfolioAdapter,
-	name string,
-) (categoryNode *ClassDiagramCategoryNode) {
-	categoryNode = new(ClassDiagramCategoryNode)
-
-	categoryNode.portfolioAdapter = portfolioAdapter
-	categoryNode.Name = name
-
-	return
-}
-
 func (ClassDiagramCategoryNode *ClassDiagramCategoryNode) IsExpanded() bool {
 	return true
 }
 
-func (categoryNode *ClassDiagramCategoryNode) GenerateChildren() (children []diagrammer.PortfolioNode) {
-	return categoryNode.children
-}
-
-func (categoryNode *ClassDiagramCategoryNode) generateChildren() {
+func (categoryNode *ClassDiagramCategoryNode) GenerateChildren() []diagrammer.PortfolioNode {
 
 	gongdocStage := categoryNode.portfolioAdapter.gongdocStage
 	for classDiagram := range *gongdoc_models.GetGongstructInstancesSet[gongdoc_models.Classdiagram](gongdocStage) {
@@ -68,13 +69,14 @@ func (categoryNode *ClassDiagramCategoryNode) generateChildren() {
 			categoryNode,
 			classDiagram)
 		categoryNode.AppendChildren(classDiagramNode)
+		classDiagramNode.GenerateChildren()
 	}
 
 	slices.SortFunc(categoryNode.children, func(a, b diagrammer.PortfolioNode) int {
 		return cmp.Compare(a.GetName(), b.GetName())
 	})
 
-	return
+	return categoryNode.children
 }
 
 // GetName implements diagrammer.Node.

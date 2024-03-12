@@ -51,6 +51,11 @@ func (classDiagramNode *ClassDiagramNode) GetParent() diagrammer.PortfolioNode {
 	return classDiagramNode.parentNode
 }
 
+// GetChildren implements diagrammer.PortfolioDiagramNode.
+func (classDiagramNode *ClassDiagramNode) GetChildren() []diagrammer.PortfolioNode {
+	return nil
+}
+
 // AppendChildren implements diagrammer.PortfolioDiagramNode.
 func (classDiagramNode *ClassDiagramNode) AppendChildren(diagrammer.PortfolioNode) {
 	panic("unimplemented")
