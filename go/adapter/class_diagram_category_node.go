@@ -59,7 +59,7 @@ func (ClassDiagramCategoryNode *ClassDiagramCategoryNode) IsExpanded() bool {
 	return true
 }
 
-func (categoryNode *ClassDiagramCategoryNode) GenerateChildren() []diagrammer.PortfolioNode {
+func (categoryNode *ClassDiagramCategoryNode) GeneratesProgeny() []diagrammer.PortfolioNode {
 
 	gongdocStage := categoryNode.portfolioAdapter.gongdocStage
 	for classDiagram := range *gongdoc_models.GetGongstructInstancesSet[gongdoc_models.Classdiagram](gongdocStage) {
@@ -69,7 +69,7 @@ func (categoryNode *ClassDiagramCategoryNode) GenerateChildren() []diagrammer.Po
 			categoryNode,
 			classDiagram)
 		categoryNode.AppendChildren(classDiagramNode)
-		classDiagramNode.GenerateChildren()
+		classDiagramNode.GeneratesProgeny()
 	}
 
 	slices.SortFunc(categoryNode.children, func(a, b diagrammer.PortfolioNode) int {

@@ -3,8 +3,9 @@ package diagrammer
 // Portfolio interface to be implemented by the Portfolio adapter
 type Portfolio interface {
 
-	// GenerateChildren generates and returns the root nodes of the tree for navigating the portfolio
-	GenerateChildren() []PortfolioNode
+	// GeneratesProgeny generates and returns the root nodes of the tree for navigating the portfolio
+	// root nodes themselves generate their progreny
+	GeneratesProgeny() []PortfolioNode
 
 	// GetChildren return the root nodes
 	GetChildren() []PortfolioNode

@@ -100,7 +100,7 @@ func (diagrammer *Diagrammer) modelNode2ModelTreeNode(modelNode ModelNode, treeS
 // and recursively fill up the Tree UI from the Portfolio tree
 func (diagrammer *Diagrammer) FillUpPortfolioUITree(portfolioUITree *gongtree_models.Tree) {
 
-	for _, portfolioNode := range diagrammer.portfolio.GenerateChildren() {
+	for _, portfolioNode := range diagrammer.portfolio.GeneratesProgeny() {
 		// log.Printf("FillUpPortfolioTree %s %p\n", portfolioNode.GetName(), portfolioNode)
 		treeNode := diagrammer.portfolioNode2NodeTree(portfolioNode, diagrammer.treeStage)
 		portfolioUITree.RootNodes = append(portfolioUITree.RootNodes, treeNode)
