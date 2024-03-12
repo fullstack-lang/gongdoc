@@ -1,8 +1,11 @@
 package adapter
 
 import (
+	"log"
+
 	gong_models "github.com/fullstack-lang/gong/go/models"
 	"github.com/fullstack-lang/gongdoc/go/diagrammer"
+	gongdoc_models "github.com/fullstack-lang/gongdoc/go/models"
 )
 
 type GongEnumNode struct {
@@ -12,12 +15,31 @@ type GongEnumNode struct {
 
 // RemoveFromDiagram implements diagrammer.ModelElementNode.
 func (gongEnumNode *GongEnumNode) RemoveFromDiagram() {
-	panic("unimplemented")
+	diagramPackage := gongEnumNode.portfolioAdapter.getDiagramPackage()
+
+	var gongEnumShape *gongdoc_models.GongEnumShape
+	shape, ok := gongEnumNode.portfolioAdapter.diagrammer.GetElementNodeDisplayed(gongEnumNode)
+
+	if !ok {
+		log.Fatalln("unknown gongenum shape")
+		return
+	}
+	if gongEnumShape, ok = shape.(*gongdoc_models.GongEnumShape); !ok {
+		log.Fatalln("not a gongenum shape")
+		return
+	}
+
+	diagramPackage.SelectedClassdiagram.RemoveGongEnumShape(
+		gongEnumNode.portfolioAdapter.gongdocStage,
+		gongdoc_models.IdentifierToGongObjectName(gongEnumShape.Identifier))
 }
 
 // AddToDiagram implements diagrammer.ElementNode.
 func (gongEnumNode *GongEnumNode) AddToDiagram() {
-	panic("unimplemented")
+	diagramPackage := gongEnumNode.portfolioAdapter.getDiagramPackage()
+
+	diagramPackage.SelectedClassdiagram.AddGongEnumShape(
+		gongEnumNode.portfolioAdapter.gongdocStage, diagramPackage, gongEnumNode.GetName())
 }
 
 var _ diagrammer.ModelElementNode = &GongEnumNode{}
