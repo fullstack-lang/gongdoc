@@ -121,7 +121,7 @@ func (fieldNode *FieldNode) AddToDiagram() {
 			targetMultiplicity = gongdoc_models.ZERO_ONE
 		case *gong_models.SliceOfPointerToGongStructField:
 			targetStructName = realField.GongStruct.Name
-			sourceMultiplicity = gongdoc_models.ZERO_ONE
+			sourceMultiplicity = gongdoc_models.MANY
 			targetMultiplicity = gongdoc_models.MANY
 		}
 		targetSourceGongStructShape := false
