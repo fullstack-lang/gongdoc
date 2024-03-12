@@ -1,7 +1,8 @@
 package diagrammer
 
 type ModelNode interface {
-	GenerateChildren() []ModelNode
+	GenerateProgeny() []ModelNode
+	GetChildren() []ModelNode
 
 	GetName() string
 	IsNameEditable() bool

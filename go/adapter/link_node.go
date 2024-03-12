@@ -21,6 +21,11 @@ func (linkNode *LinkNode) AddToDiagram() {
 	panic("unimplemented")
 }
 
+// GetChildren implements diagrammer.ModelElementNode.
+func (*LinkNode) GetChildren() []diagrammer.ModelNode {
+	return nil
+}
+
 func NewLinkNode(
 	portfolioAdapter *PortfolioAdapter,
 	link *gong_models.GongLink) (linkNode *LinkNode) {
@@ -36,8 +41,8 @@ func (linkNode *LinkNode) IsExpanded() bool {
 	return true
 }
 
-// GenerateChildren implements diagrammer.Node.
-func (linkNode *LinkNode) GenerateChildren() (children []diagrammer.ModelNode) {
+// GenerateProgeny implements diagrammer.Node.
+func (linkNode *LinkNode) GenerateProgeny() (children []diagrammer.ModelNode) {
 
 	// for link := range *gong_models.GetLinkInstancesSet[gong_models.Link](linkNode.stage) {
 

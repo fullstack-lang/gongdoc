@@ -31,15 +31,15 @@ func NewGongEnumNode(
 	return
 }
 
-// GenerateChildren implements diagrammer.Node.
-func (gongEnumNode *GongEnumNode) GenerateChildren() (children []diagrammer.ModelNode) {
+// GenerateProgeny implements diagrammer.Node.
+func (gongEnumNode *GongEnumNode) GenerateProgeny() []diagrammer.ModelNode {
 
 	for _, gongEnumValue := range gongEnumNode.gongEnum.GongEnumValues {
 		enumValueNode := NewEnumValueNode(gongEnumNode.portfolioAdapter, gongEnumValue)
-		children = append(children, enumValueNode)
+		gongEnumNode.children = append(gongEnumNode.children, enumValueNode)
 	}
 
-	return
+	return gongEnumNode.children
 }
 
 // GetName implements diagrammer.Node.

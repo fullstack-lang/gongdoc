@@ -10,6 +10,11 @@ type EnumValueNode struct {
 	EnumValue *gong_models.GongEnumValue
 }
 
+// GetChildren implements diagrammer.ModelElementNode.
+func (*EnumValueNode) GetChildren() []diagrammer.ModelNode {
+	return nil
+}
+
 // RemoveFromDiagram implements diagrammer.ModelElementNode.
 func (enumvalueNode *EnumValueNode) RemoveFromDiagram() {
 	panic("unimplemented")
@@ -30,8 +35,8 @@ func NewEnumValueNode(
 	return
 }
 
-// GenerateChildren implements diagrammer.Node.
-func (enumvalueNode *EnumValueNode) GenerateChildren() (children []diagrammer.ModelNode) {
+// GenerateProgeny implements diagrammer.Node.
+func (enumvalueNode *EnumValueNode) GenerateProgeny() (children []diagrammer.ModelNode) {
 	return
 }
 

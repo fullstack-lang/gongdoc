@@ -1,5 +1,6 @@
 package diagrammer
 
 type Model interface {
-	GenerateChildren() []ModelNode
+	GenerateProgeny() []ModelNode
+	GetChildren() []ModelNode
 }

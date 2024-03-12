@@ -66,8 +66,9 @@ func (diagrammer *Diagrammer) GetPortfiolioNodeFromTreeNode(portfolioNode Portfo
 // FillUpModelTree ranges over Model Root Nodes
 // and recursively fill up the Model Tree
 func (diagrammer *Diagrammer) FillUpModelTree(modelTree *gongtree_models.Tree) {
+	diagrammer.model.GenerateProgeny()
 
-	for _, node := range diagrammer.model.GenerateChildren() {
+	for _, node := range diagrammer.model.GetChildren() {
 		treeNode := diagrammer.modelNode2ModelTreeNode(node, diagrammer.treeStage)
 		modelTree.RootNodes = append(modelTree.RootNodes, treeNode)
 	}
@@ -88,7 +89,7 @@ func (diagrammer *Diagrammer) modelNode2ModelTreeNode(modelNode ModelNode, treeS
 		diagrammer: diagrammer,
 		modelNode:  modelNode}
 
-	for _, childrenModelNode := range modelNode.GenerateChildren() {
+	for _, childrenModelNode := range modelNode.GetChildren() {
 		childrenTreeNode := diagrammer.modelNode2ModelTreeNode(childrenModelNode, treeStage)
 		modelTreeNode.Children = append(modelTreeNode.Children, childrenTreeNode)
 	}

@@ -31,15 +31,15 @@ func NewGongNoteNode(
 	return
 }
 
-// GenerateChildren implements diagrammer.Node.
-func (gongNoteNode *GongNoteNode) GenerateChildren() (children []diagrammer.ModelNode) {
+// GenerateProgeny implements diagrammer.Node.
+func (gongNoteNode *GongNoteNode) GenerateProgeny() []diagrammer.ModelNode {
 
 	for _, link := range gongNoteNode.gongNote.Links {
 		linkNode := NewLinkNode(gongNoteNode.portfolioAdapter, link)
-		children = append(children, linkNode)
+		gongNoteNode.children = append(gongNoteNode.children, linkNode)
 	}
 
-	return
+	return gongNoteNode.children
 }
 
 // GetName implements diagrammer.Node.

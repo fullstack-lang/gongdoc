@@ -38,15 +38,15 @@ func (gongStructNode *GongStructNode) AddToDiagram() {
 		gongStructNode.portfolioAdapter.gongdocStage, diagramPackage, gongStructNode.gongStruct.Name)
 }
 
-// GenerateChildren implements diagrammer.Node.
-func (gongStructNode *GongStructNode) GenerateChildren() (children []diagrammer.ModelNode) {
+// GenerateProgeny implements diagrammer.Node.
+func (gongStructNode *GongStructNode) GenerateProgeny() []diagrammer.ModelNode {
 
 	for _, field := range gongStructNode.gongStruct.Fields {
 		fieldNode := NewFieldNode(gongStructNode.portfolioAdapter, gongStructNode, field)
-		children = append(children, fieldNode)
+		gongStructNode.children = append(gongStructNode.children, fieldNode)
 	}
 
-	return
+	return gongStructNode.children
 }
 
 // GetName implements diagrammer.Node.

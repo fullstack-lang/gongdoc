@@ -17,18 +17,19 @@ func NewGongEnumCategoryNode(portfolioAdapter *PortfolioAdapter, name string) *G
 	return &GongEnumCategoryNode{ModelCategoryNodeBase: ModelCategoryNodeBase{portfolioAdapter: portfolioAdapter, Name: name}}
 }
 
-// GenerateChildren implements diagrammer.Node.
-func (categoryNode *GongEnumCategoryNode) GenerateChildren() (children []diagrammer.ModelNode) {
+// GenerateProgeny implements diagrammer.Node.
+func (categoryNode *GongEnumCategoryNode) GenerateProgeny() []diagrammer.ModelNode {
 
 	for gongEnum := range *gong_models.GetGongstructInstancesSet[gong_models.GongEnum](categoryNode.portfolioAdapter.gongStage) {
 
 		gongEnumNode := NewGongEnumNode(categoryNode.portfolioAdapter, gongEnum)
-		children = append(children, gongEnumNode)
+		gongEnumNode.GenerateProgeny()
+		categoryNode.children = append(categoryNode.children, gongEnumNode)
 	}
 
-	slices.SortFunc(children, func(a, b diagrammer.ModelNode) int {
+	slices.SortFunc(categoryNode.children, func(a, b diagrammer.ModelNode) int {
 		return cmp.Compare(a.GetName(), b.GetName())
 	})
 
-	return
+	return categoryNode.children
 }

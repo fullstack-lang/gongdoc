@@ -21,6 +21,11 @@ func (fieldNode *FieldNode) AddToDiagram() {
 	panic("unimplemented")
 }
 
+// GetChildren implements diagrammer.ModelElementNode.
+func (*FieldNode) GetChildren() []diagrammer.ModelNode {
+	return nil
+}
+
 var _ diagrammer.ModelElementNode = &FieldNode{}
 
 func NewFieldNode(
@@ -34,8 +39,8 @@ func NewFieldNode(
 	return
 }
 
-// GenerateChildren implements diagrammer.Node.
-func (fieldNode *FieldNode) GenerateChildren() (children []diagrammer.ModelNode) {
+// GenerateProgeny implements diagrammer.Node.
+func (fieldNode *FieldNode) GenerateProgeny() (children []diagrammer.ModelNode) {
 	return
 }
 

@@ -16,18 +16,19 @@ func NewGongNoteCategoryNode(portfolioAdapter *PortfolioAdapter, name string) *G
 	return &GongNoteCategoryNode{ModelCategoryNodeBase: ModelCategoryNodeBase{portfolioAdapter: portfolioAdapter, Name: name}}
 }
 
-// GenerateChildren implements diagrammer.Node.
-func (categoryNode *GongNoteCategoryNode) GenerateChildren() (children []diagrammer.ModelNode) {
+// GenerateProgeny implements diagrammer.Node.
+func (categoryNode *GongNoteCategoryNode) GenerateProgeny() []diagrammer.ModelNode {
 
 	for gongNote := range *gong_models.GetGongstructInstancesSet[gong_models.GongNote](categoryNode.portfolioAdapter.gongStage) {
 
 		gongNoteNode := NewGongNoteNode(categoryNode.portfolioAdapter, gongNote)
-		children = append(children, gongNoteNode)
+		gongNoteNode.GenerateProgeny()
+		categoryNode.children = append(categoryNode.children, gongNoteNode)
 	}
 
-	slices.SortFunc(children, func(a, b diagrammer.ModelNode) int {
+	slices.SortFunc(categoryNode.children, func(a, b diagrammer.ModelNode) int {
 		return cmp.Compare(a.GetName(), b.GetName())
 	})
 
-	return
+	return categoryNode.children
 }

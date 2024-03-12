@@ -6,7 +6,10 @@ import (
 
 type ModelAdapter struct {
 	portfolioAdapter *PortfolioAdapter
+	rootNodes        []diagrammer.ModelNode
 }
+
+var _ diagrammer.Model = &ModelAdapter{}
 
 func NewModelAdapter(portfolioAdapter *PortfolioAdapter) (adapter *ModelAdapter) {
 	adapter = new(ModelAdapter)
@@ -15,15 +18,23 @@ func NewModelAdapter(portfolioAdapter *PortfolioAdapter) (adapter *ModelAdapter)
 }
 
 // GetRootNodes implements bridge.Model.
-func (modelAdapter *ModelAdapter) GenerateChildren() (rootNodes []diagrammer.ModelNode) {
+func (modelAdapter *ModelAdapter) GenerateProgeny() []diagrammer.ModelNode {
 	gongStructCategoryNode := NewGongStructCategoryNode(modelAdapter.portfolioAdapter, "gongstructs")
-	rootNodes = append(rootNodes, gongStructCategoryNode)
+	gongStructCategoryNode.GenerateProgeny()
+	modelAdapter.rootNodes = append(modelAdapter.rootNodes, gongStructCategoryNode)
 
 	gongEnumCategoryNode := NewGongEnumCategoryNode(modelAdapter.portfolioAdapter, "gongenums")
-	rootNodes = append(rootNodes, gongEnumCategoryNode)
+	gongEnumCategoryNode.GenerateProgeny()
+	modelAdapter.rootNodes = append(modelAdapter.rootNodes, gongEnumCategoryNode)
 
 	gongNoteCategoryNode := NewGongNoteCategoryNode(modelAdapter.portfolioAdapter, "gongnotes")
-	rootNodes = append(rootNodes, gongNoteCategoryNode)
+	gongNoteCategoryNode.GenerateProgeny()
+	modelAdapter.rootNodes = append(modelAdapter.rootNodes, gongNoteCategoryNode)
 
-	return
+	return modelAdapter.rootNodes
+}
+
+// GetChildren implements diagrammer.Model.
+func (modelAdapter *ModelAdapter) GetChildren() []diagrammer.ModelNode {
+	return modelAdapter.rootNodes
 }

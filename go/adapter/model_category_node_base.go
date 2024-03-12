@@ -1,7 +1,10 @@
 package adapter
 
+import "github.com/fullstack-lang/gongdoc/go/diagrammer"
+
 type ModelCategoryNodeBase struct {
 	portfolioAdapter *PortfolioAdapter
+	children         []diagrammer.ModelNode
 	Name             string
 	isExpanded       bool
 }
@@ -20,4 +23,8 @@ func (base *ModelCategoryNodeBase) IsNameEditable() bool {
 
 func (base *ModelCategoryNodeBase) GetName() string {
 	return base.Name
+}
+
+func (base *ModelCategoryNodeBase) GetChildren() []diagrammer.ModelNode {
+	return base.children
 }

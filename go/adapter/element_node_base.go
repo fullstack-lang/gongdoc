@@ -1,7 +1,10 @@
 package adapter
 
+import "github.com/fullstack-lang/gongdoc/go/diagrammer"
+
 type ElementNodeBase struct {
 	portfolioAdapter *PortfolioAdapter
+	children         []diagrammer.ModelNode
 }
 
 func (base *ElementNodeBase) IsExpanded() bool {
@@ -16,4 +19,8 @@ func (base *ElementNodeBase) IsNameEditable() bool {
 
 func (base *ElementNodeBase) CanBeAddedToDiagram() bool {
 	return true
+}
+
+func (base *ElementNodeBase) GetChildren() []diagrammer.ModelNode {
+	return base.children
 }
