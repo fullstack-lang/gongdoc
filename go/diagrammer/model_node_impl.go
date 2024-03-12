@@ -23,7 +23,7 @@ func (modelNodeImpl *ModelNodeImpl) OnAfterUpdate(stage *gongtree_models.StageSt
 	if !stagedNode.IsChecked && frontNode.IsChecked {
 
 		if modelElementNode, ok := modelNodeImpl.modelNode.(ModelElementNode); ok {
-			map_ModelNode_Shape := modelNodeImpl.diagrammer.portfolio.AddElement(modelElementNode)
+			map_ModelNode_Shape := modelNodeImpl.diagrammer.portfolio.AddElementToDiagram(modelElementNode)
 
 			stagedNode.IsChecked = frontNode.IsChecked
 			modelNodeImpl.diagrammer.generatePortfolioNodesButtons()
@@ -36,7 +36,7 @@ func (modelNodeImpl *ModelNodeImpl) OnAfterUpdate(stage *gongtree_models.StageSt
 	if stagedNode.IsChecked && !frontNode.IsChecked {
 
 		if modelElementNode, ok := modelNodeImpl.modelNode.(ModelElementNode); ok {
-			map_ModelNode_Shape := modelNodeImpl.diagrammer.portfolio.RemoveElement(modelElementNode)
+			map_ModelNode_Shape := modelNodeImpl.diagrammer.portfolio.RemoveElementFromDiagram(modelElementNode)
 
 			stagedNode.IsChecked = frontNode.IsChecked
 			modelNodeImpl.diagrammer.generatePortfolioNodesButtons()

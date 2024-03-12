@@ -88,8 +88,8 @@ func (portfolioAdapter *PortfolioAdapter) getDiagramPackage() *gongdoc_models.Di
 	return diagramPackage
 }
 
-// AddElement implements diagrammer.Portfolio.
-func (portfolioAdapter *PortfolioAdapter) AddElement(modelElementNode diagrammer.ModelElementNode) (
+// AddElementToDiagram implements diagrammer.Portfolio.
+func (portfolioAdapter *PortfolioAdapter) AddElementToDiagram(modelElementNode diagrammer.ModelElementNode) (
 	setOfModelElementNode map[diagrammer.ModelElementNode]diagrammer.Shape) {
 
 	modelElementNode.AddToDiagram()
@@ -103,7 +103,7 @@ func (portfolioAdapter *PortfolioAdapter) AddElement(modelElementNode diagrammer
 	return
 }
 
-func (portfolioAdapter *PortfolioAdapter) RemoveElement(modelElementNode diagrammer.ModelElementNode) (
+func (portfolioAdapter *PortfolioAdapter) RemoveElementFromDiagram(modelElementNode diagrammer.ModelElementNode) (
 	setOfModelElementNode map[diagrammer.ModelElementNode]diagrammer.Shape) {
 
 	modelElementNode.RemoveFromDiagram()
