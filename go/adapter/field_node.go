@@ -2,6 +2,7 @@ package adapter
 
 import (
 	"log"
+	"slices"
 	"strings"
 
 	gong_models "github.com/fullstack-lang/gong/go/models"
@@ -18,7 +19,51 @@ type FieldNode struct {
 
 // RemoveFromDiagram implements diagrammer.ModelElementNode.
 func (fieldNode *FieldNode) RemoveFromDiagram() {
-	panic("unimplemented")
+	gongdocStage := fieldNode.portfolioAdapter.gongdocStage
+
+	var gongStructShape *gongdoc_models.GongStructShape
+	shape, ok := fieldNode.portfolioAdapter.diagrammer.GetElementNodeDisplayed(fieldNode.gongStructNode)
+
+	if !ok {
+		log.Fatalln("unknown gongstruct shape")
+		return
+	}
+	if gongStructShape, ok = shape.(*gongdoc_models.GongStructShape); !ok {
+		log.Fatalln("not a gongstruct shape")
+		return
+	}
+
+	{
+		var field *gongdoc_models.Field
+
+		for _, _field := range gongStructShape.Fields {
+			if gongdoc_models.IdentifierToFieldName(_field.Identifier) == fieldNode.GetName() {
+				field = _field
+			}
+		}
+		if field != nil {
+			idx := slices.Index(gongStructShape.Fields, field)
+			gongStructShape.Fields = slices.Delete(gongStructShape.Fields, idx, idx+1)
+			gongStructShape.Height = gongStructShape.Height - 15
+			field.Unstage(gongdocStage)
+		}
+	}
+	{
+		var link *gongdoc_models.Link
+
+		for _, _field := range gongStructShape.Links {
+			if gongdoc_models.IdentifierToFieldName(_field.Identifier) == fieldNode.GetName() {
+				link = _field
+			}
+		}
+		if link != nil {
+			idx := slices.Index(gongStructShape.Links, link)
+			gongStructShape.Links = slices.Delete(gongStructShape.Links, idx, idx+1)
+			link.Unstage(gongdocStage)
+		}
+	}
+
+	gongdocStage.Commit()
 }
 
 // AddToDiagram implements diagrammer.ElementNode.
