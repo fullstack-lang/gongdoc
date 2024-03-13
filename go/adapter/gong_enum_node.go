@@ -57,7 +57,7 @@ func NewGongEnumNode(
 func (gongEnumNode *GongEnumNode) GenerateProgeny() []diagrammer.ModelNode {
 
 	for _, gongEnumValue := range gongEnumNode.gongEnum.GongEnumValues {
-		enumValueNode := NewEnumValueNode(gongEnumNode.portfolioAdapter, gongEnumValue)
+		enumValueNode := NewEnumValueNode(gongEnumNode.portfolioAdapter, gongEnumNode, gongEnumValue)
 		gongEnumNode.children = append(gongEnumNode.children, enumValueNode)
 	}
 
