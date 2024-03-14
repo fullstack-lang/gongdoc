@@ -74,6 +74,7 @@ var _ diagrammer.ModelElementNode = &GongNoteNode{}
 func NewGongNoteNode(
 	portfolioAdapter *PortfolioAdapter,
 	gongNote *gong_models.GongNote) (gongNoteNode *GongNoteNode) {
+
 	gongNoteNode = &GongNoteNode{ElementNodeBase: ElementNodeBase{portfolioAdapter: portfolioAdapter}}
 
 	gongNoteNode.gongNote = gongNote
@@ -84,7 +85,7 @@ func NewGongNoteNode(
 func (gongNoteNode *GongNoteNode) GenerateProgeny() []diagrammer.ModelNode {
 
 	for _, link := range gongNoteNode.gongNote.Links {
-		linkNode := NewLinkNode(gongNoteNode.portfolioAdapter, link)
+		linkNode := NewLinkNode(gongNoteNode.portfolioAdapter, gongNoteNode, link)
 		gongNoteNode.children = append(gongNoteNode.children, linkNode)
 	}
 

@@ -268,16 +268,19 @@ func Default_2Injection(stage *models.StageStruct) {
 	// Declarations of staged instances of GongStructShape
 	__GongStructShape__000000_Default_2_Classdiagram := (&models.GongStructShape{Name: `Default_2-Classdiagram`}).Stage(stage)
 	__GongStructShape__000001_Default_2_Field := (&models.GongStructShape{Name: `Default_2-Field`}).Stage(stage)
+	__GongStructShape__000002_Default_2_NoteShape := (&models.GongStructShape{Name: `Default_2-NoteShape`}).Stage(stage)
 
 	// Declarations of staged instances of Link
 
 	// Declarations of staged instances of NoteShape
+	__NoteShape__000000_NoteOnGongdoc := (&models.NoteShape{Name: `NoteOnGongdoc`}).Stage(stage)
 
 	// Declarations of staged instances of NoteShapeLink
 
 	// Declarations of staged instances of Position
 	__Position__000000_Pos_Default_2_Classdiagram := (&models.Position{Name: `Pos-Default_2-Classdiagram`}).Stage(stage)
 	__Position__000001_Pos_Default_2_Field := (&models.Position{Name: `Pos-Default_2-Field`}).Stage(stage)
+	__Position__000002_Pos_Default_2_NoteShape := (&models.Position{Name: `Pos-Default_2-NoteShape`}).Stage(stage)
 
 	// Declarations of staged instances of UmlState
 
@@ -317,6 +320,38 @@ func Default_2Injection(stage *models.StageStruct) {
 	__GongStructShape__000001_Default_2_Field.Height = 63.000000
 	__GongStructShape__000001_Default_2_Field.IsSelected = false
 
+	// GongStructShape values setup
+	__GongStructShape__000002_Default_2_NoteShape.Name = `Default_2-NoteShape`
+
+	// comment added to overcome the problem with the comment map association
+
+	//gong:ident [ref_models.NoteShape]
+	__GongStructShape__000002_Default_2_NoteShape.Identifier = `ref_models.NoteShape`
+	__GongStructShape__000002_Default_2_NoteShape.ShowNbInstances = false
+	__GongStructShape__000002_Default_2_NoteShape.NbInstances = 0
+	__GongStructShape__000002_Default_2_NoteShape.Width = 240.000000
+	__GongStructShape__000002_Default_2_NoteShape.Height = 63.000000
+	__GongStructShape__000002_Default_2_NoteShape.IsSelected = false
+
+	// NoteShape values setup
+	__NoteShape__000000_NoteOnGongdoc.Name = `NoteOnGongdoc`
+
+	// comment added to overcome the problem with the comment map association
+
+	//gong:ident [ref_models.NoteOnGongdoc]
+	__NoteShape__000000_NoteOnGongdoc.Identifier = `ref_models.NoteOnGongdoc`
+	__NoteShape__000000_NoteOnGongdoc.Body = `Note Example
+
+This note can refers to [models.NoteShape]
+or to [models.Classdiagram.NoteShapes]
+`
+	__NoteShape__000000_NoteOnGongdoc.BodyHTML = ``
+	__NoteShape__000000_NoteOnGongdoc.X = 498.000000
+	__NoteShape__000000_NoteOnGongdoc.Y = 203.000000
+	__NoteShape__000000_NoteOnGongdoc.Width = 240.000000
+	__NoteShape__000000_NoteOnGongdoc.Height = 63.000000
+	__NoteShape__000000_NoteOnGongdoc.Matched = false
+
 	// Position values setup
 	__Position__000000_Pos_Default_2_Classdiagram.X = 78.000000
 	__Position__000000_Pos_Default_2_Classdiagram.Y = 27.000000
@@ -327,11 +362,19 @@ func Default_2Injection(stage *models.StageStruct) {
 	__Position__000001_Pos_Default_2_Field.Y = 182.000000
 	__Position__000001_Pos_Default_2_Field.Name = `Pos-Default_2-Field`
 
+	// Position values setup
+	__Position__000002_Pos_Default_2_NoteShape.X = 66.000000
+	__Position__000002_Pos_Default_2_NoteShape.Y = 26.000000
+	__Position__000002_Pos_Default_2_NoteShape.Name = `Pos-Default_2-NoteShape`
+
 	// Setup of pointers
 	__Classdiagram__000000_Default_2.GongStructShapes = append(__Classdiagram__000000_Default_2.GongStructShapes, __GongStructShape__000000_Default_2_Classdiagram)
 	__Classdiagram__000000_Default_2.GongStructShapes = append(__Classdiagram__000000_Default_2.GongStructShapes, __GongStructShape__000001_Default_2_Field)
+	__Classdiagram__000000_Default_2.GongStructShapes = append(__Classdiagram__000000_Default_2.GongStructShapes, __GongStructShape__000002_Default_2_NoteShape)
+	__Classdiagram__000000_Default_2.NoteShapes = append(__Classdiagram__000000_Default_2.NoteShapes, __NoteShape__000000_NoteOnGongdoc)
 	__GongStructShape__000000_Default_2_Classdiagram.Position = __Position__000000_Pos_Default_2_Classdiagram
 	__GongStructShape__000001_Default_2_Field.Position = __Position__000001_Pos_Default_2_Field
+	__GongStructShape__000002_Default_2_NoteShape.Position = __Position__000002_Pos_Default_2_NoteShape
 }
 
 
