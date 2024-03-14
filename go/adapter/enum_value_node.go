@@ -2,6 +2,7 @@ package adapter
 
 import (
 	"log"
+	"slices"
 
 	gong_models "github.com/fullstack-lang/gong/go/models"
 	gongdoc_models "github.com/fullstack-lang/gongdoc/go/models"
@@ -34,8 +35,35 @@ func (*EnumValueNode) GetChildren() []diagrammer.ModelNode {
 }
 
 // RemoveFromDiagram implements diagrammer.ModelElementNode.
-func (enumvalueNode *EnumValueNode) RemoveFromDiagram() {
-	panic("unimplemented")
+func (enumValueNode *EnumValueNode) RemoveFromDiagram() {
+	gongdocStage := enumValueNode.portfolioAdapter.gongdocStage
+
+	var gongEnumShape *gongdoc_models.GongEnumShape
+	shape, ok := enumValueNode.portfolioAdapter.diagrammer.GetElementNodeDisplayed(enumValueNode.gongEnumNode)
+
+	if !ok {
+		log.Fatalln("unknown gong enum shape")
+		return
+	}
+	if gongEnumShape, ok = shape.(*gongdoc_models.GongEnumShape); !ok {
+		log.Fatalln("not a gong enum shape")
+		return
+	}
+
+	var gongEnumValueEntry *gongdoc_models.GongEnumValueEntry
+
+	for _, _field := range gongEnumShape.GongEnumValueEntrys {
+		if gongdoc_models.IdentifierToFieldName(_field.Identifier) == enumValueNode.GetName() {
+			gongEnumValueEntry = _field
+		}
+	}
+	if gongEnumValueEntry != nil {
+		idx := slices.Index(gongEnumShape.GongEnumValueEntrys, gongEnumValueEntry)
+		gongEnumShape.GongEnumValueEntrys = slices.Delete(gongEnumShape.GongEnumValueEntrys, idx, idx+1)
+		gongEnumShape.Height = gongEnumShape.Height - 15
+		gongEnumValueEntry.Unstage(gongdocStage)
+	}
+	gongdocStage.Commit()
 }
 
 // AddToDiagram implements diagrammer.ElementNode.
