@@ -2,6 +2,7 @@ package adapter
 
 import (
 	"log"
+	"slices"
 
 	gong_models "github.com/fullstack-lang/gong/go/models"
 	gongdoc_models "github.com/fullstack-lang/gongdoc/go/models"
@@ -29,7 +30,35 @@ func NewLinkNode(
 
 // RemoveFromDiagram implements diagrammer.ModelElementNode.
 func (linkNode *LinkNode) RemoveFromDiagram() {
-	panic("unimplemented")
+
+	gongdocStage := linkNode.portfolioAdapter.gongdocStage
+
+	// get the holding note shape
+	var noteShape *gongdoc_models.NoteShape
+	shape, ok := linkNode.portfolioAdapter.diagrammer.GetElementNodeDisplayed(linkNode.gongNoteNode)
+
+	if !ok {
+		log.Fatalln("unknown note shape")
+		return
+	}
+	if noteShape, ok = shape.(*gongdoc_models.NoteShape); !ok {
+		log.Fatalln("not a note shape")
+		return
+	}
+
+	// get the relevant gong note link
+	var noteShapeLink *gongdoc_models.NoteShapeLink
+	for _, _noteShapeLink := range noteShape.NoteShapeLinks {
+		if _noteShapeLink.Name == linkNode.link.Name {
+			noteShapeLink = _noteShapeLink
+		}
+	}
+
+	noteShapeLink.Unstage(gongdocStage)
+	idx := slices.Index(noteShape.NoteShapeLinks, noteShapeLink)
+	noteShape.NoteShapeLinks = slices.Delete(noteShape.NoteShapeLinks, idx, idx+1)
+
+	gongdocStage.Commit()
 }
 
 // AddToDiagram implements diagrammer.ElementNode.

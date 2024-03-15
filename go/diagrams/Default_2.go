@@ -279,6 +279,8 @@ func Default_2Injection(stage *models.StageStruct) {
 
 	// Declarations of staged instances of NoteShapeLink
 	__NoteShapeLink__000000_NoteShape := (&models.NoteShapeLink{Name: `NoteShape`}).Stage(stage)
+	__NoteShapeLink__000001_NoteShapes := (&models.NoteShapeLink{Name: `NoteShapes`}).Stage(stage)
+	__NoteShapeLink__000002_OrientationType := (&models.NoteShapeLink{Name: `OrientationType`}).Stage(stage)
 
 	// Declarations of staged instances of Position
 	__Position__000000_Pos_Default_2_Classdiagram := (&models.Position{Name: `Pos-Default_2-Classdiagram`}).Stage(stage)
@@ -407,6 +409,24 @@ or to <a href="/models#OrientationType">models.OrientationType</a>
 	__NoteShapeLink__000000_NoteShape.Identifier = `ref_models.NoteShape`
 	__NoteShapeLink__000000_NoteShape.Type = models.NOTE_SHAPE_LINK_TO_GONG_STRUCT_OR_ENUM_SHAPE
 
+	// NoteShapeLink values setup
+	__NoteShapeLink__000001_NoteShapes.Name = `NoteShapes`
+
+	// comment added to overcome the problem with the comment map association
+
+	//gong:ident [ref_models.Classdiagram.NoteShapes]
+	__NoteShapeLink__000001_NoteShapes.Identifier = `ref_models.Classdiagram.NoteShapes`
+	__NoteShapeLink__000001_NoteShapes.Type = models.NOTE_SHAPE_LINK_TO_GONG_FIELD
+
+	// NoteShapeLink values setup
+	__NoteShapeLink__000002_OrientationType.Name = `OrientationType`
+
+	// comment added to overcome the problem with the comment map association
+
+	//gong:ident [ref_models.OrientationType]
+	__NoteShapeLink__000002_OrientationType.Identifier = `ref_models.OrientationType`
+	__NoteShapeLink__000002_OrientationType.Type = models.NOTE_SHAPE_LINK_TO_GONG_STRUCT_OR_ENUM_SHAPE
+
 	// Position values setup
 	__Position__000000_Pos_Default_2_Classdiagram.X = 78.000000
 	__Position__000000_Pos_Default_2_Classdiagram.Y = 27.000000
@@ -445,6 +465,8 @@ or to <a href="/models#OrientationType">models.OrientationType</a>
 	__GongStructShape__000002_Default_2_NoteShape.Position = __Position__000002_Pos_Default_2_NoteShape
 	__Link__000000_NoteShapes.Middlevertice = __Vertice__000000_Verticle_in_class_diagram_Default_2_in_middle_between_Default_2_Classdiagram_and_Default_2_NoteShape
 	__NoteShape__000000_NoteOnGongdoc.NoteShapeLinks = append(__NoteShape__000000_NoteOnGongdoc.NoteShapeLinks, __NoteShapeLink__000000_NoteShape)
+	__NoteShape__000000_NoteOnGongdoc.NoteShapeLinks = append(__NoteShape__000000_NoteOnGongdoc.NoteShapeLinks, __NoteShapeLink__000001_NoteShapes)
+	__NoteShape__000000_NoteOnGongdoc.NoteShapeLinks = append(__NoteShape__000000_NoteOnGongdoc.NoteShapeLinks, __NoteShapeLink__000002_OrientationType)
 }
 
 
