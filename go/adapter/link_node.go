@@ -2,7 +2,6 @@ package adapter
 
 import (
 	"log"
-	"strings"
 
 	gong_models "github.com/fullstack-lang/gong/go/models"
 	gongdoc_models "github.com/fullstack-lang/gongdoc/go/models"
@@ -14,7 +13,7 @@ type LinkNode struct {
 	ElementNodeBase
 	gongNoteNode *GongNoteNode
 	stage        *gong_models.StageStruct
-	Link         *gong_models.GongLink
+	link         *gong_models.GongLink
 }
 
 func NewLinkNode(
@@ -24,7 +23,7 @@ func NewLinkNode(
 	linkNode = &LinkNode{ElementNodeBase: ElementNodeBase{portfolioAdapter: portfolioAdapter}}
 
 	linkNode.gongNoteNode = gongNoteNode
-	linkNode.Link = link
+	linkNode.link = link
 	return
 }
 
@@ -50,13 +49,12 @@ func (linkNode *LinkNode) AddToDiagram() {
 	}
 	noteShapeLink := (&gongdoc_models.NoteShapeLink{Name: linkNode.GetName()}).Stage(gongdocStage)
 
-	if strings.ContainsAny(linkNode.GetName(), ".") {
-
-		subStrings := strings.Split(linkNode.GetName(), ".")
+	if linkNode.link.Recv != "" {
 
 		noteShapeLink.Type = gongdoc_models.NOTE_SHAPE_LINK_TO_GONG_FIELD
 		noteShapeLink.Identifier =
-			gongdoc_models.GongstructAndFieldnameToFieldIdentifier(subStrings[0], subStrings[1])
+			gongdoc_models.GongstructAndFieldnameToFieldIdentifier(
+				linkNode.link.Recv, linkNode.link.Name)
 
 	} else {
 		noteShapeLink.Type = gongdoc_models.NOTE_SHAPE_LINK_TO_GONG_STRUCT_OR_ENUM_SHAPE
@@ -88,7 +86,7 @@ func (linkNode *LinkNode) GenerateProgeny() (children []diagrammer.ModelNode) {
 
 // GetName implements diagrammer.Node.
 func (linkNode *LinkNode) GetName() string {
-	return linkNode.Link.GetName()
+	return linkNode.link.GetName()
 }
 
 // IsNameEditable implements diagrammer.Node.
@@ -97,14 +95,14 @@ func (linkNode *LinkNode) IsNameEditable() bool {
 }
 
 func (linkNode *LinkNode) GetElement() any {
-	return linkNode.Link
+	return linkNode.link
 }
 
 func (linkNode *LinkNode) CanBeAddedToDiagram() (result bool) {
 
 	diagrammer := linkNode.portfolioAdapter.diagrammer
 	gongStage := linkNode.portfolioAdapter.gongStage
-	link := linkNode.Link
+	link := linkNode.link
 
 	// the parent node must already be displayed in order to be able to display the node
 	result = diagrammer.IsElementNodeDisplayed(linkNode.gongNoteNode)
