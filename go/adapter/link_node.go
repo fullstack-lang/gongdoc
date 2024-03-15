@@ -119,6 +119,14 @@ func (linkNode *LinkNode) CanBeAddedToDiagram() (result bool) {
 		if ok {
 			result = result && diagrammer.IsElementDisplayed(gongStruct)
 		}
+
+		// is it a gongsenu ?
+		map2_ := *gong_models.GetGongstructInstancesMap[gong_models.GongEnum](gongStage)
+		gongEnum, ok := map2_[link.Name]
+
+		if ok {
+			result = result && diagrammer.IsElementDisplayed(gongEnum)
+		}
 	} else // the other case (Recv != "") is when the gonglink points to a link
 	{
 		// fieldName := link.Recv + "." + link.Name

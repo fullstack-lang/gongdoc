@@ -262,6 +262,7 @@ func Default_2Injection(stage *models.StageStruct) {
 	// Declarations of staged instances of Field
 
 	// Declarations of staged instances of GongEnumShape
+	__GongEnumShape__000000_Default_2_OrientationType := (&models.GongEnumShape{Name: `Default_2-OrientationType`}).Stage(stage)
 
 	// Declarations of staged instances of GongEnumValueEntry
 
@@ -281,6 +282,7 @@ func Default_2Injection(stage *models.StageStruct) {
 	__Position__000000_Pos_Default_2_Classdiagram := (&models.Position{Name: `Pos-Default_2-Classdiagram`}).Stage(stage)
 	__Position__000001_Pos_Default_2_Field := (&models.Position{Name: `Pos-Default_2-Field`}).Stage(stage)
 	__Position__000002_Pos_Default_2_NoteShape := (&models.Position{Name: `Pos-Default_2-NoteShape`}).Stage(stage)
+	__Position__000003_Pos_Default_2_OrientationType := (&models.Position{Name: `Pos-Default_2-OrientationType`}).Stage(stage)
 
 	// Declarations of staged instances of UmlState
 
@@ -293,6 +295,16 @@ func Default_2Injection(stage *models.StageStruct) {
 	// Classdiagram values setup
 	__Classdiagram__000000_Default_2.Name = `Default_2`
 	__Classdiagram__000000_Default_2.IsInDrawMode = false
+
+	// GongEnumShape values setup
+	__GongEnumShape__000000_Default_2_OrientationType.Name = `Default_2-OrientationType`
+
+	// comment added to overcome the problem with the comment map association
+
+	//gong:ident [ref_models.OrientationType]
+	__GongEnumShape__000000_Default_2_OrientationType.Identifier = `ref_models.OrientationType`
+	__GongEnumShape__000000_Default_2_OrientationType.Width = 240.000000
+	__GongEnumShape__000000_Default_2_OrientationType.Height = 63.000000
 
 	// GongStructShape values setup
 	__GongStructShape__000000_Default_2_Classdiagram.Name = `Default_2-Classdiagram`
@@ -327,7 +339,7 @@ func Default_2Injection(stage *models.StageStruct) {
 
 	//gong:ident [ref_models.NoteShape]
 	__GongStructShape__000002_Default_2_NoteShape.Identifier = `ref_models.NoteShape`
-	__GongStructShape__000002_Default_2_NoteShape.ShowNbInstances = false
+	__GongStructShape__000002_Default_2_NoteShape.ShowNbInstances = true
 	__GongStructShape__000002_Default_2_NoteShape.NbInstances = 0
 	__GongStructShape__000002_Default_2_NoteShape.Width = 240.000000
 	__GongStructShape__000002_Default_2_NoteShape.Height = 63.000000
@@ -344,12 +356,17 @@ func Default_2Injection(stage *models.StageStruct) {
 
 This note can refers to [models.NoteShape]
 or to [models.Classdiagram.NoteShapes]
+or to [models.OrientationType]
 `
-	__NoteShape__000000_NoteOnGongdoc.BodyHTML = ``
+	__NoteShape__000000_NoteOnGongdoc.BodyHTML = `<p>Note Example
+<p>This note can refers to <a href="/models#NoteShape">models.NoteShape</a>
+or to <a href="/models#Classdiagram.NoteShapes">models.Classdiagram.NoteShapes</a>
+or to <a href="/models#OrientationType">models.OrientationType</a>
+`
 	__NoteShape__000000_NoteOnGongdoc.X = 498.000000
 	__NoteShape__000000_NoteOnGongdoc.Y = 203.000000
-	__NoteShape__000000_NoteOnGongdoc.Width = 240.000000
-	__NoteShape__000000_NoteOnGongdoc.Height = 63.000000
+	__NoteShape__000000_NoteOnGongdoc.Width = 357.000000
+	__NoteShape__000000_NoteOnGongdoc.Height = 106.000000
 	__NoteShape__000000_NoteOnGongdoc.Matched = false
 
 	// Position values setup
@@ -367,11 +384,18 @@ or to [models.Classdiagram.NoteShapes]
 	__Position__000002_Pos_Default_2_NoteShape.Y = 26.000000
 	__Position__000002_Pos_Default_2_NoteShape.Name = `Pos-Default_2-NoteShape`
 
+	// Position values setup
+	__Position__000003_Pos_Default_2_OrientationType.X = 76.000000
+	__Position__000003_Pos_Default_2_OrientationType.Y = 400.000000
+	__Position__000003_Pos_Default_2_OrientationType.Name = `Pos-Default_2-OrientationType`
+
 	// Setup of pointers
 	__Classdiagram__000000_Default_2.GongStructShapes = append(__Classdiagram__000000_Default_2.GongStructShapes, __GongStructShape__000000_Default_2_Classdiagram)
 	__Classdiagram__000000_Default_2.GongStructShapes = append(__Classdiagram__000000_Default_2.GongStructShapes, __GongStructShape__000001_Default_2_Field)
 	__Classdiagram__000000_Default_2.GongStructShapes = append(__Classdiagram__000000_Default_2.GongStructShapes, __GongStructShape__000002_Default_2_NoteShape)
+	__Classdiagram__000000_Default_2.GongEnumShapes = append(__Classdiagram__000000_Default_2.GongEnumShapes, __GongEnumShape__000000_Default_2_OrientationType)
 	__Classdiagram__000000_Default_2.NoteShapes = append(__Classdiagram__000000_Default_2.NoteShapes, __NoteShape__000000_NoteOnGongdoc)
+	__GongEnumShape__000000_Default_2_OrientationType.Position = __Position__000003_Pos_Default_2_OrientationType
 	__GongStructShape__000000_Default_2_Classdiagram.Position = __Position__000000_Pos_Default_2_Classdiagram
 	__GongStructShape__000001_Default_2_Field.Position = __Position__000001_Pos_Default_2_Field
 	__GongStructShape__000002_Default_2_NoteShape.Position = __Position__000002_Pos_Default_2_NoteShape
