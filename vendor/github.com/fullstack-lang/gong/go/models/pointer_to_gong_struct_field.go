@@ -11,6 +11,8 @@ type PointerToGongStructField struct {
 	CompositeStructName string
 }
 
+var _ FieldInterface = &PointerToGongStructField{}
+
 func (pointerToGongStructField *PointerToGongStructField) GetIndex() int {
 	return pointerToGongStructField.Index
 }

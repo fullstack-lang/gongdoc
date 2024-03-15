@@ -161,6 +161,8 @@ var map_DocLink_Identifier_Default map[string]any = map[string]any{
 
 	"ref_models.NOTE_SHAPE_LINK_TO_GONG_STRUCT_OR_ENUM_SHAPE": ref_models.NOTE_SHAPE_LINK_TO_GONG_STRUCT_OR_ENUM_SHAPE,
 
+	"ref_models.NoteOnGongdoc": ref_models.NoteOnGongdoc,
+
 	"ref_models.NoteShape": &(ref_models.NoteShape{}),
 
 	"ref_models.NoteShape.Body": (ref_models.NoteShape{}).Body,
@@ -281,10 +283,14 @@ func DefaultInjection(stage *models.StageStruct) {
 	__Link__000000_Classdiagrams := (&models.Link{Name: `Classdiagrams`}).Stage(stage)
 	__Link__000001_Fields := (&models.Link{Name: `Fields`}).Stage(stage)
 	__Link__000002_NoteShapes := (&models.Link{Name: `NoteShapes`}).Stage(stage)
+	__Link__000003_SelectedClassdiagram := (&models.Link{Name: `SelectedClassdiagram`}).Stage(stage)
 
 	// Declarations of staged instances of NoteShape
+	__NoteShape__000000_NoteOnGongdoc := (&models.NoteShape{Name: `NoteOnGongdoc`}).Stage(stage)
 
 	// Declarations of staged instances of NoteShapeLink
+	__NoteShapeLink__000000_Classdiagram_NoteShapes := (&models.NoteShapeLink{Name: `Classdiagram.NoteShapes`}).Stage(stage)
+	__NoteShapeLink__000001_NoteShape := (&models.NoteShapeLink{Name: `NoteShape`}).Stage(stage)
 
 	// Declarations of staged instances of Position
 	__Position__000000_Pos_Default_Classdiagram := (&models.Position{Name: `Pos-Default-Classdiagram`}).Stage(stage)
@@ -302,13 +308,14 @@ func DefaultInjection(stage *models.StageStruct) {
 	// Declarations of staged instances of Vertice
 	__Vertice__000000_Verticle_in_class_diagram_Default_in_middle_between_Default_Classdiagram_and_Default_NoteShape := (&models.Vertice{Name: `Verticle in class diagram Default in middle between Default-Classdiagram and Default-NoteShape`}).Stage(stage)
 	__Vertice__000001_Verticle_in_class_diagram_Default_in_middle_between_Default_DiagramPackage_and_Default_Classdiagram := (&models.Vertice{Name: `Verticle in class diagram Default in middle between Default-DiagramPackage and Default-Classdiagram`}).Stage(stage)
-	__Vertice__000002_Verticle_in_class_diagram_Default_in_middle_between_Default_GongStructShape_and_Default_Field := (&models.Vertice{Name: `Verticle in class diagram Default in middle between Default-GongStructShape and Default-Field`}).Stage(stage)
+	__Vertice__000002_Verticle_in_class_diagram_Default_in_middle_between_Default_DiagramPackage_and_Default_Classdiagram := (&models.Vertice{Name: `Verticle in class diagram Default in middle between Default-DiagramPackage and Default-Classdiagram`}).Stage(stage)
+	__Vertice__000003_Verticle_in_class_diagram_Default_in_middle_between_Default_GongStructShape_and_Default_Field := (&models.Vertice{Name: `Verticle in class diagram Default in middle between Default-GongStructShape and Default-Field`}).Stage(stage)
 
 	// Setup of values
 
 	// Classdiagram values setup
 	__Classdiagram__000000_Default.Name = `Default`
-	__Classdiagram__000000_Default.IsInDrawMode = true
+	__Classdiagram__000000_Default.IsInDrawMode = false
 
 	// Field values setup
 	__Field__000000_Name.Name = `Name`
@@ -458,11 +465,11 @@ func DefaultInjection(stage *models.StageStruct) {
 	__Link__000000_Classdiagrams.SourceMultiplicity = models.ZERO_ONE
 	__Link__000000_Classdiagrams.SourceMultiplicityOffsetX = 21.000000
 	__Link__000000_Classdiagrams.SourceMultiplicityOffsetY = -24.000000
-	__Link__000000_Classdiagrams.StartOrientation = models.ORIENTATION_HORIZONTAL
-	__Link__000000_Classdiagrams.StartRatio = 0.500000
+	__Link__000000_Classdiagrams.StartOrientation = models.ORIENTATION_VERTICAL
+	__Link__000000_Classdiagrams.StartRatio = 0.437500
 	__Link__000000_Classdiagrams.EndOrientation = models.ORIENTATION_HORIZONTAL
 	__Link__000000_Classdiagrams.EndRatio = 0.500000
-	__Link__000000_Classdiagrams.CornerOffsetRatio = 1.341985
+	__Link__000000_Classdiagrams.CornerOffsetRatio = 1.015873
 
 	// Link values setup
 	__Link__000001_Fields.Name = `Fields`
@@ -516,6 +523,72 @@ func DefaultInjection(stage *models.StageStruct) {
 	__Link__000002_NoteShapes.EndRatio = 0.500000
 	__Link__000002_NoteShapes.CornerOffsetRatio = 1.262818
 
+	// Link values setup
+	__Link__000003_SelectedClassdiagram.Name = `SelectedClassdiagram`
+
+	// comment added to overcome the problem with the comment map association
+
+	//gong:ident [ref_models.DiagramPackage.SelectedClassdiagram]
+	__Link__000003_SelectedClassdiagram.Identifier = `ref_models.DiagramPackage.SelectedClassdiagram`
+
+	// comment added to overcome the problem with the comment map association
+
+	//gong:ident [ref_models.Classdiagram]
+	__Link__000003_SelectedClassdiagram.Fieldtypename = `ref_models.Classdiagram`
+	__Link__000003_SelectedClassdiagram.FieldOffsetX = -50.000000
+	__Link__000003_SelectedClassdiagram.FieldOffsetY = -16.000000
+	__Link__000003_SelectedClassdiagram.TargetMultiplicity = models.ZERO_ONE
+	__Link__000003_SelectedClassdiagram.TargetMultiplicityOffsetX = -50.000000
+	__Link__000003_SelectedClassdiagram.TargetMultiplicityOffsetY = 16.000000
+	__Link__000003_SelectedClassdiagram.SourceMultiplicity = models.MANY
+	__Link__000003_SelectedClassdiagram.SourceMultiplicityOffsetX = 10.000000
+	__Link__000003_SelectedClassdiagram.SourceMultiplicityOffsetY = -50.000000
+	__Link__000003_SelectedClassdiagram.StartOrientation = models.ORIENTATION_HORIZONTAL
+	__Link__000003_SelectedClassdiagram.StartRatio = 0.500000
+	__Link__000003_SelectedClassdiagram.EndOrientation = models.ORIENTATION_VERTICAL
+	__Link__000003_SelectedClassdiagram.EndRatio = 0.562500
+	__Link__000003_SelectedClassdiagram.CornerOffsetRatio = 2.174603
+
+	// NoteShape values setup
+	__NoteShape__000000_NoteOnGongdoc.Name = `NoteOnGongdoc`
+
+	// comment added to overcome the problem with the comment map association
+
+	//gong:ident [ref_models.NoteOnGongdoc]
+	__NoteShape__000000_NoteOnGongdoc.Identifier = `ref_models.NoteOnGongdoc`
+	__NoteShape__000000_NoteOnGongdoc.Body = `Note Example
+
+This note can refers to [models.NoteShape]
+or to [models.Classdiagram.NoteShapes]
+`
+	__NoteShape__000000_NoteOnGongdoc.BodyHTML = `<p>Note Example
+<p>This note can refers to <a href="/models#NoteShape">models.NoteShape</a>
+or to <a href="/models#Classdiagram.NoteShapes">models.Classdiagram.NoteShapes</a>
+`
+	__NoteShape__000000_NoteOnGongdoc.X = 759.999939
+	__NoteShape__000000_NoteOnGongdoc.Y = 48.000000
+	__NoteShape__000000_NoteOnGongdoc.Width = 347.000000
+	__NoteShape__000000_NoteOnGongdoc.Height = 88.000000
+	__NoteShape__000000_NoteOnGongdoc.Matched = false
+
+	// NoteShapeLink values setup
+	__NoteShapeLink__000000_Classdiagram_NoteShapes.Name = `Classdiagram.NoteShapes`
+
+	// comment added to overcome the problem with the comment map association
+
+	//gong:ident [ref_models.Classdiagram.NoteShapes]
+	__NoteShapeLink__000000_Classdiagram_NoteShapes.Identifier = `ref_models.Classdiagram.NoteShapes`
+	__NoteShapeLink__000000_Classdiagram_NoteShapes.Type = models.NOTE_SHAPE_LINK_TO_GONG_FIELD
+
+	// NoteShapeLink values setup
+	__NoteShapeLink__000001_NoteShape.Name = `NoteShape`
+
+	// comment added to overcome the problem with the comment map association
+
+	//gong:ident [ref_models.NoteShape]
+	__NoteShapeLink__000001_NoteShape.Identifier = `ref_models.NoteShape`
+	__NoteShapeLink__000001_NoteShape.Type = models.NOTE_SHAPE_LINK_TO_GONG_STRUCT_OR_ENUM_SHAPE
+
 	// Position values setup
 	__Position__000000_Pos_Default_Classdiagram.X = 558.000031
 	__Position__000000_Pos_Default_Classdiagram.Y = 319.000000
@@ -542,8 +615,8 @@ func DefaultInjection(stage *models.StageStruct) {
 	__Position__000004_Pos_Default_GongStructShape.Name = `Pos-Default-GongStructShape`
 
 	// Position values setup
-	__Position__000005_Pos_Default_MultiplicityType.X = 106.000000
-	__Position__000005_Pos_Default_MultiplicityType.Y = 15.000000
+	__Position__000005_Pos_Default_MultiplicityType.X = 364.000000
+	__Position__000005_Pos_Default_MultiplicityType.Y = 37.000000
 	__Position__000005_Pos_Default_MultiplicityType.Name = `Pos-Default-MultiplicityType`
 
 	// Position values setup
@@ -562,9 +635,14 @@ func DefaultInjection(stage *models.StageStruct) {
 	__Vertice__000001_Verticle_in_class_diagram_Default_in_middle_between_Default_DiagramPackage_and_Default_Classdiagram.Name = `Verticle in class diagram Default in middle between Default-DiagramPackage and Default-Classdiagram`
 
 	// Vertice values setup
-	__Vertice__000002_Verticle_in_class_diagram_Default_in_middle_between_Default_GongStructShape_and_Default_Field.X = 476.500000
-	__Vertice__000002_Verticle_in_class_diagram_Default_in_middle_between_Default_GongStructShape_and_Default_Field.Y = 363.000000
-	__Vertice__000002_Verticle_in_class_diagram_Default_in_middle_between_Default_GongStructShape_and_Default_Field.Name = `Verticle in class diagram Default in middle between Default-GongStructShape and Default-Field`
+	__Vertice__000002_Verticle_in_class_diagram_Default_in_middle_between_Default_DiagramPackage_and_Default_Classdiagram.X = 700.000016
+	__Vertice__000002_Verticle_in_class_diagram_Default_in_middle_between_Default_DiagramPackage_and_Default_Classdiagram.Y = 281.500000
+	__Vertice__000002_Verticle_in_class_diagram_Default_in_middle_between_Default_DiagramPackage_and_Default_Classdiagram.Name = `Verticle in class diagram Default in middle between Default-DiagramPackage and Default-Classdiagram`
+
+	// Vertice values setup
+	__Vertice__000003_Verticle_in_class_diagram_Default_in_middle_between_Default_GongStructShape_and_Default_Field.X = 476.500000
+	__Vertice__000003_Verticle_in_class_diagram_Default_in_middle_between_Default_GongStructShape_and_Default_Field.Y = 363.000000
+	__Vertice__000003_Verticle_in_class_diagram_Default_in_middle_between_Default_GongStructShape_and_Default_Field.Name = `Verticle in class diagram Default in middle between Default-GongStructShape and Default-Field`
 
 	// Setup of pointers
 	__Classdiagram__000000_Default.GongStructShapes = append(__Classdiagram__000000_Default.GongStructShapes, __GongStructShape__000004_Default_NoteShape)
@@ -574,6 +652,7 @@ func DefaultInjection(stage *models.StageStruct) {
 	__Classdiagram__000000_Default.GongStructShapes = append(__Classdiagram__000000_Default.GongStructShapes, __GongStructShape__000002_Default_Field)
 	__Classdiagram__000000_Default.GongEnumShapes = append(__Classdiagram__000000_Default.GongEnumShapes, __GongEnumShape__000000_Default_GongEnumShapeType)
 	__Classdiagram__000000_Default.GongEnumShapes = append(__Classdiagram__000000_Default.GongEnumShapes, __GongEnumShape__000001_Default_MultiplicityType)
+	__Classdiagram__000000_Default.NoteShapes = append(__Classdiagram__000000_Default.NoteShapes, __NoteShape__000000_NoteOnGongdoc)
 	__GongEnumShape__000000_Default_GongEnumShapeType.Position = __Position__000003_Pos_Default_GongEnumShapeType
 	__GongEnumShape__000000_Default_GongEnumShapeType.GongEnumValueEntrys = append(__GongEnumShape__000000_Default_GongEnumShapeType.GongEnumValueEntrys, __GongEnumValueEntry__000000_Int)
 	__GongEnumShape__000000_Default_GongEnumShapeType.GongEnumValueEntrys = append(__GongEnumShape__000000_Default_GongEnumShapeType.GongEnumValueEntrys, __GongEnumValueEntry__000002_String)
@@ -584,14 +663,18 @@ func DefaultInjection(stage *models.StageStruct) {
 	__GongStructShape__000000_Default_Classdiagram.Links = append(__GongStructShape__000000_Default_Classdiagram.Links, __Link__000002_NoteShapes)
 	__GongStructShape__000001_Default_DiagramPackage.Position = __Position__000001_Pos_Default_DiagramPackage
 	__GongStructShape__000001_Default_DiagramPackage.Links = append(__GongStructShape__000001_Default_DiagramPackage.Links, __Link__000000_Classdiagrams)
+	__GongStructShape__000001_Default_DiagramPackage.Links = append(__GongStructShape__000001_Default_DiagramPackage.Links, __Link__000003_SelectedClassdiagram)
 	__GongStructShape__000002_Default_Field.Position = __Position__000002_Pos_Default_Field
 	__GongStructShape__000003_Default_GongStructShape.Position = __Position__000004_Pos_Default_GongStructShape
 	__GongStructShape__000003_Default_GongStructShape.Fields = append(__GongStructShape__000003_Default_GongStructShape.Fields, __Field__000000_Name)
 	__GongStructShape__000003_Default_GongStructShape.Links = append(__GongStructShape__000003_Default_GongStructShape.Links, __Link__000001_Fields)
 	__GongStructShape__000004_Default_NoteShape.Position = __Position__000006_Pos_Default_NoteShape
 	__Link__000000_Classdiagrams.Middlevertice = __Vertice__000001_Verticle_in_class_diagram_Default_in_middle_between_Default_DiagramPackage_and_Default_Classdiagram
-	__Link__000001_Fields.Middlevertice = __Vertice__000002_Verticle_in_class_diagram_Default_in_middle_between_Default_GongStructShape_and_Default_Field
+	__Link__000001_Fields.Middlevertice = __Vertice__000003_Verticle_in_class_diagram_Default_in_middle_between_Default_GongStructShape_and_Default_Field
 	__Link__000002_NoteShapes.Middlevertice = __Vertice__000000_Verticle_in_class_diagram_Default_in_middle_between_Default_Classdiagram_and_Default_NoteShape
+	__Link__000003_SelectedClassdiagram.Middlevertice = __Vertice__000002_Verticle_in_class_diagram_Default_in_middle_between_Default_DiagramPackage_and_Default_Classdiagram
+	__NoteShape__000000_NoteOnGongdoc.NoteShapeLinks = append(__NoteShape__000000_NoteOnGongdoc.NoteShapeLinks, __NoteShapeLink__000001_NoteShape)
+	__NoteShape__000000_NoteOnGongdoc.NoteShapeLinks = append(__NoteShape__000000_NoteOnGongdoc.NoteShapeLinks, __NoteShapeLink__000000_Classdiagram_NoteShapes)
 }
 
 

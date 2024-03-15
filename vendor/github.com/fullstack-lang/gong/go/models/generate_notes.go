@@ -71,5 +71,6 @@ func (modelPkg *ModelPkg) GenerateDocs(docPackage *doc.Package) {
 			}
 		}
 		// log.Println("documenting ", noteName)
+
 	}
 }
