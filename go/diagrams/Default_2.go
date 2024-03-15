@@ -272,11 +272,13 @@ func Default_2Injection(stage *models.StageStruct) {
 	__GongStructShape__000002_Default_2_NoteShape := (&models.GongStructShape{Name: `Default_2-NoteShape`}).Stage(stage)
 
 	// Declarations of staged instances of Link
+	__Link__000000_NoteShapes := (&models.Link{Name: `NoteShapes`}).Stage(stage)
 
 	// Declarations of staged instances of NoteShape
 	__NoteShape__000000_NoteOnGongdoc := (&models.NoteShape{Name: `NoteOnGongdoc`}).Stage(stage)
 
 	// Declarations of staged instances of NoteShapeLink
+	__NoteShapeLink__000000_NoteShape := (&models.NoteShapeLink{Name: `NoteShape`}).Stage(stage)
 
 	// Declarations of staged instances of Position
 	__Position__000000_Pos_Default_2_Classdiagram := (&models.Position{Name: `Pos-Default_2-Classdiagram`}).Stage(stage)
@@ -289,6 +291,7 @@ func Default_2Injection(stage *models.StageStruct) {
 	// Declarations of staged instances of Umlsc
 
 	// Declarations of staged instances of Vertice
+	__Vertice__000000_Verticle_in_class_diagram_Default_2_in_middle_between_Default_2_Classdiagram_and_Default_2_NoteShape := (&models.Vertice{Name: `Verticle in class diagram Default_2 in middle between Default_2-Classdiagram and Default_2-NoteShape`}).Stage(stage)
 
 	// Setup of values
 
@@ -345,6 +348,32 @@ func Default_2Injection(stage *models.StageStruct) {
 	__GongStructShape__000002_Default_2_NoteShape.Height = 63.000000
 	__GongStructShape__000002_Default_2_NoteShape.IsSelected = false
 
+	// Link values setup
+	__Link__000000_NoteShapes.Name = `NoteShapes`
+
+	// comment added to overcome the problem with the comment map association
+
+	//gong:ident [ref_models.Classdiagram.NoteShapes]
+	__Link__000000_NoteShapes.Identifier = `ref_models.Classdiagram.NoteShapes`
+
+	// comment added to overcome the problem with the comment map association
+
+	//gong:ident [ref_models.NoteShape]
+	__Link__000000_NoteShapes.Fieldtypename = `ref_models.NoteShape`
+	__Link__000000_NoteShapes.FieldOffsetX = -50.000000
+	__Link__000000_NoteShapes.FieldOffsetY = -16.000000
+	__Link__000000_NoteShapes.TargetMultiplicity = models.MANY
+	__Link__000000_NoteShapes.TargetMultiplicityOffsetX = -50.000000
+	__Link__000000_NoteShapes.TargetMultiplicityOffsetY = 16.000000
+	__Link__000000_NoteShapes.SourceMultiplicity = models.MANY
+	__Link__000000_NoteShapes.SourceMultiplicityOffsetX = 10.000000
+	__Link__000000_NoteShapes.SourceMultiplicityOffsetY = -50.000000
+	__Link__000000_NoteShapes.StartOrientation = models.ORIENTATION_HORIZONTAL
+	__Link__000000_NoteShapes.StartRatio = 0.500000
+	__Link__000000_NoteShapes.EndOrientation = models.ORIENTATION_HORIZONTAL
+	__Link__000000_NoteShapes.EndRatio = 0.500000
+	__Link__000000_NoteShapes.CornerOffsetRatio = 1.380000
+
 	// NoteShape values setup
 	__NoteShape__000000_NoteOnGongdoc.Name = `NoteOnGongdoc`
 
@@ -369,6 +398,15 @@ or to <a href="/models#OrientationType">models.OrientationType</a>
 	__NoteShape__000000_NoteOnGongdoc.Height = 106.000000
 	__NoteShape__000000_NoteOnGongdoc.Matched = false
 
+	// NoteShapeLink values setup
+	__NoteShapeLink__000000_NoteShape.Name = `NoteShape`
+
+	// comment added to overcome the problem with the comment map association
+
+	//gong:ident [ref_models.NoteShape]
+	__NoteShapeLink__000000_NoteShape.Identifier = `ref_models.NoteShape`
+	__NoteShapeLink__000000_NoteShape.Type = models.NOTE_SHAPE_LINK_TO_GONG_STRUCT_OR_ENUM_SHAPE
+
 	// Position values setup
 	__Position__000000_Pos_Default_2_Classdiagram.X = 78.000000
 	__Position__000000_Pos_Default_2_Classdiagram.Y = 27.000000
@@ -380,14 +418,19 @@ or to <a href="/models#OrientationType">models.OrientationType</a>
 	__Position__000001_Pos_Default_2_Field.Name = `Pos-Default_2-Field`
 
 	// Position values setup
-	__Position__000002_Pos_Default_2_NoteShape.X = 66.000000
-	__Position__000002_Pos_Default_2_NoteShape.Y = 26.000000
+	__Position__000002_Pos_Default_2_NoteShape.X = 565.000000
+	__Position__000002_Pos_Default_2_NoteShape.Y = 21.000000
 	__Position__000002_Pos_Default_2_NoteShape.Name = `Pos-Default_2-NoteShape`
 
 	// Position values setup
-	__Position__000003_Pos_Default_2_OrientationType.X = 76.000000
-	__Position__000003_Pos_Default_2_OrientationType.Y = 400.000000
+	__Position__000003_Pos_Default_2_OrientationType.X = 92.000000
+	__Position__000003_Pos_Default_2_OrientationType.Y = 368.000000
 	__Position__000003_Pos_Default_2_OrientationType.Name = `Pos-Default_2-OrientationType`
+
+	// Vertice values setup
+	__Vertice__000000_Verticle_in_class_diagram_Default_2_in_middle_between_Default_2_Classdiagram_and_Default_2_NoteShape.X = 681.500000
+	__Vertice__000000_Verticle_in_class_diagram_Default_2_in_middle_between_Default_2_Classdiagram_and_Default_2_NoteShape.Y = 55.500000
+	__Vertice__000000_Verticle_in_class_diagram_Default_2_in_middle_between_Default_2_Classdiagram_and_Default_2_NoteShape.Name = `Verticle in class diagram Default_2 in middle between Default_2-Classdiagram and Default_2-NoteShape`
 
 	// Setup of pointers
 	__Classdiagram__000000_Default_2.GongStructShapes = append(__Classdiagram__000000_Default_2.GongStructShapes, __GongStructShape__000000_Default_2_Classdiagram)
@@ -397,8 +440,11 @@ or to <a href="/models#OrientationType">models.OrientationType</a>
 	__Classdiagram__000000_Default_2.NoteShapes = append(__Classdiagram__000000_Default_2.NoteShapes, __NoteShape__000000_NoteOnGongdoc)
 	__GongEnumShape__000000_Default_2_OrientationType.Position = __Position__000003_Pos_Default_2_OrientationType
 	__GongStructShape__000000_Default_2_Classdiagram.Position = __Position__000000_Pos_Default_2_Classdiagram
+	__GongStructShape__000000_Default_2_Classdiagram.Links = append(__GongStructShape__000000_Default_2_Classdiagram.Links, __Link__000000_NoteShapes)
 	__GongStructShape__000001_Default_2_Field.Position = __Position__000001_Pos_Default_2_Field
 	__GongStructShape__000002_Default_2_NoteShape.Position = __Position__000002_Pos_Default_2_NoteShape
+	__Link__000000_NoteShapes.Middlevertice = __Vertice__000000_Verticle_in_class_diagram_Default_2_in_middle_between_Default_2_Classdiagram_and_Default_2_NoteShape
+	__NoteShape__000000_NoteOnGongdoc.NoteShapeLinks = append(__NoteShape__000000_NoteOnGongdoc.NoteShapeLinks, __NoteShapeLink__000000_NoteShape)
 }
 
 

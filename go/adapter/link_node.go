@@ -120,7 +120,7 @@ func (linkNode *LinkNode) CanBeAddedToDiagram() (result bool) {
 			result = result && diagrammer.IsElementDisplayed(gongStruct)
 		}
 
-		// is it a gongsenu ?
+		// is it a gongsenum ?
 		map2_ := *gong_models.GetGongstructInstancesMap[gong_models.GongEnum](gongStage)
 		gongEnum, ok := map2_[link.Name]
 
@@ -129,8 +129,25 @@ func (linkNode *LinkNode) CanBeAddedToDiagram() (result bool) {
 		}
 	} else // the other case (Recv != "") is when the gonglink points to a link
 	{
-		// fieldName := link.Recv + "." + link.Name
+		fieldName := link.Recv + "." + link.Name
+		_ = fieldName
 
+		// if the receiver gongstruct present ?
+		map_ := *gong_models.GetGongstructInstancesMap[gong_models.GongStruct](gongStage)
+		gongStruct, ok := map_[link.Recv]
+
+		if ok {
+			result = result && diagrammer.IsElementDisplayed(gongStruct)
+		}
+
+		// if yes, is the field displayed ?
+		if result && ok {
+			for _, field := range gongStruct.Fields {
+				if field.GetName() == link.Name {
+					result = result && diagrammer.IsElementDisplayed(field)
+				}
+			}
+		}
 	}
 
 	return
