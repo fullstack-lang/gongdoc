@@ -13,7 +13,7 @@ func (portfolioDiagramNodeImpl *PortfolioDiagramNodeImpl) OnAfterUpdate(stage *g
 		stagedNode.IsChecked = true
 		map_ModelNode_Shape := portfolioDiagramNodeImpl.portfolioDiagramNode.DisplayDiagram()
 
-		portfolioDiagramNodeImpl.diagrammer.generatePortfolioNodesButtons()
+		portfolioDiagramNodeImpl.diagrammer.generatePortfolioNodesStatusAndButtons()
 		portfolioDiagramNodeImpl.diagrammer.computeModelNodeStatus(map_ModelNode_Shape)
 		portfolioDiagramNodeImpl.diagrammer.treeStage.Commit()
 	}
@@ -26,7 +26,7 @@ func (portfolioDiagramNodeImpl *PortfolioDiagramNodeImpl) OnAfterUpdate(stage *g
 			// force the stage node name to the front
 			portfolioDiagramNodeImpl.portfolioDiagramNode.SetIsInRenameMode(false)
 			stagedNode.IsInEditMode = false
-			portfolioDiagramNodeImpl.diagrammer.generatePortfolioNodesButtons()
+			portfolioDiagramNodeImpl.diagrammer.generatePortfolioNodesStatusAndButtons()
 			portfolioDiagramNodeImpl.diagrammer.treeStage.Commit()
 			return
 		}
@@ -34,7 +34,7 @@ func (portfolioDiagramNodeImpl *PortfolioDiagramNodeImpl) OnAfterUpdate(stage *g
 		stagedNode.Name = frontNode.Name
 		stagedNode.IsInEditMode = false
 		portfolioDiagramNodeImpl.portfolioDiagramNode.SetIsInRenameMode(false)
-		portfolioDiagramNodeImpl.diagrammer.generatePortfolioNodesButtons()
+		portfolioDiagramNodeImpl.diagrammer.generatePortfolioNodesStatusAndButtons()
 		portfolioDiagramNodeImpl.diagrammer.treeStage.Commit()
 	}
 }

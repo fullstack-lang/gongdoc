@@ -26,7 +26,7 @@ func (modelNodeImpl *ModelNodeImpl) OnAfterUpdate(stage *gongtree_models.StageSt
 			map_ModelNode_Shape := modelNodeImpl.diagrammer.portfolio.AddElementToDiagram(modelElementNode)
 
 			stagedNode.IsChecked = frontNode.IsChecked
-			modelNodeImpl.diagrammer.generatePortfolioNodesButtons()
+			modelNodeImpl.diagrammer.generatePortfolioNodesStatusAndButtons()
 			modelNodeImpl.diagrammer.computeModelNodeStatus(map_ModelNode_Shape)
 			modelNodeImpl.diagrammer.treeStage.Commit()
 		}
@@ -39,7 +39,7 @@ func (modelNodeImpl *ModelNodeImpl) OnAfterUpdate(stage *gongtree_models.StageSt
 			map_ModelNode_Shape := modelNodeImpl.diagrammer.portfolio.RemoveElementFromDiagram(modelElementNode)
 
 			stagedNode.IsChecked = frontNode.IsChecked
-			modelNodeImpl.diagrammer.generatePortfolioNodesButtons()
+			modelNodeImpl.diagrammer.generatePortfolioNodesStatusAndButtons()
 			modelNodeImpl.diagrammer.computeModelNodeStatus(map_ModelNode_Shape)
 			modelNodeImpl.diagrammer.treeStage.Commit()
 		}
