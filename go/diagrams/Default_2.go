@@ -394,8 +394,8 @@ or to [models.OrientationType]
 or to <a href="/models#Classdiagram.NoteShapes">models.Classdiagram.NoteShapes</a>
 or to <a href="/models#OrientationType">models.OrientationType</a>
 `
-	__NoteShape__000000_NoteOnGongdoc.X = 498.000000
-	__NoteShape__000000_NoteOnGongdoc.Y = 203.000000
+	__NoteShape__000000_NoteOnGongdoc.X = 478.000000
+	__NoteShape__000000_NoteOnGongdoc.Y = 185.000000
 	__NoteShape__000000_NoteOnGongdoc.Width = 357.000000
 	__NoteShape__000000_NoteOnGongdoc.Height = 106.000000
 	__NoteShape__000000_NoteOnGongdoc.Matched = false
@@ -465,8 +465,8 @@ or to <a href="/models#OrientationType">models.OrientationType</a>
 	__GongStructShape__000002_Default_2_NoteShape.Position = __Position__000002_Pos_Default_2_NoteShape
 	__Link__000000_NoteShapes.Middlevertice = __Vertice__000000_Verticle_in_class_diagram_Default_2_in_middle_between_Default_2_Classdiagram_and_Default_2_NoteShape
 	__NoteShape__000000_NoteOnGongdoc.NoteShapeLinks = append(__NoteShape__000000_NoteOnGongdoc.NoteShapeLinks, __NoteShapeLink__000000_NoteShape)
-	__NoteShape__000000_NoteOnGongdoc.NoteShapeLinks = append(__NoteShape__000000_NoteOnGongdoc.NoteShapeLinks, __NoteShapeLink__000001_NoteShapes)
 	__NoteShape__000000_NoteOnGongdoc.NoteShapeLinks = append(__NoteShape__000000_NoteOnGongdoc.NoteShapeLinks, __NoteShapeLink__000002_OrientationType)
+	__NoteShape__000000_NoteOnGongdoc.NoteShapeLinks = append(__NoteShape__000000_NoteOnGongdoc.NoteShapeLinks, __NoteShapeLink__000001_NoteShapes)
 }
 
 

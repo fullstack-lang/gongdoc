@@ -7,9 +7,10 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 export class AppComponent implements OnInit {
 
   default = 'DOC Data/Model'
-  view = this.default
+  diagrammer = 'Diagram Edition'
+  view = this.diagrammer
 
-  views: string[] = [this.default];
+  views: string[] = [this.diagrammer];
 
   GONG__MODEL__StacksPath = "github.com/fullstack-lang/gongdoc/go/models"
   GONG__DATA__StackPath = "gongdoc"

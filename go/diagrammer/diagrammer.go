@@ -106,7 +106,7 @@ func (diagrammer *Diagrammer) FillUpPortfolioUITree(portfolioUITree *gongtree_mo
 		treeNode := diagrammer.portfolioNode2NodeTree(portfolioNode, diagrammer.treeStage)
 		portfolioUITree.RootNodes = append(portfolioUITree.RootNodes, treeNode)
 	}
-	diagrammer.generatePortfolioNodesButtons()
+	diagrammer.generatePortfolioNodesStatusAndButtons()
 }
 
 func (diagrammer *Diagrammer) portfolioNode2NodeTree(portfolioNode PortfolioNode, treeStage *gongtree_models.StageStruct) (portfolioTreeNode *gongtree_models.Node) {
@@ -134,18 +134,18 @@ func (diagrammer *Diagrammer) portfolioNode2NodeTree(portfolioNode PortfolioNode
 	return
 }
 
-func (diagrammer *Diagrammer) generatePortfolioNodesButtons() {
+func (diagrammer *Diagrammer) generatePortfolioNodesStatusAndButtons() {
 
 	for _, portfolioNode := range diagrammer.portfolio.GetChildren() {
 		// log.Printf("generatePortfolioNodesButtons %s %p\n", portfolioNode.GetName(), portfolioNode)
 
 		// here the value of "class diagrams" node has changed, 0xc0014665e8
-		diagrammer.generatePortfolioNodesButtonsRecursive(portfolioNode)
+		diagrammer.generatePortfolioNodesStatusAndButtonsRecursive(portfolioNode)
 	}
 	diagrammer.treeStage.Commit()
 }
 
-func (diagrammer *Diagrammer) generatePortfolioNodesButtonsRecursive(portfolioNode PortfolioNode) {
+func (diagrammer *Diagrammer) generatePortfolioNodesStatusAndButtonsRecursive(portfolioNode PortfolioNode) {
 
 	// log.Printf("generatePortfolioNodesButtonsRecursive %s %p\n", portfolioNode.GetName(), portfolioNode)
 
@@ -174,6 +174,10 @@ func (diagrammer *Diagrammer) generatePortfolioNodesButtonsRecursive(portfolioNo
 	}
 
 	if portfolioDiagramNode, ok := portfolioNode.(PortfolioDiagramNode); ok {
+
+		// disable the check button if the end user edit the diagram
+		treeNode.IsCheckboxDisabled = diagrammer.portfolio.IsInDrawingMode()
+
 		if portfolioDiagramNode == diagrammer.portfolio.GetSelectedPortfolioDiagramNode() {
 			treeNode.IsChecked = true
 
@@ -290,7 +294,7 @@ func (diagrammer *Diagrammer) generatePortfolioNodesButtonsRecursive(portfolioNo
 	}
 
 	for _, childrenPortfolioNode := range portfolioNode.GetChildren() {
-		diagrammer.generatePortfolioNodesButtonsRecursive(childrenPortfolioNode)
+		diagrammer.generatePortfolioNodesStatusAndButtonsRecursive(childrenPortfolioNode)
 	}
 }
 

@@ -61,20 +61,20 @@ func (buttonImpl *PortfolioDiagramNodeButtonImpl) ButtonUpdated(
 			childrenTreeNode := buttonImpl.diagrammer.portfolioNode2NodeTree(childrenPortfolioNode, buttonImpl.treeStage)
 			parentTreeNode.Children = append(parentTreeNode.Children, childrenTreeNode)
 			buttonImpl.diagrammer.AddPortfiolioNodeTreeNodeEntry(childrenPortfolioNode, childrenTreeNode)
-			buttonImpl.diagrammer.generatePortfolioNodesButtons()
+			buttonImpl.diagrammer.generatePortfolioNodesStatusAndButtons()
 
 			buttonImpl.treeStage.Commit()
 		}
 	case EDIT_CANCEL:
 		map_ModelNode_Shape := buttonImpl.portfolioDiagramNode.CancelEdit()
 
-		buttonImpl.diagrammer.generatePortfolioNodesButtons()
+		buttonImpl.diagrammer.generatePortfolioNodesStatusAndButtons()
 		buttonImpl.diagrammer.computeModelNodeStatus(map_ModelNode_Shape)
 		buttonImpl.treeStage.Commit()
 	case EDIT:
 		map_ModelNode_Shape := buttonImpl.portfolioDiagramNode.DrawDiagram()
 
-		buttonImpl.diagrammer.generatePortfolioNodesButtons()
+		buttonImpl.diagrammer.generatePortfolioNodesStatusAndButtons()
 		buttonImpl.diagrammer.computeModelNodeStatus(map_ModelNode_Shape)
 		buttonImpl.treeStage.Commit()
 	case REMOVE:
@@ -91,7 +91,7 @@ func (buttonImpl *PortfolioDiagramNodeButtonImpl) ButtonUpdated(
 		buttonImpl.diagrammer.RemovePortfiolioNodeTreeNodeEntry(buttonImpl.portfolioDiagramNode)
 		buttonImpl.treeStage.Commit()
 
-		buttonImpl.diagrammer.generatePortfolioNodesButtons()
+		buttonImpl.diagrammer.generatePortfolioNodesStatusAndButtons()
 
 		// generate empty model tree
 		map_ModelElementNode_Shape := make(map[ModelElementNode]Shape)
@@ -101,18 +101,18 @@ func (buttonImpl *PortfolioDiagramNodeButtonImpl) ButtonUpdated(
 		buttonImpl.portfolioDiagramNode.SetIsInRenameMode(false)
 		buttonImpl.treeNode.IsInEditMode = false
 
-		buttonImpl.diagrammer.generatePortfolioNodesButtons()
+		buttonImpl.diagrammer.generatePortfolioNodesStatusAndButtons()
 		buttonImpl.treeStage.Commit()
 	case RENAME:
 		buttonImpl.portfolioDiagramNode.SetIsInRenameMode(true)
 		buttonImpl.treeNode.IsInEditMode = true
 
-		buttonImpl.diagrammer.generatePortfolioNodesButtons()
+		buttonImpl.diagrammer.generatePortfolioNodesStatusAndButtons()
 		buttonImpl.treeStage.Commit()
 	case SAVE:
 		map_ModelNode_Shape := buttonImpl.portfolioDiagramNode.SaveDiagram()
 
-		buttonImpl.diagrammer.generatePortfolioNodesButtons()
+		buttonImpl.diagrammer.generatePortfolioNodesStatusAndButtons()
 		buttonImpl.diagrammer.computeModelNodeStatus(map_ModelNode_Shape)
 		buttonImpl.treeStage.Commit()
 
