@@ -1,11 +1,12 @@
 // insertion point for imports
+import { AnimateAPI } from './animate-api'
 
 // usefull for managing pointer ID values that can be nullable
 import { NullInt64 } from './null-int64'
 
-export class RectAnchoredRectDB {
+export class PolylineAPI {
 
-	static GONGSTRUCT_NAME = "RectAnchoredRect"
+	static GONGSTRUCT_NAME = "Polyline"
 
 	CreatedAt?: string
 	DeletedAt?: string
@@ -13,16 +14,7 @@ export class RectAnchoredRectDB {
 
 	// insertion point for basic fields declarations
 	Name: string = ""
-	X: number = 0
-	Y: number = 0
-	Width: number = 0
-	Height: number = 0
-	RX: number = 0
-	X_Offset: number = 0
-	Y_Offset: number = 0
-	RectAnchorType: string = ""
-	WidthFollowRect: boolean = false
-	HeightFollowRect: boolean = false
+	Points: string = ""
 	Color: string = ""
 	FillOpacity: number = 0
 	Stroke: string = ""
@@ -33,9 +25,10 @@ export class RectAnchoredRectDB {
 
 	// insertion point for other decls
 
-	RectAnchoredRectPointersEncoding: RectAnchoredRectPointersEncoding = new RectAnchoredRectPointersEncoding
+	PolylinePointersEncoding: PolylinePointersEncoding = new PolylinePointersEncoding
 }
 
-export class RectAnchoredRectPointersEncoding {
+export class PolylinePointersEncoding {
 	// insertion point for pointers and slices of pointers encoding fields
+	Animates: number[] = []
 }

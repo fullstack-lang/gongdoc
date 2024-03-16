@@ -1,19 +1,19 @@
 // insertion point for imports
-import { RectDB } from './rect-db'
-import { TextDB } from './text-db'
-import { CircleDB } from './circle-db'
-import { LineDB } from './line-db'
-import { EllipseDB } from './ellipse-db'
-import { PolylineDB } from './polyline-db'
-import { PolygoneDB } from './polygone-db'
-import { PathDB } from './path-db'
-import { LinkDB } from './link-db'
-import { RectLinkLinkDB } from './rectlinklink-db'
+import { RectAPI } from './rect-api'
+import { TextAPI } from './text-api'
+import { CircleAPI } from './circle-api'
+import { LineAPI } from './line-api'
+import { EllipseAPI } from './ellipse-api'
+import { PolylineAPI } from './polyline-api'
+import { PolygoneAPI } from './polygone-api'
+import { PathAPI } from './path-api'
+import { LinkAPI } from './link-api'
+import { RectLinkLinkAPI } from './rectlinklink-api'
 
 // usefull for managing pointer ID values that can be nullable
 import { NullInt64 } from './null-int64'
 
-export class LayerDB {
+export class LayerAPI {
 
 	static GONGSTRUCT_NAME = "Layer"
 

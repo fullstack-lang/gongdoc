@@ -1,13 +1,12 @@
 // insertion point for imports
-import { RectDB } from './rect-db'
-import { LinkDB } from './link-db'
+import { AnimateAPI } from './animate-api'
 
 // usefull for managing pointer ID values that can be nullable
 import { NullInt64 } from './null-int64'
 
-export class RectLinkLinkDB {
+export class LinkAnchoredTextAPI {
 
-	static GONGSTRUCT_NAME = "RectLinkLink"
+	static GONGSTRUCT_NAME = "LinkAnchoredText"
 
 	CreatedAt?: string
 	DeletedAt?: string
@@ -15,7 +14,12 @@ export class RectLinkLinkDB {
 
 	// insertion point for basic fields declarations
 	Name: string = ""
-	TargetAnchorPosition: number = 0
+	Content: string = ""
+	AutomaticLayout: boolean = false
+	LinkAnchorType: string = ""
+	X_Offset: number = 0
+	Y_Offset: number = 0
+	FontWeight: string = ""
 	Color: string = ""
 	FillOpacity: number = 0
 	Stroke: string = ""
@@ -26,13 +30,10 @@ export class RectLinkLinkDB {
 
 	// insertion point for other decls
 
-	RectLinkLinkPointersEncoding: RectLinkLinkPointersEncoding = new RectLinkLinkPointersEncoding
+	LinkAnchoredTextPointersEncoding: LinkAnchoredTextPointersEncoding = new LinkAnchoredTextPointersEncoding
 }
 
-export class RectLinkLinkPointersEncoding {
+export class LinkAnchoredTextPointersEncoding {
 	// insertion point for pointers and slices of pointers encoding fields
-	StartID: NullInt64 = new NullInt64 // if pointer is null, Start.ID = 0
-
-	EndID: NullInt64 = new NullInt64 // if pointer is null, End.ID = 0
-
+	Animates: number[] = []
 }

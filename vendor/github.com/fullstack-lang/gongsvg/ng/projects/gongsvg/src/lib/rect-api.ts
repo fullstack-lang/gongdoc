@@ -1,13 +1,13 @@
 // insertion point for imports
-import { AnimateDB } from './animate-db'
-import { RectAnchoredTextDB } from './rectanchoredtext-db'
-import { RectAnchoredRectDB } from './rectanchoredrect-db'
-import { RectAnchoredPathDB } from './rectanchoredpath-db'
+import { AnimateAPI } from './animate-api'
+import { RectAnchoredTextAPI } from './rectanchoredtext-api'
+import { RectAnchoredRectAPI } from './rectanchoredrect-api'
+import { RectAnchoredPathAPI } from './rectanchoredpath-api'
 
 // usefull for managing pointer ID values that can be nullable
 import { NullInt64 } from './null-int64'
 
-export class RectDB {
+export class RectAPI {
 
 	static GONGSTRUCT_NAME = "Rect"
 

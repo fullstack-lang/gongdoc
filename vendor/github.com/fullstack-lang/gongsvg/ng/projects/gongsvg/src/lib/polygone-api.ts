@@ -1,12 +1,12 @@
 // insertion point for imports
-import { AnimateDB } from './animate-db'
+import { AnimateAPI } from './animate-api'
 
 // usefull for managing pointer ID values that can be nullable
 import { NullInt64 } from './null-int64'
 
-export class CircleDB {
+export class PolygoneAPI {
 
-	static GONGSTRUCT_NAME = "Circle"
+	static GONGSTRUCT_NAME = "Polygone"
 
 	CreatedAt?: string
 	DeletedAt?: string
@@ -14,9 +14,7 @@ export class CircleDB {
 
 	// insertion point for basic fields declarations
 	Name: string = ""
-	CX: number = 0
-	CY: number = 0
-	Radius: number = 0
+	Points: string = ""
 	Color: string = ""
 	FillOpacity: number = 0
 	Stroke: string = ""
@@ -27,10 +25,10 @@ export class CircleDB {
 
 	// insertion point for other decls
 
-	CirclePointersEncoding: CirclePointersEncoding = new CirclePointersEncoding
+	PolygonePointersEncoding: PolygonePointersEncoding = new PolygonePointersEncoding
 }
 
-export class CirclePointersEncoding {
+export class PolygonePointersEncoding {
 	// insertion point for pointers and slices of pointers encoding fields
-	Animations: number[] = []
+	Animates: number[] = []
 }

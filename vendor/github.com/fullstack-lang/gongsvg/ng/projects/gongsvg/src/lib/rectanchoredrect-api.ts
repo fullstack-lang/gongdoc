@@ -1,12 +1,11 @@
 // insertion point for imports
-import { AnimateDB } from './animate-db'
 
 // usefull for managing pointer ID values that can be nullable
 import { NullInt64 } from './null-int64'
 
-export class RectAnchoredTextDB {
+export class RectAnchoredRectAPI {
 
-	static GONGSTRUCT_NAME = "RectAnchoredText"
+	static GONGSTRUCT_NAME = "RectAnchoredRect"
 
 	CreatedAt?: string
 	DeletedAt?: string
@@ -14,13 +13,16 @@ export class RectAnchoredTextDB {
 
 	// insertion point for basic fields declarations
 	Name: string = ""
-	Content: string = ""
-	FontWeight: string = ""
-	FontSize: number = 0
+	X: number = 0
+	Y: number = 0
+	Width: number = 0
+	Height: number = 0
+	RX: number = 0
 	X_Offset: number = 0
 	Y_Offset: number = 0
 	RectAnchorType: string = ""
-	TextAnchorType: string = ""
+	WidthFollowRect: boolean = false
+	HeightFollowRect: boolean = false
 	Color: string = ""
 	FillOpacity: number = 0
 	Stroke: string = ""
@@ -31,10 +33,9 @@ export class RectAnchoredTextDB {
 
 	// insertion point for other decls
 
-	RectAnchoredTextPointersEncoding: RectAnchoredTextPointersEncoding = new RectAnchoredTextPointersEncoding
+	RectAnchoredRectPointersEncoding: RectAnchoredRectPointersEncoding = new RectAnchoredRectPointersEncoding
 }
 
-export class RectAnchoredTextPointersEncoding {
+export class RectAnchoredRectPointersEncoding {
 	// insertion point for pointers and slices of pointers encoding fields
-	Animates: number[] = []
 }

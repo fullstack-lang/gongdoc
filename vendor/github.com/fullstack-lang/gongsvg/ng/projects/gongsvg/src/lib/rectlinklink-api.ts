@@ -1,11 +1,13 @@
 // insertion point for imports
+import { RectAPI } from './rect-api'
+import { LinkAPI } from './link-api'
 
 // usefull for managing pointer ID values that can be nullable
 import { NullInt64 } from './null-int64'
 
-export class RectAnchoredPathDB {
+export class RectLinkLinkAPI {
 
-	static GONGSTRUCT_NAME = "RectAnchoredPath"
+	static GONGSTRUCT_NAME = "RectLinkLink"
 
 	CreatedAt?: string
 	DeletedAt?: string
@@ -13,12 +15,7 @@ export class RectAnchoredPathDB {
 
 	// insertion point for basic fields declarations
 	Name: string = ""
-	Definition: string = ""
-	X_Offset: number = 0
-	Y_Offset: number = 0
-	RectAnchorType: string = ""
-	ScalePropotionnally: boolean = false
-	AppliedScaling: number = 0
+	TargetAnchorPosition: number = 0
 	Color: string = ""
 	FillOpacity: number = 0
 	Stroke: string = ""
@@ -29,9 +26,13 @@ export class RectAnchoredPathDB {
 
 	// insertion point for other decls
 
-	RectAnchoredPathPointersEncoding: RectAnchoredPathPointersEncoding = new RectAnchoredPathPointersEncoding
+	RectLinkLinkPointersEncoding: RectLinkLinkPointersEncoding = new RectLinkLinkPointersEncoding
 }
 
-export class RectAnchoredPathPointersEncoding {
+export class RectLinkLinkPointersEncoding {
 	// insertion point for pointers and slices of pointers encoding fields
+	StartID: NullInt64 = new NullInt64 // if pointer is null, Start.ID = 0
+
+	EndID: NullInt64 = new NullInt64 // if pointer is null, End.ID = 0
+
 }

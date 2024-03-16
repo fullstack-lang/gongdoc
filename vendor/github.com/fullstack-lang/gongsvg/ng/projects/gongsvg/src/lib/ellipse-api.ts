@@ -1,10 +1,10 @@
 // insertion point for imports
-import { AnimateDB } from './animate-db'
+import { AnimateAPI } from './animate-api'
 
 // usefull for managing pointer ID values that can be nullable
 import { NullInt64 } from './null-int64'
 
-export class EllipseDB {
+export class EllipseAPI {
 
 	static GONGSTRUCT_NAME = "Ellipse"
 

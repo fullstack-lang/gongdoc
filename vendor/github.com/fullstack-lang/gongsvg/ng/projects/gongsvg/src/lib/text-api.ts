@@ -1,12 +1,12 @@
 // insertion point for imports
-import { AnimateDB } from './animate-db'
+import { AnimateAPI } from './animate-api'
 
 // usefull for managing pointer ID values that can be nullable
 import { NullInt64 } from './null-int64'
 
-export class LineDB {
+export class TextAPI {
 
-	static GONGSTRUCT_NAME = "Line"
+	static GONGSTRUCT_NAME = "Text"
 
 	CreatedAt?: string
 	DeletedAt?: string
@@ -14,10 +14,9 @@ export class LineDB {
 
 	// insertion point for basic fields declarations
 	Name: string = ""
-	X1: number = 0
-	Y1: number = 0
-	X2: number = 0
-	Y2: number = 0
+	X: number = 0
+	Y: number = 0
+	Content: string = ""
 	Color: string = ""
 	FillOpacity: number = 0
 	Stroke: string = ""
@@ -25,15 +24,13 @@ export class LineDB {
 	StrokeDashArray: string = ""
 	StrokeDashArrayWhenSelected: string = ""
 	Transform: string = ""
-	MouseClickX: number = 0
-	MouseClickY: number = 0
 
 	// insertion point for other decls
 
-	LinePointersEncoding: LinePointersEncoding = new LinePointersEncoding
+	TextPointersEncoding: TextPointersEncoding = new TextPointersEncoding
 }
 
-export class LinePointersEncoding {
+export class TextPointersEncoding {
 	// insertion point for pointers and slices of pointers encoding fields
 	Animates: number[] = []
 }

@@ -1,11 +1,11 @@
 // insertion point for imports
-import { LayerDB } from './layer-db'
-import { RectDB } from './rect-db'
+import { LayerAPI } from './layer-api'
+import { RectAPI } from './rect-api'
 
 // usefull for managing pointer ID values that can be nullable
 import { NullInt64 } from './null-int64'
 
-export class SVGDB {
+export class SVGAPI {
 
 	static GONGSTRUCT_NAME = "SVG"
 
