@@ -68,7 +68,7 @@ export class MaterialFormComponent implements OnInit {
 
   ngOnInit(): void {
 
-    this.gongtableFrontRepoService.pull(this.DataStack).subscribe(
+    this.gongtableFrontRepoService.connectToWebSocket(this.DataStack).subscribe(
       gongtablesFrontRepo => {
         this.gongtableFrontRepo = gongtablesFrontRepo
 
