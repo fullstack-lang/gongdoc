@@ -1,11 +1,11 @@
 // insertion point for imports
-import { SVGIconDB } from './svgicon-db'
-import { ButtonDB } from './button-db'
+import { SVGIconAPI } from './svgicon-api'
+import { ButtonAPI } from './button-api'
 
 // usefull for managing pointer ID values that can be nullable
 import { NullInt64 } from './null-int64'
 
-export class NodeDB {
+export class NodeAPI {
 
 	static GONGSTRUCT_NAME = "Node"
 

@@ -1,12 +1,11 @@
 // insertion point for imports
-import { NodeDB } from './node-db'
 
 // usefull for managing pointer ID values that can be nullable
 import { NullInt64 } from './null-int64'
 
-export class TreeDB {
+export class SVGIconAPI {
 
-	static GONGSTRUCT_NAME = "Tree"
+	static GONGSTRUCT_NAME = "SVGIcon"
 
 	CreatedAt?: string
 	DeletedAt?: string
@@ -14,13 +13,13 @@ export class TreeDB {
 
 	// insertion point for basic fields declarations
 	Name: string = ""
+	SVG: string = ""
 
 	// insertion point for other decls
 
-	TreePointersEncoding: TreePointersEncoding = new TreePointersEncoding
+	SVGIconPointersEncoding: SVGIconPointersEncoding = new SVGIconPointersEncoding
 }
 
-export class TreePointersEncoding {
+export class SVGIconPointersEncoding {
 	// insertion point for pointers and slices of pointers encoding fields
-	RootNodes: number[] = []
 }
