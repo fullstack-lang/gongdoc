@@ -3,9 +3,9 @@
 // usefull for managing pointer ID values that can be nullable
 import { NullInt64 } from './null-int64'
 
-export class FormFieldIntDB {
+export class CheckBoxAPI {
 
-	static GONGSTRUCT_NAME = "FormFieldInt"
+	static GONGSTRUCT_NAME = "CheckBox"
 
 	CreatedAt?: string
 	DeletedAt?: string
@@ -13,17 +13,13 @@ export class FormFieldIntDB {
 
 	// insertion point for basic fields declarations
 	Name: string = ""
-	Value: number = 0
-	HasMinValidator: boolean = false
-	MinValue: number = 0
-	HasMaxValidator: boolean = false
-	MaxValue: number = 0
+	Value: boolean = false
 
 	// insertion point for other decls
 
-	FormFieldIntPointersEncoding: FormFieldIntPointersEncoding = new FormFieldIntPointersEncoding
+	CheckBoxPointersEncoding: CheckBoxPointersEncoding = new CheckBoxPointersEncoding
 }
 
-export class FormFieldIntPointersEncoding {
+export class CheckBoxPointersEncoding {
 	// insertion point for pointers and slices of pointers encoding fields
 }

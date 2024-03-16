@@ -1,10 +1,10 @@
 // insertion point for imports
-import { OptionDB } from './option-db'
+import { OptionAPI } from './option-api'
 
 // usefull for managing pointer ID values that can be nullable
 import { NullInt64 } from './null-int64'
 
-export class FormFieldSelectDB {
+export class FormFieldSelectAPI {
 
 	static GONGSTRUCT_NAME = "FormFieldSelect"
 

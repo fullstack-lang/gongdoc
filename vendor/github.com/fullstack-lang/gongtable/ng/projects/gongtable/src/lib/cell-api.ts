@@ -1,14 +1,14 @@
 // insertion point for imports
-import { CellStringDB } from './cellstring-db'
-import { CellFloat64DB } from './cellfloat64-db'
-import { CellIntDB } from './cellint-db'
-import { CellBooleanDB } from './cellboolean-db'
-import { CellIconDB } from './cellicon-db'
+import { CellStringAPI } from './cellstring-api'
+import { CellFloat64API } from './cellfloat64-api'
+import { CellIntAPI } from './cellint-api'
+import { CellBooleanAPI } from './cellboolean-api'
+import { CellIconAPI } from './cellicon-api'
 
 // usefull for managing pointer ID values that can be nullable
 import { NullInt64 } from './null-int64'
 
-export class CellDB {
+export class CellAPI {
 
 	static GONGSTRUCT_NAME = "Cell"
 

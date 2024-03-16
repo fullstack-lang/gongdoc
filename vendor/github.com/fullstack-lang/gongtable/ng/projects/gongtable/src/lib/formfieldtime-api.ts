@@ -3,9 +3,9 @@
 // usefull for managing pointer ID values that can be nullable
 import { NullInt64 } from './null-int64'
 
-export class FormFieldFloat64DB {
+export class FormFieldTimeAPI {
 
-	static GONGSTRUCT_NAME = "FormFieldFloat64"
+	static GONGSTRUCT_NAME = "FormFieldTime"
 
 	CreatedAt?: string
 	DeletedAt?: string
@@ -13,17 +13,14 @@ export class FormFieldFloat64DB {
 
 	// insertion point for basic fields declarations
 	Name: string = ""
-	Value: number = 0
-	HasMinValidator: boolean = false
-	MinValue: number = 0
-	HasMaxValidator: boolean = false
-	MaxValue: number = 0
+	Value: Date = new Date
+	Step: number = 0
 
 	// insertion point for other decls
 
-	FormFieldFloat64PointersEncoding: FormFieldFloat64PointersEncoding = new FormFieldFloat64PointersEncoding
+	FormFieldTimePointersEncoding: FormFieldTimePointersEncoding = new FormFieldTimePointersEncoding
 }
 
-export class FormFieldFloat64PointersEncoding {
+export class FormFieldTimePointersEncoding {
 	// insertion point for pointers and slices of pointers encoding fields
 }

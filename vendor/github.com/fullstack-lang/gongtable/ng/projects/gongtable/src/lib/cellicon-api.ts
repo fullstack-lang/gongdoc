@@ -1,12 +1,11 @@
 // insertion point for imports
-import { FormDivDB } from './formdiv-db'
 
 // usefull for managing pointer ID values that can be nullable
 import { NullInt64 } from './null-int64'
 
-export class FormGroupDB {
+export class CellIconAPI {
 
-	static GONGSTRUCT_NAME = "FormGroup"
+	static GONGSTRUCT_NAME = "CellIcon"
 
 	CreatedAt?: string
 	DeletedAt?: string
@@ -14,16 +13,13 @@ export class FormGroupDB {
 
 	// insertion point for basic fields declarations
 	Name: string = ""
-	Label: string = ""
-	HasSuppressButton: boolean = false
-	HasSuppressButtonBeenPressed: boolean = false
+	Icon: string = ""
 
 	// insertion point for other decls
 
-	FormGroupPointersEncoding: FormGroupPointersEncoding = new FormGroupPointersEncoding
+	CellIconPointersEncoding: CellIconPointersEncoding = new CellIconPointersEncoding
 }
 
-export class FormGroupPointersEncoding {
+export class CellIconPointersEncoding {
 	// insertion point for pointers and slices of pointers encoding fields
-	FormDivs: number[] = []
 }

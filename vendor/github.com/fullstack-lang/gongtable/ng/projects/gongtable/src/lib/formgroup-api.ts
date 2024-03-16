@@ -1,11 +1,12 @@
 // insertion point for imports
+import { FormDivAPI } from './formdiv-api'
 
 // usefull for managing pointer ID values that can be nullable
 import { NullInt64 } from './null-int64'
 
-export class CellBooleanDB {
+export class FormGroupAPI {
 
-	static GONGSTRUCT_NAME = "CellBoolean"
+	static GONGSTRUCT_NAME = "FormGroup"
 
 	CreatedAt?: string
 	DeletedAt?: string
@@ -13,13 +14,16 @@ export class CellBooleanDB {
 
 	// insertion point for basic fields declarations
 	Name: string = ""
-	Value: boolean = false
+	Label: string = ""
+	HasSuppressButton: boolean = false
+	HasSuppressButtonBeenPressed: boolean = false
 
 	// insertion point for other decls
 
-	CellBooleanPointersEncoding: CellBooleanPointersEncoding = new CellBooleanPointersEncoding
+	FormGroupPointersEncoding: FormGroupPointersEncoding = new FormGroupPointersEncoding
 }
 
-export class CellBooleanPointersEncoding {
+export class FormGroupPointersEncoding {
 	// insertion point for pointers and slices of pointers encoding fields
+	FormDivs: number[] = []
 }

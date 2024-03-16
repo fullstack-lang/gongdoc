@@ -1,13 +1,13 @@
 // insertion point for imports
-import { FormFieldDB } from './formfield-db'
-import { CheckBoxDB } from './checkbox-db'
-import { FormEditAssocButtonDB } from './formeditassocbutton-db'
-import { FormSortAssocButtonDB } from './formsortassocbutton-db'
+import { FormFieldAPI } from './formfield-api'
+import { CheckBoxAPI } from './checkbox-api'
+import { FormEditAssocButtonAPI } from './formeditassocbutton-api'
+import { FormSortAssocButtonAPI } from './formsortassocbutton-api'
 
 // usefull for managing pointer ID values that can be nullable
 import { NullInt64 } from './null-int64'
 
-export class FormDivDB {
+export class FormDivAPI {
 
 	static GONGSTRUCT_NAME = "FormDiv"
 

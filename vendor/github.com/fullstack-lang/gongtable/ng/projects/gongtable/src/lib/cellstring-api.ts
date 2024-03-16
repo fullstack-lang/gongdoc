@@ -3,9 +3,9 @@
 // usefull for managing pointer ID values that can be nullable
 import { NullInt64 } from './null-int64'
 
-export class CellFloat64DB {
+export class CellStringAPI {
 
-	static GONGSTRUCT_NAME = "CellFloat64"
+	static GONGSTRUCT_NAME = "CellString"
 
 	CreatedAt?: string
 	DeletedAt?: string
@@ -13,13 +13,13 @@ export class CellFloat64DB {
 
 	// insertion point for basic fields declarations
 	Name: string = ""
-	Value: number = 0
+	Value: string = ""
 
 	// insertion point for other decls
 
-	CellFloat64PointersEncoding: CellFloat64PointersEncoding = new CellFloat64PointersEncoding
+	CellStringPointersEncoding: CellStringPointersEncoding = new CellStringPointersEncoding
 }
 
-export class CellFloat64PointersEncoding {
+export class CellStringPointersEncoding {
 	// insertion point for pointers and slices of pointers encoding fields
 }

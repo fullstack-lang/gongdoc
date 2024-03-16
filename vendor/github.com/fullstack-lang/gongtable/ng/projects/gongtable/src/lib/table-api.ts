@@ -1,11 +1,11 @@
 // insertion point for imports
-import { DisplayedColumnDB } from './displayedcolumn-db'
-import { RowDB } from './row-db'
+import { DisplayedColumnAPI } from './displayedcolumn-api'
+import { RowAPI } from './row-api'
 
 // usefull for managing pointer ID values that can be nullable
 import { NullInt64 } from './null-int64'
 
-export class TableDB {
+export class TableAPI {
 
 	static GONGSTRUCT_NAME = "Table"
 

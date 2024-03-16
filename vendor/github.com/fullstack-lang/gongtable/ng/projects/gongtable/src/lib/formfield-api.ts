@@ -1,16 +1,16 @@
 // insertion point for imports
-import { FormFieldStringDB } from './formfieldstring-db'
-import { FormFieldFloat64DB } from './formfieldfloat64-db'
-import { FormFieldIntDB } from './formfieldint-db'
-import { FormFieldDateDB } from './formfielddate-db'
-import { FormFieldTimeDB } from './formfieldtime-db'
-import { FormFieldDateTimeDB } from './formfielddatetime-db'
-import { FormFieldSelectDB } from './formfieldselect-db'
+import { FormFieldStringAPI } from './formfieldstring-api'
+import { FormFieldFloat64API } from './formfieldfloat64-api'
+import { FormFieldIntAPI } from './formfieldint-api'
+import { FormFieldDateAPI } from './formfielddate-api'
+import { FormFieldTimeAPI } from './formfieldtime-api'
+import { FormFieldDateTimeAPI } from './formfielddatetime-api'
+import { FormFieldSelectAPI } from './formfieldselect-api'
 
 // usefull for managing pointer ID values that can be nullable
 import { NullInt64 } from './null-int64'
 
-export class FormFieldDB {
+export class FormFieldAPI {
 
 	static GONGSTRUCT_NAME = "FormField"
 

@@ -3,9 +3,9 @@
 // usefull for managing pointer ID values that can be nullable
 import { NullInt64 } from './null-int64'
 
-export class CellIntDB {
+export class FormSortAssocButtonAPI {
 
-	static GONGSTRUCT_NAME = "CellInt"
+	static GONGSTRUCT_NAME = "FormSortAssocButton"
 
 	CreatedAt?: string
 	DeletedAt?: string
@@ -13,13 +13,13 @@ export class CellIntDB {
 
 	// insertion point for basic fields declarations
 	Name: string = ""
-	Value: number = 0
+	Label: string = ""
 
 	// insertion point for other decls
 
-	CellIntPointersEncoding: CellIntPointersEncoding = new CellIntPointersEncoding
+	FormSortAssocButtonPointersEncoding: FormSortAssocButtonPointersEncoding = new FormSortAssocButtonPointersEncoding
 }
 
-export class CellIntPointersEncoding {
+export class FormSortAssocButtonPointersEncoding {
 	// insertion point for pointers and slices of pointers encoding fields
 }

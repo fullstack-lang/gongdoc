@@ -3,9 +3,9 @@
 // usefull for managing pointer ID values that can be nullable
 import { NullInt64 } from './null-int64'
 
-export class CellIconDB {
+export class FormFieldIntAPI {
 
-	static GONGSTRUCT_NAME = "CellIcon"
+	static GONGSTRUCT_NAME = "FormFieldInt"
 
 	CreatedAt?: string
 	DeletedAt?: string
@@ -13,13 +13,17 @@ export class CellIconDB {
 
 	// insertion point for basic fields declarations
 	Name: string = ""
-	Icon: string = ""
+	Value: number = 0
+	HasMinValidator: boolean = false
+	MinValue: number = 0
+	HasMaxValidator: boolean = false
+	MaxValue: number = 0
 
 	// insertion point for other decls
 
-	CellIconPointersEncoding: CellIconPointersEncoding = new CellIconPointersEncoding
+	FormFieldIntPointersEncoding: FormFieldIntPointersEncoding = new FormFieldIntPointersEncoding
 }
 
-export class CellIconPointersEncoding {
+export class FormFieldIntPointersEncoding {
 	// insertion point for pointers and slices of pointers encoding fields
 }

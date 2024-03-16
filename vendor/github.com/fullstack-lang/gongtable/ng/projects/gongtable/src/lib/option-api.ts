@@ -3,9 +3,9 @@
 // usefull for managing pointer ID values that can be nullable
 import { NullInt64 } from './null-int64'
 
-export class FormFieldDateDB {
+export class OptionAPI {
 
-	static GONGSTRUCT_NAME = "FormFieldDate"
+	static GONGSTRUCT_NAME = "Option"
 
 	CreatedAt?: string
 	DeletedAt?: string
@@ -13,13 +13,12 @@ export class FormFieldDateDB {
 
 	// insertion point for basic fields declarations
 	Name: string = ""
-	Value: Date = new Date
 
 	// insertion point for other decls
 
-	FormFieldDatePointersEncoding: FormFieldDatePointersEncoding = new FormFieldDatePointersEncoding
+	OptionPointersEncoding: OptionPointersEncoding = new OptionPointersEncoding
 }
 
-export class FormFieldDatePointersEncoding {
+export class OptionPointersEncoding {
 	// insertion point for pointers and slices of pointers encoding fields
 }

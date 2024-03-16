@@ -3,9 +3,9 @@
 // usefull for managing pointer ID values that can be nullable
 import { NullInt64 } from './null-int64'
 
-export class DisplayedColumnDB {
+export class FormFieldStringAPI {
 
-	static GONGSTRUCT_NAME = "DisplayedColumn"
+	static GONGSTRUCT_NAME = "FormFieldString"
 
 	CreatedAt?: string
 	DeletedAt?: string
@@ -13,12 +13,14 @@ export class DisplayedColumnDB {
 
 	// insertion point for basic fields declarations
 	Name: string = ""
+	Value: string = ""
+	IsTextArea: boolean = false
 
 	// insertion point for other decls
 
-	DisplayedColumnPointersEncoding: DisplayedColumnPointersEncoding = new DisplayedColumnPointersEncoding
+	FormFieldStringPointersEncoding: FormFieldStringPointersEncoding = new FormFieldStringPointersEncoding
 }
 
-export class DisplayedColumnPointersEncoding {
+export class FormFieldStringPointersEncoding {
 	// insertion point for pointers and slices of pointers encoding fields
 }

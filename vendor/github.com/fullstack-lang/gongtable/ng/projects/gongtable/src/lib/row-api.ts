@@ -1,11 +1,12 @@
 // insertion point for imports
+import { CellAPI } from './cell-api'
 
 // usefull for managing pointer ID values that can be nullable
 import { NullInt64 } from './null-int64'
 
-export class CellStringDB {
+export class RowAPI {
 
-	static GONGSTRUCT_NAME = "CellString"
+	static GONGSTRUCT_NAME = "Row"
 
 	CreatedAt?: string
 	DeletedAt?: string
@@ -13,13 +14,14 @@ export class CellStringDB {
 
 	// insertion point for basic fields declarations
 	Name: string = ""
-	Value: string = ""
+	IsChecked: boolean = false
 
 	// insertion point for other decls
 
-	CellStringPointersEncoding: CellStringPointersEncoding = new CellStringPointersEncoding
+	RowPointersEncoding: RowPointersEncoding = new RowPointersEncoding
 }
 
-export class CellStringPointersEncoding {
+export class RowPointersEncoding {
 	// insertion point for pointers and slices of pointers encoding fields
+	Cells: number[] = []
 }

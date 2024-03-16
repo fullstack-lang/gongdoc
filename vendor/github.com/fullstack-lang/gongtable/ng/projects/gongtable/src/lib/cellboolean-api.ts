@@ -3,9 +3,9 @@
 // usefull for managing pointer ID values that can be nullable
 import { NullInt64 } from './null-int64'
 
-export class CheckBoxDB {
+export class CellBooleanAPI {
 
-	static GONGSTRUCT_NAME = "CheckBox"
+	static GONGSTRUCT_NAME = "CellBoolean"
 
 	CreatedAt?: string
 	DeletedAt?: string
@@ -17,9 +17,9 @@ export class CheckBoxDB {
 
 	// insertion point for other decls
 
-	CheckBoxPointersEncoding: CheckBoxPointersEncoding = new CheckBoxPointersEncoding
+	CellBooleanPointersEncoding: CellBooleanPointersEncoding = new CellBooleanPointersEncoding
 }
 
-export class CheckBoxPointersEncoding {
+export class CellBooleanPointersEncoding {
 	// insertion point for pointers and slices of pointers encoding fields
 }

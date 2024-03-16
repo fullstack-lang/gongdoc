@@ -1,12 +1,11 @@
 // insertion point for imports
-import { CellDB } from './cell-db'
 
 // usefull for managing pointer ID values that can be nullable
 import { NullInt64 } from './null-int64'
 
-export class RowDB {
+export class FormFieldDateAPI {
 
-	static GONGSTRUCT_NAME = "Row"
+	static GONGSTRUCT_NAME = "FormFieldDate"
 
 	CreatedAt?: string
 	DeletedAt?: string
@@ -14,14 +13,13 @@ export class RowDB {
 
 	// insertion point for basic fields declarations
 	Name: string = ""
-	IsChecked: boolean = false
+	Value: Date = new Date
 
 	// insertion point for other decls
 
-	RowPointersEncoding: RowPointersEncoding = new RowPointersEncoding
+	FormFieldDatePointersEncoding: FormFieldDatePointersEncoding = new FormFieldDatePointersEncoding
 }
 
-export class RowPointersEncoding {
+export class FormFieldDatePointersEncoding {
 	// insertion point for pointers and slices of pointers encoding fields
-	Cells: number[] = []
 }

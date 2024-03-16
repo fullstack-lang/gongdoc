@@ -3,9 +3,9 @@
 // usefull for managing pointer ID values that can be nullable
 import { NullInt64 } from './null-int64'
 
-export class OptionDB {
+export class CellIntAPI {
 
-	static GONGSTRUCT_NAME = "Option"
+	static GONGSTRUCT_NAME = "CellInt"
 
 	CreatedAt?: string
 	DeletedAt?: string
@@ -13,12 +13,13 @@ export class OptionDB {
 
 	// insertion point for basic fields declarations
 	Name: string = ""
+	Value: number = 0
 
 	// insertion point for other decls
 
-	OptionPointersEncoding: OptionPointersEncoding = new OptionPointersEncoding
+	CellIntPointersEncoding: CellIntPointersEncoding = new CellIntPointersEncoding
 }
 
-export class OptionPointersEncoding {
+export class CellIntPointersEncoding {
 	// insertion point for pointers and slices of pointers encoding fields
 }
