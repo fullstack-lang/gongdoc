@@ -21,6 +21,8 @@ export function updateLinkFromCursor(
 
 ) {
 
+
+
     // offSetForNewMidlleSegment denotes the standard distance between
     // a rect and the middle segment that is created when going from a
     // two segment link to a three segment link
@@ -137,6 +139,8 @@ export function updateLinkFromCursor(
     }
     if (segment.Orientation == gongsvg.OrientationType.ORIENTATION_VERTICAL) {
 
+
+
         // set up the cursor style
         document.body.style.cursor = 'ew-resize'
 
@@ -148,6 +152,8 @@ export function updateLinkFromCursor(
             let newStartRatio = (pointAtMouseMove.X - previousStart!.X) / previousStart!.Width
 
             link.StartRatio = newStartRatio
+
+            // console.log("updateLinkFromCursor", draggedSegmentNumber, "newStartRatio", newStartRatio)
 
             // special case where we need to change orientation
             if (newStartRatio < 0 || newStartRatio > 1) {
@@ -175,6 +181,7 @@ export function updateLinkFromCursor(
                     document.body.style.cursor = 'not-allowed'
                     if (newStartRatio < 0) { newStartRatio = 0 }
                     if (newStartRatio > 1) { newStartRatio = 1 }
+                    link.StartRatio = newStartRatio
                 }
             }
 

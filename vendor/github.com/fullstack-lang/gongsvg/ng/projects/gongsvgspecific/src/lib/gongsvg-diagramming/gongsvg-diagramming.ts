@@ -754,7 +754,7 @@ export class GongsvgDiagrammingComponent implements OnInit, OnDestroy, AfterView
   linkMouseDown(event: MouseEvent, segmentNumber: number, link: gongsvg.Link): void {
     if (this.State == StateEnumType.WAITING_FOR_USER_INPUT && !event.altKey && !event.shiftKey) {
       this.State = StateEnumType.LINK_DRAGGING
-      console.log(getFunctionName(), "state at exit", this.State)
+      console.log(getFunctionName(), "state at entry", this.State)
       console.assert(this.gongsvgFrontRepo?.getFrontArray(gongsvg.SVG.GONGSTRUCT_NAME).length == 1,
         getFunctionName(), "gongsvgFrontRepo not good")
 
