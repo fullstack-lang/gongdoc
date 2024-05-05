@@ -1,0 +1,6 @@
+{
+    "name": "gong",
+    "workspaces": [
+        "ng-github.com-fullstack-lang-gongdoc"
+    ]
+}
