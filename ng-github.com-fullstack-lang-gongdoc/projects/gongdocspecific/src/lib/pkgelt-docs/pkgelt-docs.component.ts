@@ -2,10 +2,22 @@ import { Component, Input, OnInit } from '@angular/core';
 
 import { Router, RouterState } from '@angular/router';
 
+import { AngularSplitModule } from 'angular-split';
+
+import { TreeComponent } from '../../../../../../vendor/github.com/fullstack-lang/gongtree/ng-github.com-fullstack-lang-gongtree/projects/gongtreespecific/src/public-api'
+
+import { GongsvgDiagrammingComponent } from '../../../../../../vendor/github.com/fullstack-lang/gongsvg/ng-github.com-fullstack-lang-gongsvg/projects/gongsvgspecific/src/lib/gongsvg-diagramming/gongsvg-diagramming'
+
 @Component({
   selector: 'lib-pkgelt-docs',
   templateUrl: './pkgelt-docs.component.html',
-  styleUrls: ['./pkgelt-docs.component.css']
+  styleUrls: ['./pkgelt-docs.component.css'],
+  standalone: true,
+  imports: [
+    AngularSplitModule,
+    TreeComponent,
+    GongsvgDiagrammingComponent
+  ]
 })
 export class PkgeltDocsComponent implements OnInit {
 

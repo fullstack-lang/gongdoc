@@ -415,7 +415,7 @@ func DefaultInjection(stage *models.StageStruct) {
 
 	//gong:ident [ref_models.Field]
 	__GongStructShape__000002_Default_Field.Identifier = `ref_models.Field`
-	__GongStructShape__000002_Default_Field.ShowNbInstances = false
+	__GongStructShape__000002_Default_Field.ShowNbInstances = true
 	__GongStructShape__000002_Default_Field.NbInstances = 0
 	__GongStructShape__000002_Default_Field.Width = 240.000000
 	__GongStructShape__000002_Default_Field.Height = 63.000000
@@ -428,7 +428,7 @@ func DefaultInjection(stage *models.StageStruct) {
 
 	//gong:ident [ref_models.GongEnumShape]
 	__GongStructShape__000003_Default_GongEnumShape.Identifier = `ref_models.GongEnumShape`
-	__GongStructShape__000003_Default_GongEnumShape.ShowNbInstances = false
+	__GongStructShape__000003_Default_GongEnumShape.ShowNbInstances = true
 	__GongStructShape__000003_Default_GongEnumShape.NbInstances = 0
 	__GongStructShape__000003_Default_GongEnumShape.Width = 240.000000
 	__GongStructShape__000003_Default_GongEnumShape.Height = 63.000000
@@ -585,7 +585,7 @@ or to <a href="/models#OrientationType">models.OrientationType</a>
 	__NoteShape__000000_NoteOnGongdoc.X = 759.999939
 	__NoteShape__000000_NoteOnGongdoc.Y = 48.000000
 	__NoteShape__000000_NoteOnGongdoc.Width = 347.000000
-	__NoteShape__000000_NoteOnGongdoc.Height = 88.000000
+	__NoteShape__000000_NoteOnGongdoc.Height = 123.000000
 	__NoteShape__000000_NoteOnGongdoc.Matched = false
 
 	// NoteShapeLink values setup
@@ -637,13 +637,13 @@ or to <a href="/models#OrientationType">models.OrientationType</a>
 	__Position__000005_Pos_Default_GongStructShape.Name = `Pos-Default-GongStructShape`
 
 	// Position values setup
-	__Position__000006_Pos_Default_MultiplicityType.X = 364.000000
-	__Position__000006_Pos_Default_MultiplicityType.Y = 37.000000
+	__Position__000006_Pos_Default_MultiplicityType.X = 409.000000
+	__Position__000006_Pos_Default_MultiplicityType.Y = 46.000000
 	__Position__000006_Pos_Default_MultiplicityType.Name = `Pos-Default-MultiplicityType`
 
 	// Position values setup
-	__Position__000007_Pos_Default_NoteShape.X = 952.000061
-	__Position__000007_Pos_Default_NoteShape.Y = 216.000000
+	__Position__000007_Pos_Default_NoteShape.X = 1031.000061
+	__Position__000007_Pos_Default_NoteShape.Y = 309.000000
 	__Position__000007_Pos_Default_NoteShape.Name = `Pos-Default-NoteShape`
 
 	// Vertice values setup
