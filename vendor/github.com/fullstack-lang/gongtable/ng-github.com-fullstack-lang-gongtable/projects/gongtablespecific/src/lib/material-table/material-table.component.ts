@@ -2,22 +2,51 @@ import { Component, Inject, Input, OnInit, Optional, ViewChild } from '@angular/
 import { Subscription, debounceTime, distinctUntilChanged, forkJoin } from 'rxjs';
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 
-import * as gongtable from 'gongtable'
+import * as gongtable from '../../../../gongtable/src/public-api'
 
 import { MatTableDataSource } from '@angular/material/table';
 import { FormControl } from '@angular/forms';
-import { MatSort } from '@angular/material/sort';
-import { MatPaginator } from '@angular/material/paginator';
+
 import { SelectionModel } from '@angular/cdk/collections';
-import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { TableDialogData } from '../table-dialog-data';
 
 const allowMultiSelect = true
 
+import { MAT_DIALOG_DATA, MatDialog, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { MatSort } from '@angular/material/sort';
+import { DragDropModule } from '@angular/cdk/drag-drop';
+import { CommonModule } from '@angular/common';
+
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
+import { MatTableModule } from '@angular/material/table';
+import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatInputModule } from '@angular/material/input';
+import { MatButtonModule } from '@angular/material/button';
+
 @Component({
   selector: 'lib-material-table',
   templateUrl: './material-table.component.html',
-  styleUrls: ['./material-table.component.css']
+  styleUrls: ['./material-table.component.css'],
+  standalone: true,
+  imports: [
+    FormsModule,
+    ReactiveFormsModule,
+
+    MatButtonModule,
+    MatFormFieldModule,
+    MatPaginatorModule,
+    MatTableModule,
+    MatCheckboxModule,
+    MatDialogModule,
+    MatInputModule,
+
+    CommonModule,
+    DragDropModule,
+
+
+  ],
 })
 export class MaterialTableComponent implements OnInit {
 
@@ -73,7 +102,7 @@ export class MaterialTableComponent implements OnInit {
 
 
     // not null if the component is called as a selection component of cellboolean instances
-    public dialogRef: MatDialogRef<MaterialTableComponent>,
+    public dialog: MatDialog,
     @Optional() @Inject(MAT_DIALOG_DATA) public tableDialogData: TableDialogData,
   ) {
 
@@ -284,7 +313,7 @@ export class MaterialTableComponent implements OnInit {
           // in case this component is called as a modal window (MatDialog)
           // exits,
           if (this.tableDialogData) {
-            this.dialogRef?.close('Closing the application')
+            this.dialog.closeAll()
           }
         }
       )
@@ -309,7 +338,7 @@ export class MaterialTableComponent implements OnInit {
             // in case this component is called as a modal window (MatDialog)
             // exits,
             if (this.tableDialogData) {
-              this.dialogRef?.close('Closing the application')
+              this.dialog.closeAll()
             }
           }
         )
@@ -334,7 +363,7 @@ export class MaterialTableComponent implements OnInit {
 
   close() {
     if (this.tableDialogData) {
-      this.dialogRef?.close('Closing the application')
+      this.dialog.closeAll()
     }
   }
 
