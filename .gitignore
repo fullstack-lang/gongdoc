@@ -10,3 +10,5 @@ go/cmd/gongdoc/test.db
 *.exe
 go/cmd/gongdoc/__debug_*
 go/cmd/gongdoc/gongdoc.db
+
+node_modules

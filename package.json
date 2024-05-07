@@ -1,0 +1,8 @@
+{
+    "name": "gong",
+    "workspaces": [
+        "ng-github.com-fullstack-lang-gongdoc",
+        "vendor/github.com/fullstack-lang/gongtree/ng-github.com-fullstack-lang-gongtree",
+        "vendor/github.com/fullstack-lang/gongsvg/ng-github.com-fullstack-lang-gongsvg"
+    ]
+}
