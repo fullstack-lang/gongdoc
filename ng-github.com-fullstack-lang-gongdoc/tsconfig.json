@@ -11,7 +11,10 @@
       ],
       "gongdocspecific": [
         "./dist/gongdocspecific"
-      ]
+      ],
+      "@vendored_components/*": [
+        "../vendor/*"
+      ],
     },
     "noPropertyAccessFromIndexSignature": true,
     "noImplicitReturns": true,
