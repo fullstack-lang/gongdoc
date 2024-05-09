@@ -28,6 +28,7 @@ export class LinkAnchoredText {
 	Color: string = ""
 	FillOpacity: number = 0
 	Stroke: string = ""
+	StrokeOpacity: number = 0
 	StrokeWidth: number = 0
 	StrokeDashArray: string = ""
 	StrokeDashArrayWhenSelected: string = ""
@@ -54,6 +55,7 @@ export function CopyLinkAnchoredTextToLinkAnchoredTextAPI(linkanchoredtext: Link
 	linkanchoredtextAPI.Color = linkanchoredtext.Color
 	linkanchoredtextAPI.FillOpacity = linkanchoredtext.FillOpacity
 	linkanchoredtextAPI.Stroke = linkanchoredtext.Stroke
+	linkanchoredtextAPI.StrokeOpacity = linkanchoredtext.StrokeOpacity
 	linkanchoredtextAPI.StrokeWidth = linkanchoredtext.StrokeWidth
 	linkanchoredtextAPI.StrokeDashArray = linkanchoredtext.StrokeDashArray
 	linkanchoredtextAPI.StrokeDashArrayWhenSelected = linkanchoredtext.StrokeDashArrayWhenSelected
@@ -90,6 +92,7 @@ export function CopyLinkAnchoredTextAPIToLinkAnchoredText(linkanchoredtextAPI: L
 	linkanchoredtext.Color = linkanchoredtextAPI.Color
 	linkanchoredtext.FillOpacity = linkanchoredtextAPI.FillOpacity
 	linkanchoredtext.Stroke = linkanchoredtextAPI.Stroke
+	linkanchoredtext.StrokeOpacity = linkanchoredtextAPI.StrokeOpacity
 	linkanchoredtext.StrokeWidth = linkanchoredtextAPI.StrokeWidth
 	linkanchoredtext.StrokeDashArray = linkanchoredtextAPI.StrokeDashArray
 	linkanchoredtext.StrokeDashArrayWhenSelected = linkanchoredtextAPI.StrokeDashArrayWhenSelected

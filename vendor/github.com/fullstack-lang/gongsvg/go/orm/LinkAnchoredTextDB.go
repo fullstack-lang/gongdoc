@@ -93,6 +93,9 @@ type LinkAnchoredTextDB struct {
 	// Declation for basic field linkanchoredtextDB.Stroke
 	Stroke_Data sql.NullString
 
+	// Declation for basic field linkanchoredtextDB.StrokeOpacity
+	StrokeOpacity_Data sql.NullFloat64
+
 	// Declation for basic field linkanchoredtextDB.StrokeWidth
 	StrokeWidth_Data sql.NullFloat64
 
@@ -147,13 +150,15 @@ type LinkAnchoredTextWOP struct {
 
 	Stroke string `xlsx:"10"`
 
-	StrokeWidth float64 `xlsx:"11"`
+	StrokeOpacity float64 `xlsx:"11"`
 
-	StrokeDashArray string `xlsx:"12"`
+	StrokeWidth float64 `xlsx:"12"`
 
-	StrokeDashArrayWhenSelected string `xlsx:"13"`
+	StrokeDashArray string `xlsx:"13"`
 
-	Transform string `xlsx:"14"`
+	StrokeDashArrayWhenSelected string `xlsx:"14"`
+
+	Transform string `xlsx:"15"`
 	// insertion for WOP pointer fields
 }
 
@@ -170,6 +175,7 @@ var LinkAnchoredText_Fields = []string{
 	"Color",
 	"FillOpacity",
 	"Stroke",
+	"StrokeOpacity",
 	"StrokeWidth",
 	"StrokeDashArray",
 	"StrokeDashArrayWhenSelected",
@@ -497,6 +503,9 @@ func (linkanchoredtextDB *LinkAnchoredTextDB) CopyBasicFieldsFromLinkAnchoredTex
 	linkanchoredtextDB.Stroke_Data.String = linkanchoredtext.Stroke
 	linkanchoredtextDB.Stroke_Data.Valid = true
 
+	linkanchoredtextDB.StrokeOpacity_Data.Float64 = linkanchoredtext.StrokeOpacity
+	linkanchoredtextDB.StrokeOpacity_Data.Valid = true
+
 	linkanchoredtextDB.StrokeWidth_Data.Float64 = linkanchoredtext.StrokeWidth
 	linkanchoredtextDB.StrokeWidth_Data.Valid = true
 
@@ -543,6 +552,9 @@ func (linkanchoredtextDB *LinkAnchoredTextDB) CopyBasicFieldsFromLinkAnchoredTex
 
 	linkanchoredtextDB.Stroke_Data.String = linkanchoredtext.Stroke
 	linkanchoredtextDB.Stroke_Data.Valid = true
+
+	linkanchoredtextDB.StrokeOpacity_Data.Float64 = linkanchoredtext.StrokeOpacity
+	linkanchoredtextDB.StrokeOpacity_Data.Valid = true
 
 	linkanchoredtextDB.StrokeWidth_Data.Float64 = linkanchoredtext.StrokeWidth
 	linkanchoredtextDB.StrokeWidth_Data.Valid = true
@@ -591,6 +603,9 @@ func (linkanchoredtextDB *LinkAnchoredTextDB) CopyBasicFieldsFromLinkAnchoredTex
 	linkanchoredtextDB.Stroke_Data.String = linkanchoredtext.Stroke
 	linkanchoredtextDB.Stroke_Data.Valid = true
 
+	linkanchoredtextDB.StrokeOpacity_Data.Float64 = linkanchoredtext.StrokeOpacity
+	linkanchoredtextDB.StrokeOpacity_Data.Valid = true
+
 	linkanchoredtextDB.StrokeWidth_Data.Float64 = linkanchoredtext.StrokeWidth
 	linkanchoredtextDB.StrokeWidth_Data.Valid = true
 
@@ -617,6 +632,7 @@ func (linkanchoredtextDB *LinkAnchoredTextDB) CopyBasicFieldsToLinkAnchoredText(
 	linkanchoredtext.Color = linkanchoredtextDB.Color_Data.String
 	linkanchoredtext.FillOpacity = linkanchoredtextDB.FillOpacity_Data.Float64
 	linkanchoredtext.Stroke = linkanchoredtextDB.Stroke_Data.String
+	linkanchoredtext.StrokeOpacity = linkanchoredtextDB.StrokeOpacity_Data.Float64
 	linkanchoredtext.StrokeWidth = linkanchoredtextDB.StrokeWidth_Data.Float64
 	linkanchoredtext.StrokeDashArray = linkanchoredtextDB.StrokeDashArray_Data.String
 	linkanchoredtext.StrokeDashArrayWhenSelected = linkanchoredtextDB.StrokeDashArrayWhenSelected_Data.String
@@ -636,6 +652,7 @@ func (linkanchoredtextDB *LinkAnchoredTextDB) CopyBasicFieldsToLinkAnchoredText_
 	linkanchoredtext.Color = linkanchoredtextDB.Color_Data.String
 	linkanchoredtext.FillOpacity = linkanchoredtextDB.FillOpacity_Data.Float64
 	linkanchoredtext.Stroke = linkanchoredtextDB.Stroke_Data.String
+	linkanchoredtext.StrokeOpacity = linkanchoredtextDB.StrokeOpacity_Data.Float64
 	linkanchoredtext.StrokeWidth = linkanchoredtextDB.StrokeWidth_Data.Float64
 	linkanchoredtext.StrokeDashArray = linkanchoredtextDB.StrokeDashArray_Data.String
 	linkanchoredtext.StrokeDashArrayWhenSelected = linkanchoredtextDB.StrokeDashArrayWhenSelected_Data.String
@@ -656,6 +673,7 @@ func (linkanchoredtextDB *LinkAnchoredTextDB) CopyBasicFieldsToLinkAnchoredTextW
 	linkanchoredtext.Color = linkanchoredtextDB.Color_Data.String
 	linkanchoredtext.FillOpacity = linkanchoredtextDB.FillOpacity_Data.Float64
 	linkanchoredtext.Stroke = linkanchoredtextDB.Stroke_Data.String
+	linkanchoredtext.StrokeOpacity = linkanchoredtextDB.StrokeOpacity_Data.Float64
 	linkanchoredtext.StrokeWidth = linkanchoredtextDB.StrokeWidth_Data.Float64
 	linkanchoredtext.StrokeDashArray = linkanchoredtextDB.StrokeDashArray_Data.String
 	linkanchoredtext.StrokeDashArrayWhenSelected = linkanchoredtextDB.StrokeDashArrayWhenSelected_Data.String
