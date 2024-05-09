@@ -23,6 +23,7 @@ export class LinkAnchoredTextAPI {
 	Color: string = ""
 	FillOpacity: number = 0
 	Stroke: string = ""
+	StrokeOpacity: number = 0
 	StrokeWidth: number = 0
 	StrokeDashArray: string = ""
 	StrokeDashArrayWhenSelected: string = ""

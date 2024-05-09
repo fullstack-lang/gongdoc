@@ -33,6 +33,7 @@
                     [attr.fill]="circle.Color!" 
                     [attr.fill-opacity]="circle.FillOpacity"
                     [attr.stroke]="circle.Stroke" 
+                    [attr.stroke-opacity]="circle.StrokeOpacity"
                     [attr.stroke-width]="circle.StrokeWidth" 
                     [attr.stroke-dasharray]="circle.StrokeDashArray"
                     [attr.transform]="circle.Transform">
@@ -53,6 +54,7 @@
                     [attr.fill]="ellipse.Color"
                     [attr.fill-opacity]="ellipse.FillOpacity"
                     [attr.stroke]="ellipse.Stroke"
+                    [attr.stroke-opacity]="ellipse.StrokeOpacity"
                     [attr.stroke-width]="ellipse.StrokeWidth"
                     [attr.stroke-dasharray]="ellipse.StrokeDashArray" />
 
@@ -71,6 +73,7 @@
                     [attr.fill]="line.Color"
                     [attr.fill-opacity]="line.FillOpacity"
                     [attr.stroke]="line.Stroke"
+                    [attr.stroke-opacity]="line.StrokeOpacity"
                     [attr.stroke-width]="line.StrokeWidth"
                     [attr.stroke-dasharray]="line.StrokeDashArray"
                     [attr.transform]="line.Transform" />
@@ -89,6 +92,7 @@
                     [attr.fill-opacity]="text.FillOpacity"
                     
                     [attr.stroke]="text.Stroke" 
+                    [attr.stroke-opacity]="text.StrokeOpacity"
                     [attr.stroke-width]="text.StrokeWidth" 
                     [attr.stroke-dasharray]="text.StrokeDashArray"
                     [attr.transform]="text.Transform">{{text.Content}}</text>
@@ -99,6 +103,7 @@
                     [attr.fill]="path.Color"
                     [attr.fill-opacity]="path.FillOpacity"
                     [attr.stroke]="path.Stroke"
+                    [attr.stroke-opacity]="path.StrokeOpacity"
                     [attr.stroke-width]="path.StrokeWidth"
                     [attr.stroke-dasharray]="path.StrokeDashArray"
                     [attr.transform]="path.Transform" />
@@ -115,6 +120,7 @@
                     [attr.fill]="polygone.Color"
                     [attr.fill-opacity]="polygone.FillOpacity"
                     [attr.stroke]="polygone.Stroke"
+                    [attr.stroke-opacity]="polygone.StrokeOpacity"
                     [attr.stroke-width]="polygone.StrokeWidth"
                     [attr.stroke-dasharray]="polygone.StrokeDashArray" />
     
@@ -129,6 +135,7 @@
                     [attr.fill]="polyline.Color"
                     [attr.fill-opacity]="polyline.FillOpacity"
                     [attr.stroke]="polyline.Stroke"
+                    [attr.stroke-opacity]="polyline.StrokeOpacity"
                     [attr.stroke-width]="polyline.StrokeWidth"
                     [attr.stroke-dasharray]="polyline.StrokeDashArray"
                 />
@@ -149,6 +156,7 @@
                     [attr.fill]="rect.Color"
                     [attr.fill-opacity]="rect.FillOpacity"
                     [attr.stroke]="rect.Stroke"
+                    [attr.stroke-opacity]="rect.StrokeOpacity"
                     [attr.stroke-width]="rect.StrokeWidth"
                     [attr.stroke-dasharray]="rect.IsSelected ? rect.StrokeDashArrayWhenSelected : rect.StrokeDashArray"
                     [attr.transform]="rect.Transform"
@@ -363,6 +371,7 @@
                             [attr.fill]="link.Color"
                             [attr.fill-opacity]="link.FillOpacity" 
                             [attr.stroke]="link.Stroke" 
+                            [attr.stroke-opacity]="link.StrokeOpacity"
                             [attr.stroke-width]="link.StrokeWidth"
                             [attr.stroke-dasharray]="link.StrokeDashArray" 
                             />
@@ -377,6 +386,7 @@
                                 [attr.fill]="link.Color"
                                 [attr.fill-opacity]="link.FillOpacity" 
                                 [attr.stroke]="link.Stroke" 
+                                [attr.stroke-opacity]="link.StrokeOpacity"
                                 [attr.stroke-width]="link.StrokeWidth"
                                 [attr.stroke-dasharray]="link.StrokeDashArray" 
                                 [attr.segment-orientation]="getOrientation(segment)"
@@ -393,6 +403,7 @@
                                 [attr.fill]="link.Color"
                                 [attr.fill-opacity]="link.FillOpacity" 
                                 [attr.stroke]="link.Stroke" 
+                                [attr.stroke-opacity]="link.StrokeOpacity"
                                 [attr.stroke-width]="link.StrokeWidth"
                                 [attr.stroke-dasharray]="link.StrokeDashArray" 
                                 [attr.segment-orientation]="getOrientation(segment)"
@@ -411,6 +422,7 @@
                             [attr.fill]="link.Color"
                             [attr.fill-opacity]="link.FillOpacity" 
                             [attr.stroke]="link.Stroke" 
+                            [attr.stroke-opacity]="link.StrokeOpacity"
                             [attr.stroke-width]="link.StrokeWidth"
                             [attr.stroke-dasharray]="link.StrokeDashArray" 
                             />
@@ -421,6 +433,7 @@
                                 [attr.fill]="link.Color"
                                 [attr.fill-opacity]="link.FillOpacity" 
                                 [attr.stroke]="link.Stroke" 
+                                [attr.stroke-opacity]="link.StrokeOpacity"
                                 [attr.stroke-width]="link.StrokeWidth"
                                 [attr.stroke-dasharray]="link.StrokeDashArray" 
                             />
@@ -431,6 +444,7 @@
                                 [attr.fill]="link.Color"
                                 [attr.fill-opacity]="link.FillOpacity" 
                                 [attr.stroke]="link.Stroke" 
+                                [attr.stroke-opacity]="link.StrokeOpacity"
                                 [attr.stroke-width]="link.StrokeWidth"
                                 [attr.stroke-dasharray]="link.StrokeDashArray" 
                             />
@@ -447,6 +461,7 @@
                                         [attr.fill]="text.Color"    
                                         [attr.fill-opacity]="text.FillOpacity"
                                         [attr.stroke]="text.Stroke"
+                                        [attr.stroke-opacity]="text.StrokeOpacity"
                                         [attr.stroke-width]="text.StrokeWidth"
                                         [attr.stroke-dasharray]="text.StrokeDashArray"
                                         [attr.transform]="text.Transform"
@@ -467,6 +482,7 @@
                                         [attr.fill]="text.Color"    
                                         [attr.fill-opacity]="text.FillOpacity"
                                         [attr.stroke]="text.Stroke"
+                                        [attr.stroke-opacity]="text.StrokeOpacity"
                                         [attr.stroke-width]="text.StrokeWidth"
                                         [attr.stroke-dasharray]="text.StrokeDashArray"
                                         [attr.transform]="text.Transform"
@@ -487,6 +503,7 @@
                                         [attr.fill]="text.Color"    
                                         [attr.fill-opacity]="text.FillOpacity"
                                         [attr.stroke]="text.Stroke"
+                                        [attr.stroke-opacity]="text.StrokeOpacity"
                                         [attr.stroke-width]="text.StrokeWidth"
                                         [attr.stroke-dasharray]="text.StrokeDashArray"
                                         [attr.transform]="text.Transform"
@@ -507,6 +524,7 @@
                                         [attr.fill]="text.Color"    
                                         [attr.fill-opacity]="text.FillOpacity"
                                         [attr.stroke]="text.Stroke"
+                                        [attr.stroke-opacity]="text.StrokeOpacity"
                                         [attr.stroke-width]="text.StrokeWidth"
                                         [attr.stroke-dasharray]="text.StrokeDashArray"
                                         [attr.transform]="text.Transform"
@@ -531,6 +549,7 @@
                             [attr.fill]="link.Color"
                             [attr.fill-opacity]="link.FillOpacity" 
                             [attr.stroke]="link.Stroke" 
+                            [attr.stroke-opacity]="link.StrokeOpacity"
                             [attr.stroke-width]="link.StrokeWidth"
                             [attr.stroke-dasharray]="link.StrokeDashArray" 
                             [attr.transform]="link.Transform" 
@@ -548,6 +567,7 @@
                         [attr.fill]="rectLinkLink.Color"
                         [attr.fill-opacity]="rectLinkLink.FillOpacity" 
                         [attr.stroke]="rectLinkLink.Stroke" 
+                        [attr.stroke-opacity]="rectLinkLink.StrokeOpacity"
                         [attr.stroke-width]="rectLinkLink.StrokeWidth"
                         [attr.stroke-dasharray]="rectLinkLink.StrokeDashArray" 
                         [attr.transform]="rectLinkLink.Transform" 
@@ -582,6 +602,7 @@
             [attr.fill]="text.Color"    
             [attr.fill-opacity]="text.FillOpacity"
             [attr.stroke]="text.Stroke"
+            [attr.stroke-opacity]="text.StrokeOpacity"
             [attr.stroke-width]="text.StrokeWidth != 0 ? text.StrokeWidth : null"
             [attr.stroke-dasharray]="text.StrokeDashArray"
             [attr.transform]="text.Transform"
@@ -608,6 +629,7 @@
         [attr.fill]="rect.Color"
         [attr.fill-opacity]="rect.FillOpacity"
         [attr.stroke]="rect.Stroke"
+        [attr.stroke-opacity]="rect.StrokeOpacity"
         [attr.stroke-width]="rect.StrokeWidth"
     > </rect>
 </ng-template>
@@ -621,6 +643,7 @@
                 [attr.fill]="path.Color"
                 [attr.fill-opacity]="path.FillOpacity"
                 [attr.stroke]="path.Stroke"
+                [attr.stroke-opacity]="path.StrokeOpacity"
                 [attr.stroke-width]="path.StrokeWidth"
                 [attr.transform]="path.Transform"
             > </path>
@@ -636,6 +659,7 @@
                 [attr.fill]="path.Color"
                 [attr.fill-opacity]="path.FillOpacity"
                 [attr.stroke]="path.Stroke"
+                [attr.stroke-opacity]="path.StrokeOpacity"
                 [attr.stroke-width]="path.StrokeWidth"
                 [attr.transform]="path.Transform + ' translate(' + anchorX + ' ' + anchorY + ') scale(' + path.AppliedScaling + ' ' + path.AppliedScaling + ')'"
             > </path>

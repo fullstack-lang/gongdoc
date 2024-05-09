@@ -10,6 +10,15 @@ import { AngularSplitModule } from 'angular-split';
 
 import { PanelComponent } from '../../projects/gongdocspecific/src/public-api';
 
+import { TreeComponent } from '@vendored_components/github.com/fullstack-lang/gongtree/ng-github.com-fullstack-lang-gongtree/projects/gongtreespecific/src/public-api'
+import { MaterialTableComponent } from '@vendored_components/github.com/fullstack-lang/gongtable/ng-github.com-fullstack-lang-gongtable/projects/gongtablespecific/src/lib/material-table/material-table.component';
+import { MaterialFormComponent } from '@vendored_components/github.com/fullstack-lang/gongtable/ng-github.com-fullstack-lang-gongtable/projects/gongtablespecific/src/lib/material-form/material-form.component';
+import * as gongtable from '@vendored_components/github.com/fullstack-lang/gongtable/ng-github.com-fullstack-lang-gongtable/projects/gongtable/src/public-api';
+import { GongsvgDiagrammingComponent } from '@vendored_components/github.com/fullstack-lang/gongsvg/ng-github.com-fullstack-lang-gongsvg/projects/gongsvgspecific/src/lib/gongsvg-diagramming/gongsvg-diagramming'
+
+import * as gongdoc from '../../projects/gongdoc/src/public-api'
+import * as gongsvg from '@vendored_components/github.com/fullstack-lang/gongsvg/ng-github.com-fullstack-lang-gongsvg/projects/gongsvg/src/public-api'
+
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
@@ -23,6 +32,10 @@ import { PanelComponent } from '../../projects/gongdocspecific/src/public-api';
 
     AngularSplitModule,
 
+    TreeComponent,
+    MaterialTableComponent,
+    MaterialFormComponent,
+
     PanelComponent,
   ]
 })
@@ -31,13 +44,28 @@ export class AppComponent implements OnInit {
   default = 'DOC Data/Model'
   diagrammer = 'Diagram Edition'
   view = this.diagrammer
+  probe = "probe"
+  svg_stack_probe = "SVG probe"
 
-  views: string[] = [this.diagrammer];
+  views: string[] = [this.diagrammer, this.probe, this.svg_stack_probe];
 
   GONG__MODEL__StacksPath = "github.com/fullstack-lang/gongdoc/go/models"
   GONG__DATA__StackPath = "gongdoc"
 
   loading = true
+
+  scrollStyle = {
+    'overflow- x': 'auto',
+    'width': '100%',  // Ensure the div takes the full width of its parent container
+  }
+
+  StackType = gongdoc.StackType
+
+  StackName = "gongdoc"
+  TableExtraPathEnum = gongtable.TableExtraPathEnum
+  StacksNames = gongdoc.StacksNames
+  SVGStackType = gongsvg.StackType
+
 
   constructor(
   ) {

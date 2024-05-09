@@ -2786,39 +2786,39 @@ func GetFields[Type Gongstruct]() (res []string) {
 	case Animate:
 		res = []string{"Name", "AttributeName", "Values", "Dur", "RepeatCount"}
 	case Circle:
-		res = []string{"Name", "CX", "CY", "Radius", "Color", "FillOpacity", "Stroke", "StrokeWidth", "StrokeDashArray", "StrokeDashArrayWhenSelected", "Transform", "Animations"}
+		res = []string{"Name", "CX", "CY", "Radius", "Color", "FillOpacity", "Stroke", "StrokeOpacity", "StrokeWidth", "StrokeDashArray", "StrokeDashArrayWhenSelected", "Transform", "Animations"}
 	case Ellipse:
-		res = []string{"Name", "CX", "CY", "RX", "RY", "Color", "FillOpacity", "Stroke", "StrokeWidth", "StrokeDashArray", "StrokeDashArrayWhenSelected", "Transform", "Animates"}
+		res = []string{"Name", "CX", "CY", "RX", "RY", "Color", "FillOpacity", "Stroke", "StrokeOpacity", "StrokeWidth", "StrokeDashArray", "StrokeDashArrayWhenSelected", "Transform", "Animates"}
 	case Layer:
 		res = []string{"Display", "Name", "Rects", "Texts", "Circles", "Lines", "Ellipses", "Polylines", "Polygones", "Paths", "Links", "RectLinkLinks"}
 	case Line:
-		res = []string{"Name", "X1", "Y1", "X2", "Y2", "Color", "FillOpacity", "Stroke", "StrokeWidth", "StrokeDashArray", "StrokeDashArrayWhenSelected", "Transform", "Animates", "MouseClickX", "MouseClickY"}
+		res = []string{"Name", "X1", "Y1", "X2", "Y2", "Color", "FillOpacity", "Stroke", "StrokeOpacity", "StrokeWidth", "StrokeDashArray", "StrokeDashArrayWhenSelected", "Transform", "Animates", "MouseClickX", "MouseClickY"}
 	case Link:
-		res = []string{"Name", "Type", "IsBezierCurve", "Start", "StartAnchorType", "End", "EndAnchorType", "StartOrientation", "StartRatio", "EndOrientation", "EndRatio", "CornerOffsetRatio", "CornerRadius", "HasEndArrow", "EndArrowSize", "HasStartArrow", "StartArrowSize", "TextAtArrowEnd", "TextAtArrowStart", "ControlPoints", "Color", "FillOpacity", "Stroke", "StrokeWidth", "StrokeDashArray", "StrokeDashArrayWhenSelected", "Transform"}
+		res = []string{"Name", "Type", "IsBezierCurve", "Start", "StartAnchorType", "End", "EndAnchorType", "StartOrientation", "StartRatio", "EndOrientation", "EndRatio", "CornerOffsetRatio", "CornerRadius", "HasEndArrow", "EndArrowSize", "HasStartArrow", "StartArrowSize", "TextAtArrowEnd", "TextAtArrowStart", "ControlPoints", "Color", "FillOpacity", "Stroke", "StrokeOpacity", "StrokeWidth", "StrokeDashArray", "StrokeDashArrayWhenSelected", "Transform"}
 	case LinkAnchoredText:
-		res = []string{"Name", "Content", "AutomaticLayout", "LinkAnchorType", "X_Offset", "Y_Offset", "FontWeight", "Color", "FillOpacity", "Stroke", "StrokeWidth", "StrokeDashArray", "StrokeDashArrayWhenSelected", "Transform", "Animates"}
+		res = []string{"Name", "Content", "AutomaticLayout", "LinkAnchorType", "X_Offset", "Y_Offset", "FontWeight", "Color", "FillOpacity", "Stroke", "StrokeOpacity", "StrokeWidth", "StrokeDashArray", "StrokeDashArrayWhenSelected", "Transform", "Animates"}
 	case Path:
-		res = []string{"Name", "Definition", "Color", "FillOpacity", "Stroke", "StrokeWidth", "StrokeDashArray", "StrokeDashArrayWhenSelected", "Transform", "Animates"}
+		res = []string{"Name", "Definition", "Color", "FillOpacity", "Stroke", "StrokeOpacity", "StrokeWidth", "StrokeDashArray", "StrokeDashArrayWhenSelected", "Transform", "Animates"}
 	case Point:
 		res = []string{"Name", "X", "Y"}
 	case Polygone:
-		res = []string{"Name", "Points", "Color", "FillOpacity", "Stroke", "StrokeWidth", "StrokeDashArray", "StrokeDashArrayWhenSelected", "Transform", "Animates"}
+		res = []string{"Name", "Points", "Color", "FillOpacity", "Stroke", "StrokeOpacity", "StrokeWidth", "StrokeDashArray", "StrokeDashArrayWhenSelected", "Transform", "Animates"}
 	case Polyline:
-		res = []string{"Name", "Points", "Color", "FillOpacity", "Stroke", "StrokeWidth", "StrokeDashArray", "StrokeDashArrayWhenSelected", "Transform", "Animates"}
+		res = []string{"Name", "Points", "Color", "FillOpacity", "Stroke", "StrokeOpacity", "StrokeWidth", "StrokeDashArray", "StrokeDashArrayWhenSelected", "Transform", "Animates"}
 	case Rect:
-		res = []string{"Name", "X", "Y", "Width", "Height", "RX", "Color", "FillOpacity", "Stroke", "StrokeWidth", "StrokeDashArray", "StrokeDashArrayWhenSelected", "Transform", "Animations", "IsSelectable", "IsSelected", "CanHaveLeftHandle", "HasLeftHandle", "CanHaveRightHandle", "HasRightHandle", "CanHaveTopHandle", "HasTopHandle", "IsScalingProportionally", "CanHaveBottomHandle", "HasBottomHandle", "CanMoveHorizontaly", "CanMoveVerticaly", "RectAnchoredTexts", "RectAnchoredRects", "RectAnchoredPaths"}
+		res = []string{"Name", "X", "Y", "Width", "Height", "RX", "Color", "FillOpacity", "Stroke", "StrokeOpacity", "StrokeWidth", "StrokeDashArray", "StrokeDashArrayWhenSelected", "Transform", "Animations", "IsSelectable", "IsSelected", "CanHaveLeftHandle", "HasLeftHandle", "CanHaveRightHandle", "HasRightHandle", "CanHaveTopHandle", "HasTopHandle", "IsScalingProportionally", "CanHaveBottomHandle", "HasBottomHandle", "CanMoveHorizontaly", "CanMoveVerticaly", "RectAnchoredTexts", "RectAnchoredRects", "RectAnchoredPaths"}
 	case RectAnchoredPath:
-		res = []string{"Name", "Definition", "X_Offset", "Y_Offset", "RectAnchorType", "ScalePropotionnally", "AppliedScaling", "Color", "FillOpacity", "Stroke", "StrokeWidth", "StrokeDashArray", "StrokeDashArrayWhenSelected", "Transform"}
+		res = []string{"Name", "Definition", "X_Offset", "Y_Offset", "RectAnchorType", "ScalePropotionnally", "AppliedScaling", "Color", "FillOpacity", "Stroke", "StrokeOpacity", "StrokeWidth", "StrokeDashArray", "StrokeDashArrayWhenSelected", "Transform"}
 	case RectAnchoredRect:
-		res = []string{"Name", "X", "Y", "Width", "Height", "RX", "X_Offset", "Y_Offset", "RectAnchorType", "WidthFollowRect", "HeightFollowRect", "Color", "FillOpacity", "Stroke", "StrokeWidth", "StrokeDashArray", "StrokeDashArrayWhenSelected", "Transform"}
+		res = []string{"Name", "X", "Y", "Width", "Height", "RX", "X_Offset", "Y_Offset", "RectAnchorType", "WidthFollowRect", "HeightFollowRect", "Color", "FillOpacity", "Stroke", "StrokeOpacity", "StrokeWidth", "StrokeDashArray", "StrokeDashArrayWhenSelected", "Transform"}
 	case RectAnchoredText:
-		res = []string{"Name", "Content", "FontWeight", "FontSize", "X_Offset", "Y_Offset", "RectAnchorType", "TextAnchorType", "Color", "FillOpacity", "Stroke", "StrokeWidth", "StrokeDashArray", "StrokeDashArrayWhenSelected", "Transform", "Animates"}
+		res = []string{"Name", "Content", "FontWeight", "FontSize", "X_Offset", "Y_Offset", "RectAnchorType", "TextAnchorType", "Color", "FillOpacity", "Stroke", "StrokeOpacity", "StrokeWidth", "StrokeDashArray", "StrokeDashArrayWhenSelected", "Transform", "Animates"}
 	case RectLinkLink:
-		res = []string{"Name", "Start", "End", "TargetAnchorPosition", "Color", "FillOpacity", "Stroke", "StrokeWidth", "StrokeDashArray", "StrokeDashArrayWhenSelected", "Transform"}
+		res = []string{"Name", "Start", "End", "TargetAnchorPosition", "Color", "FillOpacity", "Stroke", "StrokeOpacity", "StrokeWidth", "StrokeDashArray", "StrokeDashArrayWhenSelected", "Transform"}
 	case SVG:
 		res = []string{"Name", "Layers", "DrawingState", "StartRect", "EndRect", "IsEditable"}
 	case Text:
-		res = []string{"Name", "X", "Y", "Content", "Color", "FillOpacity", "Stroke", "StrokeWidth", "StrokeDashArray", "StrokeDashArrayWhenSelected", "Transform", "Animates"}
+		res = []string{"Name", "X", "Y", "Content", "Color", "FillOpacity", "Stroke", "StrokeOpacity", "StrokeWidth", "StrokeDashArray", "StrokeDashArrayWhenSelected", "Transform", "Animates"}
 	}
 	return
 }
@@ -2986,39 +2986,39 @@ func GetFieldsFromPointer[Type PointerToGongstruct]() (res []string) {
 	case *Animate:
 		res = []string{"Name", "AttributeName", "Values", "Dur", "RepeatCount"}
 	case *Circle:
-		res = []string{"Name", "CX", "CY", "Radius", "Color", "FillOpacity", "Stroke", "StrokeWidth", "StrokeDashArray", "StrokeDashArrayWhenSelected", "Transform", "Animations"}
+		res = []string{"Name", "CX", "CY", "Radius", "Color", "FillOpacity", "Stroke", "StrokeOpacity", "StrokeWidth", "StrokeDashArray", "StrokeDashArrayWhenSelected", "Transform", "Animations"}
 	case *Ellipse:
-		res = []string{"Name", "CX", "CY", "RX", "RY", "Color", "FillOpacity", "Stroke", "StrokeWidth", "StrokeDashArray", "StrokeDashArrayWhenSelected", "Transform", "Animates"}
+		res = []string{"Name", "CX", "CY", "RX", "RY", "Color", "FillOpacity", "Stroke", "StrokeOpacity", "StrokeWidth", "StrokeDashArray", "StrokeDashArrayWhenSelected", "Transform", "Animates"}
 	case *Layer:
 		res = []string{"Display", "Name", "Rects", "Texts", "Circles", "Lines", "Ellipses", "Polylines", "Polygones", "Paths", "Links", "RectLinkLinks"}
 	case *Line:
-		res = []string{"Name", "X1", "Y1", "X2", "Y2", "Color", "FillOpacity", "Stroke", "StrokeWidth", "StrokeDashArray", "StrokeDashArrayWhenSelected", "Transform", "Animates", "MouseClickX", "MouseClickY"}
+		res = []string{"Name", "X1", "Y1", "X2", "Y2", "Color", "FillOpacity", "Stroke", "StrokeOpacity", "StrokeWidth", "StrokeDashArray", "StrokeDashArrayWhenSelected", "Transform", "Animates", "MouseClickX", "MouseClickY"}
 	case *Link:
-		res = []string{"Name", "Type", "IsBezierCurve", "Start", "StartAnchorType", "End", "EndAnchorType", "StartOrientation", "StartRatio", "EndOrientation", "EndRatio", "CornerOffsetRatio", "CornerRadius", "HasEndArrow", "EndArrowSize", "HasStartArrow", "StartArrowSize", "TextAtArrowEnd", "TextAtArrowStart", "ControlPoints", "Color", "FillOpacity", "Stroke", "StrokeWidth", "StrokeDashArray", "StrokeDashArrayWhenSelected", "Transform"}
+		res = []string{"Name", "Type", "IsBezierCurve", "Start", "StartAnchorType", "End", "EndAnchorType", "StartOrientation", "StartRatio", "EndOrientation", "EndRatio", "CornerOffsetRatio", "CornerRadius", "HasEndArrow", "EndArrowSize", "HasStartArrow", "StartArrowSize", "TextAtArrowEnd", "TextAtArrowStart", "ControlPoints", "Color", "FillOpacity", "Stroke", "StrokeOpacity", "StrokeWidth", "StrokeDashArray", "StrokeDashArrayWhenSelected", "Transform"}
 	case *LinkAnchoredText:
-		res = []string{"Name", "Content", "AutomaticLayout", "LinkAnchorType", "X_Offset", "Y_Offset", "FontWeight", "Color", "FillOpacity", "Stroke", "StrokeWidth", "StrokeDashArray", "StrokeDashArrayWhenSelected", "Transform", "Animates"}
+		res = []string{"Name", "Content", "AutomaticLayout", "LinkAnchorType", "X_Offset", "Y_Offset", "FontWeight", "Color", "FillOpacity", "Stroke", "StrokeOpacity", "StrokeWidth", "StrokeDashArray", "StrokeDashArrayWhenSelected", "Transform", "Animates"}
 	case *Path:
-		res = []string{"Name", "Definition", "Color", "FillOpacity", "Stroke", "StrokeWidth", "StrokeDashArray", "StrokeDashArrayWhenSelected", "Transform", "Animates"}
+		res = []string{"Name", "Definition", "Color", "FillOpacity", "Stroke", "StrokeOpacity", "StrokeWidth", "StrokeDashArray", "StrokeDashArrayWhenSelected", "Transform", "Animates"}
 	case *Point:
 		res = []string{"Name", "X", "Y"}
 	case *Polygone:
-		res = []string{"Name", "Points", "Color", "FillOpacity", "Stroke", "StrokeWidth", "StrokeDashArray", "StrokeDashArrayWhenSelected", "Transform", "Animates"}
+		res = []string{"Name", "Points", "Color", "FillOpacity", "Stroke", "StrokeOpacity", "StrokeWidth", "StrokeDashArray", "StrokeDashArrayWhenSelected", "Transform", "Animates"}
 	case *Polyline:
-		res = []string{"Name", "Points", "Color", "FillOpacity", "Stroke", "StrokeWidth", "StrokeDashArray", "StrokeDashArrayWhenSelected", "Transform", "Animates"}
+		res = []string{"Name", "Points", "Color", "FillOpacity", "Stroke", "StrokeOpacity", "StrokeWidth", "StrokeDashArray", "StrokeDashArrayWhenSelected", "Transform", "Animates"}
 	case *Rect:
-		res = []string{"Name", "X", "Y", "Width", "Height", "RX", "Color", "FillOpacity", "Stroke", "StrokeWidth", "StrokeDashArray", "StrokeDashArrayWhenSelected", "Transform", "Animations", "IsSelectable", "IsSelected", "CanHaveLeftHandle", "HasLeftHandle", "CanHaveRightHandle", "HasRightHandle", "CanHaveTopHandle", "HasTopHandle", "IsScalingProportionally", "CanHaveBottomHandle", "HasBottomHandle", "CanMoveHorizontaly", "CanMoveVerticaly", "RectAnchoredTexts", "RectAnchoredRects", "RectAnchoredPaths"}
+		res = []string{"Name", "X", "Y", "Width", "Height", "RX", "Color", "FillOpacity", "Stroke", "StrokeOpacity", "StrokeWidth", "StrokeDashArray", "StrokeDashArrayWhenSelected", "Transform", "Animations", "IsSelectable", "IsSelected", "CanHaveLeftHandle", "HasLeftHandle", "CanHaveRightHandle", "HasRightHandle", "CanHaveTopHandle", "HasTopHandle", "IsScalingProportionally", "CanHaveBottomHandle", "HasBottomHandle", "CanMoveHorizontaly", "CanMoveVerticaly", "RectAnchoredTexts", "RectAnchoredRects", "RectAnchoredPaths"}
 	case *RectAnchoredPath:
-		res = []string{"Name", "Definition", "X_Offset", "Y_Offset", "RectAnchorType", "ScalePropotionnally", "AppliedScaling", "Color", "FillOpacity", "Stroke", "StrokeWidth", "StrokeDashArray", "StrokeDashArrayWhenSelected", "Transform"}
+		res = []string{"Name", "Definition", "X_Offset", "Y_Offset", "RectAnchorType", "ScalePropotionnally", "AppliedScaling", "Color", "FillOpacity", "Stroke", "StrokeOpacity", "StrokeWidth", "StrokeDashArray", "StrokeDashArrayWhenSelected", "Transform"}
 	case *RectAnchoredRect:
-		res = []string{"Name", "X", "Y", "Width", "Height", "RX", "X_Offset", "Y_Offset", "RectAnchorType", "WidthFollowRect", "HeightFollowRect", "Color", "FillOpacity", "Stroke", "StrokeWidth", "StrokeDashArray", "StrokeDashArrayWhenSelected", "Transform"}
+		res = []string{"Name", "X", "Y", "Width", "Height", "RX", "X_Offset", "Y_Offset", "RectAnchorType", "WidthFollowRect", "HeightFollowRect", "Color", "FillOpacity", "Stroke", "StrokeOpacity", "StrokeWidth", "StrokeDashArray", "StrokeDashArrayWhenSelected", "Transform"}
 	case *RectAnchoredText:
-		res = []string{"Name", "Content", "FontWeight", "FontSize", "X_Offset", "Y_Offset", "RectAnchorType", "TextAnchorType", "Color", "FillOpacity", "Stroke", "StrokeWidth", "StrokeDashArray", "StrokeDashArrayWhenSelected", "Transform", "Animates"}
+		res = []string{"Name", "Content", "FontWeight", "FontSize", "X_Offset", "Y_Offset", "RectAnchorType", "TextAnchorType", "Color", "FillOpacity", "Stroke", "StrokeOpacity", "StrokeWidth", "StrokeDashArray", "StrokeDashArrayWhenSelected", "Transform", "Animates"}
 	case *RectLinkLink:
-		res = []string{"Name", "Start", "End", "TargetAnchorPosition", "Color", "FillOpacity", "Stroke", "StrokeWidth", "StrokeDashArray", "StrokeDashArrayWhenSelected", "Transform"}
+		res = []string{"Name", "Start", "End", "TargetAnchorPosition", "Color", "FillOpacity", "Stroke", "StrokeOpacity", "StrokeWidth", "StrokeDashArray", "StrokeDashArrayWhenSelected", "Transform"}
 	case *SVG:
 		res = []string{"Name", "Layers", "DrawingState", "StartRect", "EndRect", "IsEditable"}
 	case *Text:
-		res = []string{"Name", "X", "Y", "Content", "Color", "FillOpacity", "Stroke", "StrokeWidth", "StrokeDashArray", "StrokeDashArrayWhenSelected", "Transform", "Animates"}
+		res = []string{"Name", "X", "Y", "Content", "Color", "FillOpacity", "Stroke", "StrokeOpacity", "StrokeWidth", "StrokeDashArray", "StrokeDashArrayWhenSelected", "Transform", "Animates"}
 	}
 	return
 }
@@ -3058,6 +3058,8 @@ func GetFieldStringValueFromPointer[Type PointerToGongstruct](instance Type, fie
 			res = fmt.Sprintf("%f", inferedInstance.FillOpacity)
 		case "Stroke":
 			res = inferedInstance.Stroke
+		case "StrokeOpacity":
+			res = fmt.Sprintf("%f", inferedInstance.StrokeOpacity)
 		case "StrokeWidth":
 			res = fmt.Sprintf("%f", inferedInstance.StrokeWidth)
 		case "StrokeDashArray":
@@ -3093,6 +3095,8 @@ func GetFieldStringValueFromPointer[Type PointerToGongstruct](instance Type, fie
 			res = fmt.Sprintf("%f", inferedInstance.FillOpacity)
 		case "Stroke":
 			res = inferedInstance.Stroke
+		case "StrokeOpacity":
+			res = fmt.Sprintf("%f", inferedInstance.StrokeOpacity)
 		case "StrokeWidth":
 			res = fmt.Sprintf("%f", inferedInstance.StrokeWidth)
 		case "StrokeDashArray":
@@ -3206,6 +3210,8 @@ func GetFieldStringValueFromPointer[Type PointerToGongstruct](instance Type, fie
 			res = fmt.Sprintf("%f", inferedInstance.FillOpacity)
 		case "Stroke":
 			res = inferedInstance.Stroke
+		case "StrokeOpacity":
+			res = fmt.Sprintf("%f", inferedInstance.StrokeOpacity)
 		case "StrokeWidth":
 			res = fmt.Sprintf("%f", inferedInstance.StrokeWidth)
 		case "StrokeDashArray":
@@ -3299,6 +3305,8 @@ func GetFieldStringValueFromPointer[Type PointerToGongstruct](instance Type, fie
 			res = fmt.Sprintf("%f", inferedInstance.FillOpacity)
 		case "Stroke":
 			res = inferedInstance.Stroke
+		case "StrokeOpacity":
+			res = fmt.Sprintf("%f", inferedInstance.StrokeOpacity)
 		case "StrokeWidth":
 			res = fmt.Sprintf("%f", inferedInstance.StrokeWidth)
 		case "StrokeDashArray":
@@ -3332,6 +3340,8 @@ func GetFieldStringValueFromPointer[Type PointerToGongstruct](instance Type, fie
 			res = fmt.Sprintf("%f", inferedInstance.FillOpacity)
 		case "Stroke":
 			res = inferedInstance.Stroke
+		case "StrokeOpacity":
+			res = fmt.Sprintf("%f", inferedInstance.StrokeOpacity)
 		case "StrokeWidth":
 			res = fmt.Sprintf("%f", inferedInstance.StrokeWidth)
 		case "StrokeDashArray":
@@ -3361,6 +3371,8 @@ func GetFieldStringValueFromPointer[Type PointerToGongstruct](instance Type, fie
 			res = fmt.Sprintf("%f", inferedInstance.FillOpacity)
 		case "Stroke":
 			res = inferedInstance.Stroke
+		case "StrokeOpacity":
+			res = fmt.Sprintf("%f", inferedInstance.StrokeOpacity)
 		case "StrokeWidth":
 			res = fmt.Sprintf("%f", inferedInstance.StrokeWidth)
 		case "StrokeDashArray":
@@ -3400,6 +3412,8 @@ func GetFieldStringValueFromPointer[Type PointerToGongstruct](instance Type, fie
 			res = fmt.Sprintf("%f", inferedInstance.FillOpacity)
 		case "Stroke":
 			res = inferedInstance.Stroke
+		case "StrokeOpacity":
+			res = fmt.Sprintf("%f", inferedInstance.StrokeOpacity)
 		case "StrokeWidth":
 			res = fmt.Sprintf("%f", inferedInstance.StrokeWidth)
 		case "StrokeDashArray":
@@ -3429,6 +3443,8 @@ func GetFieldStringValueFromPointer[Type PointerToGongstruct](instance Type, fie
 			res = fmt.Sprintf("%f", inferedInstance.FillOpacity)
 		case "Stroke":
 			res = inferedInstance.Stroke
+		case "StrokeOpacity":
+			res = fmt.Sprintf("%f", inferedInstance.StrokeOpacity)
 		case "StrokeWidth":
 			res = fmt.Sprintf("%f", inferedInstance.StrokeWidth)
 		case "StrokeDashArray":
@@ -3466,6 +3482,8 @@ func GetFieldStringValueFromPointer[Type PointerToGongstruct](instance Type, fie
 			res = fmt.Sprintf("%f", inferedInstance.FillOpacity)
 		case "Stroke":
 			res = inferedInstance.Stroke
+		case "StrokeOpacity":
+			res = fmt.Sprintf("%f", inferedInstance.StrokeOpacity)
 		case "StrokeWidth":
 			res = fmt.Sprintf("%f", inferedInstance.StrokeWidth)
 		case "StrokeDashArray":
@@ -3553,6 +3571,8 @@ func GetFieldStringValueFromPointer[Type PointerToGongstruct](instance Type, fie
 			res = fmt.Sprintf("%f", inferedInstance.FillOpacity)
 		case "Stroke":
 			res = inferedInstance.Stroke
+		case "StrokeOpacity":
+			res = fmt.Sprintf("%f", inferedInstance.StrokeOpacity)
 		case "StrokeWidth":
 			res = fmt.Sprintf("%f", inferedInstance.StrokeWidth)
 		case "StrokeDashArray":
@@ -3594,6 +3614,8 @@ func GetFieldStringValueFromPointer[Type PointerToGongstruct](instance Type, fie
 			res = fmt.Sprintf("%f", inferedInstance.FillOpacity)
 		case "Stroke":
 			res = inferedInstance.Stroke
+		case "StrokeOpacity":
+			res = fmt.Sprintf("%f", inferedInstance.StrokeOpacity)
 		case "StrokeWidth":
 			res = fmt.Sprintf("%f", inferedInstance.StrokeWidth)
 		case "StrokeDashArray":
@@ -3630,6 +3652,8 @@ func GetFieldStringValueFromPointer[Type PointerToGongstruct](instance Type, fie
 			res = fmt.Sprintf("%f", inferedInstance.FillOpacity)
 		case "Stroke":
 			res = inferedInstance.Stroke
+		case "StrokeOpacity":
+			res = fmt.Sprintf("%f", inferedInstance.StrokeOpacity)
 		case "StrokeWidth":
 			res = fmt.Sprintf("%f", inferedInstance.StrokeWidth)
 		case "StrokeDashArray":
@@ -3667,6 +3691,8 @@ func GetFieldStringValueFromPointer[Type PointerToGongstruct](instance Type, fie
 			res = fmt.Sprintf("%f", inferedInstance.FillOpacity)
 		case "Stroke":
 			res = inferedInstance.Stroke
+		case "StrokeOpacity":
+			res = fmt.Sprintf("%f", inferedInstance.StrokeOpacity)
 		case "StrokeWidth":
 			res = fmt.Sprintf("%f", inferedInstance.StrokeWidth)
 		case "StrokeDashArray":
@@ -3719,6 +3745,8 @@ func GetFieldStringValueFromPointer[Type PointerToGongstruct](instance Type, fie
 			res = fmt.Sprintf("%f", inferedInstance.FillOpacity)
 		case "Stroke":
 			res = inferedInstance.Stroke
+		case "StrokeOpacity":
+			res = fmt.Sprintf("%f", inferedInstance.StrokeOpacity)
 		case "StrokeWidth":
 			res = fmt.Sprintf("%f", inferedInstance.StrokeWidth)
 		case "StrokeDashArray":
@@ -3776,6 +3804,8 @@ func GetFieldStringValue[Type Gongstruct](instance Type, fieldName string) (res 
 			res = fmt.Sprintf("%f", inferedInstance.FillOpacity)
 		case "Stroke":
 			res = inferedInstance.Stroke
+		case "StrokeOpacity":
+			res = fmt.Sprintf("%f", inferedInstance.StrokeOpacity)
 		case "StrokeWidth":
 			res = fmt.Sprintf("%f", inferedInstance.StrokeWidth)
 		case "StrokeDashArray":
@@ -3811,6 +3841,8 @@ func GetFieldStringValue[Type Gongstruct](instance Type, fieldName string) (res 
 			res = fmt.Sprintf("%f", inferedInstance.FillOpacity)
 		case "Stroke":
 			res = inferedInstance.Stroke
+		case "StrokeOpacity":
+			res = fmt.Sprintf("%f", inferedInstance.StrokeOpacity)
 		case "StrokeWidth":
 			res = fmt.Sprintf("%f", inferedInstance.StrokeWidth)
 		case "StrokeDashArray":
@@ -3924,6 +3956,8 @@ func GetFieldStringValue[Type Gongstruct](instance Type, fieldName string) (res 
 			res = fmt.Sprintf("%f", inferedInstance.FillOpacity)
 		case "Stroke":
 			res = inferedInstance.Stroke
+		case "StrokeOpacity":
+			res = fmt.Sprintf("%f", inferedInstance.StrokeOpacity)
 		case "StrokeWidth":
 			res = fmt.Sprintf("%f", inferedInstance.StrokeWidth)
 		case "StrokeDashArray":
@@ -4017,6 +4051,8 @@ func GetFieldStringValue[Type Gongstruct](instance Type, fieldName string) (res 
 			res = fmt.Sprintf("%f", inferedInstance.FillOpacity)
 		case "Stroke":
 			res = inferedInstance.Stroke
+		case "StrokeOpacity":
+			res = fmt.Sprintf("%f", inferedInstance.StrokeOpacity)
 		case "StrokeWidth":
 			res = fmt.Sprintf("%f", inferedInstance.StrokeWidth)
 		case "StrokeDashArray":
@@ -4050,6 +4086,8 @@ func GetFieldStringValue[Type Gongstruct](instance Type, fieldName string) (res 
 			res = fmt.Sprintf("%f", inferedInstance.FillOpacity)
 		case "Stroke":
 			res = inferedInstance.Stroke
+		case "StrokeOpacity":
+			res = fmt.Sprintf("%f", inferedInstance.StrokeOpacity)
 		case "StrokeWidth":
 			res = fmt.Sprintf("%f", inferedInstance.StrokeWidth)
 		case "StrokeDashArray":
@@ -4079,6 +4117,8 @@ func GetFieldStringValue[Type Gongstruct](instance Type, fieldName string) (res 
 			res = fmt.Sprintf("%f", inferedInstance.FillOpacity)
 		case "Stroke":
 			res = inferedInstance.Stroke
+		case "StrokeOpacity":
+			res = fmt.Sprintf("%f", inferedInstance.StrokeOpacity)
 		case "StrokeWidth":
 			res = fmt.Sprintf("%f", inferedInstance.StrokeWidth)
 		case "StrokeDashArray":
@@ -4118,6 +4158,8 @@ func GetFieldStringValue[Type Gongstruct](instance Type, fieldName string) (res 
 			res = fmt.Sprintf("%f", inferedInstance.FillOpacity)
 		case "Stroke":
 			res = inferedInstance.Stroke
+		case "StrokeOpacity":
+			res = fmt.Sprintf("%f", inferedInstance.StrokeOpacity)
 		case "StrokeWidth":
 			res = fmt.Sprintf("%f", inferedInstance.StrokeWidth)
 		case "StrokeDashArray":
@@ -4147,6 +4189,8 @@ func GetFieldStringValue[Type Gongstruct](instance Type, fieldName string) (res 
 			res = fmt.Sprintf("%f", inferedInstance.FillOpacity)
 		case "Stroke":
 			res = inferedInstance.Stroke
+		case "StrokeOpacity":
+			res = fmt.Sprintf("%f", inferedInstance.StrokeOpacity)
 		case "StrokeWidth":
 			res = fmt.Sprintf("%f", inferedInstance.StrokeWidth)
 		case "StrokeDashArray":
@@ -4184,6 +4228,8 @@ func GetFieldStringValue[Type Gongstruct](instance Type, fieldName string) (res 
 			res = fmt.Sprintf("%f", inferedInstance.FillOpacity)
 		case "Stroke":
 			res = inferedInstance.Stroke
+		case "StrokeOpacity":
+			res = fmt.Sprintf("%f", inferedInstance.StrokeOpacity)
 		case "StrokeWidth":
 			res = fmt.Sprintf("%f", inferedInstance.StrokeWidth)
 		case "StrokeDashArray":
@@ -4271,6 +4317,8 @@ func GetFieldStringValue[Type Gongstruct](instance Type, fieldName string) (res 
 			res = fmt.Sprintf("%f", inferedInstance.FillOpacity)
 		case "Stroke":
 			res = inferedInstance.Stroke
+		case "StrokeOpacity":
+			res = fmt.Sprintf("%f", inferedInstance.StrokeOpacity)
 		case "StrokeWidth":
 			res = fmt.Sprintf("%f", inferedInstance.StrokeWidth)
 		case "StrokeDashArray":
@@ -4312,6 +4360,8 @@ func GetFieldStringValue[Type Gongstruct](instance Type, fieldName string) (res 
 			res = fmt.Sprintf("%f", inferedInstance.FillOpacity)
 		case "Stroke":
 			res = inferedInstance.Stroke
+		case "StrokeOpacity":
+			res = fmt.Sprintf("%f", inferedInstance.StrokeOpacity)
 		case "StrokeWidth":
 			res = fmt.Sprintf("%f", inferedInstance.StrokeWidth)
 		case "StrokeDashArray":
@@ -4348,6 +4398,8 @@ func GetFieldStringValue[Type Gongstruct](instance Type, fieldName string) (res 
 			res = fmt.Sprintf("%f", inferedInstance.FillOpacity)
 		case "Stroke":
 			res = inferedInstance.Stroke
+		case "StrokeOpacity":
+			res = fmt.Sprintf("%f", inferedInstance.StrokeOpacity)
 		case "StrokeWidth":
 			res = fmt.Sprintf("%f", inferedInstance.StrokeWidth)
 		case "StrokeDashArray":
@@ -4385,6 +4437,8 @@ func GetFieldStringValue[Type Gongstruct](instance Type, fieldName string) (res 
 			res = fmt.Sprintf("%f", inferedInstance.FillOpacity)
 		case "Stroke":
 			res = inferedInstance.Stroke
+		case "StrokeOpacity":
+			res = fmt.Sprintf("%f", inferedInstance.StrokeOpacity)
 		case "StrokeWidth":
 			res = fmt.Sprintf("%f", inferedInstance.StrokeWidth)
 		case "StrokeDashArray":
@@ -4437,6 +4491,8 @@ func GetFieldStringValue[Type Gongstruct](instance Type, fieldName string) (res 
 			res = fmt.Sprintf("%f", inferedInstance.FillOpacity)
 		case "Stroke":
 			res = inferedInstance.Stroke
+		case "StrokeOpacity":
+			res = fmt.Sprintf("%f", inferedInstance.StrokeOpacity)
 		case "StrokeWidth":
 			res = fmt.Sprintf("%f", inferedInstance.StrokeWidth)
 		case "StrokeDashArray":

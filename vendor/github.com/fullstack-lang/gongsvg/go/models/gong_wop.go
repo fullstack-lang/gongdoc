@@ -34,6 +34,7 @@ type Circle_WOP struct {
 	Color string
 	FillOpacity float64
 	Stroke string
+	StrokeOpacity float64
 	StrokeWidth float64
 	StrokeDashArray string
 	StrokeDashArrayWhenSelected string
@@ -49,6 +50,7 @@ func (from *Circle) CopyBasicFields(to *Circle) {
 	to.Color = from.Color
 	to.FillOpacity = from.FillOpacity
 	to.Stroke = from.Stroke
+	to.StrokeOpacity = from.StrokeOpacity
 	to.StrokeWidth = from.StrokeWidth
 	to.StrokeDashArray = from.StrokeDashArray
 	to.StrokeDashArrayWhenSelected = from.StrokeDashArrayWhenSelected
@@ -65,6 +67,7 @@ type Ellipse_WOP struct {
 	Color string
 	FillOpacity float64
 	Stroke string
+	StrokeOpacity float64
 	StrokeWidth float64
 	StrokeDashArray string
 	StrokeDashArrayWhenSelected string
@@ -81,6 +84,7 @@ func (from *Ellipse) CopyBasicFields(to *Ellipse) {
 	to.Color = from.Color
 	to.FillOpacity = from.FillOpacity
 	to.Stroke = from.Stroke
+	to.StrokeOpacity = from.StrokeOpacity
 	to.StrokeWidth = from.StrokeWidth
 	to.StrokeDashArray = from.StrokeDashArray
 	to.StrokeDashArrayWhenSelected = from.StrokeDashArrayWhenSelected
@@ -109,6 +113,7 @@ type Line_WOP struct {
 	Color string
 	FillOpacity float64
 	Stroke string
+	StrokeOpacity float64
 	StrokeWidth float64
 	StrokeDashArray string
 	StrokeDashArrayWhenSelected string
@@ -127,6 +132,7 @@ func (from *Line) CopyBasicFields(to *Line) {
 	to.Color = from.Color
 	to.FillOpacity = from.FillOpacity
 	to.Stroke = from.Stroke
+	to.StrokeOpacity = from.StrokeOpacity
 	to.StrokeWidth = from.StrokeWidth
 	to.StrokeDashArray = from.StrokeDashArray
 	to.StrokeDashArrayWhenSelected = from.StrokeDashArrayWhenSelected
@@ -155,6 +161,7 @@ type Link_WOP struct {
 	Color string
 	FillOpacity float64
 	Stroke string
+	StrokeOpacity float64
 	StrokeWidth float64
 	StrokeDashArray string
 	StrokeDashArrayWhenSelected string
@@ -181,6 +188,7 @@ func (from *Link) CopyBasicFields(to *Link) {
 	to.Color = from.Color
 	to.FillOpacity = from.FillOpacity
 	to.Stroke = from.Stroke
+	to.StrokeOpacity = from.StrokeOpacity
 	to.StrokeWidth = from.StrokeWidth
 	to.StrokeDashArray = from.StrokeDashArray
 	to.StrokeDashArrayWhenSelected = from.StrokeDashArrayWhenSelected
@@ -199,6 +207,7 @@ type LinkAnchoredText_WOP struct {
 	Color string
 	FillOpacity float64
 	Stroke string
+	StrokeOpacity float64
 	StrokeWidth float64
 	StrokeDashArray string
 	StrokeDashArrayWhenSelected string
@@ -217,6 +226,7 @@ func (from *LinkAnchoredText) CopyBasicFields(to *LinkAnchoredText) {
 	to.Color = from.Color
 	to.FillOpacity = from.FillOpacity
 	to.Stroke = from.Stroke
+	to.StrokeOpacity = from.StrokeOpacity
 	to.StrokeWidth = from.StrokeWidth
 	to.StrokeDashArray = from.StrokeDashArray
 	to.StrokeDashArrayWhenSelected = from.StrokeDashArrayWhenSelected
@@ -230,6 +240,7 @@ type Path_WOP struct {
 	Color string
 	FillOpacity float64
 	Stroke string
+	StrokeOpacity float64
 	StrokeWidth float64
 	StrokeDashArray string
 	StrokeDashArrayWhenSelected string
@@ -243,6 +254,7 @@ func (from *Path) CopyBasicFields(to *Path) {
 	to.Color = from.Color
 	to.FillOpacity = from.FillOpacity
 	to.Stroke = from.Stroke
+	to.StrokeOpacity = from.StrokeOpacity
 	to.StrokeWidth = from.StrokeWidth
 	to.StrokeDashArray = from.StrokeDashArray
 	to.StrokeDashArrayWhenSelected = from.StrokeDashArrayWhenSelected
@@ -270,6 +282,7 @@ type Polygone_WOP struct {
 	Color string
 	FillOpacity float64
 	Stroke string
+	StrokeOpacity float64
 	StrokeWidth float64
 	StrokeDashArray string
 	StrokeDashArrayWhenSelected string
@@ -283,6 +296,7 @@ func (from *Polygone) CopyBasicFields(to *Polygone) {
 	to.Color = from.Color
 	to.FillOpacity = from.FillOpacity
 	to.Stroke = from.Stroke
+	to.StrokeOpacity = from.StrokeOpacity
 	to.StrokeWidth = from.StrokeWidth
 	to.StrokeDashArray = from.StrokeDashArray
 	to.StrokeDashArrayWhenSelected = from.StrokeDashArrayWhenSelected
@@ -296,6 +310,7 @@ type Polyline_WOP struct {
 	Color string
 	FillOpacity float64
 	Stroke string
+	StrokeOpacity float64
 	StrokeWidth float64
 	StrokeDashArray string
 	StrokeDashArrayWhenSelected string
@@ -309,6 +324,7 @@ func (from *Polyline) CopyBasicFields(to *Polyline) {
 	to.Color = from.Color
 	to.FillOpacity = from.FillOpacity
 	to.Stroke = from.Stroke
+	to.StrokeOpacity = from.StrokeOpacity
 	to.StrokeWidth = from.StrokeWidth
 	to.StrokeDashArray = from.StrokeDashArray
 	to.StrokeDashArrayWhenSelected = from.StrokeDashArrayWhenSelected
@@ -326,6 +342,7 @@ type Rect_WOP struct {
 	Color string
 	FillOpacity float64
 	Stroke string
+	StrokeOpacity float64
 	StrokeWidth float64
 	StrokeDashArray string
 	StrokeDashArrayWhenSelected string
@@ -356,6 +373,7 @@ func (from *Rect) CopyBasicFields(to *Rect) {
 	to.Color = from.Color
 	to.FillOpacity = from.FillOpacity
 	to.Stroke = from.Stroke
+	to.StrokeOpacity = from.StrokeOpacity
 	to.StrokeWidth = from.StrokeWidth
 	to.StrokeDashArray = from.StrokeDashArray
 	to.StrokeDashArrayWhenSelected = from.StrokeDashArrayWhenSelected
@@ -387,6 +405,7 @@ type RectAnchoredPath_WOP struct {
 	Color string
 	FillOpacity float64
 	Stroke string
+	StrokeOpacity float64
 	StrokeWidth float64
 	StrokeDashArray string
 	StrokeDashArrayWhenSelected string
@@ -405,6 +424,7 @@ func (from *RectAnchoredPath) CopyBasicFields(to *RectAnchoredPath) {
 	to.Color = from.Color
 	to.FillOpacity = from.FillOpacity
 	to.Stroke = from.Stroke
+	to.StrokeOpacity = from.StrokeOpacity
 	to.StrokeWidth = from.StrokeWidth
 	to.StrokeDashArray = from.StrokeDashArray
 	to.StrokeDashArrayWhenSelected = from.StrokeDashArrayWhenSelected
@@ -427,6 +447,7 @@ type RectAnchoredRect_WOP struct {
 	Color string
 	FillOpacity float64
 	Stroke string
+	StrokeOpacity float64
 	StrokeWidth float64
 	StrokeDashArray string
 	StrokeDashArrayWhenSelected string
@@ -449,6 +470,7 @@ func (from *RectAnchoredRect) CopyBasicFields(to *RectAnchoredRect) {
 	to.Color = from.Color
 	to.FillOpacity = from.FillOpacity
 	to.Stroke = from.Stroke
+	to.StrokeOpacity = from.StrokeOpacity
 	to.StrokeWidth = from.StrokeWidth
 	to.StrokeDashArray = from.StrokeDashArray
 	to.StrokeDashArrayWhenSelected = from.StrokeDashArrayWhenSelected
@@ -468,6 +490,7 @@ type RectAnchoredText_WOP struct {
 	Color string
 	FillOpacity float64
 	Stroke string
+	StrokeOpacity float64
 	StrokeWidth float64
 	StrokeDashArray string
 	StrokeDashArrayWhenSelected string
@@ -487,6 +510,7 @@ func (from *RectAnchoredText) CopyBasicFields(to *RectAnchoredText) {
 	to.Color = from.Color
 	to.FillOpacity = from.FillOpacity
 	to.Stroke = from.Stroke
+	to.StrokeOpacity = from.StrokeOpacity
 	to.StrokeWidth = from.StrokeWidth
 	to.StrokeDashArray = from.StrokeDashArray
 	to.StrokeDashArrayWhenSelected = from.StrokeDashArrayWhenSelected
@@ -500,6 +524,7 @@ type RectLinkLink_WOP struct {
 	Color string
 	FillOpacity float64
 	Stroke string
+	StrokeOpacity float64
 	StrokeWidth float64
 	StrokeDashArray string
 	StrokeDashArrayWhenSelected string
@@ -513,6 +538,7 @@ func (from *RectLinkLink) CopyBasicFields(to *RectLinkLink) {
 	to.Color = from.Color
 	to.FillOpacity = from.FillOpacity
 	to.Stroke = from.Stroke
+	to.StrokeOpacity = from.StrokeOpacity
 	to.StrokeWidth = from.StrokeWidth
 	to.StrokeDashArray = from.StrokeDashArray
 	to.StrokeDashArrayWhenSelected = from.StrokeDashArrayWhenSelected
@@ -542,6 +568,7 @@ type Text_WOP struct {
 	Color string
 	FillOpacity float64
 	Stroke string
+	StrokeOpacity float64
 	StrokeWidth float64
 	StrokeDashArray string
 	StrokeDashArrayWhenSelected string
@@ -557,6 +584,7 @@ func (from *Text) CopyBasicFields(to *Text) {
 	to.Color = from.Color
 	to.FillOpacity = from.FillOpacity
 	to.Stroke = from.Stroke
+	to.StrokeOpacity = from.StrokeOpacity
 	to.StrokeWidth = from.StrokeWidth
 	to.StrokeDashArray = from.StrokeDashArray
 	to.StrokeDashArrayWhenSelected = from.StrokeDashArrayWhenSelected

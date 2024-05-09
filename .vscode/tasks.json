@@ -17,7 +17,7 @@
 			"label": "03 - ng serve --host=127.0.0.1",
 			"type": "shell",
 			"options": {
-				"cwd": "ng"
+				"cwd": "ng-github.com-fullstack-lang-gongdoc"
 			},
 			"command": "ng serve --host=127.0.0.1",
 			"group": "build"
@@ -26,7 +26,7 @@
 			"label": "03 - ng build",
 			"type": "shell",
 			"options": {
-				"cwd": "ng"
+				"cwd": "ng-github.com-fullstack-lang-gongdoc"
 			},
 			"command": "ng build",
 			"group": "build",
