@@ -95,6 +95,7 @@ func (docSVGMapper *DocSVGMapper) GenerateSvg(
 		rect.FillOpacity = 100
 		rect.Color = gongsvg_models.Lightsalmon.ToString()
 		rect.Color = "white"
+		rect.RX = 8
 
 		// moveability
 		rect.CanMoveHorizontaly = true
