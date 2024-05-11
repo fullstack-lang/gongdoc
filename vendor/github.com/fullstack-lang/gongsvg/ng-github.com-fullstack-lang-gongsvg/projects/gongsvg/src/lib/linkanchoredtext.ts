@@ -25,6 +25,8 @@ export class LinkAnchoredText {
 	X_Offset: number = 0
 	Y_Offset: number = 0
 	FontWeight: string = ""
+	FontSize: string = ""
+	LetterSpacing: string = ""
 	Color: string = ""
 	FillOpacity: number = 0
 	Stroke: string = ""
@@ -52,6 +54,8 @@ export function CopyLinkAnchoredTextToLinkAnchoredTextAPI(linkanchoredtext: Link
 	linkanchoredtextAPI.X_Offset = linkanchoredtext.X_Offset
 	linkanchoredtextAPI.Y_Offset = linkanchoredtext.Y_Offset
 	linkanchoredtextAPI.FontWeight = linkanchoredtext.FontWeight
+	linkanchoredtextAPI.FontSize = linkanchoredtext.FontSize
+	linkanchoredtextAPI.LetterSpacing = linkanchoredtext.LetterSpacing
 	linkanchoredtextAPI.Color = linkanchoredtext.Color
 	linkanchoredtextAPI.FillOpacity = linkanchoredtext.FillOpacity
 	linkanchoredtextAPI.Stroke = linkanchoredtext.Stroke
@@ -89,6 +93,8 @@ export function CopyLinkAnchoredTextAPIToLinkAnchoredText(linkanchoredtextAPI: L
 	linkanchoredtext.X_Offset = linkanchoredtextAPI.X_Offset
 	linkanchoredtext.Y_Offset = linkanchoredtextAPI.Y_Offset
 	linkanchoredtext.FontWeight = linkanchoredtextAPI.FontWeight
+	linkanchoredtext.FontSize = linkanchoredtextAPI.FontSize
+	linkanchoredtext.LetterSpacing = linkanchoredtextAPI.LetterSpacing
 	linkanchoredtext.Color = linkanchoredtextAPI.Color
 	linkanchoredtext.FillOpacity = linkanchoredtextAPI.FillOpacity
 	linkanchoredtext.Stroke = linkanchoredtextAPI.Stroke

@@ -204,6 +204,8 @@ type LinkAnchoredText_WOP struct {
 	X_Offset float64
 	Y_Offset float64
 	FontWeight string
+	FontSize string
+	LetterSpacing string
 	Color string
 	FillOpacity float64
 	Stroke string
@@ -223,6 +225,8 @@ func (from *LinkAnchoredText) CopyBasicFields(to *LinkAnchoredText) {
 	to.X_Offset = from.X_Offset
 	to.Y_Offset = from.Y_Offset
 	to.FontWeight = from.FontWeight
+	to.FontSize = from.FontSize
+	to.LetterSpacing = from.LetterSpacing
 	to.Color = from.Color
 	to.FillOpacity = from.FillOpacity
 	to.Stroke = from.Stroke

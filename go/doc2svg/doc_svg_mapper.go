@@ -248,7 +248,9 @@ func (docSVGMapper *DocSVGMapper) GenerateSvg(
 			targetMulitplicity.StrokeWidth = 1
 			targetMulitplicity.Color = gongsvg_models.Black.ToString()
 			targetMulitplicity.FillOpacity = 100
-			targetMulitplicity.FontWeight = "normal"
+			targetMulitplicity.FontWeight = "300"
+			targetMulitplicity.FontSize = "15"
+			targetMulitplicity.LetterSpacing = "0.1em"
 
 			fieldName := new(gongsvg_models.LinkAnchoredText).Stage(docSVGMapper.gongsvgStage)
 			fieldName.AutomaticLayout = true
@@ -266,7 +268,9 @@ func (docSVGMapper *DocSVGMapper) GenerateSvg(
 			fieldName.StrokeWidth = 1
 			fieldName.Color = gongsvg_models.Black.ToString()
 			fieldName.FillOpacity = 100
-			fieldName.FontWeight = "normal"
+			fieldName.FontWeight = "300"
+			fieldName.FontSize = "15"
+			fieldName.LetterSpacing = "0.1em"
 
 			// add the callback
 
@@ -284,6 +288,9 @@ func (docSVGMapper *DocSVGMapper) GenerateSvg(
 			sourceMultiplicity.Stroke = gongsvg_models.Black.ToString()
 			sourceMultiplicity.StrokeOpacity = 1
 			sourceMultiplicity.StrokeWidth = 1
+			sourceMultiplicity.FontWeight = "300"
+			sourceMultiplicity.FontSize = "15"
+			sourceMultiplicity.LetterSpacing = "0.1em"
 		}
 	}
 
