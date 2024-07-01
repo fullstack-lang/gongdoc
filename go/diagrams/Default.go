@@ -11,18 +11,11 @@ import (
 
 // generated in order to avoid error in the package import
 // if there are no elements in the stage to marshall
-var ___dummy__Stage_Default models.StageStruct
-var ___dummy__Time_Default time.Time
+var _ time.Time
 
 // _ point for meta package dummy declaration
-var ___dummy__ref_models_Default ref_models.StageStruct
+var _ ref_models.StageStruct
 
-// currently, DocLink renaming is not enabled in gopls
-// the following map are devised to overcome this limitation
-// those maps and the processing code will be eleminated when
-// DocLink renaming will be enabled in gopls
-// [Corresponding Issue](https://github.com/golang/go/issues/57559)
-//
 // When parsed, those maps will help with the renaming process
 var _ map[string]any = map[string]any{
 	// injection point for docLink to identifiers
@@ -114,6 +107,8 @@ var _ map[string]any = map[string]any{
 	"ref_models.GongStructShape.ShowNbInstances": (ref_models.GongStructShape{}).ShowNbInstances,
 
 	"ref_models.GongStructShape.Width": (ref_models.GongStructShape{}).Width,
+
+	"ref_models.GongdocStackName": ref_models.GongdocStackName,
 
 	"ref_models.Int": ref_models.Int,
 
@@ -211,7 +206,11 @@ var _ map[string]any = map[string]any{
 
 	"ref_models.Position.Y": (ref_models.Position{}).Y,
 
+	"ref_models.StacksNames": ref_models.StacksNames(""),
+
 	"ref_models.String": ref_models.String,
+
+	"ref_models.SvgStackName": ref_models.SvgStackName,
 
 	"ref_models.UmlState": &(ref_models.UmlState{}),
 
@@ -242,37 +241,23 @@ var _ map[string]any = map[string]any{
 	"ref_models.ZERO_ONE": ref_models.ZERO_ONE,
 }
 
-// init might be handy if one want to have the data embedded in the binary
-// but it has to properly reference the _ gateway in the main package
-// func init() {
-// 	_ = __Dummy_time_variable
-// 	InjectionGateway["Default"] = _
-// }
-
-// _ will stage objects of database "Default"
+// function will stage objects
 func _(stage *models.StageStruct) {
 
 	// Declaration of instances to stage
 
-	// Declarations of staged instances of Classdiagram
 	__Classdiagram__000000_Default := (&models.Classdiagram{Name: `Default`}).Stage(stage)
 
-	// Declarations of staged instances of DiagramPackage
-
-	// Declarations of staged instances of Field
 	__Field__000000_Name := (&models.Field{Name: `Name`}).Stage(stage)
 
-	// Declarations of staged instances of GongEnumShape
 	__GongEnumShape__000000_Default_GongEnumShapeType := (&models.GongEnumShape{Name: `Default-GongEnumShapeType`}).Stage(stage)
 	__GongEnumShape__000001_Default_MultiplicityType := (&models.GongEnumShape{Name: `Default-MultiplicityType`}).Stage(stage)
 
-	// Declarations of staged instances of GongEnumValueEntry
 	__GongEnumValueEntry__000000_Int := (&models.GongEnumValueEntry{Name: `Int`}).Stage(stage)
 	__GongEnumValueEntry__000001_ONE := (&models.GongEnumValueEntry{Name: `ONE`}).Stage(stage)
 	__GongEnumValueEntry__000002_String := (&models.GongEnumValueEntry{Name: `String`}).Stage(stage)
 	__GongEnumValueEntry__000003_ZERO_ONE := (&models.GongEnumValueEntry{Name: `ZERO_ONE`}).Stage(stage)
 
-	// Declarations of staged instances of GongStructShape
 	__GongStructShape__000000_Default_Classdiagram := (&models.GongStructShape{Name: `Default-Classdiagram`}).Stage(stage)
 	__GongStructShape__000001_Default_DiagramPackage := (&models.GongStructShape{Name: `Default-DiagramPackage`}).Stage(stage)
 	__GongStructShape__000002_Default_Field := (&models.GongStructShape{Name: `Default-Field`}).Stage(stage)
@@ -280,20 +265,16 @@ func _(stage *models.StageStruct) {
 	__GongStructShape__000004_Default_GongStructShape := (&models.GongStructShape{Name: `Default-GongStructShape`}).Stage(stage)
 	__GongStructShape__000005_Default_NoteShape := (&models.GongStructShape{Name: `Default-NoteShape`}).Stage(stage)
 
-	// Declarations of staged instances of Link
 	__Link__000000_Classdiagrams := (&models.Link{Name: `Classdiagrams`}).Stage(stage)
 	__Link__000001_Fields := (&models.Link{Name: `Fields`}).Stage(stage)
 	__Link__000002_NoteShapes := (&models.Link{Name: `NoteShapes`}).Stage(stage)
 	__Link__000003_SelectedClassdiagram := (&models.Link{Name: `SelectedClassdiagram`}).Stage(stage)
 
-	// Declarations of staged instances of NoteShape
 	__NoteShape__000000_NoteOnGongdoc := (&models.NoteShape{Name: `NoteOnGongdoc`}).Stage(stage)
 
-	// Declarations of staged instances of NoteShapeLink
 	__NoteShapeLink__000000_Classdiagram_NoteShapes := (&models.NoteShapeLink{Name: `Classdiagram.NoteShapes`}).Stage(stage)
 	__NoteShapeLink__000001_NoteShape := (&models.NoteShapeLink{Name: `NoteShape`}).Stage(stage)
 
-	// Declarations of staged instances of Position
 	__Position__000000_Pos_Default_Classdiagram := (&models.Position{Name: `Pos-Default-Classdiagram`}).Stage(stage)
 	__Position__000001_Pos_Default_DiagramPackage := (&models.Position{Name: `Pos-Default-DiagramPackage`}).Stage(stage)
 	__Position__000002_Pos_Default_Field := (&models.Position{Name: `Pos-Default-Field`}).Stage(stage)
@@ -303,11 +284,6 @@ func _(stage *models.StageStruct) {
 	__Position__000006_Pos_Default_MultiplicityType := (&models.Position{Name: `Pos-Default-MultiplicityType`}).Stage(stage)
 	__Position__000007_Pos_Default_NoteShape := (&models.Position{Name: `Pos-Default-NoteShape`}).Stage(stage)
 
-	// Declarations of staged instances of UmlState
-
-	// Declarations of staged instances of Umlsc
-
-	// Declarations of staged instances of Vertice
 	__Vertice__000000_Verticle_in_class_diagram_Default_in_middle_between_Default_Classdiagram_and_Default_NoteShape := (&models.Vertice{Name: `Verticle in class diagram Default in middle between Default-Classdiagram and Default-NoteShape`}).Stage(stage)
 	__Vertice__000001_Verticle_in_class_diagram_Default_in_middle_between_Default_DiagramPackage_and_Default_Classdiagram := (&models.Vertice{Name: `Verticle in class diagram Default in middle between Default-DiagramPackage and Default-Classdiagram`}).Stage(stage)
 	__Vertice__000002_Verticle_in_class_diagram_Default_in_middle_between_Default_DiagramPackage_and_Default_Classdiagram := (&models.Vertice{Name: `Verticle in class diagram Default in middle between Default-DiagramPackage and Default-Classdiagram`}).Stage(stage)
@@ -315,162 +291,117 @@ func _(stage *models.StageStruct) {
 
 	// Setup of values
 
-	// Classdiagram values setup
 	__Classdiagram__000000_Default.Name = `Default`
 	__Classdiagram__000000_Default.IsInDrawMode = false
 
-	// Field values setup
 	__Field__000000_Name.Name = `Name`
 
-	// comment added to overcome the problem with the comment map association
-
-	//gong:ident [ref_models.GongStructShape.Name]
+	//gong:ident [ref_models.GongStructShape.Name] comment added to overcome the problem with the comment map association
 	__Field__000000_Name.Identifier = `ref_models.GongStructShape.Name`
 	__Field__000000_Name.FieldTypeAsString = ``
 	__Field__000000_Name.Structname = `GongStructShape`
 	__Field__000000_Name.Fieldtypename = `string`
 
-	// GongEnumShape values setup
 	__GongEnumShape__000000_Default_GongEnumShapeType.Name = `Default-GongEnumShapeType`
 
-	// comment added to overcome the problem with the comment map association
-
-	//gong:ident [ref_models.GongEnumShapeType]
+	//gong:ident [ref_models.GongEnumShapeType] comment added to overcome the problem with the comment map association
 	__GongEnumShape__000000_Default_GongEnumShapeType.Identifier = `ref_models.GongEnumShapeType`
 	__GongEnumShape__000000_Default_GongEnumShapeType.Width = 240.000000
 	__GongEnumShape__000000_Default_GongEnumShapeType.Height = 93.000000
 
-	// GongEnumShape values setup
 	__GongEnumShape__000001_Default_MultiplicityType.Name = `Default-MultiplicityType`
 
-	// comment added to overcome the problem with the comment map association
-
-	//gong:ident [ref_models.MultiplicityType]
+	//gong:ident [ref_models.MultiplicityType] comment added to overcome the problem with the comment map association
 	__GongEnumShape__000001_Default_MultiplicityType.Identifier = `ref_models.MultiplicityType`
 	__GongEnumShape__000001_Default_MultiplicityType.Width = 240.000000
 	__GongEnumShape__000001_Default_MultiplicityType.Height = 93.000000
 
-	// GongEnumValueEntry values setup
 	__GongEnumValueEntry__000000_Int.Name = `Int`
 
-	// comment added to overcome the problem with the comment map association
-
-	//gong:ident [ref_models.GongEnumShapeType.Int]
+	//gong:ident [ref_models.GongEnumShapeType.Int] comment added to overcome the problem with the comment map association
 	__GongEnumValueEntry__000000_Int.Identifier = `ref_models.GongEnumShapeType.Int`
 
-	// GongEnumValueEntry values setup
 	__GongEnumValueEntry__000001_ONE.Name = `ONE`
 
-	// comment added to overcome the problem with the comment map association
-
-	//gong:ident [ref_models.MultiplicityType.ONE]
+	//gong:ident [ref_models.MultiplicityType.ONE] comment added to overcome the problem with the comment map association
 	__GongEnumValueEntry__000001_ONE.Identifier = `ref_models.MultiplicityType.ONE`
 
-	// GongEnumValueEntry values setup
 	__GongEnumValueEntry__000002_String.Name = `String`
 
-	// comment added to overcome the problem with the comment map association
-
-	//gong:ident [ref_models.GongEnumShapeType.String]
+	//gong:ident [ref_models.GongEnumShapeType.String] comment added to overcome the problem with the comment map association
 	__GongEnumValueEntry__000002_String.Identifier = `ref_models.GongEnumShapeType.String`
 
-	// GongEnumValueEntry values setup
 	__GongEnumValueEntry__000003_ZERO_ONE.Name = `ZERO_ONE`
 
-	// comment added to overcome the problem with the comment map association
-
-	//gong:ident [ref_models.MultiplicityType.ZERO_ONE]
+	//gong:ident [ref_models.MultiplicityType.ZERO_ONE] comment added to overcome the problem with the comment map association
 	__GongEnumValueEntry__000003_ZERO_ONE.Identifier = `ref_models.MultiplicityType.ZERO_ONE`
 
-	// GongStructShape values setup
 	__GongStructShape__000000_Default_Classdiagram.Name = `Default-Classdiagram`
 
-	// comment added to overcome the problem with the comment map association
-
-	//gong:ident [ref_models.Classdiagram]
+	//gong:ident [ref_models.Classdiagram] comment added to overcome the problem with the comment map association
 	__GongStructShape__000000_Default_Classdiagram.Identifier = `ref_models.Classdiagram`
-	__GongStructShape__000000_Default_Classdiagram.ShowNbInstances = true
+	__GongStructShape__000000_Default_Classdiagram.ShowNbInstances = false
 	__GongStructShape__000000_Default_Classdiagram.NbInstances = 0
 	__GongStructShape__000000_Default_Classdiagram.Width = 240.000000
 	__GongStructShape__000000_Default_Classdiagram.Height = 63.000000
 	__GongStructShape__000000_Default_Classdiagram.IsSelected = false
 
-	// GongStructShape values setup
 	__GongStructShape__000001_Default_DiagramPackage.Name = `Default-DiagramPackage`
 
-	// comment added to overcome the problem with the comment map association
-
-	//gong:ident [ref_models.DiagramPackage]
+	//gong:ident [ref_models.DiagramPackage] comment added to overcome the problem with the comment map association
 	__GongStructShape__000001_Default_DiagramPackage.Identifier = `ref_models.DiagramPackage`
-	__GongStructShape__000001_Default_DiagramPackage.ShowNbInstances = true
+	__GongStructShape__000001_Default_DiagramPackage.ShowNbInstances = false
 	__GongStructShape__000001_Default_DiagramPackage.NbInstances = 0
 	__GongStructShape__000001_Default_DiagramPackage.Width = 240.000000
 	__GongStructShape__000001_Default_DiagramPackage.Height = 63.000000
 	__GongStructShape__000001_Default_DiagramPackage.IsSelected = false
 
-	// GongStructShape values setup
 	__GongStructShape__000002_Default_Field.Name = `Default-Field`
 
-	// comment added to overcome the problem with the comment map association
-
-	//gong:ident [ref_models.Field]
+	//gong:ident [ref_models.Field] comment added to overcome the problem with the comment map association
 	__GongStructShape__000002_Default_Field.Identifier = `ref_models.Field`
-	__GongStructShape__000002_Default_Field.ShowNbInstances = true
+	__GongStructShape__000002_Default_Field.ShowNbInstances = false
 	__GongStructShape__000002_Default_Field.NbInstances = 0
 	__GongStructShape__000002_Default_Field.Width = 240.000000
 	__GongStructShape__000002_Default_Field.Height = 63.000000
 	__GongStructShape__000002_Default_Field.IsSelected = false
 
-	// GongStructShape values setup
 	__GongStructShape__000003_Default_GongEnumShape.Name = `Default-GongEnumShape`
 
-	// comment added to overcome the problem with the comment map association
-
-	//gong:ident [ref_models.GongEnumShape]
+	//gong:ident [ref_models.GongEnumShape] comment added to overcome the problem with the comment map association
 	__GongStructShape__000003_Default_GongEnumShape.Identifier = `ref_models.GongEnumShape`
-	__GongStructShape__000003_Default_GongEnumShape.ShowNbInstances = true
+	__GongStructShape__000003_Default_GongEnumShape.ShowNbInstances = false
 	__GongStructShape__000003_Default_GongEnumShape.NbInstances = 0
 	__GongStructShape__000003_Default_GongEnumShape.Width = 240.000000
 	__GongStructShape__000003_Default_GongEnumShape.Height = 63.000000
 	__GongStructShape__000003_Default_GongEnumShape.IsSelected = false
 
-	// GongStructShape values setup
 	__GongStructShape__000004_Default_GongStructShape.Name = `Default-GongStructShape`
 
-	// comment added to overcome the problem with the comment map association
-
-	//gong:ident [ref_models.GongStructShape]
+	//gong:ident [ref_models.GongStructShape] comment added to overcome the problem with the comment map association
 	__GongStructShape__000004_Default_GongStructShape.Identifier = `ref_models.GongStructShape`
-	__GongStructShape__000004_Default_GongStructShape.ShowNbInstances = true
+	__GongStructShape__000004_Default_GongStructShape.ShowNbInstances = false
 	__GongStructShape__000004_Default_GongStructShape.NbInstances = 0
 	__GongStructShape__000004_Default_GongStructShape.Width = 240.000000
 	__GongStructShape__000004_Default_GongStructShape.Height = 78.000000
 	__GongStructShape__000004_Default_GongStructShape.IsSelected = false
 
-	// GongStructShape values setup
 	__GongStructShape__000005_Default_NoteShape.Name = `Default-NoteShape`
 
-	// comment added to overcome the problem with the comment map association
-
-	//gong:ident [ref_models.NoteShape]
+	//gong:ident [ref_models.NoteShape] comment added to overcome the problem with the comment map association
 	__GongStructShape__000005_Default_NoteShape.Identifier = `ref_models.NoteShape`
-	__GongStructShape__000005_Default_NoteShape.ShowNbInstances = true
+	__GongStructShape__000005_Default_NoteShape.ShowNbInstances = false
 	__GongStructShape__000005_Default_NoteShape.NbInstances = 0
 	__GongStructShape__000005_Default_NoteShape.Width = 240.000000
 	__GongStructShape__000005_Default_NoteShape.Height = 63.000000
 	__GongStructShape__000005_Default_NoteShape.IsSelected = false
 
-	// Link values setup
 	__Link__000000_Classdiagrams.Name = `Classdiagrams`
 
-	// comment added to overcome the problem with the comment map association
-
-	//gong:ident [ref_models.DiagramPackage.Classdiagrams]
+	//gong:ident [ref_models.DiagramPackage.Classdiagrams] comment added to overcome the problem with the comment map association
 	__Link__000000_Classdiagrams.Identifier = `ref_models.DiagramPackage.Classdiagrams`
 
-	// comment added to overcome the problem with the comment map association
-
-	//gong:ident [ref_models.Classdiagram]
+	//gong:ident [ref_models.Classdiagram] comment added to overcome the problem with the comment map association
 	__Link__000000_Classdiagrams.Fieldtypename = `ref_models.Classdiagram`
 	__Link__000000_Classdiagrams.FieldOffsetX = -50.000000
 	__Link__000000_Classdiagrams.FieldOffsetY = -16.000000
@@ -486,17 +417,12 @@ func _(stage *models.StageStruct) {
 	__Link__000000_Classdiagrams.EndRatio = 0.500000
 	__Link__000000_Classdiagrams.CornerOffsetRatio = 1.079365
 
-	// Link values setup
 	__Link__000001_Fields.Name = `Fields`
 
-	// comment added to overcome the problem with the comment map association
-
-	//gong:ident [ref_models.GongStructShape.Fields]
+	//gong:ident [ref_models.GongStructShape.Fields] comment added to overcome the problem with the comment map association
 	__Link__000001_Fields.Identifier = `ref_models.GongStructShape.Fields`
 
-	// comment added to overcome the problem with the comment map association
-
-	//gong:ident [ref_models.Field]
+	//gong:ident [ref_models.Field] comment added to overcome the problem with the comment map association
 	__Link__000001_Fields.Fieldtypename = `ref_models.Field`
 	__Link__000001_Fields.FieldOffsetX = -50.000000
 	__Link__000001_Fields.FieldOffsetY = -16.000000
@@ -512,17 +438,12 @@ func _(stage *models.StageStruct) {
 	__Link__000001_Fields.EndRatio = 0.500000
 	__Link__000001_Fields.CornerOffsetRatio = 1.380000
 
-	// Link values setup
 	__Link__000002_NoteShapes.Name = `NoteShapes`
 
-	// comment added to overcome the problem with the comment map association
-
-	//gong:ident [ref_models.Classdiagram.NoteShapes]
+	//gong:ident [ref_models.Classdiagram.NoteShapes] comment added to overcome the problem with the comment map association
 	__Link__000002_NoteShapes.Identifier = `ref_models.Classdiagram.NoteShapes`
 
-	// comment added to overcome the problem with the comment map association
-
-	//gong:ident [ref_models.NoteShape]
+	//gong:ident [ref_models.NoteShape] comment added to overcome the problem with the comment map association
 	__Link__000002_NoteShapes.Fieldtypename = `ref_models.NoteShape`
 	__Link__000002_NoteShapes.FieldOffsetX = -94.000000
 	__Link__000002_NoteShapes.FieldOffsetY = -14.000000
@@ -538,17 +459,12 @@ func _(stage *models.StageStruct) {
 	__Link__000002_NoteShapes.EndRatio = 0.500000
 	__Link__000002_NoteShapes.CornerOffsetRatio = 1.262818
 
-	// Link values setup
 	__Link__000003_SelectedClassdiagram.Name = `SelectedClassdiagram`
 
-	// comment added to overcome the problem with the comment map association
-
-	//gong:ident [ref_models.DiagramPackage.SelectedClassdiagram]
+	//gong:ident [ref_models.DiagramPackage.SelectedClassdiagram] comment added to overcome the problem with the comment map association
 	__Link__000003_SelectedClassdiagram.Identifier = `ref_models.DiagramPackage.SelectedClassdiagram`
 
-	// comment added to overcome the problem with the comment map association
-
-	//gong:ident [ref_models.Classdiagram]
+	//gong:ident [ref_models.Classdiagram] comment added to overcome the problem with the comment map association
 	__Link__000003_SelectedClassdiagram.Fieldtypename = `ref_models.Classdiagram`
 	__Link__000003_SelectedClassdiagram.FieldOffsetX = -50.000000
 	__Link__000003_SelectedClassdiagram.FieldOffsetY = -16.000000
@@ -564,12 +480,9 @@ func _(stage *models.StageStruct) {
 	__Link__000003_SelectedClassdiagram.EndRatio = 0.562500
 	__Link__000003_SelectedClassdiagram.CornerOffsetRatio = 2.174603
 
-	// NoteShape values setup
 	__NoteShape__000000_NoteOnGongdoc.Name = `NoteOnGongdoc`
 
-	// comment added to overcome the problem with the comment map association
-
-	//gong:ident [ref_models.NoteOnGongdoc]
+	//gong:ident [ref_models.NoteOnGongdoc] comment added to overcome the problem with the comment map association
 	__NoteShape__000000_NoteOnGongdoc.Identifier = `ref_models.NoteOnGongdoc`
 	__NoteShape__000000_NoteOnGongdoc.Body = `Note Example
 
@@ -588,80 +501,62 @@ or to <a href="/models#OrientationType">models.OrientationType</a>
 	__NoteShape__000000_NoteOnGongdoc.Height = 123.000000
 	__NoteShape__000000_NoteOnGongdoc.Matched = false
 
-	// NoteShapeLink values setup
 	__NoteShapeLink__000000_Classdiagram_NoteShapes.Name = `Classdiagram.NoteShapes`
 
-	// comment added to overcome the problem with the comment map association
-
-	//gong:ident [ref_models.Classdiagram.NoteShapes]
+	//gong:ident [ref_models.Classdiagram.NoteShapes] comment added to overcome the problem with the comment map association
 	__NoteShapeLink__000000_Classdiagram_NoteShapes.Identifier = `ref_models.Classdiagram.NoteShapes`
 	__NoteShapeLink__000000_Classdiagram_NoteShapes.Type = models.NOTE_SHAPE_LINK_TO_GONG_FIELD
 
-	// NoteShapeLink values setup
 	__NoteShapeLink__000001_NoteShape.Name = `NoteShape`
 
-	// comment added to overcome the problem with the comment map association
-
-	//gong:ident [ref_models.NoteShape]
+	//gong:ident [ref_models.NoteShape] comment added to overcome the problem with the comment map association
 	__NoteShapeLink__000001_NoteShape.Identifier = `ref_models.NoteShape`
 	__NoteShapeLink__000001_NoteShape.Type = models.NOTE_SHAPE_LINK_TO_GONG_STRUCT_OR_ENUM_SHAPE
 
-	// Position values setup
 	__Position__000000_Pos_Default_Classdiagram.X = 558.000031
 	__Position__000000_Pos_Default_Classdiagram.Y = 319.000000
 	__Position__000000_Pos_Default_Classdiagram.Name = `Pos-Default-Classdiagram`
 
-	// Position values setup
 	__Position__000001_Pos_Default_DiagramPackage.X = 121.000000
 	__Position__000001_Pos_Default_DiagramPackage.Y = 181.000000
 	__Position__000001_Pos_Default_DiagramPackage.Name = `Pos-Default-DiagramPackage`
 
-	// Position values setup
 	__Position__000002_Pos_Default_Field.X = 595.000000
 	__Position__000002_Pos_Default_Field.Y = 558.000000
 	__Position__000002_Pos_Default_Field.Name = `Pos-Default-Field`
 
-	// Position values setup
 	__Position__000003_Pos_Default_GongEnumShape.X = 35.000000
 	__Position__000003_Pos_Default_GongEnumShape.Y = 26.000000
 	__Position__000003_Pos_Default_GongEnumShape.Name = `Pos-Default-GongEnumShape`
 
-	// Position values setup
 	__Position__000004_Pos_Default_GongEnumShapeType.X = 54.000000
 	__Position__000004_Pos_Default_GongEnumShapeType.Y = 390.000000
 	__Position__000004_Pos_Default_GongEnumShapeType.Name = `Pos-Default-GongEnumShapeType`
 
-	// Position values setup
 	__Position__000005_Pos_Default_GongStructShape.X = 175.000000
 	__Position__000005_Pos_Default_GongStructShape.Y = 544.000000
 	__Position__000005_Pos_Default_GongStructShape.Name = `Pos-Default-GongStructShape`
 
-	// Position values setup
 	__Position__000006_Pos_Default_MultiplicityType.X = 409.000000
 	__Position__000006_Pos_Default_MultiplicityType.Y = 46.000000
 	__Position__000006_Pos_Default_MultiplicityType.Name = `Pos-Default-MultiplicityType`
 
-	// Position values setup
 	__Position__000007_Pos_Default_NoteShape.X = 1031.000061
 	__Position__000007_Pos_Default_NoteShape.Y = 309.000000
 	__Position__000007_Pos_Default_NoteShape.Name = `Pos-Default-NoteShape`
 
-	// Vertice values setup
 	__Vertice__000000_Verticle_in_class_diagram_Default_in_middle_between_Default_Classdiagram_and_Default_NoteShape.X = 867.000000
 	__Vertice__000000_Verticle_in_class_diagram_Default_in_middle_between_Default_Classdiagram_and_Default_NoteShape.Y = 264.500000
 	__Vertice__000000_Verticle_in_class_diagram_Default_in_middle_between_Default_Classdiagram_and_Default_NoteShape.Name = `Verticle in class diagram Default in middle between Default-Classdiagram and Default-NoteShape`
 
-	// Vertice values setup
 	__Vertice__000001_Verticle_in_class_diagram_Default_in_middle_between_Default_DiagramPackage_and_Default_Classdiagram.X = 700.000016
 	__Vertice__000001_Verticle_in_class_diagram_Default_in_middle_between_Default_DiagramPackage_and_Default_Classdiagram.Y = 281.500000
 	__Vertice__000001_Verticle_in_class_diagram_Default_in_middle_between_Default_DiagramPackage_and_Default_Classdiagram.Name = `Verticle in class diagram Default in middle between Default-DiagramPackage and Default-Classdiagram`
 
-	// Vertice values setup
 	__Vertice__000002_Verticle_in_class_diagram_Default_in_middle_between_Default_DiagramPackage_and_Default_Classdiagram.X = 700.000016
 	__Vertice__000002_Verticle_in_class_diagram_Default_in_middle_between_Default_DiagramPackage_and_Default_Classdiagram.Y = 281.500000
 	__Vertice__000002_Verticle_in_class_diagram_Default_in_middle_between_Default_DiagramPackage_and_Default_Classdiagram.Name = `Verticle in class diagram Default in middle between Default-DiagramPackage and Default-Classdiagram`
 
-	// Vertice values setup
 	__Vertice__000003_Verticle_in_class_diagram_Default_in_middle_between_Default_GongStructShape_and_Default_Field.X = 745.000000
 	__Vertice__000003_Verticle_in_class_diagram_Default_in_middle_between_Default_GongStructShape_and_Default_Field.Y = 590.000000
 	__Vertice__000003_Verticle_in_class_diagram_Default_in_middle_between_Default_GongStructShape_and_Default_Field.Name = `Verticle in class diagram Default in middle between Default-GongStructShape and Default-Field`
@@ -700,5 +595,3 @@ or to <a href="/models#OrientationType">models.OrientationType</a>
 	__NoteShape__000000_NoteOnGongdoc.NoteShapeLinks = append(__NoteShape__000000_NoteOnGongdoc.NoteShapeLinks, __NoteShapeLink__000001_NoteShape)
 	__NoteShape__000000_NoteOnGongdoc.NoteShapeLinks = append(__NoteShape__000000_NoteOnGongdoc.NoteShapeLinks, __NoteShapeLink__000000_Classdiagram_NoteShapes)
 }
-
-
