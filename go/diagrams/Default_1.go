@@ -14,7 +14,7 @@ import (
 var ___dummy__Stage_Default_1 models.StageStruct
 var ___dummy__Time_Default_1 time.Time
 
-// Injection point for meta package dummy declaration
+// _ point for meta package dummy declaration
 var ___dummy__ref_models_Default_1 ref_models.StageStruct
 
 // currently, DocLink renaming is not enabled in gopls
@@ -24,7 +24,7 @@ var ___dummy__ref_models_Default_1 ref_models.StageStruct
 // [Corresponding Issue](https://github.com/golang/go/issues/57559)
 //
 // When parsed, those maps will help with the renaming process
-var map_DocLink_Identifier_Default_1 map[string]any = map[string]any{
+var _ map[string]any = map[string]any{
 	// injection point for docLink to identifiers
 
 	"ref_models.Classdiagram": &(ref_models.Classdiagram{}),
@@ -249,14 +249,14 @@ var map_DocLink_Identifier_Default_1 map[string]any = map[string]any{
 }
 
 // init might be handy if one want to have the data embedded in the binary
-// but it has to properly reference the Injection gateway in the main package
+// but it has to properly reference the _ gateway in the main package
 // func init() {
 // 	_ = __Dummy_time_variable
-// 	InjectionGateway["Default_1"] = Default_1Injection
+// 	InjectionGateway["Default_1"] = _
 // }
 
-// Default_1Injection will stage objects of database "Default_1"
-func Default_1Injection(stage *models.StageStruct) {
+// _ will stage objects of database "Default_1"
+func _(stage *models.StageStruct) {
 
 	// Declaration of instances to stage
 
