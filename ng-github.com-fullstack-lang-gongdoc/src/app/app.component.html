@@ -54,7 +54,7 @@
     </as-split-area>
 </as-split>
 
-<!-- <as-split unit="pixel" *ngIf="view==svg_stack_probe" direction="vertical">
+<as-split unit="pixel" *ngIf="view==svg_probe" direction="vertical">
     <as-split-area [size]=40>
         <ng-container *ngTemplateOutlet="radioToolbar"></ng-container>
     </as-split-area>
@@ -63,15 +63,18 @@
             <as-split-area [size]=50>
                 <as-split direction="horizontal">
                     <as-split-area [size]="20">
-                        <lib-tree [GONG__StackPath]="StacksNames.SvgStackName+'-sidebar'" name="gong"></lib-tree>
+                        <lib-tree [GONG__StackPath]="StacksNames.SvgStackName+
+                        TableExtraPathEnum.StackNamePostFixForTableForMainTree" name="gong"></lib-tree>
                     </as-split-area>
                     <as-split-area [size]="50">
                         <div [ngStyle]="scrollStyle">
-                            <lib-material-table TableName="Table" [DataStack]="StacksNames.SvgStackName+'-table'"></lib-material-table>
+                            <lib-material-table TableName="Table" [DataStack]="StacksNames.SvgStackName+
+                            TableExtraPathEnum.StackNamePostFixForTableForMainTable"></lib-material-table>
                         </div>
                     </as-split-area>
                     <as-split-area [size]="30">
-                        <lib-material-form FormName="Form" [DataStack]="StacksNames.SvgStackName+'-form'"></lib-material-form>
+                        <lib-material-form FormName="Form" [DataStack]="StacksNames.SvgStackName+
+                            TableExtraPathEnum.StackNamePostFixForTableForMainForm"></lib-material-form>
                     </as-split-area>
                 </as-split>
             </as-split-area>
@@ -80,4 +83,4 @@
             </as-split-area>
         </as-split>
     </as-split-area>
-</as-split> -->
+</as-split>

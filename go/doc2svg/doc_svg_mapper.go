@@ -133,11 +133,11 @@ func (docSVGMapper *DocSVGMapper) GenerateSvg(
 		titleBox.StrokeOpacity = 0
 		titleBox.RectAnchorType = gongsvg_models.RECT_TOP_LEFT
 		titleBox.Color = "#ff8450"
-		titleBox.Color = "white"
+		titleBox.Color = gongsvg_models.White.ToString()
 		titleBox.WidthFollowRect = true
 		titleBox.FillOpacity = 0
 
-		titleBox.Stroke = "white"
+		titleBox.Stroke = gongsvg_models.White.ToString()
 		titleBox.StrokeOpacity = 1
 		titleBox.StrokeWidth = 0
 
@@ -324,7 +324,7 @@ func (docSVGMapper *DocSVGMapper) GenerateSvg(
 		rect.StrokeDashArrayWhenSelected = "5 5"
 
 		rect.FillOpacity = 100
-		rect.Color = gongsvg_models.Lightsteelblue.ToString()
+		rect.Color = gongsvg_models.White.ToString()
 
 		// moveability
 		rect.CanMoveHorizontaly = true
@@ -360,9 +360,10 @@ func (docSVGMapper *DocSVGMapper) GenerateSvg(
 		titleBox.Width = rect.Width
 		titleBox.Height = 30
 		titleBox.RectAnchorType = gongsvg_models.RECT_TOP_LEFT
-		titleBox.Color = gongsvg_models.Steelblue.ToString()
+		titleBox.Color = gongsvg_models.White.ToString()
 		titleBox.WidthFollowRect = true
-		titleBox.FillOpacity = 100
+		titleBox.FillOpacity = 0.0
+		titleBox.StrokeWidth = 0
 
 		rect.RectAnchoredRects = append(rect.RectAnchoredRects, titleBox)
 
