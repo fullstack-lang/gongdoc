@@ -322,6 +322,8 @@ func (diagrammer *Diagrammer) computeModelNodeStatus(map_ModelElementNode_Shape 
 		if _, ok := map_ModelElementNode_Shape[modelElementNode]; ok {
 			treeNode.IsChecked = true
 		}
+
+		treeNode.HasSecondCheckboxButton = modelElementNode.HasSecondCheckbox()
 	}
 }
 
