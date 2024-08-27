@@ -905,7 +905,7 @@ func GetFields[Type Gongstruct]() (res []string) {
 	case Button:
 		res = []string{"Name", "Icon", "SVGIcon"}
 	case Node:
-		res = []string{"Name", "FontStyle", "BackgroundColor", "IsExpanded", "HasCheckboxButton", "IsChecked", "IsCheckboxDisabled", "IsInEditMode", "IsNodeClickable", "IsWithPreceedingIcon", "PreceedingIcon", "PreceedingSVGIcon", "Children", "Buttons"}
+		res = []string{"Name", "FontStyle", "BackgroundColor", "IsExpanded", "HasCheckboxButton", "IsChecked", "IsCheckboxDisabled", "HasSecondCheckboxButton", "IsSecondCheckboxChecked", "IsSecondCheckboxDisabled", "TextAfterSecondCheckbox", "IsInEditMode", "IsNodeClickable", "IsWithPreceedingIcon", "PreceedingIcon", "PreceedingSVGIcon", "Children", "Buttons"}
 	case SVGIcon:
 		res = []string{"Name", "SVG"}
 	case Tree:
@@ -963,7 +963,7 @@ func GetFieldsFromPointer[Type PointerToGongstruct]() (res []string) {
 	case *Button:
 		res = []string{"Name", "Icon", "SVGIcon"}
 	case *Node:
-		res = []string{"Name", "FontStyle", "BackgroundColor", "IsExpanded", "HasCheckboxButton", "IsChecked", "IsCheckboxDisabled", "IsInEditMode", "IsNodeClickable", "IsWithPreceedingIcon", "PreceedingIcon", "PreceedingSVGIcon", "Children", "Buttons"}
+		res = []string{"Name", "FontStyle", "BackgroundColor", "IsExpanded", "HasCheckboxButton", "IsChecked", "IsCheckboxDisabled", "HasSecondCheckboxButton", "IsSecondCheckboxChecked", "IsSecondCheckboxDisabled", "TextAfterSecondCheckbox", "IsInEditMode", "IsNodeClickable", "IsWithPreceedingIcon", "PreceedingIcon", "PreceedingSVGIcon", "Children", "Buttons"}
 	case *SVGIcon:
 		res = []string{"Name", "SVG"}
 	case *Tree:
@@ -1006,6 +1006,14 @@ func GetFieldStringValueFromPointer[Type PointerToGongstruct](instance Type, fie
 			res = fmt.Sprintf("%t", inferedInstance.IsChecked)
 		case "IsCheckboxDisabled":
 			res = fmt.Sprintf("%t", inferedInstance.IsCheckboxDisabled)
+		case "HasSecondCheckboxButton":
+			res = fmt.Sprintf("%t", inferedInstance.HasSecondCheckboxButton)
+		case "IsSecondCheckboxChecked":
+			res = fmt.Sprintf("%t", inferedInstance.IsSecondCheckboxChecked)
+		case "IsSecondCheckboxDisabled":
+			res = fmt.Sprintf("%t", inferedInstance.IsSecondCheckboxDisabled)
+		case "TextAfterSecondCheckbox":
+			res = inferedInstance.TextAfterSecondCheckbox
 		case "IsInEditMode":
 			res = fmt.Sprintf("%t", inferedInstance.IsInEditMode)
 		case "IsNodeClickable":
@@ -1094,6 +1102,14 @@ func GetFieldStringValue[Type Gongstruct](instance Type, fieldName string) (res 
 			res = fmt.Sprintf("%t", inferedInstance.IsChecked)
 		case "IsCheckboxDisabled":
 			res = fmt.Sprintf("%t", inferedInstance.IsCheckboxDisabled)
+		case "HasSecondCheckboxButton":
+			res = fmt.Sprintf("%t", inferedInstance.HasSecondCheckboxButton)
+		case "IsSecondCheckboxChecked":
+			res = fmt.Sprintf("%t", inferedInstance.IsSecondCheckboxChecked)
+		case "IsSecondCheckboxDisabled":
+			res = fmt.Sprintf("%t", inferedInstance.IsSecondCheckboxDisabled)
+		case "TextAfterSecondCheckbox":
+			res = inferedInstance.TextAfterSecondCheckbox
 		case "IsInEditMode":
 			res = fmt.Sprintf("%t", inferedInstance.IsInEditMode)
 		case "IsNodeClickable":
