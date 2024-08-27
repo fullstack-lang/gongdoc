@@ -36,3 +36,11 @@ func (base *ModelCategoryNodeBase) GetParent() diagrammer.ModelNode {
 func (base *ModelCategoryNodeBase) HasSecondCheckbox() bool {
 	return false
 }
+
+func (base *ModelCategoryNodeBase) HasSecondName() bool {
+	return false
+}
+
+func (base *ModelCategoryNodeBase) GetSecondName() string {
+	return ""
+}

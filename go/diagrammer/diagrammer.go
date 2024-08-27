@@ -324,6 +324,8 @@ func (diagrammer *Diagrammer) computeModelNodeStatus(map_ModelElementNode_Shape 
 		}
 
 		treeNode.HasSecondCheckboxButton = modelElementNode.HasSecondCheckbox()
+		treeNode.TextAfterSecondCheckbox = modelElementNode.GetSecondName()
+		treeNode.IsSecondCheckboxDisabled = !isInDrawingMode
 	}
 }
 

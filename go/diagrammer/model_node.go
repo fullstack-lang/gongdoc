@@ -13,4 +13,6 @@ type ModelNode interface {
 	SetIsExpanded(isExpanded bool)
 
 	HasSecondCheckbox() bool
+	HasSecondName() bool
+	GetSecondName() string
 }
