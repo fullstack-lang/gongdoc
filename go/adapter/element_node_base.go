@@ -40,3 +40,7 @@ func (base *ElementNodeBase) HasSecondName() bool {
 func (base *ElementNodeBase) GetSecondName() string {
 	return ""
 }
+
+func (base *ElementNodeBase) GetLinkedNode() diagrammer.ModelElementNode {
+	return nil
+}

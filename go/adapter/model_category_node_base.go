@@ -44,3 +44,7 @@ func (base *ModelCategoryNodeBase) HasSecondName() bool {
 func (base *ModelCategoryNodeBase) GetSecondName() string {
 	return ""
 }
+
+func (base *ModelCategoryNodeBase) GetLinkedNode() diagrammer.ModelElementNode {
+	return nil
+}

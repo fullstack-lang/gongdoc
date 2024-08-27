@@ -270,15 +270,15 @@ func (fieldNode *FieldNode) CanBeAddedToDiagram() (result bool) {
 
 func (fieldNode *FieldNode) HasSecondCheckbox() (result bool) {
 
-	if pointerToGongStructField, ok := fieldNode.Field.(*gong_models.PointerToGongStructField); ok {
-		_ = pointerToGongStructField
-		result = !fieldNode.CanBeAddedToDiagram()
-	}
+	// if pointerToGongStructField, ok := fieldNode.Field.(*gong_models.PointerToGongStructField); ok {
+	// 	_ = pointerToGongStructField
+	// 	result = !fieldNode.CanBeAddedToDiagram()
+	// }
 
-	if sliceOfPointerToGongStructField, ok := fieldNode.Field.(*gong_models.SliceOfPointerToGongStructField); ok {
-		_ = sliceOfPointerToGongStructField
-		result = !fieldNode.CanBeAddedToDiagram()
-	}
+	// if sliceOfPointerToGongStructField, ok := fieldNode.Field.(*gong_models.SliceOfPointerToGongStructField); ok {
+	// 	_ = sliceOfPointerToGongStructField
+	// 	result = !fieldNode.CanBeAddedToDiagram()
+	// }
 	return
 }
 
