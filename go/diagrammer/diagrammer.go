@@ -323,9 +323,14 @@ func (diagrammer *Diagrammer) computeModelNodeStatus(map_ModelElementNode_Shape 
 			treeNode.IsChecked = true
 		}
 
-		treeNode.HasSecondCheckboxButton = modelElementNode.HasSecondCheckbox()
-		treeNode.TextAfterSecondCheckbox = modelElementNode.GetSecondName()
-		treeNode.IsSecondCheckboxDisabled = !isInDrawingMode
+		if modelElementNode.HasSecondCheckbox() {
+			treeNode.HasSecondCheckboxButton = true
+			treeNode.IsSecondCheckboxDisabled = !isInDrawingMode
+		}
+		if modelElementNode.HasSecondName() {
+			treeNode.TextAfterSecondCheckbox = modelElementNode.GetSecondName()
+		}
+
 	}
 }
 

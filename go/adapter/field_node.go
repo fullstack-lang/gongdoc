@@ -285,7 +285,6 @@ func (fieldNode *FieldNode) HasSecondCheckbox() (result bool) {
 func (fieldNode *FieldNode) HasSecondName() (result bool) {
 
 	if pointerToGongStructField, ok := fieldNode.Field.(*gong_models.PointerToGongStructField); ok {
-
 		_ = pointerToGongStructField
 		result = true
 	}
@@ -308,5 +307,6 @@ func (fieldNode *FieldNode) GetSecondName() (result string) {
 		_ = sliceOfPointerToGongStructField
 		result = sliceOfPointerToGongStructField.GongStruct.GetName()
 	}
+
 	return
 }

@@ -30,6 +30,9 @@
             </button>
             <mat-checkbox *ngIf="node.gongNode.HasSecondCheckboxButton" [disabled]="node.gongNode.IsSecondCheckboxDisabled" [checked]="node.gongNode.IsSecondCheckboxChecked" (change)="toggleNodeSecondCheckbox(node)">
             </mat-checkbox>
+            @if (!node.gongNode.HasSecondCheckboxButton && node.gongNode.TextAfterSecondCheckbox != "") {
+                &nbsp;&nbsp;
+            }
             <div [ngStyle]="getStyle(node)">
                 {{node.gongNode.TextAfterSecondCheckbox}}
             </div>
@@ -67,6 +70,9 @@
             </div>
             <mat-checkbox *ngIf="node.gongNode.HasSecondCheckboxButton" [disabled]="node.gongNode.IsSecondCheckboxDisabled" [checked]="node.gongNode.IsSecondCheckboxChecked" (change)="toggleNodeSecondCheckbox(node)">
             </mat-checkbox>
+            @if (!node.gongNode.HasSecondCheckboxButton && node.gongNode.TextAfterSecondCheckbox != "") {
+                &nbsp;&nbsp;
+            }
             <div [ngStyle]="getStyle(node)">
                 {{node.gongNode.TextAfterSecondCheckbox}}
             </div>
