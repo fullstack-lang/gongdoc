@@ -188,7 +188,12 @@ func (docSVGMapper *DocSVGMapper) GenerateSvg(
 		startRect := docSVGMapper.map_GongstructShape_Rect[gongstructShape]
 		for _, docLink := range gongstructShape.Links {
 
-			endRect := docSVGMapper.map_Structname_Rect[docLink.Fieldtypename]
+			endRect, ok := docSVGMapper.map_Structname_Rect[docLink.Fieldtypename]
+
+			// if some renaming of field type name has occured, end rect might be nil
+			if !ok {
+				continue
+			}
 
 			link := new(gongsvg_models.Link).Stage(docSVGMapper.gongsvgStage)
 			link.Name = startRect.Name + " - to - " + endRect.Name
