@@ -18,227 +18,7 @@ var _ ref_models.StageStruct
 
 // When parsed, those maps will help with the renaming process
 var _ map[string]any = map[string]any{
-	// injection point for docLink to identifiers
-
-	"ref_models.Classdiagram": &(ref_models.Classdiagram{}),
-
-	"ref_models.Classdiagram.GongEnumShapes": (ref_models.Classdiagram{}).GongEnumShapes,
-
-	"ref_models.Classdiagram.GongStructShapes": (ref_models.Classdiagram{}).GongStructShapes,
-
-	"ref_models.Classdiagram.IsInDrawMode": (ref_models.Classdiagram{}).IsInDrawMode,
-
-	"ref_models.Classdiagram.Name": (ref_models.Classdiagram{}).Name,
-
-	"ref_models.Classdiagram.NoteShapes": (ref_models.Classdiagram{}).NoteShapes,
-
-	"ref_models.DiagramPackage": &(ref_models.DiagramPackage{}),
-
-	"ref_models.DiagramPackage.AbsolutePathToDiagramPackage": (ref_models.DiagramPackage{}).AbsolutePathToDiagramPackage,
-
-	"ref_models.DiagramPackage.Classdiagrams": (ref_models.DiagramPackage{}).Classdiagrams,
-
-	"ref_models.DiagramPackage.GongModelPath": (ref_models.DiagramPackage{}).GongModelPath,
-
-	"ref_models.DiagramPackage.IsEditable": (ref_models.DiagramPackage{}).IsEditable,
-
-	"ref_models.DiagramPackage.IsReloaded": (ref_models.DiagramPackage{}).IsReloaded,
-
-	"ref_models.DiagramPackage.Name": (ref_models.DiagramPackage{}).Name,
-
-	"ref_models.DiagramPackage.Path": (ref_models.DiagramPackage{}).Path,
-
-	"ref_models.DiagramPackage.SelectedClassdiagram": (ref_models.DiagramPackage{}).SelectedClassdiagram,
-
-	"ref_models.DiagramPackage.Umlscs": (ref_models.DiagramPackage{}).Umlscs,
-
-	"ref_models.Field": &(ref_models.Field{}),
-
-	"ref_models.Field.FieldTypeAsString": (ref_models.Field{}).FieldTypeAsString,
-
-	"ref_models.Field.Fieldtypename": (ref_models.Field{}).Fieldtypename,
-
-	"ref_models.Field.Identifier": (ref_models.Field{}).Identifier,
-
-	"ref_models.Field.Name": (ref_models.Field{}).Name,
-
-	"ref_models.Field.Structname": (ref_models.Field{}).Structname,
-
-	"ref_models.GongEnumShape": &(ref_models.GongEnumShape{}),
-
-	"ref_models.GongEnumShape.GongEnumValueEntrys": (ref_models.GongEnumShape{}).GongEnumValueEntrys,
-
-	"ref_models.GongEnumShape.Height": (ref_models.GongEnumShape{}).Height,
-
-	"ref_models.GongEnumShape.Identifier": (ref_models.GongEnumShape{}).Identifier,
-
-	"ref_models.GongEnumShape.Name": (ref_models.GongEnumShape{}).Name,
-
-	"ref_models.GongEnumShape.Position": (ref_models.GongEnumShape{}).Position,
-
-	"ref_models.GongEnumShape.Width": (ref_models.GongEnumShape{}).Width,
-
-	"ref_models.GongEnumShapeType": ref_models.GongEnumShapeType(0),
-
-	"ref_models.GongEnumValueEntry": &(ref_models.GongEnumValueEntry{}),
-
-	"ref_models.GongEnumValueEntry.Identifier": (ref_models.GongEnumValueEntry{}).Identifier,
-
-	"ref_models.GongEnumValueEntry.Name": (ref_models.GongEnumValueEntry{}).Name,
-
-	"ref_models.GongStructShape": &(ref_models.GongStructShape{}),
-
-	"ref_models.GongStructShape.Fields": (ref_models.GongStructShape{}).Fields,
-
-	"ref_models.GongStructShape.Height": (ref_models.GongStructShape{}).Height,
-
-	"ref_models.GongStructShape.Identifier": (ref_models.GongStructShape{}).Identifier,
-
-	"ref_models.GongStructShape.IsSelected": (ref_models.GongStructShape{}).IsSelected,
-
-	"ref_models.GongStructShape.Links": (ref_models.GongStructShape{}).Links,
-
-	"ref_models.GongStructShape.Name": (ref_models.GongStructShape{}).Name,
-
-	"ref_models.GongStructShape.NbInstances": (ref_models.GongStructShape{}).NbInstances,
-
-	"ref_models.GongStructShape.Position": (ref_models.GongStructShape{}).Position,
-
-	"ref_models.GongStructShape.ShowNbInstances": (ref_models.GongStructShape{}).ShowNbInstances,
-
-	"ref_models.GongStructShape.Width": (ref_models.GongStructShape{}).Width,
-
-	"ref_models.GongdocStackName": ref_models.GongdocStackName,
-
-	"ref_models.Int": ref_models.Int,
-
-	"ref_models.Link": &(ref_models.Link{}),
-
-	"ref_models.Link.CornerOffsetRatio": (ref_models.Link{}).CornerOffsetRatio,
-
-	"ref_models.Link.EndOrientation": (ref_models.Link{}).EndOrientation,
-
-	"ref_models.Link.EndRatio": (ref_models.Link{}).EndRatio,
-
-	"ref_models.Link.FieldOffsetX": (ref_models.Link{}).FieldOffsetX,
-
-	"ref_models.Link.FieldOffsetY": (ref_models.Link{}).FieldOffsetY,
-
-	"ref_models.Link.Fieldtypename": (ref_models.Link{}).Fieldtypename,
-
-	"ref_models.Link.Identifier": (ref_models.Link{}).Identifier,
-
-	"ref_models.Link.Middlevertice": (ref_models.Link{}).Middlevertice,
-
-	"ref_models.Link.Name": (ref_models.Link{}).Name,
-
-	"ref_models.Link.SourceMultiplicity": (ref_models.Link{}).SourceMultiplicity,
-
-	"ref_models.Link.SourceMultiplicityOffsetX": (ref_models.Link{}).SourceMultiplicityOffsetX,
-
-	"ref_models.Link.SourceMultiplicityOffsetY": (ref_models.Link{}).SourceMultiplicityOffsetY,
-
-	"ref_models.Link.StartOrientation": (ref_models.Link{}).StartOrientation,
-
-	"ref_models.Link.StartRatio": (ref_models.Link{}).StartRatio,
-
-	"ref_models.Link.TargetMultiplicity": (ref_models.Link{}).TargetMultiplicity,
-
-	"ref_models.Link.TargetMultiplicityOffsetX": (ref_models.Link{}).TargetMultiplicityOffsetX,
-
-	"ref_models.Link.TargetMultiplicityOffsetY": (ref_models.Link{}).TargetMultiplicityOffsetY,
-
-	"ref_models.MANY": ref_models.MANY,
-
-	"ref_models.MultiplicityType": ref_models.MultiplicityType(""),
-
-	"ref_models.NOTE_SHAPE_LINK_TO_GONG_FIELD": ref_models.NOTE_SHAPE_LINK_TO_GONG_FIELD,
-
-	"ref_models.NOTE_SHAPE_LINK_TO_GONG_STRUCT_OR_ENUM_SHAPE": ref_models.NOTE_SHAPE_LINK_TO_GONG_STRUCT_OR_ENUM_SHAPE,
-
-	"ref_models.NoteOnGongdoc": ref_models.NoteOnGongdoc,
-
-	"ref_models.NoteShape": &(ref_models.NoteShape{}),
-
-	"ref_models.NoteShape.Body": (ref_models.NoteShape{}).Body,
-
-	"ref_models.NoteShape.BodyHTML": (ref_models.NoteShape{}).BodyHTML,
-
-	"ref_models.NoteShape.Height": (ref_models.NoteShape{}).Height,
-
-	"ref_models.NoteShape.Identifier": (ref_models.NoteShape{}).Identifier,
-
-	"ref_models.NoteShape.Matched": (ref_models.NoteShape{}).Matched,
-
-	"ref_models.NoteShape.Name": (ref_models.NoteShape{}).Name,
-
-	"ref_models.NoteShape.NoteShapeLinks": (ref_models.NoteShape{}).NoteShapeLinks,
-
-	"ref_models.NoteShape.Width": (ref_models.NoteShape{}).Width,
-
-	"ref_models.NoteShape.X": (ref_models.NoteShape{}).X,
-
-	"ref_models.NoteShape.Y": (ref_models.NoteShape{}).Y,
-
-	"ref_models.NoteShapeLink": &(ref_models.NoteShapeLink{}),
-
-	"ref_models.NoteShapeLink.Identifier": (ref_models.NoteShapeLink{}).Identifier,
-
-	"ref_models.NoteShapeLink.Name": (ref_models.NoteShapeLink{}).Name,
-
-	"ref_models.NoteShapeLink.Type": (ref_models.NoteShapeLink{}).Type,
-
-	"ref_models.NoteShapeLinkType": ref_models.NoteShapeLinkType(""),
-
-	"ref_models.ONE": ref_models.ONE,
-
-	"ref_models.ORIENTATION_HORIZONTAL": ref_models.ORIENTATION_HORIZONTAL,
-
-	"ref_models.ORIENTATION_VERTICAL": ref_models.ORIENTATION_VERTICAL,
-
-	"ref_models.OrientationType": ref_models.OrientationType(""),
-
-	"ref_models.Position": &(ref_models.Position{}),
-
-	"ref_models.Position.Name": (ref_models.Position{}).Name,
-
-	"ref_models.Position.X": (ref_models.Position{}).X,
-
-	"ref_models.Position.Y": (ref_models.Position{}).Y,
-
-	"ref_models.StacksNames": ref_models.StacksNames(""),
-
-	"ref_models.String": ref_models.String,
-
-	"ref_models.SvgStackName": ref_models.SvgStackName,
-
-	"ref_models.UmlState": &(ref_models.UmlState{}),
-
-	"ref_models.UmlState.Name": (ref_models.UmlState{}).Name,
-
-	"ref_models.UmlState.X": (ref_models.UmlState{}).X,
-
-	"ref_models.UmlState.Y": (ref_models.UmlState{}).Y,
-
-	"ref_models.Umlsc": &(ref_models.Umlsc{}),
-
-	"ref_models.Umlsc.Activestate": (ref_models.Umlsc{}).Activestate,
-
-	"ref_models.Umlsc.IsInDrawMode": (ref_models.Umlsc{}).IsInDrawMode,
-
-	"ref_models.Umlsc.Name": (ref_models.Umlsc{}).Name,
-
-	"ref_models.Umlsc.States": (ref_models.Umlsc{}).States,
-
-	"ref_models.Vertice": &(ref_models.Vertice{}),
-
-	"ref_models.Vertice.Name": (ref_models.Vertice{}).Name,
-
-	"ref_models.Vertice.X": (ref_models.Vertice{}).X,
-
-	"ref_models.Vertice.Y": (ref_models.Vertice{}).Y,
-
-	"ref_models.ZERO_ONE": ref_models.ZERO_ONE,
+	// injection point for docLink to identifiers{{EntriesDocLinkStringDocLinkIdentifier}}
 }
 
 // function will stage objects
@@ -246,48 +26,48 @@ func _(stage *models.StageStruct) {
 
 	// Declaration of instances to stage
 
-	__Classdiagram__000000_Default := (&models.Classdiagram{Name: `Default`}).Stage(stage)
+	__Classdiagram__000000_Default := (&models.Classdiagram{}).Stage(stage)
 
-	__Field__000000_Name := (&models.Field{Name: `Name`}).Stage(stage)
+	__Field__000000_Name := (&models.Field{}).Stage(stage)
 
-	__GongEnumShape__000000_Default_GongEnumShapeType := (&models.GongEnumShape{Name: `Default-GongEnumShapeType`}).Stage(stage)
-	__GongEnumShape__000001_Default_MultiplicityType := (&models.GongEnumShape{Name: `Default-MultiplicityType`}).Stage(stage)
+	__GongEnumShape__000000_Default_GongEnumShapeType := (&models.GongEnumShape{}).Stage(stage)
+	__GongEnumShape__000001_Default_MultiplicityType := (&models.GongEnumShape{}).Stage(stage)
 
-	__GongEnumValueEntry__000000_Int := (&models.GongEnumValueEntry{Name: `Int`}).Stage(stage)
-	__GongEnumValueEntry__000001_ONE := (&models.GongEnumValueEntry{Name: `ONE`}).Stage(stage)
-	__GongEnumValueEntry__000002_String := (&models.GongEnumValueEntry{Name: `String`}).Stage(stage)
-	__GongEnumValueEntry__000003_ZERO_ONE := (&models.GongEnumValueEntry{Name: `ZERO_ONE`}).Stage(stage)
+	__GongEnumValueEntry__000000_Int := (&models.GongEnumValueEntry{}).Stage(stage)
+	__GongEnumValueEntry__000001_ONE := (&models.GongEnumValueEntry{}).Stage(stage)
+	__GongEnumValueEntry__000002_String := (&models.GongEnumValueEntry{}).Stage(stage)
+	__GongEnumValueEntry__000003_ZERO_ONE := (&models.GongEnumValueEntry{}).Stage(stage)
 
-	__GongStructShape__000000_Default_Classdiagram := (&models.GongStructShape{Name: `Default-Classdiagram`}).Stage(stage)
-	__GongStructShape__000001_Default_DiagramPackage := (&models.GongStructShape{Name: `Default-DiagramPackage`}).Stage(stage)
-	__GongStructShape__000002_Default_Field := (&models.GongStructShape{Name: `Default-Field`}).Stage(stage)
-	__GongStructShape__000003_Default_GongEnumShape := (&models.GongStructShape{Name: `Default-GongEnumShape`}).Stage(stage)
-	__GongStructShape__000004_Default_GongStructShape := (&models.GongStructShape{Name: `Default-GongStructShape`}).Stage(stage)
-	__GongStructShape__000005_Default_NoteShape := (&models.GongStructShape{Name: `Default-NoteShape`}).Stage(stage)
+	__GongStructShape__000000_Default_Classdiagram := (&models.GongStructShape{}).Stage(stage)
+	__GongStructShape__000001_Default_DiagramPackage := (&models.GongStructShape{}).Stage(stage)
+	__GongStructShape__000002_Default_Field := (&models.GongStructShape{}).Stage(stage)
+	__GongStructShape__000003_Default_GongEnumShape := (&models.GongStructShape{}).Stage(stage)
+	__GongStructShape__000004_Default_GongStructShape := (&models.GongStructShape{}).Stage(stage)
+	__GongStructShape__000005_Default_NoteShape := (&models.GongStructShape{}).Stage(stage)
 
-	__Link__000000_Classdiagrams := (&models.Link{Name: `Classdiagrams`}).Stage(stage)
-	__Link__000001_Fields := (&models.Link{Name: `Fields`}).Stage(stage)
-	__Link__000002_NoteShapes := (&models.Link{Name: `NoteShapes`}).Stage(stage)
-	__Link__000003_SelectedClassdiagram := (&models.Link{Name: `SelectedClassdiagram`}).Stage(stage)
+	__Link__000000_Classdiagrams := (&models.Link{}).Stage(stage)
+	__Link__000001_Fields := (&models.Link{}).Stage(stage)
+	__Link__000002_NoteShapes := (&models.Link{}).Stage(stage)
+	__Link__000003_SelectedClassdiagram := (&models.Link{}).Stage(stage)
 
-	__NoteShape__000000_NoteOnGongdoc := (&models.NoteShape{Name: `NoteOnGongdoc`}).Stage(stage)
+	__NoteShape__000000_NoteOnGongdoc := (&models.NoteShape{}).Stage(stage)
 
-	__NoteShapeLink__000000_Classdiagram_NoteShapes := (&models.NoteShapeLink{Name: `Classdiagram.NoteShapes`}).Stage(stage)
-	__NoteShapeLink__000001_NoteShape := (&models.NoteShapeLink{Name: `NoteShape`}).Stage(stage)
+	__NoteShapeLink__000000_Classdiagram_NoteShapes := (&models.NoteShapeLink{}).Stage(stage)
+	__NoteShapeLink__000001_NoteShape := (&models.NoteShapeLink{}).Stage(stage)
 
-	__Position__000000_Pos_Default_Classdiagram := (&models.Position{Name: `Pos-Default-Classdiagram`}).Stage(stage)
-	__Position__000001_Pos_Default_DiagramPackage := (&models.Position{Name: `Pos-Default-DiagramPackage`}).Stage(stage)
-	__Position__000002_Pos_Default_Field := (&models.Position{Name: `Pos-Default-Field`}).Stage(stage)
-	__Position__000003_Pos_Default_GongEnumShape := (&models.Position{Name: `Pos-Default-GongEnumShape`}).Stage(stage)
-	__Position__000004_Pos_Default_GongEnumShapeType := (&models.Position{Name: `Pos-Default-GongEnumShapeType`}).Stage(stage)
-	__Position__000005_Pos_Default_GongStructShape := (&models.Position{Name: `Pos-Default-GongStructShape`}).Stage(stage)
-	__Position__000006_Pos_Default_MultiplicityType := (&models.Position{Name: `Pos-Default-MultiplicityType`}).Stage(stage)
-	__Position__000007_Pos_Default_NoteShape := (&models.Position{Name: `Pos-Default-NoteShape`}).Stage(stage)
+	__Position__000000_Pos_Default_Classdiagram := (&models.Position{}).Stage(stage)
+	__Position__000001_Pos_Default_DiagramPackage := (&models.Position{}).Stage(stage)
+	__Position__000002_Pos_Default_Field := (&models.Position{}).Stage(stage)
+	__Position__000003_Pos_Default_GongEnumShape := (&models.Position{}).Stage(stage)
+	__Position__000004_Pos_Default_GongEnumShapeType := (&models.Position{}).Stage(stage)
+	__Position__000005_Pos_Default_GongStructShape := (&models.Position{}).Stage(stage)
+	__Position__000006_Pos_Default_MultiplicityType := (&models.Position{}).Stage(stage)
+	__Position__000007_Pos_Default_NoteShape := (&models.Position{}).Stage(stage)
 
-	__Vertice__000000_Verticle_in_class_diagram_Default_in_middle_between_Default_Classdiagram_and_Default_NoteShape := (&models.Vertice{Name: `Verticle in class diagram Default in middle between Default-Classdiagram and Default-NoteShape`}).Stage(stage)
-	__Vertice__000001_Verticle_in_class_diagram_Default_in_middle_between_Default_DiagramPackage_and_Default_Classdiagram := (&models.Vertice{Name: `Verticle in class diagram Default in middle between Default-DiagramPackage and Default-Classdiagram`}).Stage(stage)
-	__Vertice__000002_Verticle_in_class_diagram_Default_in_middle_between_Default_DiagramPackage_and_Default_Classdiagram := (&models.Vertice{Name: `Verticle in class diagram Default in middle between Default-DiagramPackage and Default-Classdiagram`}).Stage(stage)
-	__Vertice__000003_Verticle_in_class_diagram_Default_in_middle_between_Default_GongStructShape_and_Default_Field := (&models.Vertice{Name: `Verticle in class diagram Default in middle between Default-GongStructShape and Default-Field`}).Stage(stage)
+	__Vertice__000000_Verticle_in_class_diagram_Default_in_middle_between_Default_Classdiagram_and_Default_NoteShape := (&models.Vertice{}).Stage(stage)
+	__Vertice__000001_Verticle_in_class_diagram_Default_in_middle_between_Default_DiagramPackage_and_Default_Classdiagram := (&models.Vertice{}).Stage(stage)
+	__Vertice__000002_Verticle_in_class_diagram_Default_in_middle_between_Default_DiagramPackage_and_Default_Classdiagram := (&models.Vertice{}).Stage(stage)
+	__Vertice__000003_Verticle_in_class_diagram_Default_in_middle_between_Default_GongStructShape_and_Default_Field := (&models.Vertice{}).Stage(stage)
 
 	// Setup of values
 
@@ -521,8 +301,8 @@ or to <a href="/models#OrientationType">models.OrientationType</a>
 	__Position__000001_Pos_Default_DiagramPackage.Y = 181.000000
 	__Position__000001_Pos_Default_DiagramPackage.Name = `Pos-Default-DiagramPackage`
 
-	__Position__000002_Pos_Default_Field.X = 595.000000
-	__Position__000002_Pos_Default_Field.Y = 558.000000
+	__Position__000002_Pos_Default_Field.X = 659.000000
+	__Position__000002_Pos_Default_Field.Y = 554.000000
 	__Position__000002_Pos_Default_Field.Name = `Pos-Default-Field`
 
 	__Position__000003_Pos_Default_GongEnumShape.X = 35.000000
