@@ -165,7 +165,7 @@ func (backRepoUmlState *BackRepoUmlStateStruct) CommitDeleteInstance(id uint) (E
 	// umlstate is not staged anymore, remove umlstateDB
 	umlstateDB := backRepoUmlState.Map_UmlStateDBID_UmlStateDB[id]
 	db, _ := backRepoUmlState.db.Unscoped()
-	_, err := db.Delete(&umlstateDB)
+	_, err := db.Delete(umlstateDB)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -225,7 +225,7 @@ func (backRepoUmlState *BackRepoUmlStateStruct) CommitPhaseTwoInstance(backRepo 
 		umlstateDB.CopyBasicFieldsFromUmlState(umlstate)
 
 		// insertion point for translating pointers encodings into actual pointers
-		_, err := backRepoUmlState.db.Save(&umlstateDB)
+		_, err := backRepoUmlState.db.Save(umlstateDB)
 		if err != nil {
 			log.Fatal(err)
 		}

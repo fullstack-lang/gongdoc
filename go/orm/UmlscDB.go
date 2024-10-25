@@ -169,7 +169,7 @@ func (backRepoUmlsc *BackRepoUmlscStruct) CommitDeleteInstance(id uint) (Error e
 	// umlsc is not staged anymore, remove umlscDB
 	umlscDB := backRepoUmlsc.Map_UmlscDBID_UmlscDB[id]
 	db, _ := backRepoUmlsc.db.Unscoped()
-	_, err := db.Delete(&umlscDB)
+	_, err := db.Delete(umlscDB)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -247,7 +247,7 @@ func (backRepoUmlsc *BackRepoUmlscStruct) CommitPhaseTwoInstance(backRepo *BackR
 				append(umlscDB.UmlscPointersEncoding.States, int(umlstateAssocEnd_DB.ID))
 		}
 
-		_, err := backRepoUmlsc.db.Save(&umlscDB)
+		_, err := backRepoUmlsc.db.Save(umlscDB)
 		if err != nil {
 			log.Fatal(err)
 		}

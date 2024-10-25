@@ -201,7 +201,7 @@ func (backRepoGongStructShape *BackRepoGongStructShapeStruct) CommitDeleteInstan
 	// gongstructshape is not staged anymore, remove gongstructshapeDB
 	gongstructshapeDB := backRepoGongStructShape.Map_GongStructShapeDBID_GongStructShapeDB[id]
 	db, _ := backRepoGongStructShape.db.Unscoped()
-	_, err := db.Delete(&gongstructshapeDB)
+	_, err := db.Delete(gongstructshapeDB)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -309,7 +309,7 @@ func (backRepoGongStructShape *BackRepoGongStructShapeStruct) CommitPhaseTwoInst
 				append(gongstructshapeDB.GongStructShapePointersEncoding.Links, int(linkAssocEnd_DB.ID))
 		}
 
-		_, err := backRepoGongStructShape.db.Save(&gongstructshapeDB)
+		_, err := backRepoGongStructShape.db.Save(gongstructshapeDB)
 		if err != nil {
 			log.Fatal(err)
 		}

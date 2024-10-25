@@ -165,7 +165,7 @@ func (backRepoVertice *BackRepoVerticeStruct) CommitDeleteInstance(id uint) (Err
 	// vertice is not staged anymore, remove verticeDB
 	verticeDB := backRepoVertice.Map_VerticeDBID_VerticeDB[id]
 	db, _ := backRepoVertice.db.Unscoped()
-	_, err := db.Delete(&verticeDB)
+	_, err := db.Delete(verticeDB)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -225,7 +225,7 @@ func (backRepoVertice *BackRepoVerticeStruct) CommitPhaseTwoInstance(backRepo *B
 		verticeDB.CopyBasicFieldsFromVertice(vertice)
 
 		// insertion point for translating pointers encodings into actual pointers
-		_, err := backRepoVertice.db.Save(&verticeDB)
+		_, err := backRepoVertice.db.Save(verticeDB)
 		if err != nil {
 			log.Fatal(err)
 		}

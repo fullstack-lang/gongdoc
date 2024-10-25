@@ -165,7 +165,7 @@ func (backRepoNoteShapeLink *BackRepoNoteShapeLinkStruct) CommitDeleteInstance(i
 	// noteshapelink is not staged anymore, remove noteshapelinkDB
 	noteshapelinkDB := backRepoNoteShapeLink.Map_NoteShapeLinkDBID_NoteShapeLinkDB[id]
 	db, _ := backRepoNoteShapeLink.db.Unscoped()
-	_, err := db.Delete(&noteshapelinkDB)
+	_, err := db.Delete(noteshapelinkDB)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -225,7 +225,7 @@ func (backRepoNoteShapeLink *BackRepoNoteShapeLinkStruct) CommitPhaseTwoInstance
 		noteshapelinkDB.CopyBasicFieldsFromNoteShapeLink(noteshapelink)
 
 		// insertion point for translating pointers encodings into actual pointers
-		_, err := backRepoNoteShapeLink.db.Save(&noteshapelinkDB)
+		_, err := backRepoNoteShapeLink.db.Save(noteshapelinkDB)
 		if err != nil {
 			log.Fatal(err)
 		}

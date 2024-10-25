@@ -195,7 +195,7 @@ func (backRepoDiagramPackage *BackRepoDiagramPackageStruct) CommitDeleteInstance
 	// diagrampackage is not staged anymore, remove diagrampackageDB
 	diagrampackageDB := backRepoDiagramPackage.Map_DiagramPackageDBID_DiagramPackageDB[id]
 	db, _ := backRepoDiagramPackage.db.Unscoped()
-	_, err := db.Delete(&diagrampackageDB)
+	_, err := db.Delete(diagrampackageDB)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -303,7 +303,7 @@ func (backRepoDiagramPackage *BackRepoDiagramPackageStruct) CommitPhaseTwoInstan
 				append(diagrampackageDB.DiagramPackagePointersEncoding.Umlscs, int(umlscAssocEnd_DB.ID))
 		}
 
-		_, err := backRepoDiagramPackage.db.Save(&diagrampackageDB)
+		_, err := backRepoDiagramPackage.db.Save(diagrampackageDB)
 		if err != nil {
 			log.Fatal(err)
 		}

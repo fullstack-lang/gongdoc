@@ -169,7 +169,7 @@ func (backRepoClassdiagram *BackRepoClassdiagramStruct) CommitDeleteInstance(id 
 	// classdiagram is not staged anymore, remove classdiagramDB
 	classdiagramDB := backRepoClassdiagram.Map_ClassdiagramDBID_ClassdiagramDB[id]
 	db, _ := backRepoClassdiagram.db.Unscoped()
-	_, err := db.Delete(&classdiagramDB)
+	_, err := db.Delete(classdiagramDB)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -283,7 +283,7 @@ func (backRepoClassdiagram *BackRepoClassdiagramStruct) CommitPhaseTwoInstance(b
 				append(classdiagramDB.ClassdiagramPointersEncoding.NoteShapes, int(noteshapeAssocEnd_DB.ID))
 		}
 
-		_, err := backRepoClassdiagram.db.Save(&classdiagramDB)
+		_, err := backRepoClassdiagram.db.Save(classdiagramDB)
 		if err != nil {
 			log.Fatal(err)
 		}

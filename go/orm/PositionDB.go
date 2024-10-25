@@ -165,7 +165,7 @@ func (backRepoPosition *BackRepoPositionStruct) CommitDeleteInstance(id uint) (E
 	// position is not staged anymore, remove positionDB
 	positionDB := backRepoPosition.Map_PositionDBID_PositionDB[id]
 	db, _ := backRepoPosition.db.Unscoped()
-	_, err := db.Delete(&positionDB)
+	_, err := db.Delete(positionDB)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -225,7 +225,7 @@ func (backRepoPosition *BackRepoPositionStruct) CommitPhaseTwoInstance(backRepo 
 		positionDB.CopyBasicFieldsFromPosition(position)
 
 		// insertion point for translating pointers encodings into actual pointers
-		_, err := backRepoPosition.db.Save(&positionDB)
+		_, err := backRepoPosition.db.Save(positionDB)
 		if err != nil {
 			log.Fatal(err)
 		}

@@ -178,7 +178,7 @@ func (backRepoGongEnumShape *BackRepoGongEnumShapeStruct) CommitDeleteInstance(i
 	// gongenumshape is not staged anymore, remove gongenumshapeDB
 	gongenumshapeDB := backRepoGongEnumShape.Map_GongEnumShapeDBID_GongEnumShapeDB[id]
 	db, _ := backRepoGongEnumShape.db.Unscoped()
-	_, err := db.Delete(&gongenumshapeDB)
+	_, err := db.Delete(gongenumshapeDB)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -268,7 +268,7 @@ func (backRepoGongEnumShape *BackRepoGongEnumShapeStruct) CommitPhaseTwoInstance
 				append(gongenumshapeDB.GongEnumShapePointersEncoding.GongEnumValueEntrys, int(gongenumvalueentryAssocEnd_DB.ID))
 		}
 
-		_, err := backRepoGongEnumShape.db.Save(&gongenumshapeDB)
+		_, err := backRepoGongEnumShape.db.Save(gongenumshapeDB)
 		if err != nil {
 			log.Fatal(err)
 		}

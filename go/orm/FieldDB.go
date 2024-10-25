@@ -177,7 +177,7 @@ func (backRepoField *BackRepoFieldStruct) CommitDeleteInstance(id uint) (Error e
 	// field is not staged anymore, remove fieldDB
 	fieldDB := backRepoField.Map_FieldDBID_FieldDB[id]
 	db, _ := backRepoField.db.Unscoped()
-	_, err := db.Delete(&fieldDB)
+	_, err := db.Delete(fieldDB)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -237,7 +237,7 @@ func (backRepoField *BackRepoFieldStruct) CommitPhaseTwoInstance(backRepo *BackR
 		fieldDB.CopyBasicFieldsFromField(field)
 
 		// insertion point for translating pointers encodings into actual pointers
-		_, err := backRepoField.db.Save(&fieldDB)
+		_, err := backRepoField.db.Save(fieldDB)
 		if err != nil {
 			log.Fatal(err)
 		}

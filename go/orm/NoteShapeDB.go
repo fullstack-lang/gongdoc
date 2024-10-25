@@ -205,7 +205,7 @@ func (backRepoNoteShape *BackRepoNoteShapeStruct) CommitDeleteInstance(id uint) 
 	// noteshape is not staged anymore, remove noteshapeDB
 	noteshapeDB := backRepoNoteShape.Map_NoteShapeDBID_NoteShapeDB[id]
 	db, _ := backRepoNoteShape.db.Unscoped()
-	_, err := db.Delete(&noteshapeDB)
+	_, err := db.Delete(noteshapeDB)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -283,7 +283,7 @@ func (backRepoNoteShape *BackRepoNoteShapeStruct) CommitPhaseTwoInstance(backRep
 				append(noteshapeDB.NoteShapePointersEncoding.NoteShapeLinks, int(noteshapelinkAssocEnd_DB.ID))
 		}
 
-		_, err := backRepoNoteShape.db.Save(&noteshapeDB)
+		_, err := backRepoNoteShape.db.Save(noteshapeDB)
 		if err != nil {
 			log.Fatal(err)
 		}

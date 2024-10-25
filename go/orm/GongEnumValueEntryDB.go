@@ -159,7 +159,7 @@ func (backRepoGongEnumValueEntry *BackRepoGongEnumValueEntryStruct) CommitDelete
 	// gongenumvalueentry is not staged anymore, remove gongenumvalueentryDB
 	gongenumvalueentryDB := backRepoGongEnumValueEntry.Map_GongEnumValueEntryDBID_GongEnumValueEntryDB[id]
 	db, _ := backRepoGongEnumValueEntry.db.Unscoped()
-	_, err := db.Delete(&gongenumvalueentryDB)
+	_, err := db.Delete(gongenumvalueentryDB)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -219,7 +219,7 @@ func (backRepoGongEnumValueEntry *BackRepoGongEnumValueEntryStruct) CommitPhaseT
 		gongenumvalueentryDB.CopyBasicFieldsFromGongEnumValueEntry(gongenumvalueentry)
 
 		// insertion point for translating pointers encodings into actual pointers
-		_, err := backRepoGongEnumValueEntry.db.Save(&gongenumvalueentryDB)
+		_, err := backRepoGongEnumValueEntry.db.Save(gongenumvalueentryDB)
 		if err != nil {
 			log.Fatal(err)
 		}
