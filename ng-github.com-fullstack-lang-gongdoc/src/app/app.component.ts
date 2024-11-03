@@ -43,11 +43,10 @@ export class AppComponent implements OnInit {
 
   default = 'DOC Data/Model'
   diagrammer = 'Diagram Edition'
-  view = this.diagrammer
   probe = "probe"
-  svg_probe = "SVG probe"
+  view = this.probe
 
-  views: string[] = [this.diagrammer, this.probe, this.svg_probe];
+  views: string[] = [this.diagrammer, this.probe];
 
   GONG__MODEL__StacksPath = "github.com/fullstack-lang/gongdoc/go/models"
   GONG__DATA__StackPath = "gongdoc"
