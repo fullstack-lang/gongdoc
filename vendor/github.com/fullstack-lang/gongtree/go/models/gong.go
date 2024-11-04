@@ -5,7 +5,6 @@ import (
 	"cmp"
 	"errors"
 	"fmt"
-	"log"
 	"math"
 	"slices"
 	"time"
@@ -211,7 +210,6 @@ func (stage *StageStruct) CommitWithSuspendedCallbacks() {
 }
 
 func (stage *StageStruct) Commit() {
-	log.Println(time.Now().Format(time.RFC3339Nano), "gong tree commit", stage.path)
 	stage.ComputeReverseMaps()
 
 	if stage.BackRepo != nil {
