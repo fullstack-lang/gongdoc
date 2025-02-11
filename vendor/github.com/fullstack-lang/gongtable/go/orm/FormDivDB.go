@@ -418,16 +418,48 @@ func (formdivDB *FormDivDB) DecodePointers(backRepo *BackRepoStruct, formdiv *mo
 		formdiv.CheckBoxs = append(formdiv.CheckBoxs, backRepo.BackRepoCheckBox.Map_CheckBoxDBID_CheckBoxPtr[uint(_CheckBoxid)])
 	}
 
-	// FormEditAssocButton field
-	formdiv.FormEditAssocButton = nil
-	if formdivDB.FormEditAssocButtonID.Int64 != 0 {
-		formdiv.FormEditAssocButton = backRepo.BackRepoFormEditAssocButton.Map_FormEditAssocButtonDBID_FormEditAssocButtonPtr[uint(formdivDB.FormEditAssocButtonID.Int64)]
+	// FormEditAssocButton field	
+	{
+		id := formdivDB.FormEditAssocButtonID.Int64
+		if id != 0 {
+			tmp, ok := backRepo.BackRepoFormEditAssocButton.Map_FormEditAssocButtonDBID_FormEditAssocButtonPtr[uint(id)]
+
+			// if the pointer id is unknown, it is not a problem, maybe the target was removed from the front
+			if !ok {
+				log.Println("DecodePointers: formdiv.FormEditAssocButton, unknown pointer id", id)
+				formdiv.FormEditAssocButton = nil
+			} else {
+				// updates only if field has changed
+				if formdiv.FormEditAssocButton == nil || formdiv.FormEditAssocButton != tmp {
+					formdiv.FormEditAssocButton = tmp
+				}
+			}
+		} else {
+			formdiv.FormEditAssocButton = nil
+		}
 	}
-	// FormSortAssocButton field
-	formdiv.FormSortAssocButton = nil
-	if formdivDB.FormSortAssocButtonID.Int64 != 0 {
-		formdiv.FormSortAssocButton = backRepo.BackRepoFormSortAssocButton.Map_FormSortAssocButtonDBID_FormSortAssocButtonPtr[uint(formdivDB.FormSortAssocButtonID.Int64)]
+	
+	// FormSortAssocButton field	
+	{
+		id := formdivDB.FormSortAssocButtonID.Int64
+		if id != 0 {
+			tmp, ok := backRepo.BackRepoFormSortAssocButton.Map_FormSortAssocButtonDBID_FormSortAssocButtonPtr[uint(id)]
+
+			// if the pointer id is unknown, it is not a problem, maybe the target was removed from the front
+			if !ok {
+				log.Println("DecodePointers: formdiv.FormSortAssocButton, unknown pointer id", id)
+				formdiv.FormSortAssocButton = nil
+			} else {
+				// updates only if field has changed
+				if formdiv.FormSortAssocButton == nil || formdiv.FormSortAssocButton != tmp {
+					formdiv.FormSortAssocButton = tmp
+				}
+			}
+		} else {
+			formdiv.FormSortAssocButton = nil
+		}
 	}
+	
 	return
 }
 

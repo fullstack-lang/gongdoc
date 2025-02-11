@@ -348,11 +348,27 @@ func (backRepoButton *BackRepoButtonStruct) CheckoutPhaseTwoInstance(backRepo *B
 func (buttonDB *ButtonDB) DecodePointers(backRepo *BackRepoStruct, button *models.Button) {
 
 	// insertion point for checkout of pointer encoding
-	// SVGIcon field
-	button.SVGIcon = nil
-	if buttonDB.SVGIconID.Int64 != 0 {
-		button.SVGIcon = backRepo.BackRepoSVGIcon.Map_SVGIconDBID_SVGIconPtr[uint(buttonDB.SVGIconID.Int64)]
+	// SVGIcon field	
+	{
+		id := buttonDB.SVGIconID.Int64
+		if id != 0 {
+			tmp, ok := backRepo.BackRepoSVGIcon.Map_SVGIconDBID_SVGIconPtr[uint(id)]
+
+			// if the pointer id is unknown, it is not a problem, maybe the target was removed from the front
+			if !ok {
+				log.Println("DecodePointers: button.SVGIcon, unknown pointer id", id)
+				button.SVGIcon = nil
+			} else {
+				// updates only if field has changed
+				if button.SVGIcon == nil || button.SVGIcon != tmp {
+					button.SVGIcon = tmp
+				}
+			}
+		} else {
+			button.SVGIcon = nil
+		}
 	}
+	
 	return
 }
 
