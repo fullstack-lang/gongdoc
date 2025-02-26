@@ -30,7 +30,6 @@
 			},
 			"command": "ng build",
 			"group": "build",
-			"dependsOn": "00 - update deps & go mod vendor"
 		},
 		{
 			"label": "02 - go run",
@@ -279,17 +278,6 @@
 				"tidy"
 			],
 			"group": "build"
-		},
-		{
-			"label": "00 - update deps & go mod vendor",
-			"type": "shell",
-			"command": "go",
-			"args": [
-				"mod",
-				"vendor"
-			],
-			"group": "build",
-			"dependsOn": "00 - update dependencies"
 		},
 		{
 			"label": "00 - go get -d github.com/fullstack-lang/gong@HEAD",
