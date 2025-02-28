@@ -9,15 +9,14 @@ import { TreeComponent } from '@vendored_components/github.com/fullstack-lang/go
 import { GongsvgDiagrammingComponent } from '@vendored_components/github.com/fullstack-lang/gongsvg/ng-github.com-fullstack-lang-gongsvg/projects/gongsvgspecific/src/lib/gongsvg-diagramming/gongsvg-diagramming'
 
 @Component({
-  selector: 'lib-pkgelt-docs',
-  templateUrl: './pkgelt-docs.component.html',
-  styleUrls: ['./pkgelt-docs.component.css'],
-  standalone: true,
-  imports: [
-    AngularSplitModule,
-    TreeComponent,
-    GongsvgDiagrammingComponent
-  ]
+    selector: 'lib-pkgelt-docs',
+    templateUrl: './pkgelt-docs.component.html',
+    styleUrls: ['./pkgelt-docs.component.css'],
+    imports: [
+        AngularSplitModule,
+        TreeComponent,
+        GongsvgDiagrammingComponent
+    ]
 })
 export class PkgeltDocsComponent implements OnInit {
 

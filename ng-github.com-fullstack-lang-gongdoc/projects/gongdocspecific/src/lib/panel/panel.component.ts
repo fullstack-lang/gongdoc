@@ -11,21 +11,18 @@ import { AngularSplitModule } from 'angular-split';
 import { PkgeltDocsComponent } from '../pkgelt-docs/pkgelt-docs.component'
 
 @Component({
-  selector: 'lib-panel',
-  templateUrl: './panel.component.html',
-  styleUrls: ['./panel.component.css'],
-  standalone: true,
-  imports: [
-    MatRadioModule,
-    FormsModule,
-    CommonModule,
-    MatButtonModule,
-    MatIconModule,
-
-    AngularSplitModule,
-
-    PkgeltDocsComponent
-  ],
+    selector: 'lib-panel',
+    templateUrl: './panel.component.html',
+    styleUrls: ['./panel.component.css'],
+    imports: [
+        MatRadioModule,
+        FormsModule,
+        CommonModule,
+        MatButtonModule,
+        MatIconModule,
+        AngularSplitModule,
+        PkgeltDocsComponent
+    ]
 })
 export class PanelComponent implements OnInit {
 

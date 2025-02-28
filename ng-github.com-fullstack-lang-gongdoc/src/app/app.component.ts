@@ -20,24 +20,20 @@ import * as gongdoc from '../../projects/gongdoc/src/public-api'
 import * as gongsvg from '@vendored_components/github.com/fullstack-lang/gongsvg/ng-github.com-fullstack-lang-gongsvg/projects/gongsvg/src/public-api'
 
 @Component({
-  selector: 'app-root',
-  templateUrl: './app.component.html',
-  standalone: true,
-  imports: [
-    MatRadioModule,
-    FormsModule,
-    CommonModule,
-    MatButtonModule,
-    MatIconModule,
-
-    AngularSplitModule,
-
-    TreeComponent,
-    MaterialTableComponent,
-    MaterialFormComponent,
-
-    PanelComponent,
-  ]
+    selector: 'app-root',
+    templateUrl: './app.component.html',
+    imports: [
+        MatRadioModule,
+        FormsModule,
+        CommonModule,
+        MatButtonModule,
+        MatIconModule,
+        AngularSplitModule,
+        TreeComponent,
+        MaterialTableComponent,
+        MaterialFormComponent,
+        PanelComponent,
+    ]
 })
 export class AppComponent implements OnInit {
 
