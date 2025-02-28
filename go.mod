@@ -4,7 +4,7 @@ go 1.23.1
 
 require (
 	github.com/frankban/quicktest v1.14.6 // indirect
-	github.com/fullstack-lang/gong v0.0.0-20250227235007-1303c6f936cf
+	github.com/fullstack-lang/gong v0.0.0-20250228015728-c81eed3e9613
 	github.com/gin-contrib/cors v1.7.3
 	github.com/gin-contrib/static v1.1.3
 	github.com/gin-gonic/gin v1.10.0
@@ -23,9 +23,9 @@ require (
 )
 
 require (
-	github.com/fullstack-lang/gongsvg v0.0.0-20250228013549-77970c8647a2
-	github.com/fullstack-lang/gongtable v0.0.0-20250226015953-728e9cc7f4d2
-	github.com/fullstack-lang/gongtree v0.0.0-20250226015955-cc1d0cbcaf4a
+	github.com/fullstack-lang/gongsvg v0.0.0-20250228015811-ca84f5f68f48
+	github.com/fullstack-lang/gongtable v0.0.0-20250228015820-9014f126a754
+	github.com/fullstack-lang/gongtree v0.0.0-20250228015837-888a66e7bf0c
 	github.com/fullstack-lang/maticons v0.0.0-20240913013021-27a7b8fd9369
 	github.com/glebarez/sqlite v1.11.0
 	github.com/gorilla/websocket v1.5.3
