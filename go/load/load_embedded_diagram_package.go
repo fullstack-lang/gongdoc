@@ -10,7 +10,7 @@ import (
 	gong_models "github.com/fullstack-lang/gong/go/models"
 	gongdoc_models "github.com/fullstack-lang/gongdoc/go/models"
 
-	gongtree_models "github.com/fullstack-lang/gongtree/go/models"
+	gongtree_models "github.com/fullstack-lang/gong/lib/tree/go/models"
 )
 
 func LoadEmbeddedDiagramPackage(

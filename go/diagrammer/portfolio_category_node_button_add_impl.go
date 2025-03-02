@@ -1,7 +1,7 @@
 package diagrammer
 
 import (
-	gongtree_models "github.com/fullstack-lang/gongtree/go/models"
+	gongtree_models "github.com/fullstack-lang/gong/lib/tree/go/models"
 )
 
 type PortfolioCategoryNodeButtonAddImpl struct {

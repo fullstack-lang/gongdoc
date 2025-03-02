@@ -3,7 +3,7 @@ package diagrammer
 import (
 	"slices"
 
-	gongtree_models "github.com/fullstack-lang/gongtree/go/models"
+	gongtree_models "github.com/fullstack-lang/gong/lib/tree/go/models"
 )
 
 type ButtonType int

@@ -1,13 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 
-import { MatRadioModule } from '@angular/material/radio';
-import { FormsModule } from '@angular/forms';
-import { CommonModule } from '@angular/common';
-import { MatButtonModule } from '@angular/material/button';
-import { MatIconModule } from '@angular/material/icon';
-
-import { AngularSplitModule } from 'angular-split';
-
 import { PkgeltDocsComponent } from '../../projects/gongdocspecific/src/lib/pkgelt-docs/pkgelt-docs.component'
 
 import * as gongtable from '@vendored_components/github.com/fullstack-lang/gongtable/ng-github.com-fullstack-lang-gongtable/projects/gongtable/src/public-api';
@@ -20,13 +12,6 @@ import * as svg from '@vendored_components/github.com/fullstack-lang/gong/lib/sv
     selector: 'app-root',
     templateUrl: './app.component.html',
     imports: [
-        MatRadioModule,
-        FormsModule,
-        CommonModule,
-        MatButtonModule,
-        MatIconModule,
-        AngularSplitModule,
-
         PkgeltDocsComponent,
 
     ]

@@ -4,7 +4,7 @@ import { Router, RouterState } from '@angular/router';
 
 import { AngularSplitModule } from 'angular-split';
 
-import { TreeComponent } from '@vendored_components/github.com/fullstack-lang/gongtree/ng-github.com-fullstack-lang-gongtree/projects/gongtreespecific/src/public-api'
+import { TreeSpecificComponent } from '@vendored_components/github.com/fullstack-lang/gong/lib/tree/ng-github.com-fullstack-lang-gong-lib-tree/projects/treespecific/src/lib/tree-specific/tree-specific.component'
 import { SvgSpecificComponent } from '@vendored_components/github.com/fullstack-lang/gong/lib/svg/ng-github.com-fullstack-lang-gong-lib-svg/projects/svgspecific/src/lib/svg-specific/svg-specific.component'
 
 
@@ -14,7 +14,7 @@ import { SvgSpecificComponent } from '@vendored_components/github.com/fullstack-
     styleUrls: ['./pkgelt-docs.component.css'],
     imports: [
         AngularSplitModule,
-        TreeComponent,
+        TreeSpecificComponent,
         SvgSpecificComponent,
     ]
 })

@@ -17,8 +17,8 @@ import (
 	gongsvg_fullstack "github.com/fullstack-lang/gong/lib/svg/go/fullstack"
 	"github.com/fullstack-lang/gongdoc/go/doc2svg"
 
-	gongtree_fullstack "github.com/fullstack-lang/gongtree/go/fullstack"
-	gongtree_models "github.com/fullstack-lang/gongtree/go/models"
+	gongtree_fullstack "github.com/fullstack-lang/gong/lib/tree/go/fullstack"
+	gongtree_models "github.com/fullstack-lang/gong/lib/tree/go/models"
 
 	"github.com/gin-gonic/gin"
 )

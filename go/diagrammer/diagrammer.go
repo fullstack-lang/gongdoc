@@ -3,7 +3,7 @@ package diagrammer
 import (
 	"log"
 
-	gongtree_models "github.com/fullstack-lang/gongtree/go/models"
+	gongtree_models "github.com/fullstack-lang/gong/lib/tree/go/models"
 
 	"github.com/fullstack-lang/maticons/maticons"
 )
