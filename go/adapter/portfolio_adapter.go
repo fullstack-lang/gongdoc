@@ -3,7 +3,7 @@ package adapter
 import (
 	gong_models "github.com/fullstack-lang/gong/go/models"
 
-	gongsvg_models "github.com/fullstack-lang/gongsvg/go/models"
+	gongsvg_models "github.com/fullstack-lang/gong/lib/svg/go/models"
 
 	gongdoc_models "github.com/fullstack-lang/gongdoc/go/models"
 

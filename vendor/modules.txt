@@ -60,15 +60,13 @@ github.com/fullstack-lang/gong/go/fullstack
 github.com/fullstack-lang/gong/go/ignore
 github.com/fullstack-lang/gong/go/models
 github.com/fullstack-lang/gong/go/orm
+github.com/fullstack-lang/gong/lib/svg/go/controllers
+github.com/fullstack-lang/gong/lib/svg/go/db
+github.com/fullstack-lang/gong/lib/svg/go/fullstack
+github.com/fullstack-lang/gong/lib/svg/go/models
+github.com/fullstack-lang/gong/lib/svg/go/orm
+github.com/fullstack-lang/gong/lib/svg/ng-github.com-fullstack-lang-gong-lib-svg
 github.com/fullstack-lang/gong/ng-github.com-fullstack-lang-gong
-# github.com/fullstack-lang/gongsvg v0.0.0-20250228023049-bb49bd65c7c6
-## explicit; go 1.23.1
-github.com/fullstack-lang/gongsvg/go/controllers
-github.com/fullstack-lang/gongsvg/go/db
-github.com/fullstack-lang/gongsvg/go/fullstack
-github.com/fullstack-lang/gongsvg/go/models
-github.com/fullstack-lang/gongsvg/go/orm
-github.com/fullstack-lang/gongsvg/ng-github.com-fullstack-lang-gongsvg
 # github.com/fullstack-lang/gongtable v0.0.0-20250228023050-cc13aa50af79
 ## explicit; go 1.23.1
 github.com/fullstack-lang/gongtable/go/controllers

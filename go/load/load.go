@@ -14,8 +14,8 @@ import (
 	gongdoc_fullstack "github.com/fullstack-lang/gongdoc/go/fullstack"
 	gongdoc_models "github.com/fullstack-lang/gongdoc/go/models"
 
+	gongsvg_fullstack "github.com/fullstack-lang/gong/lib/svg/go/fullstack"
 	"github.com/fullstack-lang/gongdoc/go/doc2svg"
-	gongsvg_fullstack "github.com/fullstack-lang/gongsvg/go/fullstack"
 
 	gongtree_fullstack "github.com/fullstack-lang/gongtree/go/fullstack"
 	gongtree_models "github.com/fullstack-lang/gongtree/go/models"
@@ -35,7 +35,7 @@ func (beforeCommitImplementation *BeforeCommitImplementation) BeforeCommit(gongd
 // Load have gongdoc init itself and the gong stack as well
 // then parse the model source code in [goSourceDirectories]
 // [stackName], for instance "gongsvg"
-// of the gong stack [pathPath], for instance "github.com/fullstack-lang/gongsvg/go/models"
+// of the gong stack [pathPath], for instance "github.com/fullstack-lang/gong/lib/svg/go/models"
 // then parse the diagram.
 // the diagram  can be embedded if [embeddedDiagrams] is true (possible if
 // no edit is wished and if the binary need to be shipped as a standalone item)
