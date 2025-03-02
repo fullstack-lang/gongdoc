@@ -36,20 +36,16 @@ import { LinkSegmentsPipe } from '../link-segments.pipe'
 import { formatSVG, processSVG } from '../cleanandresizesvg'
 
 @Component({
-  selector: 'lib-gongsvg-diagramming',
-  templateUrl: './gongsvg-diagramming.html',
-  styleUrls: ['./gongsvg-diagramming.css'],
-  imports: [
-    CommonModule,
-
-    MatIconModule,
-    MatButtonModule,
-
-    TextWidthCalculatorComponent,
-
-    LinkSegmentsPipe,
-  ],
-  standalone: true,
+    selector: 'lib-gongsvg-diagramming',
+    templateUrl: './gongsvg-diagramming.html',
+    styleUrls: ['./gongsvg-diagramming.css'],
+    imports: [
+        CommonModule,
+        MatIconModule,
+        MatButtonModule,
+        TextWidthCalculatorComponent,
+        LinkSegmentsPipe,
+    ]
 })
 export class GongsvgDiagrammingComponent implements OnInit, OnDestroy, AfterViewInit {
 

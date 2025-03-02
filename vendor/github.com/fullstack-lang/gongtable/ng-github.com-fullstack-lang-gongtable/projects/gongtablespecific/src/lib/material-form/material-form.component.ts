@@ -26,26 +26,22 @@ import { MatInputModule } from '@angular/material/input';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 
 @Component({
-  selector: 'lib-material-form',
-  templateUrl: './material-form.component.html',
-  styleUrls: ['./material-form.component.css'],
-  standalone: true,
-  imports: [
-    CommonModule,
-    FormsModule,
-    ReactiveFormsModule,
-
-    MatFormFieldModule,
-    MatOptionModule,
-    MatIconModule,
-    MatButtonModule,
-    MatInputModule,
-    MatSelectModule,
-    MatCheckboxModule,
-
-    MatPaginatorModule,
-
-  ],
+    selector: 'lib-material-form',
+    templateUrl: './material-form.component.html',
+    styleUrls: ['./material-form.component.css'],
+    imports: [
+        CommonModule,
+        FormsModule,
+        ReactiveFormsModule,
+        MatFormFieldModule,
+        MatOptionModule,
+        MatIconModule,
+        MatButtonModule,
+        MatInputModule,
+        MatSelectModule,
+        MatCheckboxModule,
+        MatPaginatorModule,
+    ]
 })
 export class MaterialFormComponent implements OnInit {
 

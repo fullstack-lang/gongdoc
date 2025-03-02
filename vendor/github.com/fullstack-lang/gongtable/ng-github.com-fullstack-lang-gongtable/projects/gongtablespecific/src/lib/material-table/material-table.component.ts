@@ -27,28 +27,23 @@ import { MatButtonModule } from '@angular/material/button';
 
 
 @Component({
-  selector: 'lib-material-table',
-  templateUrl: './material-table.component.html',
-  styleUrls: ['./material-table.component.css'],
-  standalone: true,
-  imports: [
-    FormsModule,
-    ReactiveFormsModule,
-
-    MatButtonModule,
-    MatFormFieldModule,
-    MatPaginatorModule,
-    MatTableModule,
-    MatCheckboxModule,
-    MatDialogModule,
-    MatInputModule,
-    MatSortModule,
-
-    CommonModule,
-    DragDropModule,
-
-
-  ],
+    selector: 'lib-material-table',
+    templateUrl: './material-table.component.html',
+    styleUrls: ['./material-table.component.css'],
+    imports: [
+        FormsModule,
+        ReactiveFormsModule,
+        MatButtonModule,
+        MatFormFieldModule,
+        MatPaginatorModule,
+        MatTableModule,
+        MatCheckboxModule,
+        MatDialogModule,
+        MatInputModule,
+        MatSortModule,
+        CommonModule,
+        DragDropModule,
+    ]
 })
 export class MaterialTableComponent implements OnInit, AfterViewInit {
 

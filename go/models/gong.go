@@ -206,6 +206,11 @@ type StageStruct struct {
 	// map to enable docLink renaming when an identifier is renamed
 	Map_DocLink_Renaming map[string]GONG__Identifier
 	// the to be removed stops here
+	
+	// store the stage order of each instance in order to
+	// preserve this order when serializing them
+	Order            uint
+	Map_Staged_Order map[any]uint
 }
 
 func (stage *StageStruct) GetType() string {
@@ -332,6 +337,8 @@ func NewStage(path string) (stage *StageStruct) {
 		// to be removed after fix of [issue](https://github.com/golang/go/issues/57559)
 		Map_DocLink_Renaming: make(map[string]GONG__Identifier),
 		// the to be removed stops here
+
+		Map_Staged_Order: make(map[any]uint),
 	}
 
 	return
@@ -427,7 +434,12 @@ func (stage *StageStruct) RestoreXL(dirPath string) {
 // insertion point for cumulative sub template with model space calls
 // Stage puts classdiagram to the model stage
 func (classdiagram *Classdiagram) Stage(stage *StageStruct) *Classdiagram {
-	stage.Classdiagrams[classdiagram] = __member
+
+	if _, ok := stage.Classdiagrams[classdiagram]; !ok {
+		stage.Classdiagrams[classdiagram] = __member
+		stage.Map_Staged_Order[classdiagram] = stage.Order
+		stage.Order++
+	}
 	stage.Classdiagrams_mapString[classdiagram.Name] = classdiagram
 
 	return classdiagram
@@ -477,7 +489,12 @@ func (classdiagram *Classdiagram) GetName() (res string) {
 
 // Stage puts diagrampackage to the model stage
 func (diagrampackage *DiagramPackage) Stage(stage *StageStruct) *DiagramPackage {
-	stage.DiagramPackages[diagrampackage] = __member
+
+	if _, ok := stage.DiagramPackages[diagrampackage]; !ok {
+		stage.DiagramPackages[diagrampackage] = __member
+		stage.Map_Staged_Order[diagrampackage] = stage.Order
+		stage.Order++
+	}
 	stage.DiagramPackages_mapString[diagrampackage.Name] = diagrampackage
 
 	return diagrampackage
@@ -527,7 +544,12 @@ func (diagrampackage *DiagramPackage) GetName() (res string) {
 
 // Stage puts field to the model stage
 func (field *Field) Stage(stage *StageStruct) *Field {
-	stage.Fields[field] = __member
+
+	if _, ok := stage.Fields[field]; !ok {
+		stage.Fields[field] = __member
+		stage.Map_Staged_Order[field] = stage.Order
+		stage.Order++
+	}
 	stage.Fields_mapString[field.Name] = field
 
 	return field
@@ -577,7 +599,12 @@ func (field *Field) GetName() (res string) {
 
 // Stage puts gongenumshape to the model stage
 func (gongenumshape *GongEnumShape) Stage(stage *StageStruct) *GongEnumShape {
-	stage.GongEnumShapes[gongenumshape] = __member
+
+	if _, ok := stage.GongEnumShapes[gongenumshape]; !ok {
+		stage.GongEnumShapes[gongenumshape] = __member
+		stage.Map_Staged_Order[gongenumshape] = stage.Order
+		stage.Order++
+	}
 	stage.GongEnumShapes_mapString[gongenumshape.Name] = gongenumshape
 
 	return gongenumshape
@@ -627,7 +654,12 @@ func (gongenumshape *GongEnumShape) GetName() (res string) {
 
 // Stage puts gongenumvalueentry to the model stage
 func (gongenumvalueentry *GongEnumValueEntry) Stage(stage *StageStruct) *GongEnumValueEntry {
-	stage.GongEnumValueEntrys[gongenumvalueentry] = __member
+
+	if _, ok := stage.GongEnumValueEntrys[gongenumvalueentry]; !ok {
+		stage.GongEnumValueEntrys[gongenumvalueentry] = __member
+		stage.Map_Staged_Order[gongenumvalueentry] = stage.Order
+		stage.Order++
+	}
 	stage.GongEnumValueEntrys_mapString[gongenumvalueentry.Name] = gongenumvalueentry
 
 	return gongenumvalueentry
@@ -677,7 +709,12 @@ func (gongenumvalueentry *GongEnumValueEntry) GetName() (res string) {
 
 // Stage puts gongstructshape to the model stage
 func (gongstructshape *GongStructShape) Stage(stage *StageStruct) *GongStructShape {
-	stage.GongStructShapes[gongstructshape] = __member
+
+	if _, ok := stage.GongStructShapes[gongstructshape]; !ok {
+		stage.GongStructShapes[gongstructshape] = __member
+		stage.Map_Staged_Order[gongstructshape] = stage.Order
+		stage.Order++
+	}
 	stage.GongStructShapes_mapString[gongstructshape.Name] = gongstructshape
 
 	return gongstructshape
@@ -727,7 +764,12 @@ func (gongstructshape *GongStructShape) GetName() (res string) {
 
 // Stage puts link to the model stage
 func (link *Link) Stage(stage *StageStruct) *Link {
-	stage.Links[link] = __member
+
+	if _, ok := stage.Links[link]; !ok {
+		stage.Links[link] = __member
+		stage.Map_Staged_Order[link] = stage.Order
+		stage.Order++
+	}
 	stage.Links_mapString[link.Name] = link
 
 	return link
@@ -777,7 +819,12 @@ func (link *Link) GetName() (res string) {
 
 // Stage puts noteshape to the model stage
 func (noteshape *NoteShape) Stage(stage *StageStruct) *NoteShape {
-	stage.NoteShapes[noteshape] = __member
+
+	if _, ok := stage.NoteShapes[noteshape]; !ok {
+		stage.NoteShapes[noteshape] = __member
+		stage.Map_Staged_Order[noteshape] = stage.Order
+		stage.Order++
+	}
 	stage.NoteShapes_mapString[noteshape.Name] = noteshape
 
 	return noteshape
@@ -827,7 +874,12 @@ func (noteshape *NoteShape) GetName() (res string) {
 
 // Stage puts noteshapelink to the model stage
 func (noteshapelink *NoteShapeLink) Stage(stage *StageStruct) *NoteShapeLink {
-	stage.NoteShapeLinks[noteshapelink] = __member
+
+	if _, ok := stage.NoteShapeLinks[noteshapelink]; !ok {
+		stage.NoteShapeLinks[noteshapelink] = __member
+		stage.Map_Staged_Order[noteshapelink] = stage.Order
+		stage.Order++
+	}
 	stage.NoteShapeLinks_mapString[noteshapelink.Name] = noteshapelink
 
 	return noteshapelink
@@ -877,7 +929,12 @@ func (noteshapelink *NoteShapeLink) GetName() (res string) {
 
 // Stage puts position to the model stage
 func (position *Position) Stage(stage *StageStruct) *Position {
-	stage.Positions[position] = __member
+
+	if _, ok := stage.Positions[position]; !ok {
+		stage.Positions[position] = __member
+		stage.Map_Staged_Order[position] = stage.Order
+		stage.Order++
+	}
 	stage.Positions_mapString[position.Name] = position
 
 	return position
@@ -927,7 +984,12 @@ func (position *Position) GetName() (res string) {
 
 // Stage puts umlstate to the model stage
 func (umlstate *UmlState) Stage(stage *StageStruct) *UmlState {
-	stage.UmlStates[umlstate] = __member
+
+	if _, ok := stage.UmlStates[umlstate]; !ok {
+		stage.UmlStates[umlstate] = __member
+		stage.Map_Staged_Order[umlstate] = stage.Order
+		stage.Order++
+	}
 	stage.UmlStates_mapString[umlstate.Name] = umlstate
 
 	return umlstate
@@ -977,7 +1039,12 @@ func (umlstate *UmlState) GetName() (res string) {
 
 // Stage puts umlsc to the model stage
 func (umlsc *Umlsc) Stage(stage *StageStruct) *Umlsc {
-	stage.Umlscs[umlsc] = __member
+
+	if _, ok := stage.Umlscs[umlsc]; !ok {
+		stage.Umlscs[umlsc] = __member
+		stage.Map_Staged_Order[umlsc] = stage.Order
+		stage.Order++
+	}
 	stage.Umlscs_mapString[umlsc.Name] = umlsc
 
 	return umlsc
@@ -1027,7 +1094,12 @@ func (umlsc *Umlsc) GetName() (res string) {
 
 // Stage puts vertice to the model stage
 func (vertice *Vertice) Stage(stage *StageStruct) *Vertice {
-	stage.Vertices[vertice] = __member
+
+	if _, ok := stage.Vertices[vertice]; !ok {
+		stage.Vertices[vertice] = __member
+		stage.Map_Staged_Order[vertice] = stage.Order
+		stage.Order++
+	}
 	stage.Vertices_mapString[vertice.Name] = vertice
 
 	return vertice
@@ -2134,10 +2206,10 @@ func GetFieldsFromPointer[Type PointerToGongstruct]() (res []string) {
 type GongFieldValueType string
 
 const (
-	GongFieldValueTypeInt     GongFieldValueType = "GongFieldValueTypeInt"
-	GongFieldValueTypeFloat   GongFieldValueType = "GongFieldValueTypeFloat"
-	GongFieldValueTypeBool    GongFieldValueType = "GongFieldValueTypeBool"
-	GongFieldValueTypeOthers  GongFieldValueType = "GongFieldValueTypeOthers"
+	GongFieldValueTypeInt    GongFieldValueType = "GongFieldValueTypeInt"
+	GongFieldValueTypeFloat  GongFieldValueType = "GongFieldValueTypeFloat"
+	GongFieldValueTypeBool   GongFieldValueType = "GongFieldValueTypeBool"
+	GongFieldValueTypeOthers GongFieldValueType = "GongFieldValueTypeOthers"
 )
 
 type GongFieldValue struct {

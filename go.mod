@@ -4,7 +4,7 @@ go 1.23.1
 
 require (
 	github.com/frankban/quicktest v1.14.6 // indirect
-	github.com/fullstack-lang/gong v0.0.0-20250228015728-c81eed3e9613
+	github.com/fullstack-lang/gong v0.0.0-20250302162411-55c2ba7d91ed
 	github.com/gin-contrib/cors v1.7.3
 	github.com/gin-contrib/static v1.1.3
 	github.com/gin-gonic/gin v1.10.0
@@ -23,9 +23,9 @@ require (
 )
 
 require (
-	github.com/fullstack-lang/gongsvg v0.0.0-20250228015811-ca84f5f68f48
-	github.com/fullstack-lang/gongtable v0.0.0-20250228015820-9014f126a754
-	github.com/fullstack-lang/gongtree v0.0.0-20250228015837-888a66e7bf0c
+	github.com/fullstack-lang/gongsvg v0.0.0-20250228023049-bb49bd65c7c6
+	github.com/fullstack-lang/gongtable v0.0.0-20250228023050-cc13aa50af79
+	github.com/fullstack-lang/gongtree v0.0.0-20250228023052-f51b21501fb7
 	github.com/fullstack-lang/maticons v0.0.0-20240913013021-27a7b8fd9369
 	github.com/glebarez/sqlite v1.11.0
 	github.com/gorilla/websocket v1.5.3
@@ -33,7 +33,7 @@ require (
 )
 
 require (
-	github.com/bytedance/sonic v1.12.9 // indirect
+	github.com/bytedance/sonic v1.12.10 // indirect
 	github.com/bytedance/sonic/loader v0.2.3 // indirect
 	github.com/cloudwego/base64x v0.1.5 // indirect
 	github.com/dustin/go-humanize v1.0.1 // indirect
@@ -65,7 +65,7 @@ require (
 	github.com/xuri/efp v0.0.0-20250227110027-3491fafc2b79 // indirect
 	github.com/xuri/nfp v0.0.0-20250226145837-86d5fc24b2ba // indirect
 	golang.org/x/arch v0.14.0 // indirect
-	golang.org/x/exp v0.0.0-20250218142911-aa4b98e5adaa // indirect
+	golang.org/x/exp v0.0.0-20250228200357-dead58393ab7 // indirect
 	golang.org/x/mod v0.23.0 // indirect
 	golang.org/x/net v0.35.0 // indirect
 	google.golang.org/protobuf v1.36.5 // indirect

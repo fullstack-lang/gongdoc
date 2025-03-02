@@ -44,22 +44,19 @@ interface FlatNode {
 
 // Tree component is a diagram selector
 @Component({
-  selector: 'lib-tree',
-  templateUrl: './tree.component.html',
-  styleUrls: ['./tree.component.css'],
-  imports: [
-    CommonModule,
-
-    FormsModule,
-    ReactiveFormsModule,
-
-    MatIconModule,
-    MatButtonModule,
-    MatTreeModule,
-    MatCheckboxModule,
-    MatFormFieldModule,
-  ],
-  standalone: true,
+    selector: 'lib-tree',
+    templateUrl: './tree.component.html',
+    styleUrls: ['./tree.component.css'],
+    imports: [
+        CommonModule,
+        FormsModule,
+        ReactiveFormsModule,
+        MatIconModule,
+        MatButtonModule,
+        MatTreeModule,
+        MatCheckboxModule,
+        MatFormFieldModule,
+    ]
 })
 export class TreeComponent implements OnInit {
 

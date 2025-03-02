@@ -9,6 +9,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { AngularSplitModule } from 'angular-split';
 
 import { PanelComponent } from '../../projects/gongdocspecific/src/public-api';
+import { PkgeltDocsComponent } from '../../projects/gongdocspecific/src/lib/pkgelt-docs/pkgelt-docs.component'
 
 import { TreeComponent } from '@vendored_components/github.com/fullstack-lang/gongtree/ng-github.com-fullstack-lang-gongtree/projects/gongtreespecific/src/public-api'
 import { MaterialTableComponent } from '@vendored_components/github.com/fullstack-lang/gongtable/ng-github.com-fullstack-lang-gongtable/projects/gongtablespecific/src/lib/material-table/material-table.component';
@@ -29,10 +30,12 @@ import * as gongsvg from '@vendored_components/github.com/fullstack-lang/gongsvg
         MatButtonModule,
         MatIconModule,
         AngularSplitModule,
+
+        PkgeltDocsComponent,
         TreeComponent,
         MaterialTableComponent,
         MaterialFormComponent,
-        PanelComponent,
+
     ]
 })
 export class AppComponent implements OnInit {
