@@ -7,6 +7,7 @@ import { AngularSplitModule } from 'angular-split';
 import { TreeSpecificComponent } from '@vendored_components/github.com/fullstack-lang/gong/lib/tree/ng-github.com-fullstack-lang-gong-lib-tree/projects/treespecific/src/lib/tree-specific/tree-specific.component'
 import { SvgSpecificComponent } from '@vendored_components/github.com/fullstack-lang/gong/lib/svg/ng-github.com-fullstack-lang-gong-lib-svg/projects/svgspecific/src/lib/svg-specific/svg-specific.component'
 
+import * as gongdoc from '../../../../gongdoc/src/public-api'
 
 @Component({
     selector: 'lib-pkgelt-docs',
@@ -21,6 +22,8 @@ import { SvgSpecificComponent } from '@vendored_components/github.com/fullstack-
 export class PkgeltDocsComponent implements OnInit {
 
   @Input() GONG__StackPath: string = ""
+
+  TreeNames = gongdoc.TreeNames
 
   constructor(
     private router: Router,

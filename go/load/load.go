@@ -10,6 +10,7 @@ import (
 	// for diagrams
 	"github.com/fullstack-lang/gongdoc/go/adapter"
 	"github.com/fullstack-lang/gongdoc/go/diagrammer"
+	"github.com/fullstack-lang/gongdoc/go/models"
 
 	gongdoc_fullstack "github.com/fullstack-lang/gongdoc/go/fullstack"
 	gongdoc_models "github.com/fullstack-lang/gongdoc/go/models"
@@ -95,10 +96,10 @@ func Load(
 	diagrammer := diagrammer.NewDiagrammer(modelAdapter, portfolioAdapter, gongtreeStage)
 	portfolioAdapter.SetDiagrammer(diagrammer)
 
-	treeOfModelObjects := (&gongtree_models.Tree{Name: "model"}).Stage(gongtreeStage)
+	treeOfModelObjects := (&gongtree_models.Tree{Name: models.Model.ToString()}).Stage(gongtreeStage)
 	diagrammer.FillUpModelTree(treeOfModelObjects)
 
-	treeOfPortfolioObjects := (&gongtree_models.Tree{Name: "portfolio"}).Stage(gongtreeStage)
+	treeOfPortfolioObjects := (&gongtree_models.Tree{Name: models.Portfolio.ToString()}).Stage(gongtreeStage)
 	diagrammer.FillUpPortfolioUITree(treeOfPortfolioObjects)
 	diagrammer.CommitTreeStage()
 

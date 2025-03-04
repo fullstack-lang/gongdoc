@@ -5,7 +5,6 @@ import (
 	"log"
 	"strconv"
 
-	gongdoc_models "github.com/fullstack-lang/gongdoc/go/models"
 	gongdoc_stack "github.com/fullstack-lang/gongdoc/go/stack"
 	gongdoc_static "github.com/fullstack-lang/gongdoc/go/static"
 )
@@ -34,7 +33,7 @@ func main() {
 	r := gongdoc_static.ServeStaticFiles(*logGINFlag)
 
 	// setup stack
-	stack := gongdoc_stack.NewStack(r, gongdoc_models.GongdocStackName.ToString(), *unmarshallFromCode, *marshallOnCommit, "", *embeddedDiagrams, true)
+	stack := gongdoc_stack.NewStack(r, "whatever stack name is OK, we are only interested in the analysis of the stack code", *unmarshallFromCode, *marshallOnCommit, "", *embeddedDiagrams, true)
 	stack.Probe.Refresh()
 
 	log.Printf("Server ready serve on localhost:" + strconv.Itoa(*port))
