@@ -1,3 +1,5 @@
+Repo archived, function is no as a lib in gong
+
 # Gongdoc
 A gong stack for editing UML diagrams of gong code
 
